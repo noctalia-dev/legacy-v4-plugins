@@ -52,18 +52,6 @@
       "lastUpdated": "2026-01-22T23:28:50+01:00"
     },
     {
-      "id": "currency-converter",
-      "name": "Currency Converter",
-      "version": "1.0.1",
-      "author": "Lokize",
-      "description": "Real-time currency converter widget with support for multiple currencies",
-      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-      "minNoctaliaVersion": "3.6.0",
-      "license": "MIT",
-      "tags": [],
-      "lastUpdated": "2026-01-06T20:50:02-03:00"
-    },
-    {
       "id": "currency-exchange",
       "name": "Currency Exchange",
       "version": "1.0.0",
