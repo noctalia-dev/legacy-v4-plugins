@@ -1,0 +1,10 @@
+{
+    "bar": {
+        "close": "Close"
+    },
+    "widget": {
+        "pin": "Pin widget",
+        "unpin": "Unpin widget",
+        "close": "Close widget"
+    }
+}

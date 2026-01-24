@@ -1,0 +1,20 @@
+{
+  "id": "overlay-widgets",
+  "name": "Overlay Widgets",
+  "version": "1.0.0",
+  "description": "Overlay system for placing and pinning widgets on screen",
+  "author": "Cleboost",
+  "license": "MIT",
+  "minNoctaliaVersion": "4.0.0",
+  "entryPoints": {
+    "main": "Main.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "widgets": "[]"
+    }
+  }
+}
