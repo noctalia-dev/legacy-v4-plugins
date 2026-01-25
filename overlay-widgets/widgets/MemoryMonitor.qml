@@ -51,6 +51,7 @@ Item {
             }
         }
         
+        // Progress bar
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 20
