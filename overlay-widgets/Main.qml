@@ -11,18 +11,7 @@ Item {
     property bool overlayOpen: false
     property var widgets: []
     property var canvasInstance: null
-    property var pinnedDisplayInstances: []
-    
-    function getPinnedWidgets() {
-        var pinned = [];
-        for (var i = 0; i < widgets.length; i++) {
-            if (widgets[i].pinned) pinned.push(widgets[i]);
-        }
-        return pinned;
-    }
-    
-    // Check if we have any pinned widgets
-    readonly property bool hasPinnedWidgets: getPinnedWidgets().length > 0
+    property var widgetInstances: ({})
     
     function loadSettings() {
         if (!pluginApi) return;
@@ -33,15 +22,62 @@ Item {
             widgets = [];
         }
         
-        if (hasPinnedWidgets) {
-            createPinnedDisplays();
-        }
+        syncWidgetInstances();
     }
     
     function saveWidgets() {
         if (!pluginApi) return;
         pluginApi.pluginSettings.widgets = JSON.stringify(widgets);
         pluginApi.saveSettings();
+    }
+    
+    function syncWidgetInstances() {
+        if (!pluginApi || !pluginApi.pluginDir) return;
+        
+        var currentIds = {};
+        
+        for (var i = 0; i < widgets.length; i++) {
+            var data = widgets[i];
+            currentIds[data.id] = true;
+            
+            if (!widgetInstances[data.id]) {
+                var widgetDef = WidgetRegistry.getWidgetById(data.widgetType);
+                if (!widgetDef) continue;
+                
+                var component = Qt.createComponent(pluginApi.pluginDir + "/WidgetWindow.qml");
+                if (component.status === Component.Ready) {
+                    var instance = component.createObject(null, {
+                        widgetId: data.id,
+                        widgetType: data.widgetType,
+                        widgetX: data.x,
+                        widgetY: data.y,
+                        widgetWidth: data.width || widgetDef.defaultWidth,
+                        widgetHeight: data.height || widgetDef.defaultHeight,
+                        pinned: data.pinned,
+                        pluginApi: pluginApi,
+                        mainInstance: root,
+                        editMode: overlayOpen
+                    });
+                    if (instance) widgetInstances[data.id] = instance;
+                }
+            } else {
+                widgetInstances[data.id].pinned = data.pinned;
+                widgetInstances[data.id].editMode = overlayOpen;
+            }
+        }
+        
+        for (var id in widgetInstances) {
+            if (!currentIds[id]) {
+                widgetInstances[id].destroy();
+                delete widgetInstances[id];
+            }
+        }
+    }
+    
+    function updateWidgetsEditMode() {
+        for (var id in widgetInstances) {
+            widgetInstances[id].editMode = overlayOpen;
+        }
     }
     
     function createCanvas() {
@@ -54,8 +90,6 @@ Item {
                 pluginApi: pluginApi,
                 mainInstance: root
             });
-        } else {
-            console.error("OverlayWidgets: Error creating canvas:", component.errorString());
         }
     }
     
@@ -66,59 +100,19 @@ Item {
         }
     }
     
-    function createPinnedDisplays() {
-        destroyPinnedDisplays();
-        
-        if (!pluginApi || !pluginApi.pluginDir) return;
-        
-        var pinned = getPinnedWidgets();
-        for (var i = 0; i < pinned.length; i++) {
-            var data = pinned[i];
-            var widget = WidgetRegistry.getWidgetById(data.widgetType);
-            if (!widget) continue;
-            
-            var component = Qt.createComponent(pluginApi.pluginDir + "/PinnedWidgetDisplay.qml");
-            if (component.status === Component.Ready) {
-                var instance = component.createObject(null, {
-                    widgetId: data.id,
-                    widgetType: data.widgetType,
-                    widgetX: data.x,
-                    widgetY: data.y,
-                    widgetWidth: data.width || widget.defaultWidth,
-                    widgetHeight: data.height || widget.defaultHeight,
-                    pluginApi: pluginApi
-                });
-                if (instance) pinnedDisplayInstances.push(instance);
-            }
-        }
-    }
-    
-    function destroyPinnedDisplays() {
-        for (var i = 0; i < pinnedDisplayInstances.length; i++) {
-            if (pinnedDisplayInstances[i]) {
-                pinnedDisplayInstances[i].destroy();
-            }
-        }
-        pinnedDisplayInstances = [];
-    }
-    
     function openOverlay() {
         if (overlayOpen) return;
         overlayOpen = true;
         
-        destroyPinnedDisplays();
-        
         createCanvas();
+        updateWidgetsEditMode();
     }
     
     function closeOverlay() {
         overlayOpen = false;
         
+        updateWidgetsEditMode();
         destroyCanvas();
-        
-        if (hasPinnedWidgets) {
-            createPinnedDisplays();
-        }
     }
     
     function toggleWidget(widgetType) {
@@ -126,15 +120,21 @@ Item {
         
         for (var i = 0; i < newWidgets.length; i++) {
             if (newWidgets[i].widgetType === widgetType) {
+                var removedId = newWidgets[i].id;
                 newWidgets.splice(i, 1);
                 widgets = newWidgets;
                 saveWidgets();
+                
+                if (widgetInstances[removedId]) {
+                    widgetInstances[removedId].destroy();
+                    delete widgetInstances[removedId];
+                }
                 return;
             }
         }
         
-        var widget = WidgetRegistry.getWidgetById(widgetType);
-        if (!widget) return;
+        var widgetDef = WidgetRegistry.getWidgetById(widgetType);
+        if (!widgetDef) return;
         
         var id = "widget_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
         newWidgets.push({
@@ -142,12 +142,13 @@ Item {
             widgetType: widgetType,
             x: 100 + Math.random() * 200,
             y: 150 + Math.random() * 100,
-            width: widget.defaultWidth,
-            height: widget.defaultHeight,
+            width: widgetDef.defaultWidth,
+            height: widgetDef.defaultHeight,
             pinned: false
         });
         widgets = newWidgets;
         saveWidgets();
+        syncWidgetInstances();
     }
     
     function updateWidget(widgetId, x, y, width, height) {
@@ -174,6 +175,11 @@ Item {
                 newWidgets.splice(i, 1);
                 widgets = newWidgets;
                 saveWidgets();
+                
+                if (widgetInstances[widgetId]) {
+                    widgetInstances[widgetId].destroy();
+                    delete widgetInstances[widgetId];
+                }
                 return;
             }
         }
@@ -186,6 +192,9 @@ Item {
                 newWidgets[i] = Object.assign({}, newWidgets[i], { pinned: true });
                 widgets = newWidgets;
                 saveWidgets();
+                if (widgetInstances[widgetId]) {
+                    widgetInstances[widgetId].pinned = true;
+                }
                 return;
             }
         }
@@ -198,6 +207,9 @@ Item {
                 newWidgets[i] = Object.assign({}, newWidgets[i], { pinned: false });
                 widgets = newWidgets;
                 saveWidgets();
+                if (widgetInstances[widgetId]) {
+                    widgetInstances[widgetId].pinned = false;
+                }
                 return;
             }
         }

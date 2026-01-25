@@ -7,12 +7,10 @@ Item {
     id: root
     property var pluginApi: null
     
-    // Transparent background
     Rectangle {
         anchors.fill: parent
         color: "transparent"
         
-        // Small white frame
         Rectangle {
             anchors.centerIn: parent
             width: timeText.implicitWidth + 20
@@ -22,7 +20,6 @@ Item {
             border.width: 1
             radius: 4
             
-            // Time text
             NText {
                 id: timeText
                 anchors.centerIn: parent

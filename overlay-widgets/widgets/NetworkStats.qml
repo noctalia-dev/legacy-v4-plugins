@@ -48,60 +48,81 @@ Item {
         }
         
         RowLayout {
+            id: statsRow
             Layout.fillWidth: true
-            spacing: Style.marginM
+            spacing: Style.marginS
             
-            ColumnLayout {
+            Item {
                 Layout.fillWidth: true
-                spacing: Style.marginXS
+                Layout.preferredWidth: 0
+                clip: true
                 
-                NIcon {
-                    icon: "download"
-                    pointSize: Style.fontSizeM
-                    color: Color.mPrimary
-                    Layout.alignment: Qt.AlignHCenter
-                }
-                
-                NText {
-                    text: "Download"
-                    pointSize: Style.fontSizeS
-                    color: Color.mOnSurfaceVariant
-                    Layout.alignment: Qt.AlignHCenter
-                }
-                
-                NText {
-                    text: formatSpeed(networkRx)
-                    pointSize: Style.fontSizeM
-                    font.weight: Font.Medium
-                    color: Color.mOnSurface
-                    Layout.alignment: Qt.AlignHCenter
+                ColumnLayout {
+                    anchors.fill: parent
+                    spacing: Style.marginXS
+                    
+                    NIcon {
+                        icon: "download"
+                        pointSize: Style.fontSizeM
+                        color: Color.mPrimary
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    
+                    NText {
+                        text: "Download"
+                        pointSize: Style.fontSizeS
+                        color: Color.mOnSurfaceVariant
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                    }
+                    
+                    NText {
+                        text: formatSpeed(networkRx)
+                        pointSize: Style.fontSizeM
+                        font.weight: Font.Medium
+                        color: Color.mOnSurface
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                    }
                 }
             }
             
-            ColumnLayout {
+            Item {
                 Layout.fillWidth: true
-                spacing: Style.marginXS
+                Layout.preferredWidth: 0
+                clip: true
                 
-                NIcon {
-                    icon: "upload"
-                    pointSize: Style.fontSizeM
-                    color: Color.mPrimary
-                    Layout.alignment: Qt.AlignHCenter
-                }
-                
-                NText {
-                    text: "Upload"
-                    pointSize: Style.fontSizeS
-                    color: Color.mOnSurfaceVariant
-                    Layout.alignment: Qt.AlignHCenter
-                }
-                
-                NText {
-                    text: formatSpeed(networkTx)
-                    pointSize: Style.fontSizeM
-                    font.weight: Font.Medium
-                    color: Color.mOnSurface
-                    Layout.alignment: Qt.AlignHCenter
+                ColumnLayout {
+                    anchors.fill: parent
+                    spacing: Style.marginXS
+                    
+                    NIcon {
+                        icon: "upload"
+                        pointSize: Style.fontSizeM
+                        color: Color.mPrimary
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                    
+                    NText {
+                        text: "Upload"
+                        pointSize: Style.fontSizeS
+                        color: Color.mOnSurfaceVariant
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                    }
+                    
+                    NText {
+                        text: formatSpeed(networkTx)
+                        pointSize: Style.fontSizeM
+                        font.weight: Font.Medium
+                        color: Color.mOnSurface
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        elide: Text.ElideRight
+                    }
                 }
             }
         }
