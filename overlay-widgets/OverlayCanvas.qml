@@ -12,14 +12,12 @@ PanelWindow {
     property var pluginApi: null
     property var mainInstance: null
     
-    readonly property bool editMode: mainInstance ? mainInstance.overlayOpen : false
-    
     exclusiveZone: 0
-    color: editMode ? Qt.rgba(0, 0, 0, 0.3) : "transparent"
+    color: Qt.rgba(0, 0, 0, 0.3)
     
     WlrLayershell.namespace: "noctalia:overlay-widgets:canvas"
-    WlrLayershell.layer: WlrLayer.Overlay
-    WlrLayershell.keyboardFocus: editMode ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    WlrLayershell.layer: WlrLayer.Top
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
     
     anchors.top: true
     anchors.bottom: true
@@ -28,8 +26,6 @@ PanelWindow {
     
     MouseArea {
         anchors.fill: parent
-        enabled: editMode
-        visible: editMode
         onClicked: {
             if (mainInstance) mainInstance.closeOverlay();
         }
@@ -37,7 +33,6 @@ PanelWindow {
     
     Rectangle {
         id: topBar
-        visible: editMode
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: Style.marginM
@@ -90,39 +85,6 @@ PanelWindow {
                     if (mainInstance) mainInstance.closeOverlay();
                 }
             }
-        }
-    }
-    
-    Item {
-        id: widgetsContainer
-        anchors.fill: parent
-        
-        Repeater {
-            id: widgetRepeater
-            model: mainInstance ? mainInstance.widgets : []
-            
-            delegate: WidgetItem {
-                visible: editMode || modelData.pinned
-                
-                widgetId: modelData.id
-                widgetType: modelData.widgetType
-                widgetX: modelData.x
-                widgetY: modelData.y
-                widgetWidth: modelData.width
-                widgetHeight: modelData.height
-                pinned: modelData.pinned
-                editMode: root.editMode
-                pluginApi: root.pluginApi
-                mainInstance: root.mainInstance
-            }
-        }
-    }
-    
-    Connections {
-        target: mainInstance
-        function onWidgetsChanged() {
-            widgetRepeater.model = [];
-            widgetRepeater.model = mainInstance.widgets;
         }
     }
 }

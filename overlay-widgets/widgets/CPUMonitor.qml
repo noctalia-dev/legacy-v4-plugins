@@ -41,7 +41,6 @@ Item {
             }
         }
         
-        // Progress bar
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 20
@@ -69,10 +68,10 @@ Item {
             }
         }
         
-        NText {
-            text: "Cores: " + (SystemStatService.cpuCores || "N/A")
-            pointSize: Style.fontSizeS
-            color: Color.mOnSurfaceVariant
-        }
+        // NText {
+        //     text: "Cores: " + (SystemStatService.cpuCores || "N/A")
+        //     pointSize: Style.fontSizeS
+        //     color: Color.mOnSurfaceVariant
+        // }
     }
 }
