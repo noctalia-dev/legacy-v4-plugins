@@ -1,0 +1,24 @@
+{
+  "feeds": [
+    {
+      "name": "Adrenaline",
+      "url": "http://www.adrenaline.com.br/rss.html"
+    }
+  ],
+  "updateInterval": 600,
+  "maxItemsPerFeed": 10,
+  "showOnlyUnread": false,
+  "markAsReadOnClick": true,
+  "readItems": [
+    "https://www.adrenaline.com.br/?p=642424",
+    "https://www.adrenaline.com.br/?p=642204",
+    "https://www.adrenaline.com.br/?p=642416",
+    "https://www.adrenaline.com.br/?p=642401",
+    "https://www.adrenaline.com.br/?p=642402",
+    "https://www.adrenaline.com.br/?p=642398",
+    "https://www.adrenaline.com.br/?p=642393",
+    "https://www.adrenaline.com.br/?p=642388",
+    "https://www.adrenaline.com.br/?p=642200",
+    "https://www.adrenaline.com.br/?p=642379"
+  ]
+}

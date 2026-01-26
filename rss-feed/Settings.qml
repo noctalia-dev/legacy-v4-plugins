@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell.Io
 import qs.Commons
 import qs.Widgets
 
@@ -26,14 +25,10 @@ ColumnLayout {
 
     function saveSettings() {
         if (!pluginApi) {
-            Logger.e("RSS Feed: Cannot save settings - pluginApi is null");
+            console.error("RSS Feed: Cannot save settings - pluginApi is null");
             return;
         }
         
-        if (!pluginApi.pluginSettings) {
-            pluginApi.pluginSettings = {};
-        }
-
         pluginApi.pluginSettings.feeds = feeds;
         pluginApi.pluginSettings.updateInterval = updateInterval;
         pluginApi.pluginSettings.maxItemsPerFeed = maxItemsPerFeed;
@@ -50,7 +45,7 @@ ColumnLayout {
 
     function addFeed() {
         if (newFeedName.trim() === "" || newFeedUrl.trim() === "") {
-            Logger.e("RSS Feed: Name and URL are required");
+            console.error("RSS Feed: Name and URL are required");
             return;
         }
         
@@ -74,8 +69,19 @@ ColumnLayout {
         saveSettings();
     }
 
+    // Title
+    Text {
+        text: pluginApi?.tr("settings.title", "RSS Feed Reader Settings") || "RSS Feed Reader Settings"
+        font.pixelSize: Style.fontSizeXL || 20
+        font.bold: true
+        color: Style.textColor || "#FFFFFF"
+    }
 
-
+    Rectangle {
+        Layout.fillWidth: true
+        height: 1
+        color: Style.borderColor || "#333333"
+    }
 
     // Update Interval
     ColumnLayout {
