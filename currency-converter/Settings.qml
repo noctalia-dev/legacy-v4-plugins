@@ -21,7 +21,7 @@ ColumnLayout {
 
   function saveSettings() {
     if (!pluginApi) {
-      console.error("Currency Converter: Cannot save settings - pluginApi is null");
+      Logger.d("Currency Converter: Cannot save settings - pluginApi is null");
       return;
     }
     

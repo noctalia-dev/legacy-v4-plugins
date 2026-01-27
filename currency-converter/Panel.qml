@@ -67,10 +67,10 @@ Item {
             calculateConversion();
           }
         } catch (e) {
-          console.error("Error parsing exchange rates:", e);
+          Logger.d("Error parsing exchange rates:", e);
         }
       } else {
-        console.error("Failed to fetch exchange rates");
+        Logger.d("Failed to fetch exchange rates");
       }
     }
   }
