@@ -1,11 +1,11 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Services.UI
 import qs.Widgets
 
-Rectangle {
+NIconButton {
   id: root
 
   property var pluginApi: null
@@ -13,16 +13,56 @@ Rectangle {
   property string widgetId: ""
   property string section: ""
 
-  implicitWidth: barIsVertical ? Style.capsuleHeight : contentRow.implicitWidth + Style.marginM * 2
-  implicitHeight: Style.capsuleHeight
-
   property bool discordRunning: false
 
-  readonly property string barPosition: Settings.data.bar.position || "top"
-  readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
+  baseSize: Style.getCapsuleHeightForScreen(screen?.name)
+  applyUiScale: false
+  icon: "brand-discord"
+  tooltipText: discordRunning ? "Discord Running - Toggle Overlay" : "Discord Stopped"
+  tooltipDirection: BarService.getTooltipDirection(screen?.name)
+  customRadius: Style.radiusL
 
-  color: Style.capsuleColor
-  radius: Style.radiusL
+  colorBg: Style.capsuleColor
+  colorFg: Color.mOnSurface
+  colorBgHover: Color.mHover
+  colorFgHover: Color.mOnHover
+  colorBorder: "transparent"
+  colorBorderHover: "transparent"
+
+  border.color: Style.capsuleBorderColor
+  border.width: Style.capsuleBorderWidth
+
+  NPopupContextMenu {
+    id: contextMenu
+
+    model: [
+      {
+        "label": "Toggle Overlay",
+        "action": "toggle-overlay",
+        "icon": "brand-discord"
+      },
+      {
+        "label": "Plugin Settings",
+        "action": "plugin-settings",
+        "icon": "settings"
+      },
+    ]
+
+    onTriggered: action => {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
+
+      if (action === "toggle-overlay") {
+        if (pluginApi?.mainInstance) {
+          pluginApi.mainInstance.toggleOverlay();
+        }
+      } else if (action === "plugin-settings") {
+        if (pluginApi) {
+          BarService.openPluginSettings(screen, pluginApi.manifest);
+        }
+      }
+    }
+  }
 
   // Process to check Discord status
   Process {
@@ -33,13 +73,6 @@ Rectangle {
     onExited: (exitCode, exitStatus) => {
       discordRunning = (exitCode === 0);
     }
-  }
-
-  // IPC Process to toggle overlay
-  Process {
-    id: ipcProcess
-    command: ["qs", "-p", Quickshell.shellDir, "ipc", "call", "plugin:hyprland-discord-overlay", "toggle"]
-    running: false
   }
 
   // Update discord status periodically
@@ -56,37 +89,14 @@ Rectangle {
     checkDiscordProcess.running = true;
   }
 
-  RowLayout {
-    id: contentRow
-    anchors.centerIn: parent
-    spacing: Style.marginS
-
-    NIcon {
-      icon: "brand-discord"
-      pointSize: Style.fontSizeL
-      color: discordRunning ? Color.mPrimary : (mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface)
+  onClicked: {
+    if (pluginApi?.mainInstance) {
+      Logger.i("DiscordOverlay.BarWidget", "Calling Discord overlay toggle");
+      pluginApi.mainInstance.toggleOverlay();
     }
   }
 
-  MouseArea {
-    id: mouseArea
-    anchors.fill: parent
-    hoverEnabled: true
-    cursorShape: Qt.PointingHandCursor
-
-    onEntered: {
-      root.color = Color.mHover;
-    }
-
-    onExited: {
-      root.color = Style.capsuleColor;
-    }
-
-    onClicked: {
-      if (pluginApi) {
-        Logger.i("DiscordOverlay.BarWidget: Calling Discord overlay toggle");
-        ipcProcess.running = true;
-      }
-    }
+  onRightClicked: {
+    PanelService.showContextMenu(contextMenu, root, screen);
   }
 }
