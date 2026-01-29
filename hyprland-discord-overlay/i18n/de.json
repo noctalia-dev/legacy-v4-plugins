@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "IPC-Umschaltung empfangen",
+    "launching_discord": "Discord wird gestartet...",
+    "no_window_found": "Kein Discord-Fenster gefunden",
+    "plugin_loaded": "Plugin-API geladen",
+    "resolution_detected": "Auflösung erkannt: {width} × {height}",
+    "discord_launched": "Discord gestartet",
+    "toggle_called": "Umschaltung aufgerufen",
+    "window_found": "Discord-Fenster gefunden",
+    "window_moved": "Fenster verschoben, Exit-Code: {code}",
+    "workspace_toggled": "Arbeitsbereich umgeschaltet"
+  }
+}

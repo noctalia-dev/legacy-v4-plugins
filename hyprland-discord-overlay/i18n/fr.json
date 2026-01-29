@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "Basculement IPC reçu",
+    "launching_discord": "Lancement de Discord...",
+    "no_window_found": "Aucune fenêtre Discord trouvée",
+    "plugin_loaded": "API du plugin chargée",
+    "resolution_detected": "Résolution détectée : {width} × {height}",
+    "discord_launched": "Discord lancé",
+    "toggle_called": "Basculement activé",
+    "window_found": "Fenêtre Discord trouvée",
+    "window_moved": "Fenêtre déplacée, code de sortie : {code}",
+    "workspace_toggled": "Espace de travail basculé"
+  }
+}

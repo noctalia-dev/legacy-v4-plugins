@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "IPC toggle received",
+    "launching_discord": "Launching Discord...",
+    "no_window_found": "No Discord window found",
+    "plugin_loaded": "Plugin API loaded",
+    "resolution_detected": "Detected resolution: {width} x {height}",
+    "discord_launched": "Discord launched",
+    "toggle_called": "Toggle called",
+    "window_found": "Found Discord window",
+    "window_moved": "Window moved, exit code: {code}",
+    "workspace_toggled": "Workspace toggled"
+  }
+}

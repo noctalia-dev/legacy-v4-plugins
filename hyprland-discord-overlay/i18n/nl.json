@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "IPC-schakelaar ontvangen",
+    "launching_discord": "Discord starten...",
+    "no_window_found": "Geen Discord-venster gevonden",
+    "plugin_loaded": "Plugin-API geladen",
+    "resolution_detected": "Resolutie gedetecteerd: {width} × {height}",
+    "discord_launched": "Discord gestart",
+    "toggle_called": "Schakelaar aangeroepen",
+    "window_found": "Discord-venster gevonden",
+    "window_moved": "Venster verplaatst, afsluitcode: {code}",
+    "workspace_toggled": "Werkruimte gewisseld"
+  }
+}

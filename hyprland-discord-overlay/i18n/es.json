@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "Conmutación IPC recibida",
+    "launching_discord": "Iniciando Discord...",
+    "no_window_found": "No se encontró ventana de Discord",
+    "plugin_loaded": "API del plugin cargada",
+    "resolution_detected": "Resolución detectada: {width} × {height}",
+    "discord_launched": "Discord iniciado",
+    "toggle_called": "Conmutación activada",
+    "window_found": "Ventana de Discord encontrada",
+    "window_moved": "Ventana movida, código de salida: {code}",
+    "workspace_toggled": "Espacio de trabajo conmutado"
+  }
+}

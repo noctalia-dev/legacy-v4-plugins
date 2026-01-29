@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "Alternância IPC recebida",
+    "launching_discord": "Iniciando Discord...",
+    "no_window_found": "Nenhuma janela do Discord encontrada",
+    "plugin_loaded": "API do plugin carregada",
+    "resolution_detected": "Resolução detectada: {width} × {height}",
+    "discord_launched": "Discord iniciado",
+    "toggle_called": "Alternância ativada",
+    "window_found": "Janela do Discord encontrada",
+    "window_moved": "Janela movida, código de saída: {code}",
+    "workspace_toggled": "Espaço de trabalho alternado"
+  }
+}

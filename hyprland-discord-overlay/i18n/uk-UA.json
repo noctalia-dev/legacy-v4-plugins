@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "Отримано перемикання IPC",
+    "launching_discord": "Запуск Discord...",
+    "no_window_found": "Вікно Discord не знайдено",
+    "plugin_loaded": "API плагіна завантажено",
+    "resolution_detected": "Виявлено роздільну здатність: {width} × {height}",
+    "discord_launched": "Discord запущено",
+    "toggle_called": "Перемикання викликано",
+    "window_found": "Вікно Discord знайдено",
+    "window_moved": "Вікно переміщено, код виходу: {code}",
+    "workspace_toggled": "Робочий простір перемкнуто"
+  }
+}

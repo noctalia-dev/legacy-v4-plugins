@@ -1,0 +1,26 @@
+{
+  "id": "hyprland-discord-overlay",
+  "name": "Discord Overlay (Hyprland)",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "blacku",
+  "license": "MIT",
+  "description": "Discord overlay with automatic window management for Hyprland. Moves Discord window to overlay workspace as floating, centered window. Requires Hyprland window manager.",
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "autoLaunchDiscord": true,
+      "windowWidthPercent": 80,
+      "windowHeightPercent": 90,
+      "topMarginPercent": 5
+    }
+  }
+}

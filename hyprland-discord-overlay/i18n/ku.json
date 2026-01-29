@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "Guheztina IPC hate wergirtin",
+    "launching_discord": "Discord tê destpêkirin...",
+    "no_window_found": "Paceyê Discord nehat dîtin",
+    "plugin_loaded": "API ya plugin hate barkirin",
+    "resolution_detected": "Çareserî hate dîtin: {width} × {height}",
+    "discord_launched": "Discord hate destpêkirin",
+    "toggle_called": "Guheztinê hate bankkirin",
+    "window_found": "Paceyê Discord hate dîtin",
+    "window_moved": "Pace hate guherandin, koda derketinê: {code}",
+    "workspace_toggled": "Cihê xebatê hate guhertin"
+  }
+}

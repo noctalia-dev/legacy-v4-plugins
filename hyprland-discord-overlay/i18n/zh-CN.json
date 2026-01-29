@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "已接收 IPC 切换",
+    "launching_discord": "正在启动 Discord...",
+    "no_window_found": "未找到 Discord 窗口",
+    "plugin_loaded": "插件 API 已加载",
+    "resolution_detected": "检测到分辨率：{width} × {height}",
+    "discord_launched": "Discord 已启动",
+    "toggle_called": "已调用切换",
+    "window_found": "已找到 Discord 窗口",
+    "window_moved": "窗口已移动，退出代码：{code}",
+    "workspace_toggled": "工作区已切换"
+  }
+}

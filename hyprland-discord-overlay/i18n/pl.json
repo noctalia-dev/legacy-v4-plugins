@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "Otrzymano przełączenie IPC",
+    "launching_discord": "Uruchamianie Discorda...",
+    "no_window_found": "Nie znaleziono okna Discorda",
+    "plugin_loaded": "Załadowano API wtyczki",
+    "resolution_detected": "Wykryto rozdzielczość: {width} × {height}",
+    "discord_launched": "Uruchomiono Discorda",
+    "toggle_called": "Wywołano przełączenie",
+    "window_found": "Znaleziono okno Discorda",
+    "window_moved": "Przesunięto okno, kod wyjścia: {code}",
+    "workspace_toggled": "Przełączono przestrzeń roboczą"
+  }
+}

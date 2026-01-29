@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "IPC切り替えを受信しました",
+    "launching_discord": "Discordを起動中...",
+    "no_window_found": "Discordウィンドウが見つかりません",
+    "plugin_loaded": "プラグインAPIを読み込みました",
+    "resolution_detected": "解像度を検出しました：{width} × {height}",
+    "discord_launched": "Discordを起動しました",
+    "toggle_called": "切り替えが呼び出されました",
+    "window_found": "Discordウィンドウが見つかりました",
+    "window_moved": "ウィンドウを移動しました、終了コード：{code}",
+    "workspace_toggled": "ワークスペースを切り替えました"
+  }
+}

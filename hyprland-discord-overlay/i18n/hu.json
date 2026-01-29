@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "IPC váltás érkezett",
+    "launching_discord": "Discord indítása...",
+    "no_window_found": "Nem található Discord ablak",
+    "plugin_loaded": "Plugin API betöltve",
+    "resolution_detected": "Felbontás észlelve: {width} × {height}",
+    "discord_launched": "Discord elindítva",
+    "toggle_called": "Váltás meghívva",
+    "window_found": "Discord ablak megtalálva",
+    "window_moved": "Ablak áthelyezve, kilépési kód: {code}",
+    "workspace_toggled": "Munkaterület átváltva"
+  }
+}

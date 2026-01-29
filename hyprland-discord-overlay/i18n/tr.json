@@ -1,0 +1,14 @@
+{
+  "main": {
+    "ipc_received": "IPC değişimi alındı",
+    "launching_discord": "Discord başlatılıyor...",
+    "no_window_found": "Discord penceresi bulunamadı",
+    "plugin_loaded": "Eklenti API'si yüklendi",
+    "resolution_detected": "Çözünürlük algılandı: {width} × {height}",
+    "discord_launched": "Discord başlatıldı",
+    "toggle_called": "Değişim çağrıldı",
+    "window_found": "Discord penceresi bulundu",
+    "window_moved": "Pencere taşındı, çıkış kodu: {code}",
+    "workspace_toggled": "Çalışma alanı değiştirildi"
+  }
+}
