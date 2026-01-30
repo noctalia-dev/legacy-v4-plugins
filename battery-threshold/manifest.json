@@ -7,18 +7,24 @@
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Set the battery threshold for laptop batteries to extend battery lifespan",
-  "tags": ["Bar", "Panel", "System"],
+  "tags": [
+    "Bar",
+    "Panel",
+    "System"
+  ],
   "entryPoints": {
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",
-    "panel": "Panel.qml"
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
   },
   "dependencies": {
     "plugins": []
   },
   "metadata": {
     "defaultSettings": {
-      "chargeThreshold": 80
+      "chargeThreshold": 80,
+      "batteryDevice": "/sys/class/power_supply/BAT0"
     }
   }
 }
