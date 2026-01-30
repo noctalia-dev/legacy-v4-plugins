@@ -13,16 +13,19 @@ Item {
     property int batteryMinThresh: 40
     property int batteryMaxThresh: 100
 
+    property list<string> batteries: []
     readonly property string thresholdFile: "/sys/class/power_supply/BAT0/charge_control_end_threshold"
 
     Component.onCompleted: {
         batteryChecker.running = true;
+        getBatteries();
     }
 
     function refresh() {
         if (thresholdFileView.path !== "") {
             thresholdFileView.reload();
         }
+        getBatteries();
     }
 
     function restoreSavedThreshold() {
@@ -37,6 +40,11 @@ Item {
             thresholdWriter.command = ["sh", "-c", `echo ${saved} > ${thresholdFile}`];
             thresholdWriter.running = true;
         }
+    }
+
+    function getBatteries() {
+        Logger.i("BatteryThreshold", "Obtaining available batteries...");
+        batteryList.running = true;
     }
 
     onIsWritableChanged: {
@@ -87,5 +95,18 @@ Item {
     Process {
         id: thresholdWriter
         running: false
+    }
+
+    Process {
+        id: batteryList
+        command: ["sh", "-c", "find /sys/class/power_supply -exec find {}/ ';' | grep charge_control_end_threshold"]
+        running: false
+
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.batteries = text.split("\n").map(path => path.split("/").slice(0, -1).join("/"));
+                Logger.i("BatteryThreshold", `Found batteries: ${root.batteries}`);
+            }
+        }
     }
 }
