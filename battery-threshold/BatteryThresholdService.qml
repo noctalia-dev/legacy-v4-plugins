@@ -16,34 +16,32 @@ Item {
     readonly property string thresholdFile: "/sys/class/power_supply/BAT0/charge_control_end_threshold"
 
     Component.onCompleted: {
-        batteryChecker.running = true
+        batteryChecker.running = true;
     }
 
     function refresh() {
         if (thresholdFileView.path !== "") {
-            thresholdFileView.reload()
+            thresholdFileView.reload();
         }
     }
 
     function restoreSavedThreshold() {
         if (!pluginApi?.pluginSettings)
-            return
-        const saved = pluginApi.pluginSettings.chargeThreshold
+            return;
+        const saved = pluginApi.pluginSettings.chargeThreshold;
         // Skip if current threshold already matches saved value
         if (currentThreshold === saved)
-            return
-        if (saved >= batteryMinThresh && saved <= batteryMaxThresh
-                && isWritable) {
-            Logger.i("BatteryThreshold",
-                     "Restored charge threshold to " + saved + "%")
-            thresholdWriter.command = ["/bin/bash", "-c", `echo ${saved} > ${thresholdFile}`]
-            thresholdWriter.running = true
+            return;
+        if (saved >= batteryMinThresh && saved <= batteryMaxThresh && isWritable) {
+            Logger.i("BatteryThreshold", "Restored charge threshold to " + saved + "%");
+            thresholdWriter.command = ["sh", "-c", `echo ${saved} > ${thresholdFile}`];
+            thresholdWriter.running = true;
         }
     }
 
     onIsWritableChanged: {
         if (isWritable)
-            restoreSavedThreshold()
+            restoreSavedThreshold();
     }
 
     Process {
@@ -53,21 +51,21 @@ Item {
 
         onExited: function (exitCode) {
             if (exitCode === 0) {
-                root.isAvailable = true
-                thresholdFileView.path = root.thresholdFile
-                writeAccessChecker.running = true
+                root.isAvailable = true;
+                thresholdFileView.path = root.thresholdFile;
+                writeAccessChecker.running = true;
             }
         }
     }
 
     Process {
         id: writeAccessChecker
-        command: ["/bin/bash", "-c", `test -w ${root.thresholdFile} && echo 1 || echo 0`]
+        command: ["sh", "-c", `test -w ${root.thresholdFile} && echo 1 || echo 0`]
         running: false
 
         stdout: StdioCollector {
             onStreamFinished: {
-                root.isWritable = text.trim() === "1"
+                root.isWritable = text.trim() === "1";
             }
         }
     }
@@ -78,10 +76,10 @@ Item {
         printErrors: false
 
         onLoaded: {
-            const value = parseInt(text().trim())
+            const value = parseInt(text().trim());
             // The range exposed by sysfs
             if (!isNaN(value) && value >= 0 && value <= 100) {
-                root.currentThreshold = value
+                root.currentThreshold = value;
             }
         }
     }
