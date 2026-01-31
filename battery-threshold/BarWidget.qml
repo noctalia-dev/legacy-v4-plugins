@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import qs.Commons
 import qs.Widgets
+import qs.Services.UI
 
 Item {
     id: root
@@ -35,15 +36,39 @@ Item {
         }
     }
 
+    NPopupContextMenu {
+        id: contextMenu
+
+        model: [
+            {
+                "label": pluginApi?.tr("actions.widget-settings") || "Widget Settings",
+                "action": "widget-settings",
+                "icon": "settings"
+            }
+        ]
+
+        onTriggered: action => {
+            contextMenu.close();
+            PanelService.closeContextMenu(screen);
+
+            BarService.openPluginSettings(screen, pluginApi.manifest);
+        }
+    }
+
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
-        onClicked: {
+        onClicked: button => {
             if (pluginApi) {
-                pluginApi.openPanel(root.screen)
+                if (button.button === Qt.LeftButton) {
+                    pluginApi.openPanel(root.screen);
+                } else if (button.button === Qt.RightButton) {
+                    PanelService.showContextMenu(contextMenu, root, screen);
+                }
             }
         }
     }

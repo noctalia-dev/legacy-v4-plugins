@@ -17,7 +17,7 @@ ColumnLayout {
     NComboBox {
         Layout.fillWidth: true
         label: pluginApi?.tr("settings.battery-device") || "Battery Device"
-        description: pluginApi?.tr("settings.battery-device-desc") || "Select the battery to configure it's threshold"
+        description: pluginApi?.tr("settings.battery-device-desc") || "Battery to configure threshold for"
 
         model: service.batteries.map(path => ({
                     key: path,
