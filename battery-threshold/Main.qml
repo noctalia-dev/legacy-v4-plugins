@@ -1,4 +1,5 @@
 import QtQuick
+import qs.Commons
 
 // Start the BatteryThresholdService to restore a previously set charge
 // threshold when the plugin is loaded. This is needed as FW may reset
@@ -6,8 +7,13 @@ import QtQuick
 Item {
     property var pluginApi: null
 
-    BatteryThresholdService {
+    Component.onCompleted: {
+        if (pluginApi) {
+            service.start(pluginApi);
+        }
+    }
+
+    property var service: BatteryThresholdService {
         id: service
-        pluginApi: parent.pluginApi
     }
 }

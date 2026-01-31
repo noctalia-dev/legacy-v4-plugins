@@ -1,0 +1,6 @@
+{
+  "settings": {
+    "battery-device": "Battery Device",
+    "battery-device-desc": "Select the battery to configure it's threshold"
+  }
+}

@@ -9,25 +9,22 @@ Item {
     id: root
 
     property var pluginApi: null
+    property var service: pluginApi?.mainInstance?.service
     readonly property var geometryPlaceholder: panelContainer
     property real contentPreferredWidth: 320 * Style.uiScaleRatio
     property real contentPreferredHeight: panelContent.implicitHeight + Style.marginL * 2
     readonly property bool allowAttach: true
     anchors.fill: parent
 
-    BatteryThresholdService {
-        id: service
-        pluginApi: root.pluginApi
-    }
-
     property string batteryModelName: ""
 
     FileView {
         id: modelNameView
-        path: "/sys/class/power_supply/BAT0/model_name"
+        path: `${pluginApi?.pluginSettings?.batteryDevice || service.batteries[0]}/model_name`
         printErrors: false
 
         onLoaded: {
+            Logger.d("BatteryThreshold", "device: " + modelNameView.path);
             root.batteryModelName = text().trim();
         }
     }
@@ -35,6 +32,7 @@ Item {
     function writeThreshold(value) {
         if (!service.isWritable)
             return;
+        Logger.d("BatteryThreshold", "thresholdFile: " + service.thresholdFile);
         thresholdWriter.command = ["sh", "-c", `echo ${value} > ${service.thresholdFile}`];
         thresholdWriter.running = true;
     }
@@ -89,6 +87,7 @@ Item {
                 height: 1
                 color: Color.mOutline
                 opacity: 0.3
+                visible: service.isAvailable
             }
 
             ColumnLayout {
