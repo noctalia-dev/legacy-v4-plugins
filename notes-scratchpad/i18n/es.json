@@ -1,0 +1,38 @@
+{
+  "bar_widget": {
+    "tooltip": "Bloc de notas"
+  },
+  "panel": {
+    "header": {
+      "title": "Bloc de notas"
+    },
+    "stats": {
+      "characters": "caracteres",
+      "words": "palabras"
+    },
+    "placeholder": "Comienza a escribir tus notas aquí..."
+  },
+  "settings": {
+    "panel_dimensions": {
+      "title": "Dimensiones del panel",
+      "description": "Configura el tamaño del panel del bloc de notas al abrirse.",
+      "width": "Ancho",
+      "height": "Alto"
+    },
+    "file_storage": {
+      "title": "Almacenamiento en Archivo",
+      "description": "Opcionalmente guardar el contenido del bloc de notas en un archivo en lugar de la configuración del plugin. Dejar vacío para usar el almacenamiento predeterminado.",
+      "select": "Seleccionar archivo",
+      "picker_title": "Elegir archivo para bloc de notas",
+      "not_writable": "⚠ Advertencia: Sin permiso de escritura para esta ubicación"
+    },
+    "text_appearance": {
+      "title": "Apariencia del texto",
+      "font_size": "Tamaño de fuente"
+    },
+    "keyboard_shortcut": {
+      "title": "Atajo de teclado",
+      "description": "Alternar el panel del bloc de notas con este comando:"
+    }
+  }
+}

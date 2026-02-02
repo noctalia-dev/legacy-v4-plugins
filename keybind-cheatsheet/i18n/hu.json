@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Betoltes..."
+      "loading": "Betoltes...",
+      "title": "Billentyűzetkiosztás",
+      "title-hyprland": "Hyprland billentyűzetkiosztás",
+      "title-niri": "Niri billentyűzetkiosztás",
+      "workspace-switching": "MUNKATERÜLETEK - VÁLTÁS",
+      "workspace-moving": "MUNKATERÜLETEK - ÁTHELYEZÉS",
+      "workspace-mouse": "MUNKATERÜLETEK - EGÉR"
     },
     "settings": {
       "title": "Billentyuparancsok Beallitasai",
@@ -9,7 +15,7 @@
       "window-size": "Ablak Merete",
       "width": "Szelesseg:",
       "height": "Magassag:",
-      "auto-height": "Automatikus",
+      "auto-height": "Auto",
       "auto-height-hint": "Ha az 'Automatikus' be van kapcsolva, a magassag automatikusan igazodik a tartalomhoz.",
       "layout": "Elrendezes",
       "columns": "Oszlopok szama:",
@@ -26,10 +32,19 @@
       "saved": "Beallitasok sikeresen mentve.",
       "keybind-setup": "Billentyuparancs Beallitasa",
       "keybind-setup-description": "A cheatsheet billentyuparancsal valo megnyitasahoz adja hozzá ezt a bind-ot a kompozitor konfiguraciojához:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Mod Billentyuvaltozo",
-      "mod-var-hint": "A Super billentyuhoz hasznalt valtozó neve (pl. $mod vagy $mainMod)."
+      "mod-var-hint": "A Super billentyuhoz hasznalt valtozó neve (pl. $mod vagy $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland útvonal",
+      "niri-path": "Niri útvonal"
+    },
+    "barwidget": {
+      "tooltip": "Billentyűparancs súgó",
+      "open": "Súgó megnyitása",
+      "settings": "Plugin beállítások"
     }
   }
 }

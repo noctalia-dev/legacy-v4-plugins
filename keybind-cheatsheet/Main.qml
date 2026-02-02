@@ -3,17 +3,18 @@ import Quickshell
 import Quickshell.Io
 import qs.Commons
 import qs.Services.UI
+import qs.Services.Compositor
 
 Item {
   id: root
   property var pluginApi: null
-  property string compositor: ""
+
 
   Component.onCompleted: {
     logInfo("Main.qml Component.onCompleted - will parse once on first load");
     if (pluginApi && !parserStarted) {
       parserStarted = true;
-      detectCompositor();
+      runParser();
     }
   }
 
@@ -21,7 +22,7 @@ Item {
     logInfo("pluginApi changed");
     if (pluginApi && !parserStarted) {
       parserStarted = true;
-      detectCompositor();
+      runParser();
     }
   }
 
@@ -56,7 +57,6 @@ Item {
   }
 
   function cleanupProcesses() {
-    if (detectProcess.running) detectProcess.running = false;
     if (niriGlobProcess.running) niriGlobProcess.running = false;
     if (niriReadProcess.running) niriReadProcess.running = false;
     if (hyprGlobProcess.running) hyprGlobProcess.running = false;
@@ -77,66 +77,21 @@ Item {
     parseDepthCounter = 0;
   }
 
-  function detectCompositor() {
-    // Check environment variables to detect compositor
-    var hyprlandSig = Quickshell.env("HYPRLAND_INSTANCE_SIGNATURE");
-    var niriSocket = Quickshell.env("NIRI_SOCKET");
-
-    if (hyprlandSig && hyprlandSig.length > 0) {
-      compositor = "hyprland";
-      logInfo("Detected Hyprland compositor");
-    } else if (niriSocket && niriSocket.length > 0) {
-      compositor = "niri";
-      logInfo("Detected Niri compositor");
-    } else {
-      // Fallback: try to detect by checking running processes
-      logWarn("No compositor detected via env vars, trying process detection");
-      detectByProcess();
+  // Refresh function - accessible from mainInstance
+  function refresh() {
+    logInfo("Refresh called - will re-parse");
+    if (!pluginApi) {
+      logError("Cannot refresh: pluginApi is null");
       return;
     }
-
-    if (pluginApi) {
-      pluginApi.pluginSettings.detectedCompositor = compositor;
-      pluginApi.saveSettings();
-    }
+    
+    // Reset parserStarted to allow re-parsing
+    parserStarted = false;
+    isCurrentlyParsing = false;
+    
+    // Now run parser
+    parserStarted = true;
     runParser();
-  }
-
-  Process {
-    id: detectProcess
-    command: ["sh", "-c", "pgrep -x hyprland >/dev/null && echo hyprland || (pgrep -x niri >/dev/null && echo niri || echo unknown)"]
-    running: false
-
-    stdout: SplitParser {
-      onRead: data => {
-        var detected = data.trim();
-        if (detected === "hyprland" || detected === "niri") {
-          root.compositor = detected;
-          logInfo("Detected compositor via process: " + detected);
-        } else {
-          root.compositor = "unknown";
-          logError("Could not detect compositor");
-        }
-
-        if (pluginApi) {
-          pluginApi.pluginSettings.detectedCompositor = root.compositor;
-          pluginApi.saveSettings();
-        }
-
-        if (root.compositor !== "unknown") {
-          runParser();
-        } else {
-          saveToDb([{
-            "title": "Error",
-            "binds": [{ "keys": "ERROR", "desc": "No supported compositor detected (Hyprland/Niri)" }]
-          }]);
-        }
-      }
-    }
-  }
-
-  function detectByProcess() {
-    detectProcess.running = true;
   }
 
   // Recursive parsing support
@@ -159,7 +114,21 @@ Item {
 
     isCurrentlyParsing = true;
     parseDepthCounter = 0;
-    logInfo("=== START PARSER for " + compositor + " ===");
+
+    // Detect compositor using CompositorService
+    if (CompositorService.isHyprland) {
+      logInfo("=== START PARSER for Hyprland ===");
+    } else if (CompositorService.isNiri) {
+      logInfo("=== START PARSER for Niri ===");
+    } else {
+      logError("No supported compositor detected (Hyprland/Niri)");
+      isCurrentlyParsing = false;
+      saveToDb([{
+        "title": "Error",
+        "binds": [{ "keys": "ERROR", "desc": "No supported compositor detected (Hyprland/Niri)" }]
+      }]);
+      return;
+    }
 
     var homeDir = Quickshell.env("HOME");
     if (!homeDir) {
@@ -179,21 +148,18 @@ Item {
     collectedBinds = {};
 
     var filePath;
-    if (compositor === "hyprland") {
+    if (CompositorService.isHyprland) {
       filePath = pluginApi?.pluginSettings?.hyprlandConfigPath || (homeDir + "/.config/hypr/hyprland.conf");
       filePath = filePath.replace(/^~/, homeDir);
-    } else if (compositor === "niri") {
+    } else if (CompositorService.isNiri) {
       filePath = pluginApi?.pluginSettings?.niriConfigPath || (homeDir + "/.config/niri/config.kdl");
       filePath = filePath.replace(/^~/, homeDir);
-    } else {
-      logError("Unknown compositor: " + compositor);
-      return;
     }
 
     logInfo("Starting with main config: " + filePath);
     filesToParse = [filePath];
 
-    if (compositor === "hyprland") {
+    if (CompositorService.isHyprland) {
       parseNextHyprlandFile();
     } else {
       parseNextNiriFile();
@@ -872,15 +838,11 @@ Item {
   IpcHandler {
     target: "plugin:keybind-cheatsheet"
 
-    // Note: "toggle" is now handled by built-in "togglePanel" action
-    // Use: qs -c "noctalia-shell" ipc call plugin togglePanel keybind-cheatsheet
-
-    function refresh() {
-      logInfo("IPC refresh called - triggering manual parse");
-      if (pluginApi) {
-        // Always re-detect compositor to ensure up-to-date detection
-        compositor = "";
-        detectCompositor();
+    function toggle() {
+      if (root.pluginApi) {
+        root.pluginApi.withCurrentScreen(screen => {
+          root.pluginApi.togglePanel(screen);
+        });
       }
     }
   }

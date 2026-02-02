@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Завантаження..."
+      "loading": "Завантаження...",
+      "title": "Карта клавіш",
+      "title-hyprland": "Карта клавіш Hyprland",
+      "title-niri": "Карта клавіш Niri",
+      "workspace-switching": "РОБОЧІ ОБЛАСТІ - ПЕРЕМИКАННЯ",
+      "workspace-moving": "РОБОЧІ ОБЛАСТІ - ПЕРЕМІЩЕННЯ",
+      "workspace-mouse": "РОБОЧІ ОБЛАСТІ - МИША"
     },
     "settings": {
       "title": "Налаштування гарячих клавіш",
@@ -26,10 +32,19 @@
       "saved": "Налаштування успішно збережено.",
       "keybind-setup": "Налаштування клавіші",
       "keybind-setup-description": "Щоб відкрити шпаргалку за допомогою клавіші, додайте цей bind до конфігурації композитора:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Змінна клавіші Mod",
-      "mod-var-hint": "Ім'я змінної, що використовується для клавіші Super (наприклад, $mod або $mainMod)."
+      "mod-var-hint": "Ім'я змінної, що використовується для клавіші Super (наприклад, $mod або $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Шлях Hyprland",
+      "niri-path": "Шлях Niri"
+    },
+    "barwidget": {
+      "tooltip": "Шпаргалка гарячих клавіш",
+      "open": "Відкрити шпаргалку",
+      "settings": "Налаштування плагіна"
     }
   }
 }

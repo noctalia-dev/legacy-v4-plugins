@@ -12,8 +12,7 @@ ColumnLayout {
   property bool showTempValue: pluginApi?.pluginSettings?.showTempValue ?? true
   property bool showConditionIcon: pluginApi?.pluginSettings?.showConditionIcon ?? true
   property bool showTempUnit: pluginApi?.pluginSettings?.showTempUnit ?? true
-  property int tooltipOption: pluginApi?.pluginSettings?.tooltipOption ?? 0
-
+  property string tooltipOption: pluginApi?.pluginSettings?.tooltipOption || pluginApi?.manifest?.defaultSettings?.tooltipOption || "everything"
   spacing: Style.marginL
 
   Component.onCompleted: {
@@ -29,6 +28,7 @@ ColumnLayout {
       root.showConditionIcon = checked;
       root.showTempValue = true;
     }
+    defaultValue: true
   }
 
   NToggle {
@@ -40,6 +40,7 @@ ColumnLayout {
       root.showTempValue = checked;
       root.showConditionIcon = true;
     }
+    defaultValue: true
   }
 
   NToggle {
@@ -51,20 +52,36 @@ ColumnLayout {
     onToggled: checked => {
       root.showTempUnit = checked;
     }
+    defaultValue: true
   }
 
   NComboBox {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.tooltipOption.label") ?? "Tooltip options"
-    description: pluginApi?.tr("settings.tooltipOption.desc") ?? "Choose what you would like the tooltip to display."
+    label: pluginApi?.tr("settings.tooltipOption.label") || "Tooltip options"
+    description: pluginApi?.tr("settings.tooltipOption.desc") || "Choose what you would like the tooltip to display."
     model: [
-      {"key": "0", "name": pluginApi?.tr("settings.mode.disable") ?? "Disable the Tooltip"},
-      {"key": "1", "name": pluginApi?.tr("settings.mode.highlow") ?? "High/Low tempuratures"},
-      {"key": "2", "name": pluginApi?.tr("settings.mode.sunrise") ?? "Sunrise and Sunset times"},
-      {"key": "3", "name": pluginApi?.tr("settings.mode.everything") ?? "Show all weather information."}
+      {
+        "key": "disable",
+        "name": pluginApi?.tr("settings.mode.disable") || "Disable the Tooltip"
+      },
+      {
+        "key": "highlow",
+        "name": pluginApi?.tr("settings.mode.highlow") || "High/Low tempuratures"
+      },
+      {
+        "key": "sunrise",
+        "name": pluginApi?.tr("settings.mode.sunrise") || "Sunrise and Sunset times"
+      },
+      {
+        "key": "everything",
+        "name": pluginApi?.tr("settings.mode.everything") || "Show all weather information"
+      }
     ]
-    currentKey: String(root.tooltipOption)
-    onSelected: key => root.tooltipOption = parseInt(key)
+    currentKey: root.tooltipOption
+    onSelected: function (key) {
+      root.tooltipOption = key;
+    }
+    defaultValue: "everything"
   }
 
   function saveSettings() {

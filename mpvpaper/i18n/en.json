@@ -1,4 +1,26 @@
 {
+  "panel": {
+    "title": "Configure mpvpaper",
+    "buttons": {
+      "folder": {
+        "text": "Folder",
+        "tooltip": "Choose another folder that contains your wallpapers."
+      },
+      "refresh": {
+        "text": "Refresh",
+        "tooltip": "Refresh thumbnails, remove old ones and create new ones."
+      },
+      "random": {
+        "text": "Random",
+        "tooltip": "Choose a random image from this folder."
+      },
+      "clear": {
+        "text": "Clear",
+        "tooltip": "Clear the current wallpaper image."
+      }
+    },
+    "loading": "Loading..."
+  },
   "settings": {
     "toggle": {
       "label": "Enable mpvpaper",

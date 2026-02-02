@@ -23,7 +23,7 @@ Item {
   }
   
   readonly property var layouts: pluginApi?.mainInstance?.availableLayouts || []
-  readonly property string activeLayout: pluginApi?.mainInstance?.getMonitorLayout(panelMonitor) || ""
+  readonly property string activeLayout: (pluginApi?.mainInstance?.monitorLayouts ?? {})[panelMonitor] || ""
 
   // Matches BarWidget mapping and grouping
   readonly property var iconMap: ({

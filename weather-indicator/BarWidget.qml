@@ -22,7 +22,7 @@ Item {
   readonly property bool showTempValue: pluginApi?.pluginSettings?.showTempValue ?? true
   readonly property bool showConditionIcon: pluginApi?.pluginSettings?.showConditionIcon ?? true
   readonly property bool showTempUnit: pluginApi?.pluginSettings?.showTempUnit ?? true
-  readonly property int tooltipOption: pluginApi?.pluginSettings?.tooltipOption ?? 0
+  readonly property string tooltipOption: pluginApi?.pluginSettings?.tooltipOption || pluginApi?.manifest?.defaultSettings?.tooltipOption || "all"
 
   // Bar positioning properties
   readonly property string screenName: screen ? screen.name : ""
@@ -86,7 +86,7 @@ Item {
               var suffix = "°F";
             }
             temp = Math.round(temp);
-            if (!root.showTempUnit) {
+            if (!root.showTempUnit || isVertical) {
               suffix = "";
             }
             return `${temp}${suffix}`;
@@ -103,10 +103,11 @@ MouseArea {
     id: mouseArea
     anchors.fill: parent
     hoverEnabled: true
-    cursorShape: tooltipOption === 0 ? Qt.ArrowCursor : Qt.PointingHandCursor
+    cursorShape: Qt.PointingHandCursor
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
 
     onEntered: {
-        if (tooltipOption !== 0) {
+        if (tooltipOption !== "disable") {
             buildTooltip();
         }
     }
@@ -114,9 +115,62 @@ MouseArea {
     onExited: {
     TooltipService.hide();
     }
+
+    onClicked: function (mouse) {
+      if (mouse.button === Qt.LeftButton) {
+        if (pluginApi) {
+          PanelService.getPanel("clockPanel", screen)?.toggle(root);
+        }
+      } else if (mouse.button === Qt.RightButton) {
+        PanelService.showContextMenu(contextMenu, root, screen);
+      }
+    }
+}
+
+  NPopupContextMenu {
+    id: contextMenu
+
+    model: [
+      {
+        "label": pluginApi?.tr("menu.openPanel") || "Open Calendar",
+        "action": "open",
+        "icon": "calendar"
+      },
+      {
+        "label": pluginApi?.tr("menu.settings") || "Widget Settings",
+        "action": "settings",
+        "icon": "settings"
+      }
+    ]
+
+    onTriggered: function (action) {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
+
+      if (action === "open") {
+        PanelService.getPanel("clockPanel", screen)?.toggle(root);
+      } else if (action === "settings") {
+        BarService.openPluginSettings(screen, pluginApi.manifest);
+      }
+    }
+  }
+
+function buildCurrentTemp() {
+    let rows = [];
+    var temp = LocationService.data.weather.current_weather.temperature;
+    var suffix = "°C";
+
+    if (Settings.data.location.useFahrenheit) {
+        temp = LocationService.celsiusToFahrenheit(temp)
+        suffix = "°F";
+    }
+
+    rows.push([("Current"), `${Math.round(temp)}${suffix}`]);
+    return rows;
 }
 
 function buildHiLowTemps() {
+    let rows = [];
     var max = LocationService.data.weather.daily.temperature_2m_max[0]
     var min = LocationService.data.weather.daily.temperature_2m_min[0]
     var suffix = "°C";
@@ -127,14 +181,14 @@ function buildHiLowTemps() {
         suffix = "°F";
     }
 
-    max = Math.round(max)
-    min = Math.round(min)
+    rows.push([("High"), `${Math.round(max)}${suffix}`]);
+    rows.push([("Low"), `${Math.round(min)}${suffix}`]);
 
-    var tooltip = `High of ${max}${suffix}\nLow of ${min}${suffix}`
-    return tooltip;
+    return rows;
 }
 
 function buildSunriseSunset() {
+    let rows = [];
     var riseDate = new Date(LocationService.data.weather.daily.sunrise[0])
     var setDate  = new Date(LocationService.data.weather.daily.sunset[0])
 
@@ -142,34 +196,33 @@ function buildSunriseSunset() {
     var rise = riseDate.toLocaleTimeString(undefined, options);
     var set  = setDate.toLocaleTimeString(undefined, options);
 
-    var tooltip = `Sunrise: ${rise}\nSunset : ${set}`
-    return tooltip;
+    rows.push([("Sunrise"), rise]);
+    rows.push([("Sunset"), set]);
+    return rows;
 }
 
 function buildTooltip() {
+    let allRows = [];
     switch (tooltipOption) {
-        case 1: {
-            var tooltip = buildHiLowTemps()
-            TooltipService.show(root, tooltip, BarService.getTooltipDirection())
+        case "highlow": {
+            allRows.push(...buildHiLowTemps());
             break
         }
-
-        case 2:
-            var tooltip = buildSunriseSunset()
-
-            TooltipService.show(root, tooltip, BarService.getTooltipDirection())
+        case "sunrise": {
+            allRows.push(...buildSunriseSunset())
             break
-
-        case 3:
-            var tooltip1 = buildHiLowTemps()
-            var tooltip2 = buildSunriseSunset()
-            var finaltooltip = `${tooltip1}\n${tooltip2}`
-
-            TooltipService.show(root, finaltooltip, BarService.getTooltipDirection())
+        }
+        case "everything": {
+            allRows.push(...buildCurrentTemp());
+            allRows.push(...buildHiLowTemps())
+            allRows.push(...buildSunriseSunset());
             break
-
+        }
         default:
             break
     }
-}
+    if (allRows.length > 0) {
+      TooltipService.show(root, allRows, BarService.getTooltipDirection())
+    }
+  }
 }

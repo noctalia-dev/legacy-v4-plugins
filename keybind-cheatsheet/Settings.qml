@@ -42,7 +42,6 @@ Item {
   }
 
   Component.onDestruction: {
-    // Stop resize timer to prevent firing after destruction
     resizeTimer.stop();
   }
 
@@ -141,7 +140,7 @@ Item {
         }
 
         NText {
-          text: "px (400-3000)"
+          text: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.width-range") || "px (400-3000)"
           color: Color.mOnSurfaceVariant
           pointSize: Style.fontSizeS
         }
@@ -160,7 +159,7 @@ Item {
 
         NToggle {
           id: autoHeightToggle
-          label: "Auto"
+          label: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.auto-height") || "Auto"
           checked: root.autoHeight
           onToggled: function(checked) {
             root.autoHeight = checked;
@@ -189,7 +188,7 @@ Item {
         }
 
         NText {
-          text: "px (300-2000)"
+          text: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.height-range") || "px (300-2000)"
           color: Color.mOnSurfaceVariant
           pointSize: Style.fontSizeS
           opacity: autoHeightToggle.checked ? 0.5 : 1.0
@@ -356,7 +355,7 @@ Item {
             color: Color.mPrimary
           }
           NText {
-            text: "Hyprland Path"
+            text: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.hyprland-path") || "Hyprland Path"
             color: Color.mOnSurface
             pointSize: Style.fontSizeM
             font.weight: Style.fontWeightBold
@@ -405,7 +404,7 @@ Item {
             color: Color.mSecondary
           }
           NText {
-            text: "Niri Path"
+            text: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.niri-path") || "Niri Path"
             color: Color.mOnSurface
             pointSize: Style.fontSizeM
             font.weight: Style.fontWeightBold
@@ -465,15 +464,11 @@ Item {
           text: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.refresh-keybinds") || "Refresh Keybinds"
           icon: "refresh"
           onClicked: {
-            if (rootItem.pluginApi && rootItem.pluginApi.pluginSettings) {
-              rootItem.pluginApi.pluginSettings.cheatsheetData = [];
-              rootItem.pluginApi.pluginSettings.detectedCompositor = "";
-              rootItem.pluginApi.saveSettings();
-              ToastService.showNotice(
-                rootItem.pluginApi?.tr("keybind-cheatsheet.settings.refresh-message") ||
-                "Keybinds will be reloaded when you open the panel."
-              );
-            }
+            rootItem.pluginApi?.mainInstance?.refresh();
+            ToastService.showNotice(
+              rootItem.pluginApi?.tr("keybind-cheatsheet.settings.refresh-message") ||
+              "Refreshing keybinds..."
+            );
           }
         }
 
@@ -491,7 +486,6 @@ Item {
               rootItem.pluginApi.pluginSettings.hyprlandConfigPath = defaults.hyprlandConfigPath || "~/.config/hypr/hyprland.conf";
               rootItem.pluginApi.pluginSettings.niriConfigPath = defaults.niriConfigPath || "~/.config/niri/config.kdl";
               rootItem.pluginApi.pluginSettings.cheatsheetData = [];
-              rootItem.pluginApi.pluginSettings.detectedCompositor = "";
               rootItem.pluginApi.saveSettings();
 
               // Update UI
@@ -554,7 +548,7 @@ Item {
           id: commandText
           anchors.fill: parent
           anchors.margins: Style.marginS
-          text: "qs -c \"noctalia-shell\" ipc call \"keybind-cheatsheet\" \"toggle\""
+          text: "qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle"
           font.family: "monospace"
           pointSize: Style.fontSizeS
           color: Color.mPrimary
@@ -565,7 +559,7 @@ Item {
       NText {
         Layout.fillWidth: true
         text: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.keybind-example-hyprland") ||
-          "Hyprland example: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call \"keybind-cheatsheet\" \"toggle\""
+          "Hyprland example: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle"
         color: Color.mOnSurfaceVariant
         pointSize: Style.fontSizeXS
         wrapMode: Text.WordWrap
@@ -574,7 +568,7 @@ Item {
       NText {
         Layout.fillWidth: true
         text: rootItem.pluginApi?.tr("keybind-cheatsheet.settings.keybind-example-niri") ||
-          "Niri example: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"keybind-cheatsheet\" \"toggle\"; }"
+          "Niri example: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin:keybind-cheatsheet\" \"toggle\"; }"
         color: Color.mOnSurfaceVariant
         pointSize: Style.fontSizeXS
         wrapMode: Text.WordWrap

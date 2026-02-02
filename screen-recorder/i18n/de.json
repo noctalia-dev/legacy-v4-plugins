@@ -12,7 +12,8 @@
     "start-recording": "Bildschirmaufnahme (Aufnahme starten)",
     "started": "Aufnahme gestartet.",
     "stop-recording": "Bildschirmaufnahme (Aufnahme stoppen)",
-    "stopping": "Aufnahme stoppen…"
+    "stopping": "Aufnahme stoppen…",
+    "open-file": "Datei öffnen"
   },
   "name": "Bildschirmrekorder",
   "settings": {

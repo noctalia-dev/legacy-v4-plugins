@@ -1,0 +1,50 @@
+{
+  "keybind-cheatsheet": {
+    "panel": {
+      "loading": "Lastar...",
+      "title": "Tastatur-kart",
+      "title-hyprland": "Hyprland tastatur-kart",
+      "title-niri": "Niri tastatur-kart",
+      "workspace-switching": "ARBEIDSOMRÅDE - BYTTE",
+      "workspace-moving": "ARBEIDSOMRÅDE - FLYTTE",
+      "workspace-mouse": "ARBEIDSOMRÅDE - MUS"
+    },
+    "settings": {
+      "title": "Tastesnarveg-jukselapp Innstillingar",
+      "description": "Konfigurer utsjånad og tastesnarveg-kjelder for jukselapp-panelet.",
+      "window-size": "Vindaugsstorleik",
+      "width": "Breidde:",
+      "height": "Høgde:",
+      "auto-height": "Auto",
+      "auto-height-hint": "Når 'Auto' er aktivert, justerer høgda seg automatisk basert på innhald.",
+      "layout": "Oppsett",
+      "columns": "Tal på kolonnar:",
+      "columns-hint": "Fleire kolonnar fungerer betre med breiare vindauge.",
+      "config-paths": "Konfigurasjonsfiler",
+      "config-paths-description": "Spesifiser eigne stiar til tastesnarveg-konfigurasjonsfilene dine. Programtillegget vil automatisk parse rett fil basert på kompositoren din.",
+      "hyprland-format-hint": "Forventa format: bind = $mod, KEY, action #\"description\"\nKategoriar: # 1. CATEGORY NAME",
+      "niri-format-hint": "Kategoriar: // #\"Category Name\"\nSkildringar: hotkey-overlay-title=\"description\"",
+      "actions": "Handlingar",
+      "refresh-keybinds": "Oppdater tastesnarvegar",
+      "refresh-message": "Tastesnarvegar vil bli lasta på nytt når du opnar panelet.",
+      "reset-defaults": "Tilbakestill til standard",
+      "reset-message": "Innstillingar er tilbakestilt til standard.",
+      "saved": "Innstillingar lagra.",
+      "keybind-setup": "Tastesnarveg-oppsett",
+      "keybind-setup-description": "For å opne tastesnarveg-jukselappen med ein hurtigtast, legg til denne bindinga i kompositor-konfigurasjonen din:",
+      "keybind-example-hyprland": "Hyprland eksempel: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-niri": "Niri eksempel: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
+      "mod-var": "Mod-tast variabel",
+      "mod-var-hint": "Variabelnamnet brukt for Super-tasten din (t.d. $mod eller $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland-sti",
+      "niri-path": "Niri-sti"
+    },
+    "barwidget": {
+      "tooltip": "Tastesnarveg-jukselapp",
+      "open": "Opne jukselapp",
+      "settings": "Programtillegg-innstillingar"
+    }
+  }
+}

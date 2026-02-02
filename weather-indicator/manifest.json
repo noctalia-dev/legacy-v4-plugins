@@ -1,8 +1,8 @@
 {
   "id": "weather-indicator",
   "name": "Weather Indicator",
-  "version": "1.0.1",
-  "minNoctaliaVersion": "3.6.0",
+  "version": "1.0.4",
+  "minNoctaliaVersion": "4.3.0",
   "author": "Sovereign",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
@@ -20,7 +20,7 @@
       "showTempValue": true,
       "showTempUnit": true,
       "showConditionIcon": true,
-      "tooltipOption": 3
+      "tooltipOption": "everything"
     }
   }
 }

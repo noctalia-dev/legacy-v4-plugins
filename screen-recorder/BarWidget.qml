@@ -46,8 +46,8 @@ NIconButton {
     baseSize: Style.capsuleHeight
     applyUiScale: false
     customRadius: Style.radiusL
-    colorBg: mainInstance?.isRecording ? Color.mPrimary : Style.capsuleColor
-    colorFg: mainInstance?.isRecording ? Color.mOnPrimary : Color.mOnSurface
+    colorBg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mPrimary : Style.capsuleColor
+    colorFg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mOnPrimary : Color.mOnSurface
     colorBorder: "transparent"
     colorBorderHover: "transparent"
     border.color: Style.capsuleBorderColor

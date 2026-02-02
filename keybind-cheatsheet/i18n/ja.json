@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "読み込み中..."
+      "loading": "読み込み中...",
+      "title": "キーマップ",
+      "title-hyprland": "Hyprland キーマップ",
+      "title-niri": "Niri キーマップ",
+      "workspace-switching": "ワークスペース - 切り替え",
+      "workspace-moving": "ワークスペース - 移動",
+      "workspace-mouse": "ワークスペース - マウス"
     },
     "settings": {
       "title": "キーバインド一覧の設定",
@@ -26,10 +32,19 @@
       "saved": "設定が正常に保存されました。",
       "keybind-setup": "キーバインド設定",
       "keybind-setup-description": "キーボードショートカットでチートシートを開くには、このバインドをコンポジター設定に追加してください:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Modキー変数",
-      "mod-var-hint": "Superキーに使用される変数名（例: $mod または $mainMod）。"
+      "mod-var-hint": "Superキーに使用される変数名（例: $mod または $mainMod）。",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland パス",
+      "niri-path": "Niri パス"
+    },
+    "barwidget": {
+      "tooltip": "キーバインドチートシート",
+      "open": "チートシートを開く",
+      "settings": "プラグイン設定"
     }
   }
 }

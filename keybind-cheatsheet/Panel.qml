@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import qs.Commons
 import qs.Services.UI
+import qs.Services.Compositor
 import qs.Widgets
 
 Item {
@@ -22,19 +23,14 @@ Item {
   property int columnCount: cfg.columnCount ?? defaults.columnCount ?? 3
 
   property var rawCategories: pluginApi?.pluginSettings?.cheatsheetData || []
-  property var categories: processCategories(rawCategories)
-  property string compositor: pluginApi?.pluginSettings?.detectedCompositor || ""
+  property var categories: []
+  
 
-  function getConfigName() {
-    // Try environment variable first (for dev setups)
-    var qsConfig = Quickshell.env("QS_CONFIG_NAME");
-    if (qsConfig && qsConfig.length > 0) {
-      return qsConfig;
-    }
-
-    // Default for standard installations
-    return "noctalia-shell";
+  
+  Component.onCompleted: {
+    categories = processCategories(rawCategories);
   }
+
 
   // Dynamic column items (up to 4 columns)
   property var columnItems: []
@@ -50,11 +46,6 @@ Item {
   Component.onDestruction: {
     // Stop timer to prevent firing after destruction
     columnUpdateDebounce.stop();
-
-    // Stop refresh process if running
-    if (refreshProcess.running) {
-      refreshProcess.running = false;
-    }
 
     // Clear column items
     columnItems = [];
@@ -184,9 +175,9 @@ Item {
         }
         NText {
           text: {
-            if (root.compositor === "hyprland") {
+            if (CompositorService.isHyprland) {
               return "Hyprland Keymap";
-            } else if (root.compositor === "niri") {
+            } else if (CompositorService.isNiri) {
               return "Niri Keymap";
             } else {
               return "Keymap";
@@ -203,7 +194,7 @@ Item {
         NIconButton {
           icon: "refresh"
           onClicked: {
-            refreshProcess.running = true;
+            pluginApi?.mainInstance?.refresh();
           }
         }
 
@@ -213,7 +204,6 @@ Item {
           onClicked: {
             var screen = pluginApi?.panelOpenScreen;
             if (screen && pluginApi?.manifest) {
-              console.log("[KeybindCheatsheet] Opening plugin settings on screen:", screen.name);
               BarService.openPluginSettings(screen, pluginApi.manifest);
             }
           }
@@ -390,7 +380,7 @@ Item {
     if (!cats || cats.length === 0) return [];
 
     // For Hyprland: split large workspace categories
-    if (compositor === "hyprland") {
+    if (CompositorService.isHyprland) {
       var result = [];
       for (var i = 0; i < cats.length; i++) {
         var cat = cats[i];
@@ -411,9 +401,9 @@ Item {
             }
           }
 
-          if (switching.length > 0) result.push({ title: "WORKSPACES - SWITCHING", binds: switching });
-          if (moving.length > 0) result.push({ title: "WORKSPACES - MOVING", binds: moving });
-          if (mouse.length > 0) result.push({ title: "WORKSPACES - MOUSE", binds: mouse });
+          if (switching.length > 0) result.push({ title: pluginApi?.tr("keybind-cheatsheet.panel.workspace-switching") || "WORKSPACES - SWITCHING", binds: switching });
+          if (moving.length > 0) result.push({ title: pluginApi?.tr("keybind-cheatsheet.panel.workspace-moving") || "WORKSPACES - MOVING", binds: moving });
+          if (mouse.length > 0) result.push({ title: pluginApi?.tr("keybind-cheatsheet.panel.workspace-mouse") || "WORKSPACES - MOUSE", binds: mouse });
         } else {
           result.push(cat);
         }
@@ -464,11 +454,4 @@ Item {
     return columns;
   }
 
-  // Process to call IPC refresh command
-  // Note: We need to use custom IPC handler since there's no built-in "refresh" action
-  Process {
-    id: refreshProcess
-    command: ["qs", "-c", root.getConfigName(), "ipc", "call", "plugin:keybind-cheatsheet", "refresh"]
-    running: false
-  }
 }

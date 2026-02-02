@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Yukleniyor..."
+      "loading": "Yukleniyor...",
+      "title": "Tuş haritası",
+      "title-hyprland": "Hyprland tuş haritası",
+      "title-niri": "Niri tuş haritası",
+      "workspace-switching": "ÇALIŞMA ALANLARI - GEÇİŞ",
+      "workspace-moving": "ÇALIŞMA ALANLARI - TAŞIMA",
+      "workspace-mouse": "ÇALIŞMA ALANLARI - FARE"
     },
     "settings": {
       "title": "Klavye Kisayollari Ayarlari",
@@ -26,10 +32,19 @@
       "saved": "Ayarlar basariyla kaydedildi.",
       "keybind-setup": "Kisayol Ayari",
       "keybind-setup-description": "Cheatsheet'i bir klavye kisayoluyla acmak icin, bu bind'i compositor yapilandirmaniza ekleyin:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Mod Tusu Degiskeni",
-      "mod-var-hint": "Super tusunuz icin kullanilan degisken adi (orn. $mod veya $mainMod)."
+      "mod-var-hint": "Super tusunuz icin kullanilan degisken adi (orn. $mod veya $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland yolu",
+      "niri-path": "Niri yolu"
+    },
+    "barwidget": {
+      "tooltip": "Kısayol Kopya Kağıdı",
+      "open": "Kopya kağıdını aç",
+      "settings": "Eklenti ayarları"
     }
   }
 }

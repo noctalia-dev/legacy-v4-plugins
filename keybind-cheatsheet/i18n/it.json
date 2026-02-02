@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Caricamento..."
+      "loading": "Caricamento...",
+      "title": "Mappa tasti",
+      "title-hyprland": "Mappa tasti Hyprland",
+      "title-niri": "Mappa tasti Niri",
+      "workspace-switching": "SPAZI DI LAVORO - CAMBIO",
+      "workspace-moving": "SPAZI DI LAVORO - SPOSTAMENTO",
+      "workspace-mouse": "SPAZI DI LAVORO - MOUSE"
     },
     "settings": {
       "title": "Impostazioni Scorciatoie da Tastiera",
@@ -26,10 +32,19 @@
       "saved": "Impostazioni salvate con successo.",
       "keybind-setup": "Configurazione Scorciatoia",
       "keybind-setup-description": "Per aprire il cheatsheet con una scorciatoia, aggiungi questo bind alla configurazione del tuo compositor:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Variabile Tasto Mod",
-      "mod-var-hint": "Il nome della variabile usata per il tasto Super (es. $mod o $mainMod)."
+      "mod-var-hint": "Il nome della variabile usata per il tasto Super (es. $mod o $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Percorso Hyprland",
+      "niri-path": "Percorso Niri"
+    },
+    "barwidget": {
+      "tooltip": "Scheda scorciatoie",
+      "open": "Apri scheda",
+      "settings": "Impostazioni plugin"
     }
   }
 }

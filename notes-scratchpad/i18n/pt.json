@@ -1,0 +1,38 @@
+{
+  "bar_widget": {
+    "tooltip": "Bloco de notas"
+  },
+  "panel": {
+    "header": {
+      "title": "Bloco de notas"
+    },
+    "stats": {
+      "characters": "caracteres",
+      "words": "palavras"
+    },
+    "placeholder": "Comece a digitar suas notas aqui..."
+  },
+  "settings": {
+    "panel_dimensions": {
+      "title": "Dimensões do painel",
+      "description": "Configure o tamanho do painel do bloco de notas ao abrir.",
+      "width": "Largura",
+      "height": "Altura"
+    },
+    "file_storage": {
+      "title": "Armazenamento em Arquivo",
+      "description": "Opcionalmente salvar o conteúdo do rascunho em um arquivo em vez das configurações do plugin. Deixe vazio para usar o armazenamento padrão.",
+      "select": "Selecionar arquivo",
+      "picker_title": "Escolher arquivo para rascunho",
+      "not_writable": "⚠ Aviso: Sem permissão de escrita para este local"
+    },
+    "text_appearance": {
+      "title": "Aparência do texto",
+      "font_size": "Tamanho da fonte"
+    },
+    "keyboard_shortcut": {
+      "title": "Atalho de teclado",
+      "description": "Alternar o painel do bloco de notas com este comando:"
+    }
+  }
+}

@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Chargement..."
+      "loading": "Chargement...",
+      "title": "Carte des touches",
+      "title-hyprland": "Carte des touches Hyprland",
+      "title-niri": "Carte des touches Niri",
+      "workspace-switching": "ESPACES DE TRAVAIL - BASCULER",
+      "workspace-moving": "ESPACES DE TRAVAIL - DÉPLACER",
+      "workspace-mouse": "ESPACES DE TRAVAIL - SOURIS"
     },
     "settings": {
       "title": "Parametres des Raccourcis Clavier",
@@ -26,10 +32,19 @@
       "saved": "Parametres enregistres avec succes.",
       "keybind-setup": "Configuration du Raccourci",
       "keybind-setup-description": "Pour ouvrir le cheatsheet avec un raccourci clavier, ajoutez ce bind a la configuration de votre compositeur:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Variable de Touche Mod",
-      "mod-var-hint": "Le nom de la variable utilisée pour votre touche Super (ex. $mod ou $mainMod)."
+      "mod-var-hint": "Le nom de la variable utilisée pour votre touche Super (ex. $mod ou $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Chemin Hyprland",
+      "niri-path": "Chemin Niri"
+    },
+    "barwidget": {
+      "tooltip": "Aide-mémoire des raccourcis",
+      "open": "Ouvrir l'aide-mémoire",
+      "settings": "Paramètres du plugin"
     }
   }
 }

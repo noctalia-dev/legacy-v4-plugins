@@ -1,0 +1,50 @@
+{
+  "keybind-cheatsheet": {
+    "panel": {
+      "loading": "लोड हो रहा है...",
+      "title": "कीमैप",
+      "title-hyprland": "Hyprland कीमैप",
+      "title-niri": "Niri कीमैप",
+      "workspace-switching": "कार्यक्षेत्र - स्विच करना",
+      "workspace-moving": "कार्यक्षेत्र - स्थानांतरण",
+      "workspace-mouse": "कार्यक्षेत्र - माउस"
+    },
+    "settings": {
+      "title": "कीबाइंड चीटशीट सेटिंग्स",
+      "description": "कीबाइंड चीटशीट पैनल के लिए उपस्थिति और कीबाइंड स्रोतों को कॉन्फ़िगर करें।",
+      "window-size": "विंडो आकार",
+      "width": "चौड़ाई:",
+      "height": "ऊंचाई:",
+      "auto-height": "स्वचालित",
+      "auto-height-hint": "जब 'स्वचालित' सक्षम है, ऊंचाई सामग्री के आधार पर स्वचालित रूप से समायोजित होती है।",
+      "layout": "लेआउट",
+      "columns": "कॉलम की संख्या:",
+      "columns-hint": "अधिक कॉलम चौड़ी विंडो के साथ बेहतर काम करते हैं।",
+      "config-paths": "कॉन्फ़िगरेशन फ़ाइलें",
+      "config-paths-description": "अपनी कीबाइंड कॉन्फ़िगरेशन फ़ाइलों के लिए कस्टम पथ निर्दिष्ट करें। प्लगइन स्वचालित रूप से आपके कंपोजिटर के आधार पर उपयुक्त फ़ाइल को पार्स करेगा।",
+      "hyprland-format-hint": "अपेक्षित प्रारूप: bind = $mod, KEY, action #\"description\"\nश्रेणियाँ: # 1. CATEGORY NAME",
+      "niri-format-hint": "श्रेणियाँ: // #\"Category Name\"\nविवरण: hotkey-overlay-title=\"description\"",
+      "actions": "क्रियाएं",
+      "refresh-keybinds": "कीबाइंड रीफ्रेश करें",
+      "refresh-message": "जब आप पैनल खोलेंगे तो कीबाइंड पुनः लोड होंगे।",
+      "reset-defaults": "डिफ़ॉल्ट पर रीसेट करें",
+      "reset-message": "सेटिंग्स डिफ़ॉल्ट पर रीसेट कर दी गई हैं।",
+      "saved": "सेटिंग्स सफलतापूर्वक सहेजी गईं।",
+      "keybind-setup": "कीबाइंड सेटअप",
+      "keybind-setup-description": "कीबोर्ड शॉर्टकट के साथ कीबाइंड चीटशीट खोलने के लिए, अपने कंपोजिटर कॉन्फ़िग में यह बाइंड जोड़ें:",
+      "keybind-example-hyprland": "Hyprland उदाहरण: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-niri": "Niri उदाहरण: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
+      "mod-var": "मॉड कुंजी वेरिएबल",
+      "mod-var-hint": "आपकी Super कुंजी के लिए उपयोग किया जाने वाला वेरिएबल नाम (जैसे, $mod या $mainMod)।",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland पथ",
+      "niri-path": "Niri पथ"
+    },
+    "barwidget": {
+      "tooltip": "कीबाइंड चीटशीट",
+      "open": "चीटशीट खोलें",
+      "settings": "प्लगइन सेटिंग्स"
+    }
+  }
+}

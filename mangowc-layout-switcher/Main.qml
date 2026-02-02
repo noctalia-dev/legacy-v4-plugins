@@ -174,10 +174,6 @@ Item {
     if (!eventWatcher.running) eventWatcher.running = true
   }
 
-  function getMonitorLayout(monitorName) {
-    return root.monitorLayouts[monitorName] || "?"
-  }
-
   function setLayout(monitorName, layoutCode) {
     if (!monitorName || !layoutCode) return
 

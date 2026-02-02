@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Carregando..."
+      "loading": "Carregando...",
+      "title": "Mapa de teclas",
+      "title-hyprland": "Mapa de teclas Hyprland",
+      "title-niri": "Mapa de teclas Niri",
+      "workspace-switching": "ESPAÇOS DE TRABALHO - ALTERNAR",
+      "workspace-moving": "ESPAÇOS DE TRABALHO - MOVER",
+      "workspace-mouse": "ESPAÇOS DE TRABALHO - MOUSE"
     },
     "settings": {
       "title": "Configuracoes de Atalhos de Teclado",
@@ -26,10 +32,19 @@
       "saved": "Configuracoes salvas com sucesso.",
       "keybind-setup": "Configuracao de Atalho",
       "keybind-setup-description": "Para abrir o cheatsheet com um atalho de teclado, adicione este bind a configuracao do seu compositor:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Variável da Tecla Mod",
-      "mod-var-hint": "O nome da variável usada para sua tecla Super (ex. $mod ou $mainMod)."
+      "mod-var-hint": "O nome da variável usada para sua tecla Super (ex. $mod ou $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Caminho Hyprland",
+      "niri-path": "Caminho Niri"
+    },
+    "barwidget": {
+      "tooltip": "Folha de dicas de atalhos",
+      "open": "Abrir folha de dicas",
+      "settings": "Configurações do plugin"
     }
   }
 }

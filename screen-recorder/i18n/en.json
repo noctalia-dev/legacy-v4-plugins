@@ -9,9 +9,9 @@
     "not-installed": "gpu-screen-recorder not installed.",
     "not-installed-desc": "Please install gpu-screen-recorder to use screen recording features.",
     "saved": "Recording saved.",
-    "start-recording": "Screen recorder (start recording)",
+    "start-recording": "Screen Recorder (start recording)",
     "started": "Recording started.",
-    "stop-recording": "Screen recorder (stop recording)",
+    "stop-recording": "Screen Recorder (stop recording)",
     "stopping": "Stopping recording…",
     "open-file": "Open file"
   },

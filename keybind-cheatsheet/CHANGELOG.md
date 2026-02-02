@@ -1,5 +1,65 @@
 # Changelog
 
+## [3.1.0] - 2026-01-30
+
+### 🔧 Code Quality Improvements
+
+**Removed Excessive Logging**
+- Removed all `logDebug()`, `logInfo()`, `logWarn()` functions and their calls from Main.qml
+- Kept only `logError()` for critical error reporting
+- Follows Noctalia plugin guidelines (Logger.e() only for errors)
+- Reduces console noise and improves performance
+
+**Removed console.log Statements**
+- Removed `console.log` from Panel.qml settings button click handler
+- Production-ready code without debug statements
+
+### 🐛 Bug Fixes
+
+**Fixed Refresh Functionality (Critical)**
+- **Panel Refresh:** Fixed refresh not working from panel - parser state flags (`parserStarted`, `isCurrentlyParsing`) were not being reset
+- **Settings Refresh:** Fixed refresh from settings causing data to disappear - now properly calls IPC refresh instead of just clearing data
+
+**IPC Handler Improvements**
+- Added `toggle()` function to IpcHandler for backward compatibility
+- Both IPC call formats now work:
+  - `plugin:keybind-cheatsheet toggle` (legacy format)
+  - `plugin togglePanel keybind-cheatsheet` (built-in Noctalia function)
+- Fixed `refresh()` function to properly reset all parser state before re-detecting compositor
+
+### ✨ New Features
+
+**BarWidget Modernization**
+- Converted from custom `Rectangle` + `MouseArea` to `NIconButton` component
+- Added right-click context menu with:
+  - "Open Cheatsheet" - opens the panel
+  - "Plugin Settings" - opens plugin settings
+- Improved hover states and visual consistency with other Noctalia widgets
+- Added proper tooltip with direction based on bar position
+- Uses `NPopupContextMenu` for context menu
+
+**Settings Process Management**
+- Added `settingsRefreshProcess` for IPC communication
+- Added `getConfigName()` helper function for dynamic config detection
+- Proper process cleanup on component destruction
+
+### 📊 Changes Summary
+
+| File | Changes |
+|------|---------|
+| Main.qml | Removed logDebug/logInfo/logWarn (kept logError), added toggle() IPC, fixed refresh() state reset |
+| Panel.qml | Removed console.log from settings button |
+| Settings.qml | Added IPC refresh process, getConfigName() helper, proper cleanup |
+| BarWidget.qml | Converted to NIconButton, added right-click context menu |
+
+### 🔄 Migration Notes
+
+- No breaking changes from v3.0.0
+- Keybinds for panel toggle continue to work
+- Both old and new IPC formats supported
+
+---
+
 ## [3.0.0] - 2026-01-28
 
 ### BREAKING CHANGES

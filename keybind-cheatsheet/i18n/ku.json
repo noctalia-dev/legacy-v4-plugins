@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Barkirin..."
+      "loading": "Barkirin...",
+      "title": "Nexşeya Bişkokan",
+      "title-hyprland": "Nexşeya Bişkokan a Hyprland",
+      "title-niri": "Nexşeya Bişkokan a Niri",
+      "workspace-switching": "QADÊN XEBATÊ - GUHEZTIN",
+      "workspace-moving": "QADÊN XEBATÊ - VEGUHESTIN",
+      "workspace-mouse": "QADÊN XEBATÊ - MIŞK"
     },
     "settings": {
       "title": "Mîhengên Kurterêyên Klavyeyê",
@@ -26,10 +32,19 @@
       "saved": "Mîhengan bi serfirazî hate tomarkirin.",
       "keybind-setup": "Mîhengkirina Kurterêyê",
       "keybind-setup-description": "Ji bo vekirana cheatsheet bi kurterêyek, ev bind li veavakirina compositor xwe zêde bikin:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Guhêrbarê Bişkoja Mod",
-      "mod-var-hint": "Navê guhêrbarê ku ji bo bişkoja Super tê bikaranîn (mînak $mod an $mainMod)."
+      "mod-var-hint": "Navê guhêrbarê ku ji bo bişkoja Super tê bikaranîn (mînak $mod an $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Rêça Hyprland",
+      "niri-path": "Rêça Niri"
+    },
+    "barwidget": {
+      "tooltip": "Çavkaniya Kurterêyan",
+      "open": "Çavkaniyê veke",
+      "settings": "Mîhengên Pêvek"
     }
   }
 }

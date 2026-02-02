@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Laden..."
+      "loading": "Laden...",
+      "title": "Toetsenbordindeling",
+      "title-hyprland": "Hyprland toetsenbordindeling",
+      "title-niri": "Niri toetsenbordindeling",
+      "workspace-switching": "WERKRUIMTEN - WISSELEN",
+      "workspace-moving": "WERKRUIMTEN - VERPLAATSEN",
+      "workspace-mouse": "WERKRUIMTEN - MUIS"
     },
     "settings": {
       "title": "Sneltoetsen Overzicht Instellingen",
@@ -26,10 +32,19 @@
       "saved": "Instellingen succesvol opgeslagen.",
       "keybind-setup": "Sneltoets Instelling",
       "keybind-setup-description": "Om het cheatsheet met een sneltoets te openen, voeg deze binding toe aan je compositor configuratie:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Mod-toets Variabele",
-      "mod-var-hint": "De variabelenaam die wordt gebruikt voor uw Super-toets (bijv. $mod of $mainMod)."
+      "mod-var-hint": "De variabelenaam die wordt gebruikt voor uw Super-toets (bijv. $mod of $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland pad",
+      "niri-path": "Niri pad"
+    },
+    "barwidget": {
+      "tooltip": "Sneltoetsen Spiekbriefje",
+      "open": "Spiekbriefje openen",
+      "settings": "Plugin instellingen"
     }
   }
 }

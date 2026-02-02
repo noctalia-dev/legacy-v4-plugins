@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Загрузка..."
+      "loading": "Загрузка...",
+      "title": "Раскладка клавиш",
+      "title-hyprland": "Раскладка клавиш Hyprland",
+      "title-niri": "Раскладка клавиш Niri",
+      "workspace-switching": "РАБОЧИЕ ОБЛАСТИ - ПЕРЕКЛЮЧЕНИЕ",
+      "workspace-moving": "РАБОЧИЕ ОБЛАСТИ - ПЕРЕМЕЩЕНИЕ",
+      "workspace-mouse": "РАБОЧИЕ ОБЛАСТИ - МЫШЬ"
     },
     "settings": {
       "title": "Настройки горячих клавиш",
@@ -26,10 +32,19 @@
       "saved": "Настройки успешно сохранены.",
       "keybind-setup": "Настройка клавиши",
       "keybind-setup-description": "Чтобы открыть шпаргалку с помощью клавиши, добавьте этот bind в конфигурацию композитора:",
-      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Переменная клавиши Mod",
-      "mod-var-hint": "Имя переменной, используемой для клавиши Super (например, $mod или $mainMod)."
+      "mod-var-hint": "Имя переменной, используемой для клавиши Super (например, $mod или $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Путь Hyprland",
+      "niri-path": "Путь Niri"
+    },
+    "barwidget": {
+      "tooltip": "Шпаргалка горячих клавиш",
+      "open": "Открыть шпаргалку",
+      "settings": "Настройки плагина"
     }
   }
 }

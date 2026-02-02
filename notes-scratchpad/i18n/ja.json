@@ -1,0 +1,38 @@
+{
+  "bar_widget": {
+    "tooltip": "メモ帳"
+  },
+  "panel": {
+    "header": {
+      "title": "メモ帳"
+    },
+    "stats": {
+      "characters": "文字",
+      "words": "単語"
+    },
+    "placeholder": "ここにメモを入力してください..."
+  },
+  "settings": {
+    "panel_dimensions": {
+      "title": "パネルサイズ",
+      "description": "開いたときのメモ帳パネルのサイズを設定します。",
+      "width": "幅",
+      "height": "高さ"
+    },
+    "file_storage": {
+      "title": "ファイル保存",
+      "description": "オプションでプラグイン設定の代わりにファイルにスクラッチパッドの内容を保存します。デフォルトストレージを使用するには空のままにします。",
+      "select": "ファイルを選択",
+      "picker_title": "スクラッチパッド用のファイルを選択",
+      "not_writable": "⚠ 警告: この場所への書き込み権限がありません"
+    },
+    "text_appearance": {
+      "title": "テキストの外観",
+      "font_size": "フォントサイズ"
+    },
+    "keyboard_shortcut": {
+      "title": "キーボードショートカット",
+      "description": "このコマンドでメモ帳パネルを切り替えます："
+    }
+  }
+}

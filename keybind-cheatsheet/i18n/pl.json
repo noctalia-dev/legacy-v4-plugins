@@ -1,7 +1,13 @@
 {
   "keybind-cheatsheet": {
     "panel": {
-      "loading": "Ladowanie..."
+      "loading": "Ladowanie...",
+      "title": "Mapa klawiszy",
+      "title-hyprland": "Mapa klawiszy Hyprland",
+      "title-niri": "Mapa klawiszy Niri",
+      "workspace-switching": "OBSZARY ROBOCZE - PRZEŁĄCZANIE",
+      "workspace-moving": "OBSZARY ROBOCZE - PRZENOSZENIE",
+      "workspace-mouse": "OBSZARY ROBOCZE - MYSZ"
     },
     "settings": {
       "title": "Ustawienia Skrotow Klawiszowych",
@@ -26,10 +32,19 @@
       "saved": "Ustawienia zapisane pomyslnie.",
       "keybind-setup": "Konfiguracja Skrotu",
       "keybind-setup-description": "Aby otworzyc cheatsheet skrotem klawiszowym, dodaj ten bind do konfiguracji kompozytora:",
-      "keybind-example-hyprland": "Przyklad Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-hyprland": "Przyklad Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
       "keybind-example-niri": "Przyklad Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
       "mod-var": "Zmienna klawisza Mod",
-      "mod-var-hint": "Nazwa zmiennej używanej dla klawisza Super (np. $mod lub $mainMod)."
+      "mod-var-hint": "Nazwa zmiennej używanej dla klawisza Super (np. $mod lub $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Ścieżka Hyprland",
+      "niri-path": "Ścieżka Niri"
+    },
+    "barwidget": {
+      "tooltip": "Ściągawka skrótów klawiszowych",
+      "open": "Otwórz ściągawkę",
+      "settings": "Ustawienia wtyczki"
     }
   }
 }

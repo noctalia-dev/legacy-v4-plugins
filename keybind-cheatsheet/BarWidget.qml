@@ -1,10 +1,10 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Services.UI
 import qs.Widgets
 
-Rectangle {
+NIconButton {
   id: root
 
   property var pluginApi: null
@@ -12,47 +12,62 @@ Rectangle {
   property string widgetId: ""
   property string section: ""
 
-  readonly property string barPosition: Settings.data.bar.position || "top"
-  readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
+  baseSize: Style.getCapsuleHeightForScreen(screen?.name)
+  applyUiScale: false
+  icon: "keyboard"
+  tooltipText: pluginApi?.tr("keybind-cheatsheet.barwidget.tooltip") || "Keybind Cheatsheet"
+  tooltipDirection: BarService.getTooltipDirection(screen?.name)
+  customRadius: Style.radiusL
 
-  implicitWidth: Style.capsuleHeight
-  implicitHeight: Style.capsuleHeight
+  colorBg: Style.capsuleColor
+  colorFg: Color.mOnSurface
+  colorBgHover: Color.mHover
+  colorFgHover: Color.mOnHover
+  colorBorder: "transparent"
+  colorBorderHover: "transparent"
 
-  color: Style.capsuleColor
-  radius: Style.radiusL
+  border.color: Style.capsuleBorderColor
+  border.width: Style.capsuleBorderWidth
 
-  NIcon {
-    id: contentIcon
-    anchors.centerIn: parent
-    icon: "keyboard"
-    applyUiScale: false
-    color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-  }
+  NPopupContextMenu {
+    id: contextMenu
 
-  MouseArea {
-    id: mouseArea
-    anchors.fill: parent
-    hoverEnabled: true
-    cursorShape: Qt.PointingHandCursor
+    model: [
+      {
+        "label": "Open Cheatsheet",
+        "action": "open-panel",
+        "icon": "keyboard"
+      },
+      {
+        "label": "Plugin Settings",
+        "action": "plugin-settings",
+        "icon": "settings"
+      },
+    ]
 
-    onEntered: {
-      root.color = Color.mHover;
-    }
+    onTriggered: action => {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
 
-    onExited: {
-      root.color = Style.capsuleColor;
-    }
-
-    onClicked: {
-      if (pluginApi) {
-        // Only open panel, don't trigger parsing
-        pluginApi.withCurrentScreen(screen => pluginApi.openPanel(screen));
+      if (action === "open-panel") {
+        if (pluginApi) {
+          pluginApi.openPanel(screen);
+        }
+      } else if (action === "plugin-settings") {
+        if (pluginApi) {
+          BarService.openPluginSettings(screen, pluginApi.manifest);
+        }
       }
     }
+  }
 
-    // Memory leak prevention: cleanup hover state
-    Component.onDestruction: {
-      hoverEnabled = false;
+  onClicked: {
+    if (pluginApi) {
+      pluginApi.openPanel(screen);
     }
+  }
+
+  onRightClicked: {
+    PanelService.showContextMenu(contextMenu, root, screen);
   }
 }
