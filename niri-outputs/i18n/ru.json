@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Управление Выводом Niri",
+    "scale": "Масштаб",
+    "rotate": "Поворот",
+    "mode": "Режим",
+    "refresh-rate": "Частота Обновления",
+    "transform": "Преобразование",
+    "apply": "Применить",
+    "discard": "Отмена",
+    "position": "Позиция",
+    "enabled": "Включено",
+    "display-configuration": "Настройка Дисплея"
+  }
+}

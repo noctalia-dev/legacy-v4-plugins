@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Niri出力管理",
+    "scale": "スケール",
+    "rotate": "回転",
+    "mode": "モード",
+    "refresh-rate": "リフレッシュレート",
+    "transform": "変換",
+    "apply": "変更を適用",
+    "discard": "破棄",
+    "position": "位置",
+    "enabled": "有効",
+    "display-configuration": "ディスプレイ設定"
+  }
+}

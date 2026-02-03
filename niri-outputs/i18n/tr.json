@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Niri Çıktı Yönetimi",
+    "scale": "Ölçek",
+    "rotate": "Döndür",
+    "mode": "Mod",
+    "refresh-rate": "Yenileme Hızı",
+    "transform": "Dönüşüm",
+    "apply": "Uygula",
+    "discard": "İptal",
+    "position": "Konum",
+    "enabled": "Etkin",
+    "display-configuration": "Ekran Yapılandırması"
+  }
+}

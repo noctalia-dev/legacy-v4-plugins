@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Niri-Ausgabeverwaltung",
+    "scale": "Skalierung",
+    "rotate": "Drehen",
+    "mode": "Modus",
+    "refresh-rate": "Bildwiederholrate",
+    "transform": "Transformation",
+    "apply": "Änderungen anwenden",
+    "discard": "Verwerfen",
+    "position": "Position",
+    "enabled": "Aktiviert",
+    "display-configuration": "Anzeigekonfiguration"
+  }
+}

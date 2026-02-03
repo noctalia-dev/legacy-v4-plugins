@@ -1,0 +1,24 @@
+{
+  "id": "niri-outputs",
+  "name": "Niri Outputs",
+  "version": "1.1.1",
+  "minNoctaliaVersion": "4.1.2",
+  "author": "adrlau",
+  "official": false,
+  "license": "MIT",
+  "description": "Manage niri outputs: scale, mode, and more.",
+  "tags": ["Utility", "Bar", "Panel"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+    }
+  }
+}

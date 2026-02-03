@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Niri Uitvoerbeheer",
+    "scale": "Schaal",
+    "rotate": "Roteren",
+    "mode": "Modus",
+    "refresh-rate": "Vernieuwingsfrequentie",
+    "transform": "Transformatie",
+    "apply": "Wijzigingen Toepassen",
+    "discard": "Annuleren",
+    "position": "Positie",
+    "enabled": "Ingeschakeld",
+    "display-configuration": "Beeldschermconfiguratie"
+  }
+}

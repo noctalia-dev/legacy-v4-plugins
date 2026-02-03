@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Gestion des Sorties Niri",
+    "scale": "Échelle",
+    "rotate": "Pivoter",
+    "mode": "Mode",
+    "refresh-rate": "Fréquence de Rafraîchissement",
+    "transform": "Transformation",
+    "apply": "Appliquer les Modifications",
+    "discard": "Annuler",
+    "position": "Position",
+    "enabled": "Activé",
+    "display-configuration": "Configuration de l'Affichage"
+  }
+}
