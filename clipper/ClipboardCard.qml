@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import Quickshell
 import qs.Commons
 import qs.Services.Keyboard
+import qs.Services.Noctalia
+import qs.Services.UI
 import qs.Widgets
 
 Rectangle {
@@ -14,6 +16,7 @@ Rectangle {
     property string clipboardId: clipboardItem ? clipboardItem.id : ""
     property string mime: clipboardItem ? clipboardItem.mime : ""
     property string preview: clipboardItem ? clipboardItem.preview : ""
+    property string pinnedImageDataUrl: ""  // For pinned images - data URL
 
     // Content type detection
     readonly property bool isImage: clipboardItem && clipboardItem.isImage
@@ -87,18 +90,72 @@ Rectangle {
     signal clicked
     signal deleteClicked
     signal addToTodoClicked
+    signal pinClicked
     property bool selected: false
     property bool enableTodoIntegration: false
+    property bool isPinned: false
 
     width: 250
     height: parent.height
-    
+
+    // Get ToDo pages from plugin
+    function getTodoPages() {
+        const todoApi = PluginService.getPluginAPI("todo");
+        if (!todoApi || !todoApi.pluginSettings || !todoApi.pluginSettings.pages) {
+            return [{ id: 0, name: "General" }];
+        }
+        return todoApi.pluginSettings.pages;
+    }
+
+    // Build menu model from ToDo pages
+    function buildTodoMenuModel() {
+        const pages = getTodoPages();
+        const model = [];
+        for (let i = 0; i < pages.length; i++) {
+            model.push({
+                "label": pages[i].name,
+                "action": "page-" + pages[i].id,
+                "icon": "checkbox"
+            });
+        }
+        return model;
+    }
+
+    // Context menu for ToDo page selection
+    NPopupContextMenu {
+        id: todoContextMenu
+
+        onTriggered: action => {
+            todoContextMenu.close();
+
+            if (action.startsWith("page-")) {
+                const pageId = parseInt(action.replace("page-", ""));
+                if (root.preview) {
+                    root.pluginApi?.mainInstance?.addTodoWithText(root.preview.substring(0, 200), pageId);
+                }
+            }
+        }
+    }
+
     // Body background - Same as accent color
     color: selected ? Qt.darker(accentColor, 1.1) : (mouseArea.containsMouse ? Qt.lighter(accentColor, 1.1) : accentColor)
-    
+
     radius: (typeof Style !== "undefined") ? Style.radiusM : 16
     border.width: 2
     border.color: accentColor // Border same as background
+
+    // Visual indicator for pinned status (small icon in corner)
+    NIcon {
+        visible: root.isPinned
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 4
+        z: 100
+        icon: "pin-filled"
+        pointSize: 10
+        color: root.accentFgColor
+        opacity: 0.6
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -110,13 +167,13 @@ Rectangle {
             Layout.preferredHeight: 35
             color: root.accentColor // Header same as background
             radius: (typeof Style !== "undefined") ? Style.radiusM : 16
-            
+
             // Bottom square fix not needed if body has same color, but kept for structure
-            Rectangle { 
-                anchors.bottom: parent.bottom; 
-                width: parent.width; 
-                height: parent.radius; 
-                color: parent.color 
+            Rectangle {
+                anchors.bottom: parent.bottom;
+                width: parent.width;
+                height: parent.radius;
+                color: parent.color
             }
 
             RowLayout {
@@ -130,19 +187,34 @@ Rectangle {
                 NText { text: root.typeLabel; color: root.accentFgColor; font.bold: true }
                 Item { Layout.fillWidth: true }
                 NIconButton {
+                    id: todoButton
                     visible: root.enableTodoIntegration && !root.isImage
                     icon: "checkbox"
-                    tooltipText: "Add to ToDo"
+                    tooltipText: pluginApi?.tr("clipper.card.add-todo") || "Add to ToDo"
                     colorFg: root.accentFgColor
                     colorBg: "transparent"
                     colorBgHover: Qt.rgba(0,0,0,0.1)
                     colorBorder: "transparent"
                     colorBorderHover: "transparent"
-                    onClicked: root.addToTodoClicked()
+                    onClicked: {
+                        todoContextMenu.model = root.buildTodoMenuModel();
+                        PanelService.showContextMenu(todoContextMenu, todoButton, null);
+                    }
+                }
+                NIconButton {
+                    visible: !root.isPinned  // Hide pin button for pinned items (use delete instead)
+                    icon: "pin"
+                    tooltipText: pluginApi?.tr("clipper.card.pin") || "Pin"
+                    colorFg: root.accentFgColor
+                    colorBg: "transparent"
+                    colorBgHover: Qt.rgba(0,0,0,0.1)
+                    colorBorder: "transparent"
+                    colorBorderHover: "transparent"
+                    onClicked: root.pinClicked()
                 }
                 NIconButton {
                     icon: "trash"
-                    tooltipText: "Delete"
+                    tooltipText: pluginApi?.tr("clipper.card.delete") || "Delete"
                     colorFg: root.accentFgColor
                     colorBg: "transparent"
                     colorBgHover: Qt.rgba(0,0,0,0.1)
@@ -200,8 +272,26 @@ Rectangle {
                 anchors.fill: parent
                 radius: 8
                 imageFillMode: Image.PreserveAspectFit
-                imagePath: root.isImage ? (ClipboardService.getImageData(root.clipboardId) || "") : ""
-                Component.onCompleted: { if (root.isImage && root.clipboardId) ClipboardService.decodeToDataUrl(root.clipboardId, root.mime, null); }
+                imagePath: {
+                    // For pinned images, use data URL directly
+                    if (root.pinnedImageDataUrl) {
+                        return root.pinnedImageDataUrl;
+                    }
+                    // For cliphist images, use cache (reactive binding via imageCacheRevision)
+                    if (root.isImage && root.pluginApi?.mainInstance) {
+                        // Force re-evaluation when cache changes by referencing revision
+                        const revision = root.pluginApi.mainInstance.imageCacheRevision;
+                        const cache = root.pluginApi.mainInstance.imageCache;
+                        return cache[root.clipboardId] || "";
+                    }
+                    return "";
+                }
+                Component.onCompleted: {
+                    // Only decode if not pinned (pinned images have data URL already)
+                    if (!root.pinnedImageDataUrl && root.isImage && root.clipboardId && root.pluginApi?.mainInstance) {
+                        root.pluginApi.mainInstance.decodeToDataUrl(root.clipboardId, root.mime, null);
+                    }
+                }
             }
         }
     }

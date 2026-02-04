@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "Klembordgeschiedenis"
+    },
+    "context": {
+      "toggle": "Clipper schakelen",
+      "settings": "Instellingen openen"
+    },
+    "panel": {
+      "title": "Klembordgeschiedenis",
+      "pinned-title": "Vastgemaakte items",
+      "no-pinned": "Geen vastgemaakte items",
+      "settings": "Instellingen",
+      "search-placeholder": "Zoeken...",
+      "filter-all": "Alle",
+      "filter-text": "Tekst",
+      "filter-images": "Afbeeldingen",
+      "filter-colors": "Kleuren",
+      "filter-links": "Links",
+      "filter-code": "Code",
+      "filter-emoji": "Emoji",
+      "filter-files": "Bestanden",
+      "clear-all": "Alles wissen",
+      "no-matches": "Geen overeenkomende items",
+      "empty": "Klembord is leeg"
+    },
+    "card": {
+      "add-todo": "Toevoegen aan takenlijst",
+      "pin": "Vastmaken",
+      "delete": "Verwijderen"
+    },
+    "settings": {
+      "integrations": "Integraties",
+      "todo-integration": "ToDo-plugin-integratie",
+      "todo-description": "Klembord-items rechtstreeks toevoegen aan uw takenlijst",
+      "todo-disabled": "ToDo-plugin is niet geïnstalleerd of uitgeschakeld",
+      "appearance": "Kaartweergave",
+      "card-type": "Kaarttype",
+      "card-type-desc": "Selecteer kaarttype om aan te passen",
+      "preview": "Voorbeeld",
+      "sample-content": "Voorbeeldinhoud...",
+      "bg-color": "Achtergrondkleur",
+      "bg-color-desc": "Achtergrondkleur van kaart",
+      "separator-color": "Scheidingslijnkleur",
+      "separator-color-desc": "Lijn tussen koptekst en inhoud",
+      "fg-color": "Voorgrondkleur",
+      "fg-color-desc": "Kleur van titel, pictogrammen en tekstinhoud",
+      "reset-defaults": "Standaardinstellingen herstellen"
+    }
+  }
+}

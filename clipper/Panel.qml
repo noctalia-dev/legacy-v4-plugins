@@ -15,31 +15,27 @@ Item {
     // Plugin API (injected by PluginPanelSlot)
     property var pluginApi: null
 
-    // Process for ToDo IPC calls
-    Process {
-        id: todoIpcProcess
-        onExited: (exitCode, exitStatus) => {
-            if (exitCode === 0) {
-                ToastService.showNotice("Added to ToDo list");
-            } else {
-                Logger.e("clipper", "Failed to add to ToDo: exit code " + exitCode);
-            }
+    // Refresh clipboard list when panel becomes visible
+    onVisibleChanged: {
+        if (visible) {
+            pluginApi?.mainInstance?.refreshOnPanelOpen();
         }
     }
 
     // SmartPanel properties (required for panel behavior)
-    readonly property var geometryPlaceholder: panelContainer
+    readonly property var geometryPlaceholder: mainContainer
     readonly property bool allowAttach: false
 
-    // Panel dimensions
-    property int contentPreferredHeight: 300
-    property int contentPreferredWidth: screen.width  // 0 means use default widthRatio
+    // Panel dimensions - fullscreen transparent container
+    property int contentPreferredHeight: screen?.height || 0
+    property int contentPreferredWidth: screen?.width || 0
 
-    // Panel positioning (exposed to PluginPanelSlot which wraps this in SmartPanel)
+    // Panel positioning - cover full screen
     property bool panelAnchorBottom: true
+    property bool panelAnchorTop: true
     property bool panelAnchorLeft: true
     property bool panelAnchorRight: true
-    property bool panelAnchorHorizontalCenter: true
+    property bool panelAnchorHorizontalCenter: false
     property bool panelAnchorVerticalCenter: false
 
     // Keyboard navigation
@@ -53,15 +49,15 @@ Item {
     onFilterTypeChanged: selectedIndex = 0
     onSearchTextChanged: selectedIndex = 0
 
-    // Filtered items
+    // Filtered items (uses shared getItemType from Main.qml)
     readonly property var filteredItems: {
-        let items = ClipboardService.items || [];
+        let items = pluginApi?.mainInstance?.items || [];
         if (!filterType && !searchText)
             return items;
 
         return items.filter(item => {
             if (filterType) {
-                const itemType = getItemType(item);
+                const itemType = pluginApi?.mainInstance?.getItemType(item) || "Text";
                 if (itemType !== filterType)
                     return false;
             }
@@ -74,34 +70,7 @@ Item {
         });
     }
 
-    function getItemType(item) {
-        if (!item)
-            return "Text";
-        if (item.isImage)
-            return "Image";
-        const preview = item.preview || "";
-        const trimmed = preview.trim();
-
-        if (/^#[A-Fa-f0-9]{6}$/.test(trimmed) || /^#[A-Fa-f0-9]{3}$/.test(trimmed))
-            return "Color";
-        if (/^[A-Fa-f0-9]{6}$/.test(trimmed))
-            return "Color";
-        if (/^rgba?\s*\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\)$/i.test(trimmed))
-            return "Color";
-        if (/^https?:\/\//.test(trimmed))
-            return "Link";
-        if (preview.includes("function") || preview.includes("import ") || preview.includes("const ") || preview.includes("let ") || preview.includes("var ") || preview.includes("class ") || preview.includes("def ") || preview.includes("return ") || /^[\{\[\(<]/.test(trimmed))
-            return "Code";
-        if (trimmed.length <= 4 && trimmed.length > 0 && trimmed.charCodeAt(0) > 255)
-            return "Emoji";
-        if (/^(\/|~|file:\/\/)/.test(trimmed))
-            return "File";
-
-        return "Text";
-    }
-
     Keys.onLeftPressed: {
-        Logger.i("clipper", "onLeftPressed");
         if (listView.count > 0) {
             selectedIndex = Math.max(0, selectedIndex - 1);
             listView.positionViewAtIndex(selectedIndex, ListView.Contain);
@@ -109,7 +78,6 @@ Item {
     }
 
     Keys.onRightPressed: {
-        Logger.i("clipper", "onRightPressed");
         if (listView.count > 0) {
             selectedIndex = Math.min(listView.count - 1, selectedIndex + 1);
             listView.positionViewAtIndex(selectedIndex, ListView.Contain);
@@ -117,11 +85,10 @@ Item {
     }
 
     Keys.onReturnPressed: {
-        Logger.i("clipper", "onReturnPressed");
         if (listView.count > 0 && selectedIndex >= 0 && selectedIndex < listView.count) {
             const item = root.filteredItems[selectedIndex];
             if (item) {
-                ClipboardService.copyToClipboard(item.id);
+                pluginApi?.mainInstance?.copyToClipboard(item.id);
                 if (pluginApi) {
                     pluginApi.closePanel(screen);
                 }
@@ -130,18 +97,16 @@ Item {
     }
 
     Keys.onEscapePressed: {
-        Logger.i("clipper", "onEscapePressed");
         if (pluginApi) {
             pluginApi.closePanel(screen);
         }
     }
 
     Keys.onDeletePressed: {
-        Logger.i("clipper", "onDeletePressed");
         if (listView.count > 0 && selectedIndex >= 0 && selectedIndex < listView.count) {
             const item = root.filteredItems[selectedIndex];
             if (item) {
-                ClipboardService.deleteById(item.id);
+                pluginApi?.mainInstance?.deleteById(item.id);
                 if (selectedIndex >= listView.count - 1) {
                     selectedIndex = Math.max(0, listView.count - 2);
                 }
@@ -149,61 +114,50 @@ Item {
         }
     }
 
-    Keys.onDigit1Pressed: {
-        Logger.i("clipper", "onDigit1Pressed");
-        filterType = "Text";
-    }
+    Keys.onDigit1Pressed: filterType = "Text"
+    Keys.onDigit2Pressed: filterType = "Image"
+    Keys.onDigit3Pressed: filterType = "Color"
+    Keys.onDigit4Pressed: filterType = "Link"
+    Keys.onDigit5Pressed: filterType = "Code"
+    Keys.onDigit6Pressed: filterType = "Emoji"
+    Keys.onDigit7Pressed: filterType = "File"
+    Keys.onDigit0Pressed: filterType = ""
 
-    Keys.onDigit2Pressed: {
-        Logger.i("clipper", "onDigit2Pressed");
-        filterType = "Image";
-    }
-
-    Keys.onDigit3Pressed: {
-        Logger.i("clipper", "onDigit3Pressed");
-        filterType = "Color";
-    }
-
-    Keys.onDigit4Pressed: {
-        Logger.i("clipper", "onDigit4Pressed");
-        filterType = "Link";
-    }
-
-    Keys.onDigit5Pressed: {
-        Logger.i("clipper", "onDigit5Pressed");
-        filterType = "Code";
-    }
-
-    Keys.onDigit6Pressed: {
-        Logger.i("clipper", "onDigit6Pressed");
-        filterType = "Emoji";
-    }
-
-    Keys.onDigit7Pressed: {
-        Logger.i("clipper", "onDigit7Pressed");
-        filterType = "File";
-    }
-
-    Keys.onDigit0Pressed: {
-        Logger.i("clipper", "onDigit0Pressed");
-        filterType = "";
-    }
-
-    // Main content
-    Rectangle {
-        id: panelContainer
+    // Main container - transparent fullscreen
+    Item {
+        id: mainContainer
         anchors.fill: parent
-        color: (typeof Color !== "undefined") ? Color.mSurface : "#222222"
-        radius: Style.radiusM
 
-        Rectangle {
-            anchors.bottom: parent.bottom
-            width: parent.width
-            height: parent.radius
-            color: parent.color
+        // Click on transparent background to close panel
+        MouseArea {
+            anchors.fill: parent
+            z: -1  // Behind all other elements
+            onClicked: {
+                if (root.pluginApi) {
+                    root.pluginApi.closePanel(screen);
+                }
+            }
         }
 
-        ColumnLayout {
+        // CLIPBOARD PANEL - Bottom, full width (horizontal)
+        Rectangle {
+            id: clipboardPanel
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: Math.min(300, screen?.height * 0.3 || 300)
+            color: (typeof Color !== "undefined") ? Color.mSurface : "#222222"
+            radius: Style.radiusM
+            opacity: 1.0  // Override global panel opacity
+
+            Rectangle {
+                anchors.bottom: parent.bottom
+                width: parent.width
+                height: parent.radius
+                color: parent.color
+            }
+
+            ColumnLayout {
             anchors.fill: parent
             anchors.margins: Style.marginL
             spacing: Style.marginM
@@ -213,7 +167,7 @@ Item {
                 spacing: Style.marginM
 
                 NText {
-                    text: "Clipboard History"
+                    text: pluginApi?.tr("clipper.panel.title") || "Clipboard History"
                     font.bold: true
                     font.pointSize: Style.fontSizeL
                     Layout.alignment: Qt.AlignVCenter
@@ -226,7 +180,7 @@ Item {
 
                 NIconButton {
                     icon: "settings"
-                    tooltipText: "Settings"
+                    tooltipText: pluginApi?.tr("clipper.panel.settings") || "Settings"
                     Layout.alignment: Qt.AlignVCenter
                     colorBg: (typeof Color !== "undefined") ? Color.mSurfaceVariant : "#444444"
                     colorBgHover: (typeof Color !== "undefined") ? Color.mHover : "#666666"
@@ -243,7 +197,7 @@ Item {
                     id: searchInput
                     Layout.preferredWidth: 250
                     Layout.alignment: Qt.AlignVCenter
-                    placeholderText: "Search..."
+                    placeholderText: pluginApi?.tr("clipper.panel.search-placeholder") || "Search..."
                     text: root.searchText
                     onTextChanged: root.searchText = text
 
@@ -293,7 +247,7 @@ Item {
                             if (listView.count > 0 && root.selectedIndex >= 0 && root.selectedIndex < listView.count) {
                                 const item = root.filteredItems[root.selectedIndex];
                                 if (item) {
-                                    ClipboardService.deleteById(item.id);
+                                    pluginApi?.mainInstance?.deleteById(item.id);
                                     if (root.selectedIndex >= listView.count - 1) {
                                         root.selectedIndex = Math.max(0, listView.count - 2);
                                     }
@@ -331,7 +285,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "apps"
-                        tooltipText: "All"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-all") || "All"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "" ? Color.mPrimary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "" ? Color.mPrimary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "" ? Color.mOnPrimary : Color.mOnSurface) : "#FFFFFF"
@@ -347,7 +301,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "align-left"
-                        tooltipText: "Text"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-text") || "Text"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "Text" ? Color.mPrimary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "Text" ? Color.mPrimary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "Text" ? Color.mOnPrimary : Color.mOnSurface) : "#FFFFFF"
@@ -363,7 +317,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "photo"
-                        tooltipText: "Images"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-images") || "Images"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "Image" ? Color.mTertiary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "Image" ? Color.mTertiary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "Image" ? Color.mOnTertiary : Color.mOnSurface) : "#FFFFFF"
@@ -374,7 +328,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "palette"
-                        tooltipText: "Colors"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-colors") || "Colors"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "Color" ? Color.mSecondary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "Color" ? Color.mSecondary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "Color" ? Color.mOnSecondary : Color.mOnSurface) : "#FFFFFF"
@@ -385,7 +339,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "link"
-                        tooltipText: "Links"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-links") || "Links"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "Link" ? Color.mPrimary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "Link" ? Color.mPrimary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "Link" ? Color.mOnPrimary : Color.mOnSurface) : "#FFFFFF"
@@ -396,7 +350,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "code"
-                        tooltipText: "Code"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-code") || "Code"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "Code" ? Color.mSecondary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "Code" ? Color.mSecondary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "Code" ? Color.mOnSecondary : Color.mOnSurface) : "#FFFFFF"
@@ -407,7 +361,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "mood-smile"
-                        tooltipText: "Emoji"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-emoji") || "Emoji"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "Emoji" ? Color.mPrimary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "Emoji" ? Color.mPrimary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "Emoji" ? Color.mOnPrimary : Color.mOnSurface) : "#FFFFFF"
@@ -418,7 +372,7 @@ Item {
                     NIconButton {
                         focus: true
                         icon: "file"
-                        tooltipText: "Files"
+                        tooltipText: pluginApi?.tr("clipper.panel.filter-files") || "Files"
                         colorBg: (typeof Color !== "undefined") ? (root.filterType === "File" ? Color.mTertiary : Color.mSurfaceVariant) : "#444444"
                         colorBgHover: (typeof Color !== "undefined") ? (root.filterType === "File" ? Color.mTertiary : Color.mHover) : "#666666"
                         colorFg: (typeof Color !== "undefined") ? (root.filterType === "File" ? Color.mOnTertiary : Color.mOnSurface) : "#FFFFFF"
@@ -437,11 +391,11 @@ Item {
 
                 NButton {
                     focus: true
-                    text: "Clear All"
+                    text: pluginApi?.tr("clipper.panel.clear-all") || "Clear All"
                     icon: "trash"
                     Layout.alignment: Qt.AlignVCenter
                     Layout.topMargin: -2 * Style.uiScaleRatio
-                    onClicked: ClipboardService.wipeAll()
+                    onClicked: pluginApi?.mainInstance?.wipeAll()
                 }
             }
 
@@ -476,7 +430,7 @@ Item {
                     if (count > 0 && root.selectedIndex >= 0 && root.selectedIndex < count) {
                         const item = root.filteredItems[root.selectedIndex];
                         if (item) {
-                            ClipboardService.copyToClipboard(item.id);
+                            root.pluginApi?.mainInstance?.copyToClipboard(item.id);
                             if (root.pluginApi) {
                                 root.pluginApi.closePanel(screen);
                             }
@@ -487,7 +441,7 @@ Item {
                     if (count > 0 && root.selectedIndex >= 0 && root.selectedIndex < count) {
                         const item = root.filteredItems[root.selectedIndex];
                         if (item) {
-                            ClipboardService.deleteById(item.id);
+                            root.pluginApi?.mainInstance?.deleteById(item.id);
                             if (root.selectedIndex >= count - 1) {
                                 root.selectedIndex = Math.max(0, count - 2);
                             }
@@ -532,91 +486,50 @@ Item {
                     }
                 }
 
-                populate: Transition {
-                    NumberAnimation {
-                        property: "opacity"
-                        from: 0
-                        to: 1
-                        duration: Style.animationNormal
-                    }
-                    NumberAnimation {
-                        property: "x"
-                        from: listView.width
-                        duration: Style.animationNormal
-                        easing.type: Easing.OutCubic
-                    }
-                }
-
-                add: Transition {
-                    NumberAnimation {
-                        property: "opacity"
-                        from: 0
-                        to: 1
-                        duration: Style.animationNormal
-                    }
-                    NumberAnimation {
-                        property: "x"
-                        from: listView.width
-                        duration: Style.animationNormal
-                        easing.type: Easing.OutCubic
-                    }
-                }
-
-                remove: Transition {
-                    NumberAnimation {
-                        property: "opacity"
-                        from: 1
-                        to: 0
-                        duration: Style.animationNormal
-                    }
-                    NumberAnimation {
-                        property: "x"
-                        to: -250
-                        duration: Style.animationNormal
-                        easing.type: Easing.InCubic
-                    }
-                }
-
-                displaced: Transition {
-                    NumberAnimation {
-                        properties: "x"
-                        duration: Style.animationNormal
-                        easing.type: Easing.InOutCubic
-                    }
-                }
-
-                move: Transition {
-                    NumberAnimation {
-                        properties: "x"
-                        duration: Style.animationNormal
-                        easing.type: Easing.InOutCubic
-                    }
-                }
-
                 delegate: ClipboardCard {
                     clipboardItem: modelData
                     pluginApi: root.pluginApi
                     height: listView.height
                     selected: index === root.selectedIndex
                     enableTodoIntegration: root.pluginApi?.pluginSettings?.enableTodoIntegration || false
+                    isPinned: {
+                        // Force re-evaluation when pinnedRevision changes
+                        const rev = root.pluginApi?.mainInstance?.pinnedRevision || 0;
+                        const pinnedItems = root.pluginApi?.mainInstance?.pinnedItems || [];
+                        return pinnedItems.some(p => p.id === clipboardId);
+                    }
 
                     onClicked: {
                         root.selectedIndex = index;
-                        ClipboardService.copyToClipboard(clipboardId);
+                        root.pluginApi?.mainInstance?.copyToClipboard(clipboardId);
                         if (root.pluginApi) {
                             root.pluginApi.closePanel(screen);
                         }
                     }
 
                     onDeleteClicked: {
-                        ClipboardService.deleteById(clipboardId);
+                        root.pluginApi?.mainInstance?.deleteById(clipboardId);
+                    }
+
+                    onPinClicked: {
+                        if (isPinned) {
+                            root.pluginApi?.mainInstance?.unpinItem(clipboardId);
+                            ToastService.showNotice("Item unpinned");
+                        } else {
+                            const pinnedItems = root.pluginApi?.mainInstance?.pinnedItems || [];
+                            if (pinnedItems.length >= 20) {
+                                ToastService.showWarning("Maximum 20 pinned items reached");
+                            } else {
+                                root.pluginApi?.mainInstance?.pinItem(clipboardId);
+                                ToastService.showNotice("Item pinned");
+                            }
+                        }
                     }
 
                     onAddToTodoClicked: {
                         if (preview) {
-                            // Call Clipper IPC to add item to ToDo (page 0)
-                            todoIpcProcess.command = ["qs", "-p", Quickshell.shellDir, "ipc", "call", "plugin:clipper", "addTextToTodo", preview.substring(0, 200), "0"];
-                            todoIpcProcess.running = true;
+                            // Direct call to Main.qml function (no internal IPC)
+                            root.pluginApi?.mainInstance?.addTodoWithText(preview.substring(0, 200), 0);
                         }
                     }
                 }
@@ -624,20 +537,110 @@ Item {
                 NText {
                     anchors.centerIn: parent
                     visible: listView.count === 0
-                    text: root.filterType || root.searchText ? "No matching items" : "Clipboard is empty"
+                    text: root.filterType || root.searchText ? (pluginApi?.tr("clipper.panel.no-matches") || "No matching items") : (pluginApi?.tr("clipper.panel.empty") || "Clipboard is empty")
                     color: (typeof Color !== "undefined") ? Color.mOnSurfaceVariant : "#AAAAAA"
                 }
             }
         }
-    }
+        }  // End clipboardPanel
+
+        // PINNED PANEL - Left side, vertical
+        Rectangle {
+            id: pinnedPanel
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: clipboardPanel.top
+            anchors.bottomMargin: Style.marginM
+            width: Math.min(300, screen?.width * 0.2 || 300)
+            color: (typeof Color !== "undefined") ? Color.mSurface : "#222222"
+            radius: Style.radiusM
+            opacity: 1.0  // Override global panel opacity
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: Style.marginL
+                spacing: Style.marginM
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: Style.marginM
+
+                    NText {
+                        text: pluginApi?.tr("clipper.panel.pinned-title") || "Pinned Items"
+                        font.bold: true
+                        font.pointSize: Style.fontSizeL
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
+                    Item {
+                        Layout.fillWidth: true
+                    }
+
+
+                }
+                ListView {
+                    id: pinnedListView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    orientation: ListView.Vertical
+                    spacing: Style.marginS
+                    clip: true
+
+                    model: root.pluginApi?.mainInstance?.pinnedItems || []
+
+                    delegate: ClipboardCard {
+                        width: pinnedListView.width
+                        height: Math.min(150, pinnedPanel.height * 0.25)
+                        clipboardItem: {
+                            return {
+                                "id": modelData.id,
+                                "preview": modelData.isImage ? "" : modelData.preview,  // Don't show binary preview
+                                "mime": modelData.mime || "text/plain",
+                                "isImage": modelData.isImage || false,
+                                "content": modelData.content || ""  // For images, this is data URL
+                            };
+                        }
+                        isPinned: true
+                        pluginApi: root.pluginApi
+                        selected: false
+                        pinnedImageDataUrl: modelData.isImage ? modelData.content : ""  // Pass data URL directly
+
+                        onClicked: {
+                            root.pluginApi?.mainInstance?.copyPinnedToClipboard(modelData.id);
+                            if (root.pluginApi) {
+                                root.pluginApi.closePanel(screen);
+                            }
+                        }
+
+                        onPinClicked: {
+                            root.pluginApi?.mainInstance?.unpinItem(modelData.id);
+                            ToastService.showNotice("Item unpinned");
+                        }
+
+                        onDeleteClicked: {
+                            root.pluginApi?.mainInstance?.unpinItem(modelData.id);
+                        }
+                    }
+
+                    NText {
+                        anchors.centerIn: parent
+                        visible: pinnedListView.count === 0
+                        text: pluginApi?.tr("clipper.panel.no-pinned") || "No pinned items"
+                        color: (typeof Color !== "undefined") ? Color.mOnSurfaceVariant : "#AAAAAA"
+                    }
+                }
+            }
+        }  // End pinnedPanel
+    }  // End mainContainer
 
     Component.onCompleted: {
         selectedIndex = 0;
         filterType = "";
         searchText = "";
-        ClipboardService.list();
+        pluginApi?.mainInstance?.list(screen?.width || 100);
         listView.forceActiveFocus();
-        Logger.i("clipper", "open");
         WlrLayershell.keyboardFocus = WlrKeyboardFocus.OnDemand;
     }
+
+
 }

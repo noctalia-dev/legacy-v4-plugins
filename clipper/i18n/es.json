@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "Historial del portapapeles"
+    },
+    "context": {
+      "toggle": "Alternar Clipper",
+      "settings": "Abrir configuración"
+    },
+    "panel": {
+      "title": "Historial del portapapeles",
+      "pinned-title": "Elementos fijados",
+      "no-pinned": "Sin elementos fijados",
+      "settings": "Configuración",
+      "search-placeholder": "Buscar...",
+      "filter-all": "Todos",
+      "filter-text": "Texto",
+      "filter-images": "Imágenes",
+      "filter-colors": "Colores",
+      "filter-links": "Enlaces",
+      "filter-code": "Código",
+      "filter-emoji": "Emoji",
+      "filter-files": "Archivos",
+      "clear-all": "Borrar todo",
+      "no-matches": "Sin coincidencias",
+      "empty": "El portapapeles está vacío"
+    },
+    "card": {
+      "add-todo": "Añadir a tareas",
+      "pin": "Fijar",
+      "delete": "Eliminar"
+    },
+    "settings": {
+      "integrations": "Integraciones",
+      "todo-integration": "Integración con ToDo",
+      "todo-description": "Añadir elementos del portapapeles directamente a tu lista de tareas",
+      "todo-disabled": "El plugin ToDo no está instalado o está deshabilitado",
+      "appearance": "Apariencia de tarjetas",
+      "card-type": "Tipo de tarjeta",
+      "card-type-desc": "Selecciona el tipo de tarjeta para personalizar",
+      "preview": "Vista previa",
+      "sample-content": "Contenido de ejemplo...",
+      "bg-color": "Color de fondo",
+      "bg-color-desc": "Color de fondo de la tarjeta",
+      "separator-color": "Color del separador",
+      "separator-color-desc": "Línea entre el encabezado y el contenido",
+      "fg-color": "Color del texto",
+      "fg-color-desc": "Color del título, iconos y contenido de texto",
+      "reset-defaults": "Restaurar valores predeterminados"
+    }
+  }
+}

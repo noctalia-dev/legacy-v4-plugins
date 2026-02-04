@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "Pano geçmişi"
+    },
+    "context": {
+      "toggle": "Clipper'ı değiştir",
+      "settings": "Ayarları aç"
+    },
+    "panel": {
+      "title": "Pano geçmişi",
+      "pinned-title": "Sabitlenmiş öğeler",
+      "no-pinned": "Sabitlenmiş öğe yok",
+      "settings": "Ayarlar",
+      "search-placeholder": "Ara...",
+      "filter-all": "Tümü",
+      "filter-text": "Metin",
+      "filter-images": "Resimler",
+      "filter-colors": "Renkler",
+      "filter-links": "Bağlantılar",
+      "filter-code": "Kod",
+      "filter-emoji": "Emoji",
+      "filter-files": "Dosyalar",
+      "clear-all": "Tümünü temizle",
+      "no-matches": "Eşleşen öğe yok",
+      "empty": "Pano boş"
+    },
+    "card": {
+      "add-todo": "Yapılacaklara ekle",
+      "pin": "Sabitle",
+      "delete": "Sil"
+    },
+    "settings": {
+      "integrations": "Entegrasyonlar",
+      "todo-integration": "ToDo eklentisi entegrasyonu",
+      "todo-description": "Pano öğelerini doğrudan yapılacaklar listenize ekleyin",
+      "todo-disabled": "ToDo eklentisi yüklü değil veya devre dışı",
+      "appearance": "Kart görünümü",
+      "card-type": "Kart türü",
+      "card-type-desc": "Özelleştirilecek kart türünü seçin",
+      "preview": "Önizleme",
+      "sample-content": "Örnek içerik önizlemesi...",
+      "bg-color": "Arka plan rengi",
+      "bg-color-desc": "Kart arka plan rengi",
+      "separator-color": "Ayırıcı rengi",
+      "separator-color-desc": "Başlık ve içerik arasındaki çizgi",
+      "fg-color": "Ön plan rengi",
+      "fg-color-desc": "Başlık, simgeler ve metin içeriği rengi",
+      "reset-defaults": "Varsayılanlara sıfırla"
+    }
+  }
+}

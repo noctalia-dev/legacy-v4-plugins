@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "Історія буфера обміну"
+    },
+    "context": {
+      "toggle": "Перемкнути Clipper",
+      "settings": "Відкрити налаштування"
+    },
+    "panel": {
+      "title": "Історія буфера обміну",
+      "pinned-title": "Закріплені елементи",
+      "no-pinned": "Немає закріплених елементів",
+      "settings": "Налаштування",
+      "search-placeholder": "Пошук...",
+      "filter-all": "Усі",
+      "filter-text": "Текст",
+      "filter-images": "Зображення",
+      "filter-colors": "Кольори",
+      "filter-links": "Посилання",
+      "filter-code": "Код",
+      "filter-emoji": "Емодзі",
+      "filter-files": "Файли",
+      "clear-all": "Очистити все",
+      "no-matches": "Немає відповідних елементів",
+      "empty": "Буфер обміну порожній"
+    },
+    "card": {
+      "add-todo": "Додати до завдань",
+      "pin": "Закріпити",
+      "delete": "Видалити"
+    },
+    "settings": {
+      "integrations": "Інтеграції",
+      "todo-integration": "Інтеграція з плагіном ToDo",
+      "todo-description": "Додавати елементи буфера обміну безпосередньо до списку завдань",
+      "todo-disabled": "Плагін ToDo не встановлено або вимкнено",
+      "appearance": "Зовнішній вигляд карток",
+      "card-type": "Тип картки",
+      "card-type-desc": "Виберіть тип картки для налаштування",
+      "preview": "Попередній перегляд",
+      "sample-content": "Попередній перегляд зразка вмісту...",
+      "bg-color": "Колір фону",
+      "bg-color-desc": "Колір фону картки",
+      "separator-color": "Колір роздільника",
+      "separator-color-desc": "Лінія між заголовком і вмістом",
+      "fg-color": "Колір переднього плану",
+      "fg-color-desc": "Колір заголовка, значків і текстового вмісту",
+      "reset-defaults": "Скинути до типових значень"
+    }
+  }
+}

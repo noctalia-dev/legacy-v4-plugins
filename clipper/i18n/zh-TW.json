@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "剪貼簿歷史記錄"
+    },
+    "context": {
+      "toggle": "切換 Clipper",
+      "settings": "開啟設定"
+    },
+    "panel": {
+      "title": "剪貼簿歷史記錄",
+      "pinned-title": "已釘選項目",
+      "no-pinned": "無已釘選項目",
+      "settings": "設定",
+      "search-placeholder": "搜尋...",
+      "filter-all": "全部",
+      "filter-text": "文字",
+      "filter-images": "圖片",
+      "filter-colors": "顏色",
+      "filter-links": "連結",
+      "filter-code": "程式碼",
+      "filter-emoji": "表情符號",
+      "filter-files": "檔案",
+      "clear-all": "全部清除",
+      "no-matches": "無符合項目",
+      "empty": "剪貼簿為空"
+    },
+    "card": {
+      "add-todo": "加入待辦事項",
+      "pin": "釘選",
+      "delete": "刪除"
+    },
+    "settings": {
+      "integrations": "整合",
+      "todo-integration": "ToDo 外掛程式整合",
+      "todo-description": "將剪貼簿項目直接加入待辦事項清單",
+      "todo-disabled": "ToDo 外掛程式未安裝或已停用",
+      "appearance": "卡片外觀",
+      "card-type": "卡片類型",
+      "card-type-desc": "選擇要自訂的卡片類型",
+      "preview": "預覽",
+      "sample-content": "範例內容預覽...",
+      "bg-color": "背景顏色",
+      "bg-color-desc": "卡片背景顏色",
+      "separator-color": "分隔線顏色",
+      "separator-color-desc": "標題與內容之間的線條",
+      "fg-color": "前景顏色",
+      "fg-color-desc": "標題、圖示和文字內容顏色",
+      "reset-defaults": "重設為預設值"
+    }
+  }
+}

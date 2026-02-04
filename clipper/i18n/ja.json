@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "クリップボード履歴"
+    },
+    "context": {
+      "toggle": "Clipperを切り替え",
+      "settings": "設定を開く"
+    },
+    "panel": {
+      "title": "クリップボード履歴",
+      "pinned-title": "ピン留めされたアイテム",
+      "no-pinned": "ピン留めされたアイテムはありません",
+      "settings": "設定",
+      "search-placeholder": "検索...",
+      "filter-all": "すべて",
+      "filter-text": "テキスト",
+      "filter-images": "画像",
+      "filter-colors": "色",
+      "filter-links": "リンク",
+      "filter-code": "コード",
+      "filter-emoji": "絵文字",
+      "filter-files": "ファイル",
+      "clear-all": "すべてクリア",
+      "no-matches": "一致するアイテムがありません",
+      "empty": "クリップボードは空です"
+    },
+    "card": {
+      "add-todo": "ToDoに追加",
+      "pin": "ピン留め",
+      "delete": "削除"
+    },
+    "settings": {
+      "integrations": "統合",
+      "todo-integration": "ToDoプラグイン統合",
+      "todo-description": "クリップボードアイテムをToDoリストに直接追加",
+      "todo-disabled": "ToDoプラグインがインストールされていないか無効です",
+      "appearance": "カードの外観",
+      "card-type": "カードタイプ",
+      "card-type-desc": "カスタマイズするカードタイプを選択",
+      "preview": "プレビュー",
+      "sample-content": "サンプルコンテンツのプレビュー...",
+      "bg-color": "背景色",
+      "bg-color-desc": "カードの背景色",
+      "separator-color": "区切り線の色",
+      "separator-color-desc": "ヘッダーとコンテンツ間の線",
+      "fg-color": "前景色",
+      "fg-color-desc": "タイトル、アイコン、テキストコンテンツの色",
+      "reset-defaults": "デフォルトにリセット"
+    }
+  }
+}

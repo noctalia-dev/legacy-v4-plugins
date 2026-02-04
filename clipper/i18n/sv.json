@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "Urklippshistorik"
+    },
+    "context": {
+      "toggle": "Växla Clipper",
+      "settings": "Öppna inställningar"
+    },
+    "panel": {
+      "title": "Urklippshistorik",
+      "pinned-title": "Fästa objekt",
+      "no-pinned": "Inga fästa objekt",
+      "settings": "Inställningar",
+      "search-placeholder": "Sök...",
+      "filter-all": "Alla",
+      "filter-text": "Text",
+      "filter-images": "Bilder",
+      "filter-colors": "Färger",
+      "filter-links": "Länkar",
+      "filter-code": "Kod",
+      "filter-emoji": "Emoji",
+      "filter-files": "Filer",
+      "clear-all": "Rensa allt",
+      "no-matches": "Inga matchande objekt",
+      "empty": "Urklippet är tomt"
+    },
+    "card": {
+      "add-todo": "Lägg till i uppgifter",
+      "pin": "Fäst",
+      "delete": "Ta bort"
+    },
+    "settings": {
+      "integrations": "Integrationer",
+      "todo-integration": "ToDo-pluginintegration",
+      "todo-description": "Lägg till urklippsobjekt direkt till din uppgiftslista",
+      "todo-disabled": "ToDo-plugin är inte installerat eller inaktiverat",
+      "appearance": "Kortutseende",
+      "card-type": "Korttyp",
+      "card-type-desc": "Välj korttyp att anpassa",
+      "preview": "Förhandsgranskning",
+      "sample-content": "Förhandsgranskning av exempelinnehåll...",
+      "bg-color": "Bakgrundsfärg",
+      "bg-color-desc": "Kortets bakgrundsfärg",
+      "separator-color": "Separatorfärg",
+      "separator-color-desc": "Linje mellan rubrik och innehåll",
+      "fg-color": "Förgrundsfärg",
+      "fg-color-desc": "Färg på titel, ikoner och textinnehåll",
+      "reset-defaults": "Återställ till standard"
+    }
+  }
+}

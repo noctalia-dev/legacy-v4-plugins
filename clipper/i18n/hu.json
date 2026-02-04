@@ -1,0 +1,52 @@
+{
+  "clipper": {
+    "bar": {
+      "tooltip": "Vágólap előzmények"
+    },
+    "context": {
+      "toggle": "Clipper váltása",
+      "settings": "Beállítások megnyitása"
+    },
+    "panel": {
+      "title": "Vágólap előzmények",
+      "pinned-title": "Rögzített elemek",
+      "no-pinned": "Nincs rögzített elem",
+      "settings": "Beállítások",
+      "search-placeholder": "Keresés...",
+      "filter-all": "Minden",
+      "filter-text": "Szöveg",
+      "filter-images": "Képek",
+      "filter-colors": "Színek",
+      "filter-links": "Hivatkozások",
+      "filter-code": "Kód",
+      "filter-emoji": "Emoji",
+      "filter-files": "Fájlok",
+      "clear-all": "Összes törlése",
+      "no-matches": "Nincs egyező elem",
+      "empty": "A vágólap üres"
+    },
+    "card": {
+      "add-todo": "Hozzáadás a feladatokhoz",
+      "pin": "Rögzítés",
+      "delete": "Törlés"
+    },
+    "settings": {
+      "integrations": "Integrációk",
+      "todo-integration": "ToDo beépülő integráció",
+      "todo-description": "Vágólap elemek hozzáadása közvetlenül a feladatlistához",
+      "todo-disabled": "A ToDo beépülő nincs telepítve vagy le van tiltva",
+      "appearance": "Kártya megjelenése",
+      "card-type": "Kártya típusa",
+      "card-type-desc": "Válassza ki a testreszabandó kártya típust",
+      "preview": "Előnézet",
+      "sample-content": "Minta tartalom előnézete...",
+      "bg-color": "Háttérszín",
+      "bg-color-desc": "Kártya háttérszíne",
+      "separator-color": "Elválasztó színe",
+      "separator-color-desc": "Vonal a fejléc és a tartalom között",
+      "fg-color": "Előtérszín",
+      "fg-color-desc": "Cím, ikonok és szöveges tartalom színe",
+      "reset-defaults": "Alapértelmezések visszaállítása"
+    }
+  }
+}
