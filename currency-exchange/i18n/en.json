@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Australian Dollar",
+    "BRL": "Brazilian Real",
+    "CAD": "Canadian Dollar",
+    "CHF": "Swiss Franc",
+    "CNY": "Chinese Yuan",
+    "CZK": "Czech Koruna",
+    "DKK": "Danish Krone",
+    "EUR": "Euro",
+    "GBP": "British Pound",
+    "HKD": "Hong Kong Dollar",
+    "HUF": "Hungarian Forint",
+    "IDR": "Indonesian Rupiah",
+    "ILS": "Israeli Shekel",
+    "INR": "Indian Rupee",
+    "ISK": "Icelandic Króna",
+    "JPY": "Japanese Yen",
+    "KRW": "South Korean Won",
+    "MXN": "Mexican Peso",
+    "MYR": "Malaysian Ringgit",
+    "NOK": "Norwegian Krone",
+    "NZD": "New Zealand Dollar",
+    "PHP": "Philippine Peso",
+    "PLN": "Polish Złoty",
+    "RON": "Romanian Leu",
+    "SEK": "Swedish Krona",
+    "SGD": "Singapore Dollar",
+    "THB": "Thai Baht",
+    "TRY": "Turkish Lira",
+    "USD": "US Dollar",
+    "ZAR": "South African Rand"
+  },
+  "launcher": {
+    "command_description": "Quick currency conversion (e.g., >fx 100 USD EUR)",
+    "convert_example": "Convert {amount} {from} to {to}",
+    "convert_to_default": "Convert {amount} {from} to {to} (default)",
+    "currency_not_found": "Currency code not found in exchange rates",
+    "error_retry": "Check your internet connection. Click to retry.",
+    "fetching": "Fetching from frankfurter.app",
+    "loading": "Loading exchange rates...",
+    "rate_click_copy": "Rate: 1 {from} = {rate} {to} | Click to copy",
+    "reverse_rate": "Reverse rate | Click to copy",
+    "show_rate": "Show rate for 1 {from} to {to}",
+    "try_valid_code": "Try a valid currency code (e.g., USD, EUR, PLN)",
+    "unknown_currency": "Unknown currency: {currency}"
+  },
+  "panel": {
+    "close": "Close",
+    "copy_result": "Copy result",
+    "error": "Could not load rates",
+    "loading": "Loading rates...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Refresh rates",
+    "settings": "Settings",
+    "swap": "Swap currencies",
+    "title": "Currency Converter",
+    "updated": "Updated {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Currency Exchange"
+  },
+  "settings": {
+    "display_mode": "Display Mode",
+    "display_mode_description": "How much information to show in the widget",
+    "display_modes": {
+      "compact": "Compact (rate number)",
+      "full": "Currency pair",
+      "icon": "Icon only"
+    },
+    "general": "General Settings",
+    "intervals": {
+      "15": "15 minutes",
+      "180": "3 hours",
+      "30": "30 minutes",
+      "360": "6 hours",
+      "60": "1 hour",
+      "720": "12 hours"
+    },
+    "refresh_interval": "Refresh Interval",
+    "refresh_interval_description": "How often to refresh exchange rates automatically",
+    "source_currency": "Source Currency",
+    "source_currency_description": "Default currency to convert from",
+    "target_currency": "Target Currency",
+    "target_currency_description": "Default currency to convert to",
+    "widget": "Widget Settings"
+  },
+  "widget": {
+    "click_to_open": "Click to open converter",
+    "error": "Could not load rates, check your internet connection.",
+    "loading": "Loading exchange rates...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

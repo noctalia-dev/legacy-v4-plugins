@@ -2,8 +2,10 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell
+import Quickshell.Io
 import qs.Commons
 import qs.Services.UI
+import qs.Services.Compositor
 import qs.Widgets
 
 Item {
@@ -21,11 +23,33 @@ Item {
   property int columnCount: cfg.columnCount ?? defaults.columnCount ?? 3
 
   property var rawCategories: pluginApi?.pluginSettings?.cheatsheetData || []
-  property var categories: processCategories(rawCategories)
-  property string compositor: pluginApi?.pluginSettings?.detectedCompositor || ""
+  property var categories: []
+  
+
+  
+  Component.onCompleted: {
+    categories = processCategories(rawCategories);
+  }
+
 
   // Dynamic column items (up to 4 columns)
   property var columnItems: []
+
+  // Memory leak prevention: debounce column updates
+  Timer {
+    id: columnUpdateDebounce
+    interval: 100
+    repeat: false
+    onTriggered: updateColumnItemsNow()
+  }
+
+  Component.onDestruction: {
+    // Stop timer to prevent firing after destruction
+    columnUpdateDebounce.stop();
+
+    // Clear column items
+    columnItems = [];
+  }
 
   onRawCategoriesChanged: {
     categories = processCategories(rawCategories);
@@ -52,6 +76,11 @@ Item {
   }
 
   function updateColumnItems() {
+    columnUpdateDebounce.restart();
+  }
+
+  function updateColumnItemsNow() {
+    columnItems = []; // Clear old items explicitly
     var assignments = distributeCategories();
     var items = [];
     for (var i = 0; i < columnCount; i++) {
@@ -146,11 +175,13 @@ Item {
         }
         NText {
           text: {
-            var title = "Keybind Cheatsheet";
-            if (root.compositor) {
-              title += " (" + root.compositor.charAt(0).toUpperCase() + root.compositor.slice(1) + ")";
+            if (CompositorService.isHyprland) {
+              return "Hyprland Keymap";
+            } else if (CompositorService.isNiri) {
+              return "Niri Keymap";
+            } else {
+              return "Keymap";
             }
-            return title;
           }
           font.pointSize: Style.fontSizeM
           font.weight: Font.Bold
@@ -159,7 +190,15 @@ Item {
 
         Item { Layout.fillWidth: true }
 
-        // Settings button in corner
+        // Refresh button
+        NIconButton {
+          icon: "refresh"
+          onClicked: {
+            pluginApi?.mainInstance?.refresh();
+          }
+        }
+
+        // Settings button
         NIconButton {
           icon: "settings"
           onClicked: {
@@ -196,7 +235,7 @@ Item {
 
       RowLayout {
         id: mainLayout
-        width: scrollView.availableWidth - Style.marginS  
+        width: scrollView.availableWidth - Style.marginS
         spacing: Style.marginS
 
         Repeater {
@@ -216,6 +255,12 @@ Item {
                 sourceComponent: modelData.type === "header" ? headerComponent :
                                (modelData.type === "spacer" ? spacerComponent : bindComponent)
                 property var itemData: modelData
+
+                // Memory leak prevention: explicit cleanup
+                Component.onDestruction: {
+                  active = false;
+                  sourceComponent = undefined;
+                }
               }
             }
           }
@@ -226,27 +271,27 @@ Item {
 
   Component {
     id: headerComponent
-    ColumnLayout {  
-      Layout.preferredWidth: 300      
+    ColumnLayout {
+      Layout.preferredWidth: 300
       Layout.topMargin: Style.marginM
       Layout.bottomMargin: 4
       spacing: 0
-  
-      Item { Layout.fillWidth: true; height: 1 }  
-  
+
+      Item { Layout.fillWidth: true; height: 1 }
+
       NText {
-        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter  
-        x: parent.width - implicitWidth             
+        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        x: parent.width - implicitWidth
         text: itemData.title
         font.pointSize: 11
         font.weight: Font.Bold
         color: Color.mPrimary
       }
-  
-      Item { Layout.fillWidth: true; height: 1 }  
+
+      Item { Layout.fillWidth: true; height: 1 }
     }
   }
- 
+
 
   Component {
     id: spacerComponent
@@ -335,7 +380,7 @@ Item {
     if (!cats || cats.length === 0) return [];
 
     // For Hyprland: split large workspace categories
-    if (compositor === "hyprland") {
+    if (CompositorService.isHyprland) {
       var result = [];
       for (var i = 0; i < cats.length; i++) {
         var cat = cats[i];
@@ -356,9 +401,9 @@ Item {
             }
           }
 
-          if (switching.length > 0) result.push({ title: "WORKSPACES - SWITCHING", binds: switching });
-          if (moving.length > 0) result.push({ title: "WORKSPACES - MOVING", binds: moving });
-          if (mouse.length > 0) result.push({ title: "WORKSPACES - MOUSE", binds: mouse });
+          if (switching.length > 0) result.push({ title: pluginApi?.tr("keybind-cheatsheet.panel.workspace-switching") || "WORKSPACES - SWITCHING", binds: switching });
+          if (moving.length > 0) result.push({ title: pluginApi?.tr("keybind-cheatsheet.panel.workspace-moving") || "WORKSPACES - MOVING", binds: moving });
+          if (mouse.length > 0) result.push({ title: pluginApi?.tr("keybind-cheatsheet.panel.workspace-mouse") || "WORKSPACES - MOUSE", binds: mouse });
         } else {
           result.push(cat);
         }
@@ -408,4 +453,5 @@ Item {
 
     return columns;
   }
+
 }

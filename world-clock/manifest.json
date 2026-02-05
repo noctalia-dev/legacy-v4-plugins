@@ -1,7 +1,7 @@
 {
   "id": "world-clock",
   "name": "World Clock",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "minNoctaliaVersion": "3.6.0",
   "author": "Lokize",
   "license": "MIT",
@@ -10,7 +10,6 @@
   "entryPoints": {
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",
-    "panel": "Panel.qml",
     "settings": "Settings.qml"
   },
   "dependencies": {

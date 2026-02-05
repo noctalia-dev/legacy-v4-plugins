@@ -12,6 +12,13 @@ ColumnLayout {
   property bool valueShowCompleted: pluginApi?.pluginSettings?.showCompleted !== undefined ? pluginApi.pluginSettings.showCompleted : pluginApi?.manifest?.metadata?.defaultSettings?.showCompleted
   property bool valueShowBackground: pluginApi?.pluginSettings?.showBackground !== undefined ? pluginApi.pluginSettings.showBackground : pluginApi?.manifest?.metadata?.defaultSettings?.showBackground
 
+  // Priority color properties
+  property bool valueUseCustomColors: pluginApi?.pluginSettings?.useCustomColors !== undefined ? pluginApi.pluginSettings.useCustomColors : false
+  property color valueHighPriorityColor: (pluginApi?.pluginSettings?.priorityColors?.high) || (pluginApi?.manifest?.metadata?.defaultSettings?.priorityColors?.high) || Color.mError.toString()
+  property color valueMediumPriorityColor: (pluginApi?.pluginSettings?.priorityColors?.medium) || (pluginApi?.manifest?.metadata?.defaultSettings?.priorityColors?.medium) || Color.mPrimary.toString()
+  property color valueLowPriorityColor: (pluginApi?.pluginSettings?.priorityColors?.low) || (pluginApi?.manifest?.metadata?.defaultSettings?.priorityColors?.low) || Color.mOnSurfaceVariant.toString()
+
+
   spacing: Style.marginL
 
   Component.onCompleted: {
@@ -38,13 +45,93 @@ ColumnLayout {
     }
   }
 
+  // Toggle for custom priority colors
+  NToggle {
+    Layout.fillWidth: true
+    label: pluginApi?.tr("settings.custom_priority_colors.label")
+    description: pluginApi?.tr("settings.custom_priority_colors.description")
+    checked: root.valueUseCustomColors
+    onToggled: function (checked) {
+      root.valueUseCustomColors = checked;
+    }
+  }
+
+  // Section for priority color settings (only visible when custom colors are enabled)
+  ColumnLayout {
+    Layout.fillWidth: true
+    spacing: Style.marginS
+    visible: root.valueUseCustomColors
+
+    NText {
+      text: pluginApi?.tr("settings.priority_colors.label")
+      font.pointSize: Style.fontSizeL
+      font.weight: Font.Bold
+      Layout.topMargin: Style.marginL
+    }
+
+    GridLayout {
+      columns: 2
+      rowSpacing: Style.marginS
+      columnSpacing: Style.marginM
+      Layout.fillWidth: true
+
+      // High priority color
+      NText {
+        text: pluginApi?.tr("settings.priority_colors.high_label")
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+      }
+
+      NColorPicker {
+        id: colorPickerHigh
+        Layout.preferredWidth: Style.sliderWidth
+        Layout.preferredHeight: Style.baseWidgetSize
+        selectedColor: root.valueHighPriorityColor
+        onColorSelected: function (color) {
+          root.valueHighPriorityColor = color;
+        }
+      }
+
+      // Medium priority color
+      NText {
+        text: pluginApi?.tr("settings.priority_colors.medium_label")
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+      }
+
+      NColorPicker {
+        id: colorPickerMedium
+        Layout.preferredWidth: Style.sliderWidth
+        Layout.preferredHeight: Style.baseWidgetSize
+        selectedColor: root.valueMediumPriorityColor
+        onColorSelected: function (color) {
+          root.valueMediumPriorityColor = color;
+        }
+      }
+
+      // Low priority color
+      NText {
+        text: pluginApi?.tr("settings.priority_colors.low_label")
+        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+      }
+
+      NColorPicker {
+        id: colorPickerLow
+        Layout.preferredWidth: Style.sliderWidth
+        Layout.preferredHeight: Style.baseWidgetSize
+        selectedColor: root.valueLowPriorityColor
+        onColorSelected: function (color) {
+          root.valueLowPriorityColor = color;
+        }
+      }
+    }
+  }
+
   // Section for managing pages
   ColumnLayout {
     Layout.fillWidth: true
     spacing: Style.marginS
 
     NText {
-      text: pluginApi?.tr("settings.pages.label") || "Manage Pages"
+      text: pluginApi?.tr("settings.pages.label")
       font.pointSize: Style.fontSizeL
       font.weight: Font.Bold
       Layout.topMargin: Style.marginL
@@ -57,13 +144,13 @@ ColumnLayout {
 
       NTextInput {
         id: newPageInput
-        placeholderText: pluginApi?.tr("settings.pages.placeholder") || "Enter new page name"
+        placeholderText: pluginApi?.tr("settings.pages.placeholder")
         Layout.fillWidth: true
         Keys.onReturnPressed: addPage()
       }
 
       NButton {
-        text: pluginApi?.tr("settings.pages.add_button") || "Add Page"
+        text: pluginApi?.tr("settings.pages.add_button")
         onClicked: addPage()
       }
     }
@@ -117,7 +204,7 @@ ColumnLayout {
                 }
 
                 if (!isPageNameUnique(newName, index)) {
-                  ToastService.showError(pluginApi?.tr("settings.pages.name_exists") || "Page name already exists");
+                  ToastService.showError(pluginApi?.tr("settings.pages.name_exists"));
                   return;
                 }
 
@@ -163,7 +250,7 @@ ColumnLayout {
 
                     NIconButton {
                       icon: "pencil"
-                      tooltipText: pluginApi?.tr("settings.pages.rename_button_tooltip") || "Rename"
+                      tooltipText: pluginApi?.tr("settings.pages.rename_button_tooltip")
                       onClicked: {
                         // Switch to editing mode and capture the current name
                         originalName = modelData.name;
@@ -173,12 +260,12 @@ ColumnLayout {
 
                     NIconButton {
                       icon: "trash"
-                      tooltipText: pluginApi?.tr("settings.pages.delete_button_tooltip") || "Delete"
+                      tooltipText: pluginApi?.tr("settings.pages.delete_button_tooltip")
                       colorFg: Color.mError
                       enabled: (pluginApi?.pluginSettings?.pages?.length || 0) > 1
                       onClicked: {
                         if ((pluginApi?.pluginSettings?.pages?.length || 0) <= 1) {
-                          ToastService.showError(pluginApi?.tr("settings.pages.cannot_delete_last") || "Cannot delete the last page");
+                          ToastService.showError(pluginApi?.tr("settings.pages.cannot_delete_last"));
                           return;
                         }
 
@@ -270,12 +357,12 @@ ColumnLayout {
     var name = newPageInput.text.trim();
 
     if (name === "") {
-      ToastService.showError(pluginApi?.tr("settings.pages.empty_name") || "Page name cannot be empty");
+      ToastService.showError(pluginApi?.tr("settings.pages.empty_name"));
       return;
     }
 
     if (!isPageNameUnique(name, -1)) {
-      ToastService.showError(pluginApi?.tr("settings.pages.name_exists") || "Page name already exists");
+      ToastService.showError(pluginApi?.tr("settings.pages.name_exists"));
       return;
     }
 
@@ -353,7 +440,7 @@ ColumnLayout {
   // Function to show the confirmation dialog
   function showDeleteConfirmation(pageIdx, pageName) {
     confirmDialog.pageIndex = pageIdx;
-    var confirmMessage = pluginApi?.tr("settings.pages.confirm_delete_message") || "Are you sure you want to delete page '{pageName}'?\n\nAll todos in this page will be transferred to the first page.";
+    var confirmMessage = pluginApi?.tr("settings.pages.confirm_delete_message");
     confirmText.text = confirmMessage.replace("{pageName}", pageName);
     confirmDialog.open();
   }
@@ -365,7 +452,7 @@ ColumnLayout {
 
     var pages = pluginApi.pluginSettings.pages || [];
     if (pages.length <= 1) {
-      ToastService.showError(pluginApi?.tr("settings.pages.cannot_delete_last") || "Cannot delete the last page");
+      ToastService.showError(pluginApi?.tr("settings.pages.cannot_delete_last"));
       return;
     }
 
@@ -417,6 +504,26 @@ ColumnLayout {
 
     pluginApi.pluginSettings.showCompleted = root.valueShowCompleted;
     pluginApi.pluginSettings.showBackground = root.valueShowBackground;
+    pluginApi.pluginSettings.useCustomColors = root.valueUseCustomColors;
+
+    // Only save custom colors if the option is enabled
+    if (root.valueUseCustomColors) {
+      // Save priority colors
+      if (!pluginApi.pluginSettings.priorityColors) {
+        pluginApi.pluginSettings.priorityColors = {};
+      }
+      pluginApi.pluginSettings.priorityColors.high = root.valueHighPriorityColor.toString();
+      pluginApi.pluginSettings.priorityColors.medium = root.valueMediumPriorityColor.toString();
+      pluginApi.pluginSettings.priorityColors.low = root.valueLowPriorityColor.toString();
+    } else {
+      // If custom colors are disabled, reset to defaults
+      pluginApi.pluginSettings.priorityColors = {
+        "high": Color.mError.toString(),
+        "medium": Color.mPrimary.toString(),
+        "low": Color.mOnSurfaceVariant.toString()
+      };
+    }
+
     pluginApi.saveSettings();
 
     Logger.i("Todo", "Settings saved successfully");

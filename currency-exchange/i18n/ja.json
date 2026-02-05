@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "オーストラリアドル",
+    "BRL": "ブラジルレアル",
+    "CAD": "カナダドル",
+    "CHF": "スイスフラン",
+    "CNY": "中国人民元",
+    "CZK": "チェココルナ",
+    "DKK": "デンマーククローネ",
+    "EUR": "ユーロ",
+    "GBP": "イギリスポンド",
+    "HKD": "香港ドル",
+    "HUF": "ハンガリーフォリント",
+    "IDR": "インドネシアルピア",
+    "ILS": "イスラエルシェケル",
+    "INR": "インドルピー",
+    "ISK": "アイスランドクローナ",
+    "JPY": "日本円",
+    "KRW": "韓国ウォン",
+    "MXN": "メキシコペソ",
+    "MYR": "マレーシアリンギット",
+    "NOK": "ノルウェークローネ",
+    "NZD": "ニュージーランドドル",
+    "PHP": "フィリピンペソ",
+    "PLN": "ポーランドズウォティ",
+    "RON": "ルーマニアレウ",
+    "SEK": "スウェーデンクローナ",
+    "SGD": "シンガポールドル",
+    "THB": "タイバーツ",
+    "TRY": "トルコリラ",
+    "USD": "米ドル",
+    "ZAR": "南アフリカランド"
+  },
+  "launcher": {
+    "command_description": "素早い通貨換算（例：>fx 100 USD EUR）",
+    "convert_example": "{amount} {from}を{to}に換算",
+    "convert_to_default": "{amount} {from}を{to}に換算（デフォルト）",
+    "currency_not_found": "為替レートに通貨コードが見つかりません",
+    "error_retry": "インターネット接続を確認してください。クリックで再試行。",
+    "fetching": "frankfurter.appから取得中",
+    "loading": "為替レートを読み込み中...",
+    "rate_click_copy": "レート: 1 {from} = {rate} {to} | クリックでコピー",
+    "reverse_rate": "逆レート | クリックでコピー",
+    "show_rate": "1 {from}から{to}のレートを表示",
+    "try_valid_code": "有効な通貨コードを入力してください（例：USD、EUR、PLN）",
+    "unknown_currency": "不明な通貨: {currency}"
+  },
+  "panel": {
+    "close": "閉じる",
+    "copy_result": "結果をコピー",
+    "error": "レートを読み込めませんでした",
+    "loading": "レートを読み込み中...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "レートを更新",
+    "settings": "設定",
+    "swap": "通貨を入れ替え",
+    "title": "通貨換算",
+    "updated": "更新 {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "通貨換算"
+  },
+  "settings": {
+    "display_mode": "表示モード",
+    "display_mode_description": "ウィジェットに表示する情報量",
+    "display_modes": {
+      "compact": "コンパクト（レート数値）",
+      "full": "通貨ペア",
+      "icon": "アイコンのみ"
+    },
+    "general": "一般設定",
+    "intervals": {
+      "15": "15分",
+      "180": "3時間",
+      "30": "30分",
+      "360": "6時間",
+      "60": "1時間",
+      "720": "12時間"
+    },
+    "refresh_interval": "更新間隔",
+    "refresh_interval_description": "為替レートを自動更新する頻度",
+    "source_currency": "変換元通貨",
+    "source_currency_description": "デフォルトの変換元通貨",
+    "target_currency": "変換先通貨",
+    "target_currency_description": "デフォルトの変換先通貨",
+    "widget": "ウィジェット設定"
+  },
+  "widget": {
+    "click_to_open": "クリックして換算ツールを開く",
+    "error": "レートを読み込めませんでした。インターネット接続を確認してください。",
+    "loading": "為替レートを読み込み中...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

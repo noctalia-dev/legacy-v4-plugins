@@ -17,7 +17,7 @@ Item {
   property int sectionWidgetsCount: 0
 
   // ===== DATA BINDING =====
-  readonly property string layoutCode: pluginApi?.mainInstance?.getMonitorLayout(screen?.name) || "?"
+  readonly property string layoutCode: (pluginApi?.mainInstance?.monitorLayouts ?? {})[screen?.name] || "?"
   readonly property string layoutName: pluginApi?.mainInstance?.getLayoutName(layoutCode) || layoutCode
 
   // ===== ICON MAPPING =====

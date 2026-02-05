@@ -1,11 +1,11 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Services.UI
 import qs.Widgets
 
-Rectangle {
+NIconButton {
   id: root
 
   property var pluginApi: null
@@ -13,17 +13,56 @@ Rectangle {
   property string widgetId: ""
   property string section: ""
 
-  readonly property string barPosition: Settings.getBarPositionForScreen(screen.name)
-  readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
-
-  implicitWidth: barIsVertical ? Style.getCapsuleHeightForScreen(screen.name) : contentRow.implicitWidth + Style.marginM * 2
-  implicitHeight: Style.getCapsuleHeightForScreen(screen.name)
-
-  property bool hasNewMessages: pluginApi?.pluginSettings?.hasNewMessages || false
   property bool steamRunning: false
 
-  color: Style.capsuleColor
-  radius: Style.radiusL
+  baseSize: Style.getCapsuleHeightForScreen(screen?.name)
+  applyUiScale: false
+  icon: "brand-steam"
+  tooltipText: steamRunning ? "Steam Running - Toggle Overlay" : "Steam Stopped"
+  tooltipDirection: BarService.getTooltipDirection(screen?.name)
+  customRadius: Style.radiusL
+
+  colorBg: Style.capsuleColor
+  colorFg: Color.mOnSurface
+  colorBgHover: Color.mHover
+  colorFgHover: Color.mOnHover
+  colorBorder: "transparent"
+  colorBorderHover: "transparent"
+
+  border.color: Style.capsuleBorderColor
+  border.width: Style.capsuleBorderWidth
+
+  NPopupContextMenu {
+    id: contextMenu
+
+    model: [
+      {
+        "label": "Toggle Overlay",
+        "action": "toggle-overlay",
+        "icon": "brand-steam"
+      },
+      {
+        "label": "Plugin Settings",
+        "action": "plugin-settings",
+        "icon": "settings"
+      },
+    ]
+
+    onTriggered: action => {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
+
+      if (action === "toggle-overlay") {
+        if (pluginApi?.mainInstance) {
+          pluginApi.mainInstance.toggleOverlay();
+        }
+      } else if (action === "plugin-settings") {
+        if (pluginApi) {
+          BarService.openPluginSettings(screen, pluginApi.manifest);
+        }
+      }
+    }
+  }
 
   // Process to check Steam status
   Process {
@@ -50,126 +89,14 @@ Rectangle {
     checkSteamProcess.running = true;
   }
 
-  // Process to toggle Steam overlay via IPC
-  Process {
-    id: toggleProcess
-    command: ["qs", "-p", Quickshell.shellDir, "ipc", "call", "plugin:hyprland-steam-overlay", "toggle"]
-    running: false
+  onClicked: {
+    if (pluginApi?.mainInstance) {
+      Logger.i("SteamOverlay.BarWidget", "Calling Steam overlay toggle");
+      pluginApi.mainInstance.toggleOverlay();
+    }
   }
 
-  RowLayout {
-    id: contentRow
-    anchors.centerIn: parent
-    spacing: Style.marginS
-
-    Item {
-      implicitWidth: 24
-      implicitHeight: 24
-
-      // Steam icon - using stacked rectangles to create Steam-like logo
-      Item {
-        id: steamIcon
-        anchors.centerIn: parent
-        width: 20
-        height: 20
-
-        // Simple Steam-inspired icon using rectangles
-        Rectangle {
-          anchors.centerIn: parent
-          width: 20
-          height: 20
-          color: "transparent"
-          border.color: steamRunning ? Color.mPrimary : (mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface)
-          border.width: 2
-          radius: 10
-
-          // Inner circles for Steam logo effect
-          Rectangle {
-            anchors.centerIn: parent
-            anchors.horizontalCenterOffset: -4
-            anchors.verticalCenterOffset: 2
-            width: 6
-            height: 6
-            radius: 3
-            color: steamRunning ? Color.mPrimary : (mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface)
-          }
-
-          Rectangle {
-            anchors.centerIn: parent
-            anchors.horizontalCenterOffset: 4
-            anchors.verticalCenterOffset: 2
-            width: 4
-            height: 4
-            radius: 2
-            color: steamRunning ? Color.mPrimary : (mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface)
-          }
-
-          Rectangle {
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: 4
-            width: 8
-            height: 8
-            radius: 4
-            color: steamRunning ? Color.mPrimary : (mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface)
-          }
-        }
-
-        // Notification dot
-        Rectangle {
-          visible: hasNewMessages
-          anchors.top: parent.top
-          anchors.right: parent.right
-          width: 8
-          height: 8
-          radius: 4
-          color: "#F44336"
-          border.color: Color.mSurface
-          border.width: 1
-
-          SequentialAnimation on opacity {
-            loops: Animation.Infinite
-            running: hasNewMessages
-
-            NumberAnimation {
-              from: 1.0
-              to: 0.3
-              duration: 800
-              easing.type: Easing.InOutQuad
-            }
-            NumberAnimation {
-              from: 0.3
-              to: 1.0
-              duration: 800
-              easing.type: Easing.InOutQuad
-            }
-          }
-        }
-      }
-    }
-
-  }
-
-  MouseArea {
-    id: mouseArea
-    anchors.fill: parent
-    hoverEnabled: true
-    cursorShape: Qt.PointingHandCursor
-
-    onEntered: {
-      root.color = Color.mHover;
-    }
-
-    onExited: {
-      root.color = Style.capsuleColor;
-    }
-
-    onClicked: {
-      if (pluginApi) {
-        Logger.i("SteamOverlay.BarWidget: Calling Steam overlay toggle");
-        // Call toggle via IPC
-        toggleProcess.running = true;
-      }
-    }
+  onRightClicked: {
+    PanelService.showContextMenu(contextMenu, root, screen);
   }
 }

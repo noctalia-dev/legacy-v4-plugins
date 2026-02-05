@@ -1,0 +1,38 @@
+{
+  "bar_widget": {
+    "tooltip": "Notatnik"
+  },
+  "panel": {
+    "header": {
+      "title": "Notatnik"
+    },
+    "stats": {
+      "characters": "znaków",
+      "words": "słów"
+    },
+    "placeholder": "Zacznij pisać swoje notatki tutaj..."
+  },
+  "settings": {
+    "panel_dimensions": {
+      "title": "Wymiary panelu",
+      "description": "Skonfiguruj rozmiar panelu notatnika przy otwieraniu.",
+      "width": "Szerokość",
+      "height": "Wysokość"
+    },
+    "file_storage": {
+      "title": "Przechowywanie Plików",
+      "description": "Opcjonalnie zapisz zawartość notatnika do pliku zamiast ustawień wtyczki. Pozostaw puste, aby użyć domyślnego przechowywania.",
+      "select": "Wybierz plik",
+      "picker_title": "Wybierz plik dla notatnika",
+      "not_writable": "⚠ Ostrzeżenie: Brak uprawnień do zapisu w tej lokalizacji"
+    },
+    "text_appearance": {
+      "title": "Wygląd tekstu",
+      "font_size": "Rozmiar czcionki"
+    },
+    "keyboard_shortcut": {
+      "title": "Skrót klawiszowy",
+      "description": "Przełącz panel notatnika tym poleceniem:"
+    }
+  }
+}

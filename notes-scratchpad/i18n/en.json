@@ -1,0 +1,38 @@
+{
+  "bar_widget": {
+    "tooltip": "Scratchpad"
+  },
+  "panel": {
+    "header": {
+      "title": "Scratchpad"
+    },
+    "stats": {
+      "characters": "characters",
+      "words": "words"
+    },
+    "placeholder": "Start typing your notes here..."
+  },
+  "settings": {
+    "panel_dimensions": {
+      "title": "Panel Dimensions",
+      "description": "Configure the size of the scratchpad panel when it opens.",
+      "width": "Width",
+      "height": "Height"
+    },
+    "file_storage": {
+      "title": "File Storage",
+      "description": "Optionally save scratchpad content to a file instead of plugin storage. Leave empty to use default storage.",
+      "select": "Select file",
+      "picker_title": "Choose file for scratchpad",
+      "not_writable": "⚠ Warning: No write permission for this location"
+    },
+    "text_appearance": {
+      "title": "Text Appearance",
+      "font_size": "Font Size"
+    },
+    "keyboard_shortcut": {
+      "title": "Keyboard Shortcut",
+      "description": "Toggle the scratchpad panel with this command:"
+    }
+  }
+}

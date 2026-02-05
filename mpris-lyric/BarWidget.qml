@@ -5,7 +5,7 @@ import qs.Commons
 import qs.Widgets
 import qs.Services.UI
 
-Rectangle {
+Item {
   id: root
 
   property var pluginApi: null
@@ -47,87 +47,97 @@ Rectangle {
     return ""
   }
 
-  implicitWidth: {
+  readonly property real contentWidth: {
     if (barIsVertical) return Style.capsuleHeight
     if (isActive && hasContent) return widgetWidth
     return Style.capsuleHeight
   }
-  implicitHeight: Style.capsuleHeight
+  readonly property real contentHeight: Style.capsuleHeight
 
-  color: Style.capsuleColor
-  radius: Style.radiusL
-  clip: true
+  implicitWidth: contentWidth
+  implicitHeight: contentHeight
 
-  RowLayout {
-    id: contentRow
-    anchors.centerIn: parent
-    spacing: Style.marginS
-    layoutDirection: pillDirection ? Qt.LeftToRight : Qt.RightToLeft
+  Rectangle {
+    id: visualCapsule
+    x: Style.pixelAlignCenter(parent.width, width)
+    y: Style.pixelAlignCenter(parent.height, height)
+    width: root.contentWidth
+    height: root.contentHeight
+    color: Style.capsuleColor
+    radius: Style.radiusL
+    clip: true
 
-    NIcon {
-      id: musicIcon
-      icon: isActive ? "music" : "music-off"
-      applyUiScale: false
-      color: isActive ? Color.mPrimary : Color.mOnSurface
-    }
+    RowLayout {
+      id: contentRow
+      anchors.centerIn: parent
+      spacing: Style.marginS
+      layoutDirection: pillDirection ? Qt.LeftToRight : Qt.RightToLeft
 
-    // Lyric container with scroll
-    Item {
-      id: lyricContainer
-      visible: !barIsVertical && isActive && hasContent
-      Layout.preferredWidth: widgetWidth - Style.marginM * 2 - musicIcon.width - Style.marginS
-      Layout.preferredHeight: lyricText.implicitHeight
-      clip: true
-
-      readonly property bool needsScroll: lyricText.implicitWidth > lyricContainer.width && lyricContainer.width > 0
-
-      NText {
-        id: lyricText
-        anchors.verticalCenter: parent.verticalCenter
-        family: Settings.data.ui.font || ""
-        pointSize: Style.barFontSize
-        text: displayText
+      NIcon {
+        id: musicIcon
+        icon: isActive ? "music" : "music-off"
+        applyUiScale: false
         color: isActive ? Color.mPrimary : Color.mOnSurface
+      }
 
-        x: 0
+      // Lyric container with scroll
+      Item {
+        id: lyricContainer
+        visible: !barIsVertical && isActive && hasContent
+        Layout.preferredWidth: widgetWidth - Style.marginM * 2 - musicIcon.width - Style.marginS
+        Layout.preferredHeight: lyricText.implicitHeight
+        clip: true
 
-        SequentialAnimation {
-          id: scrollAnim
-          running: lyricContainer.needsScroll && isActive
-          loops: Animation.Infinite
+        readonly property bool needsScroll: lyricText.implicitWidth > lyricContainer.width && lyricContainer.width > 0
 
-          // Wait 1 second before scrolling
-          PauseAnimation { duration: 1000 }
+        NText {
+          id: lyricText
+          anchors.verticalCenter: parent.verticalCenter
+          family: Settings.data.ui.font || ""
+          pointSize: Style.barFontSize
+          text: displayText
+          color: isActive ? Color.mPrimary : Color.mOnSurface
 
-          // Scroll to the left
-          NumberAnimation {
-            target: lyricText
-            property: "x"
-            from: 0
-            to: lyricContainer.width - lyricText.implicitWidth
-            duration: Math.max(2000, (lyricText.implicitWidth - lyricContainer.width) * 20)
-            easing.type: Easing.Linear
+          x: 0
+
+          SequentialAnimation {
+            id: scrollAnim
+            running: lyricContainer.needsScroll && isActive
+            loops: Animation.Infinite
+
+            // Wait 1 second before scrolling
+            PauseAnimation { duration: 1000 }
+
+            // Scroll to the left
+            NumberAnimation {
+              target: lyricText
+              property: "x"
+              from: 0
+              to: lyricContainer.width - lyricText.implicitWidth
+              duration: Math.max(2000, (lyricText.implicitWidth - lyricContainer.width) * 20)
+              easing.type: Easing.Linear
+            }
+
+            // Pause at the end
+            PauseAnimation { duration: 1000 }
+
+            // Reset to start
+            NumberAnimation {
+              target: lyricText
+              property: "x"
+              to: 0
+              duration: 300
+              easing.type: Easing.OutQuad
+            }
           }
 
-          // Pause at the end
-          PauseAnimation { duration: 1000 }
-
-          // Reset to start
-          NumberAnimation {
-            target: lyricText
-            property: "x"
-            to: 0
-            duration: 300
-            easing.type: Easing.OutQuad
-          }
-        }
-
-        onTextChanged: {
-          x = 0
-          if (lyricContainer.needsScroll) {
-            scrollAnim.restart()
-          } else {
-            scrollAnim.stop()
+          onTextChanged: {
+            x = 0
+            if (lyricContainer.needsScroll) {
+              scrollAnim.restart()
+            } else {
+              scrollAnim.stop()
+            }
           }
         }
       }
@@ -174,10 +184,8 @@ Rectangle {
     }
 
     onTriggered: action => {
-      var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-      if (popupMenuWindow) {
-        popupMenuWindow.close();
-      }
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
 
       if (mainInstance) {
         if (action === "play-pause") {
@@ -198,11 +206,7 @@ Rectangle {
 
     onClicked: (mouse) => {
       if (mouse.button === Qt.RightButton) {
-        var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-        if (popupMenuWindow) {
-          popupMenuWindow.showContextMenu(contextMenu);
-          contextMenu.openAtItem(root, screen);
-        }
+        PanelService.showContextMenu(contextMenu, root, screen);
       }
     }
   }

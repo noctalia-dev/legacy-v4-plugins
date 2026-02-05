@@ -6,9 +6,9 @@ import qs.Widgets
 import qs.Services.UI
 import qs.Services.System
 
-Rectangle {
+Item {
   id: root
-  
+
   property var pluginApi: null
   property ShellScreen screen
   property string widgetId: ""
@@ -20,21 +20,25 @@ Rectangle {
 
   readonly property var mainInstance: pluginApi?.mainInstance
   readonly property bool isActive: mainInstance && (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0)
-  
-  implicitWidth: {
-    if (barIsVertical) return Style.capsuleHeight
+
+  // Bar positioning properties
+  readonly property string screenName: screen ? screen.name : ""
+  readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
+  readonly property bool isVertical: barPosition === "left" || barPosition === "right"
+  readonly property real barHeight: Style.getBarHeightForScreen(screenName)
+  readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screenName)
+  readonly property real barFontSize: Style.getBarFontSizeForScreen(screenName)
+
+  readonly property real contentWidth: {
+    if (isVertical) return Style.capsuleHeight
     if (isActive) return contentRow.implicitWidth + Style.marginM * 2
     return Style.capsuleHeight
   }
-  implicitHeight: Style.capsuleHeight
-  
-  readonly property string barPosition: Settings.data.bar.position || "top"
-  readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
-  
-  color: Style.capsuleColor
-  
-  radius: Style.radiusL
-  
+  readonly property real contentHeight: root.capsuleHeight
+
+  implicitWidth: contentWidth
+  implicitHeight: contentHeight
+
   function formatTime(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -45,100 +49,115 @@ Rectangle {
     }
     return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
-  
-  RowLayout {
-    id: contentRow
-    anchors.centerIn: parent
-    spacing: Style.marginS
-    layoutDirection: pillDirection ? Qt.LeftToRight : Qt.RightToLeft 
 
-    NIcon {
-      icon: {
-        if (mainInstance && mainInstance.timerSoundPlaying) return "bell-ringing"
-        if (mainInstance && mainInstance.timerStopwatchMode) return "stopwatch"
-        return "hourglass"
+  Rectangle {
+    id: visualCapsule
+    x: Style.pixelAlignCenter(parent.width, width)
+    y: Style.pixelAlignCenter(parent.height, height)
+    width: root.contentWidth
+    height: root.contentHeight
+    color: {
+      if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
+        return Style.capsuleColor
       }
-      applyUiScale: false
-      color: {
-         if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
-            return Color.mPrimary
-         }
-         return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-      }
+      return mouseArea.containsMouse ? Color.mHover : Style.capsuleColor
     }
-    
-    NText {
-      visible: !barIsVertical && mainInstance && (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0)
-      family: Settings.data.ui.fontFixed
-      pointSize: Style.barFontSize
-      text: {
-        if (!mainInstance) return ""
-        if (mainInstance.timerStopwatchMode) {
-            return formatTime(mainInstance.timerElapsedSeconds)
+    radius: Style.radiusL
+    border.color: Style.capsuleBorderColor
+    border.width: Style.capsuleBorderWidth
+
+    RowLayout {
+      id: contentRow
+      anchors.centerIn: parent
+      spacing: Style.marginS
+      layoutDirection: pillDirection ? Qt.LeftToRight : Qt.RightToLeft
+
+      NIcon {
+        icon: {
+          if (mainInstance && mainInstance.timerSoundPlaying) return "bell-ringing"
+          if (mainInstance && mainInstance.timerStopwatchMode) return "stopwatch"
+          return "hourglass"
         }
-        return formatTime(mainInstance.timerRemainingSeconds)
-      }
-      color: {
-         if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
+        applyUiScale: false
+        color: {
+          if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
             return Color.mPrimary
-         }
-         return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+          }
+          return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+        }
+      }
+
+      NText {
+        visible: !isVertical && mainInstance && (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0)
+        family: Settings.data.ui.fontFixed
+        pointSize: Style.barFontSize
+        text: {
+          if (!mainInstance) return ""
+          if (mainInstance.timerStopwatchMode) {
+            return formatTime(mainInstance.timerElapsedSeconds)
+          }
+          return formatTime(mainInstance.timerRemainingSeconds)
+        }
+        color: {
+          if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
+            return Color.mPrimary
+          }
+          return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+        }
       }
     }
   }
-  
+
   NPopupContextMenu {
     id: contextMenu
 
     model: {
-        var items = [];
-        
-        if (mainInstance) {
-            // Pause / Resume & Reset
-            if (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0) {
-                 items.push({
-                    "label": mainInstance.timerRunning ? pluginApi.tr("panel.pause") : pluginApi.tr("panel.resume"),
-                    "action": "toggle",
-                    "icon": mainInstance.timerRunning ? "media-pause" : "media-play"
-                });
+      var items = [];
 
-                items.push({
-                    "label": pluginApi.tr("panel.reset"),
-                    "action": "reset",
-                    "icon": "refresh"
-                });
-            }
+      if (mainInstance) {
+        // Pause / Resume & Reset
+        if (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0) {
+          items.push({
+            "label": mainInstance.timerRunning ? pluginApi.tr("panel.pause") : pluginApi.tr("panel.resume"),
+            "action": "toggle",
+            "icon": mainInstance.timerRunning ? "media-pause" : "media-play"
+          });
+
+          items.push({
+            "label": pluginApi.tr("panel.reset"),
+            "action": "reset",
+            "icon": "refresh"
+          });
         }
-        
-        // Settings
-        items.push({
-            "label": pluginApi.tr("panel.settings"),
-            "action": "widget-settings",
-            "icon": "settings"
-        });
-        
-        return items;
+      }
+
+      // Settings
+      items.push({
+        "label": pluginApi.tr("panel.settings"),
+        "action": "widget-settings",
+        "icon": "settings"
+      });
+
+      return items;
     }
 
     onTriggered: action => {
-        var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-        if (popupMenuWindow) {
-            popupMenuWindow.close();
-        }
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
 
-        if (action === "widget-settings") {
-            BarService.openPluginSettings(screen, pluginApi.manifest);
-        } else if (mainInstance) {
-            if (action === "toggle") {
-                 if (mainInstance.timerRunning) {
-                    mainInstance.timerPause();
-                } else {
-                    mainInstance.timerStart(); 
-                }
-            } else if (action === "reset") {
-                mainInstance.timerReset();
-            }
+      if (action === "widget-settings") {
+        BarService.openPluginSettings(screen, pluginApi.manifest);
+      } else if (mainInstance) {
+        if (action === "toggle") {
+          if (mainInstance.timerRunning) {
+            mainInstance.timerPause();
+          } else {
+            mainInstance.timerStart();
+          }
+        } else if (action === "reset") {
+          mainInstance.timerReset();
         }
+      }
     }
   }
 
@@ -148,30 +167,14 @@ Rectangle {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     acceptedButtons: Qt.LeftButton | Qt.RightButton
-    
-    onEntered: {
-        if (!mainInstance || (!mainInstance.timerRunning && !mainInstance.timerSoundPlaying)) {
-             root.color = Color.mHover
-        }
-    }
-    
-    onExited: {
-        if (!mainInstance || (!mainInstance.timerRunning && !mainInstance.timerSoundPlaying)) {
-             root.color = Style.capsuleColor
-        }
-    }
-    
+
     onClicked: (mouse) => {
       if (mouse.button === Qt.LeftButton) {
-          if (pluginApi) {
-            pluginApi.openPanel(root.screen, root)
-          }
+        if (pluginApi) {
+          pluginApi.openPanel(root.screen, root)
+        }
       } else if (mouse.button === Qt.RightButton) {
-          var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-          if (popupMenuWindow) {
-              popupMenuWindow.showContextMenu(contextMenu);
-              contextMenu.openAtItem(root, screen);
-          }
+        PanelService.showContextMenu(contextMenu, root, screen);
       }
     }
   }

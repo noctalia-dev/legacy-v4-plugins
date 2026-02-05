@@ -37,12 +37,12 @@
       "label": "Modificateur de taille d'icône"
     },
     "iconType": {
-      "desc": "Type d'icône",
-      "label": "Choisissez le style d'icône utilisé pour les indicateurs TX/RX."
+      "desc": "Choisissez le style d'icône utilisé pour les indicateurs TX/RX.",
+      "label": "Type d'icône"
     },
     "minWidth": {
-      "desc": "Largeur minimale du widget",
-      "label": "Définir une largeur minimale pour le widget (en px)."
+      "desc": "Définir une largeur minimale pour le widget (en px).",
+      "label": "Largeur minimale du widget"
     },
     "showNumbers": {
       "desc": "Afficher les vitesses RX/TX actuelles sous forme de nombres.",

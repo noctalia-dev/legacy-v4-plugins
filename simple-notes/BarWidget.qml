@@ -4,7 +4,7 @@ import Quickshell
 import qs.Commons
 import qs.Widgets
 
-Rectangle {
+Item {
   id: root
 
   property var pluginApi: null
@@ -12,42 +12,51 @@ Rectangle {
   property string widgetId: ""
   property string section: ""
 
-  // Standard capsule dimensions
-  implicitWidth: barIsVertical ? Style.capsuleHeight : contentRow.implicitWidth + Style.marginM * 2
-  implicitHeight: Style.capsuleHeight
-  
   readonly property string barPosition: Settings.data.bar.position || "top"
   readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
-  
+
   // Settings
   readonly property bool showCount: pluginApi?.pluginSettings?.showCountInBar ?? true
-  
+
   function getIntValue(value, defaultValue) {
     return (typeof value === 'number') ? Math.floor(value) : defaultValue;
   }
 
   readonly property int noteCount: getIntValue(pluginApi?.pluginSettings?.count, 0)
-  
-  color: Style.capsuleColor
-  radius: Style.radiusL
 
-  RowLayout {
-    id: contentRow
-    anchors.centerIn: parent
-    spacing: Style.marginS
+  readonly property real contentWidth: barIsVertical ? Style.capsuleHeight : contentRow.implicitWidth + Style.marginM * 2
+  readonly property real contentHeight: Style.capsuleHeight
 
-    NIcon {
-      icon: "paperclip" 
-      applyUiScale: false
-      color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-    }
+  implicitWidth: contentWidth
+  implicitHeight: contentHeight
 
-    NText {
-      visible: !barIsVertical && root.showCount
-      text: root.noteCount.toString()
-      color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-      font.pointSize: Style.barFontSize
-      font.weight: Font.Medium
+  Rectangle {
+    id: visualCapsule
+    x: Style.pixelAlignCenter(parent.width, width)
+    y: Style.pixelAlignCenter(parent.height, height)
+    width: root.contentWidth
+    height: root.contentHeight
+    color: mouseArea.containsMouse ? Color.mHover : Style.capsuleColor
+    radius: Style.radiusL
+
+    RowLayout {
+      id: contentRow
+      anchors.centerIn: parent
+      spacing: Style.marginS
+
+      NIcon {
+        icon: "paperclip"
+        applyUiScale: false
+        color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+      }
+
+      NText {
+        visible: !barIsVertical && root.showCount
+        text: root.noteCount.toString()
+        color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+        font.pointSize: Style.barFontSize
+        font.weight: Font.Medium
+      }
     }
   }
 
@@ -56,14 +65,6 @@ Rectangle {
     anchors.fill: parent
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
-
-    onEntered: {
-      root.color = Color.mHover;
-    }
-
-    onExited: {
-      root.color = Style.capsuleColor;
-    }
 
     onClicked: {
       if (pluginApi) {

@@ -1,0 +1,22 @@
+{
+  "id": "openhue",
+  "name": "Openhue widget",
+  "version": "1.0.1",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "alxndrv",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Plugin for controlling Philips Hue lights from the taskbar",
+  "tags": ["Bar", "Panel"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}

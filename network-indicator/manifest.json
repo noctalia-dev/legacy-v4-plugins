@@ -1,7 +1,7 @@
 {
   "id": "network-indicator",
-  "name": "NetworkIndicator",
-  "version": "1.0.3",
+  "name": "Network Indicator",
+  "version": "1.0.5",
   "minNoctaliaVersion": "3.7.5",
   "author": "tonigineer",
   "license": "MIT",

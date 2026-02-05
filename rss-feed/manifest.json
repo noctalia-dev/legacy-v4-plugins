@@ -1,8 +1,9 @@
 {
   "id": "rss-feed",
   "name": "RSS Feed Reader",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Monitor and read RSS/Atom feeds directly from your desktop",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "author": "Lokize",
   "license": "MIT",
   "minNoctaliaVersion": "3.6.0",

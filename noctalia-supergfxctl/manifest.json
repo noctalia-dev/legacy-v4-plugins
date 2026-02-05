@@ -5,7 +5,7 @@
 	"minNoctaliaVersion": "3.8.2",
 	"author": "cod3d <cod3ddot@proton.me>",
 	"license": "MIT",
-	"repository": "https://github.com/cod3ddot/noctalia-supergfxctl",
+	"repository": "https://github.com/noctalia-dev/noctalia-plugins",
 	"description": "GPU control with supergfxctl for noctalia.",
 	"tags": ["Bar", "Panel", "System", "Gaming"],
 	"entryPoints": {

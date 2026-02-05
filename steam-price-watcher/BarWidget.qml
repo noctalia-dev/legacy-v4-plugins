@@ -8,14 +8,14 @@ import qs.Commons
 import qs.Services.UI
 import qs.Widgets
 
-Rectangle {
+Item {
   id: root
 
   property var pluginApi: null
   property ShellScreen screen
   property string widgetId: ""
   property string section: ""
-  
+
   readonly property bool isVertical: Settings.data.bar.position === "left" || Settings.data.bar.position === "right"
 
   // Configuration
@@ -34,26 +34,25 @@ Rectangle {
   property bool loading: false
   property bool hasNotifications: gamesOnTarget.length > 0
 
-  implicitWidth: Math.max(60, isVertical ? Style.capsuleHeight : contentWidth)
-  implicitHeight: Math.max(32, isVertical ? contentHeight : Style.capsuleHeight)
-  radius: Style.radiusM
-  color: Style.capsuleColor
-  border.color: Style.capsuleBorderColor
-  border.width: Style.capsuleBorderWidth
-
-  readonly property real contentWidth: {
+  readonly property real visualContentWidth: {
     if (isVertical) return Style.capsuleHeight;
     var iconWidth = Style.toOdd ? Style.toOdd(Style.capsuleHeight * 0.6) : 20;
     var textWidth = gamesText ? (gamesText.implicitWidth + Style.marginS) : 60;
     return iconWidth + textWidth + Style.marginM * 2 + 24;
   }
 
-  readonly property real contentHeight: {
+  readonly property real visualContentHeight: {
     if (!isVertical) return Style.capsuleHeight;
     var iconHeight = Style.toOdd ? Style.toOdd(Style.capsuleHeight * 0.6) : 20;
     var textHeight = gamesText ? gamesText.implicitHeight : 16;
     return Math.max(iconHeight, textHeight) + Style.marginS * 2;
   }
+
+  readonly property real contentWidth: Math.max(60, isVertical ? Style.capsuleHeight : visualContentWidth)
+  readonly property real contentHeight: Math.max(32, isVertical ? visualContentHeight : Style.capsuleHeight)
+
+  implicitWidth: contentWidth
+  implicitHeight: contentHeight
 
   // Update timer
   Timer {
@@ -255,60 +254,72 @@ Rectangle {
     return pluginApi?.tr("steam-price-watcher.tooltip.no-games") || "Nenhum jogo cadastrado";
   }
 
-  RowLayout {
-    anchors.fill: parent
-    anchors.leftMargin: isVertical ? 0 : Style.marginM
-    anchors.rightMargin: isVertical ? 0 : 32
-    anchors.topMargin: isVertical ? Style.marginS : 0
-    anchors.bottomMargin: isVertical ? Style.marginS : 0
-    spacing: Style.marginS
-    visible: !isVertical
+  Rectangle {
+    id: visualCapsule
+    x: Style.pixelAlignCenter(parent.width, width)
+    y: Style.pixelAlignCenter(parent.height, height)
+    width: root.contentWidth
+    height: root.contentHeight
+    radius: Style.radiusM
+    color: Style.capsuleColor
+    border.color: Style.capsuleBorderColor
+    border.width: Style.capsuleBorderWidth
 
-    Item {
-      Layout.preferredWidth: iconSize
-      Layout.preferredHeight: iconSize
-      Layout.alignment: Qt.AlignVCenter
-      
-      readonly property int iconSize: Style.toOdd ? Style.toOdd(Style.capsuleHeight * 0.5) : 16
+    RowLayout {
+      anchors.fill: parent
+      anchors.leftMargin: isVertical ? 0 : Style.marginM
+      anchors.rightMargin: isVertical ? 0 : 32
+      anchors.topMargin: isVertical ? Style.marginS : 0
+      anchors.bottomMargin: isVertical ? Style.marginS : 0
+      spacing: Style.marginS
+      visible: !isVertical
 
-      NIcon {
-        anchors.fill: parent
-        icon: loading ? "loader" : "package"
-        color: hasNotifications ? Color.mPrimary : Color.mOnSurface
-        pointSize: parent.iconSize
-        
-        RotationAnimator on rotation {
-          running: loading
-          from: 0
-          to: 360
-          duration: 1000
-          loops: Animation.Infinite
+      Item {
+        Layout.preferredWidth: iconSize
+        Layout.preferredHeight: iconSize
+        Layout.alignment: Qt.AlignVCenter
+
+        readonly property int iconSize: Style.toOdd ? Style.toOdd(Style.capsuleHeight * 0.5) : 16
+
+        NIcon {
+          anchors.fill: parent
+          icon: loading ? "loader" : "package"
+          color: hasNotifications ? Color.mPrimary : Color.mOnSurface
+          pointSize: parent.iconSize
+
+          RotationAnimator on rotation {
+            running: loading
+            from: 0
+            to: 360
+            duration: 1000
+            loops: Animation.Infinite
+          }
+        }
+
+        // Notification indicator
+        Rectangle {
+          visible: hasNotifications && !loading
+          width: 8
+          height: 8
+          radius: 4
+          color: Color.mError
+          anchors.right: parent.right
+          anchors.top: parent.top
+          anchors.rightMargin: -2
+          anchors.topMargin: -2
+          border.color: visualCapsule.color
+          border.width: 1
         }
       }
 
-      // Notification indicator
-      Rectangle {
-        visible: hasNotifications && !loading
-        width: 8
-        height: 8
-        radius: 4
-        color: Color.mError
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: -2
-        anchors.topMargin: -2
-        border.color: root.color
-        border.width: 1
+      NText {
+        id: gamesText
+        text: displayText
+        color: hasNotifications ? Color.mPrimary : Color.mOnSurface
+        pointSize: Style.barFontSize
+        applyUiScale: false
+        Layout.alignment: Qt.AlignVCenter
       }
-    }
-
-    NText {
-      id: gamesText
-      text: displayText
-      color: hasNotifications ? Color.mPrimary : Color.mOnSurface
-      pointSize: Style.barFontSize
-      applyUiScale: false
-      Layout.alignment: Qt.AlignVCenter
     }
   }
 
@@ -322,12 +333,12 @@ Rectangle {
       // Open plugin panel near this widget
       pluginApi.openPanel(root.screen, root)
     }
-     onEntered: {
+    onEntered: {
       if (tooltipText) {
         TooltipService.show(root, tooltipText, BarService.getTooltipDirection());
       }
     }
-    
+
     onExited: {
       TooltipService.hide();
     }

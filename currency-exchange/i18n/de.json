@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Australischer Dollar",
+    "BRL": "Brasilianischer Real",
+    "CAD": "Kanadischer Dollar",
+    "CHF": "Schweizer Franken",
+    "CNY": "Chinesischer Yuan",
+    "CZK": "Tschechische Krone",
+    "DKK": "Dänische Krone",
+    "EUR": "Euro",
+    "GBP": "Britisches Pfund",
+    "HKD": "Hongkong-Dollar",
+    "HUF": "Ungarischer Forint",
+    "IDR": "Indonesische Rupiah",
+    "ILS": "Israelischer Schekel",
+    "INR": "Indische Rupie",
+    "ISK": "Isländische Krone",
+    "JPY": "Japanischer Yen",
+    "KRW": "Südkoreanischer Won",
+    "MXN": "Mexikanischer Peso",
+    "MYR": "Malaysischer Ringgit",
+    "NOK": "Norwegische Krone",
+    "NZD": "Neuseeland-Dollar",
+    "PHP": "Philippinischer Peso",
+    "PLN": "Polnischer Złoty",
+    "RON": "Rumänischer Leu",
+    "SEK": "Schwedische Krone",
+    "SGD": "Singapur-Dollar",
+    "THB": "Thailändischer Baht",
+    "TRY": "Türkische Lira",
+    "USD": "US-Dollar",
+    "ZAR": "Südafrikanischer Rand"
+  },
+  "launcher": {
+    "command_description": "Schnelle Währungsumrechnung (z.B. >fx 100 USD EUR)",
+    "convert_example": "{amount} {from} in {to} umrechnen",
+    "convert_to_default": "{amount} {from} in {to} umrechnen (Standard)",
+    "currency_not_found": "Währungscode nicht in Wechselkursen gefunden",
+    "error_retry": "Überprüfe deine Internetverbindung. Klicken zum Wiederholen.",
+    "fetching": "Abruf von frankfurter.app",
+    "loading": "Lade Wechselkurse...",
+    "rate_click_copy": "Kurs: 1 {from} = {rate} {to} | Klicken zum Kopieren",
+    "reverse_rate": "Umgekehrter Kurs | Klicken zum Kopieren",
+    "show_rate": "Kurs für 1 {from} nach {to} anzeigen",
+    "try_valid_code": "Gib einen gültigen Währungscode ein (z.B. USD, EUR, PLN)",
+    "unknown_currency": "Unbekannte Währung: {currency}"
+  },
+  "panel": {
+    "close": "Schließen",
+    "copy_result": "Ergebnis kopieren",
+    "error": "Kurse konnten nicht geladen werden",
+    "loading": "Lade Kurse...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Kurse aktualisieren",
+    "settings": "Einstellungen",
+    "swap": "Währungen tauschen",
+    "title": "Währungsrechner",
+    "updated": "Aktualisiert {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Währungsumrechnung"
+  },
+  "settings": {
+    "display_mode": "Anzeigemodus",
+    "display_mode_description": "Wie viel Information im Widget angezeigt wird",
+    "display_modes": {
+      "compact": "Kompakt (nur Kurszahl)",
+      "full": "Währungspaar",
+      "icon": "Nur Symbol"
+    },
+    "general": "Allgemeine Einstellungen",
+    "intervals": {
+      "15": "15 Minuten",
+      "180": "3 Stunden",
+      "30": "30 Minuten",
+      "360": "6 Stunden",
+      "60": "1 Stunde",
+      "720": "12 Stunden"
+    },
+    "refresh_interval": "Aktualisierungsintervall",
+    "refresh_interval_description": "Wie oft die Wechselkurse automatisch aktualisiert werden",
+    "source_currency": "Ausgangswährung",
+    "source_currency_description": "Standardwährung für die Umrechnung",
+    "target_currency": "Zielwährung",
+    "target_currency_description": "Standardwährung für das Ergebnis",
+    "widget": "Widget-Einstellungen"
+  },
+  "widget": {
+    "click_to_open": "Klicken zum Öffnen des Umrechners",
+    "error": "Kurse konnten nicht geladen werden, überprüfe deine Internetverbindung.",
+    "loading": "Lade Wechselkurse...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

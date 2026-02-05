@@ -1,9 +1,10 @@
 {
   "id": "timer",
   "name": "Timer",
-  "version": "1.0.7",
+  "version": "1.0.11",
   "minNoctaliaVersion": "3.8.0",
   "author": "Noctalia Team",
+  "official": true,
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "A timer and stopwatch plugin for the bar & control center.",

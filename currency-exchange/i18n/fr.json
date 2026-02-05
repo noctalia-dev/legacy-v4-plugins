@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Dollar australien",
+    "BRL": "Réal brésilien",
+    "CAD": "Dollar canadien",
+    "CHF": "Franc suisse",
+    "CNY": "Yuan chinois",
+    "CZK": "Couronne tchèque",
+    "DKK": "Couronne danoise",
+    "EUR": "Euro",
+    "GBP": "Livre sterling",
+    "HKD": "Dollar de Hong Kong",
+    "HUF": "Forint hongrois",
+    "IDR": "Roupie indonésienne",
+    "ILS": "Shekel israélien",
+    "INR": "Roupie indienne",
+    "ISK": "Couronne islandaise",
+    "JPY": "Yen japonais",
+    "KRW": "Won sud-coréen",
+    "MXN": "Peso mexicain",
+    "MYR": "Ringgit malaisien",
+    "NOK": "Couronne norvégienne",
+    "NZD": "Dollar néo-zélandais",
+    "PHP": "Peso philippin",
+    "PLN": "Złoty polonais",
+    "RON": "Leu roumain",
+    "SEK": "Couronne suédoise",
+    "SGD": "Dollar de Singapour",
+    "THB": "Baht thaïlandais",
+    "TRY": "Livre turque",
+    "USD": "Dollar américain",
+    "ZAR": "Rand sud-africain"
+  },
+  "launcher": {
+    "command_description": "Conversion rapide de devises (ex. >fx 100 USD EUR)",
+    "convert_example": "Convertir {amount} {from} en {to}",
+    "convert_to_default": "Convertir {amount} {from} en {to} (par défaut)",
+    "currency_not_found": "Code devise introuvable dans les taux de change",
+    "error_retry": "Vérifie ta connexion internet. Clique pour réessayer.",
+    "fetching": "Récupération depuis frankfurter.app",
+    "loading": "Chargement des taux de change...",
+    "rate_click_copy": "Taux : 1 {from} = {rate} {to} | Clique pour copier",
+    "reverse_rate": "Taux inverse | Clique pour copier",
+    "show_rate": "Afficher le taux de 1 {from} vers {to}",
+    "try_valid_code": "Entre un code devise valide (ex. USD, EUR, PLN)",
+    "unknown_currency": "Devise inconnue : {currency}"
+  },
+  "panel": {
+    "close": "Fermer",
+    "copy_result": "Copier le résultat",
+    "error": "Impossible de charger les taux",
+    "loading": "Chargement des taux...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Actualiser les taux",
+    "settings": "Paramètres",
+    "swap": "Inverser les devises",
+    "title": "Convertisseur de Devises",
+    "updated": "Mis à jour {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Change de Devises"
+  },
+  "settings": {
+    "display_mode": "Mode d'Affichage",
+    "display_mode_description": "Quantité d'informations à afficher dans le widget",
+    "display_modes": {
+      "compact": "Compact (nombre du taux)",
+      "full": "Paire de devises",
+      "icon": "Icône uniquement"
+    },
+    "general": "Paramètres Généraux",
+    "intervals": {
+      "15": "15 minutes",
+      "180": "3 heures",
+      "30": "30 minutes",
+      "360": "6 heures",
+      "60": "1 heure",
+      "720": "12 heures"
+    },
+    "refresh_interval": "Intervalle d'Actualisation",
+    "refresh_interval_description": "Fréquence de mise à jour automatique des taux de change",
+    "source_currency": "Devise Source",
+    "source_currency_description": "Devise par défaut à convertir",
+    "target_currency": "Devise Cible",
+    "target_currency_description": "Devise par défaut du résultat",
+    "widget": "Paramètres du Widget"
+  },
+  "widget": {
+    "click_to_open": "Clique pour ouvrir le convertisseur",
+    "error": "Impossible de charger les taux, vérifie ta connexion internet.",
+    "loading": "Chargement des taux de change...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

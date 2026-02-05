@@ -1,0 +1,38 @@
+{
+  "bar_widget": {
+    "tooltip": "Not defteri"
+  },
+  "panel": {
+    "header": {
+      "title": "Not defteri"
+    },
+    "stats": {
+      "characters": "karakter",
+      "words": "kelime"
+    },
+    "placeholder": "Notlarınızı buraya yazmaya başlayın..."
+  },
+  "settings": {
+    "panel_dimensions": {
+      "title": "Panel boyutları",
+      "description": "Açıldığında not defteri panelinin boyutunu yapılandırın.",
+      "width": "Genişlik",
+      "height": "Yükseklik"
+    },
+    "file_storage": {
+      "title": "Dosya Depolama",
+      "description": "İsteğe bağlı olarak not defteri içeriğini eklenti ayarları yerine bir dosyaya kaydedin. Varsayılan depolamayı kullanmak için boş bırakın.",
+      "select": "Dosya seç",
+      "picker_title": "Not defteri için dosya seç",
+      "not_writable": "⚠ Uyarı: Bu konum için yazma izni yok"
+    },
+    "text_appearance": {
+      "title": "Metin görünümü",
+      "font_size": "Yazı boyutu"
+    },
+    "keyboard_shortcut": {
+      "title": "Klavye kısayolu",
+      "description": "Bu komutla not defteri panelini değiştirin:"
+    }
+  }
+}

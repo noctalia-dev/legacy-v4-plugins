@@ -63,6 +63,7 @@ function extractRegistryEntry(manifest, dirPath) {
     id: manifest.id,
     name: manifest.name,
     version: manifest.version,
+    official: manifest.official || false,
     author: manifest.author,
     description: manifest.description,
     repository: manifest.repository,

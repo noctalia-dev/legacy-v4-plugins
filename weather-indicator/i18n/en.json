@@ -1,0 +1,37 @@
+{
+  "settings": {
+    "showTempValue": {
+      "desc": "Display the current degrees alongside the condition.",
+      "label": "Show temperature value"
+    },
+    "showTempUnit": {
+      "desc": "Show °C or °F indicating the temperature unit when using a horizontal bar.",
+      "label": "Show temperature unit when horizontal"
+    },
+    "showConditionIcon": {
+      "desc": "Include the visual weather symbol in the widget.",
+      "label": "Show condition icon"
+    },
+    "tooltipOption": {
+      "desc": "Choose what you would like the tooltip to display.",
+      "label": "Tooltip options"
+    },
+    "mode": {
+      "disable": "Disable the Tooltip",
+      "highlow": "High/Low temps",
+      "sunrise": "Sunrise/set times",
+      "everything": "Show all"
+    }
+  },
+  "tooltips": {
+    "current": "Current",
+    "high": "High",
+    "low": "Low",
+    "sunrise": "Sunrise",
+    "sunset": "Sunset"
+  },
+  "menu": {
+    "openPanel": "Open Calendar",
+    "settings": "Widget Settings"
+  }
+}

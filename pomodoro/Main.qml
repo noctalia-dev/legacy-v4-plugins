@@ -8,6 +8,10 @@ import Quickshell.Io
 Item {
   id: root
 
+  // --- CONFIGURATION: Change sound here ---
+  readonly property string alarmSoundFile: Qt.resolvedUrl("alarm.mp3").toString().replace("file://", "")
+
+
   property var pluginApi: null
 
   onPluginApiChanged: {
@@ -40,7 +44,8 @@ Item {
               pluginApi.pluginSettings.autoStartWork = newSettings.autoStartWork;
             if (newSettings.compactMode !== undefined)
               pluginApi.pluginSettings.compactMode = newSettings.compactMode;
-            
+              
+            // Trigger update
             root.settingsVersion++;
             
             Logger.i("Pomodoro", "Settings reloaded from file");
@@ -155,11 +160,23 @@ Item {
     }
   }
 
-  function pomodoroStart() {
-    // Stop any playing alarm sound when starting
-    if (root.pomodoroSoundPlaying) {
-      SoundService.stopSound("alarm-beep.wav");
+  // ---  Alarm Limit Timer ---
+  Timer {
+    id: alarmLimitTimer
+    interval: 5000 // 5 seconds
+    repeat: false
+    running: false
+    onTriggered: {
+       root.pomodoroStopAlarm();
+    }
+  }
+
+  function pomodoroStart(stopSound = true) {
+    // Stop any playing alarm sound when starting, unless explicitly asked not to (for auto-start)
+    if (stopSound && root.pomodoroSoundPlaying) {
+      SoundService.stopSound(root.alarmSoundFile); // Uses variable
       root.pomodoroSoundPlaying = false;
+      alarmLimitTimer.stop();
     }
     
     if (root.pomodoroRemainingSeconds <= 0) {
@@ -175,8 +192,9 @@ Item {
 
   function pomodoroPause() {
     root.pomodoroRunning = false;
-    SoundService.stopSound("alarm-beep.wav");
+    SoundService.stopSound(root.alarmSoundFile); // Uses variable
     root.pomodoroSoundPlaying = false;
+    alarmLimitTimer.stop();
   }
 
   function pomodoroResetSession() {
@@ -185,8 +203,9 @@ Item {
     root.pomodoroTotalSeconds = 0;
     root.pomodoroOriginalTotal = 0;
 
-    SoundService.stopSound("alarm-beep.wav");
+    SoundService.stopSound(root.alarmSoundFile); // Uses variable
     root.pomodoroSoundPlaying = false;
+    alarmLimitTimer.stop();
   }
 
   function pomodoroResetAll() {
@@ -197,22 +216,25 @@ Item {
     root.pomodoroCompletedSessions = 0;
     root.pomodoroMode = modeWork;
 
-    SoundService.stopSound("alarm-beep.wav");
+    SoundService.stopSound(root.alarmSoundFile); // Uses variable
     root.pomodoroSoundPlaying = false;
+    alarmLimitTimer.stop();
   }
 
   function pomodoroSkip() {
     root.pomodoroRunning = false;
-    SoundService.stopSound("alarm-beep.wav");
+    SoundService.stopSound(root.alarmSoundFile); // Uses variable
     root.pomodoroSoundPlaying = false;
+    alarmLimitTimer.stop();
     
     pomodoroAdvanceToNextPhase();
   }
 
   function pomodoroStopAlarm() {
     if (root.pomodoroSoundPlaying) {
-      SoundService.stopSound("alarm-beep.wav");
+      SoundService.stopSound(root.alarmSoundFile); // Uses variable
       root.pomodoroSoundPlaying = false;
+      alarmLimitTimer.stop();
     }
   }
 
@@ -251,10 +273,15 @@ Item {
     root.pomodoroRemainingSeconds = 0;
     root.pomodoroSoundPlaying = true;
 
-    SoundService.playSound("alarm-beep.wav", {
-      repeat: true,
-      volume: 0.3
-    });
+    // Play Sound (checking toggle setting)
+    if (pluginApi?.pluginSettings?.playSound !== false) {
+      SoundService.playSound(root.alarmSoundFile, { // Uses variable
+        repeat: true,
+        volume: 0.3 
+      });
+      // Start the alarm limit timer
+      alarmLimitTimer.start();
+    }
 
     var toastMessage;
     var shouldAutoStart = false;
@@ -280,9 +307,8 @@ Item {
     
     if (shouldAutoStart) {
       Qt.callLater(() => {
-        SoundService.stopSound("alarm-beep.wav");
-        root.pomodoroSoundPlaying = false;
-        root.pomodoroStart();
+        // Pass false to keep sound playing!
+        root.pomodoroStart(false);
       });
     }
   }

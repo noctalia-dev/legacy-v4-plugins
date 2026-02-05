@@ -35,7 +35,7 @@ Item {
     return [
       {
         "name": ">fx",
-        "description": "Quick currency conversion (e.g., >fx 100 USD EUR)",
+        "description": pluginApi?.tr("launcher.command_description") || "Quick currency conversion (e.g., >fx 100 USD EUR)",
         "icon": icon("cash", "accessories-calculator"),
         "isTablerIcon": iconMode === "tabler",
         "isImage": false,
@@ -57,8 +57,10 @@ Item {
       var invalidCurrency = !main.isValidCurrency(from) ? from : to;
       return [
         {
-          "name": "Unknown currency: " + invalidCurrency,
-          "description": "Currency code not found in exchange rates",
+          "name": pluginApi?.tr("launcher.unknown_currency", {
+            currency: invalidCurrency
+          }) || ("Unknown currency: " + invalidCurrency),
+          "description": pluginApi?.tr("launcher.currency_not_found") || "Currency code not found in exchange rates",
           "icon": icon("alert-circle", "dialog-warning"),
           "isTablerIcon": iconMode === "tabler",
           "isImage": false,
@@ -75,7 +77,11 @@ Item {
     // Main result
     results.push({
       "name": amount + " " + from + " = " + resultStr + " " + to,
-      "description": "Rate: 1 " + from + " = " + rateStr + " " + to + " | Click to copy",
+      "description": pluginApi?.tr("launcher.rate_click_copy", {
+        from: from,
+        rate: rateStr,
+        to: to
+      }) || ("Rate: 1 " + from + " = " + rateStr + " " + to + " | Click to copy"),
       "icon": icon("cash", "accessories-calculator"),
       "isTablerIcon": iconMode === "tabler",
       "isImage": false,
@@ -88,8 +94,12 @@ Item {
     // Reverse conversion
     var reverseRate = main.getRate(to, from);
     results.push({
-      "name": "1 " + to + " = " + main.formatNumber(reverseRate) + " " + from,
-      "description": "Reverse rate | Click to copy",
+      "name": pluginApi?.tr("widget.rate_format", {
+        from: to,
+        rate: main.formatNumber(reverseRate),
+        to: from
+      }) || ("1 " + to + " = " + main.formatNumber(reverseRate) + " " + from),
+      "description": pluginApi?.tr("launcher.reverse_rate") || "Reverse rate | Click to copy",
       "icon": icon("arrows-exchange", "view-refresh"),
       "isTablerIcon": iconMode === "tabler",
       "isImage": false,
@@ -114,8 +124,8 @@ Item {
     if (loading) {
       return [
         {
-          "name": "Loading exchange rates...",
-          "description": "Fetching from frankfurter.app",
+          "name": pluginApi?.tr("launcher.loading") || "Loading exchange rates...",
+          "description": pluginApi?.tr("launcher.fetching") || "Fetching from frankfurter.app",
           "icon": icon("refresh", "view-refresh"),
           "isTablerIcon": iconMode === "tabler",
           "isImage": false,
@@ -127,8 +137,8 @@ Item {
     if (!loading && !loaded) {
       return [
         {
-          "name": "Could not load rates",
-          "description": "Check your internet connection. Click to retry.",
+          "name": pluginApi?.tr("panel.error") || "Could not load rates",
+          "description": pluginApi?.tr("launcher.error_retry") || "Check your internet connection. Click to retry.",
           "icon": icon("alert-circle", "dialog-warning"),
           "isTablerIcon": iconMode === "tabler",
           "isImage": false,
@@ -156,7 +166,7 @@ Item {
       return [
         {
           "name": parsed.error,
-          "description": "Try a valid currency code (e.g., USD, EUR, PLN)",
+          "description": pluginApi?.tr("launcher.try_valid_code") || "Try a valid currency code (e.g., USD, EUR, PLN)",
           "icon": icon("alert-circle", "dialog-warning"),
           "isTablerIcon": iconMode === "tabler",
           "isImage": false,
@@ -171,7 +181,11 @@ Item {
     return [
       {
         "name": ">fx 100 USD EUR",
-        "description": "Convert 100 USD to EUR",
+        "description": pluginApi?.tr("launcher.convert_example", {
+          amount: "100",
+          from: "USD",
+          to: "EUR"
+        }) || "Convert 100 USD to EUR",
         "icon": icon("cash", "accessories-calculator"),
         "isTablerIcon": iconMode === "tabler",
         "isImage": false,
@@ -181,7 +195,11 @@ Item {
       },
       {
         "name": ">fx 50 BRL",
-        "description": "Convert 50 BRL to " + targetCurrency + " (default)",
+        "description": pluginApi?.tr("launcher.convert_to_default", {
+          amount: "50",
+          from: "BRL",
+          to: targetCurrency
+        }) || ("Convert 50 BRL to " + targetCurrency + " (default)"),
         "icon": icon("cash", "accessories-calculator"),
         "isTablerIcon": iconMode === "tabler",
         "isImage": false,
@@ -191,7 +209,10 @@ Item {
       },
       {
         "name": ">fx EUR GBP",
-        "description": "Show rate for 1 EUR to GBP",
+        "description": pluginApi?.tr("launcher.show_rate", {
+          from: "EUR",
+          to: "GBP"
+        }) || "Show rate for 1 EUR to GBP",
         "icon": icon("percentage", "accessories-calculator"),
         "isTablerIcon": iconMode === "tabler",
         "isImage": false,
@@ -261,12 +282,16 @@ Item {
     // Validate currencies
     if (!cachedRates[from]) {
       return {
-        error: "Unknown currency: " + from
+        error: pluginApi?.tr("launcher.unknown_currency", {
+          currency: from
+        }) || ("Unknown currency: " + from)
       };
     }
     if (to.length >= 3 && !cachedRates[to]) {
       return {
-        error: "Unknown currency: " + to
+        error: pluginApi?.tr("launcher.unknown_currency", {
+          currency: to
+        }) || ("Unknown currency: " + to)
       };
     }
     if (to.length < 3) {

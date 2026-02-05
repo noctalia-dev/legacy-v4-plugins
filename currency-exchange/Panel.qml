@@ -89,12 +89,12 @@ Item {
             color: Color.mOnSurface
             font.weight: Style.fontWeightBold
             pointSize: Style.fontSizeL
-            text: "Currency Converter"
+            text: pluginApi?.tr("panel.title") || "Currency Converter"
           }
           NIconButton {
             baseSize: Style.baseWidgetSize * 0.8
             icon: "settings"
-            tooltipText: "Settings"
+            tooltipText: pluginApi?.tr("panel.settings") || "Settings"
 
             onClicked: {
               var screen = pluginApi?.panelOpenScreen;
@@ -106,7 +106,7 @@ Item {
           NIconButton {
             baseSize: Style.baseWidgetSize * 0.8
             icon: "refresh"
-            tooltipText: "Refresh rates"
+            tooltipText: pluginApi?.tr("panel.refresh") || "Refresh rates"
 
             onClicked: {
               if (main)
@@ -116,7 +116,7 @@ Item {
           NIconButton {
             baseSize: Style.baseWidgetSize * 0.8
             icon: "close"
-            tooltipText: "Close"
+            tooltipText: pluginApi?.tr("panel.close") || "Close"
 
             onClicked: {
               if (pluginApi)
@@ -208,7 +208,7 @@ Item {
             NIconButton {
               baseSize: Style.baseWidgetSize * 0.7
               icon: "arrows-exchange"
-              tooltipText: "Swap currencies"
+              tooltipText: pluginApi?.tr("panel.swap") || "Swap currencies"
 
               onClicked: swapCurrencies()
             }
@@ -253,7 +253,7 @@ Item {
                   Layout.alignment: Qt.AlignVCenter
                   baseSize: Style.baseWidgetSize * 0.7
                   icon: "copy"
-                  tooltipText: "Copy result"
+                  tooltipText: pluginApi?.tr("panel.copy_result") || "Copy result"
                   visible: loaded && toAmount > 0
 
                   onClicked: main.copyToClipboard(toAmount.toFixed(2))
@@ -286,10 +286,14 @@ Item {
             pointSize: Style.fontSizeS
             text: {
               if (loading)
-                return "Loading rates...";
+                return pluginApi?.tr("panel.loading") || "Loading rates...";
               if (!loaded)
-                return "Could not load rates";
-              return "1 " + fromCurrency + " = " + main?.formatNumber(rate) + " " + toCurrency;
+                return pluginApi?.tr("panel.error") || "Could not load rates";
+              return pluginApi?.tr("panel.rate_format", {
+                from: fromCurrency,
+                rate: main?.formatNumber(rate),
+                to: toCurrency
+              }) || ("1 " + fromCurrency + " = " + main?.formatNumber(rate) + " " + toCurrency);
             }
           }
 
@@ -304,7 +308,10 @@ Item {
               if (!main?.lastFetch)
                 return "";
               var date = new Date(main.lastFetch);
-              return "Updated " + date.toLocaleTimeString(Qt.locale(), "HH:mm");
+              var timeStr = date.toLocaleTimeString(Qt.locale(), "HH:mm");
+              return pluginApi?.tr("panel.updated", {
+                time: timeStr
+              }) || ("Updated " + timeStr);
             }
             visible: loaded && main?.lastFetch > 0
           }

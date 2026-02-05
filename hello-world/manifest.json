@@ -1,9 +1,10 @@
 {
   "id": "hello-world",
   "name": "Hello World",
-  "version": "1.0.9",
+  "version": "1.0.12",
   "minNoctaliaVersion": "4.1.2",
-  "author": "Noctalia Team <team@noctalia.dev>",
+  "author": "Noctalia Team",
+  "official": true,
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "A simple Hello World plugin demonstrating functionalities. For developers only.",

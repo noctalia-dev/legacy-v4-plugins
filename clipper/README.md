@@ -45,18 +45,18 @@ Clipper can integrate with the ToDo plugin to quickly add selected text to your 
 #### IPC Commands for ToDo
 ```bash
 # Add selected text to ToDo page 1 (pageId 0)
-qs ipc call plugin:clipper addToTodo1
+qs -c noctalia-shell ipc call plugin:clipper addToTodo1
 
 # Add selected text to ToDo page 2 (pageId 1)
-qs ipc call plugin:clipper addToTodo2
+qs -c noctalia-shell ipc call plugin:clipper addToTodo2
 
 # ... through addToTodo9 for pages 1-9
 
 # Add selected text to specific page (0-indexed)
-qs ipc call plugin:clipper addToTodo 0
+qs -c noctalia-shell ipc call plugin:clipper addToTodo 0
 
 # Add specific text to ToDo (used internally by card button)
-qs ipc call plugin:clipper addTextToTodo "my task" 0
+qs -c noctalia-shell ipc call plugin:clipper addTextToTodo "my task" 0
 ```
 
 #### How it works
@@ -69,25 +69,25 @@ qs ipc call plugin:clipper addTextToTodo "my task" 0
 
 **Hyprland** (`~/.config/hypr/hyprland.conf`):
 ```ini
-bind = $mainMod CTRL SHIFT, 1, exec, qs ipc call plugin:clipper addToTodo1
-bind = $mainMod CTRL SHIFT, 2, exec, qs ipc call plugin:clipper addToTodo2
-bind = $mainMod CTRL SHIFT, 3, exec, qs ipc call plugin:clipper addToTodo3
+bind = $mainMod CTRL SHIFT, 1, exec, qs -c noctalia-shell ipc call plugin:clipper addToTodo1
+bind = $mainMod CTRL SHIFT, 2, exec, qs -c noctalia-shell ipc call plugin:clipper addToTodo2
+bind = $mainMod CTRL SHIFT, 3, exec, qs -c noctalia-shell ipc call plugin:clipper addToTodo3
 ```
 
 **Niri** (`~/.config/niri/config.kdl`):
 ```kdl
 binds {
-    Mod+Ctrl+Shift+1 { spawn "qs" "ipc" "call" "plugin:clipper" "addToTodo1"; }
-    Mod+Ctrl+Shift+2 { spawn "qs" "ipc" "call" "plugin:clipper" "addToTodo2"; }
-    Mod+Ctrl+Shift+3 { spawn "qs" "ipc" "call" "plugin:clipper" "addToTodo3"; }
+    Mod+Ctrl+Shift+1 { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:clipper" "addToTodo1"; }
+    Mod+Ctrl+Shift+2 { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:clipper" "addToTodo2"; }
+    Mod+Ctrl+Shift+3 { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:clipper" "addToTodo3"; }
 }
 ```
 
 **Sway** (`~/.config/sway/config`):
 ```ini
-bindsym $mod+Ctrl+Shift+1 exec qs ipc call plugin:clipper addToTodo1
-bindsym $mod+Ctrl+Shift+2 exec qs ipc call plugin:clipper addToTodo2
-bindsym $mod+Ctrl+Shift+3 exec qs ipc call plugin:clipper addToTodo3
+bindsym $mod+Ctrl+Shift+1 exec qs -c noctalia-shell ipc call plugin:clipper addToTodo1
+bindsym $mod+Ctrl+Shift+2 exec qs -c noctalia-shell ipc call plugin:clipper addToTodo2
+bindsym $mod+Ctrl+Shift+3 exec qs -c noctalia-shell ipc call plugin:clipper addToTodo3
 ```
 
 ### Customization
@@ -108,16 +108,16 @@ bindsym $mod+Ctrl+Shift+3 exec qs ipc call plugin:clipper addToTodo3
 Control the plugin via command line:
 ```bash
 # Panel control
-qs ipc call plugin:clipper openPanel
-qs ipc call plugin:clipper closePanel
-qs ipc call plugin:clipper togglePanel
+qs -c noctalia-shell ipc call plugin:clipper openPanel
+qs -c noctalia-shell ipc call plugin:clipper closePanel
+qs -c noctalia-shell ipc call plugin:clipper togglePanel
 
 # ToDo integration (requires ToDo plugin)
-qs ipc call plugin:clipper addToTodo1    # Add selection to page 1
-qs ipc call plugin:clipper addToTodo2    # Add selection to page 2
+qs -c noctalia-shell ipc call plugin:clipper addToTodo1    # Add selection to page 1
+qs -c noctalia-shell ipc call plugin:clipper addToTodo2    # Add selection to page 2
 # ... through addToTodo9
 
-qs ipc call plugin:clipper addToTodo 0   # Add selection to specific page (0-indexed)
+qs -c noctalia-shell ipc call plugin:clipper addToTodo 0   # Add selection to specific page (0-indexed)
 ```
 
 ### Bar Widget

@@ -37,12 +37,12 @@
       "label": "Symbolgrößen-Faktor"
     },
     "iconType": {
-      "desc": "Symboltyp",
-      "label": "Symbolstil auswählen"
+      "desc": "Symbolstil auswählen",
+      "label": "Symboltyp"
     },
     "minWidth": {
-      "desc": "Minimale Widget-Breite",
-      "label": "Mindestbreite für das Widget festlegen (in px)."
+      "desc": "Mindestbreite für das Widget festlegen (in px).",
+      "label": "Minimale Widget-Breite"
     },
     "showNumbers": {
       "desc": "Aktuelle RX/TX-Geschwindigkeiten als Zahlen anzeigen.",

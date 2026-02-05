@@ -1,9 +1,10 @@
 {
   "id": "steam-price-watcher",
   "name": "Steam Price Watcher",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "author": "Lokize",
   "description": "Monitor Steam game prices and get notified when they reach your target price",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "license": "MIT",
   "minNoctaliaVersion": "3.6.0",
   "entryPoints": {

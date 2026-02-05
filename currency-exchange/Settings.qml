@@ -9,23 +9,23 @@ ColumnLayout {
 
   property var cfg: pluginApi?.pluginSettings || ({})
 
-  // Currency model from shared CurrencyData.js
-  property var currencyModel: CurrencyData.buildComboModel(false)
+  // Currency model with translated names
+  property var currencyModel: pluginApi ? buildTranslatedCurrencyModel() : CurrencyData.buildComboModel(false)
   property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
 
   // Display mode options
   property var displayModeModel: [
     {
       "key": "icon",
-      "name": "Icon only"
+      "name": pluginApi?.tr("settings.display_modes.icon") || "Icon only"
     },
     {
       "key": "compact",
-      "name": "Compact (rate number)"
+      "name": pluginApi?.tr("settings.display_modes.compact") || "Compact (rate number)"
     },
     {
       "key": "full",
-      "name": "Full (1 USD = 0.85 EUR)"
+      "name": pluginApi?.tr("settings.display_modes.full") || "Currency pair"
     }
   ]
   property var pluginApi: null
@@ -34,27 +34,27 @@ ColumnLayout {
   property var refreshIntervalModel: [
     {
       "key": "15",
-      "name": "15 minutes"
+      "name": pluginApi?.tr("settings.intervals.15") || "15 minutes"
     },
     {
       "key": "30",
-      "name": "30 minutes"
+      "name": pluginApi?.tr("settings.intervals.30") || "30 minutes"
     },
     {
       "key": "60",
-      "name": "1 hour"
+      "name": pluginApi?.tr("settings.intervals.60") || "1 hour"
     },
     {
       "key": "180",
-      "name": "3 hours"
+      "name": pluginApi?.tr("settings.intervals.180") || "3 hours"
     },
     {
       "key": "360",
-      "name": "6 hours"
+      "name": pluginApi?.tr("settings.intervals.360") || "6 hours"
     },
     {
       "key": "720",
-      "name": "12 hours"
+      "name": pluginApi?.tr("settings.intervals.720") || "12 hours"
     }
   ]
   property string valueRefreshInterval: String(cfg.refreshInterval ?? defaults.refreshInterval ?? 60)
@@ -66,6 +66,18 @@ ColumnLayout {
   // Widget settings
   property string valueWidgetDisplayMode: cfg.widgetDisplayMode || defaults.widgetDisplayMode || "icon"
 
+  function buildTranslatedCurrencyModel() {
+    var model = [];
+    for (var i = 0; i < CurrencyData.currencies.length; i++) {
+      var code = CurrencyData.currencies[i];
+      var translatedName = pluginApi?.tr("currencies." + code) || CurrencyData.currencyNames[code];
+      model.push({
+        "key": code,
+        "name": translatedName + " (" + code + ")"
+      });
+    }
+    return model;
+  }
   function saveSettings() {
     if (!pluginApi)
       return;
@@ -85,30 +97,26 @@ ColumnLayout {
     NLabel {
       Layout.bottomMargin: Style.marginS
       Layout.fillWidth: true
-      label: "General Settings"
+      label: pluginApi?.tr("settings.general") || "General Settings"
     }
-
-    // TODO: change to searchable combo box
     NComboBox {
       Layout.fillWidth: true
       currentKey: valueSourceCurrency
-      description: "Default currency to convert from"
-      label: "Source Currency"
-      minimumWidth: 300
+      description: pluginApi?.tr("settings.source_currency_description") || "Default currency to convert from"
+      label: pluginApi?.tr("settings.source_currency") || "Source Currency"
+      minimumWidth: 280
       model: currencyModel
 
       onSelected: key => {
         valueSourceCurrency = key;
       }
     }
-
-    // TODO: change to searchable combo box
     NComboBox {
       Layout.fillWidth: true
       currentKey: valueTargetCurrency
-      description: "Default currency to convert to"
-      label: "Target Currency"
-      minimumWidth: 300
+      description: pluginApi?.tr("settings.target_currency_description") || "Default currency to convert to"
+      label: pluginApi?.tr("settings.target_currency") || "Target Currency"
+      minimumWidth: 280
       model: currencyModel
 
       onSelected: key => {
@@ -129,14 +137,14 @@ ColumnLayout {
       Layout.bottomMargin: Style.marginS
       // description: "Configure the bar widget appearance and behavior"
       Layout.fillWidth: true
-      label: "Widget Settings"
+      label: pluginApi?.tr("settings.widget") || "Widget Settings"
     }
     NComboBox {
       Layout.fillWidth: true
       currentKey: valueWidgetDisplayMode
-      description: "How much information to show in the bar widget"
-      label: "Display Mode"
-      minimumWidth: 250
+      description: pluginApi?.tr("settings.display_mode_description") || "How much information to show in the bar widget"
+      label: pluginApi?.tr("settings.display_mode") || "Display Mode"
+      minimumWidth: 240
       model: displayModeModel
 
       onSelected: key => {
@@ -147,9 +155,9 @@ ColumnLayout {
       Layout.fillWidth: true
       currentKey: valueRefreshInterval
       defaultValue: defaults.refreshInterval
-      description: "How often to refresh exchange rates automatically"
-      label: "Auto-refresh Interval"
-      minimumWidth: 250
+      description: pluginApi?.tr("settings.refresh_interval_description") || "How often to refresh exchange rates automatically"
+      label: pluginApi?.tr("settings.refresh_interval") || "Auto-refresh Interval"
+      minimumWidth: 240
       model: refreshIntervalModel
 
       onSelected: key => valueRefreshInterval = key

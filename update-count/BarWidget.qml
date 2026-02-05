@@ -6,7 +6,7 @@ import qs.Commons
 import qs.Widgets
 import qs.Services.UI
 
-Rectangle {
+Item {
   id: root
 
   property var pluginApi: null
@@ -18,14 +18,6 @@ Rectangle {
   readonly property string barPosition: Settings.data.bar.position
   readonly property bool isVertical: barPosition === "left" || barPosition === "right"
 
-  implicitWidth: isVertical ? Style.capsuleHeight : layout.implicitWidth + Style.marginS * 2
-  implicitHeight: isVertical ? layout.implicitHeight + Style.marginS * 2 : Style.capsuleHeight
-
-  color: root.hovered ? Color.mHover : Style.capsuleColor
-  radius: Style.radiusM
-  border.color: Style.capsuleBorderColor
-  border.width: Style.capsuleBorderWidth
-
   property string currentIconName: pluginApi?.pluginSettings?.currentIconName || pluginApi?.manifest?.metadata?.defaultSettings?.currentIconName
   property bool hideOnZero: pluginApi?.pluginSettings.hideOnZero || pluginApi?.manifest?.metadata.defaultSettings?.hideOnZero
   readonly property bool isVisible: (root.pluginApi?.mainInstance?.updateCount > 0) || !root.hideOnZero
@@ -33,57 +25,73 @@ Rectangle {
   // also set opacity to zero when invisible as we use opacity to hide the barWidgetLoader
   opacity: root.isVisible ? 1.0 : 0.0
 
+  readonly property real contentWidth: isVertical ? Style.capsuleHeight : layout.implicitWidth + Style.marginS * 2
+  readonly property real contentHeight: isVertical ? layout.implicitHeight + Style.marginS * 2 : Style.capsuleHeight
+
+  implicitWidth: contentWidth
+  implicitHeight: contentHeight
 
   //
   // ------ Widget ------
   //
-  Item {
-    id: layout
-    anchors.centerIn: parent
+  Rectangle {
+    id: visualCapsule
+    x: Style.pixelAlignCenter(parent.width, width)
+    y: Style.pixelAlignCenter(parent.height, height)
+    width: root.contentWidth
+    height: root.contentHeight
+    color: root.hovered ? Color.mHover : Style.capsuleColor
+    radius: Style.radiusM
+    border.color: Style.capsuleBorderColor
+    border.width: Style.capsuleBorderWidth
 
-    implicitWidth: grid.implicitWidth
-    implicitHeight: grid.implicitHeight
+    Item {
+      id: layout
+      anchors.centerIn: parent
 
-    GridLayout {
-      id: grid
-      columns: root.isVertical ? 1 : 2
-      rowSpacing: Style.marginS
-      columnSpacing: Style.marginS
+      implicitWidth: grid.implicitWidth
+      implicitHeight: grid.implicitHeight
 
-      NIcon {
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        icon: root.currentIconName
-        color: root.hovered ? Color.mOnHover : Color.mOnSurface
-      }
+      GridLayout {
+        id: grid
+        columns: root.isVertical ? 1 : 2
+        rowSpacing: Style.marginS
+        columnSpacing: Style.marginS
 
-      NText {
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        text: root.pluginApi?.mainInstance?.updateCount.toString()
-        color: root.hovered ? Color.mOnHover : Color.mOnSurface
-        pointSize: Style.barFontSize
+        NIcon {
+          Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+          icon: root.currentIconName
+          color: root.hovered ? Color.mOnHover : Color.mOnSurface
+        }
+
+        NText {
+          Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+          text: root.pluginApi?.mainInstance?.updateCount.toString()
+          color: root.hovered ? Color.mOnHover : Color.mOnSurface
+          pointSize: Style.barFontSize
+        }
       }
     }
+  }
 
-    MouseArea {
-      anchors.fill: parent
-      hoverEnabled: true
-      cursorShape: root.pluginApi?.mainInstance?.updateCount > 0 ? Qt.PointingHandCursor : Qt.ArrowCursor
+  MouseArea {
+    anchors.fill: parent
+    hoverEnabled: true
+    cursorShape: root.pluginApi?.mainInstance?.updateCount > 0 ? Qt.PointingHandCursor : Qt.ArrowCursor
 
-      onClicked: {
-        if (root.pluginApi?.mainInstance?.updateCount > 0)
-          root.pluginApi?.mainInstance?.startDoSystemUpdate();
-      }
+    onClicked: {
+      if (root.pluginApi?.mainInstance?.updateCount > 0)
+        root.pluginApi?.mainInstance?.startDoSystemUpdate();
+    }
 
+    onEntered: {
+      root.hovered = true;
+      buildTooltip();
+    }
 
-      onEntered: {
-        root.hovered = true;
-        buildTooltip();
-      }
-
-      onExited: {
-        root.hovered = false;
-        TooltipService.hide();
-      }
+    onExited: {
+      root.hovered = false;
+      TooltipService.hide();
     }
   }
 

@@ -8,7 +8,7 @@ import qs.Services.System
 import qs.Services.UI
 import qs.Widgets
 
-Rectangle {
+Item {
     id: root
 
     property var pluginApi: null
@@ -40,13 +40,12 @@ Rectangle {
     signal middleClicked()
     signal wheel(int angleDelta)
 
-    implicitWidth: applyUiScale ? Math.round(baseSize * Style.uiScaleRatio) : Math.round(baseSize)
-    implicitHeight: applyUiScale ? Math.round(baseSize * Style.uiScaleRatio) : Math.round(baseSize)
-    opacity: root.enabled ? (dockerAvailable ? Style.opacityFull : Style.opacityMedium) : Style.opacityMedium
-    color: hovering ? colorBgHover : colorBg
-    radius: Math.min((customRadius >= 0 ? customRadius : Style.iRadiusL), width / 2)
-    border.color: hovering ? colorBorderHover : colorBorder
-    border.width: Style.borderS
+    readonly property real contentWidth: applyUiScale ? Math.round(baseSize * Style.uiScaleRatio) : Math.round(baseSize)
+    readonly property real contentHeight: applyUiScale ? Math.round(baseSize * Style.uiScaleRatio) : Math.round(baseSize)
+
+    implicitWidth: contentWidth
+    implicitHeight: contentHeight
+
     Component.onCompleted: dockerCheckProcess.running = true
 
     Process {
@@ -60,7 +59,6 @@ Rectangle {
                 runningCount = output === "" ? 0 : output.split('\n').length;
             }
         }
-
     }
 
     Timer {
@@ -70,7 +68,6 @@ Rectangle {
         onTriggered: {
             if (dockerAvailable)
                 dockerCountProcess.running = true;
-
         }
     }
 
@@ -83,31 +80,55 @@ Rectangle {
             dockerAvailable = (code === 0);
             if (dockerAvailable)
                 dockerCountProcess.running = true;
-
         }
     }
 
-    NIcon {
-        id: icon
-
-        anchors.centerIn: parent
-        icon: "brand-docker"
-        color: dockerAvailable ? (hovering ? colorFgHover : colorFg) : Color.mOnSurfaceVariant
-    }
-
     Rectangle {
-        z: 1
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.topMargin: 3
-        anchors.rightMargin: 3
-        width: 6
-        height: 6
-        radius: 3
-        color: runningCount > 0 ? "#4caf50" : "#f44336"
-        visible: dockerAvailable
-        border.width: 1
-        border.color: root.color
+        id: visualCapsule
+        x: Style.pixelAlignCenter(parent.width, width)
+        y: Style.pixelAlignCenter(parent.height, height)
+        width: root.contentWidth
+        height: root.contentHeight
+        opacity: root.enabled ? (dockerAvailable ? Style.opacityFull : Style.opacityMedium) : Style.opacityMedium
+        color: hovering ? colorBgHover : colorBg
+        radius: Math.min((customRadius >= 0 ? customRadius : Style.iRadiusL), width / 2)
+        border.color: hovering ? colorBorderHover : colorBorder
+        border.width: Style.borderS
+
+        Behavior on color {
+            ColorAnimation {
+                duration: 150
+            }
+        }
+
+        Behavior on border.color {
+            ColorAnimation {
+                duration: 150
+            }
+        }
+
+        NIcon {
+            id: icon
+
+            anchors.centerIn: parent
+            icon: "brand-docker"
+            color: dockerAvailable ? (hovering ? colorFgHover : colorFg) : Color.mOnSurfaceVariant
+        }
+
+        Rectangle {
+            z: 1
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.topMargin: 3
+            anchors.rightMargin: 3
+            width: 6
+            height: 6
+            radius: 3
+            color: runningCount > 0 ? "#4caf50" : "#f44336"
+            visible: dockerAvailable
+            border.width: 1
+            border.color: visualCapsule.color
+        }
     }
 
     MouseArea {
@@ -125,26 +146,10 @@ Rectangle {
         onClicked: {
             if (pluginApi && dockerAvailable)
                 pluginApi.openPanel(root.screen);
-
         }
         onPressAndHold: root.rightClicked()
         onWheel: (wheel) => {
             return root.wheel(wheel.angleDelta.y);
         }
     }
-
-    Behavior on color {
-        ColorAnimation {
-            duration: 150
-        }
-
-    }
-
-    Behavior on border.color {
-        ColorAnimation {
-            duration: 150
-        }
-
-    }
-
 }

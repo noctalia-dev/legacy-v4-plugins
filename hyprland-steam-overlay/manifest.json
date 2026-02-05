@@ -1,9 +1,10 @@
 {
   "id": "hyprland-steam-overlay",
   "name": "Steam Overlay (Hyprland)",
-  "version": "2.0.1",
+  "version": "2.1.1",
   "minNoctaliaVersion": "4.1.2",
   "author": "blacku",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "license": "MIT",
   "description": "Steam overlay with automatic window management for Hyprland. Automatically moves all Steam windows (except fullscreen games) to overlay workspace as floating windows. Main 3 windows (Friends, Client, Chat) are positioned in a row. Additional windows are brought to top. If new windows don't appear on top, toggle overlay off/on (Super+S twice). Fully responsive with percentage-based layout. Requires Hyprland window manager.",
   "entryPoints": {
@@ -18,8 +19,6 @@
   "metadata": {
     "defaultSettings": {
       "autoLaunchSteam": true,
-      "enableChatNotifications": true,
-      "hasNewMessages": false,
       "friendsWidthPercent": 10,
       "mainWidthPercent": 60,
       "chatWidthPercent": 25,

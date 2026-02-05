@@ -3,7 +3,7 @@ import Quickshell
 import qs.Commons
 import qs.Widgets
 
-Rectangle {
+Item {
     id: root
 
     property var pluginApi: null
@@ -11,18 +11,28 @@ Rectangle {
     property string widgetId: ""
     property string section: ""
 
-    implicitWidth: contentRow.implicitWidth + Style.marginM * 2
-    implicitHeight: Style.capsuleHeight
+    readonly property real contentWidth: contentIcon.implicitWidth + Style.marginM * 2
+    readonly property real contentHeight: Style.capsuleHeight
 
-    color: Style.capsuleColor
-    radius: Style.radiusL
+    implicitWidth: contentWidth
+    implicitHeight: contentHeight
 
-    NIcon {
-        id: contentRow
-        anchors.centerIn: parent
-        icon: "charging-pile"
-        applyUiScale: false
-        color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+    Rectangle {
+        id: visualCapsule
+        x: Style.pixelAlignCenter(parent.width, width)
+        y: Style.pixelAlignCenter(parent.height, height)
+        width: root.contentWidth
+        height: root.contentHeight
+        color: mouseArea.containsMouse ? Color.mHover : Style.capsuleColor
+        radius: Style.radiusL
+
+        NIcon {
+            id: contentIcon
+            anchors.centerIn: parent
+            icon: "charging-pile"
+            applyUiScale: false
+            color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+        }
     }
 
     MouseArea {
@@ -30,14 +40,6 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-
-        onEntered: {
-            root.color = Color.mHover
-        }
-
-        onExited: {
-            root.color = Style.capsuleColor
-        }
 
         onClicked: {
             if (pluginApi) {

@@ -50,7 +50,7 @@ qs -c noctalia-shell ipc call plugin:currency-exchange togglePanel
 ## TODO / IDEAS
 
 - Improve UX of settings page
-- Add i18n across the plugin
+- Adapt UX of settings page to longer versions of translations
 - Make togglePanel ipc function optionally accept AMOUNT, FROM_CURR and TO_CURR
 
 ## Requirements

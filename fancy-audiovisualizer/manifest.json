@@ -4,6 +4,7 @@
   "version": "1.0.7",
   "minNoctaliaVersion": "3.7.2",
   "author": "Noctalia Team",
+  "official": true,
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Lemmy's fancy circular audio visualizer.",

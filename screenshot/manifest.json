@@ -5,7 +5,7 @@
     "minNoctaliaVersion": "3.6.0",
     "author": "Cleboost",
     "license": "MIT",
-    "repository": "https://github.com/cleboost/noctalia-plugins",
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
     "description": "Quick screenshot button in bar using hyprshot",
     "tags": [
         "Bar",

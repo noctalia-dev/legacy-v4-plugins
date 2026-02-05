@@ -18,9 +18,9 @@ Item {
     readonly property var mainInstance: pluginApi?.mainInstance
     anchors.fill: parent
 
-    property real hourHeight: 50
-    property real timeColumnWidth: 65
-    property real daySpacing: 1
+    property real hourHeight: 50 * Style.uiScaleRatio
+    property real timeColumnWidth: 65 * Style.uiScaleRatio
+    property real daySpacing: 1 * Style.uiScaleRatio
 
     // Attempt at live syncing
     Connections {
@@ -215,7 +215,7 @@ Item {
                         Item {
                             id: allDayEventsContainer
                             anchors.fill: parent
-                            anchors.leftMargin: mainInstance?.timeColumnWidth || 65
+                            anchors.leftMargin: root.timeColumnWidth
                             
                             Repeater {
                                 model: 6

@@ -1,0 +1,12 @@
+{
+    "settings": {
+        "launcher": {
+            "title": "Launcher",
+            "description": "The program used to open book files"
+        },
+        "forcegrid": {
+            "label": "Force grid view",
+            "description": "Always use grid view to display results. If disabled, use current launcher configuration"
+        }
+    }
+}

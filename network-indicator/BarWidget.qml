@@ -5,7 +5,7 @@ import qs.Commons
 import qs.Widgets
 import qs.Services.System
 
-Rectangle {
+Item {
     id: root
 
     property var pluginApi: null
@@ -41,58 +41,68 @@ Rectangle {
     property bool barIsSpacious: barDensity != "mini"
     property bool barIsVertical: barPosition === "left" || barPosition === "right"
 
-    color: root.useCustomColors && cfg.colorBackground || Style.capsuleColor
-    radius: Style.radiusM
-    border.color: Style.capsuleBorderColor
-    border.width: Style.capsuleBorderWidth
+    readonly property real contentWidth: barIsVertical ? Style.capsuleHeight : Math.max(contentRow.implicitWidth, minWidth)
+    readonly property real contentHeight: barIsVertical ? Math.round(contentRow.implicitHeight + Style.marginM * 2) : Style.capsuleHeight
 
-    implicitWidth: barIsVertical ? Style.capsuleHeight : Math.max(contentRow.implicitWidth, minWidth)
-    implicitHeight: barIsVertical ? Math.round(contentRow.implicitHeight + Style.marginM * 2) : Style.capsuleHeight
+    implicitWidth: contentWidth
+    implicitHeight: contentHeight
 
     // ---------- Widget ----------
 
     property real txSpeed: SystemStatService.txSpeed
     property real rxSpeed: SystemStatService.rxSpeed
 
-    RowLayout {
-        id: contentRow
+    Rectangle {
+        id: visualCapsule
+        x: Style.pixelAlignCenter(parent.width, width)
+        y: Style.pixelAlignCenter(parent.height, height)
+        width: root.contentWidth
+        height: root.contentHeight
+        color: root.useCustomColors && cfg.colorBackground || Style.capsuleColor
+        radius: Style.radiusM
+        border.color: Style.capsuleBorderColor
+        border.width: Style.capsuleBorderWidth
 
-        anchors.centerIn: parent
-        spacing: Style.marginS
+        RowLayout {
+            id: contentRow
 
-        Column {
-            visible: root.showNumbers && barIsSpacious && !barIsVertical
+            anchors.centerIn: parent
+            spacing: Style.marginS
 
-            spacing: root.spacingInbetween
+            Column {
+                visible: root.showNumbers && barIsSpacious && !barIsVertical
 
-            NText {
-                visible: true
-                text: convertBytes(root.txSpeed)
-                color: root.colorText
-                pointSize: Style.barFontSize * 0.75 * root.fontSizeModifier
+                spacing: root.spacingInbetween
+
+                NText {
+                    visible: true
+                    text: convertBytes(root.txSpeed)
+                    color: root.colorText
+                    pointSize: Style.barFontSize * 0.75 * root.fontSizeModifier
+                }
+
+                NText {
+                    visible: true
+                    text: convertBytes(root.rxSpeed)
+                    color: root.colorText
+                    pointSize: Style.barFontSize * 0.75 * root.fontSizeModifier
+                }
             }
 
-            NText {
-                visible: true
-                text: convertBytes(root.rxSpeed)
-                color: root.colorText
-                pointSize: Style.barFontSize * 0.75 * root.fontSizeModifier
-            }
-        }
+            Column {
+                spacing: -10.0 + root.spacingInbetween
 
-        Column {
-            spacing: -10.0 + root.spacingInbetween
+                NIcon {
+                    icon: arrowType + "-up"
+                    color: root.txSpeed > root.byteThresholdActive ? root.colorTx : root.colorSilent
+                    pointSize: Style.fontSizeL * root.iconSizeModifier
+                }
 
-            NIcon {
-                icon: arrowType + "-up"
-                color: root.txSpeed > root.byteThresholdActive ? root.colorTx : root.colorSilent
-                pointSize: Style.fontSizeL * root.iconSizeModifier
-            }
-
-            NIcon {
-                icon: arrowType + "-down"
-                color: root.rxSpeed > root.byteThresholdActive ? root.colorRx : root.colorSilent
-                pointSize: Style.fontSizeL * root.iconSizeModifier
+                NIcon {
+                    icon: arrowType + "-down"
+                    color: root.rxSpeed > root.byteThresholdActive ? root.colorRx : root.colorSilent
+                    pointSize: Style.fontSizeL * root.iconSizeModifier
+                }
             }
         }
     }

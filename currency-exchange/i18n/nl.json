@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Australische dollar",
+    "BRL": "Braziliaanse real",
+    "CAD": "Canadese dollar",
+    "CHF": "Zwitserse frank",
+    "CNY": "Chinese yuan",
+    "CZK": "Tsjechische kroon",
+    "DKK": "Deense kroon",
+    "EUR": "Euro",
+    "GBP": "Brits pond",
+    "HKD": "Hongkongse dollar",
+    "HUF": "Hongaarse forint",
+    "IDR": "Indonesische roepia",
+    "ILS": "Israëlische sjekel",
+    "INR": "Indiase roepie",
+    "ISK": "IJslandse kroon",
+    "JPY": "Japanse yen",
+    "KRW": "Zuid-Koreaanse won",
+    "MXN": "Mexicaanse peso",
+    "MYR": "Maleisische ringgit",
+    "NOK": "Noorse kroon",
+    "NZD": "Nieuw-Zeelandse dollar",
+    "PHP": "Filipijnse peso",
+    "PLN": "Poolse złoty",
+    "RON": "Roemeense leu",
+    "SEK": "Zweedse kroon",
+    "SGD": "Singaporese dollar",
+    "THB": "Thaise baht",
+    "TRY": "Turkse lira",
+    "USD": "Amerikaanse dollar",
+    "ZAR": "Zuid-Afrikaanse rand"
+  },
+  "launcher": {
+    "command_description": "Snelle valutaconversie (bijv. >fx 100 USD EUR)",
+    "convert_example": "{amount} {from} naar {to} converteren",
+    "convert_to_default": "{amount} {from} naar {to} converteren (standaard)",
+    "currency_not_found": "Valutacode niet gevonden in wisselkoersen",
+    "error_retry": "Controleer je internetverbinding. Klik om opnieuw te proberen.",
+    "fetching": "Ophalen van frankfurter.app",
+    "loading": "Wisselkoersen laden...",
+    "rate_click_copy": "Koers: 1 {from} = {rate} {to} | Klik om te kopiëren",
+    "reverse_rate": "Omgekeerde koers | Klik om te kopiëren",
+    "show_rate": "Koers van 1 {from} naar {to} tonen",
+    "try_valid_code": "Voer een geldige valutacode in (bijv. USD, EUR, PLN)",
+    "unknown_currency": "Onbekende valuta: {currency}"
+  },
+  "panel": {
+    "close": "Sluiten",
+    "copy_result": "Resultaat kopiëren",
+    "error": "Kon koersen niet laden",
+    "loading": "Koersen laden...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Koersen vernieuwen",
+    "settings": "Instellingen",
+    "swap": "Valuta's wisselen",
+    "title": "Valutaconverter",
+    "updated": "Bijgewerkt {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Valutawissel"
+  },
+  "settings": {
+    "display_mode": "Weergavemodus",
+    "display_mode_description": "Hoeveel informatie te tonen in de widget",
+    "display_modes": {
+      "compact": "Compact (koersgetal)",
+      "full": "Valutapaar",
+      "icon": "Alleen icoon"
+    },
+    "general": "Algemene Instellingen",
+    "intervals": {
+      "15": "15 minuten",
+      "180": "3 uur",
+      "30": "30 minuten",
+      "360": "6 uur",
+      "60": "1 uur",
+      "720": "12 uur"
+    },
+    "refresh_interval": "Vernieuwingsinterval",
+    "refresh_interval_description": "Hoe vaak wisselkoersen automatisch te vernieuwen",
+    "source_currency": "Bronvaluta",
+    "source_currency_description": "Standaardvaluta om te converteren",
+    "target_currency": "Doelvaluta",
+    "target_currency_description": "Standaardvaluta voor het resultaat",
+    "widget": "Widget-instellingen"
+  },
+  "widget": {
+    "click_to_open": "Klik om de converter te openen",
+    "error": "Kon koersen niet laden, controleer je internetverbinding.",
+    "loading": "Wisselkoersen laden...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

@@ -12,7 +12,8 @@
     "start-recording": "Bildschirmaufnahme (Aufnahme starten)",
     "started": "Aufnahme gestartet.",
     "stop-recording": "Bildschirmaufnahme (Aufnahme stoppen)",
-    "stopping": "Aufnahme stoppen…"
+    "stopping": "Aufnahme stoppen…",
+    "open-file": "Datei öffnen"
   },
   "name": "Bildschirmrekorder",
   "settings": {
@@ -34,6 +35,8 @@
     "general": {
       "copy-to-clipboard": "In die Zwischenablage kopieren",
       "copy-to-clipboard-description": "Kopiere die Datei nach Abschluss der Aufnahme in die Zwischenablage.",
+      "hide-when-inactive": "Bei Inaktivität ausblenden",
+      "hide-when-inactive-description": "Widget in Statusleiste ausblenden, wenn keine Aufnahme stattfindet",
       "output-folder": "Ausgabeordner",
       "output-folder-description": "Ordner, in dem Bildschirmaufnahmen gespeichert werden",
       "show-cursor": "Cursor anzeigen",

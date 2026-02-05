@@ -37,12 +37,12 @@
       "label": "Guherînerê Mezinahiya Îkonê"
     },
     "iconType": {
-      "desc": "Cureyê Îkonê",
-      "label": "Şêwaza îkonê ya ku ji bo nîşanderên TX/RX tê bikaranîn hilbijêre."
+      "desc": "Şêwaza îkonê ya ku ji bo nîşanderên TX/RX tê bikaranîn hilbijêre.",
+      "label": "Cureyê Îkonê"
     },
     "minWidth": {
-      "desc": "Firehiya Herî Kêm a Wîcêtê",
-      "label": "Ji bo widget firehiyeke kêmtirin (bi px) diyar bike."
+      "desc": "Ji bo widget firehiyeke kêmtirin (bi px) diyar bike.",
+      "label": "Firehiya Herî Kêm a Wîcêtê"
     },
     "showNumbers": {
       "desc": "Leza lezahenên RX/TX yên niha wekî hejmaran.",

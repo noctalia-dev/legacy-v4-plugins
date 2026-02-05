@@ -17,8 +17,8 @@ Item {
     property bool hasLoadedOnce: false
     property string syncStatus: ""
     
-    property real dayColumnWidth: 120
-    property real allDaySectionHeight: 0
+    property real dayColumnWidth: 120 * Style.uiScaleRatio
+    property real allDaySectionHeight: 0 * Style.uiScaleRatio
     property var allDayEventsWithLayout: []
 
     property date weekStart: calculateWeekStart(currentDate, firstDayOfWeek)

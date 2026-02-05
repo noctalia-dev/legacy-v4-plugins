@@ -35,24 +35,7 @@ Item {
     function writeThreshold(value) {
         if (!service.isWritable)
             return
-        thresholdWriter.command = ["/bin/bash", "-c", `echo ${value} > ${service.thresholdFile}`]
-        thresholdWriter.running = true
-    }
-
-    Process {
-        id: thresholdWriter
-        running: false
-
-        onExited: function (exitCode) {
-            if (exitCode === 0) {
-                service.refresh()
-                if (pluginApi) {
-                    pluginApi.pluginSettings.chargeThreshold = Math.round(
-                                thresholdSlider.value)
-                    pluginApi.saveSettings()
-                }
-            }
-        }
+        service.setThreshold(value)
     }
 
     Rectangle {

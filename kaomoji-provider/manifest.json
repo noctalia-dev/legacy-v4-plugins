@@ -6,6 +6,7 @@
   "tags": ["Launcher", "Fun"],
   "minNoctaliaVersion": "3.9.0",
   "author": "Noctalia Team",
+  "official": true,
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "entryPoints": {

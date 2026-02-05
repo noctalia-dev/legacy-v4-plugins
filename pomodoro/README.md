@@ -69,3 +69,7 @@ qs -c noctalia-shell ipc call plugin:pomodoro resetAll
 | `autoStartBreaks` | false | Automatically start break timer after work |
 | `autoStartWork` | false | Automatically start work timer after break |
 | `compactMode` | false | Hide the circular progress bar |
+
+## Credits
+
+- **Alarm Sound**: `alarm.mp3` - Sourced from [Pixabay](https://pixabay.com/) (Royalty-free, [Pixabay Content License](https://pixabay.com/service/license-summary/))

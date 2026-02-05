@@ -15,6 +15,9 @@ ColumnLayout {
   property bool editAutoStartBreaks: false
   property bool editAutoStartWork: false
   property bool editCompactMode: false
+  
+  // --- : Sound Property ---
+  property bool editPlaySound: true
 
   spacing: Style.marginM
 
@@ -25,7 +28,7 @@ ColumnLayout {
   }
 
   Component.onCompleted: {
-    Logger.i("Pomodoro", "Settings UI loaded")
+
     if (pluginApi) {
       loadSettings()
     }
@@ -43,14 +46,16 @@ ColumnLayout {
     root.editAutoStartWork = settings?.autoStartWork ?? defaults?.autoStartWork ?? false
     root.editCompactMode = settings?.compactMode ?? defaults?.compactMode ?? false
 
+    
+    // --- : Load Sound Setting ---
+    root.editPlaySound = settings?.playSound ?? defaults?.playSound ?? true
+
     autoStartBreaksToggle.checked = root.editAutoStartBreaks
     autoStartWorkToggle.checked = root.editAutoStartWork
     compactModeToggle.checked = root.editCompactMode
+    playSoundToggle.checked = root.editPlaySound
 
-    Logger.i("Pomodoro", "Settings loaded: workDuration=" + root.editWorkDuration + 
-             ", autoStartBreaks=" + root.editAutoStartBreaks +
-             ", autoStartWork=" + root.editAutoStartWork +
-             ", compactMode=" + root.editCompactMode)
+
   }
 
   ColumnLayout {
@@ -201,6 +206,29 @@ ColumnLayout {
     }
   }
 
+  // --- : Play Sound Toggle ---
+  Item {
+    Layout.fillWidth: true
+    Layout.preferredHeight: playSoundToggle.implicitHeight
+
+    NToggle {
+      id: playSoundToggle
+      anchors.fill: parent
+      label: "Play Alarm Sound"
+      description: "Play a sound when the timer finishes"
+      checked: root.editPlaySound
+    }
+
+    MouseArea {
+      anchors.fill: parent
+      cursorShape: Qt.PointingHandCursor
+      onClicked: {
+        root.editPlaySound = !root.editPlaySound
+        playSoundToggle.checked = root.editPlaySound
+      }
+    }
+  }
+
   function saveSettings() {
     if (!pluginApi) {
       Logger.e("Pomodoro", "Cannot save settings: pluginApi is null")
@@ -214,6 +242,9 @@ ColumnLayout {
     pluginApi.pluginSettings.autoStartBreaks = root.editAutoStartBreaks
     pluginApi.pluginSettings.autoStartWork = root.editAutoStartWork
     pluginApi.pluginSettings.compactMode = root.editCompactMode
+    
+    // --- : Save Sound Setting ---
+    pluginApi.pluginSettings.playSound = root.editPlaySound
 
     pluginApi.saveSettings()
 
@@ -221,12 +252,6 @@ ColumnLayout {
       pluginApi.mainInstance.settingsVersion++
     }
 
-    Logger.i("Pomodoro", "Settings saved: workDuration=" + root.editWorkDuration + 
-             ", shortBreak=" + root.editShortBreakDuration +
-             ", longBreak=" + root.editLongBreakDuration +
-             ", sessions=" + root.editSessionsBeforeLongBreak +
-             ", autoStartBreaks=" + root.editAutoStartBreaks +
-             ", autoStartWork=" + root.editAutoStartWork +
-             ", compactMode=" + root.editCompactMode)
+
   }
 }

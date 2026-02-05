@@ -122,11 +122,7 @@ Item {
         onClicked: root.pluginApi?.openPanel(root.screen)
         
         onRightClicked: {
-            const popupMenuWindow = PanelService.getPopupMenuWindow(root.screen);
-            if (popupMenuWindow) {
-                popupMenuWindow.showContextMenu(contextMenu);
-                contextMenu.openAtItem(pill, root.screen);
-            }
+            PanelService.showContextMenu(contextMenu, pill, root.screen);
         }
     }
 
@@ -142,10 +138,8 @@ Item {
         ]
 
         onTriggered: action => {
-            const popupMenuWindow = PanelService.getPopupMenuWindow(root.screen);
-            if (popupMenuWindow) {
-                popupMenuWindow.close();
-            }
+            contextMenu.close();
+            PanelService.closeContextMenu(root.screen);
 
             if (action === "widget-settings") {
                 BarService.openPluginSettings(screen, pluginApi.manifest);

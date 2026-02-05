@@ -5,7 +5,7 @@ import qs.Commons
 import qs.Widgets
 import qs.Services.UI
 
-Rectangle {
+Item {
     id: root
 
     property var pluginApi: null
@@ -15,48 +15,56 @@ Rectangle {
 
     readonly property var mainInstance: pluginApi?.mainInstance
 
-    implicitHeight: Style.capsuleHeight
-    implicitWidth: contentRow.implicitWidth + (Style.marginM * 2)
+    readonly property real contentWidth: contentRow.implicitWidth + (Style.marginM * 2)
+    readonly property real contentHeight: Style.capsuleHeight
 
-    color: Style.capsuleColor
-    radius: height / 2
-    border.color: Style.capsuleBorderColor
-    border.width: Style.capsuleBorderWidth
+    implicitWidth: contentWidth
+    implicitHeight: contentHeight
 
-    RowLayout {
-        id: contentRow
-        anchors.centerIn: parent
-        spacing: Style.marginS
+    Rectangle {
+        id: visualCapsule
+        x: Style.pixelAlignCenter(parent.width, width)
+        y: Style.pixelAlignCenter(parent.height, height)
+        width: root.contentWidth
+        height: root.contentHeight
+        color: mouseArea.containsMouse ? Color.mHover : Style.capsuleColor
+        radius: height / 2
+        border.color: Style.capsuleBorderColor
+        border.width: Style.capsuleBorderWidth
 
-        NIcon {
-            icon: {
-                var name = mainInstance?.currentDnsName || "";
-                if (name === "Google") return "brand-google";
-                if (name === "Cloudflare") return "cloud";
-                if (name === "AdGuard") return "shield-check";
-                if (name === "Quad9") return "lock";
-                return "globe";
+        RowLayout {
+            id: contentRow
+            anchors.centerIn: parent
+            spacing: Style.marginS
+
+            NIcon {
+                icon: {
+                    var name = mainInstance?.currentDnsName || "";
+                    if (name === "Google") return "brand-google";
+                    if (name === "Cloudflare") return "cloud";
+                    if (name === "AdGuard") return "shield-check";
+                    if (name === "Quad9") return "lock";
+                    return "globe";
+                }
+                pointSize: Style.fontSizeS
+                color: Color.mPrimary
             }
-            pointSize: Style.fontSizeS
-            color: Color.mPrimary
-        }
 
-        NText {
-            // TRANSLATION: Short Title
-            text: mainInstance?.currentDnsName || pluginApi?.tr("plugin.short_title") || "DNS"
-            color: Color.mOnSurface
-            pointSize: Style.barFontSize
-            font.weight: Font.Medium
+            NText {
+                // TRANSLATION: Short Title
+                text: mainInstance?.currentDnsName || pluginApi?.tr("plugin.short_title") || "DNS"
+                color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+                pointSize: Style.barFontSize
+                font.weight: Font.Medium
+            }
         }
     }
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-
-        onEntered: root.color = Qt.lighter(Style.capsuleColor, 1.1)
-        onExited: root.color = Style.capsuleColor
 
         onClicked: {
             if (pluginApi) {

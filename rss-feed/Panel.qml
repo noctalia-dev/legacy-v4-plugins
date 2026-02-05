@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
 import qs.Commons
+import qs.Services.UI
 import qs.Widgets
 
 Item {
@@ -30,6 +31,9 @@ Item {
     property var allItems: []
     property var displayItems: []
     property bool loading: false
+    property int unreadCount: 0
+    property int _prevUnreadCount: 0
+    property bool _seenInitialUnreadSet: false
 
     // Timer to reload settings after save
     Timer {
@@ -73,12 +77,15 @@ Item {
     Component.onCompleted: {
         Logger.d("RSS", "Component loaded");
         Logger.d("RSS", "Feeds configured:", feeds.length);
-        
+
         // Start fetching immediately
         if (feeds.length > 0) {
             Qt.callLater(fetchAllFeeds);
         }
     }
+
+
+
 
     onVisibleChanged: {
         if (visible) {
@@ -238,6 +245,38 @@ Item {
             displayItems = allItems.slice();
         }
         Logger.d("RSS", "displayItems.length:", displayItems.length);
+        updateUnreadCount();
+    }
+
+    function updateUnreadCount() {  
+        var newCount = 0;
+        try {
+            newCount = allItems.filter(function(item) { return !readItems.includes(item.guid || item.link); }).length;
+        } catch (e) {
+            newCount = 0;
+        }
+        
+        if (!_seenInitialUnreadSet) {
+            _prevUnreadCount = newCount;
+            _seenInitialUnreadSet = true;
+        } else if (typeof _prevUnreadCount === 'number' && newCount > _prevUnreadCount) {
+            try {
+                headerPulseDebounce.restart();
+            } catch (e) {}
+        }
+
+        unreadCount = newCount;
+
+        if (pluginApi) {
+            try {
+                pluginApi.unreadCount = unreadCount;
+            } catch (e) {
+                
+            }
+        }
+
+        _prevUnreadCount = unreadCount;
+        Logger.d("RSS", "unreadCount:", unreadCount);
     }
 
     function markAsRead(guid) {
@@ -247,8 +286,8 @@ Item {
         
         Logger.d("RSS", "Marking as read:", guid);
         
-        // Get current readItems from settings
-        const currentReadItems = cfg.readItems || defaults.readItems || [];
+        // Use current local readItems if available to update UI immediately
+        const currentReadItems = readItems || cfg.readItems || defaults.readItems || [];
         
         if (currentReadItems.includes(guid)) {
             Logger.d("RSS", "Already marked as read");
@@ -256,24 +295,26 @@ Item {
         }
         
         // Add to readItems array - create new array
-        let newReadItems = [];
-        for (let i = 0; i < currentReadItems.length; i++) {
-            newReadItems.push(currentReadItems[i]);
-        }
+        let newReadItems = currentReadItems.slice();
         newReadItems.push(guid);
         
         Logger.d("RSS", "New readItems array:", JSON.stringify(newReadItems));
         
+        // Update local state immediately so the badge updates without waiting for reload
+        readItems = newReadItems;
+        updateDisplayItems();
+        updateUnreadCount();
+        
         // Save to settings using the same pattern as Settings.qml
         if (pluginApi) {
-            if (!pluginApi.pluginSettings.readItems) {
-                pluginApi.pluginSettings.readItems = [];
+            if (!pluginApi.pluginSettings) {
+                pluginApi.pluginSettings = {};
             }
             pluginApi.pluginSettings.readItems = newReadItems;
             pluginApi.saveSettings();
             Logger.d("RSS", "Settings saved, readItems count:", newReadItems.length);
             
-            // Trigger reload timer
+            // Trigger reload timer for consistency
             settingsReloadTimer.restart();
         }
     }
@@ -285,14 +326,11 @@ Item {
         
         Logger.d("RSS", "Marking all as read, count:", allItems.length);
         
-        // Get current readItems from settings
-        const currentReadItems = cfg.readItems || defaults.readItems || [];
+        // Use local readItems to update UI immediately
+        const currentReadItems = readItems || cfg.readItems || defaults.readItems || [];
         
         // Collect all guids - create new array
-        let newReadItems = [];
-        for (let i = 0; i < currentReadItems.length; i++) {
-            newReadItems.push(currentReadItems[i]);
-        }
+        let newReadItems = currentReadItems.slice();
         
         for (let i = 0; i < allItems.length; i++) {
             const guid = allItems[i].guid || allItems[i].link;
@@ -303,10 +341,15 @@ Item {
         
         Logger.d("RSS", "New readItems array length:", newReadItems.length);
         
+        // Update local state immediately so badge updates
+        readItems = newReadItems;
+        updateDisplayItems();
+        updateUnreadCount();
+        
         // Save to settings using the same pattern as Settings.qml
         if (pluginApi) {
-            if (!pluginApi.pluginSettings.readItems) {
-                pluginApi.pluginSettings.readItems = [];
+            if (!pluginApi.pluginSettings) {
+                pluginApi.pluginSettings = {};
             }
             pluginApi.pluginSettings.readItems = newReadItems;
             pluginApi.saveSettings();
@@ -347,17 +390,105 @@ Item {
                     Layout.fillWidth: true
                 }
 
-                NText {
-                    visible: displayItems.length > 0 && showOnlyUnread
-                    text: displayItems.length + " unread"
-                    pointSize: Style.fontSizeM
-                    color: Color.mSecondary
+
+                Rectangle {
+                    id: headerBadge
+                    visible: unreadCount > 0
+                    width: unreadCount > 0 ? (badgeText.implicitWidth + 12) : 0
+                    height: unreadCount > 0 ? (badgeText.implicitHeight + 8) : 0
+                    radius: height * 0.5
+                    color: Color.mPrimary
+                    Layout.alignment: Qt.AlignVCenter
+                    Layout.preferredWidth: width
+                    Layout.preferredHeight: height
+                    anchors.leftMargin: Style.marginS
+
+                    transform: Scale { id: headerBadgeScale; xScale: 1; yScale: 1 }
+
+                    NText {
+                        id: badgeText
+                        anchors.centerIn: parent
+                        text: unreadCount > 99 ? "99+" : unreadCount.toString()
+                        pointSize: Style.fontSizeS
+                        color: Color.mOnPrimary
+                    }
+
+                    SequentialAnimation {
+                        id: headerPulse
+                        running: false
+                        PropertyAnimation { target: headerBadgeScale; property: "xScale"; to: 1.15; duration: 140; easing.type: Easing.InOutQuad }
+                        PropertyAnimation { target: headerBadgeScale; property: "yScale"; to: 1.15; duration: 140; easing.type: Easing.InOutQuad }
+                        PauseAnimation { duration: 80 }
+                        PropertyAnimation { target: headerBadgeScale; property: "xScale"; to: 1.0; duration: 160; easing.type: Easing.InOutQuad }
+                        PropertyAnimation { target: headerBadgeScale; property: "yScale"; to: 1.0; duration: 160; easing.type: Easing.InOutQuad }
+                    }
+
+                    Timer {
+                        id: headerPulseDebounce
+                        interval: 250
+                        running: false
+                        repeat: false
+                        onTriggered: {
+                            if (headerPulse) headerPulse.restart();
+                        }
+                    }
                 }
 
                 NButton {
                     text: pluginApi?.tr("widget.markAllRead", "Mark all as read") || "Mark all as read"
                     enabled: displayItems.length > 0
                     onClicked: markAllAsRead()
+                }
+
+                // Settings button
+                Rectangle {
+                    id: panelSettingsBtn
+                    width: 28
+                    height: 28
+                    radius: 6
+                    color: "transparent"
+                    Layout.alignment: Qt.AlignVCenter
+
+                    NIcon {
+                        anchors.centerIn: parent
+                        icon: "settings"
+                        pointSize: 14
+                        color: Color.mOnSurface
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            if (!pluginApi) return;
+                            var screen = pluginApi?.panelOpenScreen;
+                            if (screen) {
+                                pluginApi.closePanel(screen);
+                                Qt.callLater(function() {
+                                    BarService.openPluginSettings(screen, pluginApi.manifest);
+                                });
+                            } else if (pluginApi && pluginApi.withCurrentScreen) {
+                                // Fallback for contexts where panelOpenScreen isn't available
+                                pluginApi.withCurrentScreen(function(s) {
+                                    pluginApi.closePanel(s);
+                                    Qt.callLater(function() {
+                                        BarService.openPluginSettings(s, pluginApi.manifest);
+                                    });
+                                });
+                            } else {
+                                // Last-resort fallback to older API
+                                try {
+                                    pluginApi.openSettings(root.screen, root);
+                                } catch (e) {
+                                    try {
+                                        pluginApi.openSettings();
+                                    } catch (err) {
+                                        Logger.w("RSS", "openSettings failed:", err);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

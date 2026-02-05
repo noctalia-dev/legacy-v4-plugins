@@ -37,12 +37,12 @@
       "label": "Icoongrootte aanpassing"
     },
     "iconType": {
-      "desc": "Icoontype",
-      "label": "Kies de pictogramstijl die gebruikt wordt voor de TX/RX-indicatoren."
+      "desc": "Kies de pictogramstijl die gebruikt wordt voor de TX/RX-indicatoren.",
+      "label": "Icoontype"
     },
     "minWidth": {
-      "desc": "Minimale widgetbreedte",
-      "label": "Stel een minimale breedte in voor de widget (in px)."
+      "desc": "Stel een minimale breedte in voor de widget (in px).",
+      "label": "Minimale widgetbreedte"
     },
     "showNumbers": {
       "desc": "Toon de huidige RX/TX snelheden als getallen.",

@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Avustralya Doları",
+    "BRL": "Brezilya Reali",
+    "CAD": "Kanada Doları",
+    "CHF": "İsviçre Frangı",
+    "CNY": "Çin Yuanı",
+    "CZK": "Çek Korunası",
+    "DKK": "Danimarka Kronu",
+    "EUR": "Euro",
+    "GBP": "İngiliz Sterlini",
+    "HKD": "Hong Kong Doları",
+    "HUF": "Macar Forinti",
+    "IDR": "Endonezya Rupisi",
+    "ILS": "İsrail Şekeli",
+    "INR": "Hint Rupisi",
+    "ISK": "İzlanda Kronu",
+    "JPY": "Japon Yeni",
+    "KRW": "Güney Kore Wonu",
+    "MXN": "Meksika Pesosu",
+    "MYR": "Malezya Ringgiti",
+    "NOK": "Norveç Kronu",
+    "NZD": "Yeni Zelanda Doları",
+    "PHP": "Filipin Pesosu",
+    "PLN": "Polonya Zlotisi",
+    "RON": "Rumen Leyi",
+    "SEK": "İsveç Kronu",
+    "SGD": "Singapur Doları",
+    "THB": "Tayland Bahtı",
+    "TRY": "Türk Lirası",
+    "USD": "ABD Doları",
+    "ZAR": "Güney Afrika Randı"
+  },
+  "launcher": {
+    "command_description": "Hızlı döviz çevirisi (örn. >fx 100 USD EUR)",
+    "convert_example": "{amount} {from}'yi {to}'ye çevir",
+    "convert_to_default": "{amount} {from}'yi {to}'ye çevir (varsayılan)",
+    "currency_not_found": "Döviz kodu kurlar arasında bulunamadı",
+    "error_retry": "İnternet bağlantını kontrol et. Tekrar denemek için tıkla.",
+    "fetching": "frankfurter.app'ten alınıyor",
+    "loading": "Döviz kurları yükleniyor...",
+    "rate_click_copy": "Kur: 1 {from} = {rate} {to} | Kopyalamak için tıkla",
+    "reverse_rate": "Ters kur | Kopyalamak için tıkla",
+    "show_rate": "1 {from} - {to} kurunu göster",
+    "try_valid_code": "Geçerli bir döviz kodu gir (örn. USD, EUR, PLN)",
+    "unknown_currency": "Bilinmeyen döviz: {currency}"
+  },
+  "panel": {
+    "close": "Kapat",
+    "copy_result": "Sonucu kopyala",
+    "error": "Kurlar yüklenemedi",
+    "loading": "Kurlar yükleniyor...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Kurları yenile",
+    "settings": "Ayarlar",
+    "swap": "Dövizleri değiştir",
+    "title": "Döviz Çevirici",
+    "updated": "Güncellendi {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Döviz Çevirisi"
+  },
+  "settings": {
+    "display_mode": "Görüntüleme Modu",
+    "display_mode_description": "Widget'ta ne kadar bilgi gösterileceği",
+    "display_modes": {
+      "compact": "Kompakt (kur numarası)",
+      "full": "Döviz çifti",
+      "icon": "Yalnızca simge"
+    },
+    "general": "Genel Ayarlar",
+    "intervals": {
+      "15": "15 dakika",
+      "180": "3 saat",
+      "30": "30 dakika",
+      "360": "6 saat",
+      "60": "1 saat",
+      "720": "12 saat"
+    },
+    "refresh_interval": "Yenileme Aralığı",
+    "refresh_interval_description": "Döviz kurlarının ne sıklıkla otomatik yenileneceği",
+    "source_currency": "Kaynak Döviz",
+    "source_currency_description": "Çevrilecek varsayılan döviz",
+    "target_currency": "Hedef Döviz",
+    "target_currency_description": "Sonuç için varsayılan döviz",
+    "widget": "Widget Ayarları"
+  },
+  "widget": {
+    "click_to_open": "Çeviriciyi açmak için tıkla",
+    "error": "Kurlar yüklenemedi, internet bağlantını kontrol et.",
+    "loading": "Döviz kurları yükleniyor...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

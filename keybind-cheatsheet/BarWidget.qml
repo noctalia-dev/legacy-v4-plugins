@@ -1,10 +1,10 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import qs.Commons
+import qs.Services.UI
 import qs.Widgets
 
-Rectangle {
+NIconButton {
   id: root
 
   property var pluginApi: null
@@ -12,49 +12,62 @@ Rectangle {
   property string widgetId: ""
   property string section: ""
 
-  readonly property string barPosition: Settings.getBarPositionForScreen(screen.name)
-  readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
+  baseSize: Style.getCapsuleHeightForScreen(screen?.name)
+  applyUiScale: false
+  icon: "keyboard"
+  tooltipText: pluginApi?.tr("keybind-cheatsheet.barwidget.tooltip") || "Keybind Cheatsheet"
+  tooltipDirection: BarService.getTooltipDirection(screen?.name)
+  customRadius: Style.radiusL
 
-  implicitWidth: Style.getCapsuleHeightForScreen(screen.name)
-  implicitHeight: Style.getCapsuleHeightForScreen(screen.name)
+  colorBg: Style.capsuleColor
+  colorFg: Color.mOnSurface
+  colorBgHover: Color.mHover
+  colorFgHover: Color.mOnHover
+  colorBorder: "transparent"
+  colorBorderHover: "transparent"
 
-  color: Style.capsuleColor
-  radius: Style.radiusL
+  border.color: Style.capsuleBorderColor
+  border.width: Style.capsuleBorderWidth
 
-  Connections {
-    target: Color
-    function onMOnHoverChanged() { }
-    function onMOnSurfaceChanged() { }
-  }
+  NPopupContextMenu {
+    id: contextMenu
 
-  NIcon {
-    id: contentIcon
-    anchors.centerIn: parent
-    icon: "keyboard"
-    applyUiScale: false
-    color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-  }
+    model: [
+      {
+        "label": "Open Cheatsheet",
+        "action": "open-panel",
+        "icon": "keyboard"
+      },
+      {
+        "label": "Plugin Settings",
+        "action": "plugin-settings",
+        "icon": "settings"
+      },
+    ]
 
-  MouseArea {
-    id: mouseArea
-    anchors.fill: parent
-    hoverEnabled: true
-    cursorShape: Qt.PointingHandCursor
+    onTriggered: action => {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
 
-    onEntered: {
-      root.color = Color.mHover;
-    }
-
-    onExited: {
-      root.color = Style.capsuleColor;
-    }
-
-    onClicked: {
-      if (pluginApi) {
-        // Set flag to trigger parser in Main.qml
-        pluginApi.pluginSettings.triggerToggle = Date.now();
-        pluginApi.saveSettings();
+      if (action === "open-panel") {
+        if (pluginApi) {
+          pluginApi.openPanel(screen);
+        }
+      } else if (action === "plugin-settings") {
+        if (pluginApi) {
+          BarService.openPluginSettings(screen, pluginApi.manifest);
+        }
       }
     }
+  }
+
+  onClicked: {
+    if (pluginApi) {
+      pluginApi.openPanel(screen);
+    }
+  }
+
+  onRightClicked: {
+    PanelService.showContextMenu(contextMenu, root, screen);
   }
 }

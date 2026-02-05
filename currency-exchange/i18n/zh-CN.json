@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "澳大利亚元",
+    "BRL": "巴西雷亚尔",
+    "CAD": "加拿大元",
+    "CHF": "瑞士法郎",
+    "CNY": "人民币",
+    "CZK": "捷克克朗",
+    "DKK": "丹麦克朗",
+    "EUR": "欧元",
+    "GBP": "英镑",
+    "HKD": "港元",
+    "HUF": "匈牙利福林",
+    "IDR": "印尼盾",
+    "ILS": "以色列谢克尔",
+    "INR": "印度卢比",
+    "ISK": "冰岛克朗",
+    "JPY": "日元",
+    "KRW": "韩元",
+    "MXN": "墨西哥比索",
+    "MYR": "马来西亚林吉特",
+    "NOK": "挪威克朗",
+    "NZD": "新西兰元",
+    "PHP": "菲律宾比索",
+    "PLN": "波兰兹罗提",
+    "RON": "罗马尼亚列伊",
+    "SEK": "瑞典克朗",
+    "SGD": "新加坡元",
+    "THB": "泰铢",
+    "TRY": "土耳其里拉",
+    "USD": "美元",
+    "ZAR": "南非兰特"
+  },
+  "launcher": {
+    "command_description": "快速货币换算（例如 >fx 100 USD EUR）",
+    "convert_example": "将 {amount} {from} 换算为 {to}",
+    "convert_to_default": "将 {amount} {from} 换算为 {to}（默认）",
+    "currency_not_found": "在汇率中未找到货币代码",
+    "error_retry": "请检查网络连接。点击重试。",
+    "fetching": "正在从 frankfurter.app 获取",
+    "loading": "正在加载汇率...",
+    "rate_click_copy": "汇率: 1 {from} = {rate} {to} | 点击复制",
+    "reverse_rate": "反向汇率 | 点击复制",
+    "show_rate": "显示 1 {from} 到 {to} 的汇率",
+    "try_valid_code": "请输入有效的货币代码（例如 USD、EUR、PLN）",
+    "unknown_currency": "未知货币: {currency}"
+  },
+  "panel": {
+    "close": "关闭",
+    "copy_result": "复制结果",
+    "error": "无法加载汇率",
+    "loading": "正在加载汇率...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "刷新汇率",
+    "settings": "设置",
+    "swap": "交换货币",
+    "title": "货币换算器",
+    "updated": "更新于 {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "货币换算"
+  },
+  "settings": {
+    "display_mode": "显示模式",
+    "display_mode_description": "在组件中显示多少信息",
+    "display_modes": {
+      "compact": "紧凑（汇率数字）",
+      "full": "货币对",
+      "icon": "仅图标"
+    },
+    "general": "常规设置",
+    "intervals": {
+      "15": "15 分钟",
+      "180": "3 小时",
+      "30": "30 分钟",
+      "360": "6 小时",
+      "60": "1 小时",
+      "720": "12 小时"
+    },
+    "refresh_interval": "刷新间隔",
+    "refresh_interval_description": "自动刷新汇率的频率",
+    "source_currency": "源货币",
+    "source_currency_description": "默认换算源货币",
+    "target_currency": "目标货币",
+    "target_currency_description": "默认换算目标货币",
+    "widget": "组件设置"
+  },
+  "widget": {
+    "click_to_open": "点击打开换算器",
+    "error": "无法加载汇率，请检查网络连接。",
+    "loading": "正在加载汇率...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

@@ -37,12 +37,12 @@
       "label": "Ikonméret módosító"
     },
     "iconType": {
-      "desc": "Ikon típusa",
-      "label": "Válaszd ki az TX/RX indikátorokhoz használt ikonkészletet."
+      "desc": "Válaszd ki az TX/RX indikátorokhoz használt ikonkészletet.",
+      "label": "Ikon típusa"
     },
     "minWidth": {
-      "desc": "Minimum Widget Szélesség",
-      "label": "Állítson be egy minimális szélességet a widget számára (px-ben)."
+      "desc": "Állítson be egy minimális szélességet a widget számára (px-ben).",
+      "label": "Minimum Widget Szélesség"
     },
     "showNumbers": {
       "desc": "A pillanatnyi RX/TX sebességek megjelenítése számként.",

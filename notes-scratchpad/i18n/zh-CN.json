@@ -1,0 +1,38 @@
+{
+  "bar_widget": {
+    "tooltip": "便签本"
+  },
+  "panel": {
+    "header": {
+      "title": "便签本"
+    },
+    "stats": {
+      "characters": "字符",
+      "words": "单词"
+    },
+    "placeholder": "在这里开始输入您的笔记..."
+  },
+  "settings": {
+    "panel_dimensions": {
+      "title": "面板尺寸",
+      "description": "配置打开时便签本面板的大小。",
+      "width": "宽度",
+      "height": "高度"
+    },
+    "file_storage": {
+      "title": "文件存储",
+      "description": "可选择将便签内容保存到文件而不是插件设置中。留空以使用默认存储。",
+      "select": "选择文件",
+      "picker_title": "为便签选择文件",
+      "not_writable": "⚠ 警告：此位置没有写入权限"
+    },
+    "text_appearance": {
+      "title": "文本外观",
+      "font_size": "字体大小"
+    },
+    "keyboard_shortcut": {
+      "title": "键盘快捷键",
+      "description": "使用此命令切换便签本面板："
+    }
+  }
+}

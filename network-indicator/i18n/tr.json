@@ -37,12 +37,12 @@
       "label": "Simge Boyutu Değiştirici"
     },
     "iconType": {
-      "desc": "Simge Türü",
-      "label": "TX/RX göstergeleri için kullanılan simge stilini seçin."
+      "desc": "TX/RX göstergeleri için kullanılan simge stilini seçin.",
+      "label": "Simge Türü"
     },
     "minWidth": {
-      "desc": "Minimum Widget Genişliği",
-      "label": "Araç için minimum genişlik (piksel cinsinden) belirleyin."
+      "desc": "Araç için minimum genişlik (piksel cinsinden) belirleyin.",
+      "label": "Minimum Widget Genişliği"
     },
     "showNumbers": {
       "desc": "Mevcut RX/TX hızlarını sayı olarak görüntüle.",

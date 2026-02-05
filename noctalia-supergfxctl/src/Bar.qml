@@ -60,11 +60,7 @@ Item {
         onClicked: root.pluginApi?.openPanel(root.screen, this)
 
         onRightClicked: {
-            const popupMenuWindow = PanelService.getPopupMenuWindow(root.screen);
-            if (popupMenuWindow) {
-                popupMenuWindow.showContextMenu(contextMenu);
-                contextMenu.openAtItem(pill, root.screen);
-            }
+            PanelService.showContextMenu(contextMenu, pill, root.screen);
         }
 
         Rectangle {
@@ -110,11 +106,8 @@ Item {
         ]
 
         onTriggered: action => {
-            const popupMenuWindow = PanelService.getPopupMenuWindow(root.screen);
-            if (popupMenuWindow) {
-                popupMenuWindow.close();
-                return;
-            }
+            contextMenu.close();
+            PanelService.closeContextMenu(root.screen);
 
             switch (action) {
             case "refresh":

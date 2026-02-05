@@ -37,12 +37,12 @@
       "label": "Modyfikator rozmiaru ikony"
     },
     "iconType": {
-      "desc": "Typ Ikony",
-      "label": "Wybierz styl ikony używany dla wskaźników TX/RX."
+      "desc": "Wybierz styl ikony używany dla wskaźników TX/RX.",
+      "label": "Typ Ikony"
     },
     "minWidth": {
-      "desc": "Minimalna szerokość widżetu",
-      "label": "Ustaw minimalną szerokość widżetu (w px)."
+      "desc": "Ustaw minimalną szerokość widżetu (w px).",
+      "label": "Minimalna szerokość widżetu"
     },
     "showNumbers": {
       "desc": "Wyświetlaj aktualne prędkości RX/TX jako liczby.",

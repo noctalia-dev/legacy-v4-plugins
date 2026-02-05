@@ -6,7 +6,7 @@
   "author": "blackbartblues",
   "contributors": ["rscipher001"],
   "license": "MIT",
-  "repository": "https://github.com/blackbartblues/noctalia-clipper",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Advanced clipboard manager with history, search, keyboard navigation, and ToDo integration.",
   "tags": ["Clipboard", "Utility", "Bar", "Panel"],
   "entryPoints": {

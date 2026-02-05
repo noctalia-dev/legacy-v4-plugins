@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import Quickshell
+import Quickshell.Io
 import qs.Commons
 import qs.Widgets
 import qs.Services.UI
@@ -33,6 +34,26 @@ Item {
   function filterIPv4(ips) {
     return mainInstance?.filterIPv4(ips) || []
   }
+
+  function getOSIcon(os) {
+    if (!os) return "circle-check"
+    switch (os.toLowerCase()) {
+      case "linux":
+        return "brand-debian"
+      case "macos":
+        return "brand-apple"
+      case "ios":
+        return "device-mobile"
+      case "android":
+        return "device-mobile"
+      case "windows":
+        return "brand-windows"
+      default:
+        return "circle-check"
+    }
+  }
+
+
 
   function requireTerminal() {
     if (!isTerminalConfigured) {
@@ -242,7 +263,7 @@ Item {
           NText {
             Layout.fillWidth: true
             text: mainInstance?.tailscaleIp || ""
-            visible: mainInstance?.tailscaleRunning && mainInstance?.tailscaleIp
+            visible: (mainInstance?.tailscaleRunning ?? false) && (mainInstance?.tailscaleIp ?? false)
             pointSize: Style.fontSizeS
             color: mainIpMouseArea.containsMouse ? Color.mPrimary : Color.mOnSurfaceVariant
             font.family: Settings.data.ui.fontFixed
@@ -363,7 +384,7 @@ Item {
             Layout.fillWidth: true
             Layout.preferredHeight: 1
             color: Qt.alpha(Color.mOnSurface, 0.1)
-            visible: mainInstance?.tailscaleRunning && mainInstance?.peerList && mainInstance.peerList.length > 0
+            visible: (mainInstance?.tailscaleRunning ?? false) && (mainInstance?.peerList?.length ?? 0) > 0
           }
 
           Flickable {
@@ -413,7 +434,7 @@ Item {
                     spacing: Style.marginM
 
                     NIcon {
-                      icon: peerDelegate.peerOnline ? "circle-check" : "circle-x"
+                      icon: root.getOSIcon(peerDelegate.peerData.OS)
                       pointSize: Style.fontSizeM
                       color: peerDelegate.peerOnline ? Color.mPrimary : Color.mOnSurfaceVariant
                     }
@@ -454,7 +475,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 Layout.topMargin: Style.marginL
                 text: pluginApi?.tr("panel.no-peers") || "No connected peers"
-                visible: !mainInstance?.tailscaleRunning || !mainInstance?.peerList || mainInstance.peerList.length === 0
+                visible: !(mainInstance?.tailscaleRunning ?? false) || (mainInstance?.peerList?.length ?? 0) === 0
                 pointSize: Style.fontSizeM
                 color: Color.mOnSurfaceVariant
                 horizontalAlignment: Text.AlignHCenter
@@ -466,7 +487,7 @@ Item {
 
       NButton {
         Layout.fillWidth: true
-        visible: mainInstance?.tailscaleRunning
+        visible: mainInstance?.tailscaleRunning ?? false
         text: pluginApi?.tr("panel.admin-console") || "Admin Console"
         icon: "external-link"
         onClicked: {
@@ -482,7 +503,7 @@ Item {
         icon: mainInstance?.tailscaleRunning ? "plug-x" : "plug"
         backgroundColor: mainInstance?.tailscaleRunning ? Color.mError : Color.mPrimary
         textColor: mainInstance?.tailscaleRunning ? Color.mOnError : Color.mOnPrimary
-        enabled: mainInstance?.tailscaleInstalled
+        enabled: mainInstance?.tailscaleInstalled ?? false
         onClicked: {
           if (mainInstance) {
             mainInstance.toggleTailscale()

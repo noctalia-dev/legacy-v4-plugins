@@ -8,7 +8,7 @@ import qs.Services.UI
 import qs.Widgets
 import qs.Services.System
 
-Rectangle {
+Item {
     id: root
 
     property var pluginApi: null
@@ -16,7 +16,12 @@ Rectangle {
     property string widgetId: ""
     property string section: ""
 
-    property real baseSize: Style.capsuleHeight
+    // Per-screen bar properties
+    readonly property string screenName: screen?.name ?? ""
+    readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
+    readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
+    readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screenName)
+
     property url currentIconSource
 
     property string tooltipText: {
@@ -44,30 +49,20 @@ Rectangle {
     signal middleClicked
     signal wheel(int angleDelta)
 
-    implicitWidth: Math.round(baseSize + Style.marginS * 2)
-    implicitHeight: Math.round(baseSize)
+    readonly property real contentWidth: barIsVertical ? capsuleHeight : Math.round(capsuleHeight + Style.marginXS * 2)
+    readonly property real contentHeight: capsuleHeight
 
-    opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
-    color: Style.capsuleColor
-    radius: Math.min((customRadius >= 0 ? customRadius : Style.iRadiusL), width / 2)
-    border.color: Style.capsuleBorderColor
-    border.width: Style.capsuleBorderWidth
-
-    Behavior on color {
-        ColorAnimation {
-            duration: Style.animationNormal
-            easing.type: Easing.InOutQuad
-        }
-    }
+    implicitWidth: contentWidth
+    implicitHeight: contentHeight
 
     // --- Catwalk Specific Logic ---
     property int frameIndex: 0
     property int idleFrameIndex: 0
-    readonly property bool isRunning: root.pluginApi?.mainInstance?.isRunning ?? false  
+    readonly property bool isRunning: root.pluginApi?.mainInstance?.isRunning ?? false
     readonly property var icons: root.pluginApi?.mainInstance?.icons || []
     readonly property var idleIcons: root.pluginApi?.mainInstance?.idleIcons || []
     readonly property real cpuUsage: root.pluginApi?.mainInstance?.cpuUsage ?? 0
-    
+
     function openPanel() {
         if (pluginApi) {
             var result = pluginApi.openPanel(root.screen);
@@ -76,9 +71,9 @@ Rectangle {
             Logger.e("Catwalk", "PluginAPI is null");
         }
     }
-    
+
     function openExternalMonitor() {
-      Quickshell.execDetached(["sh", "-c", Settings.data.systemMonitor.externalMonitor]);
+        Quickshell.execDetached(["sh", "-c", Settings.data.systemMonitor.externalMonitor]);
     }
 
     Timer {
@@ -89,7 +84,7 @@ Rectangle {
             root.frameIndex = (root.frameIndex + 1) % root.icons.length
         }
     }
-    
+
     Timer {
         interval: 400
         running: !root.isRunning
@@ -105,32 +100,51 @@ Rectangle {
                            : Qt.resolvedUrl(root.idleIcons[root.idleFrameIndex % root.idleIcons.length]))
                        : ""
 
+    Rectangle {
+        id: visualCapsule
+        x: Style.pixelAlignCenter(parent.width, width)
+        y: Style.pixelAlignCenter(parent.height, height)
+        width: root.contentWidth
+        height: root.contentHeight
+        opacity: root.enabled ? Style.opacityFull : Style.opacityMedium
+        color: mouseArea.containsMouse ? Color.mHover : Style.capsuleColor
+        radius: Math.min((customRadius >= 0 ? customRadius : Style.iRadiusL), width / 2)
+        border.color: Style.capsuleBorderColor
+        border.width: Style.capsuleBorderWidth
 
-    Image {
-        id: iconImage
-        source: root.currentIconSource
-        anchors.centerIn: parent
-        anchors.horizontalCenterOffset: -3
-        anchors.verticalCenterOffset: -1
-        
-        width: root.width - Style.marginS * 2
-        height: width
-        
-        // Ensures the SVG renders sharply at any size
-        fillMode: Image.PreserveAspectFit
-        smooth: true
-        mipmap: true 
+        Behavior on color {
+            ColorAnimation {
+                duration: Style.animationNormal
+                easing.type: Easing.InOutQuad
+            }
+        }
 
-        // This enables the "mask" behavior to recolor the icon
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            colorization: 1.0
-            colorizationColor: Settings.data.colorSchemes.darkMode ? "white" : "black"
+        Image {
+            id: iconImage
+            source: root.currentIconSource
+            x: Style.pixelAlignCenter(parent.width, width)
+            y: Style.pixelAlignCenter(parent.height, height)
+
+            width: Style.toOdd(visualCapsule.width - Style.marginXS * 2)
+            height: width
+
+            // Render SVG at exact target size for crisp output
+            sourceSize: Qt.size(width, height)
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            mipmap: false
+
+            // This enables the "mask" behavior to recolor the icon
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                colorization: 1.0
+                colorizationColor: Settings.data.colorSchemes.darkMode ? "white" : "black"
+            }
         }
     }
-    
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
@@ -153,10 +167,9 @@ Rectangle {
             if (root.tooltipText) {
                 TooltipService.hide();
             }
-            
+
             Logger.i("Catwalk", "Clicked! API:", !!pluginApi, "Screen:", root.screen ? root.screen.name : "null");
 
-            
             if (!root.enabled && !root.allowClickWhenDisabled) {
                 return;
             }

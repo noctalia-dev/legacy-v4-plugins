@@ -5,7 +5,7 @@
   "minNoctaliaVersion": "3.6.0",
   "author": "linuxmobile",
   "license": "MIT",
-  "repository": "https://github.com/linuxmobile/github-feed-noctalia",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Display GitHub activity from users you follow and activity on your repos",
   "tags": ["Bar", "Panel", "Development", "Network"],
   "entryPoints": {

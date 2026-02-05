@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Dólar australiano",
+    "BRL": "Real brasileño",
+    "CAD": "Dólar canadiense",
+    "CHF": "Franco suizo",
+    "CNY": "Yuan chino",
+    "CZK": "Corona checa",
+    "DKK": "Corona danesa",
+    "EUR": "Euro",
+    "GBP": "Libra esterlina",
+    "HKD": "Dólar de Hong Kong",
+    "HUF": "Florín húngaro",
+    "IDR": "Rupia indonesia",
+    "ILS": "Séquel israelí",
+    "INR": "Rupia india",
+    "ISK": "Corona islandesa",
+    "JPY": "Yen japonés",
+    "KRW": "Won surcoreano",
+    "MXN": "Peso mexicano",
+    "MYR": "Ringgit malasio",
+    "NOK": "Corona noruega",
+    "NZD": "Dólar neozelandés",
+    "PHP": "Peso filipino",
+    "PLN": "Złoty polaco",
+    "RON": "Leu rumano",
+    "SEK": "Corona sueca",
+    "SGD": "Dólar de Singapur",
+    "THB": "Baht tailandés",
+    "TRY": "Lira turca",
+    "USD": "Dólar estadounidense",
+    "ZAR": "Rand sudafricano"
+  },
+  "launcher": {
+    "command_description": "Conversión rápida de divisas (ej. >fx 100 USD EUR)",
+    "convert_example": "Convertir {amount} {from} a {to}",
+    "convert_to_default": "Convertir {amount} {from} a {to} (predeterminado)",
+    "currency_not_found": "Código de divisa no encontrado en tasas de cambio",
+    "error_retry": "Comprueba tu conexión a internet. Clic para reintentar.",
+    "fetching": "Obteniendo de frankfurter.app",
+    "loading": "Cargando tasas de cambio...",
+    "rate_click_copy": "Tasa: 1 {from} = {rate} {to} | Clic para copiar",
+    "reverse_rate": "Tasa inversa | Clic para copiar",
+    "show_rate": "Mostrar tasa de 1 {from} a {to}",
+    "try_valid_code": "Introduce un código de divisa válido (ej. USD, EUR, PLN)",
+    "unknown_currency": "Divisa desconocida: {currency}"
+  },
+  "panel": {
+    "close": "Cerrar",
+    "copy_result": "Copiar resultado",
+    "error": "No se pudieron cargar las tasas",
+    "loading": "Cargando tasas...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Actualizar tasas",
+    "settings": "Ajustes",
+    "swap": "Intercambiar divisas",
+    "title": "Conversor de Divisas",
+    "updated": "Actualizado {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Cambio de Divisas"
+  },
+  "settings": {
+    "display_mode": "Modo de Visualización",
+    "display_mode_description": "Cuánta información mostrar en el widget",
+    "display_modes": {
+      "compact": "Compacto (número de tasa)",
+      "full": "Par de divisas",
+      "icon": "Solo icono"
+    },
+    "general": "Ajustes Generales",
+    "intervals": {
+      "15": "15 minutos",
+      "180": "3 horas",
+      "30": "30 minutos",
+      "360": "6 horas",
+      "60": "1 hora",
+      "720": "12 horas"
+    },
+    "refresh_interval": "Intervalo de Actualización",
+    "refresh_interval_description": "Con qué frecuencia actualizar las tasas de cambio automáticamente",
+    "source_currency": "Divisa de Origen",
+    "source_currency_description": "Divisa predeterminada desde la que convertir",
+    "target_currency": "Divisa de Destino",
+    "target_currency_description": "Divisa predeterminada a la que convertir",
+    "widget": "Ajustes del Widget"
+  },
+  "widget": {
+    "click_to_open": "Clic para abrir el conversor",
+    "error": "No se pudieron cargar las tasas, comprueba tu conexión a internet.",
+    "loading": "Cargando tasas de cambio...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

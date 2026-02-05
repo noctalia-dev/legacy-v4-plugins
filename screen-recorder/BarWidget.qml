@@ -46,8 +46,8 @@ NIconButton {
     baseSize: Style.capsuleHeight
     applyUiScale: false
     customRadius: Style.radiusL
-    colorBg: mainInstance?.isRecording ? Color.mPrimary : Style.capsuleColor
-    colorFg: mainInstance?.isRecording ? Color.mOnPrimary : Color.mOnSurface
+    colorBg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mPrimary : Style.capsuleColor
+    colorFg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mOnPrimary : Color.mOnSurface
     colorBorder: "transparent"
     colorBorderHover: "transparent"
     border.color: Style.capsuleBorderColor
@@ -72,11 +72,7 @@ NIconButton {
     }
 
     onRightClicked: {
-        var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-        if (popupMenuWindow) {
-            popupMenuWindow.showContextMenu(contextMenu);
-            contextMenu.openAtItem(root, screen);
-        }
+        PanelService.showContextMenu(contextMenu, root, screen);
     }
 
 
@@ -92,10 +88,8 @@ NIconButton {
         ]
 
         onTriggered: action => {
-            var popupMenuWindow = PanelService.getPopupMenuWindow(screen);
-            if (popupMenuWindow) {
-                popupMenuWindow.close();
-            }
+            contextMenu.close();
+            PanelService.closeContextMenu(screen);
 
             if (action === "widget-settings") {
                 BarService.openPluginSettings(screen, pluginApi.manifest);

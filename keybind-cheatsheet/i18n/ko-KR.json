@@ -1,0 +1,50 @@
+{
+  "keybind-cheatsheet": {
+    "panel": {
+      "loading": "로딩 중...",
+      "title": "키맵",
+      "title-hyprland": "Hyprland 키맵",
+      "title-niri": "Niri 키맵",
+      "workspace-switching": "작업공간 - 전환",
+      "workspace-moving": "작업공간 - 이동",
+      "workspace-mouse": "작업공간 - 마우스"
+    },
+    "settings": {
+      "title": "키바인드 치트시트 설정",
+      "description": "키바인드 치트시트 패널의 모양과 키바인드 소스를 구성합니다.",
+      "window-size": "창 크기",
+      "width": "너비:",
+      "height": "높이:",
+      "auto-height": "자동",
+      "auto-height-hint": "'자동'이 활성화되면 높이가 콘텐츠에 따라 자동으로 조정됩니다.",
+      "layout": "레이아웃",
+      "columns": "열 수:",
+      "columns-hint": "더 많은 열은 넓은 창에서 더 잘 작동합니다.",
+      "config-paths": "구성 파일",
+      "config-paths-description": "키바인드 구성 파일의 사용자 정의 경로를 지정하세요. 플러그인은 컴포지터에 따라 적절한 파일을 자동으로 파싱합니다.",
+      "hyprland-format-hint": "예상 형식: bind = $mod, KEY, action #\"description\"\n카테고리: # 1. CATEGORY NAME",
+      "niri-format-hint": "카테고리: // #\"Category Name\"\n설명: hotkey-overlay-title=\"description\"",
+      "actions": "작업",
+      "refresh-keybinds": "키바인드 새로고침",
+      "refresh-message": "패널을 열면 키바인드가 다시 로드됩니다.",
+      "reset-defaults": "기본값으로 재설정",
+      "reset-message": "설정이 기본값으로 재설정되었습니다.",
+      "saved": "설정이 성공적으로 저장되었습니다.",
+      "keybind-setup": "키바인드 설정",
+      "keybind-setup-description": "키보드 단축키로 키바인드 치트시트를 열려면 컴포지터 구성에 이 바인드를 추가하세요:",
+      "keybind-example-hyprland": "Hyprland 예시: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-niri": "Niri 예시: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
+      "mod-var": "Mod 키 변수",
+      "mod-var-hint": "Super 키에 사용되는 변수 이름 (예: $mod 또는 $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland 경로",
+      "niri-path": "Niri 경로"
+    },
+    "barwidget": {
+      "tooltip": "키바인드 치트시트",
+      "open": "치트시트 열기",
+      "settings": "플러그인 설정"
+    }
+  }
+}

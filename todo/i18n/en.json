@@ -31,6 +31,21 @@
       "clear_completed_button": "Clear Completed",
       "title": "Todo List"
     },
+    "todo_details": {
+      "title": "Todo Details",
+      "label_title": "Title: ",
+      "label_status": "Status: ",
+      "status_completed": "Completed",
+      "status_pending": "Pending",
+      "label_created": "Created: ",
+      "label_priority": "Priority: ",
+      "label_page": "Page:",
+      "label_details": "Details:",
+      "button_add_details": "Add",
+      "button_edit_details": "Edit",
+      "button_save": "Save",
+      "button_cancel": "Cancel"
+    },
     "todo_item": {
       "delete_button_tooltip": "Delete",
       "edit_button_tooltip": "Edit"
@@ -44,6 +59,16 @@
     "show_completed": {
       "description": "Display completed todo items in the panel",
       "label": "Show Completed Todos"
+    },
+    "custom_priority_colors": {
+      "label": "Use Custom Priority Colors",
+      "description": "Enable to customize priority colors"
+    },
+    "priority_colors": {
+      "label": "Priority Colors",
+      "high_label": "High Priority:",
+      "medium_label": "Medium Priority:",
+      "low_label": "Low Priority:"
     },
     "pages": {
       "label": "Manage Pages",

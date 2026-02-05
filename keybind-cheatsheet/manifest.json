@@ -1,11 +1,11 @@
 {
   "id": "keybind-cheatsheet",
   "name": "Keybind Cheatsheet",
-  "version": "1.4.2",
-  "minNoctaliaVersion": "4.1.2",
+  "version": "3.0.0",
+  "minNoctaliaVersion": "3.6.0",
   "author": "blacku",
   "license": "MIT",
-  "description": "Universal keyboard shortcuts cheatsheet that automatically detects and displays keybindings for Hyprland or Niri compositors.",
+  "description": "Universal keyboard shortcuts keymap that automatically detects and displays keybindings for Hyprland or Niri compositors.",
   "entryPoints": {
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",

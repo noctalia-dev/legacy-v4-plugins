@@ -37,12 +37,12 @@
       "label": "Modifikator za veličinu ikone"
     },
     "iconType": {
-      "desc": "Tip ikonë",
-      "label": "Alege stilul pictogramei folosit pentru indicatorii TX/RX."
+      "desc": "Alege stilul pictogramei folosit pentru indicatorii TX/RX.",
+      "label": "Tip ikonë"
     },
     "minWidth": {
-      "desc": "Breite des minimalen Widgets",
-      "label": "Imposta una larghezza minima per il widget (in px)."
+      "desc": "Imposta una larghezza minima per il widget (in px).",
+      "label": "Breite des minimalen Widgets"
     },
     "showNumbers": {
       "desc": "Zeige die aktuellen RX/TX-Geschwindigkeiten als Zahlen an.",

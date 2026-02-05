@@ -32,13 +32,18 @@ Item {
         // Skip if current threshold already matches saved value
         if (currentThreshold === saved)
             return
-        if (saved >= batteryMinThresh && saved <= batteryMaxThresh
-                && isWritable) {
-            Logger.i("BatteryThreshold",
-                     "Restored charge threshold to " + saved + "%")
-            thresholdWriter.command = ["/bin/bash", "-c", `echo ${saved} > ${thresholdFile}`]
-            thresholdWriter.running = true
+        if (saved >= batteryMinThresh && saved <= batteryMaxThresh && isWritable) {
+            setThreshold(saved)
         }
+    }
+
+    function setThreshold(value) {
+        const v = Math.round(value)
+        Logger.i("BatteryThreshold", "Restored charge threshold to " + v + "%")
+
+        thresholdWriter.pendingThreshold = v
+        thresholdWriter.command = ["/bin/bash", "-c", `echo ${v} > ${thresholdFile}`]
+        thresholdWriter.running = true
     }
 
     onIsWritableChanged: {
@@ -88,6 +93,20 @@ Item {
 
     Process {
         id: thresholdWriter
+        property int pendingThreshold: -1
+
         running: false
+
+        onExited: function(exitCode) {
+            if (exitCode === 0) {
+                service.refresh()
+                if (pluginApi && pluginApi.pluginSettings.chargeThreshold != pendingThreshold) {
+                    pluginApi.pluginSettings.chargeThreshold = pendingThreshold
+                    pluginApi.saveSettings()
+                }
+            } else {
+                Logger.w("BatteryThreshold", "Failed to write threshold, exitCode=" + exitCode)
+            }
+        }
     }
 }

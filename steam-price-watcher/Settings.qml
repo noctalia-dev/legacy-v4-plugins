@@ -137,16 +137,51 @@ ColumnLayout {
 
       ListModel {
         id: currencyModel
-        ListElement { name: "🇧🇷 Real Brasileiro (R$)"; key: "br" }
-        ListElement { name: "🇺🇸 Dólar Americano (USD)"; key: "us" }
+        ListElement { name: "🇧🇷 Brazilian Real (BRL)"; key: "br" }
+        ListElement { name: "🇺🇸 US Dollar (USD)"; key: "us" }
         ListElement { name: "🇪🇺 Euro (EUR)"; key: "eu" }
-        ListElement { name: "🇦🇷 Peso Argentino (ARS)"; key: "ar" }
-        ListElement { name: "🇲🇽 Peso Mexicano (MXN)"; key: "mx" }
-        ListElement { name: "🇨🇱 Peso Chileno (CLP)"; key: "cl" }
-        ListElement { name: "🇨🇴 Peso Colombiano (COP)"; key: "co" }
-        ListElement { name: "🇬🇧 Libra Esterlina (GBP)"; key: "gb" }
-        ListElement { name: "🇨🇦 Dólar Canadense (CAD)"; key: "ca" }
-        ListElement { name: "🇦🇺 Dólar Australiano (AUD)"; key: "au" }
+        ListElement { name: "🇬🇧 British Pound (GBP)"; key: "gb" }
+        ListElement { name: "🇨🇭 Swiss Franc (CHF)"; key: "chf" }
+        ListElement { name: "🇨🇿 Czech Koruna (CZK)"; key: "czk" }
+        ListElement { name: "🇩🇰 Danish Krone (DKK)"; key: "dkk" }
+        ListElement { name: "🇭🇺 Hungarian Forint (HUF)"; key: "huf" }
+        ListElement { name: "🇳🇴 Norwegian Krone (NOK)"; key: "nok" }
+        ListElement { name: "🇵🇱 Polish Złoty (PLN)"; key: "pln" }
+        ListElement { name: "🇷🇴 Romanian Leu (RON)"; key: "ron" }
+        ListElement { name: "🇸🇪 Swedish Krona (SEK)"; key: "sek" }
+        ListElement { name: "🇺🇦 Ukrainian Hryvnia (UAH)"; key: "uah" }
+        ListElement { name: "🇨🇳 Chinese Yuan (CNY)"; key: "cny" }
+        ListElement { name: "🇭🇰 Hong Kong Dollar (HKD)"; key: "hkd" }
+        ListElement { name: "🇮🇩 Indonesian Rupiah (IDR)"; key: "idr" }
+        ListElement { name: "🇮🇳 Indian Rupee (INR)"; key: "inr" }
+        ListElement { name: "🇯🇵 Japanese Yen (JPY)"; key: "jpy" }
+        ListElement { name: "🇰🇷 South Korean Won (KRW)"; key: "krw" }
+        ListElement { name: "🇲🇾 Malaysian Ringgit (MYR)"; key: "myr" }
+        ListElement { name: "🇵🇭 Philippine Peso (PHP)"; key: "php" }
+        ListElement { name: "🇸🇬 Singapore Dollar (SGD)"; key: "sgd" }
+        ListElement { name: "🇹🇭 Thai Baht (THB)"; key: "thb" }
+        ListElement { name: "🇹🇼 Taiwan Dollar (TWD)"; key: "twd" }
+        ListElement { name: "🇻🇳 Vietnamese Dong (VND)"; key: "vnd" }
+        ListElement { name: "🇮🇱 Israeli Shekel (ILS)"; key: "ils" }
+        ListElement { name: "🇰🇼 Kuwaiti Dinar (KWD)"; key: "kwd" }
+        ListElement { name: "🇶🇦 Qatari Riyal (QAR)"; key: "qar" }
+        ListElement { name: "🇸🇦 Saudi Riyal (SAR)"; key: "sar" }
+        ListElement { name: "🇦🇷 Argentine Peso (ARS)"; key: "ar" }
+        ListElement { name: "🇬🇧 British Pound (GBP)"; key: "gb" }
+        ListElement { name: "🇨🇦 Canadian Dollar (CAD)"; key: "ca" }
+        ListElement { name: "🇨🇱 Chilean Peso (CLP)"; key: "cl" }
+        ListElement { name: "🇨🇴 Colombian Peso (COP)"; key: "co" }
+        ListElement { name: "🇨🇷 Costa Rican Colón (CRC)"; key: "crc" }
+        ListElement { name: "🇲🇽 Mexican Peso (MXN)"; key: "mx" }
+        ListElement { name: "🇵🇪 Peruvian Sol (PEN)"; key: "pen" }
+        ListElement { name: "🇺🇸 US Dollar (USD)"; key: "us" }
+        ListElement { name: "🇺🇾 Uruguayan Peso (UYU)"; key: "uyu" }
+        ListElement { name: "🇦🇺 Australian Dollar (AUD)"; key: "au" }
+        ListElement { name: "🇳🇿 New Zealand Dollar (NZD)"; key: "nz" }
+        ListElement { name: "🇰🇿 Kazakhstani Tenge (KZT)"; key: "kzt" }
+        ListElement { name: "🇷🇺 Russian Ruble (RUB)"; key: "rub" }
+        ListElement { name: "🇹🇷 Turkish Lira (TRY)"; key: "try" }
+        ListElement { name: "🇿🇦 South African Rand (ZAR)"; key: "zar" }
       }
 
       NComboBox {
@@ -158,11 +193,17 @@ ColumnLayout {
           if (pluginApi && pluginApi.pluginSettings) {
             pluginApi.pluginSettings.currency = key;
             
-            // Define o símbolo da moeda
+            // Define the currency symbol map
             var symbols = {
-              "br": "R$", "us": "$", "eu": "€", "ar": "ARS$",
-              "mx": "MXN$", "cl": "CLP$", "co": "COP$",
-              "gb": "£", "ca": "CAD$", "au": "AUD$"
+              "br": "R$", "us": "$", "eu": "€", "gb": "£", "chf": "CHF",
+              "czk": "Kč", "dkk": "kr", "huf": "Ft", "nok": "kr", "pln": "zł",
+              "ron": "RON", "sek": "kr", "uah": "₴", "cny": "¥", "hkd": "HK$",
+              "idr": "Rp", "inr": "₹", "jpy": "¥", "krw": "₩", "myr": "RM",
+              "php": "₱", "sgd": "S$", "thb": "฿", "twd": "NT$", "vnd": "₫",
+              "ils": "₪", "kwd": "KWD", "qar": "QAR", "sar": "SAR",
+              "ar": "ARS$", "mx": "MXN$", "cl": "CLP$", "co": "COP$", "crc": "CRC$",
+              "pen": "PEN$", "uyu": "UYU$", "ca": "CAD$", "au": "AUD$", "nz": "NZD$",
+              "kzt": "₸", "rub": "₽", "try": "₺", "zar": "R"
             };
             pluginApi.pluginSettings.currencySymbol = symbols[key] || "$";
             pluginApi.saveSettings();

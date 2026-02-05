@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Ausztrál dollár",
+    "BRL": "Brazil real",
+    "CAD": "Kanadai dollár",
+    "CHF": "Svájci frank",
+    "CNY": "Kínai jüan",
+    "CZK": "Cseh korona",
+    "DKK": "Dán korona",
+    "EUR": "Euró",
+    "GBP": "Brit font",
+    "HKD": "Hongkongi dollár",
+    "HUF": "Magyar forint",
+    "IDR": "Indonéz rúpia",
+    "ILS": "Izraeli sékel",
+    "INR": "Indiai rúpia",
+    "ISK": "Izlandi korona",
+    "JPY": "Japán jen",
+    "KRW": "Dél-koreai von",
+    "MXN": "Mexikói peso",
+    "MYR": "Maláj ringgit",
+    "NOK": "Norvég korona",
+    "NZD": "Új-zélandi dollár",
+    "PHP": "Fülöp-szigeteki peso",
+    "PLN": "Lengyel złoty",
+    "RON": "Román lej",
+    "SEK": "Svéd korona",
+    "SGD": "Szingapúri dollár",
+    "THB": "Thai baht",
+    "TRY": "Török líra",
+    "USD": "Amerikai dollár",
+    "ZAR": "Dél-afrikai rand"
+  },
+  "launcher": {
+    "command_description": "Gyors valutaváltás (pl. >fx 100 USD EUR)",
+    "convert_example": "{amount} {from} átváltása {to}-ra",
+    "convert_to_default": "{amount} {from} átváltása {to}-ra (alapértelmezett)",
+    "currency_not_found": "Valutakód nem található az árfolyamokban",
+    "error_retry": "Ellenőrizd az internetkapcsolatodat. Kattints az újrapróbáláshoz.",
+    "fetching": "Lekérés a frankfurter.app-ról",
+    "loading": "Árfolyamok betöltése...",
+    "rate_click_copy": "Árfolyam: 1 {from} = {rate} {to} | Kattints a másoláshoz",
+    "reverse_rate": "Fordított árfolyam | Kattints a másoláshoz",
+    "show_rate": "1 {from} - {to} árfolyam mutatása",
+    "try_valid_code": "Adj meg érvényes valutakódot (pl. USD, EUR, PLN)",
+    "unknown_currency": "Ismeretlen valuta: {currency}"
+  },
+  "panel": {
+    "close": "Bezárás",
+    "copy_result": "Eredmény másolása",
+    "error": "Nem sikerült betölteni az árfolyamokat",
+    "loading": "Árfolyamok betöltése...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Árfolyamok frissítése",
+    "settings": "Beállítások",
+    "swap": "Valuták cseréje",
+    "title": "Valutaváltó",
+    "updated": "Frissítve {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Valutaváltás"
+  },
+  "settings": {
+    "display_mode": "Megjelenítési Mód",
+    "display_mode_description": "Mennyi információ jelenjen meg a widgetben",
+    "display_modes": {
+      "compact": "Kompakt (árfolyamszám)",
+      "full": "Valutapár",
+      "icon": "Csak ikon"
+    },
+    "general": "Általános Beállítások",
+    "intervals": {
+      "15": "15 perc",
+      "180": "3 óra",
+      "30": "30 perc",
+      "360": "6 óra",
+      "60": "1 óra",
+      "720": "12 óra"
+    },
+    "refresh_interval": "Frissítési Időköz",
+    "refresh_interval_description": "Milyen gyakran frissüljenek automatikusan az árfolyamok",
+    "source_currency": "Forrás Valuta",
+    "source_currency_description": "Alapértelmezett valuta az átváltáshoz",
+    "target_currency": "Cél Valuta",
+    "target_currency_description": "Alapértelmezett valuta az eredményhez",
+    "widget": "Widget Beállítások"
+  },
+  "widget": {
+    "click_to_open": "Kattints a váltó megnyitásához",
+    "error": "Nem sikerült betölteni az árfolyamokat, ellenőrizd az internetkapcsolatodat.",
+    "loading": "Árfolyamok betöltése...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

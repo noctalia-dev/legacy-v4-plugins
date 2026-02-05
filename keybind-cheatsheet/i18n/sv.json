@@ -1,0 +1,50 @@
+{
+  "keybind-cheatsheet": {
+    "panel": {
+      "loading": "Laddar...",
+      "title": "Tangentkarta",
+      "title-hyprland": "Hyprland tangentkarta",
+      "title-niri": "Niri tangentkarta",
+      "workspace-switching": "ARBETSYTOR - BYTA",
+      "workspace-moving": "ARBETSYTOR - FLYTTA",
+      "workspace-mouse": "ARBETSYTOR - MUS"
+    },
+    "settings": {
+      "title": "Tangentbordsgenvägar Inställningar",
+      "description": "Konfigurera utseende och tangentbordsgenvägskällor för fuskbladspanelen.",
+      "window-size": "Fönsterstorlek",
+      "width": "Bredd:",
+      "height": "Höjd:",
+      "auto-height": "Auto",
+      "auto-height-hint": "När 'Auto' är aktiverat justeras höjden automatiskt baserat på innehåll.",
+      "layout": "Layout",
+      "columns": "Antal kolumner:",
+      "columns-hint": "Fler kolumner fungerar bättre med bredare fönster.",
+      "config-paths": "Konfigurationsfiler",
+      "config-paths-description": "Ange anpassade sökvägar till dina tangentbordsgenvägskonfigurationsfiler. Tillägget kommer automatiskt att tolka rätt fil baserat på din compositor.",
+      "hyprland-format-hint": "Förväntat format: bind = $mod, KEY, action #\"description\"\nKategorier: # 1. CATEGORY NAME",
+      "niri-format-hint": "Kategorier: // #\"Category Name\"\nBeskrivningar: hotkey-overlay-title=\"description\"",
+      "actions": "Åtgärder",
+      "refresh-keybinds": "Uppdatera tangentbordsgenvägar",
+      "refresh-message": "Tangentbordsgenvägar laddas om när du öppnar panelen.",
+      "reset-defaults": "Återställ till standard",
+      "reset-message": "Inställningarna har återställts till standard.",
+      "saved": "Inställningar sparade.",
+      "keybind-setup": "Tangentbordsgenväg inställning",
+      "keybind-setup-description": "För att öppna tangentbordsgenvägsfuskbladet med en kortkommando, lägg till denna bindning i din compositor-konfiguration:",
+      "keybind-example-hyprland": "Hyprland exempel: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin togglePanel keybind-cheatsheet",
+      "keybind-example-niri": "Niri exempel: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
+      "mod-var": "Mod-tangent variabel",
+      "mod-var-hint": "Variabelnamnet som används för din Super-tangent (t.ex. $mod eller $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland-sökväg",
+      "niri-path": "Niri-sökväg"
+    },
+    "barwidget": {
+      "tooltip": "Tangentbordsgenvägar",
+      "open": "Öppna fuskblad",
+      "settings": "Plugin-inställningar"
+    }
+  }
+}

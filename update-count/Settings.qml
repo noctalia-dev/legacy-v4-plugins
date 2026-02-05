@@ -70,16 +70,26 @@ ColumnLayout {
     }
   }
 
-  RowLayout {
-    Layout.fillWidth: true
-    spacing: Style.marginL
+  ColumnLayout {
+    spacing: Style.marginM
 
-    NLabel {
-      label: pluginApi?.tr("settings.updateInterval.label")
-      description: pluginApi?.tr("settings.updateInterval.desc")
+    RowLayout {
+      Layout.fillWidth: true
+      spacing: Style.marginM
+
+      NLabel {
+        label: pluginApi?.tr("settings.updateInterval.label")
+        description: pluginApi?.tr("settings.updateInterval.desc")
+      }
+
+      NText {
+        text: root.updateIntervalMinutes.toString().padStart(3, " ") + " minutes"
+        color: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mOnPrimary
+      }
     }
 
     NSlider {
+      Layout.fillWidth: true
       from: 5
       to: 300
       value: root.updateIntervalMinutes
@@ -87,11 +97,6 @@ ColumnLayout {
       onValueChanged: {
         root.updateIntervalMinutes = value;
       }
-    }
-
-    NText {
-      text: root.updateIntervalMinutes.toString().padStart(3, " ") + " minutes"
-      color: Settings.data.colorSchemes.darkMode ? Color.mOnSurface : Color.mOnPrimary
     }
   }
 
@@ -145,28 +150,23 @@ ColumnLayout {
   }
 
   ColumnLayout {
-    RowLayout {
-      NText {
-        Layout.fillWidth: true
-        text: pluginApi?.tr("settings.currentNumUpdatesCmd.label")
-        color: Settings.data.colorSchemes.darkMode ? Color.mSecondary : Color.mOnSecondary
-      }
-      NText {
-        text: root.customCmdGetNumUpdates || pluginApi?.mainInstance?.updater.cmdGetNumUpdates || "NA"
-        color: Settings.data.colorSchemes.darkMode ? Color.mTertiary : Color.mOnTertiary
-      }
+    NText {
+      text: pluginApi?.tr("settings.currentNumUpdatesCmd.label")
+      color: Settings.data.colorSchemes.darkMode ? Color.mSecondary : Color.mOnSecondary
+    }
+    NLabel {
+      description: `> ${root.customCmdGetNumUpdates || pluginApi?.mainInstance?.updater.cmdGetNumUpdates || "NA"}`
+    }
+  }
+
+  ColumnLayout {
+    NText {
+      text: pluginApi?.tr("settings.currentUpdateCmd.label")
+      color: Settings.data.colorSchemes.darkMode ? Color.mSecondary : Color.mOnSecondary
     }
 
-    RowLayout {
-      NText {
-        Layout.fillWidth: true
-        text: pluginApi?.tr("settings.currentUpdateCmd.label")
-        color: Settings.data.colorSchemes.darkMode ? Color.mSecondary : Color.mOnSecondary
-      }
-      NText {
-        text: root.customCmdDoSystemUpdate || pluginApi?.mainInstance?.updater.cmdDoSystemUpdate || "NA"
-        color: Settings.data.colorSchemes.darkMode ? Color.mTertiary : Color.mOnTertiary
-      }
+    NLabel {
+      description: `> ${root.customCmdDoSystemUpdate || pluginApi?.mainInstance?.updater.cmdDoSystemUpdate || "NA"}`
     }
   }
 

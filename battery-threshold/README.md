@@ -34,12 +34,23 @@ $ sudo ./setup_rules.sh
 ```
 
 This script will:
+
 - Create a `battery_ctl` group (if it doesn't exist)
 - Add your user to the `battery_ctl` group
 - Install the udev rule to `/etc/udev/rules.d/`
 - Reload udev rules
 
 **Note:** A reboot may be required for write access to take effect.
+
+## IPC Commands
+
+```bash
+# Toggle panel
+qs -c noctalia-shell ipc call plugin:battery-threshold togglePanel
+
+# Set threshold
+qs -c noctalia-shell ipc call plugin:battery-threshold set <value>
+```
 
 ## Troubleshooting
 

@@ -4,6 +4,8 @@ A Tailscale status plugin for Noctalia that shows your Tailscale connection stat
 
 ![Preview of the tailscale status plugin](preview.png)
 
+> **Disclaimer:** This is a community-created plugin built on top of the great Tailscale CLI tool. It is not affiliated with, endorsed by, or officially connected to Tailscale Inc.
+
 ## Features
 
 - **Status Indicator**: Shows whether Tailscale is connected or disconnected with a visual indicator

@@ -6,7 +6,7 @@ import qs.Commons
 import qs.Services.UI
 import qs.Widgets
 
-Rectangle {
+Item {
     id: root
 
     property var pluginApi: null
@@ -33,7 +33,7 @@ Rectangle {
         Logger.d("RSS Feed", "RSS Feed BarWidget: Config changed");
         updateUnreadCount();
     }
-    
+
     onReadItemsChanged: {
         Logger.d("RSS Feed", "RSS Feed BarWidget: readItems changed, count:", readItems.length);
         updateUnreadCount();
@@ -42,6 +42,8 @@ Rectangle {
     // State
     property var allItems: []
     property int unreadCount: 0
+    property int _prevUnreadCount: 0
+    property bool _seenInitialUnreadSet: false
     property bool loading: false
     property bool error: false
 
@@ -60,6 +62,35 @@ Rectangle {
                     Logger.d("RSS Feed", "RSS Feed BarWidget: Settings updated, readItems count:", newReadItems.length);
                 }
             }
+
+            // Read unreadCount exposed by Panel (if provided) so badge updates promptly
+            if (pluginApi && typeof pluginApi.unreadCount === 'number') {
+                if (unreadCount !== pluginApi.unreadCount) {
+                    // Use update function so pulse logic runs
+                    _prevUnreadCount = unreadCount;
+                    unreadCount = pluginApi.unreadCount;
+                    updateUnreadCount();
+                }
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        // Adopt unread count from Panel immediately if available
+        if (pluginApi && typeof pluginApi.unreadCount === 'number') {
+            unreadCount = pluginApi.unreadCount;
+            _prevUnreadCount = unreadCount; // don't pulse on initial load
+            _seenInitialUnreadSet = true;
+        } else {
+            updateUnreadCount();
+        }
+    }
+
+    onPluginApiChanged: {
+        if (pluginApi && typeof pluginApi.unreadCount === 'number') {
+            unreadCount = pluginApi.unreadCount;
+            _prevUnreadCount = unreadCount; // don't pulse on injection
+            _seenInitialUnreadSet = true;
         }
     }
 
@@ -67,11 +98,13 @@ Rectangle {
     onAllItemsChanged: {
         if (pluginApi) {
             try {
-                if (!pluginApi.sharedData) {
-                    pluginApi.sharedData = {};
+                // Only write if sharedData object already exists to avoid creating non-configurable properties
+                if (pluginApi.sharedData !== undefined && pluginApi.sharedData !== null) {
+                    pluginApi.sharedData.allItems = allItems;
+                    Logger.d("RSS Feed", "RSS Feed BarWidget: Shared", allItems.length, "items to Panel");
+                } else {
+                    Logger.d("RSS Feed", "RSS Feed BarWidget: sharedData not available, skipping share");
                 }
-                pluginApi.sharedData.allItems = allItems;
-                Logger.d("RSS Feed", "RSS Feed BarWidget: Shared", allItems.length, "items to Panel");
             } catch (e) {
                 Logger.w("RSS Feed", "BarWidget: Error sharing data:", e);
             }
@@ -80,6 +113,21 @@ Rectangle {
     }
 
     function updateUnreadCount() {
+        var previous = _prevUnreadCount || 0;
+
+        // Prefer value provided by Panel via pluginApi when available
+        if (pluginApi && typeof pluginApi.unreadCount === 'number') {
+            var newVal = Number(pluginApi.unreadCount) || 0;
+            if (newVal !== unreadCount) {
+                if (_seenInitialUnreadSet && newVal > previous) {
+                    if (badgePulseDebounce) badgePulseDebounce.restart();
+                }
+                unreadCount = newVal;
+            }
+            _prevUnreadCount = unreadCount;
+            return;
+        }
+
         let count = 0;
         for (let i = 0; i < allItems.length; i++) {
             const item = allItems[i];
@@ -87,18 +135,25 @@ Rectangle {
                 count++;
             }
         }
-        unreadCount = count;
+
+        if (count !== unreadCount) {
+            if (_seenInitialUnreadSet && count > previous) {
+                if (badgePulseDebounce) badgePulseDebounce.restart();
+            }
+            unreadCount = count;
+        }
+        _prevUnreadCount = unreadCount;
+        _seenInitialUnreadSet = true;
     }
 
-    implicitWidth: Math.max(60, isVertical ? Style.capsuleHeight : contentWidth)
-    implicitHeight: Math.max(32, isVertical ? contentHeight :Style.capsuleHeight)
-    radius: Style.radiusM
-    color: Style.capsuleColor
-    border.color: Style.capsuleBorderColor
-    border.width: Style.capsuleBorderWidth
+    readonly property real visualContentWidth: rowLayout.implicitWidth + (unreadCount > 0 ? Style.marginM * 2 : Style.marginS)
+    readonly property real visualContentHeight: rowLayout.implicitHeight + (unreadCount > 0 ? Style.marginM * 2 : Style.marginS)
 
-    readonly property real contentWidth: rowLayout.implicitWidth + Style.marginM * 2
-    readonly property real contentHeight: rowLayout.implicitHeight + Style.marginM * 2
+    readonly property real contentWidth: Math.max(48, isVertical ? Style.capsuleHeight : visualContentWidth)
+    readonly property real contentHeight: Math.max(28, isVertical ? visualContentHeight : Style.capsuleHeight)
+
+    implicitWidth: contentWidth
+    implicitHeight: contentHeight
 
     // Timer for periodic updates
     Timer {
@@ -129,13 +184,13 @@ Rectangle {
             if (!isFetching) return;
             
             if (exitCode !== 0) {
-                console.error("RSS Feed: curl failed for", currentFeedUrl, "with code", exitCode);
+                Logger.e("RSS Feed: curl failed for", currentFeedUrl, "with code", exitCode);
                 fetchNextFeed();
                 return;
             }
             
             if (!stdout.text || stdout.text.trim() === "") {
-                console.error("RSS Feed: Empty response for", currentFeedUrl);
+                Logger.e("RSS Feed: Empty response for", currentFeedUrl);
                 fetchNextFeed();
                 return;
             }
@@ -146,7 +201,7 @@ Rectangle {
                 tempItems = tempItems.concat(items);
                 fetchNextFeed();
             } catch (e) {
-                console.error("RSS Feed: Parse error for", currentFeedUrl, ":", e);
+                Logger.e("RSS Feed: Parse error for", currentFeedUrl, ":", e);
                 fetchNextFeed();
             }
         }
@@ -290,6 +345,9 @@ Rectangle {
         if (!readItems.includes(guid)) {
             const newReadItems = readItems.slice();
             newReadItems.push(guid);
+            if (!pluginApi.pluginSettings) {
+                pluginApi.pluginSettings = {};
+            }
             pluginApi.pluginSettings.readItems = newReadItems;
             pluginApi.saveSettings();
             updateUnreadCount();
@@ -300,44 +358,87 @@ Rectangle {
         if (!pluginApi) return;
         
         const newReadItems = allItems.map(item => item.guid || item.link);
+        if (!pluginApi.pluginSettings) {
+            pluginApi.pluginSettings = {};
+        }
         pluginApi.pluginSettings.readItems = newReadItems;
         pluginApi.saveSettings();
         updateUnreadCount();
     } 
 
-    RowLayout {
-        id: rowLayout
-        anchors.centerIn: parent
-        spacing: Style.marginS
 
-        NIcon {
-            icon: "rss"
-            pointSize: Style.barFontSize
-            color: error ? Color.mOnError : loading ? Color.mPrimary : Color.mOnSurface
-            
-            NumberAnimation on opacity {
-                running: loading
-                from: 0.3
-                to: 1.0
-                duration: 1000
-                loops: Animation.Infinite
-                easing.type: Easing.InOutQuad
-            }
-        }
 
-        Rectangle {
-            visible: unreadCount > 0
-            Layout.preferredWidth: badgeText.implicitWidth + 8
-            Layout.preferredHeight: width
-            radius: width * 0.5
-            color: error ? Color.mError : Color.mPrimary
 
-            NText {
-                id: badgeText
-                anchors.centerIn: parent
-                text: unreadCount > 99 ? "99+" : unreadCount.toString()
+    Rectangle {
+        id: visualCapsule
+        x: Style.pixelAlignCenter(parent.width, width)
+        y: Style.pixelAlignCenter(parent.height, height)
+        width: root.contentWidth
+        height: root.contentHeight
+        radius: Style.radiusM
+        color: Style.capsuleColor
+        border.color: Style.capsuleBorderColor
+        border.width: Style.capsuleBorderWidth
+
+        RowLayout {
+            id: rowLayout
+            anchors.centerIn: parent
+            spacing: unreadCount > 0 ? Style.marginS : 0
+
+            NIcon {
+                icon: "rss"
                 pointSize: Style.barFontSize
-                color: error ? Color.mOnError : Color.mOnPrimary
+                color: error ? Color.mOnError : loading ? Color.mPrimary : Color.mOnSurface
+
+                NumberAnimation on opacity {
+                    running: loading
+                    from: 0.3
+                    to: 1.0
+                    duration: 1000
+                    loops: Animation.Infinite
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            Rectangle {
+                id: badgeRect
+                visible: unreadCount > 0
+                width: unreadCount > 0 ? (badgeText.implicitWidth + 8) : 0
+                height: unreadCount > 0 ? (badgeText.implicitHeight + 6) : 0
+                radius: height * 0.5
+                color: error ? Color.mError : Color.mPrimary
+                Layout.preferredWidth: width
+                Layout.preferredHeight: height
+
+                transform: Scale { id: badgeScale; xScale: 1; yScale: 1 }
+
+                NText {
+                    id: badgeText
+                    anchors.centerIn: parent
+                    text: unreadCount > 99 ? "99+" : unreadCount.toString()
+                    pointSize: Style.barFontSize
+                    color: error ? Color.mOnError : Color.mOnPrimary
+                }
+
+                SequentialAnimation {
+                    id: badgePulse
+                    running: false
+                    PropertyAnimation { target: badgeScale; property: "xScale"; to: 1.15; duration: 140; easing.type: Easing.InOutQuad }
+                    PropertyAnimation { target: badgeScale; property: "yScale"; to: 1.15; duration: 140; easing.type: Easing.InOutQuad }
+                    PauseAnimation { duration: 80 }
+                    PropertyAnimation { target: badgeScale; property: "xScale"; to: 1.0; duration: 160; easing.type: Easing.InOutQuad }
+                    PropertyAnimation { target: badgeScale; property: "yScale"; to: 1.0; duration: 160; easing.type: Easing.InOutQuad }
+                }
+
+                Timer {
+                    id: badgePulseDebounce
+                    interval: 250
+                    running: false
+                    repeat: false
+                    onTriggered: {
+                        if (badgePulse) badgePulse.restart();
+                    }
+                }
             }
         }
     }
@@ -346,8 +447,16 @@ Rectangle {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: {
-            if (pluginApi) {
-                pluginApi.openPanel(screen);
+            if (!pluginApi) return;
+            try {
+                pluginApi.openPanel(root.screen, root);
+            } catch (e) {
+                // Fallback to older/other signatures if available
+                try {
+                    pluginApi.openPanel(screen);
+                } catch (err) {
+                    Logger.w("RSS Feed", "openPanel failed:", err);
+                }
             }
         }
     }

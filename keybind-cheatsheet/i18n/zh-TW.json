@@ -1,0 +1,50 @@
+{
+  "keybind-cheatsheet": {
+    "panel": {
+      "loading": "載入中...",
+      "title": "按鍵映射",
+      "title-hyprland": "Hyprland 按鍵映射",
+      "title-niri": "Niri 按鍵映射",
+      "workspace-switching": "工作區 - 切換",
+      "workspace-moving": "工作區 - 移動",
+      "workspace-mouse": "工作區 - 滑鼠"
+    },
+    "settings": {
+      "title": "快捷鍵速查表設定",
+      "description": "設定面板的外觀和快捷鍵來源。",
+      "window-size": "視窗大小",
+      "width": "寬度:",
+      "height": "高度:",
+      "auto-height": "自動",
+      "auto-height-hint": "啟用「自動」時，高度會根據內容自動調整。",
+      "layout": "佈局",
+      "columns": "欄位數:",
+      "columns-hint": "更多欄位在較寬的視窗中效果更好。",
+      "config-paths": "設定檔",
+      "config-paths-description": "指定快捷鍵設定檔的自訂路徑。外掛程式會自動跟隨所有 include/source 指令。",
+      "hyprland-format-hint": "預期格式: bind = $mod, KEY, action #\"描述\"\n類別: # 1. 類別名稱",
+      "niri-format-hint": "類別使用以下格式建立: // #\"類別名稱\"\n描述: hotkey-overlay-title=\"描述\"",
+      "actions": "操作",
+      "refresh-keybinds": "重新整理快捷鍵",
+      "refresh-message": "開啟面板時將重新載入快捷鍵。",
+      "reset-defaults": "恢復預設值",
+      "reset-message": "設定已恢復為預設值。",
+      "saved": "設定儲存成功。",
+      "keybind-setup": "快捷鍵設定",
+      "keybind-setup-description": "要使用鍵盤快捷鍵開啟速查表，請將此繫結新增至合成器設定中:",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
+      "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
+      "mod-var": "Mod 鍵變數",
+      "mod-var-hint": "用於 Super 鍵的變數名稱（例如 $mod 或 $mainMod）。",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Hyprland 路徑",
+      "niri-path": "Niri 路徑"
+    },
+    "barwidget": {
+      "tooltip": "快捷鍵速查表",
+      "open": "開啟速查表",
+      "settings": "外掛設定"
+    }
+  }
+}

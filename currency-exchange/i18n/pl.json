@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "Dolar australijski",
+    "BRL": "Real brazylijski",
+    "CAD": "Dolar kanadyjski",
+    "CHF": "Frank szwajcarski",
+    "CNY": "Juan chiński",
+    "CZK": "Korona czeska",
+    "DKK": "Korona duńska",
+    "EUR": "Euro",
+    "GBP": "Funt brytyjski",
+    "HKD": "Dolar hongkoński",
+    "HUF": "Forint węgierski",
+    "IDR": "Rupia indonezyjska",
+    "ILS": "Szekel izraelski",
+    "INR": "Rupia indyjska",
+    "ISK": "Korona islandzka",
+    "JPY": "Jen japoński",
+    "KRW": "Won południowokoreański",
+    "MXN": "Peso meksykańskie",
+    "MYR": "Ringgit malezyjski",
+    "NOK": "Korona norweska",
+    "NZD": "Dolar nowozelandzki",
+    "PHP": "Peso filipińskie",
+    "PLN": "Złoty polski",
+    "RON": "Lej rumuński",
+    "SEK": "Korona szwedzka",
+    "SGD": "Dolar singapurski",
+    "THB": "Bat tajski",
+    "TRY": "Lira turecka",
+    "USD": "Dolar amerykański",
+    "ZAR": "Rand południowoafrykański"
+  },
+  "launcher": {
+    "command_description": "Szybka konwersja walut (np. >fx 100 USD EUR)",
+    "convert_example": "Przelicz {amount} {from} na {to}",
+    "convert_to_default": "Przelicz {amount} {from} na {to} (domyślnie)",
+    "currency_not_found": "Kod waluty nie znaleziony w kursach wymiany",
+    "error_retry": "Sprawdź połączenie z internetem. Kliknij, aby ponowić.",
+    "fetching": "Pobieranie z frankfurter.app",
+    "loading": "Ładowanie kursów walut...",
+    "rate_click_copy": "Kurs: 1 {from} = {rate} {to} | Kliknij, aby skopiować",
+    "reverse_rate": "Kurs odwrotny | Kliknij, aby skopiować",
+    "show_rate": "Pokaż kurs 1 {from} do {to}",
+    "try_valid_code": "Wprowadź prawidłowy kod waluty (np. USD, EUR, PLN)",
+    "unknown_currency": "Nieznana waluta: {currency}"
+  },
+  "panel": {
+    "close": "Zamknij",
+    "copy_result": "Kopiuj wynik",
+    "error": "Nie udało się załadować kursów",
+    "loading": "Ładowanie kursów...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "Odśwież kursy",
+    "settings": "Ustawienia",
+    "swap": "Zamień waluty",
+    "title": "Przelicznik Walut",
+    "updated": "Zaktualizowano {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "Wymiana Walut"
+  },
+  "settings": {
+    "display_mode": "Tryb Wyświetlania",
+    "display_mode_description": "Ile informacji pokazywać w widżecie",
+    "display_modes": {
+      "compact": "Kompaktowy (liczba kursu)",
+      "full": "Para walutowa",
+      "icon": "Tylko ikona"
+    },
+    "general": "Ustawienia Ogólne",
+    "intervals": {
+      "15": "15 minut",
+      "180": "3 godziny",
+      "30": "30 minut",
+      "360": "6 godzin",
+      "60": "1 godzina",
+      "720": "12 godzin"
+    },
+    "refresh_interval": "Interwał Odświeżania",
+    "refresh_interval_description": "Jak często automatycznie odświeżać kursy walut",
+    "source_currency": "Waluta Źródłowa",
+    "source_currency_description": "Domyślna waluta do przeliczenia",
+    "target_currency": "Waluta Docelowa",
+    "target_currency_description": "Domyślna waluta wyniku",
+    "widget": "Ustawienia Widżetu"
+  },
+  "widget": {
+    "click_to_open": "Kliknij, aby otworzyć przelicznik",
+    "error": "Nie udało się załadować kursów, sprawdź połączenie z internetem.",
+    "loading": "Ładowanie kursów walut...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}

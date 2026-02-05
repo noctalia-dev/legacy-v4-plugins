@@ -1,0 +1,50 @@
+{
+  "keybind-cheatsheet": {
+    "panel": {
+      "loading": "Barkirin...",
+      "title": "Nexşeya Bişkokan",
+      "title-hyprland": "Nexşeya Bişkokan a Hyprland",
+      "title-niri": "Nexşeya Bişkokan a Niri",
+      "workspace-switching": "QADÊN XEBATÊ - GUHEZTIN",
+      "workspace-moving": "QADÊN XEBATÊ - VEGUHESTIN",
+      "workspace-mouse": "QADÊN XEBATÊ - MIŞK"
+    },
+    "settings": {
+      "title": "Mîhengên Kurterêyên Klavyeyê",
+      "description": "Xuyanî û çavkaniyên kurterêyên klavyeyê ji bo panelê veavakin.",
+      "window-size": "Mezinahiya Paceyê",
+      "width": "Firehî:",
+      "height": "Bilindî:",
+      "auto-height": "Xweber",
+      "auto-height-hint": "Dema 'Xweber' çalak be, bilindî li gorî naverokê xweber tê guhartin.",
+      "layout": "Rêzkirin",
+      "columns": "Hejmara stûnan:",
+      "columns-hint": "Stûnên zêdetir bi paceyên berfirehtir baştir dixebitin.",
+      "config-paths": "Pelên Veavakirinê",
+      "config-paths-description": "Rêyên taybet bo pelên veavakirina kurterêyên klavyeyê diyar bikin. Pêvek bi xweber hemû rêbernameyên include/source dişopîne.",
+      "hyprland-format-hint": "Formata hêvîdar: bind = $mod, KEY, action #\"rave\"\nBeşan: # 1. NAVÊ BEŞÊ",
+      "niri-format-hint": "Beş bi vî awayî têne afirandin: // #\"Navê beşê\"\nRave: hotkey-overlay-title=\"rave\"",
+      "actions": "Çalakî",
+      "refresh-keybinds": "Kurterêyan Nûve Bike",
+      "refresh-message": "Kurterêyên klavyeyê dema panelê vebûyî nû dibin.",
+      "reset-defaults": "Vegerîne Bingehîn",
+      "reset-message": "Mîhengan vegeriyan nirxên bingehîn.",
+      "saved": "Mîhengan bi serfirazî hate tomarkirin.",
+      "keybind-setup": "Mîhengkirina Kurterêyê",
+      "keybind-setup-description": "Ji bo vekirana cheatsheet bi kurterêyek, ev bind li veavakirina compositor xwe zêde bikin:",
+      "keybind-example-hyprland": "Hyprland: bind = $mod, F1, exec, qs -c \"noctalia-shell\" ipc call plugin:keybind-cheatsheet toggle",
+      "keybind-example-niri": "Niri: Super+F1 { spawn \"qs\" \"-c\" \"noctalia-shell\" \"ipc\" \"call\" \"plugin\" \"togglePanel\" \"keybind-cheatsheet\"; }",
+      "mod-var": "Guhêrbarê Bişkoja Mod",
+      "mod-var-hint": "Navê guhêrbarê ku ji bo bişkoja Super tê bikaranîn (mînak $mod an $mainMod).",
+      "width-range": "px (400-3000)",
+      "height-range": "px (300-2000)",
+      "hyprland-path": "Rêça Hyprland",
+      "niri-path": "Rêça Niri"
+    },
+    "barwidget": {
+      "tooltip": "Çavkaniya Kurterêyan",
+      "open": "Çavkaniyê veke",
+      "settings": "Mîhengên Pêvek"
+    }
+  }
+}

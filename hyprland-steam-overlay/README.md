@@ -32,12 +32,12 @@ Click the gamepad icon in your top bar to toggle the Steam overlay.
 ### Via Keyboard Shortcut
 Add to your Hyprland config (`~/.config/hypr/hyprland.conf`):
 ```
-bind = SUPER, G, exec, qs ipc -c noctalia-shell call plugin:steam-overlay toggle
+bind = SUPER, G, exec, qs -c noctalia-shell ipc call plugin:steam-overlay toggle
 ```
 
 ### Via IPC Command
 ```bash
-qs ipc -c noctalia-shell call plugin:steam-overlay toggle
+qs -c noctalia-shell ipc call plugin:steam-overlay toggle
 ```
 
 ## How It Works

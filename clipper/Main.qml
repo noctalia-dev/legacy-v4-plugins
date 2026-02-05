@@ -89,28 +89,19 @@ Item {
 
         function openPanel() {
             if (pluginApi) {
-                const screens = Quickshell.screens;
-                if (screens && screens.length > 0) {
-                    pluginApi.openPanel(screens[0]);
-                }
+                pluginApi.withCurrentScreen(screen => pluginApi.openPanel(screen));
             }
         }
 
         function closePanel() {
             if (pluginApi) {
-                const screens = Quickshell.screens;
-                if (screens && screens.length > 0) {
-                    pluginApi.closePanel(screens[0]);
-                }
+                pluginApi.withCurrentScreen(screen => pluginApi.closePanel(screen));
             }
         }
 
         function togglePanel() {
             if (pluginApi) {
-                const screens = Quickshell.screens;
-                if (screens && screens.length > 0) {
-                    pluginApi.togglePanel(screens[0]);
-                }
+                pluginApi.withCurrentScreen(screen => pluginApi.togglePanel(screen));
             }
         }
 

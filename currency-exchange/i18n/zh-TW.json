@@ -1,0 +1,95 @@
+{
+  "currencies": {
+    "AUD": "澳幣",
+    "BRL": "巴西雷亞爾",
+    "CAD": "加幣",
+    "CHF": "瑞士法郎",
+    "CNY": "人民幣",
+    "CZK": "捷克克朗",
+    "DKK": "丹麥克朗",
+    "EUR": "歐元",
+    "GBP": "英鎊",
+    "HKD": "港幣",
+    "HUF": "匈牙利福林",
+    "IDR": "印尼盾",
+    "ILS": "以色列謝克爾",
+    "INR": "印度盧比",
+    "ISK": "冰島克朗",
+    "JPY": "日圓",
+    "KRW": "韓元",
+    "MXN": "墨西哥披索",
+    "MYR": "馬來西亞令吉",
+    "NOK": "挪威克朗",
+    "NZD": "紐幣",
+    "PHP": "菲律賓披索",
+    "PLN": "波蘭茲羅提",
+    "RON": "羅馬尼亞列伊",
+    "SEK": "瑞典克朗",
+    "SGD": "新加坡幣",
+    "THB": "泰銖",
+    "TRY": "土耳其里拉",
+    "USD": "美元",
+    "ZAR": "南非蘭特"
+  },
+  "launcher": {
+    "command_description": "快速貨幣換算（例如 >fx 100 USD EUR）",
+    "convert_example": "將 {amount} {from} 換算為 {to}",
+    "convert_to_default": "將 {amount} {from} 換算為 {to}（預設）",
+    "currency_not_found": "在匯率中未找到貨幣代碼",
+    "error_retry": "請檢查網路連線。點擊重試。",
+    "fetching": "正在從 frankfurter.app 取得",
+    "loading": "正在載入匯率...",
+    "rate_click_copy": "匯率: 1 {from} = {rate} {to} | 點擊複製",
+    "reverse_rate": "反向匯率 | 點擊複製",
+    "show_rate": "顯示 1 {from} 到 {to} 的匯率",
+    "try_valid_code": "請輸入有效的貨幣代碼（例如 USD、EUR、PLN）",
+    "unknown_currency": "未知貨幣: {currency}"
+  },
+  "panel": {
+    "close": "關閉",
+    "copy_result": "複製結果",
+    "error": "無法載入匯率",
+    "loading": "正在載入匯率...",
+    "rate_format": "1 {from} = {rate} {to}",
+    "refresh": "重新整理匯率",
+    "settings": "設定",
+    "swap": "交換貨幣",
+    "title": "貨幣換算器",
+    "updated": "更新於 {time}"
+  },
+  "plugin": {
+    "short_title": "FX",
+    "title": "貨幣換算"
+  },
+  "settings": {
+    "display_mode": "顯示模式",
+    "display_mode_description": "在元件中顯示多少資訊",
+    "display_modes": {
+      "compact": "精簡（匯率數字）",
+      "full": "貨幣對",
+      "icon": "僅圖示"
+    },
+    "general": "一般設定",
+    "intervals": {
+      "15": "15 分鐘",
+      "180": "3 小時",
+      "30": "30 分鐘",
+      "360": "6 小時",
+      "60": "1 小時",
+      "720": "12 小時"
+    },
+    "refresh_interval": "重新整理間隔",
+    "refresh_interval_description": "自動重新整理匯率的頻率",
+    "source_currency": "來源貨幣",
+    "source_currency_description": "預設換算來源貨幣",
+    "target_currency": "目標貨幣",
+    "target_currency_description": "預設換算目標貨幣",
+    "widget": "元件設定"
+  },
+  "widget": {
+    "click_to_open": "點擊開啟換算器",
+    "error": "無法載入匯率，請檢查網路連線。",
+    "loading": "正在載入匯率...",
+    "rate_format": "1 {from} = {rate} {to}"
+  }
+}
