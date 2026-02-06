@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Aspetto del testo",
-      "font_size": "Dimensione carattere"
+      "font_size": "Dimensione carattere",
+      "monospace": "Carattere monospazio",
+      "monospace_description": "Usa un carattere monospazio per l'area di testo"
     },
     "keyboard_shortcut": {
       "title": "Scorciatoia da tastiera",

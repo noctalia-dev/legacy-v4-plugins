@@ -16,6 +16,7 @@ ColumnLayout {
   property int fontSize: pluginApi?.pluginSettings?.fontSize ?? 14
   property string filePath: pluginApi?.pluginSettings?.filePath ?? ""
   property bool filePathWritable: true
+  property bool useMonospace: pluginApi?.pluginSettings?.useMonospace ?? false
 
   spacing: Style.marginM
 
@@ -49,6 +50,7 @@ ColumnLayout {
       pluginApi.pluginSettings.panelHeight = root.panelHeight
       pluginApi.pluginSettings.fontSize = root.fontSize
       pluginApi.pluginSettings.filePath = root.filePath
+      pluginApi.pluginSettings.useMonospace = root.useMonospace
       pluginApi.saveSettings();
     }
   }
@@ -163,6 +165,14 @@ ColumnLayout {
       onMoved: {
         root.fontSize = Math.round(value)
       }
+    }
+
+    NToggle {
+      Layout.fillWidth: true
+      label: pluginApi?.tr("settings.text_appearance.monospace") || "Monospace Font"
+      description: pluginApi?.tr("settings.text_appearance.monospace_description") || "Use a monospace font for the text area"
+      checked: root.useMonospace
+      onToggled: checked => root.useMonospace = checked
     }
   }
 

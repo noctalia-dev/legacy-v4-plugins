@@ -30,6 +30,10 @@
     "hourLineOpacity": "Opacidade das linhas de hora",
     "hourLineOpacity_description": "Ajuste a opacidade das linhas de hora.",
     "dayLineOpacity": "Opacidade das linhas diárias", 
-    "dayLineOpacity_description": "Ajuste a opacidade das linhas separadoras de dia."
+    "dayLineOpacity_description": "Ajuste a opacidade das linhas separadoras de dia.",
+    "panelMode": "Modo do painel",
+    "panelMode_description": "Escolha o layout (pode ser necessário reabrir).",
+    "panelAttach": "Painel anexado à barra",
+    "panelCenter": "Painel centralizado"
   }
 }

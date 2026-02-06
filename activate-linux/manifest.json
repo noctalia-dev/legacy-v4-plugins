@@ -1,0 +1,26 @@
+{
+  "id": "activate-linux",
+  "name": "Activate Linux Watermark",
+  "version": "1.1.0",
+  "author": "Preston Corless (pgattic)",
+  "contributors": ["outfoxxed"],
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Adds a watermark to the bottom-right of the screen similar to the one found on unactivated Windows 10/11",
+  "tags": ["Desktop", "Fun"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "customizeText": false,
+      "firstLine": "Activate Linux",
+      "secondLine": "Go to Settings to activate Linux."
+    }
+  }
+}
+

@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Textdarstellung",
-      "font_size": "Schriftgröße"
+      "font_size": "Schriftgröße",
+      "monospace": "Monospace-Schriftart",
+      "monospace_description": "Monospace-Schriftart für den Textbereich verwenden"
     },
     "keyboard_shortcut": {
       "title": "Tastenkombination",

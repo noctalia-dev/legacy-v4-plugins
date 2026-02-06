@@ -28,7 +28,10 @@ Item {
   // Cache directory for state (messages, activeTab) - use global noctalia cache
   readonly property string cacheDir: typeof Settings !== 'undefined' && Settings.cacheDir ? Settings.cacheDir + "plugins/assistant-panel/" : ""
   readonly property string stateCachePath: cacheDir + "state.json"
+
   property string activeTab: "ai"  // UI state - persisted to cache
+  property string chatInputText: "" // Chat input state - persisted to cache
+  property int chatInputCursorPosition: 0 // Chat input cursor position - persisted to cache
 
   // Provider configurations
   readonly property var providers: ({
@@ -117,20 +120,24 @@ Item {
 
   // Load state from cache file
   function loadStateFromCache() {
-    try {
-      var content = stateCacheFile.text();
-      if (!content || content.trim() === "") {
-        Logger.d("AssistantPanel", "Empty cache file, starting fresh");
-        return;
-      }
+    var content = stateCacheFile.text();
+    var result = ProviderLogic.processLoadedState(content);
 
-      var cached = JSON.parse(content);
-      root.messages = cached.messages || [];
-      root.activeTab = cached.activeTab || "ai";
-      Logger.d("AssistantPanel", "Loaded " + root.messages.length + " messages from cache");
-    } catch (e) {
-      Logger.e("AssistantPanel", "Failed to parse state cache: " + e);
+    if (!result) {
+      Logger.d("AssistantPanel", "Empty cache file, starting fresh");
+      return;
     }
+
+    if (result.error) {
+      Logger.e("AssistantPanel", "Failed to parse state cache: " + result.error);
+      return;
+    }
+
+    root.messages = result.messages;
+    root.activeTab = result.activeTab;
+    root.chatInputText = result.chatInputText;
+    root.chatInputCursorPosition = result.chatInputCursorPosition;
+    Logger.d("AssistantPanel", "Loaded " + root.messages.length + " messages from cache");
   }
 
   // Debounced save timer
@@ -156,16 +163,15 @@ Item {
       ensureCacheDir();
 
       var maxHistory = pluginApi?.pluginSettings?.maxHistoryLength || 100;
-      var toSave = root.messages.slice(-maxHistory);
+      var dataStr = ProviderLogic.prepareStateForSave(
+        root.messages,
+        root.activeTab,
+        maxHistory,
+        root.chatInputText,
+        root.chatInputCursorPosition
+      );
 
-      var stateData = {
-        messages: toSave,
-        activeTab: root.activeTab,
-        timestamp: Math.floor(Date.now() / 1000)
-      };
-
-      stateCacheFile.setText(JSON.stringify(stateData, null, 2));
-      Logger.d("AssistantPanel", "Saved " + toSave.length + " messages to cache");
+      stateCacheFile.setText(dataStr);
     } catch (e) {
       Logger.e("AssistantPanel", "Failed to save state cache: " + e);
     }
@@ -360,47 +366,28 @@ Item {
     }
 
     function handleStreamData(data) {
-      if (!data)
-        return;
-      var line = data.trim();
-      if (line === "")
+      var result = ProviderLogic.parseGeminiStream(data);
+      if (!result)
         return;
 
-      // -----------------------------
-      // Standard SSE Stream
-      // -----------------------------
-      if (line.startsWith("data: ")) {
-        var jsonStr = line.substring(6).trim();
-        if (jsonStr === "[DONE]")
-          return;
+      if (result.content) {
+        root.currentResponse += result.content;
+      } else if (result.error) {
+        Logger.e("AssistantPanel", "Gemini stream error: " + result.error);
+        if (!result.error.startsWith("Error parsing SSE")) {
+          root.errorMessage = result.error;
+        }
+      } else if (result.raw) {
+        geminiProcess.buffer += result.raw;
         try {
-          var json = JSON.parse(jsonStr);
-          if (json.candidates && json.candidates[0] && json.candidates[0].content) {
-            var parts = json.candidates[0].content.parts;
-            if (parts && parts[0] && parts[0].text) {
-              root.currentResponse += parts[0].text;
-            }
+          var errorJson = JSON.parse(geminiProcess.buffer);
+          if (errorJson.error) {
+            root.errorMessage = errorJson.error.message || "API error";
           }
+          geminiProcess.buffer = "";
         } catch (e) {
-          Logger.e("AssistantPanel", "Error parsing SSE: " + e);
+          // Incomplete
         }
-        return;
-      }
-
-      // -----------------------------
-      // Non-SSE JSON (Immediate Error)
-      // -----------------------------
-      // If we get a raw JSON object, it's likely an error.
-      try {
-        geminiProcess.buffer += line;
-        var errorJson = JSON.parse(geminiProcess.buffer);
-
-        if (errorJson.error) {
-          root.errorMessage = errorJson.error.message || "API error";
-        }
-        geminiProcess.buffer = "";
-      } catch (e) {
-        // Incomplete JSON, wait for more data
       }
     }
 
@@ -423,18 +410,22 @@ Item {
       if (root.currentResponse.trim() !== "") {
         root.addMessage("assistant", root.currentResponse.trim());
       }
+      root.chatInputText = ""; // Ensure input is cleared after successful generation
+      root.chatInputCursorPosition = 0;
+      root.saveState();
     }
   }
 
   function sendGeminiRequest() {
-    var endpoint = providers[Constants.Providers.GOOGLE].streamEndpoint.replace("{model}", model).replace("{apiKey}", apiKey);
     var history = buildConversationHistory();
-    var payload = ProviderLogic.buildGeminiPayload(systemPrompt, history, temperature);
+    var commandData = ProviderLogic.buildGeminiCommand(
+      providers[Constants.Providers.GOOGLE].streamEndpoint,
+      model, apiKey, systemPrompt, history, temperature
+    );
 
-    Logger.i("AssistantPanel", "sendGeminiRequest: endpoint=" + endpoint);
-    Logger.i("AssistantPanel", "sendGeminiRequest: payload=" + JSON.stringify(payload));
+    Logger.i("AssistantPanel", "sendGeminiRequest: endpoint=" + commandData.url);
     geminiProcess.buffer = "";
-    geminiProcess.command = ["curl", "-s", "--no-buffer", "-X", "POST", "-H", "Content-Type: application/json", "-d", JSON.stringify(payload), endpoint];
+    geminiProcess.command = commandData.args;
     Logger.i("AssistantPanel", "sendGeminiRequest: starting process");
     _responseBuffer = "";
     geminiProcess.running = true;
@@ -465,43 +456,25 @@ Item {
     }
 
     function handleStreamData(data) {
-      if (!data)
-        return;
-      var line = data.trim();
-      if (line === "")
+      var result = ProviderLogic.parseOpenAIStream(data);
+      if (!result)
         return;
 
-      // Standard SSE Stream
-      if (line.startsWith("data: ")) {
-        var jsonStr = line.substring(6).trim();
-        if (jsonStr === "[DONE]")
-          return;
+      if (result.content) {
+        root.currentResponse += result.content;
+      } else if (result.error) {
+        Logger.e("AssistantPanel", "OpenAI stream error: " + result.error);
+      } else if (result.raw) {
+        openaiProcess.buffer += result.raw;
         try {
-          var json = JSON.parse(jsonStr);
-          if (json.choices && json.choices[0]) {
-            if (json.choices[0].delta && json.choices[0].delta.content) {
-              root.currentResponse += json.choices[0].delta.content;
-            } else if (json.choices[0].message && json.choices[0].message.content) {
-              root.currentResponse = json.choices[0].message.content;
-            }
+          var errorJson = JSON.parse(openaiProcess.buffer);
+          if (errorJson.error) {
+            root.errorMessage = errorJson.error.message || "API error";
           }
+          openaiProcess.buffer = "";
         } catch (e) {
-          Logger.e("AssistantPanel", "Error parsing SSE JSON: " + e);
+          // Incomplete JSON, keep buffering
         }
-        return;
-      }
-
-      // Buffer accumulation for non-SSE data (likely multiline error JSON)
-      openaiProcess.buffer += line;
-      try {
-        var errorJson = JSON.parse(openaiProcess.buffer);
-        if (errorJson.error) {
-          root.errorMessage = errorJson.error.message || "API error";
-        }
-        // If parsed successfully (whether error or not), clear buffer to avoid stale data
-        openaiProcess.buffer = "";
-      } catch (e) {
-        // Incomplete JSON, keep buffering
       }
     }
 
@@ -527,6 +500,9 @@ Item {
       if (root.currentResponse.trim() !== "") {
         root.addMessage("assistant", root.currentResponse.trim());
       }
+      root.chatInputText = ""; // Ensure input is cleared after successful generation
+      root.chatInputCursorPosition = 0;
+      root.saveState();
 
       openaiProcess.buffer = "";
     }
@@ -534,28 +510,12 @@ Item {
 
   function sendOpenAIRequest() {
     var history = buildConversationHistory();
-    var payload = ProviderLogic.buildOpenAIPayload(model, systemPrompt, history, temperature);
+    var commandData = ProviderLogic.buildOpenAICommand(openaiBaseUrl, apiKey, model, systemPrompt, history, temperature);
 
-    var endpoint = openaiBaseUrl;
-
-    Logger.i("AssistantPanel", "sendOpenAIRequest: endpoint=" + endpoint);
-    Logger.i("AssistantPanel", "sendOpenAIRequest: payload=" + JSON.stringify(payload));
+    Logger.i("AssistantPanel", "sendOpenAIRequest: endpoint=" + commandData.url);
     openaiProcess.buffer = "";
+    openaiProcess.command = commandData.args;
 
-    var cmd = ["curl", "-s", "-S", "--no-buffer", "-X", "POST", "-H", "Content-Type: application/json"];
-
-    // Add Authorization header if API key exists (even if local, some might want it, but usually not needed if local checked.
-    // Logic above sets requiresKey=false for local, but here we just check if it exists to be safe/flexible).
-    // Actually, if local is checked, we might NOT want to send it if it's empty, or if user put something there.
-    // Let's rely on apiKey property which handles env vs settings.
-    if (apiKey && apiKey.trim() !== "") {
-      cmd.push("-H", "Authorization: Bearer " + apiKey);
-    }
-
-    cmd.push("-d", JSON.stringify(payload));
-    cmd.push(endpoint);
-
-    openaiProcess.command = cmd;
     Logger.i("AssistantPanel", "sendOpenAIRequest: starting process");
     openaiProcess.running = true;
   }
@@ -615,55 +575,37 @@ Item {
   }
 
   function translateGoogle(text, targetLang, sourceLang) {
-    var url = "https://translate.google.com/translate_a/single?client=gtx" + "&sl=" + encodeURIComponent(sourceLang || "auto") + "&tl=" + encodeURIComponent(targetLang) + "&dt=t&q=" + encodeURIComponent(text);
-
-    translateProcess.command = ["curl", "-s", url];
+    var commandData = ProviderLogic.buildGoogleTranslateCommand(text, targetLang, sourceLang);
+    translateProcess.command = commandData.args;
     translateProcess.running = true;
   }
 
   function translateDeepL(text, targetLang) {
-    if (!deeplApiKey || deeplApiKey.trim() === "") {
+    var commandData = ProviderLogic.buildDeepLTranslateCommand(text, targetLang, deeplApiKey);
+
+    if (commandData.error) {
       root.isTranslating = false;
-      root.translationError = pluginApi?.tr("errors.noDeeplKey") || "Please configure your DeepL API key";
+      root.translationError = pluginApi?.tr("errors.noDeeplKey") || commandData.error;
       return;
     }
 
-    var host = deeplApiKey.endsWith(":fx") ? "api-free.deepl.com" : "api.deepl.com";
-    var url = "https://" + host + "/v2/translate";
-
-    translateProcess.command = ["curl", "-s", "-X", "POST", url, "-H", "Authorization: DeepL-Auth-Key " + deeplApiKey, "-H", "Content-Type: application/x-www-form-urlencoded", "-d", "text=" + encodeURIComponent(text) + "&target_lang=" + targetLang.toUpperCase()];
+    translateProcess.command = commandData.args;
     translateProcess.running = true;
   }
 
   function handleTranslationResponse(responseText) {
-    if (!responseText || responseText.trim() === "") {
-      root.translationError = pluginApi?.tr("errors.emptyResponse") || "Empty response";
-      return;
-    }
+    var result = ProviderLogic.parseTranslateResponse(translatorBackend, responseText);
 
-    try {
-      if (translatorBackend === "google") {
-        var response = JSON.parse(responseText);
-        var result = "";
-        if (response && response[0]) {
-          for (var i = 0; i < response[0].length; i++) {
-            if (response[0][i] && response[0][i][0]) {
-              result += response[0][i][0];
-            }
-          }
-        }
-        root.translatedText = result;
-      } else if (translatorBackend === "deepl") {
-        var deeplResponse = JSON.parse(responseText);
-        if (deeplResponse.translations && deeplResponse.translations[0]) {
-          root.translatedText = deeplResponse.translations[0].text;
-        } else if (deeplResponse.message) {
-          root.translationError = deeplResponse.message;
-        }
-      }
-    } catch (e) {
-      root.translationError = pluginApi?.tr("errors.parseError") || "Failed to parse response";
-      Logger.e("AssistantPanel", "Translation parse error: " + e);
+    if (result.error) {
+      // Map known internal error strings to translated ones if needed, otherwise show as is
+      if (result.error === "Empty response")
+        root.translationError = pluginApi?.tr("errors.emptyResponse") || "Empty response";
+      else if (result.error === "Failed to parse response")
+        root.translationError = pluginApi?.tr("errors.parseError") || "Failed to parse response";
+      else
+        root.translationError = result.error;
+    } else if (result.text) {
+      root.translatedText = result.text;
     }
   }
 

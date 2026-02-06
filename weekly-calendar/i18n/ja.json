@@ -30,6 +30,10 @@
     "hourLineOpacity": "時間線の不透明度",
     "hourLineOpacity_description": "時間線の不透明度を調整します。",
     "dayLineOpacity": "日線の不透明度", 
-    "dayLineOpacity_description": "日付境界線の不透明度を調整します。"
+    "dayLineOpacity_description": "日付境界線の不透明度を調整します。",
+    "panelMode": "パネル表示モード",
+    "panelMode_description": "画面の表示形式を選択します (再起動が必要な場合があります)。",
+    "panelAttach": "バーに吸着",
+    "panelCenter": "中央に配置"
   }
 }

@@ -30,6 +30,10 @@
     "hourLineOpacity": "Непрозорість годинних ліній",
     "hourLineOpacity_description": "Налаштуйте непрозорість годинних ліній.",
     "dayLineOpacity": "Непрозорість ліній дня", 
-    "dayLineOpacity_description": "Налаштуйте непрозорість ліній-роздільників днів."
+    "dayLineOpacity_description": "Налаштуйте непрозорість ліній-роздільників днів.",
+    "panelMode": "Режим панелі",
+    "panelMode_description": "Виберіть макет (може знадобитися перезапуск).",
+    "panelAttach": "Панель прикріплена до панелі",
+    "panelCenter": "Центрована панель"
   }
 }

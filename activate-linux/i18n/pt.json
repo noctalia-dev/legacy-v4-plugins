@@ -1,0 +1,6 @@
+{
+  "panel": {
+    "activate": "Ativar {osName}",
+    "goto_settings": "Vá para as configurações para ativar {osName}."
+  }
+}

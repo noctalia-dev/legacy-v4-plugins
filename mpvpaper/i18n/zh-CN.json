@@ -1,0 +1,88 @@
+{
+  "barWidget": {
+    "contextMenu": {
+      "toggle": "切换",
+      "panel": "面板",
+      "play": "播放",
+      "pause": "暂停",
+      "mute": "静音",
+      "unmute": "取消静音"
+    }
+  },
+  "panel": {
+    "title": "配置mpvpaper",
+    "buttons": {
+      "folder": {
+        "text": "文件夹",
+        "tooltip": "选择另一个包含壁纸的文件夹。"
+      },
+      "refresh": {
+        "text": "刷新",
+        "tooltip": "刷新缩略图，删除旧的并创建新的。"
+      },
+      "random": {
+        "text": "随机",
+        "tooltip": "从此文件夹中选择随机图像。"
+      },
+      "clear": {
+        "text": "清除",
+        "tooltip": "清除当前壁纸图像。"
+      }
+    },
+    "loading": "加载中..."
+  },
+  "settings": {
+    "toggle": {
+      "label": "启用mpvpaper",
+      "description": "启用mpvpaper集成"
+    },
+    "wallpapers_folder": {
+      "title_label": "壁纸文件夹",
+      "title_description": "包含所有壁纸的文件夹，在使用随机壁纸时很有用",
+      "input_placeholder": "/path/to/folder/with/wallpapers",
+      "icon_tooltip": "选择壁纸文件夹",
+      "file_picker_title": "选择壁纸文件夹"
+    },
+    "select_wallpaper": {
+      "title_label": "选择壁纸",
+      "title_description": "选择当前播放的视频壁纸。",
+      "icon_tooltip": "选择当前壁纸",
+      "file_picker_title": "选择当前壁纸"
+    },
+    "volume": {
+      "label": "音量",
+      "description": "当前播放的视频壁纸的音量。"
+    },
+    "mpv_socket": {
+      "title_label": "Mpvpaper套接字",
+      "title_description": "noctalia连接到的mpvpaper套接字",
+      "input_placeholder": "例如：/tmp/mpv-socket"
+    },
+    "actions": {
+      "random": {
+        "text": "随机",
+        "tooltip": "从壁纸文件夹中选择随机壁纸。"
+      },
+      "clear": {
+        "text": "清除",
+        "tooltip": "清除当前壁纸。"
+      },
+      "pause": {
+        "text": "暂停",
+        "tooltip": "暂停视频壁纸。"
+      },
+      "resume": {
+        "text": "继续",
+        "tooltip": "继续视频壁纸。"
+      },
+      "mute": {
+        "text": "静音",
+        "tooltip": "静音视频壁纸。"
+      },
+      "unmute": {
+        "text": "取消静音",
+        "tooltip": "取消静音视频壁纸。"
+      }
+    }
+  }
+}

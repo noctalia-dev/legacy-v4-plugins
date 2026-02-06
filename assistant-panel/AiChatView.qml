@@ -20,6 +20,8 @@ Item {
   readonly property bool isGenerating: mainInstance?.isGenerating || false
   readonly property string currentResponse: mainInstance?.currentResponse || ""
   readonly property string errorMessage: mainInstance?.errorMessage || ""
+  property string initialInputText: mainInstance?.chatInputText || ""
+  property int initialCursorPosition: mainInstance?.chatInputCursorPosition || 0
 
   // Provider info - use mainInstance for computed model (has per-provider logic)
   readonly property string provider: mainInstance?.provider || Constants.Providers.GOOGLE
@@ -341,6 +343,7 @@ Item {
 
           TextArea {
             id: inputField
+            text: initialInputText
             placeholderText: pluginApi?.tr("chat.placeholder") || "Type a message..."
             placeholderTextColor: Color.mOnSurfaceVariant
             color: Color.mOnSurface
@@ -349,6 +352,26 @@ Item {
             background: null
             selectByMouse: true
             enabled: !isGenerating
+
+            onCursorPositionChanged: {
+              if (mainInstance) {
+                if (mainInstance.chatInputCursorPosition !== cursorPosition) {
+                  mainInstance.chatInputCursorPosition = cursorPosition;
+                  // Debounce handled in Main.qml saveState
+                  mainInstance.saveState();
+                }
+              }
+            }
+
+            onTextChanged: {
+              if (mainInstance) {
+                // Only update if changed to avoid loop
+                if (mainInstance.chatInputText !== text) {
+                  mainInstance.chatInputText = text;
+                  mainInstance.saveState();
+                }
+              }
+            }
 
             Keys.onReturnPressed: function (event) {
               if (event.modifiers & Qt.ShiftModifier) {
@@ -397,6 +420,9 @@ Item {
       return;
     mainInstance.sendMessage(text);
     inputField.text = "";
+    mainInstance.chatInputText = "";
+    mainInstance.chatInputCursorPosition = 0;
+    mainInstance.saveState();
     inputField.forceActiveFocus();
   }
 
@@ -411,13 +437,13 @@ Item {
     }
   }
 
-  // Message bubble component
-  // (Old inline MessageBubble removed; now using MessageBubble.qml)
-
   // Safe focusInput method for parent to call
   function focusInput() {
     if (typeof inputField !== 'undefined' && inputField && inputField.forceActiveFocus) {
       inputField.forceActiveFocus();
+      if (initialCursorPosition > 0 && initialCursorPosition <= inputField.text.length) {
+        inputField.cursorPosition = initialCursorPosition;
+      }
     }
   }
 }

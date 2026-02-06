@@ -30,6 +30,10 @@
     "hourLineOpacity": "Saat Çizgisi Opaklığı",
     "hourLineOpacity_description": "Saat çizgilerinin opaklığını ayarlayın.",
     "dayLineOpacity": "Gün Çizgisi Opaklığı", 
-    "dayLineOpacity_description": "Gün ayırıcı çizgilerin opaklığını ayarlayın."
+    "dayLineOpacity_description": "Gün ayırıcı çizgilerin opaklığını ayarlayın.",
+    "panelMode": "Panel modu",
+    "panelMode_description": "Düzeni seçin (yeniden açılması gerekebilir).",
+    "panelAttach": "Panel çubuğa takılı",
+    "panelCenter": "Ortalanmış panel"
   }
 }

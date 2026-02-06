@@ -122,7 +122,7 @@ Add to your compositor configuration:
 bind = SUPER, A, exec, qs -c noctalia-shell ipc call plugin:assistant-panel toggle
 ```
 
-### Niri (Untested)
+### Niri
 ```kdl
 binds {
     Mod+A { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:assistant-panel" "toggle"; }

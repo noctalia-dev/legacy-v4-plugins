@@ -30,6 +30,10 @@
     "hourLineOpacity": "Ondoorzichtigheid van uurlijnen",
     "hourLineOpacity_description": "Pas de ondoorzichtigheid van uurlijnen aan.",
     "dayLineOpacity": "Ondoorzichtigheid van daglijnen", 
-    "dayLineOpacity_description": "Pas de ondoorzichtigheid van dag-scheidingslijnen aan."
+    "dayLineOpacity_description": "Pas de ondoorzichtigheid van dag-scheidingslijnen aan.",
+    "panelMode": "Paneelmodus",
+    "panelMode_description": "Kies lay-out (mogelijk opnieuw openen vereist).",
+    "panelAttach": "Paneel bevestigd aan de balk",
+    "panelCenter": "Gecentreerd paneel"
   }
 }

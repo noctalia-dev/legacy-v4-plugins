@@ -74,68 +74,34 @@ Item {
     border.color: Style.capsuleBorderColor
     border.width: Style.capsuleBorderWidth
 
-    // Centered host that will scale inner content according to plugin uiScale
-    Item {
+    NIcon {
+      id: iconWidget
       anchors.centerIn: parent
-      width: parent.width
-      height: parent.height
+      icon: root.isGenerating ? "loader-2" : "sparkles"
+      color: {
+        if (root.isGenerating)
+          return Color.mPrimary;
+        if (!root.hasApiKey)
+          return Color.mOnSurfaceVariant;
+        return Color.mOnSurface;
+      }
+      applyUiScale: false
 
-      property real s: root.uiScale
+      // Rotation animation when generating
+      RotationAnimation on rotation {
+        running: root.isGenerating
+        from: 0
+        to: 360
+        duration: 1000
+        loops: Animation.Infinite
+      }
 
-      Item {
-        id: scaledHost
-        width: parent.width / (parent.s || 1)
-        height: parent.height / (parent.s || 1)
-        scale: parent.s || 1
-        anchors.centerIn: parent
-        transformOrigin: Item.Center
-
-        RowLayout {
-          id: contentRow
-          anchors.fill: parent
-          spacing: Style.marginS
-
-          NIcon {
-            id: iconWidget
-            Layout.alignment: Qt.AlignVCenter
-            icon: root.isGenerating ? "loader-2" : "sparkles"
-            color: {
-              if (root.isGenerating)
-                return Color.mPrimary;
-              if (!root.hasApiKey)
-                return Color.mOnSurfaceVariant;
-              return Color.mOnSurface;
-            }
-            applyUiScale: false
-
-            // Rotation animation when generating
-            RotationAnimation on rotation {
-              running: root.isGenerating
-              from: 0
-              to: 360
-              duration: 1000
-              loops: Animation.Infinite
-            }
-
-            // Reset rotation when not generating
-            Binding {
-              target: iconWidget
-              property: "rotation"
-              value: 0
-              when: !root.isGenerating
-            }
-          }
-
-          NText {
-            visible: !root.isVertical
-            // text: root.isGenerating
-            //   ? (pluginApi?.tr("widget.generating") || "...")
-            //   : (pluginApi?.tr("widget.title") || "AI")
-            color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-            pointSize: root.barFontSize
-            applyUiScale: false
-          }
-        }
+      // Reset rotation when not generating
+      Binding {
+        target: iconWidget
+        property: "rotation"
+        value: 0
+        when: !root.isGenerating
       }
     }
   }

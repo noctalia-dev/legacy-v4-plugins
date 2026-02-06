@@ -1,7 +1,7 @@
 {
   "id": "weather-indicator",
   "name": "Weather Indicator",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "minNoctaliaVersion": "4.3.0",
   "author": "Sovereign",
   "license": "MIT",

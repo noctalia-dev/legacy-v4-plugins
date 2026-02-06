@@ -30,6 +30,10 @@
     "hourLineOpacity": "Przezroczystość linii godzin",
     "hourLineOpacity_description": "Dopasuj przezroczystość linii godzin.",
     "dayLineOpacity": "Przezroczystość linii dni", 
-    "dayLineOpacity_description": "Dopasuj przezroczystość linii oddzielających dni."
+    "dayLineOpacity_description": "Dopasuj przezroczystość linii oddzielających dni.",
+    "panelMode": "Tryb panelu",
+    "panelMode_description": "Wybierz układ (może wymagać ponownego otwarcia).",
+    "panelAttach": "Panel przypięty do paska",
+    "panelCenter": "Panel wyśrodkowany"
   }
 }

@@ -1,7 +1,7 @@
 {
   "id": "weekly-calendar",
   "name": "Weekly Calendar",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "minNoctaliaVersion": "4.2.3",
   "author": "dodaars",
   "license": "MIT",

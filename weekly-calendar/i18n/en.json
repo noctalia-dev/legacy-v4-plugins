@@ -30,6 +30,10 @@
     "hourLineOpacity": "Hour Line Opacity",
     "hourLineOpacity_description": "Adjust the opacity of hour lines.",
     "dayLineOpacity": "Day Line Opacity", 
-    "dayLineOpacity_description": "Adjust the opacity of day separator lines."
+    "dayLineOpacity_description": "Adjust the opacity of day separator lines.",
+    "panelMode": "Panel Mode",
+    "panelMode_description": "Choose layout (may require reopening).",
+    "panelAttach": "Panel attached to bar",
+    "panelCenter": "Centered panel"
   }
 }

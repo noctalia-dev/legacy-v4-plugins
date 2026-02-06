@@ -30,6 +30,10 @@
     "hourLineOpacity": "Şeffafiya xêta saetê",
     "hourLineOpacity_description": "Şeffafiya xêtên saetan saz bikin.",
     "dayLineOpacity": "Şeffafiya xêta rojê", 
-    "dayLineOpacity_description": "Şeffafiya xêtên jêderê rojê saz bikin."
+    "dayLineOpacity_description": "Şeffafiya xêtên jêderê rojê saz bikin.",
+    "panelMode": "Rewşa panelê",
+    "panelMode_description": "Hilbijêre şêweyê (dibe ku ji nû ve vekirinê hewce bike).",
+    "panelAttach": "Panel bi bar ve girêdayî ye",
+    "panelCenter": "Panela navendîkirî"
   }
 }

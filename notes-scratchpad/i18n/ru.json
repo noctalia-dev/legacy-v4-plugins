@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Внешний вид текста",
-      "font_size": "Размер шрифта"
+      "font_size": "Размер шрифта",
+      "monospace": "Моноширинный шрифт",
+      "monospace_description": "Использовать моноширинный шрифт для текстовой области"
     },
     "keyboard_shortcut": {
       "title": "Горячая клавиша",

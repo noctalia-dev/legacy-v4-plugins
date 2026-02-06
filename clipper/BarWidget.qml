@@ -1,7 +1,6 @@
 import QtQuick
 import Quickshell
 import qs.Commons
-import qs.Services.Keyboard
 import qs.Services.UI
 import qs.Widgets
 
@@ -10,26 +9,39 @@ NIconButton {
 
     property var pluginApi: null
     property ShellScreen screen
+    property string widgetId: ""
+    property string section: ""
 
-    baseSize: (typeof Style !== "undefined" && screen) ? Style.getCapsuleHeightForScreen(screen.name) : 31
-    applyUiScale: false
     icon: "clipboard"
-    tooltipText: "Clipboard History" // TODO: I18n
-    tooltipDirection: BarService.getTooltipDirection()
-    
-    colorBg: (typeof Style !== "undefined") ? Style.capsuleColor : "#262130"
-    colorFg: (typeof Color !== "undefined" && Color.mOnSurface) ? Color.mOnSurface : "#e9e4f0"
+    tooltipText: pluginApi?.tr("bar.tooltip") || "Clipboard History"
+    tooltipDirection: BarService.getTooltipDirection(screen?.name)
+    baseSize: Style.getCapsuleHeightForScreen(screen?.name)
+    applyUiScale: false
+    customRadius: Style.radiusL
+
+    colorBg: Style.capsuleColor
+    colorFg: Color.mOnSurface
+    colorBgHover: Color.mHover
+    colorFgHover: Color.mOnHover
     colorBorder: "transparent"
     colorBorderHover: "transparent"
+
+    border.color: Style.capsuleBorderColor
+    border.width: Style.capsuleBorderWidth
 
     NPopupContextMenu {
         id: contextMenu
 
         model: [
             {
-                "label": I18n.tr("context-menu.clear-history"),
-                "action": "clear-history",
-                "icon": "trash"
+                "label": pluginApi?.tr("context.toggle") || "Toggle Clipper",
+                "action": "toggle-clipper",
+                "icon": "clipboard"
+            },
+            {
+                "label": pluginApi?.tr("context.settings") || "Open Settings",
+                "action": "open-settings",
+                "icon": "settings"
             },
         ]
 
@@ -37,14 +49,20 @@ NIconButton {
             contextMenu.close();
             PanelService.closeContextMenu(screen);
 
-            if (action === "clear-history") {
-                ClipboardService.wipeAll();
+            if (action === "toggle-clipper") {
+                if (pluginApi?.togglePanel) {
+                    pluginApi.togglePanel(screen);
+                }
+            } else if (action === "open-settings") {
+                if (pluginApi?.manifest) {
+                    BarService.openPluginSettings(screen, pluginApi.manifest);
+                }
             }
         }
     }
 
     onClicked: {
-        if (pluginApi) {
+        if (pluginApi?.openPanel) {
             pluginApi.openPanel(screen);
         }
     }

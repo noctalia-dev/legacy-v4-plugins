@@ -11,47 +11,72 @@ Item {
 
 
   Component.onCompleted: {
-    logInfo("Main.qml Component.onCompleted - will parse once on first load");
     if (pluginApi && !parserStarted) {
-      parserStarted = true;
-      runParser();
+      checkAndParse();
     }
   }
 
   onPluginApiChanged: {
-    logInfo("pluginApi changed");
     if (pluginApi && !parserStarted) {
-      parserStarted = true;
-      runParser();
+      checkAndParse();
     }
   }
 
-  // Logger helper functions
-  function logDebug(msg) {
-    if (typeof Logger !== 'undefined') Logger.d("KeybindCheatsheet", msg);
-    else console.log("[KeybindCheatsheet] " + msg);
+  // Check if compositor changed since last parse, and re-parse if needed
+  function checkAndParse() {
+    var currentCompositor = getCurrentCompositor();
+    var savedCompositor = pluginApi?.pluginSettings?.detectedCompositor || "";
+    var hasData = (pluginApi?.pluginSettings?.cheatsheetData || []).length > 0;
+
+    // Re-parse if:
+    // 1. No data cached yet, OR
+    // 2. Compositor changed since last parse
+    if (!hasData || currentCompositor !== savedCompositor) {
+      parserStarted = true;
+      runParser();
+    } else {
+      parserStarted = true; // Mark as done, using cache
+    }
   }
 
-  function logInfo(msg) {
-    if (typeof Logger !== 'undefined') Logger.i("KeybindCheatsheet", msg);
-    else console.log("[KeybindCheatsheet] " + msg);
+  // Get current compositor name
+  function getCurrentCompositor() {
+    if (CompositorService.isHyprland) return "hyprland";
+    if (CompositorService.isNiri) return "niri";
+    if (CompositorService.isSway) return "sway";
+    if (CompositorService.isLabwc) return "labwc";
+    if (CompositorService.isMango) return "mango";
+    return "unknown";
   }
 
-  function logWarn(msg) {
-    if (typeof Logger !== 'undefined') Logger.w("KeybindCheatsheet", msg);
-    else console.warn("[KeybindCheatsheet] " + msg);
-  }
+  // Get user-friendly message for unsupported compositors
+  function getUnsupportedCompositorMessage(compositor) {
+    var messages = {
+      "sway": {
+        short: pluginApi?.tr("keybind-cheatsheet.error.sway-not-supported") || "Sway is not yet supported",
+        detail: pluginApi?.tr("keybind-cheatsheet.error.sway-detail") || "Sway support may be added in a future update (similar format to Hyprland)"
+      },
+      "labwc": {
+        short: pluginApi?.tr("keybind-cheatsheet.error.labwc-not-supported") || "LabWC is not supported",
+        detail: pluginApi?.tr("keybind-cheatsheet.error.labwc-detail") || "LabWC uses XML config format which is incompatible with this plugin"
+      },
+      "mango": {
+        short: pluginApi?.tr("keybind-cheatsheet.error.mango-not-supported") || "MangoWC is not supported",
+        detail: pluginApi?.tr("keybind-cheatsheet.error.mango-detail") || "MangoWC config format is not compatible with this plugin"
+      },
+      "unknown": {
+        short: pluginApi?.tr("keybind-cheatsheet.error.unknown-compositor") || "Unknown compositor detected",
+        detail: pluginApi?.tr("keybind-cheatsheet.error.unknown-detail") || "This plugin only supports Hyprland and Niri compositors"
+      }
+    };
 
-  function logError(msg) {
-    if (typeof Logger !== 'undefined') Logger.e("KeybindCheatsheet", msg);
-    else console.error("[KeybindCheatsheet] " + msg);
+    return messages[compositor] || messages["unknown"];
   }
 
   property bool parserStarted: false
 
   // Memory leak prevention: cleanup on destruction
   Component.onDestruction: {
-    logInfo("Cleaning up Main.qml resources");
     clearParsingData();
     cleanupProcesses();
   }
@@ -79,16 +104,14 @@ Item {
 
   // Refresh function - accessible from mainInstance
   function refresh() {
-    logInfo("Refresh called - will re-parse");
     if (!pluginApi) {
-      logError("Cannot refresh: pluginApi is null");
       return;
     }
-    
+
     // Reset parserStarted to allow re-parsing
     parserStarted = false;
     isCurrentlyParsing = false;
-    
+
     // Now run parser
     parserStarted = true;
     runParser();
@@ -108,7 +131,6 @@ Item {
 
   function runParser() {
     if (isCurrentlyParsing) {
-      logWarn("Parser already running, ignoring request");
       return;
     }
 
@@ -116,23 +138,23 @@ Item {
     parseDepthCounter = 0;
 
     // Detect compositor using CompositorService
-    if (CompositorService.isHyprland) {
-      logInfo("=== START PARSER for Hyprland ===");
-    } else if (CompositorService.isNiri) {
-      logInfo("=== START PARSER for Niri ===");
-    } else {
-      logError("No supported compositor detected (Hyprland/Niri)");
+    var compositorName = getCurrentCompositor();
+    if (!CompositorService.isHyprland && !CompositorService.isNiri) {
       isCurrentlyParsing = false;
+
+      var unsupportedMsg = getUnsupportedCompositorMessage(compositorName);
       saveToDb([{
-        "title": "Error",
-        "binds": [{ "keys": "ERROR", "desc": "No supported compositor detected (Hyprland/Niri)" }]
+        "title": pluginApi?.tr("keybind-cheatsheet.error.unsupported-compositor") || "Unsupported Compositor",
+        "binds": [
+          { "keys": compositorName.toUpperCase(), "desc": unsupportedMsg.short },
+          { "keys": "INFO", "desc": unsupportedMsg.detail }
+        ]
       }]);
       return;
     }
 
     var homeDir = Quickshell.env("HOME");
     if (!homeDir) {
-      logError("Cannot get $HOME");
       isCurrentlyParsing = false;
       saveToDb([{
         "title": "ERROR",
@@ -156,7 +178,6 @@ Item {
       filePath = filePath.replace(/^~/, homeDir);
     }
 
-    logInfo("Starting with main config: " + filePath);
     filesToParse = [filePath];
 
     if (CompositorService.isHyprland) {
@@ -185,7 +206,6 @@ Item {
   // ========== NIRI RECURSIVE PARSING ==========
   function parseNextNiriFile() {
     if (parseDepthCounter >= maxParseDepth) {
-      logError("Max parse depth reached (" + maxParseDepth + "), stopping recursion");
       isCurrentlyParsing = false;
       clearParsingData();
       return;
@@ -193,7 +213,6 @@ Item {
     parseDepthCounter++;
 
     if (filesToParse.length === 0) {
-      logInfo("All Niri files parsed, converting " + Object.keys(collectedBinds).length + " categories");
       finalizeNiriBinds();
       return;
     }
@@ -214,8 +233,6 @@ Item {
     }
 
     parsedFiles[nextFile] = true;
-    logInfo("Parsing Niri file: " + nextFile);
-
     currentLines = [];
     niriReadProcess.currentFilePath = nextFile;
     niriReadProcess.command = ["cat", nextFile];
@@ -233,8 +250,6 @@ Item {
         if (trimmed.length > 0) {
           if (niriGlobProcess.expandedFiles.length < 100) {
             niriGlobProcess.expandedFiles.push(trimmed);
-          } else {
-            root.logWarn("Max glob expansion limit reached (100 files)");
           }
         }
       }
@@ -261,14 +276,11 @@ Item {
       onRead: data => {
         if (root.currentLines.length < 10000) {
           root.currentLines.push(data);
-        } else {
-          root.logError("Config file too large (>10000 lines)");
         }
       }
     }
 
     onExited: (exitCode, exitStatus) => {
-      logInfo("niriReadProcess exited, code: " + exitCode + ", lines: " + root.currentLines.length);
       if (exitCode === 0 && root.currentLines.length > 0) {
         // First pass: find includes
         for (var i = 0; i < root.currentLines.length; i++) {
@@ -277,7 +289,6 @@ Item {
           if (includeMatch) {
             var includePath = includeMatch[1];
             var resolvedPath = root.resolveRelativePath(currentFilePath, includePath);
-            logInfo("Found include: " + includePath + " -> " + resolvedPath);
             if (!root.parsedFiles[resolvedPath] && root.filesToParse.indexOf(resolvedPath) === -1) {
               root.filesToParse.push(resolvedPath);
             }
@@ -292,20 +303,28 @@ Item {
   }
 
   function parseNiriFileContent(text) {
-    logInfo("parseNiriFileContent called, text length: " + text.length);
     var lines = text.split('\n');
     var inBindsBlock = false;
-    var braceDepth = 0;
+    var bindsBlockDepth = 0;
     var currentCategory = null;
     var bindsFoundInFile = 0;
 
+    // State for multiline bind parsing
+    var currentBindKey = null;
+    var currentBindAttributes = "";
+    var currentBindAction = "";
+    var bindBraceDepth = 0;
+
     var actionCategories = {
       "spawn": "Applications",
+      "spawn-sh": "Applications",
       "focus-column": "Column Navigation",
       "focus-window": "Window Focus",
       "focus-workspace": "Workspace Navigation",
       "move-column": "Move Columns",
       "move-window": "Move Windows",
+      "move-column-to-workspace": "Workspace Management",
+      "move-window-to-workspace": "Workspace Management",
       "consume-window": "Window Management",
       "expel-window": "Window Management",
       "close-window": "Window Management",
@@ -315,6 +334,8 @@ Item {
       "switch-preset-column-width": "Column Width",
       "reset-window-height": "Window Size",
       "screenshot": "Screenshots",
+      "screenshot-window": "Screenshots",
+      "screenshot-screen": "Screenshots",
       "power-off-monitors": "Power",
       "quit": "System",
       "toggle-animation": "Animations"
@@ -323,72 +344,115 @@ Item {
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i].trim();
 
-      // Find binds block
-      if (line.startsWith("binds") && line.includes("{")) {
+      // Skip KDL block comments: /-
+      if (line.startsWith("/-")) continue;
+
+      // Find binds block start
+      if (!inBindsBlock && line.startsWith("binds") && line.includes("{")) {
         inBindsBlock = true;
-        braceDepth = 1;
-        logInfo("Entered binds block");
+        bindsBlockDepth = 1;
         continue;
       }
 
       if (!inBindsBlock) continue;
 
-      // Track brace depth
-      for (var j = 0; j < line.length; j++) {
-        if (line[j] === '{') braceDepth++;
-        else if (line[j] === '}') braceDepth--;
-      }
-
-      if (braceDepth <= 0) {
-        logInfo("Exiting binds block, found " + bindsFoundInFile + " binds");
-        inBindsBlock = false;
-        continue;
-      }
-
-      // Category markers: // #"Category Name" - only these create categories
+      // Category markers - support multiple formats:
+      // //"Category Name"
+      // // "Category Name"
+      // // #"Category Name"
+      // //#"Category Name"
       if (line.startsWith("//")) {
-        var categoryMatch = line.match(/\/\/\s*#"([^"]+)"/);
+        var categoryMatch = line.match(/\/\/\s*#?"([^"]+)"/);
         if (categoryMatch) {
           currentCategory = categoryMatch[1];
         }
         continue;
       }
 
+      // Skip empty lines
       if (line.length === 0) continue;
 
-      // Parse keybind
-      var bindMatch = line.match(/^([A-Za-z0-9_+]+)\s*(.*?)\{\s*([^}]+)\s*\}/);
-      if (bindMatch) {
-        bindsFoundInFile++;
-        var keyCombo = bindMatch[1];
-        var attributes = bindMatch[2].trim();
-        var action = bindMatch[3].trim().replace(/;$/, '');
+      // Track braces for binds block boundary
+      var openBraces = (line.match(/\{/g) || []).length;
+      var closeBraces = (line.match(/\}/g) || []).length;
 
-        var hotkeyTitle = null;
-        var titleMatch = attributes.match(/hotkey-overlay-title="([^"]+)"/);
-        if (titleMatch) hotkeyTitle = titleMatch[1];
+      // If we're not currently parsing a multiline bind
+      if (currentBindKey === null) {
+        // Try to match a keybind start: Mod+Key or Mod+Key attributes { or Mod+Key { action; }
+        var bindStartMatch = line.match(/^([A-Za-z0-9_+]+)\s*((?:[a-z\-]+="[^"]*"\s*)*)\{(.*)$/);
 
-        var formattedKeys = formatNiriKeyCombo(keyCombo);
-        var category = currentCategory || getNiriCategory(action, actionCategories);
-        var description = hotkeyTitle || formatNiriAction(action);
+        if (bindStartMatch) {
+          currentBindKey = bindStartMatch[1];
+          currentBindAttributes = bindStartMatch[2].trim();
+          var restOfLine = bindStartMatch[3];
 
-        if (!collectedBinds[category]) {
-          collectedBinds[category] = [];
+          // Check if the bind is complete on this line (single-line bind)
+          if (restOfLine.includes("}")) {
+            // Single-line bind: Mod+H { focus-column-left; }
+            currentBindAction = restOfLine.replace(/\}\s*$/, "").trim();
+            finalizeBind();
+          } else {
+            // Multiline bind starts here
+            currentBindAction = restOfLine.trim();
+            bindBraceDepth = 1;
+          }
+        } else {
+          // Not a bind start, track braces for binds block
+          bindsBlockDepth += openBraces - closeBraces;
+          if (bindsBlockDepth <= 0) {
+            inBindsBlock = false;
+          }
         }
-        collectedBinds[category].push({
-          "keys": formattedKeys,
-          "desc": description
-        });
+      } else {
+        // We're in a multiline bind, accumulate action content
+        bindBraceDepth += openBraces - closeBraces;
+
+        if (bindBraceDepth <= 0) {
+          // Bind is complete
+          currentBindAction += " " + line.replace(/\}\s*$/, "").trim();
+          finalizeBind();
+        } else {
+          // Still in multiline bind
+          currentBindAction += " " + line.trim();
+        }
       }
     }
-    logInfo("File parsing done, bindsFoundInFile: " + bindsFoundInFile);
+
+    function finalizeBind() {
+      if (!currentBindKey) return;
+
+      bindsFoundInFile++;
+      var action = currentBindAction.trim().replace(/;$/, "").trim();
+
+      var hotkeyTitle = null;
+      var titleMatch = currentBindAttributes.match(/hotkey-overlay-title="([^"]+)"/);
+      if (titleMatch) hotkeyTitle = titleMatch[1];
+
+      var formattedKeys = formatNiriKeyCombo(currentBindKey);
+      var category = currentCategory || getNiriCategory(action, actionCategories);
+      var description = hotkeyTitle || formatNiriAction(action);
+
+      if (!collectedBinds[category]) {
+        collectedBinds[category] = [];
+      }
+      collectedBinds[category].push({
+        "keys": formattedKeys,
+        "desc": description
+      });
+
+      // Reset state
+      currentBindKey = null;
+      currentBindAttributes = "";
+      currentBindAction = "";
+      bindBraceDepth = 0;
+    }
   }
 
   function finalizeNiriBinds() {
     var categoryOrder = [
       "Applications", "Window Management", "Column Navigation",
-      "Window Focus", "Workspace Navigation", "Move Columns",
-      "Move Windows", "Column Management", "Column Width",
+      "Window Focus", "Workspace Navigation", "Workspace Management",
+      "Move Columns", "Move Windows", "Column Management", "Column Width",
       "Window Size", "Screenshots", "Power", "System", "Animations"
     ];
 
@@ -407,7 +471,6 @@ Item {
       }
     }
 
-    logInfo("Found " + categories.length + " categories total");
     saveToDb(categories);
     isCurrentlyParsing = false;
     clearParsingData();
@@ -416,7 +479,6 @@ Item {
   // ========== HYPRLAND RECURSIVE PARSING ==========
   function parseNextHyprlandFile() {
     if (parseDepthCounter >= maxParseDepth) {
-      logError("Max parse depth reached (" + maxParseDepth + "), stopping recursion");
       isCurrentlyParsing = false;
       clearParsingData();
       return;
@@ -424,11 +486,9 @@ Item {
     parseDepthCounter++;
 
     if (filesToParse.length === 0) {
-      logInfo("All Hyprland files parsed, total lines: " + accumulatedLines.length);
       if (accumulatedLines.length > 0) {
         parseHyprlandConfig(accumulatedLines.join("\n"));
       } else {
-        logWarn("No content found in config files");
         isCurrentlyParsing = false;
       }
       return;
@@ -450,8 +510,6 @@ Item {
     }
 
     parsedFiles[nextFile] = true;
-    logInfo("Parsing Hyprland file: " + nextFile);
-
     currentLines = [];
     hyprReadProcess.currentFilePath = nextFile;
     hyprReadProcess.command = ["cat", nextFile];
@@ -469,8 +527,6 @@ Item {
         if (trimmed.length > 0) {
           if (hyprGlobProcess.expandedFiles.length < 100) {
             hyprGlobProcess.expandedFiles.push(trimmed);
-          } else {
-            root.logWarn("Max glob expansion limit reached (100 files)");
           }
         }
       }
@@ -497,8 +553,6 @@ Item {
       onRead: data => {
         if (root.currentLines.length < 10000) {
           root.currentLines.push(data);
-        } else {
-          root.logError("Config file too large (>10000 lines)");
         }
       }
     }
@@ -516,7 +570,6 @@ Item {
             var commentIdx = sourcePath.indexOf('#');
             if (commentIdx > 0) sourcePath = sourcePath.substring(0, commentIdx).trim();
             var resolvedPath = root.resolveRelativePath(currentFilePath, sourcePath);
-            logInfo("Found source: " + sourcePath + " -> " + resolvedPath);
             if (!root.parsedFiles[resolvedPath] && root.filesToParse.indexOf(resolvedPath) === -1) {
               root.filesToParse.push(resolvedPath);
             }
@@ -530,7 +583,6 @@ Item {
 
   // ========== HYPRLAND PARSER ==========
   function parseHyprlandConfig(text) {
-    logDebug("Parsing Hyprland config");
     var lines = text.split('\n');
     var categories = [];
     var currentCategory = null;
@@ -548,7 +600,6 @@ Item {
           categories.push(currentCategory);
         }
         var title = line.replace(/#\s*\d+\.\s*/, "").trim();
-        logDebug("New category: " + title);
         currentCategory = { "title": title, "binds": [] };
       }
       // Keybind: bind = $mod, T, exec, cmd #"description"
@@ -584,7 +635,6 @@ Item {
               "keys": fullKey,
               "desc": description
             });
-            logDebug("Added bind: " + fullKey);
           }
         }
       }
@@ -594,7 +644,6 @@ Item {
       categories.push(currentCategory);
     }
 
-    logDebug("Found " + categories.length + " categories");
     saveToDb(categories);
     isCurrentlyParsing = false;
     clearParsingData();
@@ -602,7 +651,6 @@ Item {
 
   // ========== NIRI PARSER ==========
   function parseNiriConfig(text) {
-    logDebug("Parsing Niri KDL config");
     var lines = text.split('\n');
     var inBindsBlock = false;
     var braceDepth = 0;
@@ -683,8 +731,6 @@ Item {
           "keys": formattedKeys,
           "desc": formatNiriAction(action)
         });
-
-        logDebug("Added bind: " + formattedKeys + " -> " + action);
       }
     }
 
@@ -717,7 +763,6 @@ Item {
       }
     }
 
-    logDebug("Found " + categories.length + " categories");
     saveToDb(categories);
   }
 
@@ -780,39 +825,47 @@ Item {
   }
 
   function formatNiriKeyCombo(combo) {
-    // First handle modifiers
-    var formatted = combo
-      .replace(/Mod\+/g, "Super + ")
-      .replace(/Super\+/g, "Super + ")
-      .replace(/Ctrl\+/g, "Ctrl + ")
-      .replace(/Control\+/g, "Ctrl + ")
-      .replace(/Alt\+/g, "Alt + ")
-      .replace(/Shift\+/g, "Shift + ")
-      .replace(/Win\+/g, "Super + ")
-      .replace(/\+\s*$/, "")
-      .replace(/\s+/g, " ")
-      .trim();
+    // Split by + and process each part
+    var parts = combo.split("+");
+    var formattedParts = [];
 
-    // Then format special keys (XF86, Print, etc.)
-    var parts = formatted.split(" + ");
-    var formattedParts = parts.map(function(part) {
-      var trimmed = part.trim();
-      if (["Super", "Ctrl", "Alt", "Shift"].indexOf(trimmed) === -1) {
-        return formatSpecialKey(trimmed);
+    for (var i = 0; i < parts.length; i++) {
+      var part = parts[i].trim();
+      if (part.length === 0) continue;
+
+      // Map modifier names
+      if (part === "Mod" || part === "Super" || part === "Win") {
+        formattedParts.push("Super");
+      } else if (part === "Ctrl" || part === "Control") {
+        formattedParts.push("Ctrl");
+      } else if (part === "Alt") {
+        formattedParts.push("Alt");
+      } else if (part === "Shift") {
+        formattedParts.push("Shift");
+      } else {
+        // It's a key - format special keys
+        formattedParts.push(formatSpecialKey(part));
       }
-      return trimmed;
-    });
+    }
+
     return formattedParts.join(" + ");
   }
 
   function formatNiriAction(action) {
+    // Handle spawn and spawn-sh commands
     if (action.startsWith("spawn")) {
-      var spawnMatch = action.match(/spawn\s+"([^"]+)"/);
+      var spawnMatch = action.match(/spawn(?:-sh)?\s+"([^"]+)"/);
       if (spawnMatch) {
         return "Run: " + spawnMatch[1];
       }
+      // Handle spawn with multiple arguments: spawn "cmd" "arg1" "arg2"
+      var multiArgMatch = action.match(/spawn(?:-sh)?\s+"([^"]+)"/);
+      if (multiArgMatch) {
+        return "Run: " + multiArgMatch[1];
+      }
       return action;
     }
+    // Format action name: focus-column-left -> Focus Column Left
     return action.replace(/-/g, ' ').replace(/\b\w/g, function(l) { return l.toUpperCase(); });
   }
 
@@ -827,11 +880,10 @@ Item {
 
   function saveToDb(data) {
     if (pluginApi) {
+      var compositor = getCurrentCompositor();
       pluginApi.pluginSettings.cheatsheetData = data;
+      pluginApi.pluginSettings.detectedCompositor = compositor;
       pluginApi.saveSettings();
-      logInfo("Saved " + data.length + " categories to settings");
-    } else {
-      logError("pluginApi is null!");
     }
   }
 

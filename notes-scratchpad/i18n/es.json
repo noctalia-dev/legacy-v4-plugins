@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Apariencia del texto",
-      "font_size": "Tamaño de fuente"
+      "font_size": "Tamaño de fuente",
+      "monospace": "Fuente monoespaciada",
+      "monospace_description": "Usar una fuente monoespaciada para el área de texto"
     },
     "keyboard_shortcut": {
       "title": "Atajo de teclado",

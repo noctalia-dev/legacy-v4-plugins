@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Metin görünümü",
-      "font_size": "Yazı boyutu"
+      "font_size": "Yazı boyutu",
+      "monospace": "Eşit genişlikli yazı tipi",
+      "monospace_description": "Metin alanı için eşit genişlikli yazı tipi kullan"
     },
     "keyboard_shortcut": {
       "title": "Klavye kısayolu",

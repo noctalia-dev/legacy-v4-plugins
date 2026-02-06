@@ -1,0 +1,12 @@
+{
+    "settings": {
+        "launcher": {
+            "title": "启动器",
+            "description": "用于打开图书文件的程序"
+        },
+        "forcegrid": {
+            "label": "强制网格视图",
+            "description": "始终使用网格视图显示结果。如果禁用，则使用当前启动器配置"
+        }
+    }
+}

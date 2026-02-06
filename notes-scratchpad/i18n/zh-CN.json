@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "文本外观",
-      "font_size": "字体大小"
+      "font_size": "字体大小",
+      "monospace": "等宽字体",
+      "monospace_description": "在文本区域使用等宽字体"
     },
     "keyboard_shortcut": {
       "title": "键盘快捷键",

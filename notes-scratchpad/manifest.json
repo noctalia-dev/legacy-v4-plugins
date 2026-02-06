@@ -1,7 +1,7 @@
 {
   "id": "notes-scratchpad",
   "name": "Notes Scratchpad",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "minNoctaliaVersion": "3.7.1",
   "author": "apt-get",
   "license": "MIT",

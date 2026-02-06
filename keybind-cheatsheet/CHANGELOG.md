@@ -1,5 +1,54 @@
 # Changelog
 
+## [3.1.1] - 2026-02-03
+
+### 🚀 Smart Caching
+
+**Compositor Change Detection**
+- Plugin now detects when compositor changes (e.g., switching from Hyprland to Niri)
+- Automatically re-parses config only when compositor differs from cached data
+- Instant panel opening when using same compositor (uses cache)
+- Saves detected compositor in settings for comparison
+
+### 🐛 Bug Fixes
+
+**Improved Niri Parser**
+- Fixed multiline bind parsing - handles binds that span multiple lines
+- Added `spawn-sh` action support for shell command spawning
+- Added `move-column-to-workspace` and `move-window-to-workspace` action categories
+- Better handling of complex Niri config structures
+
+**Better Error Messages**
+- User-friendly messages for unsupported compositors (Sway, LabWC, MangoWC)
+- Each compositor shows specific explanation why it's not supported
+- All error messages are translatable via i18n
+
+### 📝 Documentation
+
+**README Updates**
+- Fixed IPC command syntax in examples
+- Updated keybind format examples to use `$mainMod` instead of `$mod`
+- Corrected Niri spawn command format
+
+### 🌐 Translations
+
+**New Translation Keys**
+- `error.unsupported-compositor` - header for unsupported compositor
+- `error.sway-not-supported` / `error.sway-detail` - Sway messages
+- `error.labwc-not-supported` / `error.labwc-detail` - LabWC messages
+- `error.mango-not-supported` / `error.mango-detail` - MangoWC messages
+- `error.unknown-compositor` / `error.unknown-detail` - fallback messages
+
+### 📊 Changes Summary
+
+| File | Changes |
+|------|---------|
+| Main.qml | Added `checkAndParse()`, `getCurrentCompositor()`, `getUnsupportedCompositorMessage()`, improved Niri parser |
+| i18n/en.json | Added error message translations |
+| README.md | Fixed IPC syntax and keybind examples |
+
+---
+
 ## [3.1.0] - 2026-01-30
 
 ### 🔧 Code Quality Improvements

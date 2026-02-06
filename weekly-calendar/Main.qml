@@ -27,6 +27,7 @@ Item {
     property string monthRangeText: formatMonthRangeText(weekDates)
 
     // Settings
+    property string panelModeSetting: pluginApi?.pluginSettings?.panelMode || "attached"
     property string weekStartSetting: pluginApi?.pluginSettings?.weekStart || "1"
     property string timeFormatSetting: pluginApi?.pluginSettings?.timeFormat || "24h"
     property string lineColorTypeSetting: pluginApi?.pluginSettings?.lineColorType || "mOutline"
