@@ -1,34 +1,34 @@
 {
   "bar": {
-    "tooltip": "Historique du presse-papiers"
+    "tooltip": "История буфера обмена"
   },
   "context": {
-    "toggle": "Basculer Clipper",
-    "settings": "Ouvrir les paramètres"
+    "toggle": "Переключить Clipper",
+    "settings": "Открыть настройки"
   },
   "panel": {
-    "title": "Historique du presse-papiers",
-    "pinned-title": "Éléments épinglés",
-    "no-pinned": "Aucun élément épinglé",
-    "settings": "Paramètres",
+    "title": "История буфера обмена",
+    "pinned-title": "Закрепленные элементы",
+    "no-pinned": "Нет закрепленных элементов",
+    "settings": "Настройки",
     "close": "Close",
-    "search-placeholder": "Rechercher...",
-    "filter-all": "Tous",
-    "filter-text": "Texte",
-    "filter-images": "Images",
-    "filter-colors": "Couleurs",
-    "filter-links": "Liens",
-    "filter-code": "Code",
-    "filter-emoji": "Emoji",
-    "filter-files": "Fichiers",
-    "clear-all": "Tout effacer",
-    "no-matches": "Aucun élément correspondant",
-    "empty": "Le presse-papiers est vide"
+    "search-placeholder": "Поиск...",
+    "filter-all": "Все",
+    "filter-text": "Текст",
+    "filter-images": "Изображения",
+    "filter-colors": "Цвета",
+    "filter-links": "Ссылки",
+    "filter-code": "Код",
+    "filter-emoji": "Эмодзи",
+    "filter-files": "Файлы",
+    "clear-all": "Очистить все",
+    "no-matches": "Нет совпадающих элементов",
+    "empty": "Буфер обмена пуст"
   },
   "card": {
-    "add-todo": "Ajouter aux tâches",
-    "pin": "Épingler",
-    "delete": "Supprimer"
+    "add-todo": "Добавить в задачи",
+    "pin": "Закрепить",
+    "delete": "Удалить"
   },
   "notecards": {
     "empty-state": "No notes yet",
@@ -75,10 +75,10 @@
   "settings": {
     "tab-general": "General",
     "tab-appearance": "Appearance",
-    "integrations": "Intégrations",
-    "todo-integration": "Intégration du plugin ToDo",
-    "todo-description": "Ajouter des éléments du presse-papiers directement à votre liste de tâches",
-    "todo-disabled": "Le plugin ToDo n'est pas installé ou est désactivé",
+    "integrations": "Интеграции",
+    "todo-integration": "Интеграция с плагином ToDo",
+    "todo-description": "Добавлять элементы буфера обмена прямо в список задач",
+    "todo-disabled": "Плагин ToDo не установлен или отключен",
     "features": "Features",
     "pincards-enabled": "Enable Pin Cards",
     "pincards-desc": "Show pinned items panel and allow pinning clipboard items",
@@ -90,17 +90,17 @@
     "clear-all-notes": "Clear All Notes",
     "show-close-button": "Show Close Button",
     "show-close-button-desc": "Display an X button at the top-right corner to close the panel",
-    "appearance": "Apparence des cartes",
-    "card-type": "Type de carte",
-    "card-type-desc": "Sélectionner le type de carte à personnaliser",
-    "preview": "Aperçu",
-    "sample-content": "Aperçu du contenu...",
-    "bg-color": "Couleur d'arrière-plan",
-    "bg-color-desc": "Couleur d'arrière-plan de la carte",
-    "separator-color": "Couleur du séparateur",
-    "separator-color-desc": "Ligne entre l'en-tête et le contenu",
-    "fg-color": "Couleur de premier plan",
-    "fg-color-desc": "Couleur du titre, des icônes et du texte",
-    "reset-defaults": "Réinitialiser les valeurs par défaut"
+    "appearance": "Внешний вид карточек",
+    "card-type": "Тип карточки",
+    "card-type-desc": "Выберите тип карточки для настройки",
+    "preview": "Предпросмотр",
+    "sample-content": "Предпросмотр образца содержимого...",
+    "bg-color": "Цвет фона",
+    "bg-color-desc": "Цвет фона карточки",
+    "separator-color": "Цвет разделителя",
+    "separator-color-desc": "Линия между заголовком и содержимым",
+    "fg-color": "Цвет переднего плана",
+    "fg-color-desc": "Цвет заголовка, значков и текстового содержимого",
+    "reset-defaults": "Сбросить к значениям по умолчанию"
   }
 }

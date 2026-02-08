@@ -1,34 +1,34 @@
 {
   "bar": {
-    "tooltip": "Historique du presse-papiers"
+    "tooltip": "Vágólap előzmények"
   },
   "context": {
-    "toggle": "Basculer Clipper",
-    "settings": "Ouvrir les paramètres"
+    "toggle": "Clipper váltása",
+    "settings": "Beállítások megnyitása"
   },
   "panel": {
-    "title": "Historique du presse-papiers",
-    "pinned-title": "Éléments épinglés",
-    "no-pinned": "Aucun élément épinglé",
-    "settings": "Paramètres",
+    "title": "Vágólap előzmények",
+    "pinned-title": "Rögzített elemek",
+    "no-pinned": "Nincs rögzített elem",
+    "settings": "Beállítások",
     "close": "Close",
-    "search-placeholder": "Rechercher...",
-    "filter-all": "Tous",
-    "filter-text": "Texte",
-    "filter-images": "Images",
-    "filter-colors": "Couleurs",
-    "filter-links": "Liens",
-    "filter-code": "Code",
+    "search-placeholder": "Keresés...",
+    "filter-all": "Minden",
+    "filter-text": "Szöveg",
+    "filter-images": "Képek",
+    "filter-colors": "Színek",
+    "filter-links": "Hivatkozások",
+    "filter-code": "Kód",
     "filter-emoji": "Emoji",
-    "filter-files": "Fichiers",
-    "clear-all": "Tout effacer",
-    "no-matches": "Aucun élément correspondant",
-    "empty": "Le presse-papiers est vide"
+    "filter-files": "Fájlok",
+    "clear-all": "Összes törlése",
+    "no-matches": "Nincs egyező elem",
+    "empty": "A vágólap üres"
   },
   "card": {
-    "add-todo": "Ajouter aux tâches",
-    "pin": "Épingler",
-    "delete": "Supprimer"
+    "add-todo": "Hozzáadás a feladatokhoz",
+    "pin": "Rögzítés",
+    "delete": "Törlés"
   },
   "notecards": {
     "empty-state": "No notes yet",
@@ -75,10 +75,10 @@
   "settings": {
     "tab-general": "General",
     "tab-appearance": "Appearance",
-    "integrations": "Intégrations",
-    "todo-integration": "Intégration du plugin ToDo",
-    "todo-description": "Ajouter des éléments du presse-papiers directement à votre liste de tâches",
-    "todo-disabled": "Le plugin ToDo n'est pas installé ou est désactivé",
+    "integrations": "Integrációk",
+    "todo-integration": "ToDo beépülő integráció",
+    "todo-description": "Vágólap elemek hozzáadása közvetlenül a feladatlistához",
+    "todo-disabled": "A ToDo beépülő nincs telepítve vagy le van tiltva",
     "features": "Features",
     "pincards-enabled": "Enable Pin Cards",
     "pincards-desc": "Show pinned items panel and allow pinning clipboard items",
@@ -90,17 +90,17 @@
     "clear-all-notes": "Clear All Notes",
     "show-close-button": "Show Close Button",
     "show-close-button-desc": "Display an X button at the top-right corner to close the panel",
-    "appearance": "Apparence des cartes",
-    "card-type": "Type de carte",
-    "card-type-desc": "Sélectionner le type de carte à personnaliser",
-    "preview": "Aperçu",
-    "sample-content": "Aperçu du contenu...",
-    "bg-color": "Couleur d'arrière-plan",
-    "bg-color-desc": "Couleur d'arrière-plan de la carte",
-    "separator-color": "Couleur du séparateur",
-    "separator-color-desc": "Ligne entre l'en-tête et le contenu",
-    "fg-color": "Couleur de premier plan",
-    "fg-color-desc": "Couleur du titre, des icônes et du texte",
-    "reset-defaults": "Réinitialiser les valeurs par défaut"
+    "appearance": "Kártya megjelenése",
+    "card-type": "Kártya típusa",
+    "card-type-desc": "Válassza ki a testreszabandó kártya típust",
+    "preview": "Előnézet",
+    "sample-content": "Minta tartalom előnézete...",
+    "bg-color": "Háttérszín",
+    "bg-color-desc": "Kártya háttérszíne",
+    "separator-color": "Elválasztó színe",
+    "separator-color-desc": "Vonal a fejléc és a tartalom között",
+    "fg-color": "Előtérszín",
+    "fg-color-desc": "Cím, ikonok és szöveges tartalom színe",
+    "reset-defaults": "Alapértelmezések visszaállítása"
   }
 }

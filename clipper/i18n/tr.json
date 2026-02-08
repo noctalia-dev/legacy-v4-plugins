@@ -1,34 +1,34 @@
 {
   "bar": {
-    "tooltip": "Historique du presse-papiers"
+    "tooltip": "Pano geçmişi"
   },
   "context": {
-    "toggle": "Basculer Clipper",
-    "settings": "Ouvrir les paramètres"
+    "toggle": "Clipper'ı değiştir",
+    "settings": "Ayarları aç"
   },
   "panel": {
-    "title": "Historique du presse-papiers",
-    "pinned-title": "Éléments épinglés",
-    "no-pinned": "Aucun élément épinglé",
-    "settings": "Paramètres",
+    "title": "Pano geçmişi",
+    "pinned-title": "Sabitlenmiş öğeler",
+    "no-pinned": "Sabitlenmiş öğe yok",
+    "settings": "Ayarlar",
     "close": "Close",
-    "search-placeholder": "Rechercher...",
-    "filter-all": "Tous",
-    "filter-text": "Texte",
-    "filter-images": "Images",
-    "filter-colors": "Couleurs",
-    "filter-links": "Liens",
-    "filter-code": "Code",
+    "search-placeholder": "Ara...",
+    "filter-all": "Tümü",
+    "filter-text": "Metin",
+    "filter-images": "Resimler",
+    "filter-colors": "Renkler",
+    "filter-links": "Bağlantılar",
+    "filter-code": "Kod",
     "filter-emoji": "Emoji",
-    "filter-files": "Fichiers",
-    "clear-all": "Tout effacer",
-    "no-matches": "Aucun élément correspondant",
-    "empty": "Le presse-papiers est vide"
+    "filter-files": "Dosyalar",
+    "clear-all": "Tümünü temizle",
+    "no-matches": "Eşleşen öğe yok",
+    "empty": "Pano boş"
   },
   "card": {
-    "add-todo": "Ajouter aux tâches",
-    "pin": "Épingler",
-    "delete": "Supprimer"
+    "add-todo": "Yapılacaklara ekle",
+    "pin": "Sabitle",
+    "delete": "Sil"
   },
   "notecards": {
     "empty-state": "No notes yet",
@@ -75,10 +75,10 @@
   "settings": {
     "tab-general": "General",
     "tab-appearance": "Appearance",
-    "integrations": "Intégrations",
-    "todo-integration": "Intégration du plugin ToDo",
-    "todo-description": "Ajouter des éléments du presse-papiers directement à votre liste de tâches",
-    "todo-disabled": "Le plugin ToDo n'est pas installé ou est désactivé",
+    "integrations": "Entegrasyonlar",
+    "todo-integration": "ToDo eklentisi entegrasyonu",
+    "todo-description": "Pano öğelerini doğrudan yapılacaklar listenize ekleyin",
+    "todo-disabled": "ToDo eklentisi yüklü değil veya devre dışı",
     "features": "Features",
     "pincards-enabled": "Enable Pin Cards",
     "pincards-desc": "Show pinned items panel and allow pinning clipboard items",
@@ -90,17 +90,17 @@
     "clear-all-notes": "Clear All Notes",
     "show-close-button": "Show Close Button",
     "show-close-button-desc": "Display an X button at the top-right corner to close the panel",
-    "appearance": "Apparence des cartes",
-    "card-type": "Type de carte",
-    "card-type-desc": "Sélectionner le type de carte à personnaliser",
-    "preview": "Aperçu",
-    "sample-content": "Aperçu du contenu...",
-    "bg-color": "Couleur d'arrière-plan",
-    "bg-color-desc": "Couleur d'arrière-plan de la carte",
-    "separator-color": "Couleur du séparateur",
-    "separator-color-desc": "Ligne entre l'en-tête et le contenu",
-    "fg-color": "Couleur de premier plan",
-    "fg-color-desc": "Couleur du titre, des icônes et du texte",
-    "reset-defaults": "Réinitialiser les valeurs par défaut"
+    "appearance": "Kart görünümü",
+    "card-type": "Kart türü",
+    "card-type-desc": "Özelleştirilecek kart türünü seçin",
+    "preview": "Önizleme",
+    "sample-content": "Örnek içerik önizlemesi...",
+    "bg-color": "Arka plan rengi",
+    "bg-color-desc": "Kart arka plan rengi",
+    "separator-color": "Ayırıcı rengi",
+    "separator-color-desc": "Başlık ve içerik arasındaki çizgi",
+    "fg-color": "Ön plan rengi",
+    "fg-color-desc": "Başlık, simgeler ve metin içeriği rengi",
+    "reset-defaults": "Varsayılanlara sıfırla"
   }
 }

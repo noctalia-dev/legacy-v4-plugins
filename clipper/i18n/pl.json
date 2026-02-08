@@ -1,34 +1,34 @@
 {
   "bar": {
-    "tooltip": "Historique du presse-papiers"
+    "tooltip": "Historia schowka"
   },
   "context": {
-    "toggle": "Basculer Clipper",
-    "settings": "Ouvrir les paramètres"
+    "toggle": "Przełącz Clipper",
+    "settings": "Otwórz ustawienia"
   },
   "panel": {
-    "title": "Historique du presse-papiers",
-    "pinned-title": "Éléments épinglés",
-    "no-pinned": "Aucun élément épinglé",
-    "settings": "Paramètres",
+    "title": "Historia schowka",
+    "pinned-title": "Przypięte elementy",
+    "no-pinned": "Brak przypiętych elementów",
+    "settings": "Ustawienia",
     "close": "Close",
-    "search-placeholder": "Rechercher...",
-    "filter-all": "Tous",
-    "filter-text": "Texte",
-    "filter-images": "Images",
-    "filter-colors": "Couleurs",
-    "filter-links": "Liens",
-    "filter-code": "Code",
+    "search-placeholder": "Szukaj...",
+    "filter-all": "Wszystkie",
+    "filter-text": "Tekst",
+    "filter-images": "Obrazy",
+    "filter-colors": "Kolory",
+    "filter-links": "Linki",
+    "filter-code": "Kod",
     "filter-emoji": "Emoji",
-    "filter-files": "Fichiers",
-    "clear-all": "Tout effacer",
-    "no-matches": "Aucun élément correspondant",
-    "empty": "Le presse-papiers est vide"
+    "filter-files": "Pliki",
+    "clear-all": "Wyczyść wszystko",
+    "no-matches": "Brak pasujących elementów",
+    "empty": "Schowek jest pusty"
   },
   "card": {
-    "add-todo": "Ajouter aux tâches",
-    "pin": "Épingler",
-    "delete": "Supprimer"
+    "add-todo": "Dodaj do zadań",
+    "pin": "Przypnij",
+    "delete": "Usuń"
   },
   "notecards": {
     "empty-state": "No notes yet",
@@ -75,10 +75,10 @@
   "settings": {
     "tab-general": "General",
     "tab-appearance": "Appearance",
-    "integrations": "Intégrations",
-    "todo-integration": "Intégration du plugin ToDo",
-    "todo-description": "Ajouter des éléments du presse-papiers directement à votre liste de tâches",
-    "todo-disabled": "Le plugin ToDo n'est pas installé ou est désactivé",
+    "integrations": "Integracje",
+    "todo-integration": "Integracja z ToDo",
+    "todo-description": "Dodawaj elementy ze schowka bezpośrednio do listy zadań",
+    "todo-disabled": "Plugin ToDo nie jest zainstalowany lub jest wyłączony",
     "features": "Features",
     "pincards-enabled": "Enable Pin Cards",
     "pincards-desc": "Show pinned items panel and allow pinning clipboard items",
@@ -90,17 +90,17 @@
     "clear-all-notes": "Clear All Notes",
     "show-close-button": "Show Close Button",
     "show-close-button-desc": "Display an X button at the top-right corner to close the panel",
-    "appearance": "Apparence des cartes",
-    "card-type": "Type de carte",
-    "card-type-desc": "Sélectionner le type de carte à personnaliser",
-    "preview": "Aperçu",
-    "sample-content": "Aperçu du contenu...",
-    "bg-color": "Couleur d'arrière-plan",
-    "bg-color-desc": "Couleur d'arrière-plan de la carte",
-    "separator-color": "Couleur du séparateur",
-    "separator-color-desc": "Ligne entre l'en-tête et le contenu",
-    "fg-color": "Couleur de premier plan",
-    "fg-color-desc": "Couleur du titre, des icônes et du texte",
-    "reset-defaults": "Réinitialiser les valeurs par défaut"
+    "appearance": "Wygląd kart",
+    "card-type": "Typ karty",
+    "card-type-desc": "Wybierz typ karty do personalizacji",
+    "preview": "Podgląd",
+    "sample-content": "Przykładowa treść...",
+    "bg-color": "Kolor tła",
+    "bg-color-desc": "Kolor tła karty",
+    "separator-color": "Kolor separatora",
+    "separator-color-desc": "Linia między nagłówkiem a treścią",
+    "fg-color": "Kolor tekstu",
+    "fg-color-desc": "Kolor tytułu, ikon i treści tekstowej",
+    "reset-defaults": "Przywróć domyślne"
   }
 }

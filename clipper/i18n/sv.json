@@ -1,34 +1,34 @@
 {
   "bar": {
-    "tooltip": "Historique du presse-papiers"
+    "tooltip": "Urklippshistorik"
   },
   "context": {
-    "toggle": "Basculer Clipper",
-    "settings": "Ouvrir les paramètres"
+    "toggle": "Växla Clipper",
+    "settings": "Öppna inställningar"
   },
   "panel": {
-    "title": "Historique du presse-papiers",
-    "pinned-title": "Éléments épinglés",
-    "no-pinned": "Aucun élément épinglé",
-    "settings": "Paramètres",
+    "title": "Urklippshistorik",
+    "pinned-title": "Fästa objekt",
+    "no-pinned": "Inga fästa objekt",
+    "settings": "Inställningar",
     "close": "Close",
-    "search-placeholder": "Rechercher...",
-    "filter-all": "Tous",
-    "filter-text": "Texte",
-    "filter-images": "Images",
-    "filter-colors": "Couleurs",
-    "filter-links": "Liens",
-    "filter-code": "Code",
+    "search-placeholder": "Sök...",
+    "filter-all": "Alla",
+    "filter-text": "Text",
+    "filter-images": "Bilder",
+    "filter-colors": "Färger",
+    "filter-links": "Länkar",
+    "filter-code": "Kod",
     "filter-emoji": "Emoji",
-    "filter-files": "Fichiers",
-    "clear-all": "Tout effacer",
-    "no-matches": "Aucun élément correspondant",
-    "empty": "Le presse-papiers est vide"
+    "filter-files": "Filer",
+    "clear-all": "Rensa allt",
+    "no-matches": "Inga matchande objekt",
+    "empty": "Urklippet är tomt"
   },
   "card": {
-    "add-todo": "Ajouter aux tâches",
-    "pin": "Épingler",
-    "delete": "Supprimer"
+    "add-todo": "Lägg till i uppgifter",
+    "pin": "Fäst",
+    "delete": "Ta bort"
   },
   "notecards": {
     "empty-state": "No notes yet",
@@ -75,10 +75,10 @@
   "settings": {
     "tab-general": "General",
     "tab-appearance": "Appearance",
-    "integrations": "Intégrations",
-    "todo-integration": "Intégration du plugin ToDo",
-    "todo-description": "Ajouter des éléments du presse-papiers directement à votre liste de tâches",
-    "todo-disabled": "Le plugin ToDo n'est pas installé ou est désactivé",
+    "integrations": "Integrationer",
+    "todo-integration": "ToDo-pluginintegration",
+    "todo-description": "Lägg till urklippsobjekt direkt till din uppgiftslista",
+    "todo-disabled": "ToDo-plugin är inte installerat eller inaktiverat",
     "features": "Features",
     "pincards-enabled": "Enable Pin Cards",
     "pincards-desc": "Show pinned items panel and allow pinning clipboard items",
@@ -90,17 +90,17 @@
     "clear-all-notes": "Clear All Notes",
     "show-close-button": "Show Close Button",
     "show-close-button-desc": "Display an X button at the top-right corner to close the panel",
-    "appearance": "Apparence des cartes",
-    "card-type": "Type de carte",
-    "card-type-desc": "Sélectionner le type de carte à personnaliser",
-    "preview": "Aperçu",
-    "sample-content": "Aperçu du contenu...",
-    "bg-color": "Couleur d'arrière-plan",
-    "bg-color-desc": "Couleur d'arrière-plan de la carte",
-    "separator-color": "Couleur du séparateur",
-    "separator-color-desc": "Ligne entre l'en-tête et le contenu",
-    "fg-color": "Couleur de premier plan",
-    "fg-color-desc": "Couleur du titre, des icônes et du texte",
-    "reset-defaults": "Réinitialiser les valeurs par défaut"
+    "appearance": "Kortutseende",
+    "card-type": "Korttyp",
+    "card-type-desc": "Välj korttyp att anpassa",
+    "preview": "Förhandsgranskning",
+    "sample-content": "Förhandsgranskning av exempelinnehåll...",
+    "bg-color": "Bakgrundsfärg",
+    "bg-color-desc": "Kortets bakgrundsfärg",
+    "separator-color": "Separatorfärg",
+    "separator-color-desc": "Linje mellan rubrik och innehåll",
+    "fg-color": "Förgrundsfärg",
+    "fg-color-desc": "Färg på titel, ikoner och textinnehåll",
+    "reset-defaults": "Återställ till standard"
   }
 }

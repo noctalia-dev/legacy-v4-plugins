@@ -1,34 +1,34 @@
 {
   "bar": {
-    "tooltip": "Historique du presse-papiers"
+    "tooltip": "剪贴板历史"
   },
   "context": {
-    "toggle": "Basculer Clipper",
-    "settings": "Ouvrir les paramètres"
+    "toggle": "切换 Clipper",
+    "settings": "打开设置"
   },
   "panel": {
-    "title": "Historique du presse-papiers",
-    "pinned-title": "Éléments épinglés",
-    "no-pinned": "Aucun élément épinglé",
-    "settings": "Paramètres",
+    "title": "剪贴板历史",
+    "pinned-title": "已固定项目",
+    "no-pinned": "无已固定项目",
+    "settings": "设置",
     "close": "Close",
-    "search-placeholder": "Rechercher...",
-    "filter-all": "Tous",
-    "filter-text": "Texte",
-    "filter-images": "Images",
-    "filter-colors": "Couleurs",
-    "filter-links": "Liens",
-    "filter-code": "Code",
-    "filter-emoji": "Emoji",
-    "filter-files": "Fichiers",
-    "clear-all": "Tout effacer",
-    "no-matches": "Aucun élément correspondant",
-    "empty": "Le presse-papiers est vide"
+    "search-placeholder": "搜索...",
+    "filter-all": "全部",
+    "filter-text": "文本",
+    "filter-images": "图片",
+    "filter-colors": "颜色",
+    "filter-links": "链接",
+    "filter-code": "代码",
+    "filter-emoji": "表情符号",
+    "filter-files": "文件",
+    "clear-all": "全部清除",
+    "no-matches": "无匹配项目",
+    "empty": "剪贴板为空"
   },
   "card": {
-    "add-todo": "Ajouter aux tâches",
-    "pin": "Épingler",
-    "delete": "Supprimer"
+    "add-todo": "添加到待办事项",
+    "pin": "固定",
+    "delete": "删除"
   },
   "notecards": {
     "empty-state": "No notes yet",
@@ -75,10 +75,10 @@
   "settings": {
     "tab-general": "General",
     "tab-appearance": "Appearance",
-    "integrations": "Intégrations",
-    "todo-integration": "Intégration du plugin ToDo",
-    "todo-description": "Ajouter des éléments du presse-papiers directement à votre liste de tâches",
-    "todo-disabled": "Le plugin ToDo n'est pas installé ou est désactivé",
+    "integrations": "集成",
+    "todo-integration": "ToDo 插件集成",
+    "todo-description": "将剪贴板项目直接添加到待办事项列表",
+    "todo-disabled": "ToDo 插件未安装或已禁用",
     "features": "Features",
     "pincards-enabled": "Enable Pin Cards",
     "pincards-desc": "Show pinned items panel and allow pinning clipboard items",
@@ -90,17 +90,17 @@
     "clear-all-notes": "Clear All Notes",
     "show-close-button": "Show Close Button",
     "show-close-button-desc": "Display an X button at the top-right corner to close the panel",
-    "appearance": "Apparence des cartes",
-    "card-type": "Type de carte",
-    "card-type-desc": "Sélectionner le type de carte à personnaliser",
-    "preview": "Aperçu",
-    "sample-content": "Aperçu du contenu...",
-    "bg-color": "Couleur d'arrière-plan",
-    "bg-color-desc": "Couleur d'arrière-plan de la carte",
-    "separator-color": "Couleur du séparateur",
-    "separator-color-desc": "Ligne entre l'en-tête et le contenu",
-    "fg-color": "Couleur de premier plan",
-    "fg-color-desc": "Couleur du titre, des icônes et du texte",
-    "reset-defaults": "Réinitialiser les valeurs par défaut"
+    "appearance": "卡片外观",
+    "card-type": "卡片类型",
+    "card-type-desc": "选择要自定义的卡片类型",
+    "preview": "预览",
+    "sample-content": "示例内容预览...",
+    "bg-color": "背景颜色",
+    "bg-color-desc": "卡片背景颜色",
+    "separator-color": "分隔线颜色",
+    "separator-color-desc": "标题和内容之间的线条",
+    "fg-color": "前景颜色",
+    "fg-color-desc": "标题、图标和文本内容颜色",
+    "reset-defaults": "重置为默认值"
   }
 }
