@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Text Appearance",
-      "font_size": "Font Size"
+      "font_size": "Font Size",
+      "monospace": "Monospace Font",
+      "monospace_description": "Use a monospace font for the text area"
     },
     "keyboard_shortcut": {
       "title": "Keyboard Shortcut",

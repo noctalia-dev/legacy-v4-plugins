@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Wygląd tekstu",
-      "font_size": "Rozmiar czcionki"
+      "font_size": "Rozmiar czcionki",
+      "monospace": "Czcionka o stałej szerokości",
+      "monospace_description": "Używaj czcionki o stałej szerokości w obszarze tekstu"
     },
     "keyboard_shortcut": {
       "title": "Skrót klawiszowy",

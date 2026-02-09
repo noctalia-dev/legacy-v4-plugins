@@ -1,0 +1,16 @@
+{
+  "menu": {
+    "play": "Wiedergabe",
+    "pause": "Pausieren",
+    "previous": "Zurück",
+    "next": "Vor"
+  },
+  "settings": {
+    "player-name": "Name des Players",
+    "player-name-desc": "Bezeichnung des MPRIS-Players (z.B. musicfox, spotify, firefox)",
+    "update-interval": "Aktualisierungsintervall",
+    "update-interval-desc": "Aktualisierungsintervall für Liedtexte (in Millisekunden)",
+    "width": "Breite",
+    "width-desc": "Breite des Lyric-Widgets in Pixeln"
+  }
+}

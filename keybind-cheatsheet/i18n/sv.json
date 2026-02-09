@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Tangentbindningar",
+    "error": {
+      "unsupported-compositor": "Compositor stöds inte",
+      "sway-not-supported": "Sway stöds ännu inte",
+      "sway-detail": "Sway-stöd kan läggas till i en framtida uppdatering (liknande format som Hyprland)",
+      "labwc-not-supported": "LabWC stöds inte",
+      "labwc-detail": "LabWC använder XML-konfigurationsformat som är inkompatibelt med detta plugin",
+      "mango-not-supported": "MangoWC stöds inte",
+      "mango-detail": "MangoWC-konfigurationsformatet är inte kompatibelt med detta plugin",
+      "unknown-compositor": "Okänd compositor upptäckt",
+      "unknown-detail": "Detta plugin stöder endast Hyprland- och Niri-compositors"
+    },
     "panel": {
       "loading": "Laddar...",
       "title": "Tangentkarta",

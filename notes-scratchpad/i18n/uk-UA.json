@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Зовнішній вигляд тексту",
-      "font_size": "Розмір шрифту"
+      "font_size": "Розмір шрифту",
+      "monospace": "Моноширинний шрифт",
+      "monospace_description": "Використовувати моноширинний шрифт для текстової області"
     },
     "keyboard_shortcut": {
       "title": "Гаряча клавіша",

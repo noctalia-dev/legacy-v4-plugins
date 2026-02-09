@@ -47,14 +47,36 @@ Item {
   readonly property var geometryPlaceholder: panelContainer
   readonly property string _panelPosition: (pluginApi?.pluginSettings?.panelPosition ?? pluginApi?.manifest?.metadata?.panel?.defaultPosition ?? "right")
   readonly property bool _detached: pluginApi?.pluginSettings?.panelDetached ?? pluginApi?.manifest?.metadata?.panel?.detached ?? true
+  readonly property string _attachmentStyle: pluginApi?.pluginSettings?.attachmentStyle || "connected"
+  readonly property bool _isFloatingAttached: !_detached && _attachmentStyle === "floating"
 
-  // Only allow left, right, or center in detached mode
+  // Standard attach logic: Attach if not detached.
+  // With universal floating mode, we always use SmartPanel's attach logic if not in detached mode.
+  // The specific anchoring (connected vs floating) is handled below.
   readonly property bool allowAttach: !_detached
-  readonly property bool panelAnchorRight: _detached ? _panelPosition === "right" : (!_detached && _panelPosition === "right")
-  readonly property bool panelAnchorLeft: _detached ? _panelPosition === "left" : (!_detached && _panelPosition === "left")
-  readonly property bool panelAnchorHorizontalCenter: _detached ? _panelPosition === "center" : false
-  readonly property bool panelAnchorVerticalCenter: _detached
-  // In detached mode, never anchor top/bottom; in attached mode, allow all
+
+  // Anchor Logic Breakdown:
+  // 1. Detached: Only Left/Center/Right supported. No Top/Bottom anchors.
+  // 2. Attached Connected: Standard anchors on the respective side.
+  // 3. Attached Floating:
+  //    - Left/Right: Anchor to side + Vertical Center (Drawer).
+  //    - Top/Bottom: Anchor to edge + Horizontal Center (Drawer).
+
+  readonly property bool panelAnchorRight: !_detached ? _panelPosition === "right" : (_panelPosition === "right")
+  readonly property bool panelAnchorLeft: !_detached ? _panelPosition === "left" : (_panelPosition === "left")
+
+  // Horizontal Center:
+  // - Detached Center (Standard)
+  // - Attached Floating Top or Bottom (Vertical Drawer)
+  readonly property bool panelAnchorHorizontalCenter: (_detached && _panelPosition === "center") || (_isFloatingAttached && (_panelPosition === "top" || _panelPosition === "bottom"))
+
+  // Vertical Center:
+  // - Detached Left/Right (Standard Detached Side behavior, if defined by shell)
+  // - Attached Floating Left or Right (Side Drawer)
+  readonly property bool panelAnchorVerticalCenter: _detached || (_isFloatingAttached && (_panelPosition === "left" || _panelPosition === "right"))
+
+  // Top/Bottom:
+  // - Only valid in Attached mode
   readonly property bool panelAnchorTop: !_detached && _panelPosition === "top"
   readonly property bool panelAnchorBottom: !_detached && _panelPosition === "bottom"
 
@@ -114,7 +136,7 @@ Item {
     anchors.verticalCenter: (_detached && _panelPosition === "center" && parent) ? parent.verticalCenter : undefined
     // Left/right mode: no anchors, only x/y
     // ...no horizontal offset logic...
-    y: (_detached && (_panelPosition === "left" || _panelPosition === "right")) ? (root.height - contentPreferredHeight) / 2 : undefined
+    y: (_detached && (_panelPosition === "left" || _panelPosition === "right")) ? (root.height - contentPreferredHeight) / 2 : 0
 
     ColumnLayout {
       anchors.fill: parent

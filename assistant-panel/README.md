@@ -11,13 +11,10 @@ https://github.com/user-attachments/assets/0d1fb5eb-0b16-4ff4-a6ed-f78c196f756f
 ## Features
 
 ### AI Chat
-- **Multiple AI Providers**: Support for Google Gemini, OpenAI, OpenRouter, and local Ollama models
+- **Multiple AI Providers**: Support for Google Gemini and any model compatible with OpenAI API endpoints.
 - **Conversation History**: Persistent chat history with configurable length
 - **System Prompts**: Customize AI behavior with system instructions
 - **Temperature Control**: Adjust response creativity
-
-#### Disclaimer
-I haven't tested local and openai endpoints, but they should work since Openrouter uses the Openai API.
 
 ### Translator
 - **Multiple Backends**: Google Translate and DeepL support
@@ -36,15 +33,25 @@ I haven't tested local and openai endpoints, but they should work since Openrout
 
 ### AI Provider Setup
 
-1. Obtain API key from your AI provider
-2. Select the relevant provider in the plugin settings
-3. Enter the API key in the plugin settings
+1. Obtain API key from your AI provider (if using a remote service).
+2. Select the relevant provider in the plugin settings.
 
-#### Ollama (Local)
-1. Install [Ollama](https://ollama.ai)
-2. Start the server: `ollama serve`
-3. Pull a model: `ollama pull llama3.2`
-4. Select "Ollama (Local)" as provider in settings
+#### Google Gemini
+1. Get key from [Google AI Studio](https://aistudio.google.com/app/apikey).
+2. Enter key in settings.
+
+#### OpenAI Compatible (OpenAI, OpenRouter, Ollama, etc.)
+This provider serves as a universal client for any service compatible with the OpenAI Chat API.
+
+**For Remote Services (OpenAI, OpenRouter):**
+1. Uncheck "Local Mode".
+2. Enter your **Base URL** (e.g., `https://api.openai.com/v1/chat/completions` or `https://openrouter.ai/api/v1/chat/completions`).
+3. Enter your **API Key**.
+
+**For Local Services (Ollama, LM Studio):**
+1. Check "Local Mode" (hides API Key input).
+2. Enter your **Base URL** (e.g., `http://localhost:11434/v1/chat/completions`).
+3. Ensure your local server is running.
 
 ### Translator Setup
 
@@ -63,8 +70,7 @@ API keys can also be configured via environment variables. **Environment variabl
 | Variable | Description |
 |----------|-------------|
 | `NOCTALIA_AP_GOOGLE_API_KEY` | Google Gemini API key |
-| `NOCTALIA_AP_OPENAI_API_KEY` | OpenAI API key |
-| `NOCTALIA_AP_OPENROUTER_API_KEY` | OpenRouter API key |
+| `NOCTALIA_AP_OPENAI_COMPATIBLE_API_KEY` | OpenAI Compatible API key |
 | `NOCTALIA_AP_DEEPL_API_KEY` | DeepL translator API key |
 
 Example (add to your shell profile):
@@ -101,7 +107,7 @@ qs -c noctalia-shell ipc call plugin:assistant-panel clear
 qs -c noctalia-shell ipc call plugin:assistant-panel translateText "Hello world" "es"
 
 # Change provider
-qs -c noctalia-shell ipc call plugin:assistant-panel setProvider "openai"
+qs -c noctalia-shell ipc call plugin:assistant-panel setProvider "openai_compatible"
 
 # Change model
 qs -c noctalia-shell ipc call plugin:assistant-panel setModel "gpt-4o-mini"
@@ -116,7 +122,7 @@ Add to your compositor configuration:
 bind = SUPER, A, exec, qs -c noctalia-shell ipc call plugin:assistant-panel toggle
 ```
 
-### Niri (Untested)
+### Niri
 ```kdl
 binds {
     Mod+A { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:assistant-panel" "toggle"; }
@@ -129,9 +135,11 @@ binds {
 
 | Setting | Description | Default |
 |---------|-------------|---------|
-| Provider | AI service (Google Gemini, OpenAI, OpenRouter, Ollama) | Google Gemini |
+| Provider | AI service (Google Gemini, OpenAI Compatible) | Google Gemini |
 | Model | Model name (leave empty for provider default) | Per-provider |
 | API Key | Provider API key (or use env var) | - |
+| Local Mode | Toggle for local inference servers | false |
+| Base URL | API Endpoint URL (Required for OpenAI Compatible) | `https://api.openai.com/v1/chat/completions` |
 | Temperature | Response creativity (0.0 = focused, 2.0 = creative) | 0.7 |
 | System Prompt | Instructions for AI behavior | General assistant |
 | Max History Length | Number of messages to keep | 100 |

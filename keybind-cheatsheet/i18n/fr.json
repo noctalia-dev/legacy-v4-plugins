@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Raccourcis clavier",
+    "error": {
+      "unsupported-compositor": "Compositeur non pris en charge",
+      "sway-not-supported": "Sway n'est pas encore pris en charge",
+      "sway-detail": "La prise en charge de Sway pourrait être ajoutée dans une future mise à jour (format similaire à Hyprland)",
+      "labwc-not-supported": "LabWC n'est pas pris en charge",
+      "labwc-detail": "LabWC utilise un format de configuration XML incompatible avec ce plugin",
+      "mango-not-supported": "MangoWC n'est pas pris en charge",
+      "mango-detail": "Le format de configuration MangoWC n'est pas compatible avec ce plugin",
+      "unknown-compositor": "Compositeur inconnu détecté",
+      "unknown-detail": "Ce plugin ne prend en charge que les compositeurs Hyprland et Niri"
+    },
     "panel": {
       "loading": "Chargement...",
       "title": "Carte des touches",

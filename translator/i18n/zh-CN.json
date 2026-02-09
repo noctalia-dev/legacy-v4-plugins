@@ -104,12 +104,19 @@
     "error": "翻译错误",
     "targetLanguage": "目标语言：{code}",
     "translating": "正在翻译...",
-    "translation": "翻译 ({code})"
+    "translation": "翻译 ({code})",
+    "missingApiKey": "缺少 API 密钥",
+    "invalidApiKey": "API 密钥无效",
+    "pressEnter": "按回车键翻译"
   },
   "settings": {
-    "backend": {
-      "description": "选择要使用的翻译服务",
-      "label": "翻译后端"
-    }
+    "backend-label": "翻译后端",
+    "backend-description": "选择要使用的翻译服务",
+    "realTime-label": "实时翻译",
+    "realTime-description": "输入时即时翻译（可能导致大量 token 消耗）",
+    "apiKey-label": "API 密钥",
+    "apiKey-placeholder": "在此处输入您的 API 密钥",
+    "showPreview-label": "翻译预览",
+    "showPreview-description": "在预览面板中显示翻译结果"
   }
 }

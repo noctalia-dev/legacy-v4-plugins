@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "شێوازی دەق",
-      "font_size": "قەبارەی فۆنت"
+      "font_size": "قەبارەی فۆنت",
+      "monospace": "فۆنتی مۆنۆسپەیس",
+      "monospace_description": "فۆنتی مۆنۆسپەیس بەکاربهێنە بۆ ناوچەی دەق"
     },
     "keyboard_shortcut": {
       "title": "کورتبڕی تەختەکلیل",

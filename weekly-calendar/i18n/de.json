@@ -30,6 +30,10 @@
     "hourLineOpacity": "Opazität der Stundenlinien",
     "hourLineOpacity_description": "Passe die Deckkraft der Stundenlinien an.",
     "dayLineOpacity": "Opazität der Tageslinien",
-    "dayLineOpacity_description": "Passe die Deckkraft der Trennlinien zwischen Tagen an."
+    "dayLineOpacity_description": "Passe die Deckkraft der Trennlinien zwischen Tagen an.",
+    "panelMode": "Panel-Modus",
+    "panelMode_description": "Wählen Sie das Layout (möglicherweise ist ein Neustart erforderlich)",
+    "panelAttach": "Panel an der Leiste angeheftet",
+    "panelCenter": "Zentriertes Panel"
   }
 }

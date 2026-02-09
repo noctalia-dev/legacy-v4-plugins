@@ -11,6 +11,7 @@ ColumnLayout {
     property string weekStart: "1"
     property string timeFormat: "24h"
     property string lineColorType: "mOutline"
+    property string panelMode: "attached"
     property real hourLineOpacity: 0.5
     property real dayLineOpacity: 1.0
     
@@ -20,6 +21,7 @@ ColumnLayout {
         Logger.i("WeeklyCalendar", "Settings UI loaded")
         
         if (pluginApi?.pluginSettings) {
+            panelMode = pluginApi.pluginSettings.panelMode || "attached"
             weekStart = pluginApi.pluginSettings.weekStart || "1"
             timeFormat = pluginApi.pluginSettings.timeFormat || "24h"
             lineColorType = pluginApi.pluginSettings.lineColorType || "mOutline"
@@ -137,6 +139,24 @@ ColumnLayout {
         }
         
     }
+
+    NDivider {
+    Layout.fillWidth: true
+    Layout.topMargin: Style.marginM
+    Layout.bottomMargin: Style.marginM
+    }
+
+    NComboBox {
+        Layout.fillWidth: true
+        label: pluginApi.tr("settings.panelMode")
+        description: pluginApi.tr("settings.panelMode_description")
+        model: [
+            {"key": "attached", "name": pluginApi.tr("settings.panelAttach")},
+            {"key": "centered", "name": pluginApi.tr("settings.panelCenter")},
+        ]
+        currentKey: root.panelMode
+        onSelected: key => root.panelMode = key
+    }
     
     function saveSettings() {
         if (!pluginApi) {
@@ -147,7 +167,7 @@ ColumnLayout {
         if (!pluginApi.pluginSettings) {
             pluginApi.pluginSettings = {}
         }
-        
+        pluginApi.pluginSettings.panelMode = panelMode
         pluginApi.pluginSettings.weekStart = weekStart
         pluginApi.pluginSettings.timeFormat = timeFormat
         pluginApi.pluginSettings.lineColorType = lineColorType
@@ -157,6 +177,7 @@ ColumnLayout {
         
         Logger.i("WeeklyCalendar", "Settings saved: weekStart=" + weekStart + 
                  ", timeFormat=" + timeFormat + 
+                 ", panelMode=" + panelMode +
                  ", lineColorType=" + lineColorType +
                  ", hourLineOpacity=" + hourLineOpacity +
                  ", dayLineOpacity=" + dayLineOpacity)

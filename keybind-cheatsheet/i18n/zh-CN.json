@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "快捷键",
+    "error": {
+      "unsupported-compositor": "不支持的合成器",
+      "sway-not-supported": "尚不支持 Sway",
+      "sway-detail": "Sway 支持可能会在未来更新中添加（与 Hyprland 格式类似）",
+      "labwc-not-supported": "不支持 LabWC",
+      "labwc-detail": "LabWC 使用与此插件不兼容的 XML 配置格式",
+      "mango-not-supported": "不支持 MangoWC",
+      "mango-detail": "MangoWC 配置格式与此插件不兼容",
+      "unknown-compositor": "检测到未知的合成器",
+      "unknown-detail": "此插件仅支持 Hyprland 和 Niri 合成器"
+    },
     "panel": {
       "loading": "加载中...",
       "title": "按键映射",

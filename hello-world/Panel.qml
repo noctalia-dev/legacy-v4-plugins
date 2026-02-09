@@ -93,7 +93,7 @@ Item {
           NButton {
             Layout.alignment: Qt.AlignHCenter
             Layout.topMargin: Style.marginL
-            text: "Open Plugin Settings"
+            text: pluginApi?.tr("panel.open-settings") || "Open Plugin Settings"
             icon: "settings"
 
             onClicked: {

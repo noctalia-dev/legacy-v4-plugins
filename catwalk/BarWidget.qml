@@ -16,7 +16,12 @@ Item {
     property string widgetId: ""
     property string section: ""
 
-    property real baseSize: Style.capsuleHeight
+    // Per-screen bar properties
+    readonly property string screenName: screen?.name ?? ""
+    readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
+    readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
+    readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screenName)
+
     property url currentIconSource
 
     property string tooltipText: {
@@ -44,8 +49,8 @@ Item {
     signal middleClicked
     signal wheel(int angleDelta)
 
-    readonly property real contentWidth: Math.round(baseSize + Style.marginS * 2)
-    readonly property real contentHeight: Math.round(baseSize)
+    readonly property real contentWidth: barIsVertical ? capsuleHeight : Math.round(capsuleHeight + Style.marginXS * 2)
+    readonly property real contentHeight: capsuleHeight
 
     implicitWidth: contentWidth
     implicitHeight: contentHeight
@@ -117,17 +122,17 @@ Item {
         Image {
             id: iconImage
             source: root.currentIconSource
-            anchors.centerIn: parent
-            anchors.horizontalCenterOffset: -3
-            anchors.verticalCenterOffset: -1
+            x: Style.pixelAlignCenter(parent.width, width)
+            y: Style.pixelAlignCenter(parent.height, height)
 
-            width: visualCapsule.width - Style.marginS * 2
+            width: Style.toOdd(visualCapsule.width - Style.marginXS * 2)
             height: width
 
-            // Ensures the SVG renders sharply at any size
+            // Render SVG at exact target size for crisp output
+            sourceSize: Qt.size(width, height)
             fillMode: Image.PreserveAspectFit
             smooth: true
-            mipmap: true
+            mipmap: false
 
             // This enables the "mask" behavior to recolor the icon
             layer.enabled: true

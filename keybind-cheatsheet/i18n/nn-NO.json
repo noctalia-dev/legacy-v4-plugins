@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Tastebindingar",
+    "error": {
+      "unsupported-compositor": "Ikkje støtta compositor",
+      "sway-not-supported": "Sway er ikkje støtta enno",
+      "sway-detail": "Sway-støtte kan leggast til i ei framtidig oppdatering (liknande format som Hyprland)",
+      "labwc-not-supported": "LabWC er ikkje støtta",
+      "labwc-detail": "LabWC brukar XML-konfigurasjonsformat som er inkompatibelt med denne plugin-en",
+      "mango-not-supported": "MangoWC er ikkje støtta",
+      "mango-detail": "MangoWC-konfigurasjonsformatet er ikkje kompatibelt med denne plugin-en",
+      "unknown-compositor": "Ukjend compositor oppdaga",
+      "unknown-detail": "Denne plugin-en støttar berre Hyprland- og Niri-compositorar"
+    },
     "panel": {
       "loading": "Lastar...",
       "title": "Tastatur-kart",

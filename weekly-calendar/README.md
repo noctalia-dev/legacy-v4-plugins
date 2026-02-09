@@ -33,7 +33,11 @@ qs -c noctalia-shell ipc call plugin:weekly-calendar togglePanel
 
 As a result of relying on Noctalia's [CalendarService.qml](https://github.com/noctalia-dev/noctalia-shell/blob/main/Services/Location/CalendarService.qml), this plugin supports any calendar that works with `evolution-data-server`, covering all major calendar services (e.g. NextCloud, Google Calendar, and CalDAV / WebDAV servers).
 
-## Requirements
+The most straightforward ways to start is by either downloading `evolution` or `gnome-calendar` and set calendars through them. 
 
-- **Noctalia Shell**: 4.0.1 or later.
+## Minimum Requirements
+
+- **Noctalia Shell**: 4.2.3 or later.
 - `evolution-data-server` (also needed for Noctalia's month calendar to display events)
+- **Python packages**: EDataServer, ECal, and ICalGLib. (see [calendar-events.py](https://github.com/noctalia-dev/noctalia-shell/blob/main/Scripts/python/src/calendar/calendar-events.py))
+

@@ -7,71 +7,17 @@ import qs.Widgets
 
 DraggableDesktopWidget {
   id: root
-
-  property var pluginApi: null
-  property bool expanded: pluginApi?.pluginSettings?.isExpanded !== undefined ? pluginApi.pluginSettings.isExpanded : (pluginApi?.manifest?.metadata?.defaultSettings?.isExpanded || false)
-  property bool showCompleted: pluginApi?.pluginSettings?.showCompleted !== undefined ? pluginApi.pluginSettings.showCompleted : pluginApi?.manifest?.metadata?.defaultSettings?.showCompleted
-  property ListModel filteredTodosModel: ListModel {}
-
-  function moveTodoToCorrectPosition(todoId) {
-    if (!pluginApi) return;
-
-    var todos = pluginApi.pluginSettings.todos || [];
-    var currentPageId = pluginApi?.pluginSettings?.current_page_id || 0;
-    var todoIndex = -1;
-
-    for (var i = 0; i < todos.length; i++) {
-      if (todos[i].id === todoId) {
-        todoIndex = i;
-        break;
-      }
-    }
-
-    if (todoIndex !== -1) {
-      var movedTodo = todos[todoIndex];
-
-      todos.splice(todoIndex, 1);
-
-      // Only reorder within the same page
-      if (movedTodo.pageId === currentPageId) {
-        if (movedTodo.completed) {
-          // Place completed items at the end of the page
-          var insertIndex = todos.length;
-          for (var j = todos.length - 1; j >= 0; j--) {
-            if (todos[j].pageId === currentPageId && todos[j].completed) {
-              insertIndex = j + 1;
-              break;
-            }
-          }
-          todos.splice(insertIndex, 0, movedTodo);
-        } else {
-          // Place uncompleted items at the beginning of the page
-          var insertIndex = 0;
-          for (; insertIndex < todos.length; insertIndex++) {
-            if (todos[insertIndex].pageId === currentPageId) {
-              if (todos[insertIndex].completed) {
-                break;
-              }
-            }
-          }
-          todos.splice(insertIndex, 0, movedTodo);
-        }
-      } else {
-        // If the todo is not on the current page, just add it back to its original position
-        todos.splice(todoIndex, 0, movedTodo);
-      }
-
-      pluginApi.pluginSettings.todos = todos;
-      pluginApi.saveSettings();
-    }
-  }
-
   showBackground: (pluginApi && pluginApi.pluginSettings ? (pluginApi.pluginSettings.showBackground !== undefined ? pluginApi.pluginSettings.showBackground : pluginApi?.manifest?.metadata?.defaultSettings?.showBackground) : pluginApi?.manifest?.metadata?.defaultSettings?.showBackground)
 
+  property var pluginApi: null
+  property bool expanded: false
+  property bool showCompleted: false
+  property var rawTodos: []
+  property int currentPageId: 0
+  property ListModel filteredTodosModel: ListModel {}
   readonly property color todoBg: showBackground ? Qt.rgba(0, 0, 0, 0.2) : "transparent"
   readonly property color itemBg: showBackground ? Color.mSurface : "transparent"
   readonly property color completedItemBg: showBackground ? Color.mSurfaceVariant : "transparent"
-
   // Scaled dimensions
   readonly property int scaledMarginM: Math.round(Style.marginM * widgetScale)
   readonly property int scaledMarginS: Math.round(Style.marginS * widgetScale)
@@ -93,74 +39,61 @@ DraggableDesktopWidget {
     var tabBarHeight = scaledBaseWidgetSize * 0.8;
     var todosCount = root.filteredTodosModel.count;
     var contentHeight = (todosCount === 0) ? scaledBaseWidgetSize : (scaledBaseWidgetSize * todosCount + scaledMarginS * (todosCount - 1));
-
     var totalHeight = contentHeight + headerHeight + tabBarHeight + scaledMarginS + scaledMarginM * 4;
+
     return Math.min(totalHeight, headerHeight + tabBarHeight + Math.round(400 * widgetScale));
   }
 
-  function getCurrentTodos() {
-    return pluginApi?.pluginSettings?.todos || [];
+  // Define a function to schedule reloading of todos
+  function scheduleReload() {
+    Qt.callLater(loadTodos);
   }
 
-  function getCurrentShowCompleted() {
-    return pluginApi?.pluginSettings?.showCompleted !== undefined ? pluginApi.pluginSettings.showCompleted : pluginApi?.manifest?.metadata?.defaultSettings?.showCompleted || false;
+  // Bind rawTodos, showCompleted, and currentPageId to plugin settings
+  Binding {
+    target: root
+    property: "rawTodos"
+    value: pluginApi?.pluginSettings?.todos || []
   }
 
-  function updateFilteredTodos() {
-    if (!pluginApi)
-      return;
-
-    filteredTodosModel.clear();
-
-    var pluginTodos = getCurrentTodos();
-    var currentShowCompleted = getCurrentShowCompleted();
-    var currentPageId = pluginApi?.pluginSettings?.current_page_id || 0;
-
-    // Filter todos for the current page
-    var pageTodos = pluginTodos.filter(function(todo) {
-      return todo.pageId === currentPageId;
-    });
-
-    var filtered = pageTodos;
-
-    if (!currentShowCompleted) {
-      filtered = pageTodos.filter(function (todo) {
-        return !todo.completed;
-      });
-    }
-
-    for (var i = 0; i < filtered.length; i++) {
-      filteredTodosModel.append({
-                                  id: filtered[i].id,
-                                  text: filtered[i].text,
-                                  completed: filtered[i].completed,
-                                  pageId: filtered[i].pageId || 0
-                                });
-    }
+  Binding {
+    target: root
+    property: "showCompleted"
+    value: pluginApi?.pluginSettings?.showCompleted !== undefined
+         ? pluginApi.pluginSettings.showCompleted
+         : pluginApi?.manifest?.metadata?.defaultSettings?.showCompleted || false
   }
 
-  Timer {
-    id: updateTimer
-    interval: 200
-    running: !!pluginApi
-    repeat: true
-    onTriggered: {
-      updateFilteredTodos();
+  Binding {
+    target: root
+    property: "currentPageId"
+    value: pluginApi?.pluginSettings?.current_page_id || 0
+  }
+
+  Binding {
+    target: root
+    property: "expanded"
+    value: pluginApi?.pluginSettings?.isExpanded !== undefined
+         ? pluginApi.pluginSettings.isExpanded
+         : pluginApi?.manifest?.metadata?.defaultSettings?.isExpanded || false
+  }
+
+  Component.onCompleted: {
+    if (pluginApi) {
+      Logger.i("Todo", "DesktopWidgets initialized");
     }
   }
 
   onPluginApiChanged: {
     if (pluginApi) {
-      root.showCompleted = getCurrentShowCompleted();
-      updateFilteredTodos();
+      loadTodos();
     }
   }
 
-  Component.onCompleted: {
-    if (pluginApi) {
-      updateFilteredTodos();
-    }
-  }
+  // Listen for changes that affect the todo list display
+  onRawTodosChanged: scheduleReload()
+  onCurrentPageIdChanged: scheduleReload()
+  onShowCompletedChanged: scheduleReload()
 
   ColumnLayout {
     anchors.fill: parent
@@ -187,7 +120,7 @@ DraggableDesktopWidget {
         spacing: scaledMarginS
 
         NIcon {
-          icon: "checklist"
+          icon: "clipboard-check"
           pointSize: scaledFontSizeL
         }
 
@@ -229,6 +162,8 @@ DraggableDesktopWidget {
       Layout.fillWidth: true
       visible: expanded
       Layout.topMargin: scaledMarginS
+      Layout.leftMargin: scaledMarginM
+      Layout.rightMargin: scaledMarginM
       distributeEvenly: true
       currentIndex: currentPageIndex
       color: "transparent"
@@ -259,8 +194,7 @@ DraggableDesktopWidget {
                  (isHovered ? Color.mHover : (checked ? Color.mPrimary : Color.mOnPrimary)) :
                  (isHovered ? Color.mHover : (checked ? "transparent" : "transparent"))
 
-          border.width: showBackground ? 0 : (checked ? 1 : 0)
-          border.color: Color.mPrimary
+          border.width: 0
 
           Component.onCompleted: {
             topLeftRadius = Style.iRadiusM;
@@ -269,10 +203,21 @@ DraggableDesktopWidget {
             bottomRightRadius = Style.iRadiusM;
           }
 
+          // custom underline rectangle when checked and no background
+          Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
+            height: 1
+            color: (showBackground || !checked) ? "transparent" : Color.mPrimary
+            visible: !showBackground && checked
+          }
+
           onClicked: {
             pluginApi.pluginSettings.current_page_id = modelData.id;
             pluginApi.saveSettings();
-            updateFilteredTodos();
           }
         }
       }
@@ -345,17 +290,18 @@ DraggableDesktopWidget {
                     // Custom checkbox implementation with TapHandler
                     Item {
                       id: customCheckboxContainer
-                      width: scaledBaseWidgetSize * 0.7  // Slightly larger touch area
+                      width: scaledBaseWidgetSize * 0.7
                       height: scaledBaseWidgetSize * 0.7
-                      anchors.left: parent.left
+                      anchors.left: priorityIndicator.right
                       anchors.verticalCenter: parent.verticalCenter
 
                       Rectangle {
                         id: customCheckbox
                         width: scaledBaseWidgetSize * 0.5
                         height: scaledBaseWidgetSize * 0.5
-                        radius: Style.iRadiusXS
-                        color: showBackground ? (model.completed ? Color.mPrimary : Color.mSurface) : "transparent"
+                        radius: Style.iRadiusXXS
+                        color: Color.mSurface
+                        opacity: showBackground ? 1.0 : 0.5
                         border.color: Color.mOutline
                         border.width: Style.borderS
                         anchors.centerIn: parent
@@ -365,54 +311,48 @@ DraggableDesktopWidget {
                           anchors.centerIn: parent
                           anchors.horizontalCenterOffset: 0
                           icon: "check"
-                          color: showBackground ? Color.mOnPrimary : Color.mPrimary
+                          color: Color.mPrimary
                           pointSize: Math.max(Style.fontSizeXS, width * 0.5)
                         }
 
-                        // MouseArea for the checkbox
                         MouseArea {
                           anchors.fill: parent
                           hoverEnabled: false
 
                           onClicked: {
-                            if (pluginApi) {
-                              var todos = pluginApi.pluginSettings.todos || [];
-
-                              for (var i = 0; i < todos.length; i++) {
-                                if (todos[i].id === model.id) {
-                                  // Preserve all properties including pageId when updating
-                                  todos[i] = {
-                                    id: todos[i].id,
-                                    text: todos[i].text,
-                                    completed: !todos[i].completed,
-                                    createdAt: todos[i].createdAt,
-                                    pageId: todos[i].pageId || 0
-                                  };
-                                  break;
-                                }
-                              }
-
-                              pluginApi.pluginSettings.todos = todos;
-
-                              var completedCount = 0;
-                              for (var j = 0; j < todos.length; j++) {
-                                if (todos[j].completed) {
-                                  completedCount++;
-                                }
-                              }
-                              pluginApi.pluginSettings.completedCount = completedCount;
-
-                              moveTodoToCorrectPosition(model.id);
-
-                              pluginApi.saveSettings();
-                              updateFilteredTodos();
-                            }
+                            toggleTodo(model.id, model.completed);
                           }
                         }
                       }
                     }
 
-                    // Text for the todo item
+                    // Priority indicator - a colored vertical line
+                    Rectangle {
+                      id: priorityIndicator
+                      width: 3
+                      height: parent.height - scaledMarginS
+                      anchors.left: parent.left
+                      anchors.leftMargin: scaledMarginM
+                      anchors.verticalCenter: parent.verticalCenter
+                      radius: 1.5
+
+                      // Determine color based on priority using helper function
+                      color: {
+                        if (pluginApi) {
+                          return getPriorityColor(model.priority || "medium");
+                        } else {
+                          var priority = model.priority || "medium";
+                          if (priority === "high") {
+                            return Color.mError;
+                          } else if (priority === "low") {
+                            return Color.mOnSurfaceVariant;
+                          } else {
+                            return Color.mPrimary;
+                          }
+                        }
+                      }
+                    }
+
                     NText {
                       text: model.text
                       color: model.completed ? Color.mOnSurfaceVariant : Color.mOnSurface
@@ -445,6 +385,171 @@ DraggableDesktopWidget {
             font.pointSize: scaledFontSizeM
             font.weight: Font.Normal
           }
+        }
+      }
+    }
+  }
+
+  // Internal utility functions
+  function updateTodo(todoId, updates) {
+    if (!pluginApi) return false;
+
+    var todos = pluginApi.pluginSettings.todos || [];
+    for (var i = 0; i < todos.length; i++) {
+      if (todos[i].id === todoId) {
+        if (updates.text !== undefined) todos[i].text = updates.text;
+        if (updates.completed !== undefined) todos[i].completed = updates.completed;
+        if (updates.priority !== undefined) todos[i].priority = updates.priority;
+        if (updates.details !== undefined) todos[i].details = updates.details;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Helper function to toggle todo completion status
+  function toggleTodo(todoId, currentCompletedStatus) {
+    if (!pluginApi) {
+      Logger.e("Todo", "pluginApi is null, cannot toggle todo");
+      return false;
+    }
+
+    var success = updateTodo(todoId, {
+      completed: !currentCompletedStatus
+    });
+
+    if (success) {
+      var completedCount = calculateCompletedCount();
+      pluginApi.pluginSettings.completedCount = completedCount;
+
+      moveTodoToCorrectPosition(todoId);
+
+      pluginApi.saveSettings();
+      return true;
+    } else {
+      Logger.e("Todo", "Failed to toggle todo with ID " + todoId);
+      return false;
+    }
+  }
+
+  function calculateCompletedCount() {
+    if (!pluginApi) return 0;
+
+    var todos = pluginApi.pluginSettings.todos || [];
+    var completedCount = 0;
+    for (var j = 0; j < todos.length; j++) {
+      if (todos[j].completed) {
+        completedCount++;
+      }
+    }
+    return completedCount;
+  }
+
+
+  function moveTodoToCorrectPosition(todoId) {
+    if (!pluginApi) return;
+
+    var todos = pluginApi.pluginSettings.todos || [];
+    var currentPageId = pluginApi?.pluginSettings?.current_page_id || 0;
+    var todoIndex = -1;
+
+    for (var i = 0; i < todos.length; i++) {
+      if (todos[i].id === todoId) {
+        todoIndex = i;
+        break;
+      }
+    }
+
+    if (todoIndex === -1) return;
+
+    var movedTodo = todos[todoIndex];
+
+    // Only reorder if todo belongs to current page
+    if (movedTodo.pageId !== currentPageId) return;
+
+    todos.splice(todoIndex, 1);
+
+    if (movedTodo.completed) {
+      // Place completed items at the end of the page
+      var insertIndex = todos.length;
+      for (var j = todos.length - 1; j >= 0; j--) {
+        if (todos[j].pageId === currentPageId && todos[j].completed) {
+          insertIndex = j + 1;
+          break;
+        }
+      }
+      todos.splice(insertIndex, 0, movedTodo);
+    } else {
+      // Place uncompleted items at the beginning of the page
+      var insertIndex = 0;
+      for (; insertIndex < todos.length; insertIndex++) {
+        if (todos[insertIndex].pageId === currentPageId) {
+          if (todos[insertIndex].completed) break;
+        }
+      }
+      todos.splice(insertIndex, 0, movedTodo);
+    }
+
+    pluginApi.saveSettings();
+  }
+
+  // Helper function to get priority color
+  function getPriorityColor(priority) {
+    // Validate priority
+    var validPriorities = ["high", "medium", "low"];
+    if (!priority || validPriorities.indexOf(priority) === -1) {
+      priority = "medium";
+    }
+
+    if (!pluginApi) {
+      // Fallback to theme colors when pluginApi not available
+      return getThemeColor(priority);
+    }
+
+    var useCustomColors = pluginApi?.pluginSettings?.useCustomColors;
+    if (useCustomColors) {
+      var customColors = pluginApi?.pluginSettings?.priorityColors;
+      if (customColors && customColors[priority]) {
+        return customColors[priority];
+      }
+    }
+
+    return getThemeColor(priority);
+  }
+
+  // Helper function to get theme color
+  function getThemeColor(priority) {
+    if (priority === "high") return Color.mError;
+    if (priority === "low") return Color.mOnSurfaceVariant;
+    return Color.mPrimary;
+  }
+
+
+  function loadTodos() {
+    if (!pluginApi) return;
+
+    filteredTodosModel.clear();
+
+    var pluginTodos = root.rawTodos;
+    var currentShowCompleted = root.showCompleted;
+    var currentPageId = root.currentPageId;
+
+    // Process todos in a single pass
+    for (var i = 0; i < pluginTodos.length; i++) {
+      var todo = pluginTodos[i];
+
+      // Check if todo belongs to current page
+      if (todo.pageId === currentPageId) {
+        // Check if completed items should be shown
+        if (currentShowCompleted || !todo.completed) {
+          filteredTodosModel.append({
+            id: todo.id,
+            text: todo.text,
+            completed: todo.completed,
+            pageId: todo.pageId || 0,
+            priority: todo.priority,
+            details: todo.details
+          });
         }
       }
     }

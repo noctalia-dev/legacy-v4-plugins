@@ -13,10 +13,15 @@ ColumnLayout {
 
 
 
-    property bool editCompactMode: 
-        pluginApi?.pluginSettings?.compactMode ?? 
-        pluginApi?.manifest?.metadata?.defaultSettings?.compactMode ?? 
+    property bool editCompactMode:
+        pluginApi?.pluginSettings?.compactMode ??
+        pluginApi?.manifest?.metadata?.defaultSettings?.compactMode ??
         false
+
+    property string editIconColor:
+        pluginApi?.pluginSettings?.iconColor ??
+        pluginApi?.manifest?.metadata?.defaultSettings?.iconColor ??
+        "none"
 
     function saveSettings() {
         if (!pluginApi) {
@@ -26,12 +31,23 @@ ColumnLayout {
 
 
         pluginApi.pluginSettings.compactMode = root.editCompactMode
+        pluginApi.pluginSettings.iconColor = root.editIconColor
 
         pluginApi.saveSettings()
         Logger.i("Timer", "Settings saved successfully")
     }
 
 
+
+    // Icon Color
+    NComboBox {
+        label: I18n.tr("common.select-icon-color")
+        description: I18n.tr("common.select-color-description")
+        model: Color.colorKeyModel
+        currentKey: root.editIconColor
+        onSelected: key => root.editIconColor = key
+        minimumWidth: 200
+    }
 
     // Compact Mode
     NToggle {

@@ -1,0 +1,135 @@
+{
+  "barWidget": {
+    "contextMenu": {
+      "panel": "Panel",
+      "enable": "Enable",
+      "disable": "Disable",
+      "pause": "Pause",
+      "play": "Play",
+      "unmute": "Unmute",
+      "mute": "Mute"
+    },
+    "tooltip": "Open the video wallpaper manager."
+  },
+  "common": {
+    "tool_row": {
+      "random": {
+        "text": "Random",
+        "tooltip": "Choose a random wallpaper from the wallpapers folder."
+      },
+      "clear": {
+        "text": "Clear",
+        "tooltip": "Clear the current wallpaper."
+      },
+      "pause": {
+        "text": "Pause",
+        "tooltip": "Pause the video wallpaper."
+      },
+      "play": {
+        "text": "Play",
+        "tooltip": "Resume the video wallpaper."
+      },
+      "unmute": {
+        "text": "Unmute",
+        "tooltip": "Unmute the video wallpaper."
+      },
+      "mute": {
+        "text": "Mute",
+        "tooltip": "Mute the video wallpaper."
+      }
+    }
+  },
+  "panel": {
+    "title": "Video wallpaper manager",
+    "tool_row": {
+      "folder": {
+        "text": "Folder",
+        "tooltip": "Choose another folder that contains your wallpapers."
+      },
+      "refresh": {
+        "text": "Refresh",
+        "tooltip": "Refresh thumbnails, remove old ones and create new ones."
+      }
+    },
+    "loading": "Loading...",
+    "file_picker": {
+      "title": "Choose wallpapers folder"
+    }
+  },
+  "settings": {
+    "toggle": {
+      "label": "Enable video wallpapers",
+      "description": "Enable video wallpapers shown with QtMultimedia."
+    },
+    "tab_bar": {
+      "general": "General",
+      "automation": "Automation"
+    },
+    "general": {
+      "wallpapers_folder": {
+        "title": {
+          "label": "Wallpapers Folder",
+          "description": "The folder that contains all the video wallpapers."
+        },
+        "text_input": {
+          "placeholder": "/path/to/folder/with/wallpapers"
+        },
+        "icon_button": {
+          "tooltip": "Select wallpapers folder"
+        },
+        "file_picker": {
+          "title": "Choose wallpapers folder"
+        }
+      },
+      "select_wallpaper": {
+        "title": {
+          "label": "Select Wallpaper",
+          "description": "Choose the current video wallpaper playing."
+        },
+        "icon_button": {
+          "tooltip": "Select the current wallpaper playing."
+        },
+        "file_picker": {
+          "title": "Choose current wallpaper"
+        }
+      },
+      "fill_mode": {
+        "label": "Fill Mode",
+        "description": "The mode that the wallpaper is fitted into the background.",
+        "stretch": "Stretch",
+        "fit": "Fit",
+        "crop": "Crop"
+      },
+      "orientation": {
+        "label": "Orientation",
+        "description": "The orientation of the video playing, can be any multiple of 90."
+      },
+      "volume": {
+        "label": "Volume",
+        "description": "The current volume of the video playing."
+      }
+    },
+    "automation": {
+      "toggle": {
+        "label": "Automation",
+        "description": "Schedule automatic wallpaper change."
+      },
+      "mode": {
+        "label": "Change mode",
+        "description": "The mode to select the new wallpaper.",
+        "random": "Random",
+        "alphabetically": "Alphabetically"
+      },
+      "time": {
+        "label": "Time",
+        "description": "How long it should take to switch the wallpaper.",
+        "5m": "5m",
+        "10m": "10m",
+        "30m": "30m",
+        "1h": "1h",
+        "1h30m": "1h 30m",
+        "2h": "2h"
+      }
+    }
+  }
+}

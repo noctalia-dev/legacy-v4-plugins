@@ -3,6 +3,9 @@ import QtQuick.Layouts
 import qs.Commons
 import qs.Widgets
 
+import "./common"
+import "./settings"
+
 ColumnLayout {
     id: root
 
@@ -11,20 +14,6 @@ ColumnLayout {
     property bool active:
         pluginApi?.pluginSettings?.active ||
         false
-
-    property string wallpapersFolder: 
-        pluginApi?.pluginSettings?.wallpapersFolder ||
-        pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder ||
-        "~/Pictures/Wallpapers"
-
-    property string currentWallpaper: 
-        pluginApi?.pluginSettings?.currentWallpaper || 
-        ""
-
-    property string mpvSocket: 
-        pluginApi?.pluginSettings?.mpvSocket || 
-        pluginApi?.manifest?.metadata?.defaultSettings?.mpvSocket || 
-        "/tmp/mpv-socket"
 
     spacing: Style.marginM
     
@@ -36,139 +25,81 @@ ColumnLayout {
         checked: root.active
         onToggled: checked => root.active = checked
     }
-    
-    // Wallpaper Folder
-    ColumnLayout {
-        NLabel {
+
+    NDivider {}
+
+    ToolRow {
+        pluginApi: root.pluginApi
+        enabled: root.active
+    }
+
+    NDivider {}
+
+    NTabBar {
+        id: subTabBar
+        Layout.fillWidth: true
+        distributeEvenly: true
+        currentIndex: tabView.currentIndex
+
+        NTabButton {
             enabled: root.active
-            label: pluginApi?.tr("settings.wallpapers_folder.title_label") || "Wallpapers Folder"
-            description: pluginApi?.tr("settings.wallpapers_folder.title_description") || "The folder that contains all the wallpapers, useful when using random wallpaper"
+            text: "Playback"
+            tabIndex: 0
+            checked: subTabBar.currentIndex === 0
         }
-
-        RowLayout {
-            NTextInput {
-                enabled: root.active
-                Layout.fillWidth: true
-                placeholderText: pluginApi?.tr("settings.wallpapers_folder.input_placeholder") || "/path/to/folder/with/wallpapers"
-                text: root.wallpapersFolder
-                onTextChanged: root.wallpapersFolder = text
-            }
-
-            NIconButton {
-                enabled: root.active
-                icon: "wallpaper-selector"
-                tooltipText: pluginApi?.tr("settings.wallpapers_folder.icon_tooltip") || "Select wallpapers folder"
-                onClicked: wallpapersFolderPicker.openFilePicker()
-            }
-
-            NFilePicker {
-                id: wallpapersFolderPicker
-                title: pluginApi?.tr("settings.wallpapers_folder.file_picker_title") || "Choose wallpapers folder"
-                initialPath: root.wallpapersFolder
-                selectionMode: "folders"
-
-                onAccepted: paths => {
-                    if (paths.length > 0) {
-                        Logger.d("mpvpaper", "Selected the following wallpaper folder:", paths[0]);
-                        root.wallpapersFolder = paths[0];
-                    }
-                }
-            }
+        NTabButton {
+            enabled: root.active
+            text: "Audio"
+            tabIndex: 1
+            checked: subTabBar.currentIndex === 1
+        }
+        NTabButton {
+            enabled: root.active
+            text: "Automation"
+            tabIndex: 2
+            checked: subTabBar.currentIndex === 2
+        }
+        NTabButton {
+            enabled: root.active
+            text: "Advanced"
+            tabIndex: 3
+            checked: subTabBar.currentIndex === 3
         }
     }
 
-    // Current Wallpaper
-    ColumnLayout {
-        NLabel {
-            enabled: root.active
-            label: pluginApi?.tr("settings.current_wallpaper.title_label") || "Current Wallpaper"
-            description: pluginApi?.tr("settings.current_wallpaper.title_description") || "The current wallpaper that is shown"
+    NTabView {
+        id: tabView
+        currentIndex: subTabBar.currentIndex
+
+        PlaybackTab {
+            id: playback
+            pluginApi: root.pluginApi
+            active: root.active
         }
 
-        RowLayout {
-            NTextInput {
-                enabled: root.active
-                Layout.fillWidth: true
-                placeholderText: pluginApi?.tr("settings.current_wallpaper.input_placeholder") || "/path/to/wallpaper"
-                text: root.currentWallpaper
-                onTextChanged: root.currentWallpaper = text
-            }
-
-            NIconButton {
-                enabled: root.active
-                icon: "wallpaper-selector"
-                tooltipText: pluginApi?.tr("settings.current_wallpaper.icon_tooltip") || "Select current wallpaper"
-                onClicked: currentWallpaperPicker.openFilePicker()
-            }
-
-            NFilePicker {
-                id: currentWallpaperPicker
-                title: pluginApi?.tr("settings.current_wallpaper.file_picker_title") || "Choose current wallpaper"
-                initialPath: root.wallpapersFolder
-                selectionMode: "files"
-
-                onAccepted: paths => {
-                    if (paths.length > 0) {
-                        Logger.d("mpvpaper", "Selected the following current wallpaper:", paths[0]);
-                        root.currentWallpaper = paths[0];
-                    }
-                }
-            }
-        }
-    }
-    
-    // MPV Socket path
-    ColumnLayout {
-        NLabel {
-            enabled: root.active
-            label: pluginApi?.tr("settings.mpv_socket.title_label") || "Mpvpaper socket"
-            description: pluginApi?.tr("settings.mpv_socket.title_description") || "The mpvpaper socket that noctalia connects to"
+        AudioTab {
+            id: audio
+            pluginApi: root.pluginApi
+            active: root.active
         }
 
-        NTextInput {
-            enabled: root.active
-            Layout.fillWidth: true
-            placeholderText: pluginApi?.tr("settings.mpv_socket.input_placeholder") || "Example: /tmp/mpv-socket"
-            text: root.mpvSocket
-            onTextChanged: root.mpvSocket = text
+        AutomationTab {
+            id: automation
+            pluginApi: root.pluginApi
+            active: root.active
+        }
+
+        AdvancedTab {
+            id: advanced
+            pluginApi: root.pluginApi
+            active: root.active
         }
     }
 
 
-    RowLayout {
-        NButton {
-            enabled: root.active
-            text: pluginApi?.tr("settings.actions.random") || "Random"
-            onClicked: root.random()
-        }
-
-        NButton {
-            enabled: root.active
-            text: pluginApi?.tr("settings.actions.clear") || "Clear"
-            onClicked: root.clear()
-        }
-    }
-
-    function random() {
-        if(pluginApi?.mainInstance == null) {
-            Logger.e("mpvpaper", "Main instance isn't loaded");
-            return;
-        }
-
-        pluginApi.mainInstance.random();
-        root.currentWallpaper = pluginApi.pluginSettings.currentWallpaper;
-    }
-
-    function clear() {
-        if(pluginApi?.mainInstance == null) {
-            Logger.e("mpvpaper", "Main instance isn't loaded");
-            return;
-        }
-
-        pluginApi.mainInstance.clear();
-        root.currentWallpaper = pluginApi.pluginSettings.currentWallpaper;
-    }
-
+    /********************************
+    * Save settings functionality
+    ********************************/
     function saveSettings() {
         if(!pluginApi) {
             Logger.e("mpvpaper", "Cannot save: pluginApi is null");
@@ -176,9 +107,11 @@ ColumnLayout {
         }
 
         pluginApi.pluginSettings.active = active;
-        pluginApi.pluginSettings.wallpapersFolder = wallpapersFolder;
-        pluginApi.pluginSettings.currentWallpaper = currentWallpaper;
-        pluginApi.pluginSettings.mpvSocket = mpvSocket;
+
+        playback.saveSettings();
+        audio.saveSettings();
+        advanced.saveSettings();
+        automation.saveSettings();
 
         pluginApi.saveSettings();
 

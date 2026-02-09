@@ -1,0 +1,6 @@
+{
+  "panel": {
+    "activate": "{osName} を有効化",
+    "goto_settings": "設定に移動して {osName} を有効にしてください。"
+  }
+}

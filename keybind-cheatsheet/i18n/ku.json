@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "بەستنەوەی کلیلەکان",
+    "error": {
+      "unsupported-compositor": "کۆمپۆزیتەرێکی پشتگیری نەکراو",
+      "sway-not-supported": "Sway هێشتا پشتگیری ناکرێت",
+      "sway-detail": "پشتگیری Sway دەکرێت لە نوێکردنەوەیەکی داهاتوودا زیاد بکرێت (فۆرماتێکی هاوشێوەی Hyprland)",
+      "labwc-not-supported": "LabWC پشتگیری ناکرێت",
+      "labwc-detail": "LabWC فۆرماتی ڕێکخستنی XML بەکاردەهێنێت کە لەگەڵ ئەم پێوەکراوەدا گونجاو نییە",
+      "mango-not-supported": "MangoWC پشتگیری ناکرێت",
+      "mango-detail": "فۆرماتی ڕێکخستنی MangoWC لەگەڵ ئەم پێوەکراوەدا گونجاو نییە",
+      "unknown-compositor": "کۆمپۆزیتەرێکی نەناسراو دۆزرایەوە",
+      "unknown-detail": "ئەم پێوەکراوە تەنها کۆمپۆزیتەرەکانی Hyprland و Niri پشتگیری دەکات"
+    },
     "panel": {
       "loading": "Barkirin...",
       "title": "Nexşeya Bişkokan",

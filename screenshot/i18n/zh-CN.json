@@ -1,0 +1,11 @@
+{
+  "tooltip": "截图",
+  "settings": {
+    "mode": {
+      "label": "截图模式",
+      "description": "在区域选择或直接屏幕捕获之间选择",
+      "region": "区域选择",
+      "screen": "全屏"
+    }
+  }
+}

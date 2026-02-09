@@ -15,8 +15,13 @@ Item {
   property string section: ""
   property bool hovered: false
 
-  readonly property string barPosition: Settings.data.bar.position
+  // Bar positioning properties
+  readonly property string screenName: screen ? screen.name : ""
+  readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
   readonly property bool isVertical: barPosition === "left" || barPosition === "right"
+  readonly property real barHeight: Style.getBarHeightForScreen(screenName)
+  readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screenName)
+  readonly property real barFontSize: Style.getBarFontSizeForScreen(screenName)
 
   property string currentIconName: pluginApi?.pluginSettings?.currentIconName || pluginApi?.manifest?.metadata?.defaultSettings?.currentIconName
   property bool hideOnZero: pluginApi?.pluginSettings.hideOnZero || pluginApi?.manifest?.metadata.defaultSettings?.hideOnZero
@@ -25,8 +30,8 @@ Item {
   // also set opacity to zero when invisible as we use opacity to hide the barWidgetLoader
   opacity: root.isVisible ? 1.0 : 0.0
 
-  readonly property real contentWidth: isVertical ? Style.capsuleHeight : layout.implicitWidth + Style.marginS * 2
-  readonly property real contentHeight: isVertical ? layout.implicitHeight + Style.marginS * 2 : Style.capsuleHeight
+  readonly property real contentWidth: isVertical ? root.capsuleHeight : layout.implicitWidth + Style.marginS * 2
+  readonly property real contentHeight: isVertical ? layout.implicitHeight + Style.marginS * 2 : root.capsuleHeight
 
   implicitWidth: contentWidth
   implicitHeight: contentHeight
@@ -68,7 +73,7 @@ Item {
           Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
           text: root.pluginApi?.mainInstance?.updateCount.toString()
           color: root.hovered ? Color.mOnHover : Color.mOnSurface
-          pointSize: Style.barFontSize
+          pointSize: root.barFontSize
         }
       }
     }

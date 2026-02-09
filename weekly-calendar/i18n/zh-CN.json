@@ -30,6 +30,10 @@
     "hourLineOpacity": "小时线不透明度",
     "hourLineOpacity_description": "调整小时线的不透明度。",
     "dayLineOpacity": "日期分隔线不透明度", 
-    "dayLineOpacity_description": "调整日期分隔线的不透明度。"
+    "dayLineOpacity_description": "调整日期分隔线的不透明度。",
+    "panelMode": "面板模式",
+    "panelMode_description": "选择面板的布局（可能需要重新打开面板才会生效）。",
+    "panelAttach": "面板依附在工具列",
+    "panelCenter": "居中面板"
   }
 }

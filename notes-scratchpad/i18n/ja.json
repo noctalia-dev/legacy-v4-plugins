@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "テキストの外観",
-      "font_size": "フォントサイズ"
+      "font_size": "フォントサイズ",
+      "monospace": "等幅フォント",
+      "monospace_description": "テキストエリアに等幅フォントを使用する"
     },
     "keyboard_shortcut": {
       "title": "キーボードショートカット",

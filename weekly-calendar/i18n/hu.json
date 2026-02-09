@@ -30,6 +30,10 @@
     "hourLineOpacity": "Óravonal átlátszósága", 
     "hourLineOpacity_description": "Állítsa be az óravonalak átlátszóságát.",
     "dayLineOpacity": "Napi vonal átlátszósága",
-    "dayLineOpacity_description": "Állítsa be a napelválasztó vonalak átlátszóságát."
+    "dayLineOpacity_description": "Állítsa be a napelválasztó vonalak átlátszóságát.",
+    "panelMode": "Panel mód",
+    "panelMode_description": "Válasszon elrendezést (újraindításra lehet szükség).",
+    "panelAttach": "Panel a sávhoz rögzítve",
+    "panelCenter": "Középre igazított panel"
   }
 }

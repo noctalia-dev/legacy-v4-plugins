@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Szöveg megjelenés",
-      "font_size": "Betűméret"
+      "font_size": "Betűméret",
+      "monospace": "Monospace betűtípus",
+      "monospace_description": "Monospace betűtípus használata a szövegterülethez"
     },
     "keyboard_shortcut": {
       "title": "Billentyűparancs",

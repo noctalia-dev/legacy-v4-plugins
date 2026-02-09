@@ -10,12 +10,14 @@ import qs.Widgets
 Item {
     id: root
     property var pluginApi: null
+    readonly property var mainInstance: pluginApi?.mainInstance
     readonly property var geometryPlaceholder: panelContainer
     property real contentPreferredWidth: 950 * Style.uiScaleRatio
     property real contentPreferredHeight: 700 * Style.uiScaleRatio
     property real topHeaderHeight: 60 * Style.uiScaleRatio
-    readonly property bool allowAttach: true
-    readonly property var mainInstance: pluginApi?.mainInstance
+    readonly property bool allowAttach: mainInstance ? mainInstance.panelModeSetting === "attached" : false
+    readonly property bool panelAnchorHorizontalCenter: mainInstance ? mainInstance.panelModeSetting === "centered" : false
+    readonly property bool panelAnchorVerticalCenter: mainInstance ? mainInstance.panelModeSetting === "centered" : false
     anchors.fill: parent
 
     property real hourHeight: 50 * Style.uiScaleRatio

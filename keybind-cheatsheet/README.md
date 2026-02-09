@@ -39,7 +39,7 @@ Add the plugin to your bar configuration in Noctalia settings. Click the keyboar
 #### Hyprland
 Add to your config:
 ```bash
-bind = $mod, F1, exec, qs -c "noctalia-shell" ipc call "keybind-cheatsheet" "toggle"
+bind = $mod, F1, exec, qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle
 ```
 You can specify your custom Super key variable (e.g., $mainMod) in the plugin settings.
 
@@ -47,7 +47,7 @@ You can specify your custom Super key variable (e.g., $mainMod) in the plugin se
 Add to your config:
 ```kdl
 binds {
-    Mod+F1 { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "keybind-cheatsheet" "toggle"; }
+    Mod+F1 { spawn "qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle"; }
 }
 ```
 
@@ -60,16 +60,16 @@ The plugin recursively parses your main config and all `source` includes.
 **Keybind format:**
 ```bash
 # 1. APPLICATIONS
-bind = $mod, T, exec, alacritty #"Terminal"
-bind = $mod, B, exec, firefox #"Browser"
+bind = $mainMod, T, exec, alacritty #"Terminal"
+bind = $mainMod, B, exec, firefox #"Browser"
 
 # 2. WINDOW MANAGEMENT
-bind = $mod, Q, killactive, #"Close window"
-bind = $mod, F, fullscreen, #"Toggle fullscreen"
+bind = $mainMod, Q, killactive, #"Close window"
+bind = $mainMod, F, fullscreen, #"Toggle fullscreen"
 
 # 3. WORKSPACES
-bind = $mod, 1, workspace, 1 #"Workspace 1"
-bind = $mod SHIFT, 1, movetoworkspace, 1 #"Move to workspace 1"
+bind = $mainMod, 1, workspace, 1 #"Workspace 1"
+bind = $mainMod SHIFT, 1, movetoworkspace, 1 #"Move to workspace 1"
 ```
 
 **Requirements:**

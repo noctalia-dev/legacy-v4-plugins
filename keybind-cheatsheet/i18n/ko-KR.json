@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "키바인드",
+    "error": {
+      "unsupported-compositor": "지원되지 않는 컴포지터",
+      "sway-not-supported": "Sway는 아직 지원되지 않습니다",
+      "sway-detail": "Sway 지원은 향후 업데이트에서 추가될 수 있습니다 (Hyprland와 유사한 형식)",
+      "labwc-not-supported": "LabWC는 지원되지 않습니다",
+      "labwc-detail": "LabWC는 이 플러그인과 호환되지 않는 XML 구성 형식을 사용합니다",
+      "mango-not-supported": "MangoWC는 지원되지 않습니다",
+      "mango-detail": "MangoWC 구성 형식은 이 플러그인과 호환되지 않습니다",
+      "unknown-compositor": "알 수 없는 컴포지터가 감지되었습니다",
+      "unknown-detail": "이 플러그인은 Hyprland 및 Niri 컴포지터만 지원합니다"
+    },
     "panel": {
       "loading": "로딩 중...",
       "title": "키맵",

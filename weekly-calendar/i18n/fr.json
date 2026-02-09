@@ -30,6 +30,10 @@
     "hourLineOpacity": "Opacité des lignes horaires",
     "hourLineOpacity_description": "Ajustez l'opacité des lignes horaires.",
     "dayLineOpacity": "Opacité des lignes journalières",
-    "dayLineOpacity_description": "Ajustez l'opacité des lignes séparatrices de jour."
+    "dayLineOpacity_description": "Ajustez l'opacité des lignes séparatrices de jour.",
+    "panelMode": "Mode du panneau",
+    "panelMode_description": "Choisir la disposition (peut nécessiter une réouverture).",
+    "panelAttach": "Panneau attaché à la barre",
+    "panelCenter": "Panneau centré"
   }
   }

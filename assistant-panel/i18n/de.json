@@ -89,6 +89,12 @@
     "realTimeTranslationDesc": "Automatisch beim Tippen übersetzen",
     "maxHistory": "Maximale Länge des Verlaufs",
     "maxHistoryDesc": "Maximale Anzahl an Nachrichten, welche im Verlauf gespeichert werden sollen",
+    "local": "Lokaler Modus",
+    "localDesc": "Lokalen Inferenz-Server verwenden (z.B. Ollama)",
+    "baseUrl": "Basis-URL",
+    "baseUrlDesc": "API-Endpunkt-URL",
+    "baseUrlNote": "Hinweis: Dieses Plugin unterstützt derzeit nicht die neue OpenAI-Responses-API. Gehe zu ",
+    "moreInfo": " für weitere Informationen.",
     "panelSection": "Panel Einstellungen",
     "panelDetached": "Losgelöstes Panel",
     "panelDetachedDesc": "Panel als losgelöstes schwebendes Fenster anzeigen",
@@ -96,7 +102,13 @@
     "panelPositionDesc": "Standardbildschirmrand für das Panel",
     "panelPositionRight": "Rechts",
     "panelPositionLeft": "Links",
+    "panelPositionTop": "Oben",
+    "panelPositionBottom": "Unten",
     "panelPositionCenter": "Mitte",
+    "attachmentStyle": "Anheftungsstil",
+    "attachmentStyleDesc": "Art der Anheftung des Panels",
+    "attachConnected": "Verbunden mit der Leiste",
+    "attachFloating": "Unabhängiger Einschub",
     "panelHeightRatio": "Panel-Höhenverhältnis",
     "panelHeightRatioDesc": "Wie viel der Bildschirmhöhe soll das Panel verwenden (losgelöster Modus)",
     "panelWidth": "Panel-Breite (px)",
@@ -118,6 +130,7 @@
     "translationFailed": "Übersetzung fehlgeschlagen",
     "noDeeplKey": "Bitte konfiguriere deinen DeepL API-Key",
     "emptyResponse": "Leere Antwort",
-    "parseError": "Fehler beim Analysieren der Antwort"
+    "parseError": "Fehler beim Analysieren der Antwort",
+    "localNotRunning": "Lokaler Server nicht erreichbar. Konfiguration überprüfen."
   }
 }

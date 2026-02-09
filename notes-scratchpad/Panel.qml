@@ -25,6 +25,7 @@ Item {
   // Local state for the text content
   property string textContent: ""
   property int fontSize: pluginApi?.pluginSettings?.fontSize ?? 14
+  property bool useMonospace: pluginApi?.pluginSettings?.useMonospace ?? false
   property int savedCursorPosition: pluginApi?.pluginSettings?.cursorPosition ?? 0
   property real savedScrollX: pluginApi?.pluginSettings?.scrollPositionX ?? 0
   property real savedScrollY: pluginApi?.pluginSettings?.scrollPositionY ?? 0
@@ -160,7 +161,13 @@ Item {
         }
 
         NText {
-          text: pluginApi?.tr("panel.header.title") || "Scratchpad"
+          text: {
+            if (root.useFileStorage && root.filePath) {
+              var parts = root.filePath.split("/");
+              return parts[parts.length - 1];
+            }
+            return pluginApi?.tr("panel.header.title") || "Scratchpad";
+          }
           pointSize: Style.fontSizeL
           font.weight: Font.Bold
           Layout.fillWidth: true
@@ -185,10 +192,11 @@ Item {
         border.color: Color.mOutline
         border.width: 1
 
-        ScrollView {
+        NScrollView {
           id: scrollView
           anchors.fill: parent
           anchors.margins: Style.marginM
+          handleWidth: 5
 
           ScrollBar.horizontal.onPositionChanged: {
             if (!restoringState) saveTimer.restart();
@@ -205,6 +213,7 @@ Item {
             selectByMouse: true
             color: Color.mOnSurface
             font.pixelSize: root.fontSize
+            font.family: root.useMonospace ? Settings.data.ui.fontFixed : Settings.data.ui.fontDefault
             background: Item {}
             focus: true
 

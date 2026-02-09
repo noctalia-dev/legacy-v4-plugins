@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Tekstweergave",
-      "font_size": "Lettergrootte"
+      "font_size": "Lettergrootte",
+      "monospace": "Monospace lettertype",
+      "monospace_description": "Gebruik een monospace lettertype voor het tekstvak"
     },
     "keyboard_shortcut": {
       "title": "Sneltoets",

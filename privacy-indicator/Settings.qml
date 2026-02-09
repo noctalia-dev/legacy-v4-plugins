@@ -14,6 +14,8 @@ ColumnLayout {
   property bool hideInactive: cfg.hideInactive ?? defaults.hideInactive
   property bool removeMargins: cfg.removeMargins ?? defaults.removeMargins
   property int iconSpacing: cfg.iconSpacing || Style.marginXS
+  property string activeColor: cfg.activeColor ?? defaults.activeColor
+  property string inactiveColor: cfg.inactiveColor ?? defaults.inactiveColor
 
   spacing: Style.marginL
 
@@ -43,6 +45,22 @@ ColumnLayout {
       onToggled: function (checked) {
         root.removeMargins = checked;
       }
+    }
+
+    NComboBox {
+      label: pluginApi?.tr("settings.activeColor.label")
+      description: pluginApi?.tr("settings.activeColor.desc")
+      model: Color.colorKeyModel
+      currentKey: root.activeColor
+      onSelected: key => root.activeColor = key
+    }
+
+    NComboBox {
+      label: pluginApi?.tr("settings.inactiveColor.label")
+      description: pluginApi?.tr("settings.inactiveColor.desc")
+      model: Color.colorKeyModel
+      currentKey: root.inactiveColor
+      onSelected: key => root.inactiveColor = key
     }
 
     NComboBox {
@@ -80,6 +98,8 @@ ColumnLayout {
     pluginApi.pluginSettings.hideInactive = root.hideInactive;
     pluginApi.pluginSettings.iconSpacing = root.iconSpacing;
     pluginApi.pluginSettings.removeMargins = root.removeMargins;
+    pluginApi.pluginSettings.activeColor = root.activeColor;
+    pluginApi.pluginSettings.inactiveColor = root.inactiveColor;
 
     pluginApi.saveSettings();
 

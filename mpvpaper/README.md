@@ -1,6 +1,6 @@
 # Mpvpaper
 
-A plugin that allows manipulation of mpvpaper through the noctalia shell.
+A plugin that allows having video wallpapers using mpvpaper.
 
 ![Preview](preview.png)
 

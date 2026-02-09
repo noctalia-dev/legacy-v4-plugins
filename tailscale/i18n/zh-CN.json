@@ -1,0 +1,68 @@
+{
+  "settings": {
+    "title": "Tailscale设置",
+    "description": "配置Tailscale状态显示和行为",
+    "refresh-interval": "刷新间隔",
+    "refresh-interval-desc": "检查Tailscale状态的频率",
+    "display-options": "显示选项",
+    "compact-mode": "紧凑模式",
+    "compact-mode-desc": "在栏中仅显示图标",
+    "show-ip": "显示IP地址",
+    "show-ip-desc": "在栏部件中显示Tailscale IP",
+    "show-peers": "显示对等设备数量",
+    "show-peers-desc": "在栏中显示连接的设备数量",
+    "hide-disconnected": "隐藏断开的对等设备",
+    "hide-disconnected-desc": "在面板中仅显示在线对等设备",
+    "terminal": "终端配置",
+    "terminal-command": "终端命令",
+    "terminal-command-desc": "启动终端以进行SSH/ping的命令（例如，'ghostty'、'alacritty'、'kitty'）",
+    "ping-count": "Ping次数",
+    "ping-count-desc": "测试连接性时发送的ping数据包数量",
+    "peer-action": "对等设备点击操作",
+    "default-peer-action": "默认操作",
+    "default-peer-action-desc": "在面板中点击对等设备时的操作"
+  },
+  "actions": {
+    "widget-settings": "部件设置"
+  },
+  "context": {
+    "connect": "连接",
+    "disconnect": "断开",
+    "refresh": "刷新状态",
+    "not-installed": "未安装Tailscale",
+    "settings": "设置",
+    "copy-ip": "复制IP",
+    "ssh": "SSH到主机",
+    "ping": "Ping主机"
+  },
+  "toast": {
+    "title": "Tailscale",
+    "connected": "Tailscale已连接",
+    "disconnected": "Tailscale已断开",
+    "ip-copied": {
+      "title": "IP已复制"
+    },
+    "terminal-not-configured": {
+      "title": "终端未配置",
+      "message": "请在插件设置中设置终端命令"
+    }
+  },
+  "panel": {
+    "title": "Tailscale网络",
+    "peers": "对等设备",
+    "not-connected": "未连接",
+    "online": "在线",
+    "offline": "离线",
+    "no-peers": "没有连接的对等设备",
+    "admin-console": "管理控制台",
+    "terminal-warning": {
+      "title": "终端未配置",
+      "message": "在设置中设置终端命令以启用SSH和ping"
+    },
+    "exit-node": {
+      "active": "出口节点已激活",
+      "online": "在线",
+      "offline": "离线"
+    }
+  }
+}

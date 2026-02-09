@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Sneltoetsen",
+    "error": {
+      "unsupported-compositor": "Niet-ondersteunde compositor",
+      "sway-not-supported": "Sway wordt nog niet ondersteund",
+      "sway-detail": "Sway-ondersteuning kan worden toegevoegd in een toekomstige update (vergelijkbaar formaat met Hyprland)",
+      "labwc-not-supported": "LabWC wordt niet ondersteund",
+      "labwc-detail": "LabWC gebruikt XML-configuratieformaat dat incompatibel is met deze plugin",
+      "mango-not-supported": "MangoWC wordt niet ondersteund",
+      "mango-detail": "Het MangoWC-configuratieformaat is niet compatibel met deze plugin",
+      "unknown-compositor": "Onbekende compositor gedetecteerd",
+      "unknown-detail": "Deze plugin ondersteunt alleen Hyprland- en Niri-compositors"
+    },
     "panel": {
       "loading": "Laden...",
       "title": "Toetsenbordindeling",

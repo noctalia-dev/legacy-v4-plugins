@@ -1,7 +1,7 @@
 {
   "id": "privacy-indicator",
   "name": "Privacy Indicator",
-  "version": "1.0.13",
+  "version": "1.1.0",
   "minNoctaliaVersion": "3.6.0",
   "author": "Noctalia Team",
   "official": true,
@@ -19,7 +19,9 @@
   "metadata": {
     "defaultSettings": {
       "hideInactive": false,
-      "removeMargins": false
+      "removeMargins": false,
+      "activeColor": "primary",
+      "inactiveColor": "none"
     }
   }
 }

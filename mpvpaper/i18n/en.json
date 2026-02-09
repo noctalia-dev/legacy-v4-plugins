@@ -1,4 +1,14 @@
 {
+  "barWidget": {
+    "contextMenu": {
+      "toggle": "Toggle",
+      "panel": "Panel",
+      "play": "Play",
+      "pause": "Pause",
+      "mute": "Mute",
+      "unmute": "Unmute"
+    }
+  },
   "panel": {
     "title": "Configure mpvpaper",
     "buttons": {
@@ -33,21 +43,85 @@
       "icon_tooltip": "Select wallpapers folder",
       "file_picker_title": "Choose wallpapers folder"
     },
-    "current_wallpaper": {
-      "title_label": "Current Wallpaper",
-      "title_description": "The current wallpaper that is shown.",
-      "input_placeholder": "/path/to/wallpaper",
+    "select_wallpaper": {
+      "title_label": "Select Wallpaper",
+      "title_description": "Choose the current video wallpaper playing.",
       "icon_tooltip": "Select current wallpaper",
       "file_picker_title": "Choose current wallpaper"
     },
+    "volume": {
+      "label": "Volume",
+      "description": "The volume of the video wallpaper playing."
+    },
     "mpv_socket": {
       "title_label": "Mpvpaper socket",
-      "title_description": "The mpvpaper socket that noctalia connects to",
+      "title_description": "The mpvpaper socket that noctalia connects to.",
       "input_placeholder": "Example: /tmp/mpv-socket"
     },
-    "actions": {
+    "hardware_acceleration": {
+      "label": "Hardware Acceleration",
+      "description": "Offloads video decoding from cpu to gpu / dedicated hardware."
+    },
+    "profile": {
+      "label": "Profile",
+      "description": "The profile that mpv uses. Use fast for better performance.",
+      "default": "Default",
+      "fast": "Fast",
+      "high_quality": "High Quality",
+      "low_latency": "Low Latency"
+    },
+    "fill_mode": {
+      "label": "Fill mode",
+      "description": "The fill mode that mpvpaper uses.",
+      "fit": "Fit",
+      "crop": "Crop",
+      "stretch": "Stretch"
+    },
+    "automation": {
+      "label": "Automation",
+      "description": "Schedule automatic wallpaper change."
+    },
+    "automation_mode": {
+      "label": "Change mode",
+      "description": "The mode to select the new wallpaper.",
       "random": "Random",
-      "clear": "Clear"
+      "alphabetically": "Alphabetically"
+    },
+    "automation_time": {
+      "label": "Time",
+      "description": "How long it should take to switch the wallpaper.",
+      "5m": "5m",
+      "10m": "10m",
+      "30m": "30m",
+      "1h": "1h",
+      "1h30m": "1h 30m",
+      "2h": "2h"
+    },
+    "actions": {
+      "random": {
+        "text": "Random",
+        "tooltip": "Choose a random wallpaper from the wallpapers folder."
+      },
+      "clear": {
+        "text": "Clear",
+        "tooltip": "Clear the current wallpaper."
+      },
+      "pause": {
+        "text": "Pause",
+        "tooltip": "Pause the video wallpaper."
+      },
+      "resume": {
+        "text": "Resume",
+        "tooltip": "Resume the video wallpaper."
+      },
+      "mute": {
+        "text": "Mute",
+        "tooltip": "Mute the video wallpaper."
+      },
+      "unmute": {
+        "text": "Unmute",
+        "tooltip": "Unmute the video wallpaper."
+      }
     }
   }
 }

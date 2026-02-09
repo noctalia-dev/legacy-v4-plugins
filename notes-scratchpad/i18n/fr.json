@@ -28,7 +28,9 @@
     },
     "text_appearance": {
       "title": "Apparence du texte",
-      "font_size": "Taille de police"
+      "font_size": "Taille de police",
+      "monospace": "Police à chasse fixe",
+      "monospace_description": "Utiliser une police à chasse fixe pour la zone de texte"
     },
     "keyboard_shortcut": {
       "title": "Raccourci clavier",

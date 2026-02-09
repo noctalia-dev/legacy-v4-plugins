@@ -21,17 +21,28 @@ Item {
   readonly property var mainInstance: pluginApi?.mainInstance
   readonly property bool isGenerating: mainInstance?.isGenerating || false
   readonly property int messageCount: mainInstance?.messages?.length || 0
+
+  // Property to check if an API key is configured
   readonly property bool hasApiKey: {
     var provider = pluginApi?.pluginSettings?.ai?.provider || Constants.Providers.GOOGLE;
-    if (provider === Constants.Providers.OLLAMA)
-      return true;
-    // Check environment variable first
-    var envVarName = "NOCTALIA_AP_" + provider.toUpperCase() + "_API_KEY";
+
+    // Check environment variable first (generic key check)
+    var envVarName = provider === Constants.Providers.GOOGLE ? "NOCTALIA_AP_GOOGLE_API_KEY" : "NOCTALIA_AP_OPENAI_COMPATIBLE_API_KEY";
+
     var envKey = Quickshell.env(envVarName) || "";
     if (envKey !== "")
       return true;
-    // Check settings
+
+    // Check specific provider setting
     var settingsKey = pluginApi?.pluginSettings?.ai?.apiKeys?.[provider] || "";
+
+    // For OpenAI Compatible Local mode, key is not required
+    if (provider === Constants.Providers.OPENAI_COMPATIBLE) {
+      var isLocal = pluginApi?.pluginSettings?.ai?.openaiLocal ?? false;
+      if (isLocal)
+        return true;
+    }
+
     return settingsKey.trim() !== "";
   }
 
@@ -63,68 +74,34 @@ Item {
     border.color: Style.capsuleBorderColor
     border.width: Style.capsuleBorderWidth
 
-    // Centered host that will scale inner content according to plugin uiScale
-    Item {
+    NIcon {
+      id: iconWidget
       anchors.centerIn: parent
-      width: parent.width
-      height: parent.height
+      icon: root.isGenerating ? "loader-2" : "sparkles"
+      color: {
+        if (root.isGenerating)
+          return Color.mPrimary;
+        if (!root.hasApiKey)
+          return Color.mOnSurfaceVariant;
+        return Color.mOnSurface;
+      }
+      applyUiScale: false
 
-      property real s: root.uiScale
+      // Rotation animation when generating
+      RotationAnimation on rotation {
+        running: root.isGenerating
+        from: 0
+        to: 360
+        duration: 1000
+        loops: Animation.Infinite
+      }
 
-      Item {
-        id: scaledHost
-        width: parent.width / (parent.s || 1)
-        height: parent.height / (parent.s || 1)
-        scale: parent.s || 1
-        anchors.centerIn: parent
-        transformOrigin: Item.Center
-
-        RowLayout {
-          id: contentRow
-          anchors.fill: parent
-          spacing: Style.marginS
-
-          NIcon {
-            id: iconWidget
-            anchors.centerIn: parent
-            icon: root.isGenerating ? "loader-2" : "sparkles"
-            color: {
-              if (root.isGenerating)
-                return Color.mPrimary;
-              if (!root.hasApiKey)
-                return Color.mOnSurfaceVariant;
-              return Color.mOnSurface;
-            }
-            applyUiScale: false
-
-            // Rotation animation when generating
-            RotationAnimation on rotation {
-              running: root.isGenerating
-              from: 0
-              to: 360
-              duration: 1000
-              loops: Animation.Infinite
-            }
-
-            // Reset rotation when not generating
-            Binding {
-              target: iconWidget
-              property: "rotation"
-              value: 0
-              when: !root.isGenerating
-            }
-          }
-
-          NText {
-            visible: !root.isVertical
-            // text: root.isGenerating
-            //   ? (pluginApi?.tr("widget.generating") || "...")
-            //   : (pluginApi?.tr("widget.title") || "AI")
-            color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-            pointSize: root.barFontSize
-            applyUiScale: false
-          }
-        }
+      // Reset rotation when not generating
+      Binding {
+        target: iconWidget
+        property: "rotation"
+        value: 0
+        when: !root.isGenerating
       }
     }
   }
