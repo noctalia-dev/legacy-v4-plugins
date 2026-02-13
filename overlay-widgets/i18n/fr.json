@@ -1,0 +1,10 @@
+{
+    "bar": {
+        "close": "Fermer"
+    },
+    "widget": {
+        "pin": "Épingler le widget",
+        "unpin": "Désépingler le widget",
+        "close": "Fermer le widget"
+    }
+}
