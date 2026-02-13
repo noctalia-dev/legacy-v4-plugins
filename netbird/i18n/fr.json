@@ -1,0 +1,67 @@
+{
+	"settings": {
+		"title": "Paramètres NetBird",
+		"description": "Configurer l'affichage et le comportement du statut NetBird VPN",
+		"refresh-interval": "Intervalle de rafraîchissement",
+		"refresh-interval-desc": "Fréquence de vérification du statut NetBird",
+		"display-options": "Options d'affichage",
+		"compact-mode": "Mode compact",
+		"compact-mode-desc": "Afficher uniquement l'icône dans la barre",
+		"show-ip": "Afficher l'adresse IP",
+		"show-ip-desc": "Afficher l'IP NetBird dans le widget de la barre",
+
+		"hide-disconnected": "Masquer les pairs déconnectés",
+		"hide-disconnected-desc": "Afficher uniquement les pairs en ligne dans le panneau",
+		"show-ping": "Afficher la latence (ping)",
+		"show-ping-desc": "Ping tous les pairs connectés et affiche la latence (ms). Se rafraîchit au même intervalle que le statut.",
+		"show-ping-warning": "Cette fonctionnalité envoie des paquets ICMP à chaque pair connecté à chaque intervalle de rafraîchissement. Cela peut augmenter l'utilisation du réseau et la charge CPU.",
+		"terminal": "Configuration du terminal",
+		"terminal-detected": "Terminal auto-détecté",
+		"terminal-none": "Aucun émulateur de terminal détecté",
+		"ping-count": "Nombre de pings",
+		"ping-count-desc": "Nombre de paquets ping à envoyer lors du test de connectivité",
+		"peer-action": "Action au clic sur un pair",
+		"default-peer-action": "Action par défaut",
+		"default-peer-action-desc": "Action lors du clic sur un pair dans le panneau"
+	},
+	"actions": {
+		"widget-settings": "Paramètres du widget"
+	},
+	"context": {
+		"connect": "Connecter",
+		"disconnect": "Déconnecter",
+		"refresh": "Actualiser le statut",
+		"not-installed": "NetBird n'est pas installé",
+		"settings": "Paramètres",
+		"copy-ip": "Copier l'IP",
+		"ssh": "SSH vers l'hôte",
+		"ping": "Ping l'hôte"
+	},
+	"toast": {
+		"title": "NetBird",
+		"connected": "NetBird connecté",
+		"disconnected": "NetBird déconnecté",
+		"ip-copied": {
+			"title": "IP copiée"
+		},
+		"terminal-not-configured": {
+			"title": "Terminal non configuré",
+			"message": "Veuillez définir une commande de terminal dans les paramètres du plugin"
+		}
+	},
+	"panel": {
+		"title": "Réseau NetBird",
+		"peers": "pairs",
+		"not-connected": "Non connecté",
+		"online": "En ligne",
+		"offline": "Hors ligne",
+		"no-peers": "Aucun pair connecté",
+		"admin-console": "Console d'administration",
+		"management": "Management",
+		"signal": "Signal",
+		"terminal-warning": {
+			"title": "Terminal non configuré",
+			"message": "Définissez une commande de terminal dans les paramètres pour activer SSH et ping"
+		}
+	}
+}

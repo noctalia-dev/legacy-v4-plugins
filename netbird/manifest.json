@@ -1,0 +1,28 @@
+{
+	"id": "netbird",
+	"name": "NetBird",
+	"version": "1.0.0",
+	"minNoctaliaVersion": "4.0.0",
+	"author": "Cleboost",
+	"license": "MIT",
+	"repository": "https://github.com/noctalia-dev/noctalia-plugins",
+	"description": "Show NetBird VPN status in the menu bar.",
+	"tags": ["Bar", "Network", "Panel"],
+	"entryPoints": {
+		"main": "Main.qml",
+		"barWidget": "BarWidget.qml",
+		"panel": "Panel.qml",
+		"settings": "Settings.qml"
+	},
+	"metadata": {
+		"defaultSettings": {
+			"refreshInterval": 5000,
+			"compactMode": false,
+			"showIpAddress": true,
+			"hideDisconnected": false,
+			"showPing": false,
+			"pingCount": 5,
+			"defaultPeerAction": "copy-ip"
+		}
+	}
+}
