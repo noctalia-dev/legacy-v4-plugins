@@ -244,7 +244,7 @@ Rectangle {
                     }
                 }
                 NIconButton {
-                    visible: !root.isPinned  // Hide pin button for pinned items (use delete instead)
+                    visible: !root.isPinned && (pluginApi?.pluginSettings?.pincardsEnabled ?? true)  // Hide pin button if pinned or if feature disabled
                     icon: "pin"
                     tooltipText: pluginApi?.tr("card.pin") || "Pin"
                     colorFg: root.accentFgColor

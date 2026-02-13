@@ -40,8 +40,11 @@ Item {
   property bool removeMargins: cfg.removeMargins ?? defaults.removeMargins
   property int iconSpacing: cfg.iconSpacing || Style.marginXS
 
-  readonly property color activeColor: Color.mPrimary
-  readonly property color inactiveColor: Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+  property string activeColorKey: cfg.activeColor ?? defaults.activeColor
+  property string inactiveColorKey: cfg.inactiveColor ?? defaults.inactiveColor
+
+  readonly property color activeColor: Color.resolveColorKey(activeColorKey)
+  readonly property color inactiveColor: inactiveColorKey === "none" ? Qt.alpha(Color.mOnSurfaceVariant, 0.3) : Color.resolveColorKey(inactiveColorKey)
   readonly property color micColor: micActive ? activeColor : inactiveColor
   readonly property color camColor: camActive ? activeColor : inactiveColor
   readonly property color scrColor: scrActive ? activeColor : inactiveColor
@@ -276,10 +279,36 @@ Item {
     }
   }
 
+  NPopupContextMenu {
+    id: contextMenu
+
+    model: [
+      {
+        "label": pluginApi?.tr("menu.settings"),
+        "action": "settings",
+        "icon": "settings"
+      },
+    ]
+
+    onTriggered: function (action) {
+      contextMenu.close();
+      PanelService.closeContextMenu(screen);
+      if (action === "settings") {
+        BarService.openPluginSettings(root.screen, pluginApi.manifest);
+      }
+    }
+  }
+
   MouseArea {
     anchors.fill: parent
     acceptedButtons: Qt.RightButton
     hoverEnabled: true
+
+    onClicked: function (mouse) {
+      if (mouse.button === Qt.RightButton) {
+        PanelService.showContextMenu(contextMenu, root, screen);
+      }
+    }
 
     onEntered: {
       var tooltipText = buildTooltip();

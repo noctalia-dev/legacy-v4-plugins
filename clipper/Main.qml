@@ -9,6 +9,16 @@ Item {
     id: root
     property var pluginApi: null
 
+    // Panel settings control
+    property bool showCloseButton: false
+
+    // Watch for pluginApi changes and initialize settings
+    onPluginApiChanged: {
+        if (pluginApi) {
+            showCloseButton = pluginApi.pluginSettings?.showCloseButton ?? false;
+        }
+    }
+
     // Pending selected text for ToDo selector
     property string pendingSelectedText: ""
 
@@ -91,7 +101,7 @@ Item {
                 root.noteCardsRevision++;
 
         // Save to file
-                
+
             } catch(e) {
                 root.noteCards = [];
             }
@@ -439,6 +449,7 @@ Item {
         root.noteCardsRevision++;
 
         // Save to file
+        saveNoteCard(updatedNote);
     }
 
     // Function to delete a note card
@@ -457,7 +468,6 @@ Item {
         root.noteCards = root.noteCards.filter(n => n.id !== noteId);
         root.noteCardsRevision++;
 
-        // Save to file
         ToastService.showNotice(pluginApi?.tr("toast.note-deleted") || "Note deleted");
     }
 
@@ -524,11 +534,6 @@ Item {
 
     // Function to save all note cards (saves each to individual file)
     function saveNoteCards() {
-        // First, increment revision to ensure all local changes are captured
-        root.noteCardsRevision++;
-
-        // Save to file
-
         // Save each notecard individually
         for (let i = 0; i < root.noteCards.length; i++) {
             saveNoteCard(root.noteCards[i]);
@@ -718,6 +723,9 @@ Item {
             return;
         }
 
+        // NOTE: Cross-plugin integration - direct settings manipulation is allowed
+        // when calling another plugin's API. This is NOT internal IPC (forbidden).
+        // We're integrating with ToDo plugin using its data structure.
         const trimmedText = text.substring(0, maxTodoTextLength);
         var todos = todoApi.pluginSettings.todos || [];
 
@@ -726,7 +734,9 @@ Item {
             text: trimmedText,
             completed: false,
             createdAt: new Date().toISOString(),
-            pageId: pageId
+            pageId: pageId,
+            priority: "medium",
+            details: ""
         };
 
         todos.push(newTodo);
@@ -740,34 +750,16 @@ Item {
         Quickshell.execDetached(["wl-copy", "--", text]);
     }
 
-    // Process for copying to clipboard (prevents command injection)
+    // Process for copying to clipboard (direct pipe: cliphist decode | wl-copy)
     Process {
         id: copyToClipboardProc
         property string clipboardId: ""
         stdout: StdioCollector {}
 
         onExited: (exitCode) => {
-            if (exitCode === 0) {
-                // Now copy the decoded content to clipboard
-                wlCopyProc.write(stdout.data);
-                wlCopyProc.stdinEnabled = false;  // Close stdin to signal EOF
-            } else {
+            if (exitCode !== 0) {
                 ToastService.showError(pluginApi?.tr("toast.failed-to-copy") || "Failed to copy to clipboard");
             }
-        }
-    }
-
-    // Process for wl-copy
-    Process {
-        id: wlCopyProc
-        command: ["wl-copy"]
-        running: false
-        stdinEnabled: true
-
-        onExited: (exitCode) => {
-            if (exitCode !== 0) {
-            }
-            stdinEnabled = true;  // Re-enable for next use
         }
     }
 
@@ -787,9 +779,10 @@ Item {
             return;
         }
 
-        // Use Process with proper command array (no shell interpolation)
+        // Use shell pipe: cliphist decode ID | wl-copy
+        // ID is validated to be numeric only, so this is safe from command injection
         copyToClipboardProc.clipboardId = id;
-        copyToClipboardProc.command = ["cliphist", "decode", String(id)];
+        copyToClipboardProc.command = ["sh", "-c", `cliphist decode ${id} | wl-copy`];
         copyToClipboardProc.running = true;
     }
 
@@ -954,7 +947,7 @@ Item {
         root.activeSelector = "todo";
         root.activeSelector = "todo";
         root.pendingSelectedText = text;
-        
+
         // Get pages from ToDo plugin
         const todoApi = PluginService.getPluginAPI("todo");
         let todoPages = [];
@@ -965,8 +958,8 @@ Item {
             }
         } else {
         }
-        
-        
+
+
         // Show selector with pages list
         if (todoPageSelector) {
             todoPageSelector.show(text, todoPages);
@@ -1039,11 +1032,11 @@ Item {
                 const bulletText = "- " + text;
                 const currentContent = noteCards[i].content || "";
                 const newContent = currentContent ? currentContent + "\n" + bulletText : bulletText;
-                
+
                 noteCards[i].content = newContent;
                 noteCardsChanged();
                 saveNoteCard(noteCards[i]);
-                
+
                 ToastService.showNotice(pluginApi?.tr("toast.text-added-to-note") || "Text added to note");
                 return;
             }
@@ -1134,6 +1127,14 @@ Item {
     }
     // Initialize pinned.json and notecards.json if they don't exist
     Component.onCompleted: {
+        console.log("Main.qml Component.onCompleted - pluginApi:", pluginApi);
+        if (pluginApi) {
+            console.log("Main.qml: pluginSettings in onCompleted:", pluginApi.pluginSettings);
+            closeOnBackgroundClick = pluginApi.pluginSettings?.closeOnBackgroundClick ?? true;
+            showCloseButton = pluginApi.pluginSettings?.showCloseButton ?? false;
+            console.log("Main.qml: Set closeOnBg:", closeOnBackgroundClick, "showClose:", showCloseButton);
+        }
+
         // Create empty pinned.json if it doesn't exist
         const pinnedPath = Quickshell.env("HOME") + "/.config/noctalia/plugins/clipper/pinned.json";
         Quickshell.execDetached([
@@ -1168,7 +1169,7 @@ Item {
         if (deleteItemProc.running) deleteItemProc.terminate();
         if (wipeProc.running) wipeProc.terminate();
         if (loadNoteCardsProc.running) loadNoteCardsProc.terminate();
-        
+
         // Clear data structures
         pinnedItems = [];
         noteCards = [];

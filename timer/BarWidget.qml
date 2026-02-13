@@ -21,6 +21,11 @@ Item {
   readonly property var mainInstance: pluginApi?.mainInstance
   readonly property bool isActive: mainInstance && (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0)
 
+  property var cfg: pluginApi?.pluginSettings || ({})
+  property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+  readonly property string iconColorKey: cfg.iconColor ?? defaults.iconColor ?? "none"
+  readonly property color iconColor: Color.resolveColorKey(iconColorKey)
+
   // Bar positioning properties
   readonly property string screenName: screen ? screen.name : ""
   readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
@@ -83,7 +88,7 @@ Item {
           if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
             return Color.mPrimary
           }
-          return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+          return mouseArea.containsMouse ? Color.mOnHover : root.iconColor
         }
       }
 
@@ -102,7 +107,7 @@ Item {
           if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
             return Color.mPrimary
           }
-          return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+          return mouseArea.containsMouse ? Color.mOnHover : root.iconColor
         }
       }
     }

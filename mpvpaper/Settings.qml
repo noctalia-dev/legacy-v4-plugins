@@ -16,7 +16,7 @@ ColumnLayout {
         false
 
     spacing: Style.marginM
-    
+
     // Active toggle
     NToggle {
         Layout.fillWidth: true
@@ -43,21 +43,27 @@ ColumnLayout {
 
         NTabButton {
             enabled: root.active
-            text: "Playback"
+            text: pluginApi?.tr("settings.tab_bar.playback") || "Playback"
             tabIndex: 0
             checked: subTabBar.currentIndex === 0
         }
         NTabButton {
             enabled: root.active
-            text: "Audio"
+            text: pluginApi?.tr("settings.tab_bar.audio") || "Audio"
             tabIndex: 1
             checked: subTabBar.currentIndex === 1
         }
         NTabButton {
             enabled: root.active
-            text: "Advanced"
+            text: pluginApi?.tr("settings.tab_bar.automation") || "Automation"
             tabIndex: 2
             checked: subTabBar.currentIndex === 2
+        }
+        NTabButton {
+            enabled: root.active
+            text: pluginApi?.tr("settings.tab_bar.advanced") || "Advanced"
+            tabIndex: 3
+            checked: subTabBar.currentIndex === 3
         }
     }
 
@@ -77,6 +83,12 @@ ColumnLayout {
             active: root.active
         }
 
+        AutomationTab {
+            id: automation
+            pluginApi: root.pluginApi
+            active: root.active
+        }
+
         AdvancedTab {
             id: advanced
             pluginApi: root.pluginApi
@@ -86,8 +98,8 @@ ColumnLayout {
 
 
     /********************************
-    * Save settings functionality
-    ********************************/
+     * Save settings functionality
+     ********************************/
     function saveSettings() {
         if(!pluginApi) {
             Logger.e("mpvpaper", "Cannot save: pluginApi is null");
@@ -99,6 +111,7 @@ ColumnLayout {
         playback.saveSettings();
         audio.saveSettings();
         advanced.saveSettings();
+        automation.saveSettings();
 
         pluginApi.saveSettings();
 

@@ -11,13 +11,26 @@
   "main": {
     "added_new_todo": "Added new todo: ",
     "cleared_completed_todos": "Cleared ",
+    "cleared_all_todos": "Cleared all todos",
     "completed_todos_suffix": " completed todos",
     "not_found_suffix": " not found",
     "removed_todo": "Removed todo item",
     "todo_completed": "completed",
     "todo_marked_incomplete": "marked as incomplete",
     "todo_not_found": "Todo with ID ",
-    "todo_status_changed": "Todo "
+    "todo_status_changed": "Todo ",
+    "updated_todo": "Todo updated",
+    "updated_todo_priority": "Todo priority updated",
+    "error": "Error",
+    "error_text_empty": "Todo text cannot be empty",
+    "error_invalid_priority": "Priority must be high, medium, or low",
+    "error_page_not_found": "Page not found",
+    "error_todo_not_found": "Todo not found",
+    "error_create_failed": "Failed to create todo",
+    "error_update_failed": "Failed to update todo",
+    "error_remove_failed": "Failed to remove todo",
+    "error_rename_failed": "Failed to rename page",
+    "error_delete_failed": "Failed to delete page"
   },
   "panel": {
     "add_todo": {
@@ -76,11 +89,15 @@
       "add_button": "Add Page",
       "empty_name": "Page name cannot be empty",
       "name_exists": "Page name already exists",
+      "cannot_delete_default": "Cannot delete the default page",
       "cannot_delete_last": "Cannot delete the last page",
       "confirm_delete_title": "Confirm Delete",
       "confirm_delete_message": "Are you sure you want to delete page '{pageName}'?\n\nAll todos in this page will be transferred to the first page.",
       "rename_button_tooltip": "Rename",
-      "delete_button_tooltip": "Delete"
+      "delete_button_tooltip": "Delete",
+      "added_page": "Added page: ",
+      "deleted_page": "Deleted page",
+      "renamed_page": "Renamed page"
     }
   }
 }

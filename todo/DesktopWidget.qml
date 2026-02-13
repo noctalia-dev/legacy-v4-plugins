@@ -29,6 +29,9 @@ DraggableDesktopWidget {
   readonly property int scaledRadiusM: Math.round(Style.radiusM * widgetScale)
   readonly property int scaledRadiusS: Math.round(Style.radiusS * widgetScale)
 
+  // Reference to Main.qml instance for centralized data management
+  readonly property var mainInstance: pluginApi?.mainInstance
+
   implicitWidth: Math.round(300 * widgetScale)
   implicitHeight: {
     var headerHeight = scaledBaseWidgetSize + scaledMarginL * 2;
@@ -392,105 +395,21 @@ DraggableDesktopWidget {
 
   // Internal utility functions
   function updateTodo(todoId, updates) {
-    if (!pluginApi) return false;
-
-    var todos = pluginApi.pluginSettings.todos || [];
-    for (var i = 0; i < todos.length; i++) {
-      if (todos[i].id === todoId) {
-        if (updates.text !== undefined) todos[i].text = updates.text;
-        if (updates.completed !== undefined) todos[i].completed = updates.completed;
-        if (updates.priority !== undefined) todos[i].priority = updates.priority;
-        if (updates.details !== undefined) todos[i].details = updates.details;
-        return true;
-      }
-    }
-    return false;
+    if (!mainInstance) return false;
+    return mainInstance.updateTodo(todoId, updates);
   }
 
   // Helper function to toggle todo completion status
   function toggleTodo(todoId, currentCompletedStatus) {
-    if (!pluginApi) {
-      Logger.e("Todo", "pluginApi is null, cannot toggle todo");
+    if (!mainInstance) {
+      Logger.e("Todo", "mainInstance is null, cannot toggle todo");
       return false;
     }
 
-    var success = updateTodo(todoId, {
+    // Use the existing updateTodo function to update only the completion status
+    return updateTodo(todoId, {
       completed: !currentCompletedStatus
     });
-
-    if (success) {
-      var completedCount = calculateCompletedCount();
-      pluginApi.pluginSettings.completedCount = completedCount;
-
-      moveTodoToCorrectPosition(todoId);
-
-      pluginApi.saveSettings();
-      return true;
-    } else {
-      Logger.e("Todo", "Failed to toggle todo with ID " + todoId);
-      return false;
-    }
-  }
-
-  function calculateCompletedCount() {
-    if (!pluginApi) return 0;
-
-    var todos = pluginApi.pluginSettings.todos || [];
-    var completedCount = 0;
-    for (var j = 0; j < todos.length; j++) {
-      if (todos[j].completed) {
-        completedCount++;
-      }
-    }
-    return completedCount;
-  }
-
-
-  function moveTodoToCorrectPosition(todoId) {
-    if (!pluginApi) return;
-
-    var todos = pluginApi.pluginSettings.todos || [];
-    var currentPageId = pluginApi?.pluginSettings?.current_page_id || 0;
-    var todoIndex = -1;
-
-    for (var i = 0; i < todos.length; i++) {
-      if (todos[i].id === todoId) {
-        todoIndex = i;
-        break;
-      }
-    }
-
-    if (todoIndex === -1) return;
-
-    var movedTodo = todos[todoIndex];
-
-    // Only reorder if todo belongs to current page
-    if (movedTodo.pageId !== currentPageId) return;
-
-    todos.splice(todoIndex, 1);
-
-    if (movedTodo.completed) {
-      // Place completed items at the end of the page
-      var insertIndex = todos.length;
-      for (var j = todos.length - 1; j >= 0; j--) {
-        if (todos[j].pageId === currentPageId && todos[j].completed) {
-          insertIndex = j + 1;
-          break;
-        }
-      }
-      todos.splice(insertIndex, 0, movedTodo);
-    } else {
-      // Place uncompleted items at the beginning of the page
-      var insertIndex = 0;
-      for (; insertIndex < todos.length; insertIndex++) {
-        if (todos[insertIndex].pageId === currentPageId) {
-          if (todos[insertIndex].completed) break;
-        }
-      }
-      todos.splice(insertIndex, 0, movedTodo);
-    }
-
-    pluginApi.saveSettings();
   }
 
   // Helper function to get priority color

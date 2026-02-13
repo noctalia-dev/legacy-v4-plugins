@@ -23,10 +23,15 @@ NIconButton {
     readonly property real barFontSize: Style.getBarFontSizeForScreen(screenName)
 
     readonly property var mainInstance: pluginApi?.mainInstance
-    readonly property bool hideInactive: 
-        pluginApi?.pluginSettings?.hideInactive ?? 
-        pluginApi?.manifest?.metadata?.defaultSettings?.hideInactive ?? 
+    readonly property bool hideInactive:
+        pluginApi?.pluginSettings?.hideInactive ??
+        pluginApi?.manifest?.metadata?.defaultSettings?.hideInactive ??
         false
+
+    property var cfg: pluginApi?.pluginSettings || ({})
+    property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+    readonly property string iconColorKey: cfg.iconColor ?? defaults.iconColor ?? "none"
+    readonly property color iconColor: Color.resolveColorKey(iconColorKey)
 
     readonly property bool shouldShow: !hideInactive || (mainInstance?.isRecording ?? false) || (mainInstance?.isPending ?? false)
 
@@ -55,7 +60,7 @@ NIconButton {
     applyUiScale: false
     customRadius: Style.radiusL
     colorBg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mPrimary : Style.capsuleColor
-    colorFg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mOnPrimary : Color.mOnSurface
+    colorFg: (mainInstance?.isRecording || mainInstance?.isPending) ? Color.mOnPrimary : root.iconColor
     colorBorder: "transparent"
     colorBorderHover: "transparent"
     border.color: Style.capsuleBorderColor

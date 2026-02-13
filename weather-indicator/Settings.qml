@@ -9,15 +9,27 @@ ColumnLayout {
 
   property var pluginApi: null
 
-  property bool showTempValue: pluginApi?.pluginSettings?.showTempValue ?? true
-  property bool showConditionIcon: pluginApi?.pluginSettings?.showConditionIcon ?? true
-  property bool showTempUnit: pluginApi?.pluginSettings?.showTempUnit ?? true
-  property string tooltipOption: pluginApi?.pluginSettings?.tooltipOption || pluginApi?.manifest?.defaultSettings?.tooltipOption || "everything"
+  property var cfg: pluginApi?.pluginSettings || ({})
+  property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+
+  property bool showTempValue: cfg.showTempValue ?? defaults.showTempValue
+  property bool showConditionIcon: cfg.showConditionIcon ?? defaults.showConditionIcon
+  property bool showTempUnit: cfg.showTempUnit ?? defaults.showTempUnit
+  property string tooltipOption: cfg.tooltipOption ?? defaults.tooltipOption
+  property string customColor: cfg.customColor ?? defaults.customColor
   spacing: Style.marginL
 
   Component.onCompleted: {
     Logger.i("WeatherIndicator", "Settings UI loaded");
   }
+
+    NComboBox {
+      label: pluginApi?.tr("settings.customColor.label") || "customColor"
+      description: pluginApi?.tr("settings.customColor.desc") || "Choose what color you would like the icon and text to be."
+      model: Color.colorKeyModel
+      currentKey: root.customColor
+      onSelected: key => root.customColor = key
+    }
 
   NToggle {
     id: toggleIcon
@@ -94,7 +106,7 @@ ColumnLayout {
     pluginApi.pluginSettings.showConditionIcon = root.showConditionIcon;
     pluginApi.pluginSettings.showTempUnit = root.showTempUnit;
     pluginApi.pluginSettings.tooltipOption = root.tooltipOption;
-
+    pluginApi.pluginSettings.customColor = root.customColor;
     pluginApi.saveSettings();
 
     Logger.i("WeatherIndicator", "Settings saved successfully");

@@ -54,6 +54,11 @@ Item {
                     root.pluginApi?.tr("barWidget.contextMenu.mute") || "Mute",
                 "action": root.isMuted ? "unmute" : "mute",
                 "icon": root.isMuted ? "volume-high" : "volume-mute"
+            },
+            {
+                "label": I18n.tr("actions.widget-settings"),
+                "action": "widget-settings",
+                "icon": "settings"
             }
         ]
 
@@ -84,6 +89,9 @@ Item {
                 case "unmute":
                     root.pluginApi.pluginSettings.isMuted = false;
                     root.pluginApi.saveSettings();
+                    break;
+                case "widget-settings":
+                    BarService.openPluginSettings(root.screen, pluginApi.manifest);
                     break;
                 default:
                     Logger.e("mpvpaper", "Error, action not found:", action);

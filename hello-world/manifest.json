@@ -1,7 +1,7 @@
 {
   "id": "hello-world",
   "name": "Hello World",
-  "version": "1.0.12",
+  "version": "1.1.1",
   "minNoctaliaVersion": "4.1.2",
   "author": "Noctalia Team",
   "official": true,
@@ -23,7 +23,7 @@
   "metadata": {
     "defaultSettings": {
       "message": "Hello World",
-      "backgroundColor": "#A9AEFE"
+      "iconColor": "primary"
     }
   }
 }

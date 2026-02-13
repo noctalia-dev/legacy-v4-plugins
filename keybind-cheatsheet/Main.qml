@@ -586,6 +586,7 @@ Item {
     var lines = text.split('\n');
     var categories = [];
     var currentCategory = null;
+    var hasCategories = false; // Track if we found any category headers
 
     // TUTAJ ZMIANA: Pobierz ustawioną zmienną (domyślnie $mod) i zamień na wielkie litery
     var modVar = pluginApi?.pluginSettings?.modKeyVariable || "$mod";
@@ -596,6 +597,7 @@ Item {
 
       // Category header: # 1. Category Name
       if (line.startsWith("#") && line.match(/#\s*\d+\./)) {
+        hasCategories = true; // Found at least one category
         if (currentCategory) {
           categories.push(currentCategory);
         }
@@ -604,6 +606,12 @@ Item {
       }
       // Keybind: bind = $mod, T, exec, cmd #"description"
       else if (line.includes("bind") && line.includes('#"')) {
+        // If no categories found yet, create default category
+        if (!currentCategory && !hasCategories) {
+          var defaultCategoryName = pluginApi?.tr("keybind-cheatsheet.default-category") || "Keybinds";
+          currentCategory = { "title": defaultCategoryName, "binds": [] };
+        }
+
         if (currentCategory) {
           var descMatch = line.match(/#"(.*?)"$/);
           var description = descMatch ? descMatch[1] : "No description";

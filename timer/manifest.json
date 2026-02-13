@@ -1,7 +1,7 @@
 {
   "id": "timer",
   "name": "Timer",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "minNoctaliaVersion": "3.8.0",
   "author": "Noctalia Team",
   "official": true,
@@ -25,7 +25,8 @@
   "metadata": {
     "defaultSettings": {
       "defaultDuration": 0,
-      "compactMode": false
+      "compactMode": false,
+      "iconColor": "none"
     }
   }
 }

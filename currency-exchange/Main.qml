@@ -137,12 +137,18 @@ Item {
   // IPC Handler (for keyboard shortcut toggle)
   // =============================================================================
   IpcHandler {
+    target: "plugin:currency-exchange"
+
     function togglePanel() {
       pluginApi.withCurrentScreen(screen => {
         pluginApi.togglePanel(screen);
       });
     }
 
-    target: "plugin:currency-exchange"
+    function toggle() {
+      pluginApi.withCurrentScreen(screen => {
+        pluginApi.toggleLauncher(screen);
+      });
+    }
   }
 }

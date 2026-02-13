@@ -2,7 +2,7 @@
 
 Universal keyboard shortcuts cheatsheet plugin for Noctalia that **automatically detects** your compositor (Hyprland or Niri) and displays your keybindings with **recursive config parsing**.
 
-![Preview](assets/preview.png)
+![Preview](preview.png)
 
 ## Features
 

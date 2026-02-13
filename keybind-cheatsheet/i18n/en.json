@@ -1,5 +1,6 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Keybinds",
     "error": {
       "unsupported-compositor": "Unsupported Compositor",
       "sway-not-supported": "Sway is not yet supported",

@@ -1,0 +1,133 @@
+{
+  "barWidget": {
+    "contextMenu": {
+      "toggle": "Umschalten",
+      "panel": "Panel",
+      "play": "Abspielen",
+      "pause": "Pausieren",
+      "mute": "Stummschalten",
+      "unmute": "Stummschaltung aufheben"
+    }
+  },
+  "panel": {
+    "title": "Konfiguriere mpvpaper",
+    "buttons": {
+      "folder": {
+        "text": "Ordner",
+        "tooltip": "Wähle einen anderen Ordner, der die Hintergrundbilder enthält"
+      },
+      "refresh": {
+        "text": "Aktualisieren",
+        "tooltip": "Thumbnails aktualisieren, alte entfernen und neue erstellen"
+      },
+      "random": {
+        "text": "Zufällig",
+        "tooltip": "Wählt ein zufälliges Bild aus diesem Ordner aus"
+      },
+      "clear": {
+        "text": "Löschen",
+        "tooltip": "Lösche das aktuelle Hintergrundbild"
+      }
+    },
+    "loading": "Lade..."
+  },
+  "settings": {
+    "toggle": {
+      "label": "mpvpaper aktivieren",
+      "description": "Aktiviere die mpvpaper-Integration"
+    },
+    "tab_bar": {
+      "playback": "Wiedergabe",
+      "audio": "Audio",
+      "automation": "Automatisierung",
+      "advanced": "Erweitert"
+    },
+    "wallpapers_folder": {
+      "title_label": "Hintergrundbilder-Ordner",
+      "title_description": "Der Ordner, der alle Hintergrundbilder enthält, nützlich bei der Verwendung von zufälligen Hintergrundbildern",
+      "input_placeholder": "/path/to/folder/with/wallpapers",
+      "icon_tooltip": "Hintergrundbilder-Ordner auswählen",
+      "file_picker_title": "Hintergrundbilder-Ordner auswählen"
+    },
+    "select_wallpaper": {
+      "title_label": "Hintergrundbild auswählen",
+      "title_description": "Auswahl des aktuell abgespielten Videohintergrundbildes",
+      "icon_tooltip": "Aktuelles Hintergrundbild auswählen",
+      "file_picker_title": "Aktuelles Hintergrundbild auswählen"
+    },
+    "volume": {
+      "label": "Lautstärke",
+      "description": "Lautstärke des abgespielten Videohintergrundbildes"
+    },
+    "mpv_socket": {
+      "title_label": "Mpvpaper socket",
+      "title_description": "Der mpvpaper-Socket, mit dem noctalia verbunden ist",
+      "input_placeholder": "Beispiel: /tmp/mpv-socket"
+    },
+    "hardware_acceleration": {
+      "label": "Hardwarebeschleunigung",
+      "description": "Entlastet die CPU durch Auslagerung der Videodekodierung auf die GPU/spezielle Hardware."
+    },
+    "profile": {
+      "label": "Profil",
+      "description": "Das von mpv verwendete Profil. Verwende „fast“ für eine bessere Leistung.",
+      "default": "Standard",
+      "fast": "Schnell",
+      "high_quality": "Hohe Qualität",
+      "low_latency": "Geringe Latenz"
+    },
+    "fill_mode": {
+      "label": "Ausfüllmodus",
+      "description": "Der von mpvpaper verwendete Ausfüllmodus",
+      "fit": "Einpassen",
+      "crop": "Zuschneiden",
+      "stretch": "Dehnen"
+    },
+    "automation": {
+      "label": "Automatisierung",
+      "description": "Automatischen Hintergrundbildwechsel planen"
+    },
+    "automation_mode": {
+      "label": "Modus wechseln",
+      "description": "Der Modus zum Auswählen des neuen Hintergrundbildes",
+      "random": "Zufällig",
+      "alphabetically": "Alphabetisch"
+    },
+    "automation_time": {
+      "label": "Zeit",
+      "description": "Wie lange es dauern sollte, das Hintergrundbild zu wechseln",
+      "5m": "5m",
+      "10m": "10m",
+      "30m": "30m",
+      "1h": "1h",
+      "1h30m": "1h 30m",
+      "2h": "2h"
+    },
+    "actions": {
+      "random": {
+        "text": "Zufällig",
+        "tooltip": "Wählt ein beliebiges Hintergrundbild aus dem Hintergrundbilder Ordner aus"
+      },
+      "clear": {
+        "text": "Löschen",
+        "tooltip": "Aktuelles Hintergrundbild löschen"
+      },
+      "pause": {
+        "text": "Pausieren",
+        "tooltip": "Video-Hintergrundbild pausieren"
+      },
+      "resume": {
+        "text": "Fortsetzen",
+        "tooltip": "Video-Hintergrundbild fortsetzen"
+      },
+      "mute": {
+        "text": "Stummschalten",
+        "tooltip": "Video-Hintergrund stummschalten"
+      },
+      "unmute": {
+        "text": "Ton aktivieren",
+        "tooltip": "Stummschaltung des Video-Hintergrunds aufheben"
+      }
+    }
+  }
+}

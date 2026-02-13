@@ -1,0 +1,135 @@
+{
+  "barWidget": {
+    "contextMenu": {
+      "panel": "Panel",
+      "enable": "Aktivieren",
+      "disable": "Deaktivieren",
+      "pause": "Pausieren",
+      "play": "Fortsetzen",
+      "unmute": "Stummschaltung aufheben",
+      "mute": "Stummschalten"
+    },
+    "tooltip": "Öffne den Videohintergrund-Manager"
+  },
+  "common": {
+    "tool_row": {
+      "random": {
+        "text": "Zufällig",
+        "tooltip": "Wählt ein beliebiges Hintergrundbild aus dem Hintergrundbilder Ordner aus"
+      },
+      "clear": {
+        "text": "Löschen",
+        "tooltip": "Aktuelles Hintergrundbild löschen"
+      },
+      "pause": {
+        "text": "Pausieren",
+        "tooltip": "Video-Hintergrundbild pausieren"
+      },
+      "play": {
+        "text": "Fortsetzen",
+        "tooltip": "Video-Hintergrundbild fortsetzen"
+      },
+      "unmute": {
+        "text": "Ton aktivieren",
+        "tooltip": "Stummschaltung des Video-Hintergrunds aufheben"
+      },
+      "mute": {
+        "text": "Stummschalten",
+        "tooltip": "Video-Hintergrund stummschalten"
+      }
+    }
+  },
+  "panel": {
+    "title": "Video Hintergrund-Manager",
+    "tool_row": {
+      "folder": {
+        "text": "Ordner",
+        "tooltip": "Wähle einen anderen Ordner, der die Hintergrundbilder enthält."
+      },
+      "refresh": {
+        "text": "Aktualisieren",
+        "tooltip": "Thumbnails aktualisieren, alte entfernen und neue erstellen"
+      }
+    },
+    "loading": "Laden...",
+    "file_picker": {
+      "title": "Hintergrundbilder Ordner auswählen"
+    }
+  },
+  "settings": {
+    "toggle": {
+      "label": "Video-Hintergrundbilder aktivieren",
+      "description": "Aktiviere Video-Hintergrundbilder, die mit QtMultimedia angezeigt werden"
+    },
+    "tab_bar": {
+      "general": "Allgemein",
+      "automation": "Automatisierung"
+    },
+    "general": {
+      "wallpapers_folder": {
+        "title": {
+          "label": "Hintergrundbilder-Ordner",
+          "description": "Der Ordner, der alle Video-Hintergrundbilder enthält"
+        },
+        "text_input": {
+          "placeholder": "/path/to/folder/with/wallpapers"
+        },
+        "icon_button": {
+          "tooltip": "Hintergrundbilder Ordner auswählen"
+        },
+        "file_picker": {
+          "title": "Hintergrundbilder Ordner auswählen"
+        }
+      },
+      "select_wallpaper": {
+        "title": {
+          "label": "Hintergrundbild auswählen",
+          "description": "Aktuelles Video-Hintergrundbild auswählen"
+        },
+        "icon_button": {
+          "tooltip": "Aktuelles Video-Hintergrundbild auswählen"
+        },
+        "file_picker": {
+          "title": "Aktuelles Hintergrundbild auswählen"
+        }
+      },
+      "fill_mode": {
+        "label": "Ausfüllmodus",
+        "description": "Der Modus, in dem das Hintergrundbild in den Hintergrund eingefügt wird",
+        "stretch": "Dehnen",
+        "fit": "Einpassen",
+        "crop": "Zuschneiden"
+      },
+      "orientation": {
+        "label": "Orientierung",
+        "description": "Die Ausrichtung der Videowiedergabe kann ein Vielfaches von 90 sein.."
+      },
+      "volume": {
+        "label": "Volume",
+        "description": "Aktuelle Lautstärke des abgespielten Videos"
+      }
+    },
+    "automation": {
+      "toggle": {
+        "label": "Automatisierung",
+        "description": "Automatischen Hintergrundbildwechsel planen"
+      },
+      "mode": {
+        "label": "Modus wechseln",
+        "description": "Der Modus zum Auswählen des neuen Hintergrundbildes",
+        "random": "Zufällig",
+        "alphabetically": "Alphabetisch"
+      },
+      "time": {
+        "label": "Zeit",
+        "description": "Wie lange es dauern sollte, das Hintergrundbild zu wechseln",
+        "5m": "5m",
+        "10m": "10m",
+        "30m": "30m",
+        "1h": "1h",
+        "1h30m": "1h 30m",
+        "2h": "2h"
+      }
+    }
+  }
+}

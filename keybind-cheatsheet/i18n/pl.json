@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Skróty klawiszowe",
+    "error": {
+      "unsupported-compositor": "Nieobsługiwany kompozytor",
+      "sway-not-supported": "Sway nie jest jeszcze obsługiwany",
+      "sway-detail": "Obsługa Sway może zostać dodana w przyszłej aktualizacji (podobny format do Hyprland)",
+      "labwc-not-supported": "LabWC nie jest obsługiwany",
+      "labwc-detail": "LabWC używa formatu konfiguracji XML, który jest niekompatybilny z tą wtyczką",
+      "mango-not-supported": "MangoWC nie jest obsługiwany",
+      "mango-detail": "Format konfiguracji MangoWC nie jest kompatybilny z tą wtyczką",
+      "unknown-compositor": "Wykryto nieznany kompozytor",
+      "unknown-detail": "Ta wtyczka obsługuje tylko kompozytory Hyprland i Niri"
+    },
     "panel": {
       "loading": "Ladowanie...",
       "title": "Mapa klawiszy",

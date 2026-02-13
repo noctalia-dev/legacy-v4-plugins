@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Kısayol tuşları",
+    "error": {
+      "unsupported-compositor": "Desteklenmeyen kompozitör",
+      "sway-not-supported": "Sway henüz desteklenmiyor",
+      "sway-detail": "Sway desteği gelecekteki bir güncellemede eklenebilir (Hyprland'a benzer format)",
+      "labwc-not-supported": "LabWC desteklenmiyor",
+      "labwc-detail": "LabWC bu eklentiyle uyumlu olmayan XML yapılandırma formatı kullanıyor",
+      "mango-not-supported": "MangoWC desteklenmiyor",
+      "mango-detail": "MangoWC yapılandırma formatı bu eklentiyle uyumlu değil",
+      "unknown-compositor": "Bilinmeyen kompozitör algılandı",
+      "unknown-detail": "Bu eklenti yalnızca Hyprland ve Niri kompozitörlerini destekler"
+    },
     "panel": {
       "loading": "Yukleniyor...",
       "title": "Tuş haritası",

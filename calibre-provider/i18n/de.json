@@ -1,0 +1,12 @@
+{
+  "settings": {
+    "launcher": {
+      "title": "Launcher",
+      "description": "Das Programm zum Öffnen von Buchdateien"
+    },
+    "forcegrid": {
+      "label": "Rasteransicht erzwingen",
+      "description": "Verwende immer die Rasteransicht, um Ergebnisse anzuzeigen. Wenn deaktiviert, verwende die aktuelle Launcher-Konfiguration"
+    }
+  }
+}

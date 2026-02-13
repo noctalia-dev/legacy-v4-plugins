@@ -7,14 +7,13 @@ import qs.Widgets
 
 ColumnLayout {
     id: root
+    spacing: 0
 
     property var pluginApi: null
 
     // ToDo integration
     property bool todoPluginAvailable: false
     property bool enableTodoIntegration: pluginApi?.pluginSettings?.enableTodoIntegration ?? false
-
-    // Pinned items settings
 
     // Available card types
     readonly property var cardTypes: [
@@ -75,10 +74,10 @@ ColumnLayout {
         "File": { bg: "#e9899d", separator: "#000000", fg: "#1e1418" }
     }
 
-    spacing: Style.marginL
-
     // Home directory for path resolution
     readonly property string homeDir: Quickshell.env("HOME") || ""
+
+
 
     // Check if ToDo plugin is installed and enabled
     FileView {
@@ -140,6 +139,40 @@ ColumnLayout {
         return getColorValue(cardColors[selectedCardType]?.fg || "mOnSurface", selectedCardType, "fg");
     }
 
+    // Tab bar
+    NTabBar {
+        id: tabBar
+        Layout.fillWidth: true
+        Layout.bottomMargin: Style.marginM
+        distributeEvenly: true
+        currentIndex: tabView.currentIndex
+
+        NTabButton {
+            text: pluginApi?.tr("settings.tab-general") || "General"
+            tabIndex: 0
+            checked: tabBar.currentIndex === 0
+        }
+        NTabButton {
+            text: pluginApi?.tr("settings.tab-appearance") || "Appearance"
+            tabIndex: 1
+            checked: tabBar.currentIndex === 1
+        }
+    }
+
+    Item {
+        Layout.fillWidth: true
+        Layout.preferredHeight: Style.marginS
+    }
+
+    // Tab view
+    NTabView {
+        id: tabView
+        currentIndex: tabBar.currentIndex
+
+        // TAB 1: GENERAL
+        ColumnLayout {
+            spacing: Style.marginL
+
     // ===== INTEGRATIONS SECTION =====
     NText {
         text: pluginApi?.tr("settings.integrations") || "Integrations"
@@ -165,6 +198,157 @@ ColumnLayout {
     NDivider {
         Layout.fillWidth: true
     }
+
+    // ===== FEATURES SECTION =====
+    NText {
+        text: pluginApi?.tr("settings.features") || "Features"
+        font.bold: true
+        font.pointSize: Style.fontSizeL
+    }
+
+    // PinCards Enable Toggle
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.pincards-enabled") || "Enable Pin Cards"
+        description: pluginApi?.tr("settings.pincards-desc") || "Show pinned items panel and allow pinning clipboard items"
+        checked: pluginApi?.pluginSettings?.pincardsEnabled ?? true
+        onToggled: checked => {
+            if (pluginApi) {
+                pluginApi.pluginSettings.pincardsEnabled = checked;
+                pluginApi.saveSettings();
+            }
+        }
+    }
+
+    // Pinned items count display
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: Style.marginM
+        visible: pluginApi?.pluginSettings?.pincardsEnabled ?? true
+
+        NText {
+            text: pluginApi?.tr("settings.pincards-items-count") || "Pinned Items"
+            font.bold: true
+        }
+
+        Item { Layout.fillWidth: true }
+
+        NText {
+            text: {
+                const count = pluginApi?.mainInstance?.pinnedItems?.length || 0;
+                const max = pluginApi?.mainInstance?.maxPinnedItems || 20;
+                return count + " / " + max;
+            }
+            color: {
+                const count = pluginApi?.mainInstance?.pinnedItems?.length || 0;
+                const max = pluginApi?.mainInstance?.maxPinnedItems || 20;
+                return count >= max ? Color.mError : Color.mOnSurface;
+            }
+        }
+    }
+
+    // Clear all pinned items button
+    NButton {
+        Layout.alignment: Qt.AlignRight
+        text: pluginApi?.tr("settings.clear-all-pinned") || "Clear All Pinned Items"
+        icon: "trash"
+        visible: pluginApi?.pluginSettings?.pincardsEnabled ?? true
+        enabled: (pluginApi?.mainInstance?.pinnedItems?.length || 0) > 0
+        onClicked: {
+            if (pluginApi?.mainInstance) {
+                // Clear all pinned items
+                pluginApi.mainInstance.pinnedItems = [];
+                pluginApi.mainInstance.savePinnedFile();
+                pluginApi.mainInstance.pinnedRevision++;
+                ToastService.showNotice(pluginApi?.tr("toast.pinned-cleared") || "All pinned items cleared");
+            }
+        }
+    }
+
+    // NoteCards Enable Toggle
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.notecards-enabled") || "Enable NoteCards"
+        description: pluginApi?.tr("settings.notecards-desc") || "Show notecards panel for quick notes and sticky notes"
+        checked: pluginApi?.pluginSettings?.notecardsEnabled ?? true
+        onToggled: checked => {
+            if (pluginApi) {
+                pluginApi.pluginSettings.notecardsEnabled = checked;
+                pluginApi.saveSettings();
+            }
+        }
+    }
+
+    // Notes count display
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: Style.marginM
+        visible: pluginApi?.pluginSettings?.notecardsEnabled ?? true
+
+        NText {
+            text: pluginApi?.tr("settings.notecards-notes-count") || "Current Notes"
+            font.bold: true
+        }
+
+        Item { Layout.fillWidth: true }
+
+        NText {
+            text: {
+                const count = pluginApi?.mainInstance?.noteCards?.length || 0;
+                const max = pluginApi?.mainInstance?.maxNoteCards || 20;
+                return count + " / " + max;
+            }
+            color: {
+                const count = pluginApi?.mainInstance?.noteCards?.length || 0;
+                const max = pluginApi?.mainInstance?.maxNoteCards || 20;
+                return count >= max ? Color.mError : Color.mOnSurface;
+            }
+        }
+    }
+
+    // Clear all notes button
+    NButton {
+        Layout.alignment: Qt.AlignRight
+        text: pluginApi?.tr("settings.clear-all-notes") || "Clear All Notes"
+        icon: "trash"
+        visible: pluginApi?.pluginSettings?.notecardsEnabled ?? true
+        enabled: (pluginApi?.mainInstance?.noteCards?.length || 0) > 0
+        onClicked: {
+            if (pluginApi?.mainInstance) {
+                // Clear all notes
+                pluginApi.mainInstance.noteCards = [];
+                pluginApi.mainInstance.saveNoteCards();
+                pluginApi.mainInstance.noteCardsRevision++;
+                ToastService.showNotice(pluginApi?.tr("toast.notes-cleared") || "All notes cleared");
+            }
+        }
+    }
+
+    NDivider {
+        Layout.fillWidth: true
+    }
+
+    // Show close button toggle
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.show-close-button") || "Show Close Button"
+        description: pluginApi?.tr("settings.show-close-button-desc") || "Display an X button at the top-right corner to close the panel"
+        checked: pluginApi?.pluginSettings?.showCloseButton ?? false
+        onToggled: checked => {
+            if (pluginApi) {
+                pluginApi.pluginSettings.showCloseButton = checked;
+                pluginApi.saveSettings();
+                // Update mainInstance property for immediate effect
+                pluginApi.mainInstance.showCloseButton = checked;
+            }
+        }
+    }
+
+        }  // End General Tab
+
+        // TAB 2: APPEARANCE
+        ColumnLayout {
+            spacing: Style.marginL
 
     // ===== APPEARANCE SECTION =====
     NText {
@@ -404,113 +588,9 @@ ColumnLayout {
         }
     }
 
-    NDivider {
-        Layout.fillWidth: true
-    }
+        }  // End Appearance Tab
 
-    // ===== SCRATCHPAD SECTION =====
-    NText {
-        text: pluginApi?.tr("settings.notecards") || "NoteCards / Sticky Notes"
-        font.bold: true
-        font.pointSize: Style.fontSizeL
-    }
-
-    // NoteCards Enable Toggle
-    NToggle {
-        Layout.fillWidth: true
-        label: pluginApi?.tr("settings.notecards-enabled") || "Enable NoteCards"
-        description: pluginApi?.tr("settings.notecards-desc") || "Show notecards panel for quick notes"
-        checked: pluginApi?.pluginSettings?.notecardsEnabled ?? true
-        onToggled: checked => {
-            if (pluginApi) {
-                pluginApi.pluginSettings.notecardsEnabled = checked;
-                pluginApi.saveSettings();
-            }
-        }
-    }
-
-    // Default note color selector
-    RowLayout {
-        Layout.fillWidth: true
-        spacing: Style.marginM
-
-        ColumnLayout {
-            Layout.fillWidth: true
-            spacing: 4
-
-            NText {
-                text: pluginApi?.tr("settings.default-note-color") || "Default Note Color"
-                font.bold: true
-            }
-
-            NText {
-                text: pluginApi?.tr("settings.default-note-color-desc") || "Color for newly created notes"
-                color: Color.mOnSurfaceVariant
-                font.pointSize: Style.fontSizeS
-            }
-        }
-
-        NComboBox {
-            Layout.preferredWidth: 150
-            model: [
-                { key: "yellow", name: "Yellow" },
-                { key: "pink", name: "Pink" },
-                { key: "blue", name: "Blue" },
-                { key: "green", name: "Green" },
-                { key: "purple", name: "Purple" }
-            ]
-            currentKey: pluginApi?.pluginSettings?.defaultNoteColor || "yellow"
-            onSelected: key => {
-                if (pluginApi) {
-                    pluginApi.pluginSettings.defaultNoteColor = key;
-                    pluginApi.saveSettings();
-                }
-            }
-        }
-    }
-
-    // Notes count display
-    RowLayout {
-        Layout.fillWidth: true
-        spacing: Style.marginM
-
-        NText {
-            text: pluginApi?.tr("settings.notecards-notes-count") || "Current Notes"
-            font.bold: true
-        }
-
-        Item { Layout.fillWidth: true }
-
-        NText {
-            text: {
-                const count = pluginApi?.mainInstance?.noteCards?.length || 0;
-                const max = pluginApi?.mainInstance?.maxNoteCards || 20;
-                return count + " / " + max;
-            }
-            color: {
-                const count = pluginApi?.mainInstance?.noteCards?.length || 0;
-                const max = pluginApi?.mainInstance?.maxNoteCards || 20;
-                return count >= max ? Color.mError : Color.mOnSurface;
-            }
-        }
-    }
-
-    // Clear all notes button
-    NButton {
-        Layout.alignment: Qt.AlignRight
-        text: pluginApi?.tr("settings.clear-all-notes") || "Clear All Notes"
-        icon: "delete"
-        enabled: (pluginApi?.mainInstance?.noteCards?.length || 0) > 0
-        onClicked: {
-            if (pluginApi?.mainInstance) {
-                // Clear all notes
-                pluginApi.mainInstance.noteCards = [];
-                pluginApi.mainInstance.saveNoteCards();
-                pluginApi.mainInstance.noteCardsRevision++;
-                ToastService.showNotice(pluginApi?.tr("toast.notes-cleared") || "All notes cleared");
-            }
-        }
-    }
+    }  // End NTabView
 
     function saveSettings() {
         if (!pluginApi) {

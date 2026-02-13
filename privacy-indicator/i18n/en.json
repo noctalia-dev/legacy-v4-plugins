@@ -1,8 +1,19 @@
 {
+  "menu": {
+    "settings": "Widget settings"
+  },
   "settings": {
+    "activeColor": {
+      "desc": "Color of the icons when active.",
+      "label": "Active icon color"
+    },
     "hideInactive": {
       "desc": "Hide microphone, camera, and screen icons when there are inactive.",
       "label": "Hide inactive states"
+    },
+    "inactiveColor": {
+      "desc": "Color of the icons when inactive.",
+      "label": "Inactive icon color"
     },
     "iconSpacing": {
       "desc": "Set the spacing between the icons.",

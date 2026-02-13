@@ -16,6 +16,10 @@
       "desc": "Choose what you would like the tooltip to display.",
       "label": "Tooltip options"
     },
+    "customColor": {
+      "desc": "Choose what color you would like the icon and text to be.",
+      "label": "Custom color"
+    },
     "mode": {
       "disable": "Disable the Tooltip",
       "highlow": "High/Low temps",

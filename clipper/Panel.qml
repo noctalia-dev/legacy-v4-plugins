@@ -21,6 +21,8 @@ Item {
     // Track currently open ToDo context menu
     property var activeContextMenu: null
 
+
+
     // Refresh clipboard list and load notecards when panel becomes visible
     // Save notecards when panel is closed
     onVisibleChanged: {
@@ -35,6 +37,8 @@ Item {
             pluginApi?.mainInstance?.saveNoteCards();
         }
     }
+
+
 
     // SmartPanel properties (required for panel behavior)
     readonly property var geometryPlaceholder: mainContainer
@@ -142,17 +146,6 @@ Item {
         id: mainContainer
         anchors.fill: parent
 
-        // Click on transparent background to close panel
-        MouseArea {
-            anchors.fill: parent
-            z: -1  // Behind all other elements
-            onClicked: {
-                if (root.pluginApi) {
-                    root.pluginApi.closePanel(screen);
-                }
-            }
-        }
-
         // CLIPBOARD PANEL - Bottom, full width (horizontal)
         Rectangle {
             id: clipboardPanel
@@ -203,6 +196,22 @@ Item {
                     onClicked: {
                         if (root.pluginApi) {
                             BarService.openPluginSettings(screen, root.pluginApi.manifest);
+                        }
+                    }
+                }
+
+                NIconButton {
+                    visible: pluginApi?.mainInstance?.showCloseButton ?? false
+                    icon: "x"
+                    tooltipText: pluginApi?.tr("panel.close") || "Close"
+                    Layout.alignment: Qt.AlignVCenter
+                    colorBg: (typeof Color !== "undefined") ? Color.mSurfaceVariant : "#444444"
+                    colorBgHover: (typeof Color !== "undefined") ? Color.mError : "#CC0000"
+                    colorFg: (typeof Color !== "undefined") ? Color.mOnSurface : "#FFFFFF"
+                    colorFgHover: (typeof Color !== "undefined") ? Color.mOnError : "#FFFFFF"
+                    onClicked: {
+                        if (root.pluginApi) {
+                            root.pluginApi.closePanel(screen);
                         }
                     }
                 }
@@ -563,6 +572,7 @@ Item {
         // PINNED PANEL - Left side, vertical
         Rectangle {
             id: pinnedPanel
+            visible: pluginApi?.pluginSettings?.pincardsEnabled ?? true
             anchors.left: parent.left
             anchors.top: parent.top
             anchors.bottom: clipboardPanel.top
@@ -653,8 +663,9 @@ Item {
         // NOTECARDS PANEL - Middle space (between pinned and clipboard)
         Item {
             id: noteCardsPanel
-            anchors.left: pinnedPanel.right
-            anchors.leftMargin: Style.marginM
+            visible: pluginApi?.pluginSettings?.notecardsEnabled ?? true
+            anchors.left: pinnedPanel.visible ? pinnedPanel.right : parent.left
+            anchors.leftMargin: pinnedPanel.visible ? Style.marginM : 0
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.bottom: clipboardPanel.top

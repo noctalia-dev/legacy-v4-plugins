@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Гарячі клавіші",
+    "error": {
+      "unsupported-compositor": "Непідтримуваний композитор",
+      "sway-not-supported": "Sway поки не підтримується",
+      "sway-detail": "Підтримку Sway може бути додано в майбутньому оновленні (формат схожий на Hyprland)",
+      "labwc-not-supported": "LabWC не підтримується",
+      "labwc-detail": "LabWC використовує формат конфігурації XML, несумісний з цим плагіном",
+      "mango-not-supported": "MangoWC не підтримується",
+      "mango-detail": "Формат конфігурації MangoWC несумісний з цим плагіном",
+      "unknown-compositor": "Виявлено невідомий композитор",
+      "unknown-detail": "Цей плагін підтримує лише композитори Hyprland та Niri"
+    },
     "panel": {
       "loading": "Завантаження...",
       "title": "Карта клавіш",

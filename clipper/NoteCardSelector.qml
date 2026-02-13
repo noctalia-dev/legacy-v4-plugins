@@ -9,7 +9,7 @@ QtObject {
     property string selectedText: ""
     property var noteCards: []
     property var selectionMenu: null
-    
+
     signal noteSelected(string noteId, string noteTitle)
     signal createNewNote()
 
@@ -27,7 +27,7 @@ QtObject {
         for (let i = 0; i < noteCards.length; i++) {
             const note = noteCards[i];
             model.push({
-                "label": note.title || "Untitled",
+                "label": note.title || (pluginApi?.tr("notecards.untitled-placeholder") || "Untitled"),
                 "action": "note-" + note.id,
                 "icon": "note",
                 "noteId": note.id
@@ -40,7 +40,7 @@ QtObject {
     function show(text, notes) {
         selectedText = text || "";
         noteCards = notes || [];
-        
+
         if (selectionMenu) {
             const menuItems = buildMenuModel();
             selectionMenu.show(menuItems);
@@ -53,7 +53,7 @@ QtObject {
         } else if (action.startsWith("note-")) {
             const noteId = action.replace("note-", "");
             const note = noteCards.find(n => n.id === noteId);
-            root.noteSelected(noteId, note ? note.title : "Untitled");
+            root.noteSelected(noteId, note ? note.title : (pluginApi?.tr("notecards.untitled-placeholder") || "Untitled"));
         }
     }
 }

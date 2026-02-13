@@ -1,7 +1,7 @@
 {
   "id": "weather-indicator",
   "name": "Weather Indicator",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "minNoctaliaVersion": "4.3.0",
   "author": "Sovereign",
   "license": "MIT",
@@ -20,7 +20,8 @@
       "showTempValue": true,
       "showTempUnit": true,
       "showConditionIcon": true,
-      "tooltipOption": "everything"
+      "tooltipOption": "everything",
+      "customColor": "none"
     }
   }
 }

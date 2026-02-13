@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Billentyűparancsok",
+    "error": {
+      "unsupported-compositor": "Nem támogatott kompozitor",
+      "sway-not-supported": "A Sway még nem támogatott",
+      "sway-detail": "A Sway támogatás egy jövőbeli frissítésben hozzáadható (hasonló formátum, mint a Hyprland)",
+      "labwc-not-supported": "A LabWC nem támogatott",
+      "labwc-detail": "A LabWC XML konfigurációs formátumot használ, amely nem kompatibilis ezzel a bővítménnyel",
+      "mango-not-supported": "A MangoWC nem támogatott",
+      "mango-detail": "A MangoWC konfigurációs formátum nem kompatibilis ezzel a bővítménnyel",
+      "unknown-compositor": "Ismeretlen kompozitor észlelve",
+      "unknown-detail": "Ez a bővítmény csak a Hyprland és Niri kompozitorokat támogatja"
+    },
     "panel": {
       "loading": "Betoltes...",
       "title": "Billentyűzetkiosztás",

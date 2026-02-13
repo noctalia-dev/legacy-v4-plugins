@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Scorciatoie da tastiera",
+    "error": {
+      "unsupported-compositor": "Compositor non supportato",
+      "sway-not-supported": "Sway non è ancora supportato",
+      "sway-detail": "Il supporto per Sway potrebbe essere aggiunto in un aggiornamento futuro (formato simile a Hyprland)",
+      "labwc-not-supported": "LabWC non è supportato",
+      "labwc-detail": "LabWC utilizza un formato di configurazione XML incompatibile con questo plugin",
+      "mango-not-supported": "MangoWC non è supportato",
+      "mango-detail": "Il formato di configurazione MangoWC non è compatibile con questo plugin",
+      "unknown-compositor": "Rilevato compositor sconosciuto",
+      "unknown-detail": "Questo plugin supporta solo i compositor Hyprland e Niri"
+    },
     "panel": {
       "loading": "Caricamento...",
       "title": "Mappa tasti",

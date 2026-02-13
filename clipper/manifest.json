@@ -1,7 +1,7 @@
 {
   "id": "clipper",
   "name": "Clipper",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "minNoctaliaVersion": "4.1.2",
   "author": "blackbartblues",
   "contributors": ["rscipher001"],
@@ -20,7 +20,11 @@
   },
   "metadata": {
     "defaultSettings": {
-      "position": "Bottom"
+      "position": "Bottom",
+      "enableTodoIntegration": false,
+      "pincardsEnabled": true,
+      "notecardsEnabled": true,
+      "showCloseButton": false
     }
   }
 }

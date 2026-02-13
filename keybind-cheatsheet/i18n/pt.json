@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "Atalhos de teclado",
+    "error": {
+      "unsupported-compositor": "Compositor não suportado",
+      "sway-not-supported": "Sway ainda não é suportado",
+      "sway-detail": "O suporte ao Sway pode ser adicionado em uma atualização futura (formato semelhante ao Hyprland)",
+      "labwc-not-supported": "LabWC não é suportado",
+      "labwc-detail": "LabWC usa formato de configuração XML que é incompatível com este plugin",
+      "mango-not-supported": "MangoWC não é suportado",
+      "mango-detail": "O formato de configuração do MangoWC não é compatível com este plugin",
+      "unknown-compositor": "Compositor desconhecido detectado",
+      "unknown-detail": "Este plugin suporta apenas os compositores Hyprland e Niri"
+    },
     "panel": {
       "loading": "Carregando...",
       "title": "Mapa de teclas",

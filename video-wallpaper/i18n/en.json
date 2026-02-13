@@ -1,0 +1,186 @@
+{
+  "barWidget": {
+    "contextMenu": {
+      "panel": "Panel",
+      "enable": "Enable",
+      "disable": "Disable",
+      "pause": "Pause",
+      "play": "Play",
+      "unmute": "Unmute",
+      "mute": "Mute"
+    },
+    "tooltip": "Open the video wallpaper manager."
+  },
+  "common": {
+    "tool_row": {
+      "random": {
+        "text": "Random",
+        "tooltip": "Choose a random wallpaper from the wallpapers folder."
+      },
+      "clear": {
+        "text": "Clear",
+        "tooltip": "Clear the current wallpaper."
+      },
+      "pause": {
+        "text": "Pause",
+        "tooltip": "Pause the video wallpaper."
+      },
+      "play": {
+        "text": "Play",
+        "tooltip": "Resume the video wallpaper."
+      },
+      "unmute": {
+        "text": "Unmute",
+        "tooltip": "Unmute the video wallpaper."
+      },
+      "mute": {
+        "text": "Mute",
+        "tooltip": "Mute the video wallpaper."
+      }
+    }
+  },
+  "panel": {
+    "title": "Video wallpaper manager",
+    "tool_row": {
+      "folder": {
+        "text": "Folder",
+        "tooltip": "Choose another folder that contains your wallpapers."
+      },
+      "refresh": {
+        "text": "Refresh",
+        "tooltip": "Refresh thumbnails, remove old ones and create new ones."
+      }
+    },
+    "loading": "Loading...",
+    "file_picker": {
+      "title": "Choose wallpapers folder"
+    }
+  },
+  "settings": {
+    "toggle": {
+      "label": "Enable video wallpapers",
+      "description": "Choose your preferred backend to render the videos with, in the box below."
+    },
+    "backend": {
+      "label": "Active backend",
+      "description": "What to use to render the video wallpapers.",
+      "qt6_multimedia": "Qt6 Multimedia",
+      "mpvpaper": "Mpvpaper"
+    },
+    "tab_bar": {
+      "general": "General",
+      "automation": "Automation",
+      "advanced": "Advanced"
+    },
+    "general": {
+      "wallpapers_folder": {
+        "title": {
+          "label": "Wallpapers Folder",
+          "description": "The folder that contains all the video wallpapers."
+        },
+        "text_input": {
+          "placeholder": "/path/to/folder/with/wallpapers"
+        },
+        "icon_button": {
+          "tooltip": "Select wallpapers folder"
+        },
+        "file_picker": {
+          "title": "Choose wallpapers folder"
+        }
+      },
+      "select_wallpaper": {
+        "title": {
+          "label": "Select Wallpaper",
+          "description": "Choose the current video wallpaper playing."
+        },
+        "icon_button": {
+          "tooltip": "Select the current wallpaper playing."
+        },
+        "file_picker": {
+          "title": "Choose current wallpaper"
+        }
+      },
+      "fill_mode": {
+        "label": "Fill Mode",
+        "description": "The mode that the wallpaper is fitted into the background.",
+        "stretch": "Stretch",
+        "fit": "Fit",
+        "crop": "Crop"
+      },
+      "orientation": {
+        "label": "Orientation",
+        "description": "The orientation of the video playing, can be any multiple of 90."
+      },
+      "volume": {
+        "label": "Volume",
+        "description": "The current volume of the video playing."
+      }
+    },
+    "automation": {
+      "toggle": {
+        "label": "Automation",
+        "description": "Schedule automatic wallpaper change."
+      },
+      "mode": {
+        "label": "Change mode",
+        "description": "The mode to select the new wallpaper.",
+        "random": "Random",
+        "alphabetically": "Alphabetically"
+      },
+      "time": {
+        "label": "Time",
+        "description": "How long it should take to switch the wallpaper.",
+        "m": "{minute}m",
+        "h": "{hour}h",
+        "hour": "{count} hour",
+        "hour-plural": "{count} hours",
+        "minute": "{count} minute",
+        "minute-plural": "{count} minutes",
+        "custom": {
+          "create": {
+            "tooltip": "Create a custom time.",
+            "label": "Add Custom Time",
+            "description": "Enter time as HH:MM, (e.g. 1:20)",
+            "placeholder": "Example, 1:15",
+            "save": "Save",
+            "cancel": "Cancel"
+          },
+          "remove": "Remove"
+        }
+      }
+    },
+    "advanced": {
+      "fill_mode": {
+        "label": "Fill mode",
+        "description": "",
+        "fit": "Fit",
+        "crop": "Crop",
+        "stretch": "Stretch"
+      },
+      "profile": {
+        "label": "Mpv Profile",
+        "description": "The profile that mpv uses. Use fast for better performance.",
+        "default": "Default",
+        "fast": "Fast",
+        "high_quality": "High Quality",
+        "low_latency": "Low Latency"
+      },
+      "hardware_acceleration": {
+        "label": "Hardware Acceleration",
+        "description": "Offloads video decoding from cpu to gpu / dedicated hardware."
+      },
+      "mpv_socket": {
+        "label": "Mpvpaper Socket",
+        "description": "The mpvpaper socket that noctalia connects to.",
+        "input_placeholder": "Example: /tmp/mpv-socket"
+      },
+      "orientation": {
+        "label": "Orientation",
+        "description": "The orientation of the video playing, can be any multiple of 90 degrees."
+      },
+      "no_backend": {
+        "label": "No active backend..."
+      }
+    }
+  }
+}

@@ -55,17 +55,17 @@
     {
       "id": "calibre-provider",
       "name": "Calibre Provider",
-      "version": "1.1.0",
+      "version": "1.1.2",
       "official": false,
       "author": "Krendil",
       "description": "Search for books in your Calibre library",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-      "minNoctaliaVersion": "4.3.0",
+      "minNoctaliaVersion": "4.4.1",
       "license": "MIT",
       "tags": [
         "Launcher"
       ],
-      "lastUpdated": "2026-02-04T16:19:13+10:00"
+      "lastUpdated": "2026-02-10T10:12:36-05:00"
     },
     {
       "id": "catwalk",
@@ -88,7 +88,7 @@
     {
       "id": "clipper",
       "name": "Clipper",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "official": false,
       "author": "blackbartblues",
       "description": "Advanced clipboard manager with history, search, keyboard navigation, ToDo integration, pinned items, notecards/sticky notes, and selection-to-notecard feature. Fully translated with comprehensive i18n support.",
@@ -103,23 +103,23 @@
         "Notes",
         "i18n"
       ],
-      "lastUpdated": "2026-02-05T13:48:25+01:00"
+      "lastUpdated": "2026-02-08T21:20:48+01:00"
     },
     {
       "id": "currency-exchange",
       "name": "Currency Exchange",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "official": false,
       "author": "balor",
       "description": "Currency conversion utility via launcher and bar widget",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-      "minNoctaliaVersion": "4.1.2",
+      "minNoctaliaVersion": "4.4.1",
       "license": "MIT",
       "tags": [
         "Launcher",
         "Utility"
       ],
-      "lastUpdated": "2026-01-30T13:31:45-05:00"
+      "lastUpdated": "2026-02-10T10:12:36-05:00"
     },
     {
       "id": "dns-switcher",
@@ -174,7 +174,7 @@
     {
       "id": "hello-world",
       "name": "Hello World",
-      "version": "1.0.12",
+      "version": "1.1.1",
       "official": true,
       "author": "Noctalia Team",
       "description": "A simple Hello World plugin demonstrating functionalities. For developers only.",
@@ -184,7 +184,7 @@
       "tags": [
         "Development"
       ],
-      "lastUpdated": "2026-01-27T14:01:09-05:00"
+      "lastUpdated": "2026-02-07T19:13:14+01:00"
     },
     {
       "id": "hyprland-steam-overlay",
@@ -202,46 +202,46 @@
     {
       "id": "kagi-quick-search",
       "name": "Kagi Quick Search",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "Kainoa Kanter",
       "description": "Get AI answers from Kagi in your launcher",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-      "minNoctaliaVersion": "3.8.3",
+      "minNoctaliaVersion": "4.4.1",
       "license": "MIT",
       "tags": [
         "Launcher",
         "Productivity"
       ],
-      "lastUpdated": "2026-01-08T18:22:34-08:00"
+      "lastUpdated": "2026-02-10T10:12:36-05:00"
     },
     {
       "id": "kaomoji-provider",
       "name": "Kaomoji Provider",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "official": true,
       "author": "Noctalia Team",
       "description": "Browse and search kaomoji emoticons from the launcher",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-      "minNoctaliaVersion": "3.9.0",
+      "minNoctaliaVersion": "4.4.1",
       "license": "MIT",
       "tags": [
         "Launcher",
         "Fun"
       ],
-      "lastUpdated": "2026-01-25T13:25:41-05:00"
+      "lastUpdated": "2026-02-10T10:12:36-05:00"
     },
     {
       "id": "keybind-cheatsheet",
       "name": "Keybind Cheatsheet",
-      "version": "3.1.1",
+      "version": "3.2.2",
       "official": false,
       "author": "blacku",
       "description": "Universal keyboard shortcuts keymap that automatically detects and displays keybindings for Hyprland or Niri compositors.",
       "minNoctaliaVersion": "3.6.0",
       "license": "MIT",
       "tags": [],
-      "lastUpdated": "2026-02-03T22:32:34+01:00"
+      "lastUpdated": "2026-02-08T21:44:29+01:00"
     },
     {
       "id": "mangowc-layout-switcher",
@@ -280,7 +280,7 @@
     {
       "id": "mpris-lyric",
       "name": "MPRIS Lyric",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "official": false,
       "author": "DBeidachazi",
       "description": "Display synchronized lyrics from MPRIS-compatible music players (e.g., go-musicfox) in the bar.",
@@ -292,12 +292,12 @@
         "Music",
         "Lyrics"
       ],
-      "lastUpdated": "2026-01-26T23:59:29-05:00"
+      "lastUpdated": "2026-02-08T20:55:52+01:00"
     },
     {
       "id": "mpvpaper",
       "name": "Mpvpaper",
-      "version": "1.5.0",
+      "version": "1.6.2",
       "official": false,
       "author": "Spyridon Siarapis",
       "description": "A plugin that allows having video wallpapers using mpvpaper.",
@@ -310,7 +310,7 @@
         "Fun",
         "System"
       ],
-      "lastUpdated": "2026-02-04T14:23:36+01:00"
+      "lastUpdated": "2026-02-09T20:15:29+01:00"
     },
     {
       "id": "network-indicator",
@@ -414,7 +414,7 @@
     {
       "id": "privacy-indicator",
       "name": "Privacy Indicator",
-      "version": "1.0.13",
+      "version": "1.1.0",
       "official": true,
       "author": "Noctalia Team",
       "description": "A privacy indicator widget that shows when microphone, camera or screen sharing is active.",
@@ -426,7 +426,7 @@
         "Privacy",
         "Indicator"
       ],
-      "lastUpdated": "2026-01-27T01:00:19-05:00"
+      "lastUpdated": "2026-02-06T14:19:11-05:00"
     },
     {
       "id": "rss-feed",
@@ -444,7 +444,7 @@
     {
       "id": "screen-recorder",
       "name": "Screen Recorder",
-      "version": "1.1.5",
+      "version": "1.1.7",
       "official": true,
       "author": "Noctalia Team",
       "description": "Hardware-accelerated screen recording using gpu-screen-recorder with customizable video and audio settings",
@@ -455,7 +455,7 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-02-05T21:04:12-05:00"
+      "lastUpdated": "2026-02-10T01:17:08+03:00"
     },
     {
       "id": "screenshot",
@@ -523,7 +523,7 @@
     {
       "id": "timer",
       "name": "Timer",
-      "version": "1.0.11",
+      "version": "1.0.12",
       "official": true,
       "author": "Noctalia Team",
       "description": "A timer and stopwatch plugin for the bar & control center.",
@@ -534,12 +534,12 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-01-27T01:00:19-05:00"
+      "lastUpdated": "2026-02-06T16:15:19-05:00"
     },
     {
       "id": "todo",
       "name": "Todo List",
-      "version": "1.9.1",
+      "version": "1.9.2",
       "official": false,
       "author": "lonerOrz <lonerOrz@qq.com>",
       "description": "A simple todo list manager plugin for Noctalia Shell.",
@@ -552,38 +552,38 @@
         "Panel",
         "Productivity"
       ],
-      "lastUpdated": "2026-02-04T07:13:59+08:00"
+      "lastUpdated": "2026-02-09T21:14:49+08:00"
     },
     {
       "id": "translator",
       "name": "Translator",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "official": false,
       "author": "Cleboost",
       "description": "Quick translate in launcher",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-      "minNoctaliaVersion": "1.0.0",
+      "minNoctaliaVersion": "4.4.1",
       "license": "MIT",
       "tags": [
         "Launcher"
       ],
-      "lastUpdated": "2026-01-25T13:43:56-05:00"
+      "lastUpdated": "2026-02-10T10:12:36-05:00"
     },
     {
       "id": "unicode-picker",
       "name": "Unicode Picker",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "official": false,
       "author": "Daddeffe",
       "description": "Browse and search Unicode characters from the launcher",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-      "minNoctaliaVersion": "3.9.0",
+      "minNoctaliaVersion": "4.4.1",
       "license": "MIT",
       "tags": [
         "Launcher",
         "Utility"
       ],
-      "lastUpdated": "2026-01-25T17:22:17-08:00"
+      "lastUpdated": "2026-02-10T10:12:36-05:00"
     },
     {
       "id": "update-count",
@@ -602,9 +602,27 @@
       "lastUpdated": "2026-02-05T21:01:51-05:00"
     },
     {
+      "id": "video-wallpaper",
+      "name": "Video Wallpaper",
+      "version": "1.2.1",
+      "official": false,
+      "author": "Spyridon Siarapis",
+      "description": "A plugin that uses a backend renderer to play videos as your wallpaper.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "3.6.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "Fun",
+        "System"
+      ],
+      "lastUpdated": "2026-02-10T17:29:24+01:00"
+    },
+    {
       "id": "weather-indicator",
       "name": "Weather Indicator",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "official": false,
       "author": "Sovereign",
       "description": "Shows the current weather condition and tempurature.",
@@ -614,7 +632,7 @@
       "tags": [
         "Bar"
       ],
-      "lastUpdated": "2026-02-05T20:57:49-05:00"
+      "lastUpdated": "2026-02-09T20:19:46-05:00"
     },
     {
       "id": "weekly-calendar",

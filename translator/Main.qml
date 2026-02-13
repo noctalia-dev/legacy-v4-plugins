@@ -10,15 +10,11 @@ Item {
     target: "plugin:translator"
     function toggle(language: string, text: string) {
       if (!pluginApi) return;
-      
+
       pluginApi.withCurrentScreen(screen => {
-        var launcherPanel = PanelService.getPanel("launcherPanel", screen);
-        if (!launcherPanel)
-          return;
-        
-        var searchText = launcherPanel.searchText || "";
+        var searchText = PanelService.getLauncherSearchText(screen);
         var isInTranslateMode = searchText.startsWith(">translate");
-        
+
         var newSearchText = ">translate ";
         if (language && language.trim() !== "") {
           var langCode = TranslatorUtils.getLanguageCode(language);
@@ -26,18 +22,17 @@ Item {
             newSearchText += langCode + " ";
           }
         }
-        
+
         if (text) {
             newSearchText += text;
         }
-        
-        if (!launcherPanel.isPanelOpen) {
-          launcherPanel.open();
-          launcherPanel.setSearchText(newSearchText);
+
+        if (!PanelService.isLauncherOpen(screen)) {
+          PanelService.openLauncherWithSearch(screen, newSearchText);
         } else if (isInTranslateMode) {
-          launcherPanel.close();
+          PanelService.closeLauncher(screen);
         } else {
-          launcherPanel.setSearchText(newSearchText);
+          PanelService.setLauncherSearchText(screen, newSearchText);
         }
       });
     }

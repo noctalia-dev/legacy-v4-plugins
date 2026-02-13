@@ -1,5 +1,17 @@
 {
   "keybind-cheatsheet": {
+    "default-category": "कुञ्जी बाइन्डहरू",
+    "error": {
+      "unsupported-compositor": "असमर्थित कम्पोजिटर",
+      "sway-not-supported": "Sway अझै समर्थित छैन",
+      "sway-detail": "Sway समर्थन भविष्यको अपडेटमा थप्न सकिन्छ (Hyprland जस्तै ढाँचा)",
+      "labwc-not-supported": "LabWC समर्थित छैन",
+      "labwc-detail": "LabWC ले XML कन्फिगरेसन ढाँचा प्रयोग गर्दछ जुन यो प्लगइनसँग मिल्दैन",
+      "mango-not-supported": "MangoWC समर्थित छैन",
+      "mango-detail": "MangoWC कन्फिगरेसन ढाँचा यो प्लगइनसँग मिल्दैन",
+      "unknown-compositor": "अज्ञात कम्पोजिटर पत्ता लाग्यो",
+      "unknown-detail": "यो प्लगइनले Hyprland र Niri कम्पोजिटरहरू मात्र समर्थन गर्दछ"
+    },
     "panel": {
       "loading": "लोड हो रहा है...",
       "title": "कीमैप",

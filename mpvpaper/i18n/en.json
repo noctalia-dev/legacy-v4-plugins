@@ -36,6 +36,12 @@
       "label": "Enable mpvpaper",
       "description": "Enable the mpvpaper integration"
     },
+    "tab_bar": {
+      "playback": "Playback",
+      "audio": "Audio",
+      "automation": "Automation",
+      "advanced": "Advanced"
+    },
     "wallpapers_folder": {
       "title_label": "Wallpapers Folder",
       "title_description": "The folder that contains all the wallpapers, useful when using random wallpaper",
@@ -55,8 +61,47 @@
     },
     "mpv_socket": {
       "title_label": "Mpvpaper socket",
-      "title_description": "The mpvpaper socket that noctalia connects to",
+      "title_description": "The mpvpaper socket that noctalia connects to.",
       "input_placeholder": "Example: /tmp/mpv-socket"
+    },
+    "hardware_acceleration": {
+      "label": "Hardware Acceleration",
+      "description": "Offloads video decoding from cpu to gpu / dedicated hardware."
+    },
+    "profile": {
+      "label": "Profile",
+      "description": "The profile that mpv uses. Use fast for better performance.",
+      "default": "Default",
+      "fast": "Fast",
+      "high_quality": "High Quality",
+      "low_latency": "Low Latency"
+    },
+    "fill_mode": {
+      "label": "Fill mode",
+      "description": "The fill mode that mpvpaper uses.",
+      "fit": "Fit",
+      "crop": "Crop",
+      "stretch": "Stretch"
+    },
+    "automation": {
+      "label": "Automation",
+      "description": "Schedule automatic wallpaper change."
+    },
+    "automation_mode": {
+      "label": "Change mode",
+      "description": "The mode to select the new wallpaper.",
+      "random": "Random",
+      "alphabetically": "Alphabetically"
+    },
+    "automation_time": {
+      "label": "Time",
+      "description": "How long it should take to switch the wallpaper.",
+      "5m": "5m",
+      "10m": "10m",
+      "30m": "30m",
+      "1h": "1h",
+      "1h30m": "1h 30m",
+      "2h": "2h"
     },
     "actions": {
       "random": {
