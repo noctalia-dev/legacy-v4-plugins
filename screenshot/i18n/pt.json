@@ -6,6 +6,13 @@
       "description": "Escolher entre seleção de região ou captura direta da tela",
       "region": "Seleção de região",
       "screen": "Tela cheia"
+    },
+    "niriMode": {
+      "label": "Tipo de captura Niri",
+      "description": "Escolher o tipo de captura de tela a tirar",
+      "default": "Padrão (Interativo)",
+      "window": "Janela",
+      "fullscreen": "Tela cheia"
     }
   }
 }

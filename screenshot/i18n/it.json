@@ -6,6 +6,13 @@
       "description": "Scegli tra selezione regione o cattura diretta dello schermo",
       "region": "Selezione regione",
       "screen": "Schermo intero"
+    },
+    "niriMode": {
+      "label": "Tipo di screenshot Niri",
+      "description": "Scegli il tipo di screenshot da scattare",
+      "default": "Predefinito (Interattivo)",
+      "window": "Finestra",
+      "fullscreen": "Schermo intero"
     }
   }
 }

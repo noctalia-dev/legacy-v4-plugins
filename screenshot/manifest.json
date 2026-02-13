@@ -17,7 +17,8 @@
     },
     "metadata": {
         "defaultSettings": {
-            "mode": "region"
+            "mode": "region",
+            "niriMode": "default"
         }
     }
 }

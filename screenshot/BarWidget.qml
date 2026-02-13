@@ -33,12 +33,21 @@ NIconButton {
         pluginApi?.manifest?.metadata?.defaultSettings?.mode || 
         "region"
 
+    readonly property string niriMode: 
+        pluginApi?.pluginSettings?.niriMode || 
+        pluginApi?.manifest?.metadata?.defaultSettings?.niriMode || 
+        "default"
+
     function takeScreenshot() {
         if (CompositorService.isHyprland) {
             var args = ["hyprshot", "--freeze", "--clipboard-only", "--mode", screenshotMode, "--silent"];
             Quickshell.execDetached(args);
         } else if (CompositorService.isNiri) {
-            Quickshell.execDetached(["niri", "msg", "action", "screenshot"]);
+            var niriArgs = ["niri", "msg", "action", "screenshot"];
+            if (niriMode !== "default") {
+                niriArgs.push(niriMode);
+            }
+            Quickshell.execDetached(niriArgs);
         } else {
             // Fallback to hyprshot for other compositors
             var args = ["hyprshot", "--freeze", "--clipboard-only", "--mode", screenshotMode, "--silent"];

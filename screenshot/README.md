@@ -7,6 +7,7 @@ A simple screenshot plugin for Noctalia Shell that provides a button in the bar 
 - **Quick Screenshot**: One-click screenshot button in the bar
 - **Compositor Detection**: Automatically detects Hyprland or Niri and uses the appropriate tool
 - **Two Modes** (Hyprland only): Choose between region selection or direct full screen capture
+- **Niri Screenshot Types**: Choose between default (interactive), window, or fullscreen capture
 - **Clipboard Integration**: Screenshots are automatically copied to clipboard
 - **Silent Operation**: Runs silently without notifications
 
@@ -37,18 +38,22 @@ A simple screenshot plugin for Noctalia Shell that provides a button in the bar 
 
 ### Configuration
 
-**Hyprland only**: Configure the screenshot mode through the settings panel:
+**Hyprland**: Configure the screenshot mode through the settings panel:
 
 - **Region Selection**: Opens a region selector to capture a specific area
 - **Full Screen**: Captures the entire screen directly
 
-**Niri**: Uses the built-in screenshot functionality (no configuration needed).
+**Niri**: Configure the screenshot type through the settings panel:
+
+- **Default (Interactive)**: Opens Niri's interactive screenshot UI
+- **Window**: Captures the focused window
+- **Fullscreen**: Captures the entire screen
 
 When clicked, the plugin will:
 1. Detect your compositor (Hyprland or Niri)
 2. Use the appropriate tool:
-   - **Hyprland**: `hyprshot` with the selected mode
-   - **Niri**: `niri msg action screenshot`
+   - **Hyprland**: `hyprshot` with the selected mode (region or screen)
+   - **Niri**: `niri msg action screenshot` with the selected type (default, window, or fullscreen)
 3. Copy the screenshot to clipboard
 4. Run silently without notifications
 

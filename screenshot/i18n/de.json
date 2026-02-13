@@ -6,6 +6,13 @@
       "description": "Wählen Sie zwischen Bereichsauswahl oder direkter Bildschirmaufnahme",
       "region": "Bereichsauswahl",
       "screen": "Vollbild"
+    },
+    "niriMode": {
+      "label": "Niri Screenshot-Typ",
+      "description": "Wählen Sie den Typ des Screenshots",
+      "default": "Standard (Interaktiv)",
+      "window": "Fenster",
+      "fullscreen": "Vollbild"
     }
   }
 }
