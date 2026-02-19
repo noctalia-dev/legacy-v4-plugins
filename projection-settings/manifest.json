@@ -1,0 +1,22 @@
+{
+	"id": "projection-settings",
+	"name": "Projection Settings",
+	"version": "1.1.0",
+	"minNoctaliaVersion": "4.4.3",
+
+	"licence": "MIT",
+	"repository": "https://github.com/fosslife/noctalia-projection-settings",
+	"author": "Sparkenstein",
+	"description": "Switch monitor layouts with kanshi",
+	"entryPoints": {
+		"barWidget": "BarWidget.qml",
+		"panel": "ProjectionMenu.qml"
+	},
+	"tags": ["Bar", "Panel", "Productivity"],
+	"dependencies": {
+		"plugins": []
+	},
+	"metadata": {
+		"defaultSettings": {}
+	}
+}
