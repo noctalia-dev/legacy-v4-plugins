@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "frame-rate": {
+      "label": "帧率"
+    },
+    "bar-radius": {
+      "label": "圆角"
+    },
+    "bar-count": {
+      "label": "频谱条数量"
+    },
+    "bar-width": {
+      "label": "频谱条宽度"
+    },
+    "color": {
+      "label": "颜色",
+      "description": "选择系统颜色或自定义颜色",
+      "none": "无",
+      "primary": "主要",
+      "secondary": "辅助",
+      "tertiary": "第三",
+      "custom": "自定义",
+      "custom-label": "自定义颜色",
+      "custom-description": "用于频谱条的自定义颜色"
+    },
+    "align": {
+      "label": "对齐方式",
+      "bottom": "底部对齐",
+      "center": "垂直居中"
+    }
+  }
+}
