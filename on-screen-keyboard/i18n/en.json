@@ -1,0 +1,13 @@
+{
+  "barWidget": {
+    "toggle_keyboard": "Toggle on-screen keyboard"
+  },
+  "panel": {
+    "current_language": "Current language: {language}"
+  },
+  "tooltip": {
+    "unpin": "Unpin keyboard",
+    "pin": "Pin keyboard",
+    "close": "Close keyboard"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "on-screen-keyboard",
+  "name": "On Screen Keyboard",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Spyridon Siarapis",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A plugin to show a on screen keyboard.",
+  "tags": ["Bar", "Panel", "System"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "main": "Main.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}
