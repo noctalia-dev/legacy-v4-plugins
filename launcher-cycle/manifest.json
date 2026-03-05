@@ -1,0 +1,27 @@
+{
+  "id": "launcher-cycle",
+  "name": "Launcher Cycle",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.5.0",
+  "author": "Jakob Stender Guldberg",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Cycle launcher command modes with one keybind",
+  "tags": [
+    "Utility",
+    "Productivity"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "additionalModes": [],
+      "excludeModes": []
+    }
+  }
+}
