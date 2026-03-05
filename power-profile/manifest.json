@@ -1,0 +1,26 @@
+{
+  "id": "power-profile",
+  "name": "Power Profile",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "Mikołaj Mikołajczyk",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Shows the current power profile in the bar and allows switching between profiles exposed by power-profiles-daemon.",
+  "tags": [
+    "Bar",
+    "System",
+    "Panel"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}

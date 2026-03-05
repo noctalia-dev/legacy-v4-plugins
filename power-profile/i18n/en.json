@@ -1,0 +1,16 @@
+{
+  "profile": {
+    "power-saver": "Power Saver",
+    "balanced": "Balanced",
+    "performance": "Performance"
+  },
+  "panel": {
+    "title": "Power Profile",
+    "choose": "Choose a profile",
+    "unavailable": "power-profiles-daemon not available"
+  },
+  "context": {
+    "refresh": "Refresh"
+  },
+  "actions": {}
+}
