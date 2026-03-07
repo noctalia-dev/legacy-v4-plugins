@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
-import Quickshell.Hyprland
 import Quickshell.Io
 import qs.Commons
 import qs.Widgets
@@ -30,41 +29,10 @@ PanelWindow {
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableCross
                                ?? true
 
-    readonly property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(root.screen)
-    readonly property int activeWorkspaceId: hyprlandMonitor?.activeWorkspace?.id ?? 0
-    readonly property real monitorOffsetX: hyprlandMonitor?.x ?? 0
-    readonly property real monitorOffsetY: hyprlandMonitor?.y ?? 0
+    readonly property real monitorOffsetX: Number(root.screen?.x ?? 0)
+    readonly property real monitorOffsetY: Number(root.screen?.y ?? 0)
 
     property list<var> windowRegions: []
-
-    Process {
-        id: screenshotProc
-        property string outputName: root.screen ? root.screen.name : "unknown"
-        property string filename: "/tmp/screen-%1.png".arg(outputName.replace(/[^a-zA-Z0-9_-]/g, "_"))
-
-        command: ["grim", "-o", outputName, filename]
-        running: false
-
-        onStarted: {
-            Logger.d("ScreenShot","Taking full screen shot of output '%1' to %2".arg(outputName).arg(filename))
-            Logger.d("ScreenShot", "Screen name:", root.screen.name)
-            root.visible = false
-        }
-
-        onExited: (code, status) => {
-            if (code === 0) {
-
-
-
-                Logger.d("ScreenShot", "[RegionSelector] Full Screen Shot saved to %1".arg(filename))
-                root.visible = true
-            } else {
-                Logger.w("ScreenShot", "[RegionSelector] Full Screen Shot failed with exit code:", code)
-                Logger.w("ScreenShot", "Command was: grim -o %1 %2".arg(outputName).arg(filename))
-                root.closed()
-            }
-        }
-    }
 
     // 启动时拉取窗口列表
     Process {
@@ -75,11 +43,10 @@ PanelWindow {
             onStreamFinished: {
                 try {
                     const clients = JSON.parse(text);
-                    const ws = root.activeWorkspaceId;
                     const ox = root.monitorOffsetX;
                     const oy = root.monitorOffsetY;
                     root.windowRegions = clients
-                        .filter(w => w.workspace.id === ws && !w.hidden && w.mapped)
+                        .filter(w => !w.hidden && w.mapped)
                         .map(w => ({
                             x: w.at[0] - ox,
                             y: w.at[1] - oy,
@@ -88,9 +55,11 @@ PanelWindow {
                             title: w.title,
                             cls: w.class,
                             address: w.address
-                        }));
+                        }))
+                        .filter(w => w.width > 0 && w.height > 0)
+                        .filter(w => w.x < root.width && w.y < root.height && (w.x + w.width) > 0 && (w.y + w.height) > 0);
 
-                    Logger.d("ScreenShot", "[RegionSelector] Found", root.windowRegions.length, "windows on workspace", root.activeWorkspaceId);
+                    Logger.d("ScreenShot", "[RegionSelector] Found", root.windowRegions.length, "windows on output", root.screen?.name);
                 } catch (e) {
                     Logger.w("ScreenShot", "[RegionSelector] hyprctl parse error:", e)
                 }
@@ -105,6 +74,10 @@ PanelWindow {
         onExited: (exitCode) => {
             if (exitCode === 0) {
                 if (root.target === "record" || root.target === "recordsound"){
+                    // Stop flow: if recorder is already running, stop it immediately.
+                    if (pluginApi?.mainInstance) {
+                        pluginApi.mainInstance.recordingActive = false
+                    }
                     Logger.d("ScreenShot", `bash '` + pluginApi.pluginDir + `/record.sh'`)
                     Quickshell.execDetached(["bash", pluginApi.pluginDir + "/record.sh"])
                     root.visible = false
@@ -117,12 +90,11 @@ PanelWindow {
     function startCapture() {
         checkRecordingProc.running = true
 
-        if (!(root.target === "record" || root.target === "recordsound")) {
-            screenshotProc.running = true
-        }
-        hyprctlProc.running = pluginApi?.pluginSettings?.enableWindowsSelection
-                              ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
-                              ?? true
+        const windowsEnabled = pluginApi?.pluginSettings?.enableWindowsSelection
+                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
+                               ?? true
+
+        hyprctlProc.running = windowsEnabled && CompositorService.isHyprland
     }
 
     property real mouseX: 0
@@ -156,25 +128,30 @@ PanelWindow {
     }
 
     function processRegion(x, y, width, height, mode) {
-        // 获取显示器名称并清理
+        const globalX = Math.round(x + root.monitorOffsetX)
+        const globalY = Math.round(y + root.monitorOffsetY)
+        const globalW = Math.max(1, Math.round(width))
+        const globalH = Math.max(1, Math.round(height))
+        const geometry = `${globalX},${globalY} ${globalW}x${globalH}`
+
         var outputName = root.screen ? root.screen.name : "unknown"
         var safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
-
-        // 生成带显示器名称的文件名
-        var tempFile = "/tmp/screen-%1.png".arg(safeOutputName)
-        const scaleRatio = CompositorService.getDisplayScale(root.screen.name)
-        const scaledX = Math.round(x * scaleRatio)
-        const scaledY = Math.round(y * scaleRatio)
-        const scaledWidth = Math.round(width * scaleRatio)
-        const scaledHeight = Math.round(height * scaleRatio)
-
-        Logger.d("ScreenShot", "[Panel] Scaled values (ratio:", scaleRatio, "):",
-                    scaledX, scaledY, scaledWidth, scaledHeight)
+        var tempFile = `/tmp/screen-${safeOutputName}.png`
+        var configuredSavePath = pluginApi?.pluginSettings?.savePath
+                                 ?? pluginApi?.manifest?.metadata?.defaultSettings?.savePath
+                                 ?? ""
+        var screenshotDir = Settings.preprocessPath(configuredSavePath)
+        if (!screenshotDir || screenshotDir === "") {
+            screenshotDir = Quickshell.env("HOME") + "/Pictures/Screenshots"
+        }
+        var timestamp = Qt.formatDateTime(new Date(), "yyyy-MM-dd_HH.mm.ss")
+        var sourceFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}_source.png`
+        var outputFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}.png`
 
         Logger.d("ScreenShot", root.target)
         if (root.target === "screenshot") {
             if (mode === "copy") {
-                const copyCmd = `magick '${tempFile}' -crop ${scaledWidth}x${scaledHeight}+${scaledX}+${scaledY} - | wl-copy`
+                const copyCmd = `grim -g '${geometry}' - | wl-copy --type image/png && notify-send -a "Screenshot" "Screenshot copied" "Image copied to clipboard"`
                 Logger.d("ScreenShot", "[Panel] Executing copy command:", copyCmd)
                 Quickshell.execDetached(["sh", "-c", copyCmd])
             } else if (mode === "edit") {
@@ -182,36 +159,50 @@ PanelWindow {
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.screenshotEditor
                                ?? "swappy"
 
-                const editCmd = `magick '${tempFile}' -crop ${scaledWidth}x${scaledHeight}+${scaledX}+${scaledY} - | ${editor} -f -`
+                const editCmd = `mkdir -p '${screenshotDir}' && grim -g '${geometry}' '${sourceFile}' && ${editor} -f '${sourceFile}' -o '${outputFile}' && notify-send -a "Screenshot" "Screenshot saved" "${outputFile}"`
                 Logger.d("ScreenShot", "[Panel] Executing edit command:", editCmd)
                 Quickshell.execDetached(["sh", "-c", editCmd])
             }
         } else if (root.target === "search") {
-            const searchCmd = `magick '${tempFile}' -crop ${scaledWidth}x${scaledHeight}+${scaledX}+${scaledY} '${tempFile}' && xdg-open \"https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')\"`
+            const searchCmd = `grim -g '${geometry}' '${tempFile}' && xdg-open \"https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')\"`
             Logger.d("ScreenShot", "[Panel] Executing search command:", searchCmd)
             Quickshell.execDetached(["sh", "-c", searchCmd])
         } else if (root.target === "ocr") {
-            const ocrCmd = `magick '${tempFile}' -crop ${scaledWidth}x${scaledHeight}+${scaledX}+${scaledY} '${tempFile}' && tesseract '${tempFile}' stdout -l $(tesseract --list-langs | awk 'NR>1{print $1}' | tr '\n' '+' | sed 's/\+$//') | wl-copy`
+            const ocrCmd = `if ! command -v grim >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "grim is not installed"; exit 1; fi; if ! command -v tesseract >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "tesseract is not installed"; exit 1; fi; if ! command -v wl-copy >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "wl-copy is not installed"; exit 1; fi; OCR_TEXT=""; if grim -g '${geometry}' '${tempFile}'; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a "Screenshot" "OCR complete" "Recognized text copied to clipboard"; else notify-send -a "Screenshot" "OCR complete" "No text detected in selection"; fi`
             Logger.d("ScreenShot", "[Panel] Executing ocr command:", ocrCmd)
             Quickshell.execDetached(["sh", "-c", ocrCmd])
         } else if (root.target === "record" || root.target === "recordsound") {
 
 
             const scriptPath = pluginApi.pluginDir + '/record.sh'
+            var configuredRecordingSavePath = pluginApi?.pluginSettings?.recordingSavePath
+                                            ?? pluginApi?.manifest?.metadata?.defaultSettings?.recordingSavePath
+                                            ?? ""
+            var recordingDir = Settings.preprocessPath(configuredRecordingSavePath)
+            if (!recordingDir || recordingDir === "") {
+                recordingDir = Quickshell.env("HOME") + "/Videos"
+            }
 
-            const globalX = Math.round((x + root.monitorOffsetX))
-            const globalY = Math.round((y + root.monitorOffsetY))
-            const globalW = Math.round(width)
-            const globalH = Math.round(height)
+            var recordingNotificationsEnabled = pluginApi?.pluginSettings?.recordingNotifications
+                                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.recordingNotifications
+                                               ?? true
 
             const region = `${globalX},${globalY} ${globalW}x${globalH}`
 
-            const soundFlag = root.target === "recordsound" ? " --sound" : ""
+            const recordArgs = ["bash", scriptPath, "--region", region, "--dir", recordingDir]
+            if (root.target === "recordsound") {
+                recordArgs.push("--sound")
+            }
+            if (recordingNotificationsEnabled) {
+                recordArgs.push("--notify")
+            }
 
-            const recordCmd = `bash '${scriptPath}' --region '${region}' ${soundFlag}`
-            Logger.d("ScreenShot", "[Panel] Executing record command:", recordCmd)
-
-            Quickshell.execDetached(["bash", "-c" , recordCmd])
+            Logger.d("ScreenShot", "[Panel] Executing record command args:", recordArgs)
+            const recordStarted = Quickshell.execDetached(recordArgs)
+            if (pluginApi?.mainInstance) {
+                // Event-driven bar state update: red only when this plugin starts recording successfully.
+                pluginApi.mainInstance.recordingActive = (recordStarted !== false)
+            }
         }
     }
 

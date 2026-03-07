@@ -23,6 +23,18 @@
         "screenshotEditor": {
             "label": "截图标注工具",
             "description": "用于标注截图的工具。需要预先安装。"
+        },
+        "savePath": {
+            "label": "截图保存文件夹",
+            "description": "编辑后的截图将保存到此文件夹。"
+        },
+        "recordingSavePath": {
+            "label": "录屏保存文件夹",
+            "description": "屏幕录制文件将保存到此文件夹。"
+        },
+        "recordingNotifications": {
+            "label": "录屏通知",
+            "description": "在开始/停止录屏或发生错误时显示通知。"
         }
     }
 }

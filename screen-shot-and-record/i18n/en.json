@@ -23,6 +23,18 @@
         "screenshotEditor": {
             "label": "Screenshot Annotation Tool",
             "description": "Tool used for annotating screenshots. Needs to be pre-installed."
+        },
+        "savePath": {
+            "label": "Screenshot Save Folder",
+            "description": "Folder where edited screenshots are saved."
+        },
+        "recordingSavePath": {
+            "label": "Recording Save Folder",
+            "description": "Folder where screen recordings are saved."
+        },
+        "recordingNotifications": {
+            "label": "Recording Notifications",
+            "description": "Show notifications when recording starts/stops or errors occur."
         }
     }
 }

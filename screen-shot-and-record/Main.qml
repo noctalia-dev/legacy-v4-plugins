@@ -9,6 +9,7 @@ Item {
     id: root
     property var pluginApi: null
     property bool active: false
+    property bool recordingActive: false
     property string target: ""
 
     // 存储当前所有屏幕

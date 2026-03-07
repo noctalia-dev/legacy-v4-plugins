@@ -23,6 +23,18 @@
         "screenshotEditor": {
             "label": "Herramienta de Anotación de Capturas",
             "description": "Herramienta para anotar capturas de pantalla. Debe estar preinstalada."
+        },
+        "savePath": {
+            "label": "Carpeta de guardado de capturas",
+            "description": "Carpeta donde se guardan las capturas editadas."
+        },
+        "recordingSavePath": {
+            "label": "Carpeta de guardado de grabaciones",
+            "description": "Carpeta donde se guardan las grabaciones de pantalla."
+        },
+        "recordingNotifications": {
+            "label": "Notificaciones de grabación",
+            "description": "Mostrar notificaciones al iniciar/detener la grabación o cuando ocurren errores."
         }
     }
 }
