@@ -1,0 +1,28 @@
+{
+    "panel": {
+        "title": "Screenshot",
+        "target": {
+            "screenshot": "Screenshot",
+            "ocr": "OCR",
+            "search": "Image Search",
+            "record": "Screen Recording",
+            "recordsound": "Screen Recording (with Audio)",
+            "bug": "I'm a Bug!",
+            "stop": "Stop Recording"
+        }
+    },
+    "settings": {
+        "enableWindowsSelection": {
+            "label": "Enable Window Detection",
+            "description": "Whether to detect windows when selecting area. Only supported on Hyprland."
+        },
+        "enableCross": {
+            "label": "Enable Crosshair",
+            "description": "Whether to enable crosshair aiming."
+        },
+        "screenshotEditor": {
+            "label": "Screenshot Annotation Tool",
+            "description": "Tool used for annotating screenshots. Needs to be pre-installed."
+        }
+    }
+}

@@ -2,6 +2,12 @@
 
 Here I'll try to document all changes for the video-wallpaper plugin.
 
+## 2.0.3 - 2026-03-01
+
+- fix: Fixed a bug where disabling the video-wallpaper didn't disable it correctly.
+- fix: Fixed a bug that printed a couple of binding loop warnings in the logs from mpvpaper.
+- fix: Fixed a bug where the volume wasn't set correctly for the mpvpaper backend.
+
 ## 2.0.2 - 2026-02-20
 
 - fix: Fixed a bug where the noctalia wallpaper would spawn on top of the video wallpaper at startup.

@@ -1,0 +1,32 @@
+{
+    "id": "screen-shot-and-record",
+    "name": "ScreenShot & Record in Hyprland",
+    "version": "1.0.0",
+    "minNoctaliaVersion": "3.6.0",
+    "author": "Pulsar",
+    "license": "GPL-3.0-or-later",
+    "repository": "https://github.com/Pulsar33550336/pulsar-ns-plugins",
+    "description": "A screenshot plugin with OCR, Google Lens integration, and screen recording. Only Support Hyprland.",
+    "tags": [
+        "Bar",
+        "Panel",
+        "Utility",
+        "Hyprland"
+    ],
+    "entryPoints": {
+        "main": "Main.qml",
+        "barWidget": "BarWidget.qml",
+        "settings": "Settings.qml",
+        "panel": "Panel.qml"
+    },
+    "dependencies": {
+        "plugins": []
+    },
+    "metadata": {
+        "defaultSettings": {
+            "enableWindowsSelection": true,
+            "enableCross": true,
+            "screenshotEditor": "swappy"
+        }
+    }
+}

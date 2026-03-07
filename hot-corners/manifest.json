@@ -1,0 +1,23 @@
+{
+  "id": "hot-corners",
+  "name": "Hot Corners",
+  "version": "0.0.1",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "sapjax",
+  "official": false,
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A macOS-style hot corners plugin for Noctalia Shell.",
+  "tags": [
+    "Desktop",
+    "Productivity"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {}
+}

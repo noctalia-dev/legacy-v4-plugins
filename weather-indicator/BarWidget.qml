@@ -73,8 +73,7 @@ Item {
 
         NIcon {
           visible: root.showConditionIcon
-          anchors.verticalCenter: parent.verticalTop
-
+          Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
           icon: weatherReady ? LocationService.weatherSymbolFromCode(LocationService.data.weather.current_weather.weathercode, LocationService.data.weather.current_weather.is_day) : "weather-cloud-off"
           applyUiScale: true
           color: contentColor
@@ -82,7 +81,6 @@ Item {
 
         NText {
           visible: root.showTempValue
-          anchors.verticalCenter: parent.verticalBottom
           text: {
             if (!weatherReady || !root.showTempValue) {
               return "";
@@ -102,6 +100,10 @@ Item {
           color: contentColor
           pointSize: root.barFontSize
           applyUiScale: false
+          Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+          features: ({
+              "tnum": 1
+          })
         }
       }
     }

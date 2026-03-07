@@ -1,8 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import qs.Services.UI
 import qs.Services.Compositor
+import qs.Services.UI
 
 Item {
   id: root
@@ -17,18 +17,18 @@ Item {
       if (!CompositorService.isMango) return
       if (pluginApi) {
         pluginApi.withCurrentScreen(screen => {
-          pluginApi.openPanel(screen);
-        });
+          pluginApi.openPanel(screen)
+        })
       }
     }
   }
 
-  // ===== PUBLIC DATA =====
   Component.onCompleted: {
     if (!CompositorService.isMango) return
     refresh()
   }
 
+  // ===== PUBLIC DATA =====
   property var monitorLayouts: ({})
   property var availableLayouts: []
   property var availableMonitors: []
@@ -65,29 +65,15 @@ Item {
 
   QtObject {
     id: internal
-
-    property var fetchQueue: []
-    property bool busy: false
-
     function updateLayout(monitor, layout) {
       if (layout && monitor) {
         var cleanLayout = layout.trim()
         if (root.monitorLayouts[monitor] !== cleanLayout) {
           root.monitorLayouts[monitor] = cleanLayout
-          root.monitorLayoutsChanged()
+          // Emitting the built-in signal directly is cheaper than cloning the whole object
+          root.monitorLayoutsChanged() 
         }
       }
-    }
-
-    // Process the next monitor in the queue
-    function processQueue() {
-      if (internal.busy || internal.fetchQueue.length === 0) return
-      
-      internal.busy = true
-      var nextMonitor = internal.fetchQueue.shift()
-      layoutFetcher.targetMonitor = nextMonitor
-      layoutFetcher.command = ["mmsg", "-o", nextMonitor, "-g", "-l"]
-      layoutFetcher.running = true
     }
   }
 
@@ -101,93 +87,74 @@ Item {
     
     stdout: SplitParser {
       onRead: line => {
-        // Match: "OUTPUT layout CODE" (e.g., "eDP-1 layout T")
-        var match = line.match(/^(\S+)\s+layout\s+(\S+)$/)
-        if (match) {
-          internal.updateLayout(match[1], match[2])
+        // Only parse layout-related outputs to save regex cycles
+        if (line.includes(" layout ")) {
+          var match = line.match(/^(\S+)\s+layout\s+(\S+)$/)
+          if (match) {
+            internal.updateLayout(match[1], match[2])
+          }
         }
       }
     }
   }
 
-  // 2. Initial Layout Fetcher (Queue Worker)
-  Process {
-    id: layoutFetcher
-    property string targetMonitor: ""
-    running: false
-    
-    stdout: SplitParser {
-      onRead: line => internal.updateLayout(layoutFetcher.targetMonitor, line)
-    }
-    
-    onExited: exitCode => {
-      internal.busy = false
-      internal.processQueue()
-    }
-  }
-
-  // 3. Load Available Layouts (mmsg -L)
+  // 2. Load Available Layouts (mmsg -L) - Runs once
   Process {
     id: layoutsQuery
     command: ["mmsg", "-L"]
     running: false
+    property var tempArray: []
     
     stdout: SplitParser {
       onRead: line => {
         const code = line.trim()
-        if (code && code.length > 0 && !root.availableLayouts.some(l => l.code === code)) {
-           const name = root.getLayoutName(code)
-           root.availableLayouts.push({ code: code, name: name })
+        if (code && !layoutsQuery.tempArray.some(l => l.code === code)) {
+           layoutsQuery.tempArray.push({ code: code, name: root.getLayoutName(code) })
         }
       }
     }
     
     onExited: exitCode => { 
-      if (exitCode === 0) root.availableLayoutsChanged() 
+      if (exitCode === 0) root.availableLayouts = layoutsQuery.tempArray
+      layoutsQuery.tempArray = [] 
     }
   }
 
-  // 4. Load Monitors (mmsg -O)
+  // 3. Load Monitors (mmsg -O) - Runs once
   Process {
     id: monitorsQuery
     command: ["mmsg", "-O"]
     running: false
+    property var tempArray: []
     
     stdout: SplitParser {
       onRead: line => {
         const m = line.trim()
-        if (m && !root.availableMonitors.includes(m)) {
-          root.availableMonitors.push(m)
+        if (m && !monitorsQuery.tempArray.includes(m)) {
+          monitorsQuery.tempArray.push(m)
         }
       }
     }
     
     onExited: exitCode => {
-      if (exitCode === 0) {
-        root.availableMonitorsChanged()
-        // Queue a fetch for each detected monitor
-        root.availableMonitors.forEach(m => internal.fetchQueue.push(m))
-        internal.processQueue()
-      }
+      if (exitCode === 0) root.availableMonitors = monitorsQuery.tempArray
+      monitorsQuery.tempArray = [] 
     }
   }
 
   // ===== PUBLIC API =====
 
   function refresh() {
-    root.availableLayouts = []
-    root.availableMonitors = []
     layoutsQuery.running = true
     monitorsQuery.running = true
-    if (!eventWatcher.running) eventWatcher.running = true
+    // Restart watcher if it died
+    if (!eventWatcher.running) eventWatcher.running = true 
   }
 
   function setLayout(monitorName, layoutCode) {
     if (!monitorName || !layoutCode) return
-
     // Execute: mmsg -o <monitor> -s -l <code >
     Quickshell.execDetached(["mmsg", "-o", monitorName, "-s", "-l", layoutCode])
-    
     // Optimistic Update
     internal.updateLayout(monitorName, layoutCode)
   }

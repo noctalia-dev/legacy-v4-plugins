@@ -13,9 +13,12 @@ Item {
     property string name: "Calibre"
     property var launcher: null
     property bool handleSearch: false
-    property string supportedLayouts: "both"
     property bool supportsAutoPaste: false
-    property int preferredGridColumns: 3
+
+    property string supportedLayouts: "both"
+    property real preferredGridColumns: 4
+    property real preferredGridCellRatio: 1.5 // Standard eBook ratio size
+    property bool ignoreDensity: false
 
     // Constants
     property int maxResults: 50
@@ -111,6 +114,9 @@ Item {
         }
 
         loading = false;
+        if (launcher && launcher.activeProvider == root) {
+            launcher.updateResults();
+        }
     }
 
     function onOpened() {

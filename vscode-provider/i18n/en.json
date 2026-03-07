@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "fork": {
+            "label": "VS Code fork",
+            "description": "Which fork of VS Code you are using"
+        },
+        "includeInSearch": {
+            "label": "Include in main search",
+            "description": "Whether to include VS Code workspaces in the main launcher search results"
+        },
+        "otherCommand": {
+            "label": "Command",
+            "description": "The command to launch this fork of VS Code"
+        },
+        "otherConfigName": {
+            "label": "Config name",
+            "description": "The name of this fork's configuration directory in ~/.config"
+        }
+    },
+    "launcher": {
+        "title": "VS Code workspaces",
+        "description": "Search and open VS Code workspaces",
+        "loading": {
+            "title": "Loading...",
+            "description": "Loading sessions..."
+        },
+        "error": {
+            "title": "VS Code workspaces not loaded",
+            "description": "Check your log for error messages"
+        }
+    }
+}

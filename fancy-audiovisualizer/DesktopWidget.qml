@@ -38,7 +38,7 @@ DraggableDesktopWidget {
     from: 0
     to: 3600
     duration: 3600000
-    running: !CavaService.isIdle
+    running: !SpectrumService.isIdle
   }
 
   // Hidden canvas that encodes audio data as a 32x1 texture
@@ -50,7 +50,7 @@ DraggableDesktopWidget {
 
     onPaint: {
       var ctx = getContext("2d");
-      var values = CavaService.values;
+      var values = SpectrumService.values;
       if (!values || values.length === 0) {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, 32, 1);
@@ -68,28 +68,28 @@ DraggableDesktopWidget {
 
   // Trigger canvas repaint when audio data changes
   Connections {
-    target: CavaService
+    target: SpectrumService
     function onValuesChanged() {
-      if (!CavaService.isIdle) {
+      if (!SpectrumService.isIdle) {
         audioCanvas.requestPaint();
       }
     }
   }
 
-  // Unique instance ID for CavaService registration
+  // Unique instance ID for SpectrumService registration
   // This prevents the old widget's destruction from unregistering the new widget
-  readonly property string cavaInstanceId: "plugin:fancy-audiovisualizer:" + Date.now() + Math.random()
+  readonly property string spectrumInstanceId: "plugin:fancy-audiovisualizer:" + Date.now() + Math.random()
 
-  // Register with CavaService when pluginApi becomes available
+  // Register with SpectrumService when pluginApi becomes available
   onPluginApiChanged: {
     if (pluginApi) {
-      CavaService.registerComponent(cavaInstanceId);
+      SpectrumService.registerComponent(spectrumInstanceId);
       audioCanvas.requestPaint();
     }
   }
 
   Component.onDestruction: {
-    CavaService.unregisterComponent(cavaInstanceId);
+    SpectrumService.unregisterComponent(spectrumInstanceId);
   }
 
   // Audio texture source (outside ShaderEffect to avoid 'source' property warning)
@@ -105,7 +105,7 @@ DraggableDesktopWidget {
     id: visualizer
     anchors.fill: parent
     visible: pluginApi !== null
-    opacity: (root.fadeWhenIdle && CavaService.isIdle) ? 0 : 1
+    opacity: (root.fadeWhenIdle && SpectrumService.isIdle) ? 0 : 1
 
     Behavior on opacity {
       NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }

@@ -1,0 +1,38 @@
+{
+  "panel": {
+    "title": "Layout de Colunas",
+    "single": "Unica",
+    "columns": "%1 Colunas",
+    "status-active": "Ativo — %1 colunas",
+    "status-starting": "Iniciando...",
+    "status-disabled": "Desativado"
+  },
+  "bar": {
+    "running": "Auto-Tile: executando (%1 colunas)",
+    "starting": "Auto-Tile: iniciando...",
+    "disabled": "Auto-Tile: desativado",
+    "enable": "Ativar Auto-Tile",
+    "disable": "Desativar Auto-Tile",
+    "settings": "Configuracoes"
+  },
+  "settings": {
+    "enabled": "Ativar Auto-Tile",
+    "enabled-desc": "Redistribuir automaticamente as larguras das colunas ao abrir ou fechar janelas",
+    "per-workspace": "Por workspace",
+    "per-workspace-desc": "Cada workspace tem sua propria configuracao de colunas",
+    "only-at-max": "So no maximo",
+    "only-at-max-desc": "Redistribuir apenas quando o numero de colunas atingir o maximo",
+    "max-visible": "Colunas visiveis",
+    "max-visible-desc": "Numero maximo de colunas visiveis na tela simultaneamente",
+    "debounce": "Atraso de debounce",
+    "debounce-desc": "Atraso antes da redistribuicao para agrupar eventos rapidos",
+    "rate-limit": "Limite de eventos",
+    "rate-limit-desc": "Maximo de eventos processados por segundo",
+    "status-running": "Daemon em execucao",
+    "status-error": "Erro no daemon — reiniciando...",
+    "status-stopped": "Daemon parado",
+    "about-title": "Sobre",
+    "about-credit": "Desenvolvido por Pir0c0pter0 usando Claude",
+    "about-date": "Data"
+  }
+}

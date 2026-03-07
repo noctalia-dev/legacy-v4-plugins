@@ -1,0 +1,28 @@
+{
+    "panel": {
+        "title": "Captura de Pantalla",
+        "target": {
+            "screenshot": "Captura",
+            "ocr": "OCR",
+            "search": "Búsqueda de Imágenes",
+            "record": "Grabación de Pantalla",
+            "recordsound": "Grabación de Pantalla (con Audio)",
+            "bug": "¡Soy un bug!",
+            "stop": "Detener grabación"
+        }
+    },
+    "settings": {
+        "enableWindowsSelection": {
+            "label": "Activar Detección de Ventanas",
+            "description": "Si se deben detectar ventanas al seleccionar área. Solo compatible con Hyprland."
+        },
+        "enableCross": {
+            "label": "Activar Mira",
+            "description": "Si se debe activar la mira."
+        },
+        "screenshotEditor": {
+            "label": "Herramienta de Anotación de Capturas",
+            "description": "Herramienta para anotar capturas de pantalla. Debe estar preinstalada."
+        }
+    }
+}

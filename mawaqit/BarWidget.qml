@@ -196,11 +196,15 @@ Item {
       }
 
       NText {
-        text: root.displayText
+        text: {
+          var parts = root.displayText.split(" ");
+          return parts[0] + "\n" + parts.slice(1).join(" ");
+        }
         pointSize: root.barFontSize * 0.65
         applyUiScale: false
         color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
         Layout.alignment: Qt.AlignHCenter
+        horizontalAlignment: Text.AlignHCenter
       }
 
       NIcon {

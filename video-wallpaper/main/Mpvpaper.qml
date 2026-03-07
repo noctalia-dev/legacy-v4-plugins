@@ -38,7 +38,6 @@ Item {
 
     // Local properties
     property bool mpvpaperExists: false
-    property bool isActivating: false
 
 
     /***************************
@@ -84,8 +83,10 @@ Item {
             pluginApi.pluginSettings[screenName] = {};
         }
 
-        pluginApi.pluginSettings[screenName].isPlaying = true;
-        pluginApi.saveSettings();
+        if (pluginApi.pluginSettings[screenName].isPlaying == undefined || !pluginApi.pluginSettings[screenName].isPlaying) {
+            pluginApi.pluginSettings[screenName].isPlaying = true;
+            pluginApi.saveSettings();
+        }
     }
 
     function deactivateMpvpaper() {
@@ -224,18 +225,19 @@ Item {
     onVolumeChanged: {
         if (!root.enabled || !mpvProc.running) return;
 
-        // Mpv has volume from 0 to 100 instead of 0 to 1
-        const v = Math.min(Math.max(volume, 0), 100);
+        const clampedVolume = Math.min(Math.max(volume, 0), 1);
+        const mpvVolume = clampedVolume * 100;
 
-        sendCommandToMPV(`no-osd set volume ${v}`)
+        // Mpv has volume from 0 to 100 instead of 0 to 1
+        sendCommandToMPV(`no-osd set volume ${mpvVolume}`)
 
         // Clamp the volume
-        if(v != volume) {
+        if(clampedVolume != volume) {
             if (pluginApi?.pluginSettings?.[screenName] === undefined) {
                 pluginApi.pluginSettings[screenName] = {};
             }
 
-            pluginApi.pluginSettings[screenName].volume = v;
+            pluginApi.pluginSettings[screenName].volume = clampedVolume;
             pluginApi.saveSettings();
         }
     }

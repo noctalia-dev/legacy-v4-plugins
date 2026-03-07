@@ -1,0 +1,29 @@
+{
+    "id": "nvim-session-provider",
+    "name": "Neovim Session Provider",
+    "version": "1.0.1",
+    "description": "Open Neovim Sessions",
+    "tags": ["Launcher", "Development"],
+    "minNoctaliaVersion": "4.5.0",
+    "author": "Krendil",
+    "official": false,
+    "license": "MIT",
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+    "entryPoints": {
+        "main": "Main.qml",
+        "launcherProvider": "LauncherProvider.qml",
+        "settings": "Settings.qml"
+    },
+    "dependencies": {
+        "plugins": []
+    },
+    "metadata": {
+        "commandPrefix": "nvim",
+        "defaultSettings": {
+            "nvim": "nvim",
+            "runInTerminal": true,
+            "sessionDir": "~/.local/share/nvim/sessions",
+            "includeInSearch": true
+        }
+    }
+}

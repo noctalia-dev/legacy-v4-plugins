@@ -1,20 +1,20 @@
 {
   "panel": {
-    "countdown": "Cuenta regresiva",
-    "pause": "Pausar",
-    "reset": "Restablecer",
-    "resume": "Reanudar",
-    "settings": "Ajustes del Widget",
-    "start": "Comenzar",
-    "stopwatch": "Cronómetro",
-    "title": "Temporizador"
+    "countdown": "Countdown",
+    "pause": "Pausa",
+    "reset": "Reimposta",
+    "resume": "Riprendi",
+    "settings": "Impostazioni",
+    "start": "Avvia",
+    "stopwatch": "Cronometro",
+    "title": "Timer"
   },
   "settings": {
-    "compact-mode": "Modo Compacto",
-    "compact-mode-desc": "Ocultar la barra de progreso circular para una apariencia más limpia"
+    "compact-mode": "Modalità compatta",
+    "compact-mode-desc": "Nascondi la barra di avanzamento circolare per un aspetto più pulito"
   },
   "toast": {
-    "finished": "¡Temporizador finalizado!",
-    "title": "Temporizador"
+    "finished": "Timer terminato",
+    "title": "Timer"
   }
 }

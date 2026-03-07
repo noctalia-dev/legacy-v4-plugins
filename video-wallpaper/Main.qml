@@ -16,7 +16,6 @@ Item {
     /***************************
     * PROPERTIES
     ***************************/
-    readonly property bool   enabled:          pluginApi?.pluginSettings?.enabled          || false
     readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder || pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder || ""
 
     readonly property string thumbCacheFolderPath: ImageCacheService.wpThumbDir + "video-wallpaper"
@@ -70,56 +69,35 @@ Item {
             readonly property int screenWidth:  modelData.width
             readonly property int screenHeight: modelData.height
 
-            readonly property string activeBackend:    root.pluginApi?.pluginSettings?.activeBackend || root.pluginApi?.manifest?.metadata?.defaultSettings?.activeBackend || ""
-            readonly property string currentWallpaper: root.pluginApi?.pluginSettings?.[name]?.currentWallpaper || ""
+            readonly property string activeBackend: root.pluginApi?.pluginSettings?.activeBackend || root.pluginApi?.manifest?.metadata?.defaultSettings?.activeBackend || ""
 
-            property bool initialized: false
+            /***************************
+            * FUNCTIONALITY
+            ***************************/
+            function reloadWallpaperLoader() {
+                wallpaperLoader.active = false;
+                wallpaperLoader.active = true;
+            }
+
 
             /***************************
             * EVENTS
             ***************************/
             onActiveBackendChanged: {
-                wallpaperLoaderTimer.restart();
+                reloadWallpaperLoader();
             }
 
-            Component.onCompleted: {
-                if(!Settings.data.wallpaper.enabled) {
-                    initialized = true;
-                    wallpaperLoaderTimer.running = true
-                }
-            }
 
             /***************************
             * BACKEND COMPONENTS
             ***************************/
-            Loader {
-                active: !screenItem.initialized
-
-                Connections {
-                    target: WallpaperService
-
-                    function onWallpaperProcessingComplete() {
-                        screenItem.initialized = true;
-                        wallpaperLoaderTimer.running = true;
-                    }
-                }
-            }
-
             Timer {
-                id: wallpaperLoaderTimer
-                interval: 200
-                running: false
-                repeat: false
-                triggeredOnStart: false
-
-                onRunningChanged: {
-                    if(running) {
-                        wallpaperLoader.active = false;
-                    }
-                }
+                id: wallpaperLoaderStartupTimer
+                interval: 500
+                running: true
 
                 onTriggered: {
-                    wallpaperLoader.active = true;
+                    screenItem.reloadWallpaperLoader();
                 }
             }
 

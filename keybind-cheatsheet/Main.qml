@@ -379,7 +379,7 @@ Item {
       // If we're not currently parsing a multiline bind
       if (currentBindKey === null) {
         // Try to match a keybind start: Mod+Key or Mod+Key attributes { or Mod+Key { action; }
-        var bindStartMatch = line.match(/^([A-Za-z0-9_+]+)\s*((?:[a-z\-]+="[^"]*"\s*)*)\{(.*)$/);
+        var bindStartMatch = line.match(/^([A-Za-z0-9_+]+)\s*((?:[a-z\-]+=(?:"[^"]*"|[1-9][0-9]*|true|false)\s*)*)\{(.*)$/);
 
         if (bindStartMatch) {
           currentBindKey = bindStartMatch[1];

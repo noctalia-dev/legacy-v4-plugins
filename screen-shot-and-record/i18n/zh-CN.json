@@ -1,0 +1,28 @@
+{
+    "panel": {
+        "title": "屏幕截图",
+        "target": {
+            "screenshot": "截图",
+            "ocr": "文字识别",
+            "search": "图像搜索",
+            "record": "录屏",
+            "recordsound": "录屏（有声音）",
+            "bug": "为什么会变成这样呢",
+            "stop": "停止录屏"
+        }
+    },
+    "settings": {
+        "enableWindowsSelection": {
+            "label": "启用窗口检测",
+            "description": "是否在选择区域时检测窗口。仅支持 Hyprland。"
+        },
+        "enableCross": {
+            "label": "启用十字线瞄准",
+            "description": "是否启用十字线瞄准。"
+        },
+        "screenshotEditor": {
+            "label": "截图标注工具",
+            "description": "用于标注截图的工具。需要预先安装。"
+        }
+    }
+}

@@ -14,9 +14,6 @@ Item {
   property ShellScreen screen
   property string widgetId: ""
   property string section: ""
-  property int sectionWidgetIndex: -1
-  property int sectionWidgetsCount: 0
-
   visible: CompositorService.isMango
 
   // ===== DATA BINDING =====
@@ -58,7 +55,11 @@ Item {
     tooltipText: "Layout: " + root.layoutName
 
     onClicked: {
-      if (pluginApi) pluginApi.openPanel(root.screen)
+      if (pluginApi) pluginApi.openPanel(root.screen, root)
+    }
+
+    onRightClicked: {
+      if (pluginApi) pluginApi.openPanel(root.screen, root)
     }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "battery-device": "Akku-Gerät",
+    "battery-device-desc": "Akku für Schwellenwertkonfiguration",
+    "no-battery-device": "Für dieses System sind keine konfigurierbaren Akkus verfügbar"
+  },
+  "actions": {
+    "widget-settings": "Widget-Einstellungen"
+  }
+}

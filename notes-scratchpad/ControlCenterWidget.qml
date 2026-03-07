@@ -1,13 +1,24 @@
 import QtQuick
 import Quickshell
+import qs.Services.UI
 import qs.Widgets
 
 NIconButtonHot {
-		property ShellScreen screen
-		property var pluginApi: null
+    property ShellScreen screen
+    property var pluginApi: null
 
-		icon: "file-text"
-		tooltipText: pluginApi?.tr("bar_widget.tooltip") || "Scratchpad"
+    icon: "file-text"
+    tooltipText: pluginApi?.tr("bar_widget.tooltip") || "Scratchpad"
 
-		onClicked: pluginApi?.togglePanel(screen, this)
+    onClicked: {
+        if (pluginApi) {
+            pluginApi.togglePanel(screen);
+        }
+    }
+
+    onRightClicked: {
+        if (pluginApi && pluginApi.manifest) {
+            BarService.openPluginSettings(screen, pluginApi.manifest);
+        }
+    }
 }

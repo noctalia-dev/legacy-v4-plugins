@@ -11,7 +11,3 @@ To use this plugin, you **must disable or uninstall your existing polkit authent
 Having multiple polkit agents running simultaneously will cause conflicts and prevent this plugin from working correctly.
 
 > You may need to **restart your session or computer** after enabling this plugin for the changes to take effect and for the new agent to be registered properly.
-
-## Requirements
-
-- `quickshell-git` (latest version)

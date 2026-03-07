@@ -27,7 +27,7 @@ threshold using the slider.
 ## Setup (Required)
 
 This plugin requires write access to the battery threshold sysfs file. The
-included `setup_rules.sh` script configures a udev rule that grants write
+included `setup_rules.sh` script configures an udev rule that grants write
 permission to members of the `battery_ctl` group:
 
 ```bash
@@ -55,7 +55,7 @@ qs -c noctalia-shell ipc call plugin:battery-threshold set <value>
 
 ## Troubleshooting
 
-- **Read-only mode**: Ensure udev rule is installed and you're in the correct
+- **Read-only mode**: Ensure udev rule is installed, and you're in the correct
   group
 - **Not available**: Your laptop may not support charge threshold control, or
   select the correct battery in the settings menu
