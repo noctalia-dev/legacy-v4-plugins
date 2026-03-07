@@ -23,6 +23,10 @@ ColumnLayout {
                                       ?? pluginApi?.manifest?.metadata?.defaultSettings?.screenshotEditor
                                       ?? "swappy"
 
+    property bool keepSourceScreenshot: pluginApi?.pluginSettings?.keepSourceScreenshot
+                                        ?? pluginApi?.manifest?.metadata?.defaultSettings?.keepSourceScreenshot
+                                        ?? false
+
     property string savePath: pluginApi?.pluginSettings?.savePath
                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.savePath
                               ?? (Quickshell.env("HOME") + "/Pictures/Screenshots")
@@ -79,6 +83,16 @@ ColumnLayout {
                 Logger.d("ScreenShot", (key))
                 root.screenshotEditor = key;
             }
+        }
+    }
+
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.keepSourceScreenshot.label")
+        description: pluginApi?.tr("settings.keepSourceScreenshot.description")
+        checked: root.keepSourceScreenshot
+        onToggled: (checked) => {
+            root.keepSourceScreenshot = checked
         }
     }
 
@@ -145,6 +159,7 @@ ColumnLayout {
         pluginApi.pluginSettings.enableWindowsSelection = root.enableWindowsSelection
         pluginApi.pluginSettings.enableCross = root.enableCross
         pluginApi.pluginSettings.screenshotEditor = root.screenshotEditor
+        pluginApi.pluginSettings.keepSourceScreenshot = root.keepSourceScreenshot
         pluginApi.pluginSettings.savePath = root.savePath
         pluginApi.pluginSettings.recordingSavePath = root.recordingSavePath
         pluginApi.pluginSettings.recordingNotifications = root.recordingNotifications

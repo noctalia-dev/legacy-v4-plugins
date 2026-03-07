@@ -24,6 +24,10 @@
             "label": "Screenshot Annotation Tool",
             "description": "Tool used for annotating screenshots. Needs to be pre-installed."
         },
+        "keepSourceScreenshot": {
+            "label": "Keep Source Screenshot",
+            "description": "Keep the temporary *_source.png file after saving the edited screenshot."
+        },
         "savePath": {
             "label": "Screenshot Save Folder",
             "description": "Folder where edited screenshots are saved."

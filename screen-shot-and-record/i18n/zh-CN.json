@@ -24,6 +24,10 @@
             "label": "截图标注工具",
             "description": "用于标注截图的工具。需要预先安装。"
         },
+        "keepSourceScreenshot": {
+            "label": "保留源截图",
+            "description": "保存编辑后截图后，保留临时的 *_source.png 文件。"
+        },
         "savePath": {
             "label": "截图保存文件夹",
             "description": "编辑后的截图将保存到此文件夹。"

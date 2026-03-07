@@ -149,7 +149,7 @@ Item {
                   Layout.fillWidth: true
                   visible: root.recording
                   onClicked: {
-                      mainInstance?.open("record")
+                      mainInstance?.stopRecording()
                       pluginApi.closePanel(pluginApi.panelOpenScreen)
                   }
               }

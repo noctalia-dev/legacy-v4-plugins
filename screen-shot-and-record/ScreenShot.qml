@@ -159,7 +159,11 @@ PanelWindow {
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.screenshotEditor
                                ?? "swappy"
 
-                const editCmd = `mkdir -p '${screenshotDir}' && grim -g '${geometry}' '${sourceFile}' && ${editor} -f '${sourceFile}' -o '${outputFile}' && notify-send -a "Screenshot" "Screenshot saved" "${outputFile}"`
+                const keepSourceScreenshot = pluginApi?.pluginSettings?.keepSourceScreenshot
+                                           ?? pluginApi?.manifest?.metadata?.defaultSettings?.keepSourceScreenshot
+                                           ?? false
+
+                const editCmd = `mkdir -p '${screenshotDir}' && grim -g '${geometry}' '${sourceFile}' && ${editor} -f '${sourceFile}' -o '${outputFile}' && if [ '${keepSourceScreenshot ? "true" : "false"}' != 'true' ]; then rm -f '${sourceFile}'; fi && notify-send -a "Screenshot" "Screenshot saved" "${outputFile}"`
                 Logger.d("ScreenShot", "[Panel] Executing edit command:", editCmd)
                 Quickshell.execDetached(["sh", "-c", editCmd])
             }
@@ -229,6 +233,7 @@ PanelWindow {
         anchors.fill: parent
         live: false
         captureSource: root.screen
+    }
 
 
 
@@ -374,8 +379,6 @@ PanelWindow {
 
                 root.finish()
             }
-        }
-
     }
 
     NBox {
@@ -419,13 +422,21 @@ PanelWindow {
         }
 
         Behavior on opacity { NumberAnimation { duration: Style.animationNormal; easing.type: Easing.OutQuad } }
+    }
 
+    Item {
+        anchors.fill: parent
+        focus: true
         Keys.onPressed: (event) => {
             if (event.key === Qt.Key_Escape) {
                 root.visible = false
-                root.closed()
                 event.accepted = true
+                root.closed()
             }
+        }
+
+        Component.onCompleted: {
+            forceActiveFocus()
         }
     }
 
@@ -451,20 +462,4 @@ PanelWindow {
         }
     }
 
-    // 键盘支持
-    Item {
-        anchors.fill: parent
-        focus: true
-        Keys.onPressed: (event) => {
-            if (event.key === Qt.Key_Escape) {
-                root.visible = false
-                event.accepted = true
-                root.closed()
-            }
-        }
-
-        Component.onCompleted: {
-            forceActiveFocus()
-        }
-    }
 }
