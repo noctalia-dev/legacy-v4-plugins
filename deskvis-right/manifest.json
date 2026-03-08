@@ -1,0 +1,31 @@
+{
+	"id": "deskvis-right",
+	"name": "DeskVis Right",
+	"version": "1.0.0",
+	"minNoctaliaVersion": "3.7.2",
+	"author": "you",
+	"license": "MIT",
+	"description": "Audio visualizer — vertical, bars grow rightward / wave fills right. Transparent, follows color scheme.",
+	"tags": ["Desktop", "Audio"],
+	"entryPoints": {
+		"desktopWidget": "DesktopWidget.qml",
+		"settings": "Settings.qml"
+	},
+	"dependencies": {
+		"plugins": []
+	},
+	"metadata": {
+		"defaultSettings": {
+			"mode": "bars",
+			"barCount": 32,
+			"fps": 60,
+			"sensitivity": 1.5,
+			"smoothing": 0.18,
+			"useGradient": true,
+			"fadeWhenIdle": true,
+			"useCustomColors": false,
+			"customPrimaryColor": "#6750A4",
+			"customSecondaryColor": "#625B71"
+		}
+	}
+}
