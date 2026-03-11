@@ -16,13 +16,13 @@ jobs:
     if: ${{ github.repository == 'noctalia-dev/noctalia-plugins' }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6.3.0
         with:
           node-version: '20'
       
@@ -51,7 +51,7 @@ jobs:
       
       - name: Upload registry artifact
         if: steps.check_changes.outputs.changed == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.0
         with:
           name: updated-registry
           path: registry.json

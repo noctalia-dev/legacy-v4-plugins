@@ -1,0 +1,41 @@
+on:
+  pull_request:
+    paths:
+      - '**/*.qml'
+      - '.github/workflows/lint.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.qml'
+      - '.github/workflows/lint.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: DeterminateSystems/determinate-nix-action@v3.17.0
+
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+
+      - run: |
+          set -euo pipefail
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            git fetch --no-tags --depth=1 origin main:main
+            LINT_CMD='git diff main --name-only -- "*.qml" | xargs -r qmllint --max-warnings 0'
+          else
+            if git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
+              LINT_CMD='git diff HEAD~1 --name-only -- "*.qml" | xargs -r qmllint --max-warnings 0'
+            else
+              LINT_CMD='git ls-files "*.qml" | xargs -r qmllint --max-warnings 0'
+            fi
+          fi
+
+          nix shell --accept-flake-config nixpkgs#kdePackages.qtdeclarative -c bash -euo pipefail -c "$LINT_CMD"
+
+      - if: failure()
+        run: |
+          echo "::error::QML lint failed. Run qmllint locally before pushing (for example: qmllint path/to/File.qml)."
