@@ -1,0 +1,19 @@
+{
+  "name": "clipboard",
+  "description": "Get or set the Wayland clipboard contents.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": ["get", "set"],
+        "description": "Whether to get or set clipboard contents"
+      },
+      "content": {
+        "type": "string",
+        "description": "Content to set (only used when action is 'set')"
+      }
+    },
+    "required": ["action"]
+  }
+}

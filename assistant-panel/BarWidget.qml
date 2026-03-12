@@ -23,6 +23,7 @@ Item {
   readonly property var mainInstance: pluginApi?.mainInstance
   readonly property bool isGenerating: mainInstance?.isGenerating || false
   readonly property int messageCount: mainInstance?.messages?.length || 0
+  readonly property int toolCount: mainInstance?.toolCount || 0
 
   // Property to check if an API key is configured
   readonly property bool hasApiKey: {
@@ -187,6 +188,10 @@ Item {
 
     if (messageCount > 0) {
       tooltip += "\n" + (pluginApi?.tr("widget.messages")) + ": " + messageCount;
+    }
+
+    if (toolCount > 0) {
+      tooltip += "\n" + (pluginApi?.tr("widget.tools") || "Tools") + ": " + toolCount;
     }
 
     if (isGenerating) {

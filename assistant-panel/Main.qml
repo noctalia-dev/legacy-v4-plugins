@@ -20,6 +20,33 @@ Item {
   property string errorMessage: ""
   property bool isManuallyStopped: false
 
+  // Tool state
+  property var toolSchemas: []
+  property int toolCount: 0
+  property bool isExecutingTools: false
+  property var _pendingToolCalls: []
+  property bool _hasToolCallsToProcess: false
+  property var _toolCallQueue: []
+  property int _currentToolCallIndex: 0
+  property int _toolIterationCount: 0
+
+  // Tool confirmation state
+  property bool awaitingToolConfirmation: false
+  property var pendingToolConfirmation: null  // the tool call awaiting approval
+
+  // Tool settings accessors
+  readonly property bool toolsEnabled: pluginApi?.pluginSettings?.tools?.enabled ?? true
+  readonly property int maxToolIterations: pluginApi?.pluginSettings?.tools?.maxIterations ?? 10
+  readonly property int toolTimeout: pluginApi?.pluginSettings?.tools?.timeout ?? 30
+  readonly property string toolsDir: {
+    var custom = pluginApi?.pluginSettings?.tools?.directory || "";
+    if (custom !== "") return custom;
+    // Default: tools/ relative to this QML file's directory
+    var url = Qt.resolvedUrl("tools").toString();
+    if (url.startsWith("file://")) return url.substring(7);
+    return url;
+  }
+
   // Translation state
   property string translatedText: ""
   property bool isTranslating: false
@@ -89,6 +116,7 @@ Item {
     Logger.i("AssistantPanel", "Plugin initialized");
     // State loading is handled by FileView onLoaded
     ensureCacheDir();
+    discoverTools();
   }
 
   // Ensure cache directory exists
@@ -178,13 +206,19 @@ Item {
   }
 
   // Add a message to the chat
-  function addMessage(role, content) {
+  function addMessage(role, content, extra) {
     var newMessage = {
-      "id": Date.now().toString(),
+      "id": Date.now().toString() + "_" + Math.random().toString(36).substr(2, 4),
       "role": role,
       "content": content,
       "timestamp": new Date().toISOString()
     };
+    if (extra) {
+      var keys = Object.keys(extra);
+      for (var i = 0; i < keys.length; i++) {
+        newMessage[keys[i]] = extra[keys[i]];
+      }
+    }
     root.messages = [...root.messages, newMessage];
     saveState();
     return newMessage;
@@ -197,7 +231,526 @@ Item {
     Logger.i("AssistantPanel", "Chat history cleared");
   }
 
-  // Send a message to the AI
+  // =====================
+  // Tool Discovery
+  // =====================
+  Process {
+    id: toolDiscoveryProcess
+
+    stdout: StdioCollector {
+      onStreamFinished: {
+        root.handleToolDiscoveryResult(text);
+      }
+    }
+
+    stderr: StdioCollector {
+      onStreamFinished: {
+        if (text && text.trim() !== "") {
+          Logger.e("AssistantPanel", "Tool discovery stderr: " + text);
+        }
+      }
+    }
+
+    onExited: function (exitCode, exitStatus) {
+      if (exitCode !== 0) {
+        Logger.e("AssistantPanel", "Tool discovery failed with exit code " + exitCode);
+      }
+    }
+  }
+
+  function discoverTools() {
+    Logger.i("AssistantPanel", "Discovering tools in: " + toolsDir);
+    // Find all spec.json files with their parent directories, output as JSON array
+    toolDiscoveryProcess.command = ["sh", "-c",
+      "result='['; first=1; " +
+      "for d in " + ProviderLogic.shellQuote(toolsDir) + "/*/; do " +
+      "  if [ -f \"${d}spec.json\" ] && [ -x \"${d}run\" ]; then " +
+      "    [ $first -eq 0 ] && result=\"${result},\"; " +
+      "    spec=$(cat \"${d}spec.json\"); " +
+      "    dir=$(echo \"$d\" | sed 's:/$::'); " +
+      "    result=\"${result}$(echo \"$spec\" | jq -c --arg dir \"$dir\" '. + {\"_dir\": $dir}')\"; " +
+      "    first=0; " +
+      "  fi; " +
+      "done; " +
+      "echo \"${result}]\""
+    ];
+    toolDiscoveryProcess.running = true;
+  }
+
+  function handleToolDiscoveryResult(text) {
+    if (!text || text.trim() === "") {
+      Logger.i("AssistantPanel", "No tools found");
+      root.toolSchemas = [];
+      root.toolCount = 0;
+      return;
+    }
+
+    try {
+      var schemas = JSON.parse(text.trim());
+      root.toolSchemas = schemas;
+      root.toolCount = schemas.length;
+      var names = schemas.map(function(s) { return s.name; }).join(", ");
+      Logger.i("AssistantPanel", "Discovered " + schemas.length + " tools: " + names);
+    } catch (e) {
+      Logger.e("AssistantPanel", "Failed to parse tool discovery result: " + e);
+      root.toolSchemas = [];
+      root.toolCount = 0;
+    }
+  }
+
+  // Get active tool schemas (only if tools are enabled)
+  function getActiveToolSchemas() {
+    if (!toolsEnabled || toolSchemas.length === 0) return [];
+    // Strip internal _dir field for API payloads
+    return toolSchemas.map(function(s) {
+      return {
+        name: s.name,
+        description: s.description,
+        parameters: s.parameters
+      };
+    });
+  }
+
+  // Find tool directory by name
+  function findToolDir(toolName) {
+    for (var i = 0; i < toolSchemas.length; i++) {
+      if (toolSchemas[i].name === toolName) {
+        return toolSchemas[i]._dir;
+      }
+    }
+    return null;
+  }
+
+  // =====================
+  // Tool Allowlist (with qualifier support)
+  // =====================
+  //
+  // Allowlist keys:
+  //   "clipboard"       → tool-level (tools without qualifierParam)
+  //   "shell:ls"        → qualified (first word of qualifierParam value)
+  //   "shell:*"         → wildcard (all qualifiers for this tool)
+  //
+  // Lookup order: tool:qualifier → tool:* → tool → "confirm"
+
+  function getAllowlist() {
+    return pluginApi?.pluginSettings?.tools?.allowlist || {};
+  }
+
+  function setAllowlistEntry(key, status) {
+    if (!pluginApi) return;
+    if (!pluginApi.pluginSettings.tools)
+      pluginApi.pluginSettings.tools = {};
+    if (!pluginApi.pluginSettings.tools.allowlist)
+      pluginApi.pluginSettings.tools.allowlist = {};
+    pluginApi.pluginSettings.tools.allowlist[key] = status;
+    pluginApi.saveSettings();
+    Logger.i("AssistantPanel", "Allowlist '" + key + "' set to: " + status);
+  }
+
+  function removeAllowlistEntry(key) {
+    if (!pluginApi) return;
+    var al = pluginApi.pluginSettings?.tools?.allowlist;
+    if (!al) return;
+    delete al[key];
+    pluginApi.pluginSettings.tools.allowlist = al;
+    pluginApi.saveSettings();
+    Logger.i("AssistantPanel", "Allowlist entry removed: " + key);
+  }
+
+  // =====================
+  // Command Parsing for Qualifier Extraction
+  // =====================
+
+  // Quote-aware tokenizer: split a shell command on operators (&&, ||, ;, |)
+  // while respecting single/double quotes and escapes.
+  // Returns array of command segments, or null if unparseable (subshells, substitutions).
+  function splitShellCommand(command) {
+    if (!command) return null;
+
+    // Bail on command substitutions and subshells — can't safely analyze
+    if (command.indexOf("$(") >= 0) return null;
+    if (command.indexOf("`") >= 0) return null;
+    if (command.indexOf("\n") >= 0) return null;
+
+    var segments = [];
+    var current = "";
+    var inSingle = false;
+    var inDouble = false;
+    var escaped = false;
+
+    for (var i = 0; i < command.length; i++) {
+      var c = command[i];
+
+      if (escaped) { current += c; escaped = false; continue; }
+      if (c === "\\") { current += c; escaped = true; continue; }
+      if (c === "'" && !inDouble) { inSingle = !inSingle; current += c; continue; }
+      if (c === '"' && !inSingle) { inDouble = !inDouble; current += c; continue; }
+
+      if (!inSingle && !inDouble) {
+        var rest = command.substring(i);
+        // Check two-char operators first
+        if (rest.startsWith("&&") || rest.startsWith("||")) {
+          if (current.trim()) segments.push(current.trim());
+          current = "";
+          i++; // skip second char
+          continue;
+        }
+        // Single-char operators
+        if (c === "|" || c === ";") {
+          if (current.trim()) segments.push(current.trim());
+          current = "";
+          continue;
+        }
+        // Redirections — not an operator split, but note the command uses them
+        // We still allow the command through, just don't split on > or <
+      }
+
+      current += c;
+    }
+
+    // Unclosed quotes = unparseable
+    if (inSingle || inDouble) return null;
+    if (current.trim()) segments.push(current.trim());
+
+    return segments.length > 0 ? segments : null;
+  }
+
+  // Extract the binary (first word) from a single command segment,
+  // skipping leading env assignments (KEY=VAL).
+  function extractBinary(segment) {
+    if (!segment) return null;
+    var words = segment.trim().split(/\s+/);
+    for (var i = 0; i < words.length; i++) {
+      var w = words[i];
+      // Skip env variable assignments (KEY=VAL)
+      if (w.indexOf("=") > 0 && w.indexOf("=") < w.length - 1) continue;
+      return w;
+    }
+    return words[0] || null;
+  }
+
+  // Extract ALL command binaries from a shell command string.
+  // Returns array of binary names, or null if unparseable.
+  function extractAllCommands(command) {
+    var segments = splitShellCommand(command);
+    if (!segments) return null;
+
+    var binaries = [];
+    for (var i = 0; i < segments.length; i++) {
+      var binary = extractBinary(segments[i]);
+      if (binary) binaries.push(binary);
+    }
+    return binaries.length > 0 ? binaries : null;
+  }
+
+  // Extract single qualifier for a tool call — used by the UI for "Allow `tool:cmd`" button.
+  // Only returns a value for simple (single-command) invocations.
+  function extractQualifier(tc) {
+    for (var i = 0; i < toolSchemas.length; i++) {
+      if (toolSchemas[i].name === tc.name && toolSchemas[i].qualifierParam) {
+        var paramName = toolSchemas[i].qualifierParam;
+        var args;
+        try {
+          args = typeof tc.arguments === "string" ? JSON.parse(tc.arguments) : (tc.arguments || {});
+        } catch (e) { return null; }
+
+        var val = args[paramName];
+        if (!val || typeof val !== "string") return null;
+
+        var binaries = extractAllCommands(val);
+        // Only return qualifier for simple single-command invocations
+        if (!binaries || binaries.length !== 1) return null;
+        return binaries[0];
+      }
+    }
+    return null; // No qualifierParam for this tool
+  }
+
+  // Check if a tool has a qualifierParam defined
+  function toolHasQualifier(toolName) {
+    for (var i = 0; i < toolSchemas.length; i++) {
+      if (toolSchemas[i].name === toolName && toolSchemas[i].qualifierParam) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Get full approval for a tool call
+  // Lookup: tool:qualifier → tool:* → tool → "confirm"
+  // For compound commands (ls | grep): checks each binary individually
+  function getFullToolApproval(tc) {
+    var al = getAllowlist();
+
+    // Check tool-level "never" first (blocks everything)
+    if (al[tc.name] === "never") return "never";
+
+    var qualifier = extractQualifier(tc);
+
+    if (qualifier) {
+      // Single command — check tool:qualifier
+      var qualifiedKey = tc.name + ":" + qualifier;
+      if (al[qualifiedKey]) return al[qualifiedKey];
+
+      // Check tool:*
+      var wildcardKey = tc.name + ":*";
+      if (al[wildcardKey]) return al[wildcardKey];
+    } else if (toolHasQualifier(tc.name)) {
+      // Compound command or unparseable — try checking all binaries
+      var args;
+      try {
+        args = typeof tc.arguments === "string" ? JSON.parse(tc.arguments) : (tc.arguments || {});
+      } catch (e) { return "confirm"; }
+
+      var paramName = null;
+      for (var i = 0; i < toolSchemas.length; i++) {
+        if (toolSchemas[i].name === tc.name && toolSchemas[i].qualifierParam) {
+          paramName = toolSchemas[i].qualifierParam;
+          break;
+        }
+      }
+      if (paramName) {
+        var val = args[paramName];
+        var binaries = val ? extractAllCommands(val) : null;
+        if (binaries && binaries.length > 1) {
+          // Check each binary against allowlist; all must be approved
+          var allApproved = true;
+          for (var j = 0; j < binaries.length; j++) {
+            var bKey = tc.name + ":" + binaries[j];
+            var bWild = tc.name + ":*";
+            if (al[bKey] === "never" || al[bWild] === "never") return "never";
+            if (al[bKey] !== "always" && al[bWild] !== "always") {
+              allApproved = false;
+            }
+          }
+          if (allApproved) return "always";
+          // Not all approved — fall through to confirm
+        }
+        // Unparseable command (null from extractAllCommands) — fall through to confirm
+      }
+    }
+
+    // Check tool-level
+    if (al[tc.name]) return al[tc.name];
+
+    return "confirm";
+  }
+
+  function approveToolOnce() {
+    var tc = root.pendingToolConfirmation;
+    if (!tc) return;
+    root.awaitingToolConfirmation = false;
+    root.pendingToolConfirmation = null;
+    runToolExec(tc);
+  }
+
+  function approveToolAlways() {
+    var tc = root.pendingToolConfirmation;
+    if (!tc) return;
+    root.awaitingToolConfirmation = false;
+    root.pendingToolConfirmation = null;
+    setAllowlistEntry(tc.name, "always");
+    runToolExec(tc);
+  }
+
+  // Approve a specific qualifier (e.g., "shell:ls", "shell:cat")
+  function approveQualifier(qualifiedKey) {
+    var tc = root.pendingToolConfirmation;
+    if (!tc) return;
+    root.awaitingToolConfirmation = false;
+    root.pendingToolConfirmation = null;
+    setAllowlistEntry(qualifiedKey, "always");
+    runToolExec(tc);
+  }
+
+  function denyToolOnce() {
+    var tc = root.pendingToolConfirmation;
+    if (!tc) return;
+    root.awaitingToolConfirmation = false;
+    root.pendingToolConfirmation = null;
+
+    addMessage("tool", "Tool call denied by user.", {
+      "tool_call_id": tc.id,
+      "tool_name": tc.name,
+      "tool_args": tc.arguments,
+      "denied": true
+    });
+
+    _currentToolCallIndex++;
+    executeNextTool();
+  }
+
+  // =====================
+  // Tool Execution
+  // =====================
+  Process {
+    id: toolExecProcess
+
+    stdout: StdioCollector {
+      onStreamFinished: {
+        root._toolExecStdout = text;
+      }
+    }
+
+    stderr: StdioCollector {
+      onStreamFinished: {
+        root._toolExecStderr = text;
+      }
+    }
+
+    onExited: function (exitCode, exitStatus) {
+      root.handleToolExecComplete(exitCode);
+    }
+  }
+
+  property string _toolExecStdout: ""
+  property string _toolExecStderr: ""
+
+  function handleToolCalls(toolCalls) {
+    if (!toolCalls || toolCalls.length === 0) return;
+
+    Logger.i("AssistantPanel", "Processing " + toolCalls.length + " tool call(s)");
+
+    // Add assistant message with tool_calls
+    addMessage("assistant", root.currentResponse.trim(), { "tool_calls": toolCalls });
+    root.currentResponse = "";
+
+    _toolCallQueue = toolCalls;
+    _currentToolCallIndex = 0;
+    root.isExecutingTools = true;
+
+    executeNextTool();
+  }
+
+  function executeNextTool() {
+    if (_currentToolCallIndex >= _toolCallQueue.length) {
+      // All tools executed — check iteration limit and re-request
+      root.isExecutingTools = false;
+      _toolIterationCount++;
+
+      if (_toolIterationCount >= maxToolIterations) {
+        Logger.w("AssistantPanel", "Max tool iterations reached (" + maxToolIterations + ")");
+        addMessage("assistant", "(Tool use stopped: maximum iterations reached)");
+        root.isGenerating = false;
+        return;
+      }
+
+      continueAfterTools();
+      return;
+    }
+
+    var tc = _toolCallQueue[_currentToolCallIndex];
+
+    // Check allowlist (including shell command-level for shell tool)
+    var approval = getFullToolApproval(tc);
+
+    if (approval === "never") {
+      Logger.i("AssistantPanel", "Tool '" + tc.name + "' is denied by allowlist");
+      addMessage("tool", "Tool '" + tc.name + "' is blocked. Change in settings to allow.", {
+        "tool_call_id": tc.id,
+        "tool_name": tc.name,
+        "tool_args": tc.arguments,
+        "denied": true
+      });
+      _currentToolCallIndex++;
+      executeNextTool();
+      return;
+    }
+
+    if (approval !== "always") {
+      // Need confirmation — pause and show prompt
+      Logger.i("AssistantPanel", "Awaiting confirmation for tool: " + tc.name);
+      root.pendingToolConfirmation = tc;
+      root.awaitingToolConfirmation = true;
+      return; // Paused — user action will resume
+    }
+
+    // Approved — run immediately
+    runToolExec(tc);
+  }
+
+  function runToolExec(tc) {
+    var toolDir = findToolDir(tc.name);
+
+    if (!toolDir) {
+      Logger.e("AssistantPanel", "Tool not found: " + tc.name);
+      addMessage("tool", "Error: tool '" + tc.name + "' not found", {
+        "tool_call_id": tc.id,
+        "tool_name": tc.name,
+        "tool_args": tc.arguments
+      });
+      _currentToolCallIndex++;
+      executeNextTool();
+      return;
+    }
+
+    var argsJson = typeof tc.arguments === "string" ? tc.arguments : JSON.stringify(tc.arguments || {});
+    Logger.i("AssistantPanel", "Executing tool: " + tc.name + " with args: " + argsJson);
+
+    // Store current tool info for the completion handler
+    root._currentExecutingToolCall = tc;
+
+    _toolExecStdout = "";
+    _toolExecStderr = "";
+    toolExecProcess.command = ProviderLogic.buildToolExecCommand(toolDir, argsJson, toolTimeout);
+    toolExecProcess.running = true;
+  }
+
+  property var _currentExecutingToolCall: null
+
+  function handleToolExecComplete(exitCode) {
+    var tc = root._currentExecutingToolCall;
+    if (!tc) return;
+
+    var result = _toolExecStdout || "";
+    if (exitCode !== 0) {
+      if (_toolExecStderr) {
+        result = result ? (result + "\n" + _toolExecStderr) : _toolExecStderr;
+      }
+      if (!result) result = "Tool exited with code " + exitCode;
+
+      // Check for timeout (exit code 124 from timeout command)
+      if (exitCode === 124) {
+        result = "Error: tool timed out after " + toolTimeout + " seconds";
+      }
+    }
+
+    // Truncate very long results
+    if (result.length > 10000) {
+      result = result.substring(0, 10000) + "\n...(truncated, " + result.length + " chars total)";
+    }
+
+    var argsStr = typeof tc.arguments === "string" ? tc.arguments : JSON.stringify(tc.arguments || {});
+    var argsParsed;
+    try { argsParsed = typeof tc.arguments === "string" ? JSON.parse(tc.arguments) : (tc.arguments || {}); }
+    catch (e) { argsParsed = {}; }
+
+    Logger.i("AssistantPanel", "Tool " + tc.name + " completed (exit=" + exitCode + ", " + result.length + " chars)");
+
+    addMessage("tool", result, {
+      "tool_call_id": tc.id,
+      "tool_name": tc.name,
+      "tool_args": argsParsed
+    });
+
+    _currentToolCallIndex++;
+    executeNextTool();
+  }
+
+  function continueAfterTools() {
+    Logger.i("AssistantPanel", "Continuing after tools (iteration " + _toolIterationCount + ")");
+    root.currentResponse = "";
+
+    if (provider === Constants.Providers.GOOGLE) {
+      sendGeminiRequest();
+    } else if (provider === Constants.Providers.OPENAI_COMPATIBLE) {
+      sendOpenAIRequest();
+    }
+  }
+
+  // =====================
+  // Send Message
+  // =====================
   function sendMessage(userMessage) {
     Logger.i("AssistantPanel", "sendMessage called with: " + userMessage);
     if (!userMessage || userMessage.trim() === "") {
@@ -210,7 +763,6 @@ Item {
     }
 
     // Check API key for non-local providers
-    // For OpenAI Compatible, check apiKey only if NOT local
     var requiresKey = true;
     if (provider === Constants.Providers.OPENAI_COMPATIBLE && openaiLocal) {
       requiresKey = false;
@@ -230,6 +782,9 @@ Item {
     root.isManuallyStopped = false;
     root.currentResponse = "";
     root.errorMessage = "";
+    root._toolIterationCount = 0;
+    root._pendingToolCalls = [];
+    root._hasToolCallsToProcess = false;
 
     if (provider === Constants.Providers.GOOGLE) {
       Logger.i("AssistantPanel", "Calling sendGeminiRequest()");
@@ -291,6 +846,9 @@ Item {
       root.isGenerating = true;
       root.currentResponse = "";
       root.errorMessage = "";
+      root._toolIterationCount = 0;
+      root._pendingToolCalls = [];
+      root._hasToolCallsToProcess = false;
 
       if (provider === Constants.Providers.GOOGLE) {
         sendGeminiRequest();
@@ -311,8 +869,11 @@ Item {
       geminiProcess.running = false;
     if (openaiProcess.running)
       openaiProcess.running = false;
+    if (toolExecProcess.running)
+      toolExecProcess.running = false;
 
     root.isGenerating = false;
+    root.isExecutingTools = false;
     // If we have a partial response, add it to chat history
     if (root.currentResponse.trim() !== "") {
       root.addMessage("assistant", root.currentResponse.trim());
@@ -325,12 +886,36 @@ Item {
     var history = [];
     for (var i = 0; i < root.messages.length; i++) {
       var msg = root.messages[i];
-      history.push({
+      var entry = {
         "role": msg.role,
         "content": msg.content
-      });
+      };
+      if (msg.tool_calls) entry.tool_calls = msg.tool_calls;
+      if (msg.tool_call_id) entry.tool_call_id = msg.tool_call_id;
+      if (msg.tool_name) entry.tool_name = msg.tool_name;
+      history.push(entry);
     }
     return history;
+  }
+
+  // Common handler for when a provider stream completes
+  function handleStreamComplete() {
+    // Check if there are tool calls to process (check array regardless of flag)
+    var toolCalls = [];
+    for (var i = 0; i < root._pendingToolCalls.length; i++) {
+      if (root._pendingToolCalls[i]) {
+        toolCalls.push(root._pendingToolCalls[i]);
+      }
+    }
+
+    if (toolCalls.length > 0) {
+      Logger.i("AssistantPanel", "Stream complete with " + toolCalls.length + " tool call(s) to process");
+      root._pendingToolCalls = [];
+      root._hasToolCallsToProcess = false;
+      handleToolCalls(toolCalls);
+      return true; // Handled as tool calls
+    }
+    return false; // Normal completion
   }
 
   // =====================
@@ -372,7 +957,23 @@ Item {
 
       if (result.content) {
         root.currentResponse += result.content;
-      } else if (result.error) {
+      }
+
+      // Handle Gemini function calls (arrive as complete objects, not chunked)
+      if (result.function_calls) {
+        for (var i = 0; i < result.function_calls.length; i++) {
+          var fc = result.function_calls[i];
+          Logger.i("AssistantPanel", "Gemini: function call: " + fc.name + " args=" + JSON.stringify(fc.args || {}));
+          root._pendingToolCalls.push({
+            id: "gemini_" + Date.now() + "_" + i,
+            name: fc.name,
+            arguments: JSON.stringify(fc.args || {})
+          });
+        }
+        root._hasToolCallsToProcess = true;
+      }
+
+      if (result.error) {
         Logger.e("AssistantPanel", "Gemini stream error: " + result.error);
         if (!result.error.startsWith("Error parsing SSE")) {
           root.errorMessage = result.error;
@@ -397,8 +998,14 @@ Item {
         return;
       }
 
-      root.isGenerating = false;
       geminiProcess.buffer = "";
+
+      // Check for tool calls before completing
+      if (root.handleStreamComplete()) {
+        return; // Tool execution started
+      }
+
+      root.isGenerating = false;
 
       if (exitCode !== 0 && root.currentResponse === "") {
         if (root.errorMessage === "") {
@@ -418,13 +1025,16 @@ Item {
 
   function sendGeminiRequest() {
     var history = buildConversationHistory();
+    var activeTools = getActiveToolSchemas();
     var commandData = ProviderLogic.buildGeminiCommand(
       providers[Constants.Providers.GOOGLE].streamEndpoint,
-      model, apiKey, systemPrompt, history, temperature
+      model, apiKey, systemPrompt, history, temperature, activeTools
     );
 
     Logger.i("AssistantPanel", "sendGeminiRequest: endpoint=" + commandData.url);
     geminiProcess.buffer = "";
+    root._pendingToolCalls = [];
+    root._hasToolCallsToProcess = false;
     geminiProcess.command = commandData.args;
     Logger.i("AssistantPanel", "sendGeminiRequest: starting process");
     _responseBuffer = "";
@@ -462,7 +1072,35 @@ Item {
 
       if (result.content) {
         root.currentResponse += result.content;
-      } else if (result.error) {
+      }
+
+      // Handle tool call chunks (streamed incrementally)
+      if (result.tool_call_chunks) {
+        for (var i = 0; i < result.tool_call_chunks.length; i++) {
+          var chunk = result.tool_call_chunks[i];
+          var idx = chunk.index;
+
+          // Initialize slot if new
+          if (!root._pendingToolCalls[idx]) {
+            root._pendingToolCalls[idx] = { id: "", name: "", arguments: "" };
+            Logger.i("AssistantPanel", "OpenAI: new tool call slot " + idx);
+          }
+          if (chunk.id) root._pendingToolCalls[idx].id = chunk.id;
+          if (chunk.name) {
+            root._pendingToolCalls[idx].name = chunk.name;
+            Logger.i("AssistantPanel", "OpenAI: tool call " + idx + " name=" + chunk.name);
+          }
+          root._pendingToolCalls[idx].arguments += chunk.arguments;
+        }
+      }
+
+      // Mark tool calls for processing when finish_reason indicates it
+      if (result.finish_reason === "tool_calls") {
+        Logger.i("AssistantPanel", "OpenAI: finish_reason=tool_calls, " + root._pendingToolCalls.length + " calls pending");
+        root._hasToolCallsToProcess = true;
+      }
+
+      if (result.error) {
         Logger.e("AssistantPanel", "OpenAI stream error: " + result.error);
       } else if (result.raw) {
         openaiProcess.buffer += result.raw;
@@ -482,6 +1120,12 @@ Item {
       if (root.isManuallyStopped) {
         root.isManuallyStopped = false;
         return;
+      }
+
+      // Check for tool calls before completing
+      if (root.handleStreamComplete()) {
+        openaiProcess.buffer = "";
+        return; // Tool execution started
       }
 
       root.isGenerating = false;
@@ -510,20 +1154,20 @@ Item {
 
   function sendOpenAIRequest() {
     var history = buildConversationHistory();
-    var commandData = ProviderLogic.buildOpenAICommand(openaiBaseUrl, apiKey, model, systemPrompt, history, temperature);
+    var activeTools = getActiveToolSchemas();
+    var commandData = ProviderLogic.buildOpenAICommand(
+      openaiBaseUrl, apiKey, model, systemPrompt, history, temperature, activeTools
+    );
 
     Logger.i("AssistantPanel", "sendOpenAIRequest: endpoint=" + commandData.url);
     openaiProcess.buffer = "";
+    root._pendingToolCalls = [];
+    root._hasToolCallsToProcess = false;
     openaiProcess.command = commandData.args;
 
     Logger.i("AssistantPanel", "sendOpenAIRequest: starting process");
     openaiProcess.running = true;
   }
-
-  // =====================
-  // Ollama API (Local)
-  // =====================
-  // Ollama Process removed (consolidated into OpenAI logic)
 
   // =====================
   // Translation
@@ -597,7 +1241,6 @@ Item {
     var result = ProviderLogic.parseTranslateResponse(translatorBackend, responseText);
 
     if (result.error) {
-      // Map known internal error strings to translated ones if needed, otherwise show as is
       if (result.error === "Empty response")
         root.translationError = pluginApi?.tr("errors.emptyResponse");
       else if (result.error === "Failed to parse response")
@@ -667,7 +1310,6 @@ Item {
 
     function setModel(modelName: string) {
       if (pluginApi && modelName) {
-        // Save both legacy `model` and per-provider `models[provider]` for compatibility
         if (!pluginApi.pluginSettings.ai)
           pluginApi.pluginSettings.ai = {};
         pluginApi.pluginSettings.ai.model = modelName;
@@ -681,6 +1323,11 @@ Item {
         pluginApi.saveSettings();
         ToastService.showNotice(pluginApi?.tr("toast.modelChanged") + " " + modelName);
       }
+    }
+
+    function reloadTools() {
+      root.discoverTools();
+      ToastService.showNotice("Tools reloaded (" + root.toolCount + " found)");
     }
   }
 }

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -uo pipefail
+args=$(cat)
+action=$(printf '%s' "$args" | jq -r '.action')
+if [ "$action" = "get" ]; then
+  wl-paste 2>/dev/null || echo "(clipboard empty)"
+elif [ "$action" = "set" ]; then
+  content=$(printf '%s' "$args" | jq -r '.content')
+  printf '%s' "$content" | wl-copy
+  echo "Clipboard set."
+else
+  echo "Unknown action: $action" >&2
+  exit 1
+fi
