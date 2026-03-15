@@ -16,6 +16,8 @@ Hardware-accelerated screen recording for Noctalia using [gpu-screen-recorder](h
 
 ## Requirements
 
+
+
 - **gpu-screen-recorder** - The screen recording backend
   - Install via package manager: `gpu-screen-recorder`
 - **xdg-desktop-portal** and a compositor portal backend (wlr/hyprland/gnome etc)
