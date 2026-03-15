@@ -14,6 +14,8 @@ Hardware-accelerated screen recording for Noctalia using [gpu-screen-recorder](h
 - Optional cursor recording
 - Multiple quality presets
 
+
+
 ## Requirements
 
 - **gpu-screen-recorder** - The screen recording backend
