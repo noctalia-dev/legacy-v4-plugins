@@ -1,6 +1,5 @@
 # Plugin runtime data
 */settings.json
-registry.json
 
 # IDE / editor
 .vscode/
