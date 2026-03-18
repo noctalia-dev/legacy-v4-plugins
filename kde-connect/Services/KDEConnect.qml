@@ -364,7 +364,9 @@ QtObject {
     Process {
       id: proc
       property string deviceId: ""
-      command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId + "/sftp", "org.kde.kdeconnect.device.sftp.startBrowsing"]
+      property var mountArgs: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId + "/sftp", "org.kde.kdeconnect.device.sftp.mountAndWait"]
+      property var getDirsArgs: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId + "/sftp", "org.kde.kdeconnect.device.sftp.getDirectories"]
+      command: ["sh", "-c", mountArgs.join(" ") + " && xdg-open $(" + getDirsArgs.join(" ") + " | head -n1 | cut -d: -f1)"]
       stdout: StdioCollector {
         onStreamFinished: proc.destroy()
       }
