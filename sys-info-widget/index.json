@@ -1,0 +1,8 @@
+{
+  "id": "sys-info-widget",
+  "name": "System Info",
+  "entryPoints": {
+    "main": "Main.qml",
+    "desktopWidget": "DesktopWidget.qml"
+  }
+}

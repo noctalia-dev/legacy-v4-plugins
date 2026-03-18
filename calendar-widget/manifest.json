@@ -1,0 +1,17 @@
+{
+  "id": "com.noctalia.calendar",
+  "name": "Desktop Calendar",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "Simon",
+  "license": "MIT",
+  "description": "Monthly calendar with today highlighted.",
+  "tags": ["Desktop", "Utility"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "desktopWidget": "DesktopWidget.qml"
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}
