@@ -1,7 +1,7 @@
 {
   "id": "activate-linux",
   "name": "Activate Linux Watermark",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "Preston Corless (pgattic)",
   "contributors": ["outfoxxed"],
   "license": "MIT",
@@ -19,8 +19,11 @@
     "defaultSettings": {
       "customizeText": false,
       "firstLine": "Activate Linux",
-      "secondLine": "Go to Settings to activate Linux."
+      "secondLine": "Go to Settings to activate Linux.",
+      "firstLineSize": 22,
+      "secondLineSize": 14,
+      "marginRight": 50,
+      "marginBottom": 50
     }
   }
 }
-

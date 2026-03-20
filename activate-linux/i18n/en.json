@@ -2,5 +2,35 @@
   "panel": {
     "activate": "Activate {osName}",
     "goto_settings": "Go to Settings to activate {osName}."
+  },
+  "settings": {
+    "customizeText": {
+      "label": "Customize Text",
+      "desc": "Write some custom text to display"
+    },
+    "firstLine": {
+      "label": "First line",
+      "placeholder": "Activate Linux, Windows, BSD, ..."
+    },
+    "secondLine": {
+      "label": "Second line",
+      "placeholder": "Go to Settings..."
+    },
+    "firstLineSize": {
+      "label": "First line font size",
+      "desc": "Size: {value}"
+    },
+    "secondLineSize": {
+      "label": "Second line font size",
+      "desc": "Size: {value}"
+    },
+    "marginRight": {
+      "label": "Margin right",
+      "desc": "Pixels: {value}"
+    },
+    "marginBottom": {
+      "label": "Margin bottom",
+      "desc": "Pixels: {value}"
+    }
   }
 }

@@ -11,17 +11,26 @@ import qs.Services.System
 Item {
   id: root
   property var pluginApi: null
+
+  property var cfg: pluginApi?.pluginSettings || ({})
+  property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+
   readonly property string osName: HostService?.osPretty || "Linux"
 
   readonly property string firstLine:
-    (pluginApi?.pluginSettings?.customizeText || pluginApi?.manifest?.metadata?.defaultSettings?.customizeText || false) ?
-    (pluginApi?.pluginSettings?.firstLine || pluginApi?.manifest?.metadata?.defaultSettings?.firstLine || "Activate Linux") :
+    (cfg.customizeText ?? defaults.customizeText ?? false) ?
+    (cfg.firstLine ?? defaults.firstLine ?? "Activate Linux") :
     (pluginApi?.tr("panel.activate", { osName: root.osName }) || `Activate ${root.osName}`)
 
   readonly property string secondLine:
-    (pluginApi?.pluginSettings?.customizeText || pluginApi?.manifest?.metadata?.defaultSettings?.customizeText || false) ?
-    (pluginApi?.pluginSettings?.secondLine || pluginApi?.manifest?.metadata?.defaultSettings?.secondLine || "Go to Settings to activate Linux.") :
+    (cfg.customizeText ?? defaults.customizeText ?? false) ?
+    (cfg.secondLine ?? defaults.secondLine ?? "Go to Settings to activate Linux.") :
     (pluginApi?.tr("panel.goto_settings", { osName: root.osName }) || `Go to Settings to activate ${root.osName}.`)
+
+  readonly property int firstLineSize: cfg.firstLineSize ?? defaults.firstLineSize ?? 22
+  readonly property int secondLineSize: cfg.secondLineSize ?? defaults.secondLineSize ?? 14
+  readonly property int marginRight: cfg.marginRight ?? defaults.marginRight ?? 50
+  readonly property int marginBottom: cfg.marginBottom ?? defaults.marginBottom ?? 50
 
   Variants {
     model: Quickshell.screens // Display on all screens
@@ -29,7 +38,7 @@ Item {
     PanelWindow {
 
       anchors { right: true; bottom: true }
-      margins { right: 50; bottom: 50 }
+      margins { right: root.marginRight; bottom: root.marginBottom }
 
       implicitWidth: content.width
       implicitHeight: content.height
@@ -46,16 +55,15 @@ Item {
         NText {
           text: firstLine
           color: "#50ffffff"
-          pointSize: 22
+          pointSize: root.firstLineSize
         }
 
         NText {
           text: secondLine
           color: "#50ffffff"
-          pointSize: 14
+          pointSize: root.secondLineSize
         }
       }
     }
   }
 }
-
