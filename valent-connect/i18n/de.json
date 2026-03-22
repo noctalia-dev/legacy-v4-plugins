@@ -27,7 +27,8 @@
       "unavailable-title": "Valent läuft nicht",
       "unavailable-desc": "Stelle sicher, dass die Valent-Anwendung auf deinem System installiert ist und läuft.",
       "device-unavailable": "Das Gerät ist derzeit nicht verfügbar."
-    }
+    },
+    "refresh": "Aktualisieren"
   },
   "bar": {
     "tooltip": "Verbundene Geräte"

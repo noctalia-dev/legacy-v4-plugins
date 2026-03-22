@@ -27,9 +27,10 @@
       "unavailable-title": "Valent не запущен",
       "unavailable-desc": "Убедитесь, что приложение Valent установлено и запущено в вашей системе.",
       "device-unavailable": "Устройство сейчас недоступно"
-    }
+    },
+    "refresh": "Обновить"
   },
-   "bar": {
+  "bar": {
     "tooltip": "Подключённые устройства"
   },
   "control_center": {

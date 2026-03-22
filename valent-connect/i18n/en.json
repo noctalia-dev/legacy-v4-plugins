@@ -27,7 +27,8 @@
       "unavailable-title": "Valent is not running",
       "unavailable-desc": "Make sure the Valent application is installed and running on your system.",
       "device-unavailable": "Device is currently unavailable"
-    }
+    },
+    "refresh": "Refresh"
   },
   "bar": {
     "tooltip": "Connected Devices"

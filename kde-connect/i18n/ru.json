@@ -6,9 +6,9 @@
       "weak": "Слабое",
       "fair": "Среднее",
       "good": "Хорошее",
-      "excellent": "Отличное",
-      "unknown": "Неизвестно"
+      "excellent": "Отличное"
     },
+    "unknown": "Неизвестно",
     "card": {
       "battery": "Батарея",
       "network": "Сеть",
@@ -18,6 +18,7 @@
     "other-devices": "Другие устройства",
     "send-file-picker": "Выберите файл для отправки на устройство",
     "send-file": "Отправить файл",
+    "browse-device": "Просмотреть файлы на устройстве",
     "find-device": "Найти моё устройство",
     "pair": "Сопрячь устройство",
     "unpair": "Разорвать сопряжение",
@@ -27,9 +28,9 @@
       "unavailable-desc": "Убедитесь, что KDE Connect установлен в системе и служба kdeconnectd работает.",
        "device-unavailable": "Устройство сейчас недоступно"
     },
-    "qdbus-error": {
-      "unavailable-title": "Не удаётся найти qdbus!",
-      "unavailable-desc": "Убедитесь, что qdbus (или qdbus6 на некоторых системах) установлен в вашей системе"
+    "busctl-error": {
+      "unavailable-title": "Не удаётся найти busctl!",
+      "unavailable-desc": "Убедитесь, что busctl установлен в вашей системе"
     }
   },
    "bar": {

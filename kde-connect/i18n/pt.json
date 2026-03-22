@@ -6,9 +6,9 @@
       "weak": "Fraco",
       "fair": "Justo",
       "good": "Bom",
-      "excellent": "Excelente",
-      "unknown": "Desconhecido"
+      "excellent": "Excelente"
     },
+    "unknown": "Desconhecido",
     "card": {
       "battery": "Bateria",
       "network": "Rede",
@@ -27,9 +27,9 @@
       "unavailable-desc": "Certifique-se de ter instalado o aplicativo KDE Connect em seu sistema e de que o daemon kdeconnectd esteja em execução",
       "device-unavailable": "O dispositivo está indisponível no momento"
     },
-    "qdbus-error": {
-      "unavailable-title": "O qdbus não foi encontrado!",
-      "unavailable-desc": "Certifique-se de que o qdbus (ou qdbus6 em alguns sistemas) esteja instalado em seu sistema"
+    "busctl-error": {
+      "unavailable-title": "O busctl não foi encontrado!",
+      "unavailable-desc": "Certifique-se de que o busctl esteja instalado em seu sistema"
     }
   },
   "bar": {

@@ -1,5 +1,4 @@
 import QtQuick
-import QtMultimedia
 import Quickshell.Io
 import qs.Commons
 import qs.Services.UI
@@ -66,33 +65,35 @@ Item {
   readonly property var notificationKeys: ["Imsak", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"]
 
   // ── Audio ─────────────────────────────────────────────────────────────────
-  MediaPlayer {
+  // Using paplay instead of QtMultimedia to avoid PipeWire session conflict
+  // with the shell's native audio service introduced in v4.7.1
+  Process {
     id: azanPlayer
-    audioOutput: AudioOutput { volume: 1.0 }
-    onPlaybackStateChanged: {
-      if (playbackState === MediaPlayer.StoppedState) {
-        azanPlaying = false
-        Logger.d("Mawaqit", "Azan finished")
-      }
-    }
-    onErrorOccurred: (error, errorString) => {
-      azanPlaying = false
-      Logger.w("Mawaqit", "Azan error:", errorString)
+    onExited: {
+      root.azanPlaying = false
+      Logger.d("Mawaqit", "Azan finished")
     }
   }
 
-  function preloadAzan() {
-    if (!pluginApi?.pluginDir) return
-    azanPlayer.source = `file://${pluginApi.pluginDir}/assets/${azanFile}`
+  Process {
+    id: stopAzanProc
   }
-  onAzanFileChanged: Qt.callLater(preloadAzan)
 
+  function preloadAzan() {}
   function playAzanFile(fileName) {
-    const filePath = `file://${pluginApi.pluginDir}/assets/${fileName}`
-    if (azanPlayer.source != filePath) { azanPlayer.stop(); azanPlayer.source = filePath }
-    azanPlayer.play(); azanPlaying = true
+    if (!pluginApi?.pluginDir) return
+    const filePath = pluginApi.pluginDir + "/assets/" + fileName
+    azanPlayer.exec({
+      command: ["paplay", filePath]
+    })
+    root.azanPlaying = true
   }
-  function stopAzanFile() { azanPlayer.stop(); azanPlaying = false }
+  function stopAzanFile() {
+    stopAzanProc.exec({
+      command: ["bash", "-c", "pkill -f 'paplay.*azan' 2>/dev/null || true"]
+    })
+    root.azanPlaying = false
+  }
 
   // ── Clock-synced timer ────────────────────────────────────────────────────
   Timer {

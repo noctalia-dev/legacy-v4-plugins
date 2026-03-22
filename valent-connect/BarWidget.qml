@@ -4,6 +4,7 @@ import qs.Commons
 import qs.Modules.Bar.Extras
 import qs.Modules.Panels.Settings
 import qs.Services.UI
+import QtQuick.Layouts
 import qs.Widgets
 
 Item {
@@ -23,23 +24,29 @@ Item {
 
   visible: true
 
-  BarPill {
-    id: pill
+  RowLayout {
+    id: layouts
+    anchors.fill: parent
+    spacing: Style.marginS
 
-    screen: root.screen
-    oppositeDirection: BarService.getPillDirection(root)
-    icon: root.main?.getConnectionStateIcon(root.main?.mainDevice ?? null, root.main?.daemonAvailable ?? false) ?? "exclamation-circle"
-    autoHide: false
-    text: {
-      var m = root.main
-      if (!m || !m.daemonAvailable || !m.mainDevice) return ""
-      if (m.mainDevice.batteryCharge === -1) return ""
-      return m.mainDevice.batteryCharge + "%"
-    }
-    tooltipText: pluginApi?.tr("bar.tooltip")
-    onClicked: {
-      if (pluginApi) {
-        pluginApi.openPanel(root.screen, this)
+    BarPill {
+      id: pill
+      Layout.alignment: Qt.AlignVCenter
+      screen: root.screen
+      oppositeDirection: BarService.getPillDirection(root)
+      icon: root.main?.getConnectionStateIcon(root.main?.mainDevice ?? null, root.main?.daemonAvailable ?? false) ?? "exclamation-circle"
+      autoHide: false
+      text: {
+        var m = root.main
+        if (!m || !m.daemonAvailable || !m.mainDevice) return ""
+        if (m.mainDevice.batteryCharge === -1) return ""
+        return m.mainDevice.batteryCharge + "%"
+      }
+      tooltipText: pluginApi?.tr("bar.tooltip")
+      onClicked: {
+        if (pluginApi) {
+          pluginApi.openPanel(root.screen, this)
+        }
       }
     }
   }

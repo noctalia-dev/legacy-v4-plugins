@@ -17,42 +17,70 @@ Item {
     property bool pendingRecordAudioIn: false
     property string pendingTool: ""
 
-    readonly property string regionFile: "/tmp/screen-toolkit-region.txt"
+    // ── Sync state to pluginSettings so Panel can read without mainInstance ──
+    onIsRunningChanged:   _syncState()
+    onActiveToolChanged:  _syncState()
+
+    function _syncState() {
+        if (!pluginApi) return
+        pluginApi.pluginSettings.stateIsRunning   = root.isRunning
+        pluginApi.pluginSettings.stateActiveTool  = root.activeTool
+        pluginApi.pluginSettings.stateMirrorVisible = root.mirrorVisible
+        pluginApi.saveSettings()
+    }
 
     // ── Settings shortcuts ────────────────────────────────────
     readonly property string selectedOcrLang: pluginApi?.pluginSettings?.selectedOcrLang || "eng"
+
+    // ── Region selector state (replaces slurp) ────────────────
+    // Stores the confirmed region from RegionSelector for dispatch to tools.
+    property int _regionX: 0
+    property int _regionY: 0
+    property int _regionW: 0
+    property int _regionH: 0
+    property var _regionScreen: null
 
     // ── Capability detection ──────────────────────────────────
     property bool _capsDetected: false
     property var _detectedLangs: []
 
     Component.onCompleted: {
+        // Reset any stale running state from previous sessions
+        root.isRunning = false
+        root.activeTool = ""
         if (!_capsDetected) {
             _capsDetected = true
             detectCapabilities()
         }
     }
 
+    onPluginApiChanged: {
+        if (pluginApi) {
+            // Clear stale state that may have persisted across restarts
+            pluginApi.pluginSettings.stateIsRunning  = false
+            pluginApi.pluginSettings.stateActiveTool = ""
+            pluginApi.saveSettings()
+        }
+    }
+
     // ── Bash helpers ──────────────────────────────────────────
-    // All shell commands are built here — one place to edit, easy to test.
+    // Builds a grim command from the confirmed QML region coords.
+    // Region is already scaled for HiDPI by RegionSelector.
 
     function _grimRegionCmd(outFile) {
-        return "REGION=$(cat " + regionFile + ") || exit 1; " +
-               "grim -g \"$REGION\" " + outFile + " 2>/dev/null"
+        return "grim -g \"" +
+               root._regionX + "," + root._regionY + " " +
+               root._regionW + "x" + root._regionH + "\" " +
+               outFile + " 2>/dev/null"
     }
 
-    function _rmRegion() {
-        return "rm -f " + regionFile
-    }
-
-    // ── Generic slurp-tool launcher ───────────────────────────
-    // Replaces the 6 identical runXxx() bodies. Public named functions
-    // below keep the same API so Panel.qml and IPC are unaffected.
+    // ── Generic region-tool launcher ─────────────────────────
+    // Shows the QML region selector overlay. Panel.qml / IPC API unchanged.
     function _runSlurpTool(tool) {
         if (root.isRunning) return
         root.pendingTool = tool
         root.isRunning = true
-        closeThenLaunch(launchSlurp)
+        closeThenLaunch(launchRegionSelector)
     }
 
     // ── Processes ─────────────────────────────────────────────
@@ -205,9 +233,10 @@ Item {
             if (code === 0) {
                 root.activeTool = ""
                 if (pluginApi) pluginApi.withCurrentScreen(screen => pluginApi.closePanel(screen))
-                var region = annotateRegionProc.stdout.text.trim()
+                var region = annotateRegionProc._pendingRegion
                 Logger.i("ScreenToolkit", "annotate done, region=" + region)
                 annotateOverlay.parseAndShow(region, "/tmp/screen-toolkit-annotate.png")
+                annotateRegionProc._pendingRegion = ""
             } else {
                 root.activeTool = ""
                 ToastService.showError(pluginApi.tr("messages.capture-failed"))
@@ -215,9 +244,11 @@ Item {
         }
     }
 
-    Process {
+    // annotateRegionProc is kept as a namespace to store the pending region string
+    // so annotateProc.onExited can pass it to annotateOverlay.parseAndShow.
+    QtObject {
         id: annotateRegionProc
-        stdout: StdioCollector {}
+        property string _pendingRegion: ""
     }
 
     Process {
@@ -284,71 +315,36 @@ Item {
 
     Process { id: clipProc }
 
-    // ── Region file management ────────────────────────────────
-
-    Process {
-        id: clearRegionProc
-    }
-
-    // Slurp runs detached via systemd-run so it doesn't block the QML process.
-    // We poll for the output file rather than waiting on the process directly,
-    // because systemd-run exits immediately after spawning the unit.
-    Process {
-        id: slurpProc
-        onExited: (code) => {
-            Logger.i("ScreenToolkit", "slurpProc exited: " + code)
-            if (code !== 0) {
-                slurpPollTimer.stop()
-                root.isRunning = false
-                root.activeTool = ""
-            }
-        }
-    }
-
-    // Reads the region file and reports "ok", "cancel", or exits with code 1
-    // (file not ready yet). Single-purpose — easy to reason about.
-    Process {
-        id: slurpCheckProc
-        stdout: StdioCollector {}
-        onExited: (code) => {
-            if (code !== 0) return  // not ready yet — poll again
-            var result = slurpCheckProc.stdout.text.trim()
-            Logger.i("ScreenToolkit", "slurpCheck: " + result)
-            slurpPollTimer.stop()
-            root._slurpPollCount = 0
-            if (result === "cancel") {
-                root.isRunning = false
-                root.activeTool = ""
-            } else if (result === "ok") {
-                _dispatchPendingTool()
-            }
-        }
-    }
-
-    // Declared Process for record region-reading — replaces the old
-    // Qt.createQmlObject() dynamic allocation which could leak on early exit.
-    Process {
-        id: recordRegionProc
-        stdout: StdioCollector {}
-        onExited: (code) => {
-            var region = recordRegionProc.stdout.text.trim()
-            root.isRunning = false
-            if (region !== "") {
-                root.activeTool = "record"
-                recordOverlay.startRecording(region, root.pendingRecordFormat, root.pendingRecordAudioOut, root.pendingRecordAudioIn)
-            } else {
-                root.activeTool = ""
-                ToastService.showError(pluginApi.tr("messages.capture-failed"))
-            }
-        }
-    }
-
     // ── Overlays ──────────────────────────────────────────────
+
+    // QML region selector — replaces slurp entirely.
+    // Instant (no process spawn), GPU-rendered (ScreencopyView + GLSL shader),
+    // spring-animated selection box, works on all monitors.
+    RegionSelector {
+        id: regionSelector
+
+        onRegionSelected: (x, y, w, h, screen) => {
+            Logger.i("ScreenToolkit", "RegionSelector: region=" + x + "," + y + " " + w + "x" + h)
+            root._regionX = x
+            root._regionY = y
+            root._regionW = w
+            root._regionH = h
+            root._regionScreen = screen
+            _dispatchPendingTool()
+        }
+
+        onCancelled: {
+            Logger.i("ScreenToolkit", "RegionSelector: cancelled")
+            root.isRunning = false
+            root.activeTool = ""
+        }
+    }
 
     Annotate {
         id: annotateOverlay
         mainInstance: root
     }
+
 
     Measure {
         id: measureOverlay
@@ -371,12 +367,16 @@ Item {
     }
 
     readonly property bool mirrorVisible: mirrorOverlay.isVisible
+    onMirrorVisibleChanged: _syncState()
 
     // ── Timers ────────────────────────────────────────────────
 
+    // Colorpicker uses slurp -p — it speaks Wayland natively so coordinates
+    // are always correct regardless of compositor (Hyprland, Niri, Sway...).
+    // slurp also provides its own live crosshair preview for free.
     Timer {
         id: launchColorPicker
-        interval: 500; repeat: false
+        interval: 150; repeat: false
         onTriggered: {
             colorPickerProc.exec({
                 command: [
@@ -394,66 +394,9 @@ Item {
         }
     }
 
-    Timer {
-        id: launchSlurp
-        interval: 300; repeat: false
-        onTriggered: {
-            Logger.i("ScreenToolkit", "launchSlurp fired for: " + root.pendingTool)
-            clearRegionProc.exec({
-                command: ["bash", "-c",
-                    "rm -f " + root.regionFile +
-                    " " + root.regionFile + ".cancel" +
-                    " " + root.regionFile + ".tmp"]
-            })
-            slurpProc.exec({
-                command: [
-                    "bash", "-c",
-                    "systemd-run --user --collect --quiet " +
-                    "bash -c 'slurp > " + root.regionFile + ".tmp 2>/dev/null && " +
-                    "REGION=$(cat " + root.regionFile + ".tmp); " +
-                    "W=$(echo \"$REGION\" | cut -d\" \" -f2 | cut -dx -f1); " +
-                    "H=$(echo \"$REGION\" | cut -d\" \" -f2 | cut -dx -f2); " +
-                    "{ [ \"${W:-0}\" -gt 2 ] && [ \"${H:-0}\" -gt 2 ]; } && " +
-                    "mv " + root.regionFile + ".tmp " + root.regionFile + " || " +
-                    "{ rm -f " + root.regionFile + ".tmp; touch " + root.regionFile + ".cancel; }'"
-                ]
-            })
-            slurpPollTimer.start()
-        }
-    }
-
-    property int _slurpPollCount: 0
-
-    // Poll cap: 300 × 200 ms = 60 s max wait. Prevents zombie isRunning state
-    // if the user walks away without completing or cancelling the selection.
-    Timer {
-        id: slurpPollTimer
-        interval: 200; repeat: true
-        onTriggered: {
-            root._slurpPollCount++
-            if (root._slurpPollCount > 300) {
-                slurpPollTimer.stop()
-                root._slurpPollCount = 0
-                root.isRunning = false
-                root.activeTool = ""
-                Logger.i("ScreenToolkit", "slurp timed out after 60s")
-                return
-            }
-            slurpCheckProc.exec({
-                command: [
-                    "bash", "-c",
-                    "if [ -f " + root.regionFile + ".cancel ]; then " +
-                    "  rm -f " + root.regionFile + ".cancel; echo cancel; exit 0; " +
-                    "elif [ -f " + root.regionFile + " ]; then " +
-                    "  echo ok; exit 0; " +
-                    "else exit 1; fi"
-                ]
-            })
-        }
-    }
-
     // ── Tool launch timers ────────────────────────────────────
-    // Each fires after the slurp poll confirms a region is ready.
+    // Each fires immediately after RegionSelector confirms a region.
+    // No polling needed — region coords are already in root._regionX/Y/W/H.
 
     Timer {
         id: launchOcr
@@ -463,8 +406,7 @@ Item {
                 command: [
                     "bash", "-c",
                     _grimRegionCmd("/tmp/screen-toolkit-ocr.png") + "; " +
-                    "cat /tmp/screen-toolkit-ocr.png | tesseract - - -l " + root.pendingLangStr + " 2>/dev/null; " +
-                    _rmRegion()
+                    "cat /tmp/screen-toolkit-ocr.png | tesseract - - -l " + root.pendingLangStr + " 2>/dev/null"
                 ]
             })
         }
@@ -478,8 +420,7 @@ Item {
                 command: [
                     "bash", "-c",
                     _grimRegionCmd("/tmp/screen-toolkit-qr.png") + "; " +
-                    "zbarimg -q --raw /tmp/screen-toolkit-qr.png 2>/dev/null; " +
-                    _rmRegion()
+                    "zbarimg -q --raw /tmp/screen-toolkit-qr.png 2>/dev/null"
                 ]
             })
         }
@@ -495,7 +436,7 @@ Item {
                     _grimRegionCmd("/tmp/screen-toolkit-lens.png") + " && " +
                     "notify-send 'Screen Toolkit' 'Uploading to Lens...' 2>/dev/null; " +
                     "URL=$(curl -sS -F 'file=@/tmp/screen-toolkit-lens.png' 'https://0x0.st' 2>/dev/null); " +
-                    "rm -f /tmp/screen-toolkit-lens.png; " + _rmRegion() + "; " +
+                    "rm -f /tmp/screen-toolkit-lens.png; " +
                     "if [ -n \"$URL\" ]; then xdg-open \"https://lens.google.com/uploadbyurl?url=$URL\" 2>/dev/null; else exit 1; fi"
                 ]
             })
@@ -506,14 +447,13 @@ Item {
         id: launchAnnotate
         interval: 50; repeat: false
         onTriggered: {
-            annotateRegionProc.exec({
-                command: ["bash", "-c", "cat " + root.regionFile + " 2>/dev/null"]
-            })
+            // Store region string for annotateOverlay.parseAndShow
+            var regionStr = root._regionX + "," + root._regionY + " " + root._regionW + "x" + root._regionH
+            annotateRegionProc._pendingRegion = regionStr
             annotateProc.exec({
                 command: [
                     "bash", "-c",
-                    _grimRegionCmd("/tmp/screen-toolkit-annotate.png") + "; " +
-                    _rmRegion()
+                    _grimRegionCmd("/tmp/screen-toolkit-annotate.png")
                 ]
             })
         }
@@ -526,12 +466,10 @@ Item {
             pinGrimProc.exec({
                 command: [
                     "bash", "-c",
-                    "REGION=$(cat " + root.regionFile + ") || exit 1; " +
                     "FILE=/tmp/screen-toolkit-pin-$(date +%s%3N).png; " +
-                    "grim -s 2 -g \"$REGION\" \"$FILE\" 2>/dev/null || exit 1; " +
-                    "WH=$(echo \"$REGION\" | cut -d' ' -f2); " +
-                    "echo \"$FILE|$WH\"; " +
-                    _rmRegion()
+                    "grim -s 2 -g \"" + root._regionX + "," + root._regionY + " " +
+                    root._regionW + "x" + root._regionH + "\" \"$FILE\" 2>/dev/null || exit 1; " +
+                    "echo \"$FILE|" + root._regionW + "x" + root._regionH + "\""
                 ]
             })
         }
@@ -546,8 +484,7 @@ Item {
                     "bash", "-c",
                     _grimRegionCmd("/tmp/screen-toolkit-palette.png") + " || exit 1; " +
                     "magick /tmp/screen-toolkit-palette.png +dither -colors 8 -unique-colors txt:- 2>/dev/null " +
-                    "| grep -v '^#' | grep -oP '#[0-9a-fA-F]{6}' | head -8; " +
-                    _rmRegion()
+                    "| grep -v '^#' | grep -oP '#[0-9a-fA-F]{6}' | head -8"
                 ]
             })
         }
@@ -557,26 +494,35 @@ Item {
         id: launchRecord
         interval: 50; repeat: false
         onTriggered: {
-            // Uses a declared Process (recordRegionProc) — no dynamic allocation.
-            recordRegionProc.exec({
-                command: ["bash", "-c", "cat " + root.regionFile + " && rm -f " + root.regionFile]
-            })
+            var region = root._regionX + "," + root._regionY + " " + root._regionW + "x" + root._regionH
+            root.isRunning = false
+            root.activeTool = "record"
+            recordOverlay.startRecording(region, root.pendingRecordFormat, root.pendingRecordAudioOut, root.pendingRecordAudioIn)
+        }
+    }
+
+    // Shows the RegionSelector after the panel closes
+    Timer {
+        id: launchRegionSelector
+        interval: 150; repeat: false
+        property var targetScreen: null
+        onTriggered: {
+            regionSelector.show(targetScreen)
         }
     }
 
     // ── Internal helpers ──────────────────────────────────────
 
-    // Dispatches to the correct launch timer once slurp confirms a region.
-    // Centralises the if/else chain that was previously duplicated in slurpCheckProc.
+    // Dispatches to the correct tool timer after region is confirmed.
     function _dispatchPendingTool() {
         switch (root.pendingTool) {
-            case "ocr":      launchOcr.start();     break
-            case "qr":       launchQr.start();      break
-            case "lens":     launchLens.start();    break
+            case "ocr":      launchOcr.start();      break
+            case "qr":       launchQr.start();       break
+            case "lens":     launchLens.start();     break
             case "annotate": launchAnnotate.start(); break
-            case "pin":      launchPin.start();     break
-            case "palette":  launchPalette.start(); break
-            case "record":   launchRecord.start();  break
+            case "pin":      launchPin.start();      break
+            case "palette":  launchPalette.start();  break
+            case "record":   launchRecord.start();   break
             default:
                 Logger.w("ScreenToolkit", "unknown pendingTool: " + root.pendingTool)
                 root.isRunning = false
@@ -597,6 +543,8 @@ Item {
     function closeThenLaunch(timer) {
         if (!pluginApi) { timer.start(); return }
         pluginApi.withCurrentScreen(screen => {
+            if (timer === launchRegionSelector)
+                launchRegionSelector.targetScreen = screen
             pluginApi.closePanel(screen)
             timer.start()
         })
@@ -630,6 +578,7 @@ Item {
             pluginApi.pluginSettings.colorCapturePath = ""
             pluginApi.saveSettings()
         }
+        // slurp -p handles its own UI — no RegionSelector needed
         closeThenLaunch(launchColorPicker)
     }
 

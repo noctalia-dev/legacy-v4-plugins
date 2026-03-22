@@ -1,0 +1,19 @@
+{
+  "launcher": {
+    "command": {
+      "name": ">run",
+      "description": "Benutzerdefinierten Befehl ausführen"
+    }
+  },
+  "settings": {
+    "title": "Custom Commands",
+    "description": "Definiere Shell-Befehle, die über den Launcher ausgeführt werden können. Verwende im Launcher den Befehl >run, um darauf zuzugreifen.",
+    "commandName": "Name des Befehls",
+    "shellCommand": "Shell-Befehl",
+    "chooseIcon": "Symbol auswählen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "remove": "Befehl entfernen",
+    "add": "Befehl hinzufügen"
+  }
+}

@@ -27,7 +27,8 @@
       "unavailable-title": "O Valent não está em execução",
       "unavailable-desc": "Certifique-se de que a aplicação Valent está instalada e em execução no seu sistema.",
       "device-unavailable": "O dispositivo está indisponível no momento"
-    }
+    },
+    "refresh": "Atualizar"
   },
   "bar": {
     "tooltip": "Dispositivos conectados"

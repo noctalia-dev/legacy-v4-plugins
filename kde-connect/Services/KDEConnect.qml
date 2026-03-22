@@ -15,10 +15,9 @@ QtObject {
 
   property var mainDevice: null
   property string mainDeviceId: ""
+  property string busctlCmd: ""
 
-  property string qdbusCmd: ""
-  readonly property var qdbusOptions: ["qdbus6", "qdbus", "qdbus-qt6"]
-  property int qdbusOptionIndex: 0
+  property bool anyDevicesConnected: false;
 
   onDevicesChanged: {
     setMainDevice(root.mainDeviceId)
@@ -30,7 +29,7 @@ QtObject {
 
   // Check if KDE Connect daemon is available
   function checkDaemon(): void {
-    qdbusDetectQDbusProc.running = true;
+    detectBusctlProc.running = true;
   }
 
   // Refresh the list of devices
@@ -60,12 +59,8 @@ QtObject {
     if (root.mainDevice !== newMain) {
       root.mainDevice = newMain;
     }
-  }
 
-  // Send a ping to a device
-  function pingDevice(deviceId: string): void {
-    const proc = pingComponent.createObject(root, { deviceId: deviceId });
-    proc.running = true;
+    anyDevicesConnected = devices.find((device) => device.reachable) !== undefined;
   }
 
   function triggerFindMyPhone(deviceId: string): void {
@@ -97,23 +92,50 @@ QtObject {
     proc.running = true;
   }
 
-  property Process qdbusDetectQDbusProc: Process {
-    command: ["which", qdbusOptions[qdbusOptionIndex]]
+  function wakeUpDevice(deviceId: string): void {
+    const proc = wakeUpDeviceComponent.createObject(root, { deviceId: deviceId });
+    proc.running = true;
+  }
+
+  function busctlCall(obj, itf, method, params = []) {
+    let result = [ root.busctlCmd, "--user", "call", "--json=short", "org.kde.kdeconnect", obj, itf, method ];
+    return result.concat(params);
+  }
+
+  function busctlGet(obj, itf, prop) {
+    return [ root.busctlCmd, "--user", "get-property", "--json=short", "org.kde.kdeconnect", obj, itf, prop ];
+  }
+
+  function busctlData(text) {
+    if (text === "")
+      return "";
+
+    try {
+      let result = JSON.parse(text)?.data;
+      if (Array.isArray(result) && Array.isArray(result[0]))
+        return result[0]
+      else
+        return result;
+    } catch (e) {
+      Logger.e("KDEConnect", "Failed to parse busctl response: ", text)
+      return null;
+    }
+  }
+
+  property Process detectBusctlProc: Process {
+    command: ["which", "busctl"]
     stdout: StdioCollector {
       onStreamFinished: {
-        if (root.qdbusCmd !== "") {
+        if (root.busctlCmd !== "") {
           root.daemonCheckProc.running = true
           return
         }
 
         let location = text.trim()
         if (location !== "") {
-          root.qdbusCmd = location
+          root.busctlCmd = location
           root.daemonCheckProc.running = true
-          Logger.i("KDEConnect", "Found qdbus command:", location)
-        } else if (qdbusOptionIndex < qdbusOptions.length - 1) {
-          qdbusOptionIndex++
-          qdbusDetectQDbusProc.running = true
+          Logger.i("KDEConnect", "Found busctl command:", location)
         }
       }
     }
@@ -121,26 +143,33 @@ QtObject {
 
   // Check daemon
   property Process daemonCheckProc: Process {
-    command: [qdbusCmd]
-    stdout: StdioCollector {
-      onStreamFinished: {
-        root.daemonAvailable = text.trim().includes("org.kde.kdeconnect")
-        if (root.daemonAvailable) {
-          root.refreshDevices();
-        } else {
-          root.devices = []
-          root.mainDevice = null
-        }
+    command: [root.busctlCmd, "--user", "status", "org.kde.kdeconnect"]
+    onExited: (exitCode, exitStatus) => {
+      root.daemonAvailable = exitCode == 0;
+      if (root.daemonAvailable) {
+        forceOnNetworkChange.running = true;
+      } else {
+        root.devices = []
+        root.mainDevice = null
       }
     }
   }
 
+  property Process forceOnNetworkChange: Process {
+  command: busctlCall("/modules/kdeconnect", "org.kde.kdeconnect.daemon", "forceOnNetworkChange")
+  stdout: StdioCollector {
+    onStreamFinished: {
+      getDevicesProc.running = true;
+    }
+  }
+}
+
   // Get device list
   property Process getDevicesProc: Process {
-    command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect", "org.kde.kdeconnect.daemon.devices"]
+    command: busctlCall("/modules/kdeconnect", "org.kde.kdeconnect.daemon", "devices")
     stdout: StdioCollector {
       onStreamFinished: {
-        const deviceIds = text.trim().split('\n').filter(id => id.length > 0);
+        const deviceIds = busctlData(text);
 
         root.pendingDevices = [];
         root.pendingDeviceCount = deviceIds.length;
@@ -173,23 +202,14 @@ QtObject {
       })
 
       function start() {
-        forceOnNetworkChange.running = true
-      }
-
-      property Process forceOnNetworkChange: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect", "org.kde.kdeconnect.daemon.forceOnNetworkChange"]
-        stdout: StdioCollector {
-          onStreamFinished: {
-            nameProc.running = true;
-          }
-        }
+        nameProc.running = true
       }
 
       property Process nameProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device.name"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device", "name")
         stdout: StdioCollector {
           onStreamFinished: {
-            loader.deviceData.name = text.trim();
+            loader.deviceData.name = busctlData(text);
 
             reachableProc.running = true;
           }
@@ -197,10 +217,10 @@ QtObject {
       }
 
       property Process reachableProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device.isReachable"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device", "isReachable")
         stdout: StdioCollector {
           onStreamFinished: {
-            loader.deviceData.reachable = text.trim() === "true";
+            loader.deviceData.reachable = busctlData(text);
 
             pairingRequestedProc.running = true;
           }
@@ -208,10 +228,10 @@ QtObject {
       }
 
       property Process pairingRequestedProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device.isPairRequested"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device", "isPairRequested")
         stdout: StdioCollector {
           onStreamFinished: {
-            loader.deviceData.pairRequested = text.trim() === "true";
+            loader.deviceData.pairRequested = busctlData(text);
 
             verificationKeyProc.running = true;
           }
@@ -219,10 +239,10 @@ QtObject {
       }
 
       property Process verificationKeyProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device.verificationKey"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device", "verificationKey")
         stdout: StdioCollector {
           onStreamFinished: {
-            loader.deviceData.verificationKey = text.trim();
+            loader.deviceData.verificationKey = busctlData(text);
 
             pairedProc.running = true;
           }
@@ -230,10 +250,10 @@ QtObject {
       }
 
       property Process pairedProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device.isPaired"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device", "isPaired")
         stdout: StdioCollector {
           onStreamFinished: {
-            loader.deviceData.paired = text.trim() === "true";
+            loader.deviceData.paired = busctlData(text);
 
             if (loader.deviceData.paired)
               activeNotificationsProc.running = true;
@@ -244,13 +264,11 @@ QtObject {
       }
 
       property Process activeNotificationsProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId + "/notifications", "org.kde.kdeconnect.device.notifications.activeNotifications"]
+        command: busctlCall("/modules/kdeconnect/devices/" + loader.deviceId + "/notifications", "org.kde.kdeconnect.device.notifications", "activeNotifications");
         stdout: StdioCollector {
           onStreamFinished: {
-            if (!text.trim().startsWith("Error:")) {
-              let ids = text.trim().split("\n")
-              loader.deviceData.notificationIds = ids.length === 1 && ids[0] === "" ? [] : ids
-            }
+            let ids = busctlData(text);
+            loader.deviceData.notificationIds = ids
 
             cellularNetworkTypeProc.running = true;
           }
@@ -258,43 +276,41 @@ QtObject {
       }
 
       property Process cellularNetworkTypeProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId + "/connectivity_report", "org.freedesktop.DBus.Properties.Get", "org.kde.kdeconnect.device.connectivity_report", "cellularNetworkType"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId + "/connectivity_report", "org.kde.kdeconnect.device.connectivity_report", "cellularNetworkType")
         stdout: StdioCollector {
           onStreamFinished: {
-            loader.deviceData.cellularNetworkType = text.trim();
+            loader.deviceData.cellularNetworkType = busctlData(text);
             cellularNetworkStrengthProc.running = true;
           }
         }
       }
 
       property Process cellularNetworkStrengthProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId + "/connectivity_report", "org.freedesktop.DBus.Properties.Get", "org.kde.kdeconnect.device.connectivity_report", "cellularNetworkStrength"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId + "/connectivity_report", "org.kde.kdeconnect.device.connectivity_report", "cellularNetworkStrength")
         stdout: StdioCollector {
           onStreamFinished: {
-            const strength = parseInt(text.trim());
-            if (!isNaN(strength)) {
-              loader.deviceData.cellularNetworkStrength = strength;
-            }
+            const strength = busctlData(text);
+            loader.deviceData.cellularNetworkStrength = strength;
             isChargingProc.running = true;
           }
         }
       }
 
       property Process isChargingProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId + "/battery", "org.freedesktop.DBus.Properties.Get", "org.kde.kdeconnect.device.battery", "isCharging"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId + "/battery", "org.kde.kdeconnect.device.battery", "isCharging")
         stdout: StdioCollector {
           onStreamFinished: {
-            loader.deviceData.charging = text.trim() === "true";
+            loader.deviceData.charging = busctlData(text);
             batteryProc.running = true;
           }
         }
       }
 
       property Process batteryProc: Process {
-        command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + loader.deviceId + "/battery", "org.freedesktop.DBus.Properties.Get", "org.kde.kdeconnect.device.battery", "charge"]
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId + "/battery", "org.kde.kdeconnect.device.battery", "charge")
         stdout: StdioCollector {
           onStreamFinished: {
-            const charge = parseInt(text.trim());
+            const charge = busctlData(text);
             if (!isNaN(charge)) {
               loader.deviceData.battery = charge;
             }
@@ -335,24 +351,12 @@ QtObject {
     }
   }
 
-  // Ping component
-  property Component pingComponent: Component {
-    Process {
-      id: proc
-      property string deviceId: ""
-      command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId, "org.kde.kdeconnect.device.sendPing"]
-      stdout: StdioCollector {
-        onStreamFinished: proc.destroy()
-      }
-    }
-  }
-
   // FindMyPhone component
   property Component findMyPhoneComponent: Component {
     Process {
       id: proc
       property string deviceId: ""
-      command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId + "/findmyphone", "org.kde.kdeconnect.device.findmyphone.ring"]
+      command: busctlCall("/modules/kdeconnect/devices/" + deviceId + "/findmyphone", "org.kde.kdeconnect.device.findmyphone", "ring")
       stdout: StdioCollector {
         onStreamFinished: proc.destroy()
       }
@@ -362,11 +366,26 @@ QtObject {
   // SFTP Browse component
   property Component browseFilesComponent: Component {
     Process {
-      id: proc
+      id: mountProc
       property string deviceId: ""
-      command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId + "/sftp", "org.kde.kdeconnect.device.sftp.startBrowsing"]
+      command: busctlCall("/modules/kdeconnect/devices/" + deviceId + "/sftp", "org.kde.kdeconnect.device.sftp", "mountAndWait")
       stdout: StdioCollector {
-        onStreamFinished: proc.destroy()
+        onStreamFinished: rootDirProc.running = true
+      }
+
+      property Process rootDirProc: Process {
+        command: busctlCall("/modules/kdeconnect/devices/" + mountProc.deviceId + "/sftp", "org.kde.kdeconnect.device.sftp", "getDirectories")
+        stdout: StdioCollector {
+          onStreamFinished: {
+            const dirs = busctlData(text);
+            const path = Object.keys(dirs[0])[0];
+            if (!Qt.openUrlExternally("file://" + path)) {
+              Logger.e("KDEConnect", "Failed to open file manager for path:", path);
+            }
+
+            mountProc.destroy();
+          }
+        }
       }
     }
   }
@@ -376,7 +395,7 @@ QtObject {
     Process {
       id: proc
       property string deviceId: ""
-      command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId, "org.kde.kdeconnect.device.requestPairing"]
+      command: busctlCall("/modules/kdeconnect/devices/" + deviceId, "org.kde.kdeconnect.device", "requestPairing")
       stdout: StdioCollector {
         onStreamFinished: proc.destroy()
       }
@@ -388,7 +407,22 @@ QtObject {
     Process {
       id: proc
       property string deviceId: ""
-      command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId, "org.kde.kdeconnect.device.unpair"]
+      command: busctlCall("/modules/kdeconnect/devices/" + deviceId, "org.kde.kdeconnect.device", "unpair")
+      stdout: StdioCollector {
+        onStreamFinished: {
+          KDEConnect.refreshDevices()
+          proc.destroy()
+        }
+      }
+    }
+  }
+
+  // Wake up Device Component
+  property Component wakeUpDeviceComponent: Component {
+    Process {
+      id: proc
+      property string deviceId: ""
+      command: busctlCall("/modules/kdeconnect/devices/" + deviceId + "/remotecontrol", "org.kde.kdeconnect.device.remotecontrol", "sendCommand", [ "a{sv}", "1", "singleclick", "b", "true" ])
       stdout: StdioCollector {
         onStreamFinished: {
           KDEConnect.refreshDevices()
@@ -404,7 +438,7 @@ QtObject {
       id: proc
       property string deviceId: ""
       property string filePath: ""
-      command: [qdbusCmd, "org.kde.kdeconnect", "/modules/kdeconnect/devices/" + deviceId + "/share", "org.kde.kdeconnect.device.share.shareUrl", "file://" + filePath]
+      command: busctlCall("/modules/kdeconnect/devices/" + deviceId + "/share", "org.kde.kdeconnect.device.share", "shareUrl", [ "file://" + filePath ])
       stdout: StdioCollector {
         onStreamFinished: {
           proc.destroy()

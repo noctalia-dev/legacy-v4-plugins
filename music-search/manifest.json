@@ -1,0 +1,45 @@
+{
+  "id": "music-search",
+  "name": "Music Search",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "kevichi7",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Search YouTube, play audio in the background with mpv, and save favorites into a persistent library.",
+  "tags": [
+    "Launcher",
+    "Audio",
+    "Music"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "launcherProvider": "LauncherProvider.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "commandPrefix": "music-search",
+    "defaultSettings": {
+      "previewMetadataMode": "always",
+      "showUploaderMetadata": true,
+      "showAlbumMetadata": true,
+      "showDurationMetadata": true,
+      "showRatingMetadata": true,
+      "showTagMetadata": true,
+      "showPlayStatsMetadata": true,
+      "showStatusMetadata": true,
+      "showPreviewChips": true,
+      "previewThumbnailSize": "comfortable",
+      "showHomeRecent": true,
+      "showHomeTop": true,
+      "showHomeTags": true,
+      "showHomeArtists": true,
+      "showHomePlaylists": true,
+      "autoSaveMp3AfterPlayback": false,
+      "ytPlayerClient": "android"
+    }
+  }
+}

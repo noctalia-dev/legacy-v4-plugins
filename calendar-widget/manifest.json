@@ -1,7 +1,7 @@
 {
   "id": "calendar-widget",
   "name": "Desktop Calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minNoctaliaVersion": "4.6.6",
   "author": "Simon",
   "license": "MIT",

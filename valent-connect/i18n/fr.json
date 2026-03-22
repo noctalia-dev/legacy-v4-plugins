@@ -27,7 +27,8 @@
       "unavailable-title": "Valent n'est pas en cours d'exécution",
       "unavailable-desc": "Assurez-vous que l'application Valent est installée et en cours d'exécution sur votre système.",
       "device-unavailable": "L'appareil est actuellement indisponible"
-    }
+    },
+    "refresh": "Actualiser"
   },
   "bar": {
     "tooltip": "Appareils connectés"

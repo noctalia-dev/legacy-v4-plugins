@@ -1,0 +1,38 @@
+{
+  "panel": {
+    "emptyTitle": "Kein VPN gefunden",
+    "emptyDescription": "Verwende den Netzwerk-Manager um ein VPN hinzuzufügen"
+  },
+  "toast": {
+    "connectedTo": "Verbunden mit {name}",
+    "disconnectedFrom": "Von {Name} getrennt",
+    "connectionError": "Verbindungsaufbau mit {name} fehlgeschlagen",
+    "disconnectionError": "Die Trennung von {name} ist fehlgeschlagen",
+    "vpnRemoved": "VPN \"{name}\" wurde entfernt",
+    "vpnRemoveError": "Der VPN \"{name}\" konnte nicht entfernt werden"
+  },
+  "settings": {
+    "pluginSettings": "Plugin Einstellungen",
+    "connectedColor": "Verknüpfte Farbe",
+    "connectedColorDescription": "Wähle die Farbe für das Symbol und den Text aus, die bei bestehender Verbindung angezeigt werden sollen",
+    "disconnectedColor": "Nicht verknüpfte Farbe",
+    "disconnectedColorDescription": "Wähle die Farbe für das Symbol und den Text bei unterbrochener Verbindung aus",
+    "vpnConnections": "VPN Verbindungen",
+    "noVpnConnections": "Keine VPN Verbindungen konfiguriert",
+    "addVpn": "VPN hinzufügen",
+    "addWireguard": "WireGuard hinzufügen"
+  },
+  "common": {
+    "vpn": "VPN",
+    "refresh": "Aktualisieren",
+    "connected": "Verbunden",
+    "disconnected": "Getrennt",
+    "connect": "Verbinden",
+    "disconnect": "Trennen",
+    "close": "Schließen",
+    "settings": "Einstellungen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "cancel": "Abbrechen"
+  }
+}

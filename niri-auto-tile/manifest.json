@@ -1,7 +1,7 @@
 {
   "id": "niri-auto-tile",
   "name": "Niri Auto-Tile",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "minNoctaliaVersion": "4.4.0",
   "author": "pir0c0pter0",
   "license": "MIT",

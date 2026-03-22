@@ -1,7 +1,7 @@
 {
   "id": "coin-flip",
   "name": "Coin Flipper",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "DanisDeveloper",
   "description": "Simple bar widget with notification about result",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",

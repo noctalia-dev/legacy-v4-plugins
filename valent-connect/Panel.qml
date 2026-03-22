@@ -107,6 +107,37 @@ Item {
             color: Color.mOnSurface
           }
 
+          Item {
+            Layout.preferredWidth:  Style.baseWidgetSize * 0.8
+            Layout.preferredHeight: Style.baseWidgetSize * 0.8
+
+            NIconButton {
+              anchors.fill: parent
+              visible: !main.isRefreshing
+              icon: "refresh"
+              tooltipText: pluginApi?.tr("panel.refresh")
+              baseSize: Style.baseWidgetSize * 0.8
+              onClicked: main.refreshDevices()
+              enabled: main.daemonAvailable ?? false
+            }
+
+            NIcon {
+              anchors.centerIn: parent
+              visible: main.isRefreshing
+              icon: "refresh"
+              pointSize: Style.fontSizeL
+              color: Color.mOnSurfaceVariant
+
+              NumberAnimation on rotation {
+                from: 0
+                to: 360
+                duration: 1000
+                loops: Animation.Infinite
+                running: main && main.isRefreshing
+              }
+            }
+          }
+
           NIconButton {
             readonly property bool multipleDevices: (main.devices?.length ?? 0) > 1
             icon: "swipe"

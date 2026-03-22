@@ -6,9 +6,9 @@
       "weak": "Faible",
       "fair": "Moyen",
       "good": "Bon",
-      "excellent": "Excellent",
-      "unknown": "Inconnu"
+      "excellent": "Excellent"
     },
+    "unknown": "Inconnu",
     "card": {
       "battery": "Batterie",
       "network": "Réseau",

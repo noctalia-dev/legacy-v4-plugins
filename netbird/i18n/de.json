@@ -1,0 +1,58 @@
+{
+  "settings": {
+    "title": "NetBird Einstellungen",
+    "description": "Konfiguriere die Statusanzeige und das Verhalten von NetBird VPN",
+    "refresh-interval": "Aktualisierungsintervall",
+    "refresh-interval-desc": "Häufigkeit der Überprüfung des NetBird-Status",
+    "display-options": "Anzeigeoptionen",
+    "compact-mode": "Kompaktmodus",
+    "compact-mode-desc": "Zeige nur Symbol in der Leiste an",
+    "show-ip": "IP-Adresse anzeigen",
+    "show-ip-desc": "NetBird IP im Leisten-Widget anzeigen",
+
+    "hide-disconnected": "Nicht verbundene Peers ausblenden",
+    "hide-disconnected-desc": "Nur Online-Peers im Panel anzeigen",
+    "show-ping": "Ping-Latenz anzeigen",
+    "show-ping-desc": "Alle verbundenen Peers anpingen und die Latenz (ms) anzeigen. Die Aktualisierung erfolgt im gleichen Intervall wie der Status",
+    "show-ping-warning": "Diese Funktion sendet bei jedem Aktualisierungsintervall ICMP-Pakete an jeden verbundenen Peer. Dies kann zu einer erhöhten Netzwerkauslastung und CPU-Belastung führen.",
+    "terminal": "Terminal Konfiguration",
+    "terminal-detected": "Automatisch erkanntes Terminal",
+    "terminal-none": "Es wurde kein Terminalemulator erkannt",
+    "ping-count": "Anzahl der Pings",
+    "ping-count-desc": "Anzahl der Ping-Pakete, die beim Testen der Verbindung gesendet werden sollen",
+    "peer-action": "Peer-Klick-Aktion",
+    "default-peer-action": "Standardaktion",
+    "default-peer-action-desc": "Aktion beim Klicken auf einen Peer im Panel"
+  },
+  "actions": {
+    "widget-settings": "Widget Einstellungen"
+  },
+  "context": {
+    "connect": "Verbinden",
+    "disconnect": "Trennen",
+    "copy-ip": "IP kopieren",
+    "ssh": "SSH zum Host",
+    "ping": "Host anpingen"
+  },
+  "toast": {
+    "title": "NetBird",
+    "connected": "NetBird verbunden",
+    "disconnected": "NetBird wurde getrennt",
+    "ip-copied": {
+      "title": "IP kopiert"
+    },
+    "terminal-not-configured": {
+      "title": "Terminal nicht konfiguriert",
+      "message": "Bitte lege in den Plugin-Einstellungen einen Terminalbefehl fest"
+    }
+  },
+  "panel": {
+    "title": "NetBird Netzwerk",
+    "peers": "Peers",
+    "not-connected": "Nicht verbunden",
+    "no-peers": "Keine verbundenen peers",
+    "admin-console": "Admin Konsole",
+    "management": "Verwaltung",
+    "signal": "Signal"
+  }
+}

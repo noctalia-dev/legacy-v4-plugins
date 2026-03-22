@@ -38,7 +38,7 @@
     {
       "id": "asus_um5606_fan_state",
       "name": "ASUS UM5606 Fan State",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "official": false,
       "author": "ThatOneCalculator",
       "description": "Set the fan state on the ZenBook S 16 UM5606",
@@ -49,7 +49,7 @@
         "Bar",
         "System"
       ],
-      "lastUpdated": "2026-03-13T14:55:56-07:00"
+      "lastUpdated": "2026-03-20T20:28:11+01:00"
     },
     {
       "id": "battery-actions",
@@ -86,7 +86,7 @@
     {
       "id": "calendar-widget",
       "name": "Desktop Calendar",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "Simon",
       "description": "Monthly calendar with today highlighted.",
@@ -97,7 +97,7 @@
         "Desktop",
         "Utility"
       ],
-      "lastUpdated": "2026-03-19T19:19:35+01:00"
+      "lastUpdated": "2026-03-20T20:37:22+01:00"
     },
     {
       "id": "calibre-provider",
@@ -152,7 +152,7 @@
     {
       "id": "coin-flip",
       "name": "Coin Flipper",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "official": false,
       "author": "DanisDeveloper",
       "description": "Simple bar widget with notification about result",
@@ -161,12 +161,12 @@
       "tags": [
         "Bar"
       ],
-      "lastUpdated": "2026-03-12T21:45:04-04:00"
+      "lastUpdated": "2026-03-20T20:43:59+01:00"
     },
     {
       "id": "color-scheme-creator",
       "name": "Color Scheme Creator",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "official": true,
       "author": "Noctalia Team",
       "description": "Create and manage custom predefined color schemes with a visual color editor.",
@@ -177,7 +177,7 @@
         "Theming",
         "Utility"
       ],
-      "lastUpdated": "2026-02-24T17:49:23-05:00"
+      "lastUpdated": "2026-03-20T21:10:35+01:00"
     },
     {
       "id": "currency-exchange",
@@ -198,7 +198,7 @@
     {
       "id": "custom-commands",
       "name": "Custom Commands",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "official": true,
       "author": "Noctalia Team",
       "description": "Define and run custom shell commands from the launcher",
@@ -208,12 +208,12 @@
       "tags": [
         "Launcher"
       ],
-      "lastUpdated": "2026-03-14T09:01:32-04:00"
+      "lastUpdated": "2026-03-20T21:27:33+01:00"
     },
     {
       "id": "custom-sticker",
       "name": "Custom Stickers",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "spiros132",
       "description": "Custom stickers (images) that you can put on the desktop as desktop widgets.",
@@ -224,12 +224,12 @@
         "Desktop",
         "Fun"
       ],
-      "lastUpdated": "2026-03-19T20:22:45+01:00"
+      "lastUpdated": "2026-03-20T21:37:46+01:00"
     },
     {
       "id": "deskvis",
       "name": "DeskVis",
-      "version": "2.0.1",
+      "version": "2.0.2",
       "official": false,
       "author": "HAVEKziad",
       "description": "Audio visualizer desktop widget — bars, wave, or mirror. Supports all directions. Transparent, follows color scheme.",
@@ -239,7 +239,7 @@
         "Desktop",
         "Audio"
       ],
-      "lastUpdated": "2026-03-13T12:58:00Z"
+      "lastUpdated": "2026-03-20T22:21:12+01:00"
     },
     {
       "id": "dns-switcher",
@@ -418,7 +418,7 @@
     {
       "id": "kde-connect",
       "name": "KDE Connect",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "official": false,
       "author": "WerWolv",
       "description": "A Plugin integrating your mobile devices into a panel using KDEConnect",
@@ -431,7 +431,7 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-03-10T21:23:53+01:00"
+      "lastUpdated": "2026-03-21T20:15:22+01:00"
     },
     {
       "id": "keybind-cheatsheet",
@@ -465,7 +465,7 @@
     {
       "id": "mawaqit",
       "name": "Mawaqit",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "official": false,
       "author": "User",
       "description": "Shows prayer times with a live countdown and a Hijri calendar with Islamic events.",
@@ -475,7 +475,7 @@
         "Bar",
         "Panel"
       ],
-      "lastUpdated": "2026-03-12T23:02:48+01:00"
+      "lastUpdated": "2026-03-21T02:28:34+01:00"
     },
     {
       "id": "mini-docker",
@@ -563,9 +563,26 @@
       "lastUpdated": "2026-03-19T20:22:45+01:00"
     },
     {
+      "id": "music-search",
+      "name": "Music Search",
+      "version": "1.0.0",
+      "official": false,
+      "author": "kevichi7",
+      "description": "Search YouTube, play audio in the background with mpv, and save favorites into a persistent library.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.6.6",
+      "license": "MIT",
+      "tags": [
+        "Launcher",
+        "Audio",
+        "Music"
+      ],
+      "lastUpdated": "2026-03-20T20:40:31+08:00"
+    },
+    {
       "id": "netbird",
       "name": "NetBird",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "Cleboost",
       "description": "Show NetBird VPN status in the menu bar.",
@@ -577,7 +594,7 @@
         "Network",
         "Panel"
       ],
-      "lastUpdated": "2026-02-13T15:08:22+01:00"
+      "lastUpdated": "2026-03-20T23:10:16+01:00"
     },
     {
       "id": "network-indicator",
@@ -599,7 +616,7 @@
     {
       "id": "network-manager-vpn",
       "name": "Network Manager VPN",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "official": false,
       "author": "nZO",
       "description": "Connect to VPN via NetworkManager",
@@ -611,7 +628,7 @@
         "Panel",
         "Network"
       ],
-      "lastUpdated": "2026-02-23T22:04:26+01:00"
+      "lastUpdated": "2026-03-20T23:43:08+01:00"
     },
     {
       "id": "news",
@@ -652,7 +669,7 @@
     {
       "id": "niri-auto-tile",
       "name": "Niri Auto-Tile",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "official": false,
       "author": "pir0c0pter0",
       "description": "Automatically redistributes niri column widths evenly when windows open or close",
@@ -665,7 +682,7 @@
         "System",
         "Niri"
       ],
-      "lastUpdated": "2026-03-04T12:34:01-05:00"
+      "lastUpdated": "2026-03-21T20:51:43+01:00"
     },
     {
       "id": "niri-overview-launcher",
@@ -719,7 +736,7 @@
     {
       "id": "nvim-session-provider",
       "name": "Neovim Session Provider",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "official": false,
       "author": "Krendil",
       "description": "Open Neovim Sessions",
@@ -730,7 +747,7 @@
         "Launcher",
         "Development"
       ],
-      "lastUpdated": "2026-03-05T13:10:48+10:00"
+      "lastUpdated": "2026-03-21T21:19:00+01:00"
     },
     {
       "id": "obs-control",
@@ -911,7 +928,7 @@
     {
       "id": "screen-toolkit",
       "name": "Screen Toolkit",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "ycf-anon",
       "description": "A set of screen tools: color picker, annotate, record, pin, OCR, QR scanner, palette, measure, and webcam mirror.",
@@ -924,7 +941,7 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-03-14T23:39:24+01:00"
+      "lastUpdated": "2026-03-21T02:21:08+01:00"
     },
     {
       "id": "screenshot",
@@ -1123,20 +1140,20 @@
     {
       "id": "valent-connect",
       "name": "Valent Connect",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "official": false,
       "author": "Suyash",
       "description": "A plugin integrating your mobile devices into a panel using Valent",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.6.7",
-      "license": "MIT",
+      "license": "GPLv2",
       "tags": [
         "Bar",
         "Panel",
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-03-19T04:00:40+05:30"
+      "lastUpdated": "2026-03-21T18:45:06+05:30"
     },
     {
       "id": "video-wallpaper",
@@ -1190,7 +1207,7 @@
     {
       "id": "web-search",
       "name": "Web Search",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "Rigelyon",
       "description": "Search the Internet from the Launcher.",
@@ -1201,7 +1218,7 @@
         "Launcher",
         "Utility"
       ],
-      "lastUpdated": "2026-03-17T09:56:15+07:00"
+      "lastUpdated": "2026-03-20T20:12:02+01:00"
     },
     {
       "id": "weekly-calendar",
@@ -1221,6 +1238,24 @@
       "lastUpdated": "2026-02-05T11:19:10-05:00"
     },
     {
+      "id": "workspace-overview",
+      "name": "Workspace Overview for Hyprland",
+      "version": "1.0.0",
+      "official": false,
+      "author": "doughbran",
+      "description": "Workspace overview with live window previews and wallpaper backgrounds for Hyprland.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "3.6.0",
+      "license": "MIT",
+      "tags": [
+        "Hyprland",
+        "Bar",
+        "Panel",
+        "Utility"
+      ],
+      "lastUpdated": "2026-03-21T15:00:15-03:00"
+    },
+    {
       "id": "world-clock",
       "name": "World Clock",
       "version": "1.0.4",
@@ -1236,7 +1271,7 @@
     {
       "id": "zed-provider",
       "name": "Zed Provider",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "official": false,
       "author": "justKevv",
       "description": "A zed provider for opening project easier using zed code editor",
@@ -1247,7 +1282,7 @@
         "Launcher",
         "Developer"
       ],
-      "lastUpdated": "2026-03-20T18:01:05+08:00"
+      "lastUpdated": "2026-03-20T20:17:24+01:00"
     }
   ]
 }

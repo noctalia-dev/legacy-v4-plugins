@@ -1,7 +1,7 @@
 {
     "id": "nvim-session-provider",
     "name": "Neovim Session Provider",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Open Neovim Sessions",
     "tags": ["Launcher", "Development"],
     "minNoctaliaVersion": "4.5.0",

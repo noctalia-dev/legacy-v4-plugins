@@ -1,0 +1,9 @@
+{
+  "tooltip": {
+    "standard": "Standard",
+    "quiet": "Leise",
+    "high": "Hochleistung",
+    "full": "Voll",
+    "unknown": "Unbekannt"
+  }
+}

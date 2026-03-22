@@ -1,0 +1,12 @@
+{
+  "common": {
+    "heads": "Kopf",
+    "tails": "Zahl"
+  },
+  "settings": {
+
+  },
+  "widget": {
+    "tooltip": "Münzwurf"
+  }
+}

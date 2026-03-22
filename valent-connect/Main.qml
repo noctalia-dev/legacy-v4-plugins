@@ -13,6 +13,7 @@ Item {
   property var  devices:         []     // sorted array of device objects
   property var  mainDevice:      null
   property string mainDeviceId:  ""
+  property bool   isRefreshing:  false
 
   // ── Internal ────────────────────────────────────────────────────────────────
   property var _devicesMap: ({})
@@ -94,7 +95,26 @@ Item {
 
   function refreshDevices() {
     if (!daemonAvailable) return
-    _getManagedProc.running = true
+    isRefreshing = true
+    _refreshProc.running = true
+  }
+
+  property Process _refreshProc: Process {
+    command: ["bash", "-c", "gsettings set ca.andyholmes.Valent device-addresses \"['']\"; gsettings set ca.andyholmes.Valent device-addresses \"[]\""]
+    onRunningChanged: {
+      if (!running) {
+        _discoveryDelayTimer.start()
+      }
+    }
+  }
+
+  property Timer _discoveryDelayTimer: Timer {
+    interval: 800
+    repeat: false
+    onTriggered: {
+      _getManagedProc.running = false
+      _getManagedProc.running = true
+    }
   }
 
   function triggerFindMyPhone(deviceId) { _activate(deviceId, "findmyphone.ring") }
@@ -167,7 +187,7 @@ Item {
         var found = text.indexOf("ca.andyholmes.Valent") !== -1
         if (found && !root.daemonAvailable) {
           root.daemonAvailable = true
-          root.refreshDevices()
+          _getManagedProc.running = true
         } else if (!found) {
           root.daemonAvailable = false
           root._devicesMap  = {}
@@ -186,6 +206,7 @@ Item {
               "--method", "org.freedesktop.DBus.ObjectManager.GetManagedObjects"]
     stdout: StdioCollector {
       onStreamFinished: {
+        root.isRefreshing = false
         var raw = text.trim()
         if (raw === "" || raw.indexOf("ca.andyholmes.Valent.Device") === -1) {
           root.daemonAvailable = false
@@ -276,6 +297,7 @@ Item {
             root._devicesMap = m
             root._rebuildArray()
           }
+          root._rebuildArray()
           battProc.destroy()
         }
       }
@@ -342,7 +364,6 @@ Item {
     repeat:   true
     onTriggered: {
       root._checkAvailability()
-      if (root.daemonAvailable) root.refreshDevices()
     }
   }
 }
