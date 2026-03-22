@@ -19,6 +19,21 @@ ColumnLayout {
   property int editMarginRight: cfg.marginRight ?? defaults.marginRight ?? 50
   property int editMarginBottom: cfg.marginBottom ?? defaults.marginBottom ?? 50
 
+  Timer {
+    id: saveTimer
+    interval: 50
+    repeat: false
+    onTriggered: saveSettings()
+  }
+
+  onEditCustomizeTextChanged: saveTimer.restart()
+  onEditFirstLineChanged: saveTimer.restart()
+  onEditSecondLineChanged: saveTimer.restart()
+  onEditFirstLineSizeChanged: saveTimer.restart()
+  onEditSecondLineSizeChanged: saveTimer.restart()
+  onEditMarginRightChanged: saveTimer.restart()
+  onEditMarginBottomChanged: saveTimer.restart()
+
   spacing: Style.marginM
 
   NToggle {

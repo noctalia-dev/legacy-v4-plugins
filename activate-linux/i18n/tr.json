@@ -2,5 +2,35 @@
   "panel": {
     "activate": "{osName}’i etkinleştir",
     "goto_settings": "{osName}’i etkinleştirmek için Ayarlar’a gidin."
+  },
+  "settings": {
+    "customizeText": {
+      "label": "Metni Özelleştir",
+      "desc": "Görüntülenecek özel bir metin yazın"
+    },
+    "firstLine": {
+      "label": "Birinci satır",
+      "placeholder": "Linux, Windows, BSD, ...'u Etkinleştir"
+    },
+    "secondLine": {
+      "label": "İkinci satır",
+      "placeholder": "Ayarlar'a gidin..."
+    },
+    "firstLineSize": {
+      "label": "Birinci satır yazı tipi boyutu",
+      "desc": "Boyut: {value}"
+    },
+    "secondLineSize": {
+      "label": "İkinci satır yazı tipi boyutu",
+      "desc": "Boyut: {value}"
+    },
+    "marginRight": {
+      "label": "Sağ kenar boşluğu",
+      "desc": "Piksel: {value}"
+    },
+    "marginBottom": {
+      "label": "Alt kenar boşluğu",
+      "desc": "Piksel: {value}"
+    }
   }
 }

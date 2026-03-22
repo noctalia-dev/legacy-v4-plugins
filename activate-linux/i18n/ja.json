@@ -2,5 +2,35 @@
   "panel": {
     "activate": "{osName} を有効化",
     "goto_settings": "設定に移動して {osName} を有効にしてください。"
+  },
+  "settings": {
+    "customizeText": {
+      "label": "テキストをカスタマイズ",
+      "desc": "表示するカスタムテキストを入力します"
+    },
+    "firstLine": {
+      "label": "1行目",
+      "placeholder": "Linux, Windows, BSD, ... を有効にする"
+    },
+    "secondLine": {
+      "label": "2行目",
+      "placeholder": "設定に移動..."
+    },
+    "firstLineSize": {
+      "label": "1行目のフォントサイズ",
+      "desc": "サイズ: {value}"
+    },
+    "secondLineSize": {
+      "label": "2行目のフォントサイズ",
+      "desc": "サイズ: {value}"
+    },
+    "marginRight": {
+      "label": "右マージン",
+      "desc": "ピクセル: {value}"
+    },
+    "marginBottom": {
+      "label": "下マージン",
+      "desc": "ピクセル: {value}"
+    }
   }
 }

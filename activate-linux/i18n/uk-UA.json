@@ -2,5 +2,35 @@
   "panel": {
     "activate": "Активувати {osName}",
     "goto_settings": "Перейдіть до налаштувань, щоб активувати {osName}."
+  },
+  "settings": {
+    "customizeText": {
+      "label": "Налаштувати текст",
+      "desc": "Напишіть власний текст для відображення"
+    },
+    "firstLine": {
+      "label": "Перший рядок",
+      "placeholder": "Активація Linux, Windows, BSD, ..."
+    },
+    "secondLine": {
+      "label": "Другий рядок",
+      "placeholder": "Перейдіть до параметрів..."
+    },
+    "firstLineSize": {
+      "label": "Розмір шрифту першого рядка",
+      "desc": "Розмір: {value}"
+    },
+    "secondLineSize": {
+      "label": "Розмір шрифту другого рядка",
+      "desc": "Розмір: {value}"
+    },
+    "marginRight": {
+      "label": "Відступ праворуч",
+      "desc": "Пікселів: {value}"
+    },
+    "marginBottom": {
+      "label": "Відступ знизу",
+      "desc": "Пікселів: {value}"
+    }
   }
 }

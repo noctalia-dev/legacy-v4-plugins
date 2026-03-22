@@ -2,5 +2,35 @@
   "panel": {
     "activate": "激活 {osName}",
     "goto_settings": "前往设置以激活 {osName}。"
+  },
+  "settings": {
+    "customizeText": {
+      "label": "自定义文本",
+      "desc": "输入要显示的自定义文本"
+    },
+    "firstLine": {
+      "label": "第一行",
+      "placeholder": "激活 Linux, Windows, BSD, ..."
+    },
+    "secondLine": {
+      "label": "第二行",
+      "placeholder": "转到设置..."
+    },
+    "firstLineSize": {
+      "label": "第一行字体大小",
+      "desc": "大小: {value}"
+    },
+    "secondLineSize": {
+      "label": "第二行字体大小",
+      "desc": "大小: {value}"
+    },
+    "marginRight": {
+      "label": "右边距",
+      "desc": "像素: {value}"
+    },
+    "marginBottom": {
+      "label": "下边距",
+      "desc": "像素: {value}"
+    }
   }
 }

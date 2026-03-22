@@ -2,5 +2,35 @@
   "panel": {
     "activate": "Activer {osName}",
     "goto_settings": "Accédez aux paramètres pour activer {osName}."
+  },
+  "settings": {
+    "customizeText": {
+      "label": "Personnaliser le texte",
+      "desc": "Écrire un texte personnalisé à afficher"
+    },
+    "firstLine": {
+      "label": "Première ligne",
+      "placeholder": "Activer Linux, Windows, BSD, ..."
+    },
+    "secondLine": {
+      "label": "Deuxième ligne",
+      "placeholder": "Aller dans les Paramètres..."
+    },
+    "firstLineSize": {
+      "label": "Taille de la police de la première ligne",
+      "desc": "Taille : {value}"
+    },
+    "secondLineSize": {
+      "label": "Taille de la police de la deuxième ligne",
+      "desc": "Taille : {value}"
+    },
+    "marginRight": {
+      "label": "Marge droite",
+      "desc": "Pixels : {value}"
+    },
+    "marginBottom": {
+      "label": "Marge inférieure",
+      "desc": "Pixels : {value}"
+    }
   }
 }

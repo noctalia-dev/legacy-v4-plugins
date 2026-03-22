@@ -2,5 +2,35 @@
   "panel": {
     "activate": "Активировать {osName}",
     "goto_settings": "Перейдите в настройки, чтобы активировать {osName}."
+  },
+  "settings": {
+    "customizeText": {
+      "label": "Настроить текст",
+      "desc": "Напишите свой текст для отображения"
+    },
+    "firstLine": {
+      "label": "Первая строка",
+      "placeholder": "Активация Linux, Windows, BSD, ..."
+    },
+    "secondLine": {
+      "label": "Вторая строка",
+      "placeholder": "Перейдите в параметры..."
+    },
+    "firstLineSize": {
+      "label": "Размер шрифта первой строки",
+      "desc": "Размер: {value}"
+    },
+    "secondLineSize": {
+      "label": "Размер шрифта второй строки",
+      "desc": "Размер: {value}"
+    },
+    "marginRight": {
+      "label": "Отступ справа",
+      "desc": "Пикселей: {value}"
+    },
+    "marginBottom": {
+      "label": "Отступ снизу",
+      "desc": "Пикселей: {value}"
+    }
   }
 }

@@ -2,5 +2,35 @@
   "panel": {
     "activate": "{osName} activeren",
     "goto_settings": "Ga naar Instellingen om {osName} te activeren."
+  },
+  "settings": {
+    "customizeText": {
+      "label": "Tekst aanpassen",
+      "desc": "Schrijf een aangepaste tekst om weer te geven"
+    },
+    "firstLine": {
+      "label": "Eerste regel",
+      "placeholder": "Linux, Windows, BSD, ... activeren"
+    },
+    "secondLine": {
+      "label": "Tweede regel",
+      "placeholder": "Ga naar Instellingen..."
+    },
+    "firstLineSize": {
+      "label": "Lettergrootte eerste regel",
+      "desc": "Grootte: {value}"
+    },
+    "secondLineSize": {
+      "label": "Lettergrootte tweede regel",
+      "desc": "Grootte: {value}"
+    },
+    "marginRight": {
+      "label": "Marge rechts",
+      "desc": "Pixels: {value}"
+    },
+    "marginBottom": {
+      "label": "Marge onder",
+      "desc": "Pixels: {value}"
+    }
   }
 }
