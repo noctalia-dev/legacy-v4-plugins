@@ -1,0 +1,28 @@
+{
+  "state": {
+    "error": "Error"
+  },
+  "bar": {
+    "clear": "Clear",
+    "settings": "Settings",
+    "tooltip-title": "Calculator"
+  },
+  "panel": {
+    "title": "Calculator",
+    "subtitle": "Quick math in the bar"
+  },
+  "settings": {
+    "about": "About",
+    "show-bar": "Show value in bar",
+    "show-bar-desc": "Display the current value next to the calculator icon",
+    "precision": "Decimal precision",
+    "precision-desc": "Maximum decimals used when formatting results",
+    "language": "Language",
+    "language-desc": "Plugin display language",
+    "lang-auto": "Auto",
+    "lang-en": "English",
+    "lang-pt": "Portuguese (Brazil)",
+    "developed-by": "Developed by Pir0c0pter0",
+    "auto-language-desc": "Automatic translation follows your system language while Auto is selected."
+  }
+}

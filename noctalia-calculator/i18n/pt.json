@@ -1,0 +1,28 @@
+{
+  "state": {
+    "error": "Erro"
+  },
+  "bar": {
+    "clear": "Limpar",
+    "settings": "Configuracoes",
+    "tooltip-title": "Calculadora"
+  },
+  "panel": {
+    "title": "Calculadora",
+    "subtitle": "Conta rapida direto na barra"
+  },
+  "settings": {
+    "about": "Sobre",
+    "show-bar": "Mostrar valor na barra",
+    "show-bar-desc": "Exibe o valor atual ao lado do icone da calculadora",
+    "precision": "Precisao decimal",
+    "precision-desc": "Maximo de casas decimais ao formatar resultados",
+    "language": "Idioma",
+    "language-desc": "Idioma de exibicao do plugin",
+    "lang-auto": "Auto",
+    "lang-en": "Ingles",
+    "lang-pt": "Portugues (Brasil)",
+    "developed-by": "Desenvolvido por Pir0c0pter0",
+    "auto-language-desc": "A traducao automatica segue o idioma do sistema quando Auto estiver selecionado."
+  }
+}
