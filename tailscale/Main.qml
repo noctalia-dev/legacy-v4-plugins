@@ -50,8 +50,19 @@ Item {
   property int peerCount: 0
   property bool isRefreshing: false
   property string lastToggleAction: ""
-  property var peerList: []
+  property var _realPeerList: []
   property var exitNodeStatus: null
+
+  // Dev/testing: override the peer list with a short mock to reproduce few-device layouts.
+  // Toggle via: qs -c noctalia-shell ipc call plugin:tailscale setMockPeers
+  property bool useMockData: false
+  readonly property var mockPeerList: [
+    { "HostName": "mock-linux-box", "DNSName": "mock-linux-box.tail1234.ts.net.", "TailscaleIPs": ["100.64.0.1"], "Online": true,  "OS": "linux", "Tags": [] },
+    { "HostName": "mock-mac",       "DNSName": "mock-mac.tail1234.ts.net.",       "TailscaleIPs": ["100.64.0.2"], "Online": true,  "OS": "macos", "Tags": [] },
+    { "HostName": "mock-win-pc",    "DNSName": "mock-win-pc.tail1234.ts.net.",    "TailscaleIPs": ["100.64.0.3"], "Online": false, "OS": "windows", "Tags": [] }
+  ]
+
+  readonly property var peerList: useMockData ? mockPeerList : _realPeerList
 
   // Helper to filter IPv4 addresses from Tailscale (100.x.x.x range)
   function filterIPv4(ips) {
@@ -105,7 +116,7 @@ Item {
                 })
               }
             }
-            root.peerList = peers
+            root._realPeerList = peers
             root.peerCount = peers.length
 
             // Extract exit node status if present
@@ -122,21 +133,21 @@ Item {
             root.tailscaleIp = ""
             root.tailscaleStatus = root.tailscaleRunning ? "Connected" : "Disconnected"
             root.peerCount = 0
-            root.peerList = []
+            root._realPeerList = []
             root.exitNodeStatus = null
           }
         } catch (e) {
           Logger.e("Tailscale", "Failed to parse status: " + e)
           root.tailscaleRunning = false
           root.tailscaleStatus = "Error"
-          root.peerList = []
+          root._realPeerList = []
         }
       } else {
         root.tailscaleRunning = false
         root.tailscaleStatus = "Disconnected"
         root.tailscaleIp = ""
         root.peerCount = 0
-        root.peerList = []
+        root._realPeerList = []
       }
     }
   }
@@ -146,10 +157,10 @@ Item {
     onExited: function(exitCode, exitStatus) {
       if (exitCode === 0) {
         var message = root.lastToggleAction === "connect" ?
-          pluginApi?.tr("toast.connected") || "Tailscale connected" :
-          pluginApi?.tr("toast.disconnected") || "Tailscale disconnected"
+          pluginApi?.tr("toast.connected") :
+          pluginApi?.tr("toast.disconnected")
         ToastService.showNotice(
-          pluginApi?.tr("toast.title") || "Tailscale",
+          pluginApi?.tr("toast.title"),
           message,
           "network"
         )
@@ -242,6 +253,13 @@ Item {
 
     function refresh() {
       updateTailscaleStatus()
+    }
+
+    // Dev/testing: toggle mock peer list to reproduce few-device layouts.
+    // Usage: qs -c noctalia-shell ipc call plugin:tailscale setMockPeers
+    function setMockPeers() {
+      root.useMockData = !root.useMockData
+      Logger.d("Tailscale", "Mock peer data " + (root.useMockData ? "enabled" : "disabled"))
     }
   }
 }

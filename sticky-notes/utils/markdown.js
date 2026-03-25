@@ -20,7 +20,8 @@ function render(text, theme) {
         linkColor: t.linkColor || "#1565C0",
         taskDoneFg: t.taskDoneFg || "#9E9E9E",
         noteColor: t.noteColor || "#FFFFFF",
-        brTag: '<div style="height: 8px;"></div>'
+        lineBreakTag: "<br/>",
+        paragraphBreakTag: "<br/><br/>"
     };
 
     // Precalculate opaque quote background
@@ -265,9 +266,8 @@ function parseInline(text, style) {
     // Strikethrough
     t = t.replace(/~~(.*?)~~/g, "<s>$1</s>");
 
-    // Line breaks inside paragraphs (the double-space + newline syntax is often hard to detect once joined, 
-    // but we can convert explicit newlines to brTag if requested by user for paragraph texts).
-    t = t.replace(/\n/g, style.brTag);
+    // Preserve explicit line breaks inside plain text paragraphs.
+    t = t.replace(/\n/g, style.lineBreakTag);
 
     return t;
 }
@@ -278,13 +278,28 @@ function renderBlocks(tokens, style) {
     const out = [];
     const spacerTable = '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 0; padding: 0;"><tr><td style="font-size: 1px; line-height: 8px; padding: 0;">&nbsp;</td></tr></table>';
 
+    function hasIntrinsicBlockSpacing(token) {
+        return token && (
+            token.type === "heading" ||
+            token.type === "hr" ||
+            token.type === "codeblock" ||
+            token.type === "blockquote" ||
+            token.type === "table"
+        );
+    }
+
     for (let i = 0; i < tokens.length; i++) {
         const token = tokens[i];
 
         switch (token.type) {
             case "empty":
-                // We map empty lines to our break tag to maintain spacing
-                out.push(style.brTag);
+                // Block elements already define their own outer spacing, so
+                // only add explicit paragraph gaps between plain text-ish blocks.
+                const prevToken = i > 0 ? tokens[i - 1] : null;
+                const nextToken = i + 1 < tokens.length ? tokens[i + 1] : null;
+                if (!hasIntrinsicBlockSpacing(prevToken) && !hasIntrinsicBlockSpacing(nextToken)) {
+                    out.push(style.paragraphBreakTag);
+                }
                 break;
 
             case "hr":
@@ -340,7 +355,7 @@ function renderBlocks(tokens, style) {
                         listHtml.push(`<div style="margin-left: ${pxIndent}px; margin-top: 4px; margin-bottom: 4px;">${bulletStr} ${parseInline(item.text, style)}</div>`);
                     }
                 }
-                out.push(listHtml.join(style.brTag)); // Lists should be somewhat compact
+                out.push(listHtml.join('')); // Lists should be somewhat compact
                 break;
 
             case "table":
@@ -369,9 +384,9 @@ function renderBlocks(tokens, style) {
     // E.g paragraph then paragraph should have a break.
     let finalText = "";
     for (let r = 0; r < out.length; r++) {
-        if (r > 0 && out[r] !== style.brTag && out[r - 1] !== style.brTag &&
+        if (r > 0 && out[r] !== style.paragraphBreakTag && out[r - 1] !== style.paragraphBreakTag &&
             !/^<table|^<hr|^<h/.test(out[r]) && !/(<\/table>|<\/hr>|<\/h[1-6]>)$/.test(out[r - 1])) {
-            finalText += style.brTag;
+            finalText += style.lineBreakTag;
         }
         finalText += out[r];
     }

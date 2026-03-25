@@ -32,6 +32,8 @@ Item {
     property var dailyActivity: []
 
     property string tierLabel: ""
+    property string authHelpText: "Run `claude auth login` to restore authoritative usage."
+    property bool hasLocalStats: true
 
     property string oauthAccessToken: ""
     property double oauthExpiresAtMs: 0

@@ -8,9 +8,11 @@
   "settings": {
     "player-name": "Player Name",
     "player-name-desc": "MPRIS player name (e.g., musicfox, spotify, firefox)",
-    "update-interval": "Update Interval",
+    "hide-when-inactive": "Hide When Inactive",
+    "hide-when-inactive-desc": "Hide the widget when playback is paused or stopped",
+    "update-interval": "Update Interval: {value}ms",
     "update-interval-desc": "How often to update lyrics (in milliseconds)",
-    "width": "Width",
+    "width": "Width: {value}px",
     "width-desc": "Width of the lyric widget in pixels"
   }
 }

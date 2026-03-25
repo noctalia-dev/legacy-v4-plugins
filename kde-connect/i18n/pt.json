@@ -1,0 +1,48 @@
+{
+  "panel": {
+    "title": "Dispositivos Conectados",
+    "signal": {
+      "very-weak": "Muito Fraco",
+      "weak": "Fraco",
+      "fair": "Justo",
+      "good": "Bom",
+      "excellent": "Excelente"
+    },
+    "unknown": "Desconhecido",
+    "card": {
+      "battery": "Bateria",
+      "network": "Rede",
+      "signal-strength": "Intensidade do Signal",
+      "notifications": "Notificações"
+    },
+    "other-devices": "Outros Dispositivos",
+    "send-file-picker": "Selecione o arquivo para enviar ao dispositivo",
+    "send-file": "Enviar Arquivo",
+    "find-device": "Encontrar meu Dispositivo",
+    "pair": "Emparelhar meu Dispositivo",
+    "unpair": "Desemparelhar meu dispositivo",
+    "kdeconnect-error": {
+      "no-devices": "Nenhum dispositivo executando o KDE Connect encontrado",
+      "unavailable-title": "O kdeconnectd parece não estar em execução!",
+      "unavailable-desc": "Certifique-se de ter instalado o aplicativo KDE Connect em seu sistema e de que o daemon kdeconnectd esteja em execução",
+      "device-unavailable": "O dispositivo está indisponível no momento"
+    },
+    "busctl-error": {
+      "unavailable-title": "O busctl não foi encontrado!",
+      "unavailable-desc": "Certifique-se de que o busctl esteja instalado em seu sistema"
+    }
+  },
+  "bar": {
+    "tooltip": "Dispositivos conectados"
+  },
+  "control_center": {
+    "state-label": "Estado",
+    "state": {
+      "connected": "Conectado",
+      "disconnected": "Desconectado",
+      "unavailable": "Indisponível",
+      "no-device": "Nenhum dispositivo",
+      "not-paired": "Não pareado"
+    }
+  }
+}

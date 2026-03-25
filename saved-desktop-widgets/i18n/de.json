@@ -1,0 +1,21 @@
+{
+  "settings": {
+    "list": {
+      "remove": "Entferne die folgende Desktop Widget Konfiguration."
+    },
+    "load_widgets": {
+      "description": "Aktiviere das Laden der Widgets, wenn sich das Hintergrundbild ändert.",
+      "label": "Widgets laden"
+    },
+    "save_widgets": {
+      "description": "Aktiviere das Speichern der Widgets bei jeder Änderung.",
+      "label": "Widgets speichern"
+    },
+    "tool_row": {
+      "nuke": {
+        "text": "Nuke",
+        "tooltip": "Alle Konfigurationen entfernen. WARNUNG: DIES WIRD ALLE ANDEREN KONFIGURATIONEN MIT AUSNAHME DER AKTUELLEN ENTFERNEN!"
+      }
+    }
+  }
+}

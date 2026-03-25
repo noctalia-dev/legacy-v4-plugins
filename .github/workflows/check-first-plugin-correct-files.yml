@@ -1,0 +1,100 @@
+name: Check First Plugin has Correct Files
+on:
+  pull_request_target:
+    types: [opened]
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+jobs:
+  check-first-plugin-requirements:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check the correct files exist for first-time plugins
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          REPO: ${{ github.repository }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          # Get the folders from base and the folders from the head of the PR
+          base_folders=$(gh api "repos/$REPO/git/trees/$BASE_SHA" --jq '[ .tree[] | select(.type == "tree") | .path ]' || echo "undefined")
+          head_folders=$(gh api "repos/$REPO/git/trees/$HEAD_SHA" --jq '[ .tree[] | select(.type == "tree") | .path ]' || echo "undefined")
+
+          if [ "$base_folders" = "undefined" ] || [ "$head_folders" = "undefined" ]; then
+            echo "Could not fetch tree folders from GitHub API"
+            exit 1
+          fi
+
+          # Check the difference between base and head, and get the added folders
+          added_folders=$(jq -cn --argjson base "$base_folders" --argjson head "$head_folders" '$head - $base')
+
+          if [ "$added_folders" = "[]" ] || [ -z "$added_folders" ]; then
+            echo "No new folder detected"
+            exit 0
+          fi
+
+          head_tree=$(gh api "repos/$REPO/git/trees/$HEAD_SHA")
+
+          # Do this for all added folders, usually only one
+          for folder in $(echo "$added_folders" | jq -r '.[]')
+          do
+            echo "Checking folder: $folder"
+
+            required_files=(
+              "README.md"
+              "preview.*"
+              "manifest.json"
+            )
+
+            # Get all the files that exist in this PR
+            folder_sha=$(echo "$head_tree" | jq -r --arg folder "$folder" '.tree[] | select(.path == $folder and .type == "tree") | .sha')
+            files_in_pr=$(gh api "repos/$REPO/git/trees/$folder_sha" --jq '[ .tree[] | select(.type == "blob") | .path ]')
+
+            ## Check which required files are fulfilled
+            for file in $(echo "$files_in_pr" | jq -r '.[]')
+            do
+              # Check if this file exists inside of the required_files
+              for required in "${required_files[@]}"
+              do
+                if [[ "$file" =~ $required ]]; then
+                  # Remove the required file from the array
+                  required_files=("${required_files[@]/$required}")
+                fi
+              done
+            done
+
+            missing=()
+            for required in "${required_files[@]}";
+            do
+              [[ -n "$required" ]] && missing+=("$required")
+            done
+
+            # The list is empty, all required files are satisfied.
+            if [ ${#missing[@]} -eq 0 ]; then
+              echo "No missing files found!"
+              continue
+            fi
+
+            # Format comment for this particular folder. The format is:
+            # Folder $folder is missing some required files:
+            # - File 1
+            # - File 2
+            # - File 3 etc etc
+            comment_required_files=$(printf -- '\n- %s' "${missing[@]}")
+            comment_body=$(printf 'Plugin "%s" is missing some required files: %s' "$folder" "$comment_required_files")
+
+            # Post comment using gh CLI
+            gh pr comment "$PR_NUMBER" --body "$comment_body"
+          done

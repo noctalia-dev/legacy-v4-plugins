@@ -16,8 +16,8 @@ Item {
     required property FolderModel folderModel
 
     // Global properties
-    readonly property bool   monitorSpecific:  pluginApi?.pluginSettings?.monitorSpecific  || false
-    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder || pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder || ""
+    readonly property bool   monitorSpecific:  pluginApi?.pluginSettings?.monitorSpecific  ?? false
+    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder ?? pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder ?? ""
 
 
     /***************************

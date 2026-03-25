@@ -18,18 +18,18 @@ DraggableDesktopWidget {
   readonly property int scaledRadiusL: Math.round(Style.radiusL * widgetScale)
 
   // Settings from plugin
-  readonly property real sensitivity: pluginApi?.pluginSettings?.sensitivity ?? pluginApi?.manifest?.metadata?.defaultSettings?.sensitivity
-  readonly property real rotationSpeed: pluginApi?.pluginSettings?.rotationSpeed ?? pluginApi?.manifest?.metadata?.defaultSettings?.rotationSpeed
-  readonly property real barWidth: pluginApi?.pluginSettings?.barWidth ?? pluginApi?.manifest?.metadata?.defaultSettings?.barWidth
-  readonly property real ringOpacity: pluginApi?.pluginSettings?.ringOpacity ?? pluginApi?.manifest?.metadata?.defaultSettings?.ringOpacity
-  readonly property real bloomIntensity: pluginApi.pluginSettings?.bloomIntensity ?? pluginApi?.manifest?.metadata?.defaultSettings?.bloomIntensity
-  readonly property int visualizationMode: pluginApi?.pluginSettings?.visualizationMode ?? pluginApi?.manifest?.metadata?.defaultSettings?.visualizationMode ?? 3
-  readonly property real waveThickness: pluginApi?.pluginSettings?.waveThickness ?? pluginApi?.manifest?.metadata?.defaultSettings?.waveThickness ?? 1.0
-  readonly property real innerDiameter: pluginApi?.pluginSettings?.innerDiameter ?? pluginApi?.manifest?.metadata?.defaultSettings?.innerDiameter ?? 0.7
-  readonly property bool fadeWhenIdle: pluginApi?.pluginSettings?.fadeWhenIdle ?? false
-  readonly property bool useCustomColors: pluginApi?.pluginSettings?.useCustomColors ?? false
-  readonly property color customPrimaryColor: pluginApi?.pluginSettings?.customPrimaryColor ?? "#6750A4"
-  readonly property color customSecondaryColor: pluginApi?.pluginSettings?.customSecondaryColor ?? "#625B71"
+  readonly property real sensitivity: widgetData?.sensitivity ?? pluginApi?.pluginSettings?.sensitivity ?? pluginApi?.manifest?.metadata?.defaultSettings?.sensitivity
+  readonly property real rotationSpeed: widgetData?.rotationSpeed ?? pluginApi?.pluginSettings?.rotationSpeed ?? pluginApi?.manifest?.metadata?.defaultSettings?.rotationSpeed
+  readonly property real barWidth: widgetData?.barWidth ?? pluginApi?.pluginSettings?.barWidth ?? pluginApi?.manifest?.metadata?.defaultSettings?.barWidth
+  readonly property real ringOpacity: widgetData?.ringOpacity ?? pluginApi?.pluginSettings?.ringOpacity ?? pluginApi?.manifest?.metadata?.defaultSettings?.ringOpacity
+  readonly property real bloomIntensity: widgetData?.bloomIntensity ?? pluginApi.pluginSettings?.bloomIntensity ?? pluginApi?.manifest?.metadata?.defaultSettings?.bloomIntensity
+  readonly property int visualizationMode: widgetData?.visualizationMode ?? pluginApi?.pluginSettings?.visualizationMode ?? pluginApi?.manifest?.metadata?.defaultSettings?.visualizationMode ?? 3
+  readonly property real waveThickness: widgetData?.waveThickness ?? pluginApi?.pluginSettings?.waveThickness ?? pluginApi?.manifest?.metadata?.defaultSettings?.waveThickness ?? 1.0
+  readonly property real innerDiameter: widgetData?.innerDiameter ?? pluginApi?.pluginSettings?.innerDiameter ?? pluginApi?.manifest?.metadata?.defaultSettings?.innerDiameter ?? 0.7
+  readonly property bool fadeWhenIdle: widgetData?.fadeWhenIdle ?? pluginApi?.pluginSettings?.fadeWhenIdle ?? false
+  readonly property bool useCustomColors: widgetData?.useCustomColors ?? pluginApi?.pluginSettings?.useCustomColors ?? false
+  readonly property color customPrimaryColor: widgetData?.customPrimaryColor ?? pluginApi?.pluginSettings?.customPrimaryColor ?? "#6750A4"
+  readonly property color customSecondaryColor: widgetData?.customSecondaryColor ?? pluginApi?.pluginSettings?.customSecondaryColor ?? "#625B71"
 
   // Animation time for shader (0 to 3600, 1 hour cycle)
   property real shaderTime: 0

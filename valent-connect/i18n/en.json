@@ -1,0 +1,46 @@
+{
+  "panel": {
+    "title": "Connected Devices",
+    "signal": {
+      "very-weak": "Very Weak",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "excellent": "Excellent",
+      "unknown": "Unknown"
+    },
+    "card": {
+      "battery": "Battery",
+      "network": "Network",
+      "signal-strength": "Signal Strength",
+      "notifications": "Notifications"
+    },
+    "other-devices": "Other Devices",
+    "send-file-picker": "Pick a file to send to device",
+    "send-file": "Send File",
+    "browse-device": "Browse Device Files",
+    "find-device": "Find My Device",
+    "pair": "Pair with Device",
+    "unpair": "Unpair Device",
+    "valent-error": {
+      "no-devices": "No devices found. Make sure your phone is on the same network and has KDE Connect open.",
+      "unavailable-title": "Valent is not running",
+      "unavailable-desc": "Make sure the Valent application is installed and running on your system.",
+      "device-unavailable": "Device is currently unavailable"
+    },
+    "refresh": "Refresh"
+  },
+  "bar": {
+    "tooltip": "Connected Devices"
+  },
+  "control_center": {
+    "state-label": "State",
+    "state": {
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "unavailable": "Valent unavailable",
+      "no-device": "No device",
+      "not-paired": "Not paired"
+    }
+  }
+}

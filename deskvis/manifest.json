@@ -1,0 +1,37 @@
+{
+  "id": "deskvis",
+  "name": "DeskVis",
+  "version": "2.0.2",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "HAVEKziad",
+  "license": "MIT",
+  "description": "Audio visualizer desktop widget — bars, wave, or mirror. Supports all directions. Transparent, follows color scheme.",
+  "tags": [
+    "Desktop",
+    "Audio"
+  ],
+  "entryPoints": {
+    "desktopWidget": "DesktopWidget.qml",
+    "desktopWidgetSettings": "DesktopWidgetSettings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "direction": "up",
+      "mode": "bars",
+      "barCount": 32,
+      "fps": 60,
+      "sensitivity": 1.5,
+      "smoothing": 0.18,
+      "useGradient": true,
+      "fadeWhenIdle": true,
+      "useCustomColors": false,
+      "customPrimaryColor": "#6750A4",
+      "customSecondaryColor": "#625B71",
+      "customWidth": 0,
+      "customHeight": 0
+    }
+  }
+}

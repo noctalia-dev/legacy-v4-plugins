@@ -2,6 +2,10 @@
 
 Here I'll try to document all changes for the video-wallpaper plugin.
 
+## 2.0.4 - 2026-03-07
+
+- fix: Code cleanup and some small bug fixes.
+
 ## 2.0.3 - 2026-03-01
 
 - fix: Fixed a bug where disabling the video-wallpaper didn't disable it correctly.

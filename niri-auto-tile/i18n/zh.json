@@ -1,0 +1,39 @@
+{
+  "panel": {
+    "title": "列布局",
+    "single": "单列",
+    "columns": "{count} 列",
+    "status-active": "活动 — {count} 列",
+    "status-active-ws": "活动 — {count} 列 (WS {ws})",
+    "status-starting": "启动中...",
+    "status-disabled": "已禁用"
+  },
+  "bar": {
+    "running": "Auto-Tile: 运行中 ({count} 列)",
+    "starting": "Auto-Tile: 启动中...",
+    "disabled": "Auto-Tile: 已禁用",
+    "enable": "启用 Auto-Tile",
+    "disable": "禁用 Auto-Tile",
+    "settings": "设置"
+  },
+  "settings": {
+    "enabled": "启用 Auto-Tile",
+    "enabled-desc": "在窗口打开或关闭时自动重新分配列宽",
+    "per-workspace": "按工作区",
+    "per-workspace-desc": "每个工作区有独立的列数设置",
+    "only-at-max": "仅在最大时",
+    "only-at-max-desc": "仅在列数达到最大值时重新分配",
+    "max-visible": "可见列数: {value}",
+    "max-visible-desc": "屏幕上同时可见的最大列数",
+    "debounce": "防抖延迟: {value}ms",
+    "debounce-desc": "重新分配前的延迟，用于合并快速事件",
+    "rate-limit": "事件限制: {value}/s",
+    "rate-limit-desc": "每秒处理的最大事件数",
+    "status-running": "守护进程运行中",
+    "status-error": "守护进程错误 — 重启中...",
+    "status-stopped": "守护进程已停止",
+    "about-title": "关于",
+    "about-credit": "由 Pir0c0pter0 使用 Claude 开发",
+    "about-date": "日期: {date}"
+  }
+}

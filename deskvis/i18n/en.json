@@ -1,0 +1,28 @@
+{
+  "desktopWidgetSettings": {
+    "direction-label": "Direction",
+    "direction-description": "Which way the visualizer grows.",
+    "mode-label": "Visualizer Mode",
+    "mode-description": "How the audio is displayed.",
+    "bar-count-label": "Bar Count",
+    "bar-count-description": "Number of bars to display.",
+    "sensitivity-label": "Sensitivity",
+    "sensitivity-description": "Audio input amplification.",
+    "smoothing-label": "Smoothing",
+    "smoothing-description": "Higher = slower decay.",
+    "fps-label": "Target FPS",
+    "fps-description": "Render frame rate.",
+    "custom-width-label": "Custom Width",
+    "custom-width-description": "Override default width. 0 = use default.",
+    "custom-height-label": "Custom Height",
+    "custom-height-description": "Override default height. 0 = use default.",
+    "gradient-label": "Color Gradient",
+    "gradient-description": "Blend primary → secondary color.",
+    "fade-idle-label": "Fade When Idle",
+    "fade-idle-description": "Fade out when no audio is playing.",
+    "custom-colors-label": "Use Custom Colors",
+    "custom-colors-description": "Override theme colors with your own.",
+    "primary-color-label": "Primary Color",
+    "secondary-color-label": "Secondary Color"
+  }
+}

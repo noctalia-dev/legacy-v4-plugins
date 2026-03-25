@@ -1,0 +1,19 @@
+{
+  "launcher": {
+    "command": {
+      "name": ">run",
+      "description": "Run a custom command"
+    }
+  },
+  "settings": {
+    "title": "Custom Commands",
+    "description": "Define shell commands that can be launched from the launcher. Use >run in the launcher to access them.",
+    "commandName": "Command name",
+    "shellCommand": "Shell command",
+    "chooseIcon": "Choose icon",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "remove": "Remove command",
+    "add": "Add Command"
+  }
+}

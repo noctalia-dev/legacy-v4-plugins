@@ -16,6 +16,11 @@ A launcher provider plugin that adds kaomoji emoticon browsing and search to the
 3. Browse categories or add a search term after the command (e.g., `>kaomoji cat`)
 4. Click on a kaomoji to copy it to your clipboard
 
+## IPC
+```bash
+qs -c noctalia-shell ipc call plugin:kaomoji toggle
+```
+
 ## Categories
 
 - All, Happy, Love, Blush, Kiss, Bear, Cat, Sad, Crying, Angry, Music, Hug, Surprised

@@ -22,7 +22,7 @@ ColumnLayout {
     ***************************/
     // Orientation
     NLabel {
-        label: root.pluginApi?.tr("settings.advanced.no_backend.label") || "No active backend..."
+        label: root.pluginApi?.tr("settings.advanced.no_backend.label")
     }
 
 

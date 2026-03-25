@@ -1,14 +1,9 @@
 import QtQuick
-import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
-import Quickshell
 import qs.Commons
-import qs.Services.UI
-import qs.Widgets
-
+import "components"
 import "utils/storage.js" as Storage
-import "components" as Components
 
 // Panel Component — Main sticky-note interface
 Item {
@@ -33,13 +28,34 @@ Item {
   readonly property bool allowAttach: true
 
   anchors.fill: parent
+  focus: true
+
+  Component.onCompleted: loadNotes()
+
+  Keys.onPressed: (event) => {
+    if (event.key === Qt.Key_Escape && noteList.hasActiveEditor) {
+      noteList.saveActiveEditor();
+      event.accepted = true;
+    } else if (event.key === Qt.Key_Escape && noteList.hasSelectedNote) {
+      noteList.clearSelection();
+      event.accepted = true;
+    }
+  }
+
+  Keys.onShortcutOverride: (event) => {
+    if (event.key !== Qt.Key_Escape) return;
+
+    if (noteList.hasActiveEditor) {
+      noteList.saveActiveEditor();
+      event.accepted = true;
+    } else if (noteList.hasSelectedNote) {
+      noteList.clearSelection();
+      event.accepted = true;
+    }
+  }
 
   // ── Notes Model (ListModel for proper Repeater updates) ──
   ListModel { id: notesModel }
-
-  Component.onCompleted: {
-    loadNotes();
-  }
 
   onVisibleChanged: {
     if (visible) loadNotes();
@@ -71,95 +87,37 @@ Item {
   // ── Functions ──────────────────────────────────────────
 
   function loadNotes() {
+    if (!root.pluginApi || !root.pluginApi.mainInstance) return;
+
+    var notes = root.pluginApi.mainInstance.getDisplayNotes();
+    
+    // Simple check: if count is same and it's not empty, we might skip full reload 
+    // but for now let's at least check if we actually have different data.
+    // A better way is to compare JSON strings of the raw data.
+    var currentNotesJson = JSON.stringify(root.pluginApi.mainInstance.loadStoredNotes());
+    if (root._lastLoadedJson === currentNotesJson) return;
+    root._lastLoadedJson = currentNotesJson;
+
     notesModel.clear();
-    if (!root.pluginApi) return;
-
-    var stored = root.pluginApi.pluginSettings.notes;
-    if (!stored || stored.length === 0) return;
-
-    try {
-      var notes = JSON.parse(stored);
-      var needsPersist = false;
-      for (var i = 0; i < notes.length; i++) {
-        notes[i].modifiedStr = Storage.formatDate(new Date(notes[i].modified), root.pluginApi);
-        // Migrate: assign color to old notes that don't have one
-        if (!notes[i].color || notes[i].color === "") {
-          notes[i].color = Storage.pickRandomColor();
-          needsPersist = true;
-        }
-        
-        notes[i].noteColor = notes[i].color;
-        notesModel.append(notes[i]);
-      }
-      // Persist migrated colors so they stay consistent
-      if (needsPersist) persistNotes();
-    } catch (e) {
-      Logger.e("MdNote", "Failed to parse notes: " + e);
+    for (var i = 0; i < notes.length; i++) {
+      notesModel.append(notes[i]);
     }
   }
 
+  property string _lastLoadedJson: ""
+
   function saveNote(noteId, content, saveColor) {
-    var now = Date.now();
-    var isNew = (!noteId || noteId.length === 0);
-
-    if (isNew) {
-      noteId = Storage.generateNoteId();
+    if (root.pluginApi?.mainInstance) {
+      root.pluginApi.mainInstance.saveNote(noteId, content, saveColor);
     }
-
-    var finalColor = saveColor;
-    var foundIndex = -1;
-    for (var i = 0; i < notesModel.count; i++) {
-      if (notesModel.get(i).noteId === noteId) {
-        finalColor = notesModel.get(i).noteColor || finalColor;
-        foundIndex = i;
-        break;
-      }
-    }
-
-    var note = {
-      noteId: noteId,
-      content: content,
-      modified: now,
-      modifiedStr: Storage.formatDate(new Date(now), root.pluginApi),
-      noteColor: finalColor || Storage.pickRandomColor(),
-      color: finalColor || Storage.pickRandomColor()
-    };
-
-    if (foundIndex >= 0) {
-      notesModel.set(foundIndex, note);
-    } else {
-      notesModel.insert(0, note);
-    }
-
-    persistNotes();
-    Logger.i("MdNote", "Note saved: " + noteId);
+    loadNotes();
   }
 
   function deleteNote(noteId) {
-    for (var i = 0; i < notesModel.count; i++) {
-      if (notesModel.get(i).noteId === noteId) {
-        notesModel.remove(i);
-        break;
-      }
+    if (root.pluginApi?.mainInstance) {
+      root.pluginApi.mainInstance.deleteNote(noteId);
     }
-    persistNotes();
-    Logger.i("MdNote", "Note deleted: " + noteId);
-  }
-
-  function persistNotes() {
-    if (!root.pluginApi) return;
-    var notes = [];
-    for (var i = 0; i < notesModel.count; i++) {
-      var item = notesModel.get(i);
-      notes.push({
-        noteId: item.noteId,
-        content: item.content,
-        modified: item.modified,
-        color: item.noteColor
-      });
-    }
-    root.pluginApi.pluginSettings.notes = JSON.stringify(notes);
-    root.pluginApi.saveSettings();
+    loadNotes();
   }
 
   // ── UI ─────────────────────────────────────────────────
@@ -169,7 +127,7 @@ Item {
     anchors.fill: parent
     color: "transparent"
 
-    Components.NoteList {
+    NoteList {
       id: noteList
       anchors.fill: parent
       anchors.margins: Style.marginM
@@ -182,6 +140,20 @@ Item {
 
       onDeleteRequested: function(noteId) {
         root.deleteNote(noteId);
+      }
+
+      onExpandRequested: function(noteId, content, noteColor) {
+        if (root.pluginApi?.mainInstance && root.pluginApi?.panelOpenScreen) {
+          root.pluginApi.mainInstance.openExpandedNote(root.pluginApi.panelOpenScreen, noteId, content, noteColor);
+        }
+      }
+    }
+
+    Connections {
+      target: root.pluginApi?.mainInstance || null
+
+      function onNotesChanged() {
+        root.loadNotes();
       }
     }
   }

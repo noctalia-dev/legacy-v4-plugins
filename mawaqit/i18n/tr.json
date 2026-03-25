@@ -20,14 +20,20 @@
     "close": "Kapat",
     "configure": "Ayarlar bölümünden şehrinizi seçin",
     "now": "Şimdi",
-    "iftar": "İftar",
+    "jumuah": "Cuma",
+    "today": "Bugün",
+    "tomorrow": "Yarın",
     "imsak": "İmsak",
-    "fajr": "İmsak",
+    "fajr": "Sabah",
     "sunrise": "Güneş",
     "dhuhr": "Öğle",
     "asr": "İkindi",
     "maghrib": "Akşam",
-    "isha": "Yatsı"
+    "isha": "Yatsı",
+    "tab": {
+      "prayers": "Namaz Vakitleri",
+      "calendar": "Takvim"
+    }
   },
   "settings": {
     "location": {
@@ -44,14 +50,14 @@
     },
     "method": {
       "label": "Hesaplama Yöntemi",
-      "desc": "Namaz vakitlerinin nasıl hesaplandığını belirler. Bölgenizde takip edilen yöntemi seçin."
+      "desc": "Namaz vakitlerinin nasıl hesaplandığını belirler."
     },
     "display": {
       "header": "Görünüm"
     },
     "showCountdown": {
       "label": "Geri sayımı göster",
-      "desc": "Çubukta sabit saat yerine bir sonraki namaz için canlı geri sayım göster."
+      "desc": "Çubukta sabit saat yerine canlı geri sayım göster."
     },
     "notifications": {
       "header": "Bildirimler",
@@ -79,7 +85,7 @@
     "azan3": "Ezan 3",
     "calibration": {
       "header": "Kalibrasyon",
-      "desc": "Yerel hilal gözlemiyle uyuşmuyorsa görüntülenen Hicri tarihi ayarlayın."
+      "desc": "Yerel hilal gözlemiyle uyuşmuyorsa Hicri tarihi ayarlayın."
     },
     "hijriDayOffset": {
       "label": "Hicri Gün Ayarı",
@@ -87,11 +93,23 @@
     },
     "school": {
       "label": "Asr Hesaplama Mezhebi",
-      "desc": "Şafi/Maliki/Hanbeli gölge faktörü 1 kullanır. Hanefi faktör 2 kullanır, daha geç bir Asr vakti verir."
+      "desc": "Şafi/Maliki/Hanbeli gölge faktörü 1. Hanefi faktör 2 kullanır."
+    },
+    "calendar": {
+      "header": "Takvim"
+    },
+    "weekStartDay": {
+      "label": "Haftanın ilk günü",
+      "desc": "Takvim haftasının başlangıç gününü seçin."
     }
   },
   "error": {
-    "network": "Ağ isteği başarısız oldu. İnternet bağlantınızı kontrol edin.",
+    "network": "Ağ isteği başarısız oldu.",
     "generic": "Namaz vakitleri yüklenemedi."
+  },
+  "calendar": {
+    "today": "Bugüne dön",
+    "refresh": "Ayı yenile",
+    "approximate": "Matematiksel tahmin — hilal gözlemiyle doğrulanmamış"
   }
 }

@@ -1,0 +1,46 @@
+{
+  "panel": {
+    "title": "Appareils connectés",
+    "signal": {
+      "very-weak": "Très faible",
+      "weak": "Faible",
+      "fair": "Moyen",
+      "good": "Bon",
+      "excellent": "Excellent",
+      "unknown": "Inconnu"
+    },
+    "card": {
+      "battery": "Batterie",
+      "network": "Réseau",
+      "signal-strength": "Force du signal",
+      "notifications": "Notifications"
+    },
+    "other-devices": "Autres appareils",
+    "send-file-picker": "Choisir un fichier à envoyer à l'appareil",
+    "send-file": "Envoyer un fichier",
+    "browse-device": "Parcourir les fichiers de l'appareil",
+    "find-device": "Trouver mon appareil",
+    "pair": "Coupler avec l'appareil",
+    "unpair": "Découpler l'appareil",
+    "valent-error": {
+      "no-devices": "Aucun appareil trouvé. Assurez-vous que votre téléphone est sur le même réseau et que l'application KDE Connect est ouverte.",
+      "unavailable-title": "Valent n'est pas en cours d'exécution",
+      "unavailable-desc": "Assurez-vous que l'application Valent est installée et en cours d'exécution sur votre système.",
+      "device-unavailable": "L'appareil est actuellement indisponible"
+    },
+    "refresh": "Actualiser"
+  },
+  "bar": {
+    "tooltip": "Appareils connectés"
+  },
+  "control_center": {
+    "state-label": "État",
+    "state": {
+      "connected": "Connecté",
+      "disconnected": "Déconnecté",
+      "unavailable": "Indisponible",
+      "no-device": "Aucun appareil",
+      "not-paired": "Non couplé"
+    }
+  }
+}

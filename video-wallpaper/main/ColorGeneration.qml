@@ -26,12 +26,12 @@ Item {
     required property FolderModel thumbFolderModel
 
     // Screen specific properties
-    readonly property string currentWallpaper: pluginApi?.pluginSettings?.[screenName]?.currentWallpaper || ""
+    readonly property string currentWallpaper: pluginApi?.pluginSettings?.[screenName]?.currentWallpaper ?? ""
 
     // Global properties
-    readonly property bool   enabled:          pluginApi?.pluginSettings?.enabled          || false
-    readonly property bool   thumbCacheReady:  pluginApi?.pluginSettings?.thumbCacheReady  || false
-    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder || pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder || ""
+    readonly property bool   enabled:          pluginApi?.pluginSettings?.enabled          ?? false
+    readonly property bool   thumbCacheReady:  pluginApi?.pluginSettings?.thumbCacheReady  ?? false
+    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder ?? pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder ?? ""
 
     // Local properties
     property bool oldWallpapersSaved: false

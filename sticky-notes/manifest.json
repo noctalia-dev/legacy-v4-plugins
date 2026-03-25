@@ -1,7 +1,7 @@
 {
   "id": "sticky-notes",
   "name": "Sticky Notes",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "minNoctaliaVersion": "3.6.0",
   "author": "sapjax",
   "official": false,
@@ -14,11 +14,20 @@
     "Productivity"
   ],
   "entryPoints": {
+    "main": "Main.qml",
     "barWidget": "BarWidget.qml",
-    "panel": "Panel.qml"
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
   },
   "dependencies": {
     "plugins": []
   },
-  "metadata": {}
+  "metadata": {
+    "defaultSettings": {
+      "notes": "[]",
+      "syncEnabled": false,
+      "githubToken": "",
+      "githubGistId": ""
+    }
+  }
 }

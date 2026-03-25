@@ -5,7 +5,7 @@
   "minNoctaliaVersion": "3.6.0",
   "author": "cmptr",
   "license": "MIT",
-  "description": "Shows AI coding assistant usage stats in the bar with detail panel (Claude Code, Codex, OpenRouter, Zen)",
+  "description": "Shows AI coding assistant usage stats in the bar with detail panel (Claude Code, Codex, Copilot, OpenRouter, Zen)",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "tags": ["Bar", "Productivity", "AI"],
   "entryPoints": {
@@ -22,6 +22,7 @@
       "providers": {
         "claude": { "enabled": false, "statsPath": "~/.claude/stats-cache.json", "credentialsPath": "~/.claude/.credentials.json" },
         "codex": { "enabled": false },
+        "copilot": { "enabled": false },
         "openrouter": { "enabled": false, "apiKey": "" },
         "zen": { "enabled": false, "apiKey": "" }
       },

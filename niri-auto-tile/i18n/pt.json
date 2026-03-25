@@ -2,13 +2,14 @@
   "panel": {
     "title": "Layout de Colunas",
     "single": "Unica",
-    "columns": "%1 Colunas",
-    "status-active": "Ativo — %1 colunas",
+    "columns": "{count} Colunas",
+    "status-active": "Ativo — {count} colunas",
+    "status-active-ws": "Ativo — {count} colunas (WS {ws})",
     "status-starting": "Iniciando...",
     "status-disabled": "Desativado"
   },
   "bar": {
-    "running": "Auto-Tile: executando (%1 colunas)",
+    "running": "Auto-Tile: executando ({count} colunas)",
     "starting": "Auto-Tile: iniciando...",
     "disabled": "Auto-Tile: desativado",
     "enable": "Ativar Auto-Tile",
@@ -22,17 +23,17 @@
     "per-workspace-desc": "Cada workspace tem sua propria configuracao de colunas",
     "only-at-max": "So no maximo",
     "only-at-max-desc": "Redistribuir apenas quando o numero de colunas atingir o maximo",
-    "max-visible": "Colunas visiveis",
+    "max-visible": "Colunas visiveis: {value}",
     "max-visible-desc": "Numero maximo de colunas visiveis na tela simultaneamente",
-    "debounce": "Atraso de debounce",
+    "debounce": "Atraso de debounce: {value}ms",
     "debounce-desc": "Atraso antes da redistribuicao para agrupar eventos rapidos",
-    "rate-limit": "Limite de eventos",
+    "rate-limit": "Limite de eventos: {value}/s",
     "rate-limit-desc": "Maximo de eventos processados por segundo",
     "status-running": "Daemon em execucao",
     "status-error": "Erro no daemon — reiniciando...",
     "status-stopped": "Daemon parado",
     "about-title": "Sobre",
     "about-credit": "Desenvolvido por Pir0c0pter0 usando Claude",
-    "about-date": "Data"
+    "about-date": "Data: {date}"
   }
 }

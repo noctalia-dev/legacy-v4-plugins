@@ -8,9 +8,11 @@
   "settings": {
     "player-name": "Name des Players",
     "player-name-desc": "Bezeichnung des MPRIS-Players (z.B. musicfox, spotify, firefox)",
-    "update-interval": "Aktualisierungsintervall",
+    "hide-when-inactive": "Bei Inaktivität ausblenden",
+    "hide-when-inactive-desc": "Blendet das Widget aus, wenn die Wiedergabe pausiert oder gestoppt ist",
+    "update-interval": "Aktualisierungsintervall: {value} ms",
     "update-interval-desc": "Aktualisierungsintervall für Liedtexte (in Millisekunden)",
-    "width": "Breite",
+    "width": "Breite: {value} px",
     "width-desc": "Breite des Lyric-Widgets in Pixeln"
   }
 }

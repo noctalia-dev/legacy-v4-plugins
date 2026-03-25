@@ -27,13 +27,19 @@ Item {
         providerSettings: root.pluginSettings?.providers?.openrouter ?? ({})
     }
 
+    Copilot {
+        id: copilotProvider
+        enabled: root.providerEnabled("copilot")
+        providerSettings: root.pluginSettings?.providers?.copilot ?? ({})
+    }
+
     Zen {
         id: zenProvider
         enabled: root.providerEnabled("zen")
         providerSettings: root.pluginSettings?.providers?.zen ?? ({})
     }
 
-    property var providers: [claudeProvider, codexProvider, openRouterProvider, zenProvider]
+    property var providers: [claudeProvider, codexProvider, copilotProvider, openRouterProvider, zenProvider]
 
     property var enabledProviders: {
         const result = [];
@@ -41,6 +47,8 @@ Item {
             result.push(claudeProvider);
         if (codexProvider.enabled)
             result.push(codexProvider);
+        if (copilotProvider.enabled)
+            result.push(copilotProvider);
         if (openRouterProvider.enabled)
             result.push(openRouterProvider);
         if (zenProvider.enabled)

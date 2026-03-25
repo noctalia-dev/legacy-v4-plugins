@@ -1,0 +1,33 @@
+{
+  "widget": {
+    "tooltip": "Pick a niri animation preset"
+  },
+  "panel": {
+    "title": "Niri Animation Preset",
+    "presetsAvailable": "{count} presets available",
+    "scanning": "Scanning…",
+    "noPresetsFound": "No presets found",
+    "noFilesFound": "No .kdl files found",
+    "scanningAnimations": "Scanning animations…",
+    "applied": "Applied: {file}",
+    "animationSet": "Animation set to {file}",
+    "writeFailed": "Write failed (exit {code})",
+    "writeFailedToast": "Failed to write to target file"
+  },
+  "settings": {
+    "browse": "Browse…",
+    "animationsFolder": {
+      "label": "Animations folder",
+      "description": "Folder containing your .kdl preset files",
+      "pickerTitle": "Select animations folder"
+    },
+    "targetFile": {
+      "label": "Target KDL file",
+      "description": "File where the include line will be written"
+    },
+    "iconColor": {
+      "label": "Icon color",
+      "description": "Color of the bar widget icon"
+    }
+  }
+}

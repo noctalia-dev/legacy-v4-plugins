@@ -1,0 +1,39 @@
+{
+  "panel": {
+    "title": "열 레이아웃",
+    "single": "단일",
+    "columns": "{count} 열",
+    "status-active": "활성 — {count} 열",
+    "status-active-ws": "활성 — {count} 열 (WS {ws})",
+    "status-starting": "시작 중...",
+    "status-disabled": "비활성화됨"
+  },
+  "bar": {
+    "running": "Auto-Tile: 실행 중 ({count} 열)",
+    "starting": "Auto-Tile: 시작 중...",
+    "disabled": "Auto-Tile: 비활성화됨",
+    "enable": "Auto-Tile 활성화",
+    "disable": "Auto-Tile 비활성화",
+    "settings": "설정"
+  },
+  "settings": {
+    "enabled": "Auto-Tile 활성화",
+    "enabled-desc": "창을 열거나 닫을 때 열 너비를 자동으로 재분배합니다",
+    "per-workspace": "워크스페이스별",
+    "per-workspace-desc": "각 워크스페이스마다 독립적인 열 수 설정이 있습니다",
+    "only-at-max": "최대일 때만",
+    "only-at-max-desc": "열 수가 최대에 도달했을 때만 재분배합니다",
+    "max-visible": "표시 열 수: {value}",
+    "max-visible-desc": "화면에 동시에 표시되는 최대 열 수",
+    "debounce": "디바운스 지연: {value}ms",
+    "debounce-desc": "빠른 이벤트를 모으기 위한 재분배 전 지연",
+    "rate-limit": "이벤트 제한: {value}/s",
+    "rate-limit-desc": "초당 처리되는 최대 이벤트 수",
+    "status-running": "데몬 실행 중",
+    "status-error": "데몬 오류 — 재시작 중...",
+    "status-stopped": "데몬 중지됨",
+    "about-title": "정보",
+    "about-credit": "Pir0c0pter0가 Claude를 사용하여 개발",
+    "about-date": "날짜: {date}"
+  }
+}

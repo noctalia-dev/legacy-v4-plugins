@@ -24,14 +24,14 @@ NIconButton {
     }
 
     colorFg: {
-        if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
+        if (mainInstance && (mainInstance.cdRunning || mainInstance.swRunning || mainInstance.cdSoundPlaying)) {
             return Color.mOnPrimary
         }
         return Color.mPrimary
     }
 
     colorBg: {
-        if (mainInstance && (mainInstance.timerRunning || mainInstance.timerSoundPlaying)) {
+        if (mainInstance && (mainInstance.cdRunning || mainInstance.swRunning || mainInstance.cdSoundPlaying)) {
             return Color.mPrimary
         }
         return Style.capsuleColor

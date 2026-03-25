@@ -23,17 +23,20 @@ Item {
 
     function start(duration_str: string) {
       if (duration_str && duration_str === "stopwatch") {
-        root.timerReset();
+        root.stopwatchReset();
         root.timerStopwatchMode = true;
+        root.stopwatchStart();
       } else if (duration_str && duration_str !== "") {
         const seconds = root.parseDuration(duration_str);
         if (seconds > 0) {
-          root.timerReset();
-          root.timerRemainingSeconds = seconds;
+          root.countdownReset();
+          root.cdRemainingSeconds = seconds;
           root.timerStopwatchMode = false;
+          root.countdownStart();
         }
+      } else {
+        root.timerStart();
       }
-      root.timerStart();
     }
 
     function pause() {
@@ -45,15 +48,29 @@ Item {
     }
   }
 
-  // Timer state
-  property bool timerRunning: false
+  // View mode (which tab is active in the panel)
   property bool timerStopwatchMode: false
-  property int timerRemainingSeconds: 0
-  property int timerTotalSeconds: 0
-  property int timerElapsedSeconds: 0
-  property bool timerSoundPlaying: false
-  property int timerStartTimestamp: 0
-  property int timerPausedAt: 0
+
+  // Countdown state
+  property bool cdRunning: false
+  property int cdRemainingSeconds: 0
+  property int cdTotalSeconds: 0
+  property int cdStartTimestamp: 0
+  property int cdPausedAt: 0
+  property bool cdSoundPlaying: false
+
+  // Stopwatch state
+  property bool swRunning: false
+  property int swElapsedSeconds: 0
+  property int swStartTimestamp: 0
+  property int swPausedAt: 0
+
+  // Backward-compatible computed properties (used by bar/CC widgets)
+  readonly property bool timerRunning: timerStopwatchMode ? swRunning : cdRunning
+  readonly property int timerRemainingSeconds: cdRemainingSeconds
+  readonly property int timerTotalSeconds: cdTotalSeconds
+  readonly property int timerElapsedSeconds: swElapsedSeconds
+  readonly property bool timerSoundPlaying: cdSoundPlaying
 
   // Current timestamp
   property int timestamp: Math.floor(Date.now() / 1000)
@@ -69,18 +86,19 @@ Item {
       var now = new Date();
       root.timestamp = Math.floor(now.getTime() / 1000);
 
-      // Update timer if running
-      if (root.timerRunning && root.timerStartTimestamp > 0) {
-        const elapsedSinceStart = root.timestamp - root.timerStartTimestamp;
-
-        if (root.timerStopwatchMode) {
-          root.timerElapsedSeconds = root.timerPausedAt + elapsedSinceStart;
-        } else {
-          root.timerRemainingSeconds = root.timerTotalSeconds - elapsedSinceStart;
-          if (root.timerRemainingSeconds <= 0) {
-            root.timerOnFinished();
-          }
+      // Update countdown if running
+      if (root.cdRunning && root.cdStartTimestamp > 0) {
+        const elapsed = root.timestamp - root.cdStartTimestamp;
+        root.cdRemainingSeconds = root.cdTotalSeconds - elapsed;
+        if (root.cdRemainingSeconds <= 0) {
+          root.countdownOnFinished();
         }
+      }
+
+      // Update stopwatch if running
+      if (root.swRunning && root.swStartTimestamp > 0) {
+        const elapsed = root.timestamp - root.swStartTimestamp;
+        root.swElapsedSeconds = root.swPausedAt + elapsed;
       }
 
       // Sync to next second
@@ -102,54 +120,75 @@ Item {
     updateTimer.restart();
   }
 
-  // Logic
-  function timerStart() {
-    if (root.timerStopwatchMode) {
-      root.timerRunning = true;
-      root.timerStartTimestamp = root.timestamp;
-      root.timerPausedAt = root.timerElapsedSeconds;
-    } else {
-      if (root.timerRemainingSeconds <= 0) {
-        return;
-      }
-      root.timerRunning = true;
-      root.timerTotalSeconds = root.timerRemainingSeconds;
-      root.timerStartTimestamp = root.timestamp;
-      root.timerPausedAt = 0;
+  // Countdown logic
+  function countdownStart() {
+    if (root.cdRemainingSeconds <= 0) return;
+    root.cdTotalSeconds = root.cdRemainingSeconds;
+    root.cdStartTimestamp = root.timestamp;
+    root.cdPausedAt = 0;
+    root.cdRunning = true;
+  }
+
+  function countdownPause() {
+    if (root.cdRunning) {
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const elapsed = currentTimestamp - root.cdStartTimestamp;
+      const remaining = root.cdTotalSeconds - elapsed;
+      root.cdPausedAt = Math.max(0, remaining);
+      root.cdRemainingSeconds = root.cdPausedAt;
     }
+    root.cdRunning = false;
+    root.cdStartTimestamp = 0;
+    SoundService.stopSound("alarm-beep.wav");
+    root.cdSoundPlaying = false;
+  }
+
+  function countdownReset() {
+    root.cdRunning = false;
+    root.cdStartTimestamp = 0;
+    root.cdRemainingSeconds = 0;
+    root.cdTotalSeconds = 0;
+    root.cdPausedAt = 0;
+    SoundService.stopSound("alarm-beep.wav");
+    root.cdSoundPlaying = false;
+  }
+
+  // Stopwatch logic
+  function stopwatchStart() {
+    root.swStartTimestamp = root.timestamp;
+    root.swPausedAt = root.swElapsedSeconds;
+    root.swRunning = true;
+  }
+
+  function stopwatchPause() {
+    if (root.swRunning) {
+      root.swPausedAt = root.swElapsedSeconds;
+    }
+    root.swRunning = false;
+    root.swStartTimestamp = 0;
+  }
+
+  function stopwatchReset() {
+    root.swRunning = false;
+    root.swStartTimestamp = 0;
+    root.swElapsedSeconds = 0;
+    root.swPausedAt = 0;
+  }
+
+  // Convenience: operate on current mode
+  function timerStart() {
+    if (root.timerStopwatchMode) stopwatchStart();
+    else countdownStart();
   }
 
   function timerPause() {
-    if (root.timerRunning) {
-      if (root.timerStopwatchMode) {
-        root.timerPausedAt = root.timerElapsedSeconds;
-      } else {
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        const elapsedSinceStart = currentTimestamp - root.timerStartTimestamp;
-        const currentRemaining = root.timerTotalSeconds - elapsedSinceStart;
-        root.timerPausedAt = Math.max(0, currentRemaining);
-        root.timerRemainingSeconds = root.timerPausedAt;
-      }
-    }
-    root.timerRunning = false;
-    root.timerStartTimestamp = 0;
-    SoundService.stopSound("alarm-beep.wav");
-    root.timerSoundPlaying = false;
+    if (root.timerStopwatchMode) stopwatchPause();
+    else countdownPause();
   }
 
   function timerReset() {
-    root.timerRunning = false;
-    root.timerStartTimestamp = 0;
-    if (root.timerStopwatchMode) {
-      root.timerElapsedSeconds = 0;
-      root.timerPausedAt = 0;
-    } else {
-      root.timerRemainingSeconds = 0;
-      root.timerTotalSeconds = 0;
-      root.timerPausedAt = 0;
-    }
-    SoundService.stopSound("alarm-beep.wav");
-    root.timerSoundPlaying = false;
+    if (root.timerStopwatchMode) stopwatchReset();
+    else countdownReset();
   }
 
   function parseDuration(duration_str) {
@@ -176,10 +215,10 @@ Item {
     return totalSeconds;
   }
 
-  function timerOnFinished() {
-    root.timerRunning = false;
-    root.timerRemainingSeconds = 0;
-    root.timerSoundPlaying = true;
+  function countdownOnFinished() {
+    root.cdRunning = false;
+    root.cdRemainingSeconds = 0;
+    root.cdSoundPlaying = true;
     SoundService.playSound("alarm-beep.wav", {
       repeat: true,
       volume: 0.3
@@ -187,7 +226,14 @@ Item {
     ToastService.showNotice(
       pluginApi?.tr("toast.title") || "Timer",
       pluginApi?.tr("toast.finished") || "Timer finished!",
-      "hourglass"
+      "hourglass",
+      {
+        onDismissed: () => {
+          if (root.cdSoundPlaying) {
+             root.countdownPause();
+          }
+        }
+      }
     );
   }
 }

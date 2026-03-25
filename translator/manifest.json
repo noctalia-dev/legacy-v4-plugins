@@ -1,7 +1,7 @@
 {
   "id": "translator",
   "name": "Translator",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "minNoctaliaVersion": "4.4.1",
   "author": "Cleboost",
   "license": "MIT",

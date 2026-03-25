@@ -21,12 +21,12 @@ ColumnLayout {
     required property var pluginApi
 
     required property string activeBackend
-    required property bool enabled
+    required property bool   enabled
     required property string selectedMonitor
 
     // Monitor specific properties
-    property string fillMode: pluginApi?.pluginSettings?.[selectedMonitor]?.fillMode    || pluginApi?.manifest?.metadata?.defaultSettings?.fill_mode || ""
-    property int orientation: pluginApi?.pluginSettings?.[selectedMonitor]?.orientation || 0
+    property string fillMode: pluginApi?.pluginSettings?.[selectedMonitor]?.fillMode    ?? pluginApi?.manifest?.metadata?.defaultSettings?.fill_mode ?? ""
+    property int orientation: pluginApi?.pluginSettings?.[selectedMonitor]?.orientation ?? 0
 
     // Constants
     readonly property list<string> backends: ["qt6-multimedia", "mpvpaper"]
@@ -42,21 +42,21 @@ ColumnLayout {
     NComboBox {
         enabled: root.enabled
         Layout.fillWidth: true
-        label: root.pluginApi?.tr("settings.advanced.fill_mode.label") || "Fill Mode"
-        description: root.pluginApi?.tr("settings.advanced.fill_mode.description") || "The mode that the wallpaper is fitted into the background."
+        label:       root.pluginApi?.tr("settings.advanced.fill_mode.label")
+        description: root.pluginApi?.tr("settings.advanced.fill_mode.description")
         defaultValue: "fit"
         model: [
             {
                 "key": "fit",
-                "name": root.pluginApi?.tr("settings.advanced.fill_mode.fit") || "Fit"
+                "name": root.pluginApi?.tr("settings.advanced.fill_mode.fit")
             },
             {
                 "key": "crop",
-                "name": root.pluginApi?.tr("settings.advanced.fill_mode.crop") || "Crop"
+                "name": root.pluginApi?.tr("settings.advanced.fill_mode.crop")
             },
             {
                 "key": "stretch",
-                "name": root.pluginApi?.tr("settings.advanced.fill_mode.stretch") || "Stretch"
+                "name": root.pluginApi?.tr("settings.advanced.fill_mode.stretch")
             }
         ]
         currentKey: root.fillMode
@@ -74,8 +74,8 @@ ColumnLayout {
         defaultValue: 0
         stepSize: 90
         text: _value
-        label: root.pluginApi?.tr("settings.advanced.orientation.label") || "Orientation"
-        description: root.pluginApi?.tr("settings.advanced.orientation.description") || "The orientation of the video playing, can be any multiple of 90 degrees."
+        label:       root.pluginApi?.tr("settings.advanced.orientation.label")
+        description: root.pluginApi?.tr("settings.advanced.orientation.description")
         onMoved: value => _value = value
         onPressedChanged: (pressed, value) => {
             if(root.pluginApi == null) {
@@ -118,8 +118,8 @@ ColumnLayout {
         target: root.pluginApi
         function onPluginSettingsChanged() {
             // Update the local properties on change
-            root.fillMode =    root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.fillMode    || root.pluginApi?.manifest?.metadata?.defaultSettings?.fillMode || ""
-            root.orientation = root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.orientation || 0
+            root.fillMode =    root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.fillMode    ?? root.pluginApi?.manifest?.metadata?.defaultSettings?.fillMode ?? ""
+            root.orientation = root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.orientation ?? 0
         }
     }
 

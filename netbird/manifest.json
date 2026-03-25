@@ -1,7 +1,7 @@
 {
 	"id": "netbird",
 	"name": "NetBird",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minNoctaliaVersion": "4.0.0",
 	"author": "Cleboost",
 	"license": "MIT",

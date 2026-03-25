@@ -22,8 +22,8 @@ ColumnLayout {
     required property string screenName
     required property bool   thumbCacheReady
 
-    readonly property string currentWallpaper: pluginApi?.pluginSettings?.[screenName]?.currentWallpaper || ""
-    readonly property bool   monitorSpecific:  pluginApi?.pluginSettings?.monitorSpecific                || false
+    readonly property string currentWallpaper: pluginApi?.pluginSettings?.[screenName]?.currentWallpaper ?? ""
+    readonly property bool   monitorSpecific:  pluginApi?.pluginSettings?.monitorSpecific                ?? false
 
 
     /***************************
@@ -71,7 +71,7 @@ ColumnLayout {
             spacing: Style.marginS
 
             NText {
-                text: root.pluginApi?.tr("panel.loading") || "Loading..."
+                text: root.pluginApi?.tr("panel.loading")
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 pointSize: Style.fontSizeL
                 font.weight: Font.Bold

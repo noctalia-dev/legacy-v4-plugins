@@ -1,7 +1,7 @@
 {
   "id": "mpris-lyric",
   "name": "MPRIS Lyric",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "minNoctaliaVersion": "3.8.0",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "author": "DBeidachazi",
@@ -22,6 +22,7 @@
   "metadata": {
     "defaultSettings": {
       "playerName": "musicfox",
+      "hideWhenInactive": false,
       "updateInterval": 200,
       "width": 300
     }

@@ -1,5 +1,7 @@
 # Editor directories and files
 .vscode/
+.agents/
+skills-lock.json
 
 # Qt/QML specific
 *.qmlc

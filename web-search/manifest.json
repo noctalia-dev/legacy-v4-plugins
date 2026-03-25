@@ -1,0 +1,30 @@
+{
+    "id": "web-search",
+    "name": "Web Search",
+    "version": "1.0.1",
+    "author": "Rigelyon",
+    "license": "MIT",
+    "description": "Search the Internet from the Launcher.",
+    "minNoctaliaVersion": "3.9.0",
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+    "tags": [
+        "Launcher",
+        "Utility"
+    ],
+    "entryPoints": {
+        "main": "Main.qml",
+        "launcherProvider": "LauncherProvider.qml",
+        "settings": "Settings.qml"
+    },
+    "dependencies": {
+        "plugins": []
+    },
+    "metadata": {
+        "commandPrefix": "web",
+        "defaultSettings": {
+            "search_engine": "Google",
+            "show_suggestions": true,
+            "max_results": 5
+        }
+    }
+}

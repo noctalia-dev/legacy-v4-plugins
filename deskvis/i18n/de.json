@@ -1,0 +1,28 @@
+{
+  "desktopWidgetSettings": {
+    "direction-label": "Richtung",
+    "direction-description": "In welche Richtung der Visualizer wächst",
+    "mode-label": "Visualisierungsmodus",
+    "mode-description": "Wie die Audioausgabe dargestellt wird",
+    "bar-count-label": "Anzahl der Balken",
+    "bar-count-description": "Anzahl der anzuzeigenden Balken",
+    "sensitivity-label": "Empfindlichkeit",
+    "sensitivity-description": "Verstärkung des Audioeingangs",
+    "smoothing-label": "Glättung",
+    "smoothing-description": "Höher = langsamere Abklingzeit",
+    "fps-label": "Ziel-FPS",
+    "fps-description": "Bildwiederholrate beim Rendern",
+    "custom-width-label": "Benutzerdefinierte Breite",
+    "custom-width-description": "Standardbreite überschreiben. 0 = Standard verwenden",
+    "custom-height-label": "Benutzerdefinierte Höhe",
+    "custom-height-description": "Standardhöhe überschreiben. 0 = Standard verwenden",
+    "gradient-label": "Farbverlauf",
+    "gradient-description": "Primär- und Sekundärfarbe mischen.",
+    "fade-idle-label": "Bei Inaktivität ausblenden",
+    "fade-idle-description": "Ausblenden, wenn kein Ton abgespielt wird",
+    "custom-colors-label": "Benutzerdefinierte Farben verwenden",
+    "custom-colors-description": "Farben des Themes durch eigene Farben überschreiben",
+    "primary-color-label": "Grundfarbe",
+    "secondary-color-label": "Zweitfarbe"
+  }
+}

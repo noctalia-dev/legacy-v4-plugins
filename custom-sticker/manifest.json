@@ -1,0 +1,21 @@
+{
+  "id": "custom-sticker",
+  "name": "Custom Stickers",
+  "version": "1.0.1",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "spiros132",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Custom stickers (images) that you can put on the desktop as desktop widgets.",
+  "tags": ["Desktop", "Fun"],
+  "entryPoints": {
+    "desktopWidget": "DesktopWidget.qml",
+    "desktopWidgetSettings": "DesktopWidgetSettings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}

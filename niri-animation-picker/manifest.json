@@ -1,0 +1,26 @@
+{
+  "id": "niri-animation-picker",
+  "name": "Niri Animation Picker",
+  "version": "1.1.1",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Duncan-Rose",
+  "license": "MIT",
+  "repository": "",
+  "description": "Pick a KDL animation preset and write it as an include into your niri config",
+  "tags": ["Fun", "Niri","Theming","Utility"],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "animationsFolder": "~/.config/niri/animations",
+      "targetFile": "~/.config/niri/config.kdl",
+      "iconColor": "none"
+    }
+  }
+}

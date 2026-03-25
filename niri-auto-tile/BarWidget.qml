@@ -51,16 +51,16 @@ Item {
         Row {
             id: columnIndicator
             anchors.centerIn: parent
-            spacing: 2
+            spacing: Style.marginXXS
             opacity: isEnabled ? 1.0 : 0.35
 
             Repeater {
                 model: root.maxVisible
 
                 Rectangle {
-                    width: 4
+                    width: Math.round(4 * Style.uiScaleRatio)
                     height: root.capsuleHeight * 0.5
-                    radius: 1
+                    radius: Style.radiusXXXS
                     color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
                 }
             }
@@ -71,10 +71,10 @@ Item {
     Rectangle {
         anchors.bottom: visualCapsule.bottom
         anchors.horizontalCenter: visualCapsule.horizontalCenter
-        anchors.bottomMargin: 1
-        width: 4
-        height: 4
-        radius: 2
+        anchors.bottomMargin: Style.marginXXXS
+        width: Math.round(4 * Style.uiScaleRatio)
+        height: Math.round(4 * Style.uiScaleRatio)
+        radius: Math.round(2 * Style.uiScaleRatio)
         visible: isEnabled
         color: isRunning ? Color.mPrimary : Color.mSecondary
     }
@@ -86,13 +86,13 @@ Item {
             var items = [];
             items.push({
                 "label": isEnabled
-                    ? (pluginApi?.tr("bar.disable") ?? "Disable Auto-Tile")
-                    : (pluginApi?.tr("bar.enable") ?? "Enable Auto-Tile"),
+                    ? pluginApi?.tr("bar.disable")
+                    : pluginApi?.tr("bar.enable"),
                 "action": "toggle",
                 "icon": isEnabled ? "player-pause" : "player-play"
             });
             items.push({
-                "label": pluginApi?.tr("bar.settings") ?? "Settings",
+                "label": pluginApi?.tr("bar.settings"),
                 "action": "widget-settings",
                 "icon": "flask"
             });

@@ -11,7 +11,7 @@ Item {
     /***************************
     * PROPERTIES
     ***************************/
-    readonly property bool enabled:          pluginApi?.pluginSettings?.enabled          || false
+    readonly property bool enabled: pluginApi?.pluginSettings?.enabled ?? false
 
     required property var random
     required property var clear

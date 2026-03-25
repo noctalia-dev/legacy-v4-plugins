@@ -1,0 +1,59 @@
+{
+    "settings": {
+        "capture": {
+            "label": "启用捕获",
+            "description": "启动或停止键盘事件捕获"
+        },
+        "ipc": {
+            "title": "IPC 命令",
+            "toggleCommand": "切换捕获：qs -c noctalia-shell ipc call plugin:show-keys toggle"
+        },
+        "security": {
+            "title": "安全免责声明",
+            "message": "Show Keys 需要从 /dev/input/event* 读取原始键盘事件。像 niri 这样的 compositor 目前还没有为此类用途提供原生且安全的 API，因此此插件只能依赖直接访问输入设备。将当前用户加入 'input' 组会削弱 Wayland 的输入隔离，并且可能让同一用户下运行的其他进程也能观察按键输入。",
+            "disclaimer": "在 niri 或其他 Wayland compositor 提供合适的原生 API 之前，此插件都必须承担这项安全权衡。若您选择启用它，即表示您理解并自行承担相关风险。"
+        },
+        "device": {
+            "label": "设备路径（重要）",
+            "description": "键盘设备事件路径，修改后需要重启 noctalia-shell 才能生效。",
+            "placeholder": "/dev/input/event3"
+        },
+        "guide": {
+            "title": "设置指南",
+            "steps": "• 首次使用：运行 'sudo evtest' 查找键盘设备路径。\n• 如果要以非 root 方式捕获，请将当前用户加入 'input' 组：'sudo usermod -aG input $USER'，然后重启或重新登录。\n• 警告：这样做是以便利性换取安全性，可能让同一用户下运行的其他进程也能读取原始键盘输入。\n• 如果您不能接受这一风险，请在 compositor 提供原生支持之前不要启用此插件。"
+        },
+        "position": {
+            "label": "OSD 位置",
+            "description": "按键浮窗在屏幕上的显示位置",
+            "bottom": "底部",
+            "top": "顶部"
+        },
+        "margin": {
+            "label": "边缘间距",
+            "description": "距屏幕边缘距离：{value} 像素"
+        },
+        "delay": {
+            "label": "自动隐藏延迟",
+            "description": "OSD 淡出前的等待时间：{value} 秒"
+        },
+        "pillColor": {
+            "label": "按键文字颜色",
+            "description": "按键标签的文字颜色"
+        },
+        "pillBg": {
+            "label": "按键背景颜色",
+            "description": "每个按键胶囊的背景颜色"
+        },
+        "useCustomColors": {
+            "label": "使用自定义颜色",
+            "description": "覆盖您的 Noctalia shell 主题配色方案"
+        },
+        "monitors": {
+            "label": "活跃显示器",
+            "description": "选择在哪些显示器上显示按键浮窗"
+        },
+        "preview": {
+            "label": "预览"
+        }
+    }
+}

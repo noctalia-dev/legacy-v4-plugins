@@ -2,3 +2,4 @@ NoteList 1.0 NoteList.qml
 NoteCard 1.0 NoteCard.qml
 NewNoteCard 1.0 NewNoteCard.qml
 EmptyState 1.0 EmptyState.qml
+ExpandedNoteWindow 1.0 ExpandedNoteWindow.qml

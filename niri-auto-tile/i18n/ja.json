@@ -1,0 +1,39 @@
+{
+  "panel": {
+    "title": "カラムレイアウト",
+    "single": "シングル",
+    "columns": "{count} カラム",
+    "status-active": "アクティブ — {count} カラム",
+    "status-active-ws": "アクティブ — {count} カラム (WS {ws})",
+    "status-starting": "起動中...",
+    "status-disabled": "無効"
+  },
+  "bar": {
+    "running": "Auto-Tile: 実行中 ({count} カラム)",
+    "starting": "Auto-Tile: 起動中...",
+    "disabled": "Auto-Tile: 無効",
+    "enable": "Auto-Tile を有効にする",
+    "disable": "Auto-Tile を無効にする",
+    "settings": "設定"
+  },
+  "settings": {
+    "enabled": "Auto-Tile を有効にする",
+    "enabled-desc": "ウィンドウの開閉時にカラム幅を自動的に再分配します",
+    "per-workspace": "ワークスペースごと",
+    "per-workspace-desc": "各ワークスペースに独自のカラム数設定があります",
+    "only-at-max": "最大時のみ",
+    "only-at-max-desc": "カラム数が最大に達した場合のみ再分配します",
+    "max-visible": "表示カラム数: {value}",
+    "max-visible-desc": "画面に同時に表示されるカラムの最大数",
+    "debounce": "デバウンス遅延: {value}ms",
+    "debounce-desc": "高速イベントをまとめるための再分配前の遅延",
+    "rate-limit": "イベント制限: {value}/s",
+    "rate-limit-desc": "1秒あたりに処理されるイベントの最大数",
+    "status-running": "デーモン実行中",
+    "status-error": "デーモンエラー — 再起動中...",
+    "status-stopped": "デーモン停止",
+    "about-title": "について",
+    "about-credit": "Pir0c0pter0 が Claude を使用して開発",
+    "about-date": "日付: {date}"
+  }
+}

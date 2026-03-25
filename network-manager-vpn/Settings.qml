@@ -62,8 +62,8 @@ ColumnLayout {
     }
 
     NColorChoice {
-        label: t("settings.connectedColor") || "Connected color"
-        description: t("settings.connectedColorDescription") || "Color used for icon and text when connected"
+        label: t("settings.connectedColor")
+        description: t("settings.connectedColorDescription")
         currentKey: root.editConnectedColor
         onSelected: (key) => {
             root.editConnectedColor = key;
@@ -71,8 +71,8 @@ ColumnLayout {
     }
 
     NColorChoice {
-        label: t("settings.disconnectedColor") || "Disconnected color"
-        description: t("settings.disconnectedColorDescription") || "Color used for icon and text when disconnected"
+        label: t("settings.disconnectedColor")
+        description: t("settings.disconnectedColorDescription")
         currentKey: root.editDisconnectedColor
         onSelected: (key) => {
             root.editDisconnectedColor = key;
@@ -92,13 +92,13 @@ ColumnLayout {
             spacing: Style.marginM
 
             NLabel {
-                label: t("settings.vpnConnections") || "VPN Connections"
+                label: t("settings.vpnConnections")
                 Layout.fillWidth: true
             }
 
             NText {
                 visible: root.vpnList.length === 0
-                text: t("settings.noVpnConnections") || "No VPN connections configured."
+                text: t("settings.noVpnConnections")
                 pointSize: Style.fontSizeS
                 color: Color.mOnSurfaceVariant
                 Layout.leftMargin: Style.marginXS
@@ -162,7 +162,7 @@ ColumnLayout {
                             NIconButton {
                                 visible: !vpnRow.confirmingDelete
                                 icon: "edit"
-                                tooltipText: t("common.edit") || "Edit in Network Manager"
+                                tooltipText: t("common.edit")
                                 baseSize: Style.baseWidgetSize * 0.75
                                 onClicked: {
                                     main.editConnection(modelData.uuid);
@@ -173,7 +173,7 @@ ColumnLayout {
                             NIconButton {
                                 visible: !vpnRow.confirmingDelete
                                 icon: "trash-x"
-                                tooltipText: t("common.delete") || "Delete"
+                                tooltipText: t("common.delete")
                                 baseSize: Style.baseWidgetSize * 0.75
                                 onClicked: {
                                     root.pendingDeleteUuid = modelData.uuid;
@@ -183,7 +183,7 @@ ColumnLayout {
 
                             NButton {
                                 visible: vpnRow.confirmingDelete
-                                text: t("common.delete") || "Delete"
+                                text: t("common.delete")
                                 fontSize: Style.fontSizeXS
                                 backgroundColor: Color.mError
                                 outlined: false
@@ -196,7 +196,7 @@ ColumnLayout {
 
                             NButton {
                                 visible: vpnRow.confirmingDelete
-                                text: t("common.cancel") || "Cancel"
+                                text: t("common.cancel")
                                 fontSize: Style.fontSizeXS
                                 outlined: true
                                 onClicked: {
@@ -223,7 +223,7 @@ ColumnLayout {
                 }
 
                 NButton {
-                    text: t("settings.addVpn") || "Add VPN"
+                    text: t("settings.addVpn")
                     icon: "add"
                     fontSize: Style.fontSizeS
                     outlined: true
@@ -234,7 +234,7 @@ ColumnLayout {
                 }
 
                 NButton {
-                    text: t("settings.addWireguard") || "Add WireGuard"
+                    text: t("settings.addWireguard")
                     icon: "add"
                     fontSize: Style.fontSizeS
                     outlined: true

@@ -1,7 +1,7 @@
 {
   "id": "network-manager-vpn",
   "name": "Network Manager VPN",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "minNoctaliaVersion": "3.6.0",
   "author": "nZO",
   "license": "MIT",

@@ -1,0 +1,35 @@
+{
+  "id": "custom-commands",
+  "name": "Custom Commands",
+  "version": "1.0.4",
+  "description": "Define and run custom shell commands from the launcher",
+  "tags": ["Launcher"],
+  "minNoctaliaVersion": "4.4.1",
+  "author": "Noctalia Team",
+  "official": true,
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "entryPoints": {
+    "launcherProvider": "LauncherProvider.qml",
+    "main": "Main.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": { "plugins": [] },
+  "metadata": {
+    "commandPrefix": "run",
+    "defaultSettings": {
+      "commands": [
+        {
+          "name": "File Manager",
+          "command": "xdg-open ~",
+          "icon": "folder"
+        },
+        {
+          "name": "System Monitor",
+          "command": "gnome-system-monitor || plasma-systemmonitor || xfce4-taskmanager",
+          "icon": "activity"
+        }
+      ]
+    }
+  }
+}

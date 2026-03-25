@@ -1,7 +1,7 @@
 {
   "id": "news",
   "name": "News Bar",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "minNoctaliaVersion": "3.6.0",
   "author": "LazarH",
   "license": "MIT",

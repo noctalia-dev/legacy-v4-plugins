@@ -1,0 +1,250 @@
+{
+  "actions": {
+    "primary": {
+      "open_controls": "opens controls",
+      "toggle_record": "toggles recording",
+      "toggle_stream": "toggles streaming"
+    }
+  },
+  "bar": {
+    "recording_label": "REC",
+    "replay_label": "RPL",
+    "streaming_label": "LIVE"
+  },
+  "control_center": {
+    "tooltip": {
+      "active": "OBS active: {outputs}\nLeft click {primaryAction}\nRight click toggles recording\nMiddle click toggles the replay buffer",
+      "ready": "OBS is ready\nLeft click {primaryAction}\nRight click toggles recording\nMiddle click toggles the replay buffer",
+      "needs_restart": "OBS is running, but WebSocket control is unavailable\nRestart OBS once to restore controls",
+      "offline": "OBS is offline\nLeft click {primaryAction}\nRight click launches OBS"
+    }
+  },
+  "panel": {
+    "header": {
+      "title": "OBS Control",
+      "active": "Active outputs: {outputs}. Manage capture, replay, or streaming from here.",
+      "ready": "OBS is connected and ready for recording, replay, or streaming.",
+      "qt_websockets_missing": "Qt WebSockets support is unavailable in this Quickshell runtime. Install qt6-websockets to enable OBS controls.",
+      "config_missing": "OBS websocket config is missing or disabled. Open OBS, enable obs-websocket, and try again.",
+      "needs_restart": "OBS is open, but WebSocket control is unavailable until it is restarted once.",
+      "offline": "OBS is offline. Launch it here and the widget will track its state."
+    },
+    "status": {
+      "label": "Status",
+      "recording": "Recording",
+      "replay": "Replay Buffer",
+      "streaming": "Streaming",
+      "ready": "Ready",
+      "qt_websockets_missing": "Qt WebSockets Missing",
+      "config_missing": "OBS WebSocket Not Configured",
+      "needs_restart": "Needs OBS Restart",
+      "offline": "Offline",
+      "connected_hint": "Left click {primaryAction}. Right click toggles recording, middle click toggles replay, and the panel exposes streaming and save actions.",
+      "qt_websockets_missing_hint": "Qt WebSockets support is missing in this Quickshell runtime. Install qt6-websockets, then restart Noctalia to enable OBS controls.",
+      "config_missing_hint": "OBS websocket config is missing or disabled. Open OBS, enable obs-websocket, then restart or refresh the plugin.",
+      "disconnected_hint": "WebSocket control is unavailable right now. Launch or restart OBS to restore quick actions.",
+      "recording_elapsed": "Recording Time",
+      "streaming_elapsed": "Streaming Time",
+      "managed_hint": "Plugin-managed launches can close OBS after the last active recording, replay, or stream stops."
+    },
+    "actions": {
+      "retry_connection": "Retry Connection",
+      "launch_obs": "Launch OBS",
+      "stop_recording": "Stop Recording",
+      "start_recording": "Start Recording",
+      "stop_streaming": "Stop Streaming",
+      "start_streaming": "Start Streaming",
+      "stop_replay": "Stop Replay",
+      "start_replay": "Start Replay",
+      "save_replay": "Save Replay",
+      "open_videos": "Open Videos",
+      "refresh_status": "Refresh Status",
+      "open_settings": "Open Settings"
+    }
+  },
+  "settings": {
+    "header": {
+      "label": "OBS Control",
+      "description": "Choose how OBS appears in the bar, Control Center, and quick actions."
+    },
+    "sections": {
+      "behavior": {
+        "label": "Quick Actions",
+        "description": "Set what clicks do and how OBS launches when you ask the plugin to open it."
+      },
+      "bar": {
+        "label": "Bar",
+        "description": "Keep Always Show enabled if you want the OBS button to stay in the same spot all the time."
+      },
+      "control_center": {
+        "label": "Control Center",
+        "description": "Choose when the shortcut should appear. Leave Ready off if you only want it during active sessions."
+      },
+      "videos": {
+        "label": "Videos & Automation",
+        "description": "Choose where recordings open and what the plugin should do after capture stops."
+      }
+    },
+    "runtime": {
+      "qt_websockets_missing_title": "Qt WebSockets Missing",
+      "qt_websockets_missing": "Install qt6-websockets and restart Noctalia to enable OBS control.",
+      "websocket_config_missing_title": "OBS WebSocket Not Configured",
+      "websocket_config_missing": "Enable obs-websocket in OBS, then refresh or restart Noctalia."
+    },
+    "poll_interval": {
+      "label": "Refresh Interval",
+      "description": "How often to refresh OBS state, in milliseconds."
+    },
+    "left_click_action": {
+      "label": "Left Click",
+      "description": "Pick the primary action for the bar and Control Center button.",
+      "options": {
+        "open_controls": "Open Controls",
+        "toggle_recording": "Toggle Recording",
+        "toggle_streaming": "Toggle Streaming"
+      }
+    },
+    "launch_behavior": {
+      "label": "Launch OBS",
+      "description": "Only used for the manual Launch OBS action. Automatic starts still open minimized to tray.",
+      "options": {
+        "normal": "Normal Window",
+        "minimized_to_tray": "Minimize To Tray"
+      }
+    },
+    "bar_label_mode": {
+      "label": "Label Style",
+      "description": "Choose how active OBS states appear in the bar.",
+      "options": {
+        "icon_only": "Icon Only",
+        "short_label": "Short Labels",
+        "duration": "Duration Labels"
+      }
+    },
+    "videos_path": {
+      "label": "Videos Folder",
+      "description": "Leave empty to use your default Videos directory."
+    },
+    "videos_opener": {
+      "label": "Folder Opener",
+      "description": "Command used to open the Videos folder, for example xdg-open or your file manager."
+    },
+    "auto_close_managed": {
+      "label": "Close OBS After Managed Sessions",
+      "description": "If the plugin launched OBS for you, close it again after the last active output stops."
+    },
+    "open_videos_after_stop": {
+      "label": "Offer Open Videos After Save",
+      "description": "Show an Open Videos action after recording stops or a replay is saved."
+    },
+    "show_elapsed_in_bar": {
+      "label": "Show Elapsed Time",
+      "description": "Show the timer in the bar when Label Style is set to Duration Labels."
+    },
+    "show_bar_recording": {
+      "label": "While Recording",
+      "description": "Keep the bar button visible during recording."
+    },
+    "show_bar_replay": {
+      "label": "While Replay Is Active",
+      "description": "Keep the bar button visible while only the replay buffer is running."
+    },
+    "show_bar_streaming": {
+      "label": "While Streaming",
+      "description": "Keep the bar button visible during streaming."
+    },
+    "always_show_in_bar": {
+      "label": "Always Show In Bar",
+      "description": "Keep the bar button visible even when OBS is idle or offline so its position stays stable."
+    },
+    "show_control_center_recording": {
+      "label": "While Recording",
+      "description": "Show the Control Center shortcut during recording."
+    },
+    "show_control_center_replay": {
+      "label": "While Replay Is Active",
+      "description": "Show the Control Center shortcut while the replay buffer is active."
+    },
+    "show_control_center_streaming": {
+      "label": "While Streaming",
+      "description": "Show the Control Center shortcut during streaming."
+    },
+    "show_control_center_ready": {
+      "label": "When OBS Is Ready",
+      "description": "Keep the shortcut visible while OBS is connected but idle."
+    }
+  },
+  "toast": {
+    "actions": {
+      "open_videos": "Open Videos"
+    },
+    "record_started": {
+      "title": "OBS recording started",
+      "body": "Local recording is running."
+    },
+    "record_started_launch": {
+      "title": "OBS recording started",
+      "body": "OBS launched automatically for recording."
+    },
+    "record_stopped": {
+      "title": "OBS recording stopped",
+      "body": "Recording saved to Videos."
+    },
+    "record_stopped_autoclose": {
+      "title": "OBS recording stopped",
+      "body": "Recording saved to Videos. OBS closed."
+    },
+    "stream_started": {
+      "title": "OBS stream started",
+      "body": "Live streaming is active."
+    },
+    "stream_started_launch": {
+      "title": "OBS stream started",
+      "body": "OBS launched automatically for streaming."
+    },
+    "stream_stopped": {
+      "title": "OBS stream stopped",
+      "body": "Live streaming ended."
+    },
+    "stream_stopped_autoclose": {
+      "title": "OBS stream stopped",
+      "body": "Live streaming ended. OBS closed."
+    },
+    "replay_started": {
+      "title": "OBS replay buffer started",
+      "body": "Replay buffer is active."
+    },
+    "replay_started_launch": {
+      "title": "OBS replay buffer started",
+      "body": "OBS launched automatically for replay."
+    },
+    "replay_stopped": {
+      "title": "OBS replay buffer stopped",
+      "body": "Instant replay is off."
+    },
+    "replay_stopped_autoclose": {
+      "title": "OBS replay buffer stopped",
+      "body": "Instant replay is off. OBS closed."
+    },
+    "replay_saved": {
+      "title": "OBS replay saved",
+      "body": "Saved the last replay buffer to Videos."
+    },
+    "offline": {
+      "title": "OBS is offline",
+      "body": "Launch OBS to use recording controls."
+    },
+    "qt_websockets_missing": {
+      "title": "Qt WebSockets support missing",
+      "body": "Qt WebSockets support is unavailable in this Quickshell runtime. Install qt6-websockets to enable OBS controls."
+    },
+    "websocket_config_missing": {
+      "title": "OBS websocket not configured",
+      "body": "OBS websocket config is missing or disabled. Open OBS, enable obs-websocket, and try again."
+    },
+    "error": {
+      "title": "OBS control failed",
+      "body": "Check the OBS websocket output."
+    }
+  }
+}

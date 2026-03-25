@@ -15,20 +15,47 @@
     "new": "新建笔记",
     "empty": "暂无笔记",
     "create-first": "点击 + 创建你的第一条笔记",
+    "hint-unselect": "ESC 取消选中",
+    "hint-click-select": "点击以选中",
     "delete-confirm": "确定删除这条笔记？",
-    "cancel": "取消"
+    "cancel": "取消",
+    "close": "关闭",
+    "window-title": "便签详情",
+    "mode-preview": "预览",
+    "mode-edit": "编辑",
+    "switch-preview": "切到预览",
+    "switch-edit": "切到编辑"
   },
   "editor": {
     "back": "返回列表",
     "save": "保存",
     "delete": "删除",
     "placeholder": "开始用 Markdown 写作...",
-    "hint": "Ctrl+Enter 保存 · Esc 取消"
+    "hint": "Ctrl+S 保存",
+    "hint-esc-save": "ESC 保存"
   },
   "settings": {
-    "notesDir": {
-      "label": "笔记目录",
-      "desc": "笔记文件存储的文件夹路径。"
+    "saved": "便利贴设置已保存",
+    "syncNow": "立即同步",
+    "syncEnabled": {
+      "label": "启用 GitHub Gist 同步",
+      "desc": "在笔记变更后自动同步到一个私有 gist。"
+    },
+    "githubToken": {
+      "label": "GitHub Token",
+      "desc": "填写带有 gist 权限的个人访问令牌。",
+      "placeholder": "ghp_xxx",
+      "help": "插件会创建或复用一个名为 `noctalia-sticky-notes` 的私有 gist。每条 note 会保存为一个文件，文件名就是 note id。"
+    }
+  },
+  "sync": {
+    "syncing": "正在同步笔记到 GitHub Gist...",
+    "success": {
+      "created": "已创建 gist 并完成同步。",
+      "updated": "已同步到 GitHub Gist。"
+    },
+    "errors": {
+      "missing-token": "请先填写 GitHub token 再执行同步。"
     }
   }
 }

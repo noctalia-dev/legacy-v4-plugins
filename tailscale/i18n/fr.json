@@ -13,6 +13,8 @@
     "show-peers-desc": "Afficher le nombre d'appareils connectés dans la barre",
     "hide-disconnected": "Masquer les pairs déconnectés",
     "hide-disconnected-desc": "Afficher uniquement les pairs en ligne dans le panneau",
+    "hide-mullvad-exit-nodes": "Masquer les nœuds de sortie Mullvad",
+    "hide-mullvad-exit-nodes-desc": "Masquer les nœuds de sortie Mullvad VPN de la liste des pairs",
     "terminal": "Configuration du terminal",
     "terminal-command": "Commande du terminal",
     "terminal-command-desc": "Commande pour lancer le terminal pour SSH/ping (ex : 'ghostty', 'alacritty', 'kitty')",
@@ -32,6 +34,7 @@
     "not-installed": "Tailscale n'est pas installé",
     "settings": "Paramètres",
     "copy-ip": "Copier l'IP",
+    "copy-fqdn": "Copier le FQDN",
     "ssh": "SSH vers l'hôte",
     "ping": "Ping l'hôte"
   },
@@ -41,6 +44,9 @@
     "disconnected": "Tailscale déconnecté",
     "ip-copied": {
       "title": "IP copiée"
+    },
+    "fqdn-copied": {
+      "title": "FQDN copié"
     },
     "terminal-not-configured": {
       "title": "Terminal non configuré",

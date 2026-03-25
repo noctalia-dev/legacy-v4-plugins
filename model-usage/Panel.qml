@@ -168,7 +168,7 @@ Item {
                             }
 
                             NText {
-                                text: "Run `claude auth login` to restore authoritative usage."
+                                text: root.selectedProvider?.authHelpText ?? ""
                                 pointSize: Style.fontSizeXS
                                 color: Color.mOnSurfaceVariant
                             }
@@ -351,7 +351,7 @@ Item {
                     }
 
                     Rectangle {
-                        visible: root.selectedProvider?.ready ?? false
+                        visible: (root.selectedProvider?.ready ?? false) && (root.selectedProvider?.hasLocalStats ?? false)
                         Layout.fillWidth: true
                         color: root.sectionBackgroundColor
                         radius: Style.radiusS

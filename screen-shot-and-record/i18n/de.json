@@ -1,0 +1,28 @@
+{
+  "panel": {
+    "title": "Screenshot",
+    "target": {
+      "screenshot": "Screenshot",
+      "ocr": "OCR",
+      "search": "Bildersuche",
+      "record": "Bildschirmaufnahme",
+      "recordsound": "Bildschirmaufnahme (mit Audio)",
+      "bug": "Ich bin ein Bug!",
+      "stop": "Aufnahme stoppen"
+    }
+  },
+  "settings": {
+    "enableWindowsSelection": {
+      "label": "Fenstererkennung aktivieren",
+      "description": "Ob bei der Auswahl eines Bereichs Fenster erkannt werden sollen. Wird nur auf Hyprland unterstützt."
+    },
+    "enableCross": {
+      "label": "Fadenkreuz aktivieren",
+      "description": "Ob das Zielen mit Fadenkreuz aktiviert werden soll."
+    },
+    "screenshotEditor": {
+      "label": "Tool zum Bearbeiten von Screenshots",
+      "description": "Ein Tool zum Bearbeiten von Screenshots. Muss vorinstalliert werden."
+    }
+  }
+}

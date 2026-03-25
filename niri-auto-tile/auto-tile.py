@@ -10,6 +10,7 @@ Supports per-workspace max-visible settings via --workspace-config.
 import argparse
 import json
 import logging
+import os
 import signal
 import subprocess
 import threading
@@ -25,6 +26,7 @@ MAX_EVENTS_PER_SECOND = 20
 PER_WORKSPACE = False
 WORKSPACE_MAX_VISIBLE: dict[int, int] = {}
 ONLY_AT_MAX = True
+CONFIG_FILE: str = ""
 
 # ─── Logging ───
 logging.basicConfig(
@@ -426,17 +428,64 @@ def parse_args() -> argparse.Namespace:
         help='JSON map of workspace_id -> maxVisible, e.g. \'{"3":2,"1":4}\'',
     )
     parser.add_argument(
+        "--config-file", type=str, default=None,
+        help="path to runtime config file for hot-reload via SIGUSR1",
+    )
+    parser.add_argument(
         "--debug", action="store_true",
         help="enable debug logging",
     )
     return parser.parse_args()
 
 
+# ─── Hot Reload ───
+def reload_config() -> None:
+    """Reload configuration from CONFIG_FILE and trigger redistribution."""
+    global MAX_VISIBLE, PER_WORKSPACE, WORKSPACE_MAX_VISIBLE, ONLY_AT_MAX
+
+    if not CONFIG_FILE or not os.path.isfile(CONFIG_FILE):
+        log.warning("no config file to reload")
+        return
+
+    try:
+        with open(CONFIG_FILE) as f:
+            cfg = json.load(f)
+    except (OSError, json.JSONDecodeError) as exc:
+        log.warning("failed to read config file: %s", exc)
+        return
+
+    if not isinstance(cfg, dict):
+        return
+
+    old_max = MAX_VISIBLE
+    if "maxVisible" in cfg:
+        MAX_VISIBLE = max(1, int(cfg["maxVisible"]))
+    if "onlyAtMax" in cfg:
+        ONLY_AT_MAX = bool(cfg["onlyAtMax"])
+    if "perWorkspace" in cfg:
+        PER_WORKSPACE = bool(cfg["perWorkspace"])
+    if "workspaceMaxVisible" in cfg:
+        raw = cfg["workspaceMaxVisible"]
+        if isinstance(raw, dict):
+            WORKSPACE_MAX_VISIBLE = {
+                int(k): max(1, int(v))
+                for k, v in raw.items()
+                if str(k).isdigit() and str(v).isdigit()
+            }
+
+    log.info("config reloaded (max_visible=%d)", MAX_VISIBLE)
+
+    # Clear cached state so redistribution runs with new config
+    with _lock:
+        _prev_col_counts.clear()
+    redistribute()
+
+
 # ─── Main ───
 def main() -> None:
     """Main entry point with reconnection loop."""
     global MAX_VISIBLE, DEBOUNCE_SECONDS, MAX_EVENTS_PER_SECOND
-    global PER_WORKSPACE, WORKSPACE_MAX_VISIBLE, ONLY_AT_MAX
+    global PER_WORKSPACE, WORKSPACE_MAX_VISIBLE, ONLY_AT_MAX, CONFIG_FILE
 
     args = parse_args()
 
@@ -462,6 +511,8 @@ def main() -> None:
                 }
         except (json.JSONDecodeError, ValueError) as exc:
             log.warning("invalid --workspace-config: %s", exc)
+    if args.config_file:
+        CONFIG_FILE = args.config_file
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
@@ -473,6 +524,11 @@ def main() -> None:
             t.cancel()
         raise KeyboardInterrupt
     signal.signal(signal.SIGTERM, _shutdown)
+
+    # Handle SIGUSR1 for hot config reload (no restart needed)
+    def _reload(signum, frame):
+        reload_config()
+    signal.signal(signal.SIGUSR1, _reload)
 
     mode = "per-workspace" if PER_WORKSPACE else "global"
     ws_cfg = f", ws_config={WORKSPACE_MAX_VISIBLE}" if WORKSPACE_MAX_VISIBLE else ""

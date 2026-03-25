@@ -1,0 +1,250 @@
+{
+  "actions": {
+    "primary": {
+      "open_controls": "öffnet Bedienelemente",
+      "toggle_record": "schaltet die Aufzeichnung ein oder aus",
+      "toggle_stream": "schaltet den Stream ein oder aus"
+    }
+  },
+  "bar": {
+    "recording_label": "REC",
+    "replay_label": "RPL",
+    "streaming_label": "LIVE"
+  },
+  "control_center": {
+    "tooltip": {
+      "active": "OBS aktiv: {outputs}\nLinksklick {primaryAction}\nRechtsklick schaltet die Aufzeichnung ein oder aus\nMittelklick schaltet den Wiedergabepuffer ein oder aus",
+      "ready": "OBS ist bereit\nLinksklick {primaryAction}\nRechtsklick schaltet die Aufnahme ein oder aus\nMittelklick schaltet den Wiedergabepuffer ein oder aus",
+      "needs_restart": "OBS läuft, aber die WebSocket-Steuerung ist nicht verfügbar\nStarte OBS neu, um die Steuerung wiederherzustellen",
+      "offline": "OBS ist offline\nLinksklick {primaryAction}\nRechtsklick startet OBS"
+    }
+  },
+  "panel": {
+    "header": {
+      "title": "OBS Steuerung",
+      "active": "Aktive Ausgänge: {outputs}. Verwalte hier Aufnahme, Replay oder Streaming.",
+      "ready": "OBS ist verbunden und bereit für Aufnahme, Replay oder Streaming.",
+      "qt_websockets_missing": "Die Qt-WebSockets-Unterstützung ist in dieser QuickShell-Laufzeit nicht verfügbar. Installiere qt6-websockets, um die OBS-Steuerung zu aktivieren.",
+      "config_missing": "Die OBS-WebSocket-Konfiguration fehlt oder ist deaktiviert. Öffne OBS, aktiviere obs-websocket und versuche es erneut.",
+      "needs_restart": "OBS ist geöffnet, aber die WebSocket-Steuerung ist erst nach einem Neustart verfügbar.",
+      "offline": "OBS ist offline. Starte es hier und das Widget zeigt den Status an."
+    },
+    "status": {
+      "label": "Status",
+      "recording": "Aufnahme",
+      "replay": "Wiedergabepuffer",
+      "streaming": "Streaming",
+      "ready": "Bereit",
+      "qt_websockets_missing": "Qt WebSockets fehlen",
+      "config_missing": "OBS WebSocket nicht konfiguriert",
+      "needs_restart": "OBS benötigt Neustart",
+      "offline": "Offline",
+      "connected_hint": "Linksklick {primaryAction}. Rechtsklick schaltet die Aufnahme ein oder aus, Mittelklick schaltet Replay ein oder aus, und das Panel bietet Streaming- und Speicheraktionen.",
+      "qt_websockets_missing_hint": "In dieser QuickShell-Laufzeit fehlt die Qt-WebSockets-Unterstützung. Installiere qt6-websockets und starte Noctalia anschließend neu, um die OBS-Steuerung zu aktivieren.",
+      "config_missing_hint": "Die OBS-WebSocket-Konfiguration fehlt oder ist deaktiviert. Öffne OBS, aktiviere obs-websocket und aktualisiere das Plugin oder starte Noctalia neu.",
+      "disconnected_hint": "Die WebSocket-Steuerung ist derzeit nicht verfügbar. Starte OBS neu oder aktualisiere den Status, um die Schnellaktionen wiederherzustellen.",
+      "recording_elapsed": "Aufnahmezeit",
+      "streaming_elapsed": "Streamdauer",
+      "managed_hint": "Plugin-gesteuerte Starts können OBS schließen, sobald die letzte aktive Aufnahme, Wiedergabe oder der letzte Stream beendet ist."
+    },
+    "actions": {
+      "retry_connection": "Verbindung erneut versuchen",
+      "launch_obs": "OBS starten",
+      "stop_recording": "Aufnahme beenden",
+      "start_recording": "Aufnahme starten",
+      "stop_streaming": "Stream beenden",
+      "start_streaming": "Stream starten",
+      "stop_replay": "Replay beenden",
+      "start_replay": "Replay starten",
+      "save_replay": "Replay speichern",
+      "open_videos": "Videos öffnen",
+      "refresh_status": "Status aktualisieren",
+      "open_settings": "Einstellungen öffnen"
+    }
+  },
+  "settings": {
+    "header": {
+      "label": "OBS Steuerung",
+      "description": "Lege fest, wie OBS in der Bar, im Kontrollzentrum und in den Schnellaktionen erscheint."
+    },
+    "sections": {
+      "behavior": {
+        "label": "Schnellaktionen",
+        "description": "Lege fest, was Klicks tun und wie OBS geöffnet wird, wenn das Plugin es starten soll."
+      },
+      "bar": {
+        "label": "Bar",
+        "description": "Lass Immer anzeigen aktiviert, wenn die OBS-Schaltfläche immer an derselben Stelle bleiben soll."
+      },
+      "control_center": {
+        "label": "Kontrollzentrum",
+        "description": "Lege fest, wann die Verknüpfung erscheinen soll. Deaktiviere Bereit, wenn sie nur bei aktiven Sitzungen sichtbar sein soll."
+      },
+      "videos": {
+        "label": "Videos & Automatisierung",
+        "description": "Lege fest, wo Aufnahmen geöffnet werden und was das Plugin nach dem Beenden tun soll."
+      }
+    },
+    "runtime": {
+      "qt_websockets_missing_title": "Qt WebSockets fehlen",
+      "qt_websockets_missing": "Installiere qt6-websockets und starte Noctalia neu, um die OBS-Steuerung zu aktivieren.",
+      "websocket_config_missing_title": "OBS WebSocket nicht konfiguriert",
+      "websocket_config_missing": "Aktiviere obs-websocket in OBS und aktualisiere das Plugin oder starte Noctalia neu."
+    },
+    "poll_interval": {
+      "label": "Aktualisierungsintervall",
+      "description": "Wie oft der OBS-Status in Millisekunden aktualisiert wird."
+    },
+    "left_click_action": {
+      "label": "Linksklick",
+      "description": "Lege die Hauptaktion für die Schaltfläche in Bar und Kontrollzentrum fest.",
+      "options": {
+        "open_controls": "Bedienelemente öffnen",
+        "toggle_recording": "Aufnahme ein-/ausschalten",
+        "toggle_streaming": "Streaming ein-/ausschalten"
+      }
+    },
+    "launch_behavior": {
+      "label": "OBS starten",
+      "description": "Wird nur für die manuelle Aktion OBS starten verwendet. Automatische Starts bleiben in die Taskleiste minimiert.",
+      "options": {
+        "normal": "Normales Fenster",
+        "minimized_to_tray": "In die Taskleiste minimieren"
+      }
+    },
+    "bar_label_mode": {
+      "label": "Label-Stil",
+      "description": "Lege fest, wie aktive OBS-Zustände in der Bar erscheinen.",
+      "options": {
+        "icon_only": "Nur Symbol",
+        "short_label": "Kurze Labels",
+        "duration": "Zeitangaben"
+      }
+    },
+    "videos_path": {
+      "label": "Video-Ordner",
+      "description": "Leer lassen, um den Standardordner Videos zu verwenden."
+    },
+    "videos_opener": {
+      "label": "Ordner-Öffner",
+      "description": "Befehl zum Öffnen des Video-Ordners, zum Beispiel xdg-open oder dein Dateimanager."
+    },
+    "auto_close_managed": {
+      "label": "OBS nach Plugin-Starts schließen",
+      "description": "Wenn das Plugin OBS für dich gestartet hat, wird OBS nach dem letzten aktiven Ausgang wieder geschlossen."
+    },
+    "open_videos_after_stop": {
+      "label": "Videos nach dem Speichern anbieten",
+      "description": "Zeigt nach dem Beenden einer Aufnahme oder dem Speichern eines Replays eine Aktion zum Öffnen des Ordners an."
+    },
+    "show_elapsed_in_bar": {
+      "label": "Verstrichene Zeit anzeigen",
+      "description": "Zeigt die Zeit in der Bar an, wenn der Label-Stil auf Zeitangaben steht."
+    },
+    "show_bar_recording": {
+      "label": "Während der Aufnahme",
+      "description": "Die Schaltfläche in der Bar während der Aufnahme anzeigen."
+    },
+    "show_bar_replay": {
+      "label": "Während Replay aktiv ist",
+      "description": "Die Schaltfläche in der Bar anzeigen, wenn nur der Wiedergabepuffer läuft."
+    },
+    "show_bar_streaming": {
+      "label": "Während des Streamings",
+      "description": "Die Schaltfläche in der Bar während des Streamings anzeigen."
+    },
+    "always_show_in_bar": {
+      "label": "Immer in der Bar anzeigen",
+      "description": "Die Schaltfläche in der Bar auch im Leerlauf oder offline sichtbar lassen, damit ihre Position stabil bleibt."
+    },
+    "show_control_center_recording": {
+      "label": "Während der Aufnahme",
+      "description": "Die Verknüpfung im Kontrollzentrum während der Aufnahme anzeigen."
+    },
+    "show_control_center_replay": {
+      "label": "Während Replay aktiv ist",
+      "description": "Die Verknüpfung im Kontrollzentrum anzeigen, solange der Wiedergabepuffer aktiv ist."
+    },
+    "show_control_center_streaming": {
+      "label": "Während des Streamings",
+      "description": "Die Verknüpfung im Kontrollzentrum während des Streamings anzeigen."
+    },
+    "show_control_center_ready": {
+      "label": "Wenn OBS bereit ist",
+      "description": "Die Verknüpfung sichtbar lassen, wenn OBS verbunden, aber inaktiv ist."
+    }
+  },
+  "toast": {
+    "actions": {
+      "open_videos": "Videos öffnen"
+    },
+    "record_started": {
+      "title": "OBS-Aufnahme gestartet",
+      "body": "Die lokale Aufnahme läuft."
+    },
+    "record_started_launch": {
+      "title": "OBS-Aufnahme gestartet",
+      "body": "OBS wurde automatisch für die Aufnahme gestartet."
+    },
+    "record_stopped": {
+      "title": "OBS-Aufnahme beendet",
+      "body": "Die Aufnahme wurde im Ordner Videos gespeichert."
+    },
+    "record_stopped_autoclose": {
+      "title": "OBS-Aufnahme beendet",
+      "body": "Die Aufnahme wurde im Ordner Videos gespeichert. OBS wurde geschlossen."
+    },
+    "stream_started": {
+      "title": "OBS-Stream gestartet",
+      "body": "Der Livestream ist aktiv."
+    },
+    "stream_started_launch": {
+      "title": "OBS-Stream gestartet",
+      "body": "OBS wurde automatisch für das Streaming gestartet."
+    },
+    "stream_stopped": {
+      "title": "OBS-Stream beendet",
+      "body": "Der Livestream wurde beendet."
+    },
+    "stream_stopped_autoclose": {
+      "title": "OBS-Stream beendet",
+      "body": "Der Livestream wurde beendet. OBS wurde geschlossen."
+    },
+    "replay_started": {
+      "title": "OBS-Replay-Puffer gestartet",
+      "body": "Der Replay-Puffer ist aktiv."
+    },
+    "replay_started_launch": {
+      "title": "OBS-Replay-Puffer gestartet",
+      "body": "OBS wurde automatisch für den Replay-Puffer gestartet."
+    },
+    "replay_stopped": {
+      "title": "OBS-Replay-Puffer gestoppt",
+      "body": "Instant Replay ist ausgeschaltet."
+    },
+    "replay_stopped_autoclose": {
+      "title": "OBS-Replay-Puffer gestoppt",
+      "body": "Instant Replay ist ausgeschaltet. OBS wurde geschlossen."
+    },
+    "replay_saved": {
+      "title": "OBS-Replay gespeichert",
+      "body": "Der letzte Replay-Puffer wurde unter Videos gespeichert."
+    },
+    "offline": {
+      "title": "OBS ist offline",
+      "body": "Starte OBS, um die Aufnahmesteuerung zu nutzen."
+    },
+    "qt_websockets_missing": {
+      "title": "Qt-WebSockets-Unterstützung fehlt",
+      "body": "Die Qt-WebSockets-Unterstützung ist in dieser QuickShell-Laufzeit nicht verfügbar. Installiere qt6-websockets, um die OBS-Steuerung zu aktivieren."
+    },
+    "websocket_config_missing": {
+      "title": "OBS-WebSocket nicht konfiguriert",
+      "body": "Die OBS-WebSocket-Konfiguration fehlt oder ist deaktiviert. Öffne OBS, aktiviere obs-websocket und versuche es erneut."
+    },
+    "error": {
+      "title": "OBS-Steuerung fehlgeschlagen",
+      "body": "Überprüfe die OBS-WebSocket-Ausgabe."
+    }
+  }
+}

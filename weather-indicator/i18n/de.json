@@ -1,0 +1,41 @@
+{
+  "settings": {
+    "showTempValue": {
+      "desc": "Zeige die aktuelle Temperatur neben der Wetterlage an.",
+      "label": "Temperaturwert anzeigen"
+    },
+    "showTempUnit": {
+      "desc": "Zeige °C oder °F an, um die Temperatureinheit bei Verwendung einer horizontalen Bar anzugeben.",
+      "label": "Temperatureinheit im Querformat anzeigen"
+    },
+    "showConditionIcon": {
+      "desc": "Füge das visuelle Wettersymbol in das Widget ein.",
+      "label": "Zustandssymbol anzeigen"
+    },
+    "tooltipOption": {
+      "desc": "Wähle aus, was im Tooltip angezeigt werden soll.",
+      "label": "Tooltip Optionen"
+    },
+    "customColor": {
+      "desc": "Wähle die gewünschte Farbe für das Symbol und den Text aus.",
+      "label": "Benutzerdefinierte Farbe"
+    },
+    "mode": {
+      "disable": "Tooltip deaktivieren",
+      "highlow": "Höchst-/Tiefsttemperaturen",
+      "sunrise": "Sonnenauf- und -untergangszeiten",
+      "everything": "Alle anzeigen"
+    }
+  },
+  "tooltips": {
+    "current": "Aktuell",
+    "high": "Hoch",
+    "low": "Niedrig",
+    "sunrise": "Sonnenaufgang",
+    "sunset": "Sonnenuntergang"
+  },
+  "menu": {
+    "openPanel": "Wetter anzeigen",
+    "settings": "Widget Einstellungen"
+  }
+}

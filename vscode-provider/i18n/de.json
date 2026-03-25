@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "fork": {
+      "label": "VS Code fork",
+      "description": "Welchen Fork von VS Code verwendest du"
+    },
+    "includeInSearch": {
+      "label": "In die Hauptsuche einbeziehen",
+      "description": "Ob VS Code Arbeitsbereiche in die Suchergebnisse des Hauptstartprogramms aufgenommen werden sollen"
+    },
+    "otherCommand": {
+      "label": "Befehl",
+      "description": "Der Befehl zum Starten dieses Forks von VS Code"
+    },
+    "otherConfigName": {
+      "label": "Name der Konfiguration",
+      "description": "Der Name des Konfigurationsverzeichnisses dieses Forks in ~/.config"
+    }
+  },
+  "launcher": {
+    "title": "VS Code Arbeitsbereiche",
+    "description": "VS Code Arbeitsbereiche suchen und öffnen",
+    "loading": {
+      "title": "Wird geladen...",
+      "description": "Sitzungen werden geladen..."
+    },
+    "error": {
+      "title": "VS Code Arbeitsbereiche wurden nicht geladen",
+      "description": "Überprüfe das Protokoll auf Fehlermeldungen"
+    }
+  }
+}

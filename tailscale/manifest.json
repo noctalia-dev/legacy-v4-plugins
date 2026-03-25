@@ -1,7 +1,7 @@
 {
   "id": "tailscale",
   "name": "Tailscale",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "minNoctaliaVersion": "4.0.0",
   "author": "nineluj",
   "license": "MIT",
@@ -28,6 +28,7 @@
       "showIpAddress": true,
       "showPeerCount": true,
       "hideDisconnected": false,
+      "hideMullvadExitNodes": true,
       "terminalCommand": "",
       "pingCount": 5,
       "defaultPeerAction": "copy-ip"

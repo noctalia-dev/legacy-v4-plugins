@@ -301,7 +301,7 @@ ColumnLayout {
     label: pluginApi?.tr("settings.model") || "Model"
     description: pluginApi?.tr("settings.modelDesc") || "Specify the AI model to use (leave blank for default)"
     text: root.editModel
-    onEditingFinished: function () {
+    onTextChanged: {
       var modelText = (text || "").trim();
       var defaultModel = providers[root.editProvider]?.defaultModel || "";
       // Only save custom values, not empty or default
@@ -342,7 +342,7 @@ ColumnLayout {
     text: root.apiKeyManagedByEnv ? "" : root.editApiKey
     enabled: !root.apiKeyManagedByEnv
     inputMethodHints: Qt.ImhHiddenText
-    onEditingFinished: function () {
+    onTextChanged: {
       if (!root.apiKeyManagedByEnv) {
         root.editApiKeys = Object.assign({}, root.editApiKeys, {
           [root.editProvider]: text

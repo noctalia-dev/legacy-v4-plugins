@@ -40,33 +40,26 @@ function pickRandomColor() {
 function formatDate(date, pluginApi) {
     if (!date) return "";
 
-    const t = (key, fallback) => {
-        if (pluginApi && pluginApi.tr) {
-            const r = pluginApi.tr(key);
-            if (r && r !== key) return r;
-        }
-        return fallback;
-    };
-
+    const d = (date instanceof Date) ? date : new Date(date);
     const now = new Date();
-    const d = new Date(date);
     const diffMs = now.getTime() - d.getTime();
     const diffMins = Math.floor(diffMs / 60000);
 
-    if (diffMins < 1) return t("time.just-now", "Just now");
-    if (diffMins < 60) return t("time.minutes-ago", "{n}m ago").replace("{n}", diffMins);
+    if (diffMins < 1) return (pluginApi?.tr("time.just-now") || "");
+    if (diffMins < 60) return (pluginApi?.tr("time.minutes-ago") || "").replace("{n}", diffMins);
 
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return t("time.hours-ago", "{n}h ago").replace("{n}", diffHours);
+    if (diffHours < 24) return (pluginApi?.tr("time.hours-ago") || "").replace("{n}", diffHours);
 
     const diffDays = Math.floor(diffHours / 24);
-    if (diffDays < 7) return t("time.days-ago", "{n}d ago").replace("{n}", diffDays);
+    if (diffDays < 7) return (pluginApi?.tr("time.days-ago") || "").replace("{n}", diffDays);
 
-    const mo = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
+    const year = d.getFullYear();
+    const mo = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
 
-    if (d.getFullYear() === now.getFullYear()) {
+    if (year === now.getFullYear()) {
         return `${mo}/${day}`;
     }
-    return `${d.getFullYear()}/${mo}/${day}`;
+    return `${year}/${mo}/${day}`;
 }

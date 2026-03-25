@@ -6,9 +6,9 @@
       "weak": "Schwach",
       "fair": "Okay",
       "good": "Gut",
-      "excellent": "Ausgezeichnet",
-      "unknown": "Unbekannt"
+      "excellent": "Ausgezeichnet"
     },
+    "unknown": "Unbekannt",
     "card": {
       "battery": "Akkustand",
       "network": "Netzwerk",
@@ -18,6 +18,7 @@
     "other-devices": "Andere Geräte",
     "send-file-picker": "Datei zum Senden an Gerät auswählen",
     "send-file": "Datei senden",
+    "browse-files": "Dateien auf Gerät durchsuchen",
     "find-device": "Mein Gerät suchen",
     "pair": "Mit Gerät koppeln",
     "unpair": "Gerät entkoppeln",
@@ -26,6 +27,10 @@
       "unavailable-title": "kdeconnectd scheint nicht zu laufen!",
       "unavailable-desc": "Sicherstellen, dass die KDE Connect-Anwendung auf Ihrem System installiert ist und dass der kdeconnectd-Daemon gestartet wurde",
       "device-unavailable": "Das Gerät ist derzeit nicht verfügbar."
+    },
+    "busctl-error": {
+      "unavailable-title": "busctl kann nicht gefunden werden!",
+      "unavailable-desc": "Stelle sicher, dass busctl (teil von systemd) auf deinem System installiert ist"
     }
   },
   "bar": {
@@ -39,6 +44,12 @@
       "unavailable": "Nicht verfügbar",
       "no-device": "Kein Gerät",
       "not-paired": "Nicht gekoppelt"
+    }
+  },
+  "settings": {
+    "no-device-connected-hide": {
+      "label": "Verstecken wenn nicht verbunden",
+      "description": "Verstecke den Knopf in der Leiste, wenn kein Gerät verbunden ist"
     }
   }
 }

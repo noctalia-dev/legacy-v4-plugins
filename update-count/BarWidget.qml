@@ -82,12 +82,8 @@ Item {
   MouseArea {
     anchors.fill: parent
     hoverEnabled: true
+    acceptedButtons: Qt.LeftButton | Qt.RightButton
     cursorShape: root.pluginApi?.mainInstance?.updateCount > 0 ? Qt.PointingHandCursor : Qt.ArrowCursor
-
-    onClicked: {
-      if (root.pluginApi?.mainInstance?.updateCount > 0)
-        root.pluginApi?.mainInstance?.startDoSystemUpdate();
-    }
 
     onEntered: {
       root.hovered = true;
@@ -97,6 +93,44 @@ Item {
     onExited: {
       root.hovered = false;
       TooltipService.hide();
+    }
+
+    onPressed: mouse => {
+      TooltipService.hide();
+
+      if (mouse.button == Qt.LeftButton && root.pluginApi?.mainInstance?.updateCount > 0)
+        root.pluginApi?.mainInstance?.startDoSystemUpdate();
+      else if (mouse.button == Qt.RightButton)
+        PanelService.showContextMenu(contextMenu, root, screen);
+    }
+
+    NPopupContextMenu {
+      id: contextMenu
+
+      model: [
+        {
+          "label": "Update",
+          "action": "run-update-cmd",
+          "icon": "arrow-up-from-arc",
+          "enabled": root.pluginApi?.mainInstance?.updateCount > 0
+        },
+        {
+          "label": I18n.tr("actions.widget-settings"),
+          "action": "widget-settings",
+          "icon": "settings"
+        },
+      ]
+
+      onTriggered: action => {
+        contextMenu.close();
+        PanelService.closeContextMenu(screen);
+
+        if (action === "run-update-cmd")
+          root.pluginApi?.mainInstance?.startDoSystemUpdate();
+        else if (action === "widget-settings") {
+          BarService.openPluginSettings(screen, pluginApi.manifest);
+        }
+      }
     }
   }
 

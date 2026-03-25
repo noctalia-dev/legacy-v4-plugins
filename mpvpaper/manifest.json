@@ -3,7 +3,7 @@
   "name": "Mpvpaper",
   "version": "1.6.2",
   "minNoctaliaVersion": "3.6.0",
-  "author": "Spyridon Siarapis",
+  "author": "spiros132",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "A plugin that allows having video wallpapers using mpvpaper.",

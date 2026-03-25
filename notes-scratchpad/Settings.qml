@@ -196,7 +196,7 @@ ColumnLayout {
         id: commandText
         anchors.fill: parent
         anchors.margins: Style.marginM
-        text: "qs -c noctalia-shell ipc call plugin togglePanel notes-scratchpad"
+        text: "qs -c noctalia-shell ipc call plugin:notes-scratchpad togglePanel"
         font.pointSize: Style.fontSizeS
         font.family: Settings.data.ui.fontFixed
         color: Color.mPrimary

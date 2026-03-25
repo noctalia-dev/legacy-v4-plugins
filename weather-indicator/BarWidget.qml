@@ -23,11 +23,11 @@ Item {
    property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
 
   // Get settings or use false
-  readonly property string customColor: cfg.customColor ?? defaults.customColor
-  readonly property bool showTempValue: cfg.showTempValue ?? defaults.showTempValue
-  readonly property bool showConditionIcon: cfg.showConditionIcon ?? defaults.customColor
-  readonly property bool showTempUnit: cfg.showTempUnit ?? defaults.showTempUnit
-  readonly property string tooltipOption: cfg.tooltipOption || defaults.tooltipOption
+  readonly property string customColor: cfg.customColor ?? defaults.customColor ?? "none"
+  readonly property bool showTempValue: cfg.showTempValue ?? defaults.showTempValue ?? false
+  readonly property bool showConditionIcon: cfg.showConditionIcon ?? defaults.customColor ?? false
+  readonly property bool showTempUnit: cfg.showTempUnit ?? defaults.showTempUnit ?? false
+  readonly property string tooltipOption: cfg.tooltipOption ?? defaults.tooltipOption ?? "everything"
 
   // Bar positioning properties
   readonly property string screenName: screen ? screen.name : ""

@@ -19,7 +19,7 @@ Item {
   readonly property bool pillDirection: BarService.getPillDirection(root)
 
   readonly property var mainInstance: pluginApi?.mainInstance
-  readonly property bool isActive: mainInstance && (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0)
+  readonly property bool isActive: mainInstance && (mainInstance.cdRunning || mainInstance.swRunning || mainInstance.swElapsedSeconds > 0 || mainInstance.cdRemainingSeconds > 0 || mainInstance.cdSoundPlaying)
 
   property var cfg: pluginApi?.pluginSettings || ({})
   property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
@@ -87,7 +87,7 @@ Item {
       }
 
       NText {
-        visible: !isVertical && mainInstance && (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0)
+        visible: !isVertical && mainInstance && (mainInstance.cdRunning || mainInstance.swRunning || mainInstance.swElapsedSeconds > 0 || mainInstance.cdRemainingSeconds > 0 || mainInstance.cdSoundPlaying)
         family: Settings.data.ui.fontFixed
         pointSize: root.barFontSize
         font.weight: Style.fontWeightBold
@@ -111,7 +111,10 @@ Item {
 
       if (mainInstance) {
         // Pause / Resume & Reset
-        if (mainInstance.timerRunning || mainInstance.timerElapsedSeconds > 0 || mainInstance.timerRemainingSeconds > 0) {
+        const modeActive = mainInstance.timerStopwatchMode
+          ? (mainInstance.swRunning || mainInstance.swElapsedSeconds > 0)
+          : (mainInstance.cdRunning || mainInstance.cdRemainingSeconds > 0 || mainInstance.cdSoundPlaying);
+        if (modeActive) {
           items.push({
             "label": mainInstance.timerRunning ? pluginApi.tr("panel.pause") : pluginApi.tr("panel.resume"),
             "action": "toggle",

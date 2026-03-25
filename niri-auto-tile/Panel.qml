@@ -97,7 +97,7 @@ Item {
                         }
 
                         NText {
-                            text: pluginApi?.tr("panel.title") ?? "Column Layout"
+                            text: pluginApi?.tr("panel.title")
                             pointSize: Style.fontSizeL
                             font.bold: true
                             color: Color.mOnSurface
@@ -135,12 +135,12 @@ Item {
 
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
-                                Layout.minimumHeight: 50
+                                Layout.minimumHeight: Math.round(50 * Style.uiScaleRatio)
 
                                 radius: Style.iRadiusM
                                 color: isSelected ? Qt.alpha(Color.mPrimary, 0.15) : Color.mSurfaceVariant
                                 border.color: isSelected ? Color.mPrimary : (optionMouse.containsMouse ? Color.mOutline : "transparent")
-                                border.width: isSelected ? 2 : 1
+                                border.width: isSelected ? Style.borderM : Style.borderS
 
                                 Behavior on color { ColorAnimation { duration: Style.animationFast } }
                                 Behavior on border.color { ColorAnimation { duration: Style.animationFast } }
@@ -157,18 +157,18 @@ Item {
 
                                         Row {
                                             anchors.centerIn: parent
-                                            spacing: 3
+                                            spacing: Style.marginXXS
 
                                             Repeater {
                                                 model: layoutOption.columnCount
 
                                                 Rectangle {
                                                     width: {
-                                                        const available = layoutOption.width - Style.marginS * 2 - (layoutOption.columnCount - 1) * 3;
-                                                        return Math.max(8, available / layoutOption.columnCount);
+                                                        const available = layoutOption.width - Style.marginS * 2 - (layoutOption.columnCount - 1) * Style.marginXXS;
+                                                        return Math.max(Math.round(8 * Style.uiScaleRatio), available / layoutOption.columnCount);
                                                     }
                                                     height: layoutOption.height * 0.45
-                                                    radius: 3
+                                                    radius: Style.iRadiusXXXS
                                                     color: layoutOption.isSelected
                                                         ? Color.mPrimary
                                                         : (optionMouse.containsMouse ? Qt.alpha(Color.mOnSurface, 0.4) : Qt.alpha(Color.mOnSurface, 0.25))
@@ -183,8 +183,8 @@ Item {
                                     NText {
                                         Layout.alignment: Qt.AlignHCenter
                                         text: layoutOption.columnCount === 1
-                                            ? (pluginApi?.tr("panel.single") ?? "Single")
-                                            : (pluginApi?.tr("panel.columns") ?? "%1 Columns").arg(layoutOption.columnCount)
+                                            ? pluginApi?.tr("panel.single")
+                                            : pluginApi?.tr("panel.columns", {"count": layoutOption.columnCount})
                                         pointSize: Style.fontSizeS
                                         font.bold: layoutOption.isSelected
                                         color: layoutOption.isSelected ? Color.mPrimary : Color.mOnSurface
@@ -211,9 +211,9 @@ Item {
                         spacing: Style.marginS
 
                         Rectangle {
-                            width: 8
-                            height: 8
-                            radius: 4
+                            width: Math.round(8 * Style.uiScaleRatio)
+                            height: Math.round(8 * Style.uiScaleRatio)
+                            radius: Math.round(4 * Style.uiScaleRatio)
                             color: {
                                 if (!root.isEnabled) return Color.mOutline;
                                 if (root.isRunning) return Color.mPrimary;
@@ -223,15 +223,14 @@ Item {
 
                         NText {
                             text: {
-                                if (!root.isEnabled) return pluginApi?.tr("panel.status-disabled") ?? "Disabled";
+                                if (!root.isEnabled) return pluginApi?.tr("panel.status-disabled");
                                 if (root.isRunning) {
-                                    const label = (pluginApi?.tr("panel.status-active") ?? "Active — %1 columns").arg(root.currentMaxVisible);
                                     if (root.perWorkspace && root.currentWorkspaceId > 0) {
-                                        return label + " (WS " + root.currentWorkspaceId + ")";
+                                        return pluginApi?.tr("panel.status-active-ws", {"count": root.currentMaxVisible, "ws": root.currentWorkspaceId});
                                     }
-                                    return label;
+                                    return pluginApi?.tr("panel.status-active", {"count": root.currentMaxVisible});
                                 }
-                                return pluginApi?.tr("panel.status-starting") ?? "Starting...";
+                                return pluginApi?.tr("panel.status-starting");
                             }
                             pointSize: Style.fontSizeS
                             color: Qt.alpha(Color.mOnSurface, 0.6)

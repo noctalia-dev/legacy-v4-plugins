@@ -1,0 +1,51 @@
+{
+  "settings": {
+    "zoom": {
+      "label": "Wallpaper Zoom",
+      "desc": "Scale of the wallpaper to provide room for parallax movement"
+    },
+    "direction": {
+      "label": "Parallax Direction",
+      "desc": "Which direction the wallpaper shifts when changing workspaces",
+      "none": "None",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical",
+      "both": "Horizontal + Vertical"
+    },
+    "horizontal": {
+      "title": "Horizontal Parallax",
+      "amount": "Parallax Amount",
+      "duration": "Animation Duration"
+    },
+    "vertical": {
+      "title": "Vertical Parallax",
+      "amount": "Parallax Amount",
+      "duration": "Animation Duration"
+    },
+    "invert": {
+      "label": "Invert Direction",
+      "desc": "Move the wallpaper in the same direction as workspace changes"
+    },
+    "autoZoom": {
+      "label": "Auto Zoom",
+      "desc": "Automatically and progressively zoom to prevent background layer from showing"
+    },
+    "easing": {
+      "label": "Easing Curve",
+      "desc": "The mathematical curve used for parallax animations",
+      "linear": "Linear",
+      "inQuad": "Ease In Quad",
+      "outQuad": "Ease Out Quad",
+      "inOutQuad": "Ease In Out Quad",
+      "inCubic": "Ease In Cubic",
+      "outCubic": "Ease Out Cubic",
+      "inOutCubic": "Ease In Out Cubic",
+      "inQuart": "Ease In Quart",
+      "outQuart": "Ease Out Quart",
+      "inOutQuart": "Ease In Out Quart",
+      "inExpo": "Ease In Exponential",
+      "outExpo": "Ease Out Exponential",
+      "inOutExpo": "Ease In Out Exponential"
+    }
+  }
+}

@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Check i18n translation coverage script
-# Identifies plugins that have English strings (en.json) but are missing the target language translation.
+# Check i18n translation coverage and line count parity script
+# 1. Identifies plugins that have English strings (en.json) but are missing the target language translation.
+# 2. Lists plugins where target translation has fewer lines than en.json.
 
 # ANSI Color Codes
 RED='\033[0;31m'
@@ -24,17 +25,19 @@ fi
 total_plugins=0
 present_count=0
 missing_count=0
+mismatch_count=0
 missing_plugins=()
-present_plugins=()
+mismatch_plugins=()
 
 # Find all en.json files inside i18n directories
 # We assume the structure is: ./PluginName/i18n/en.json
 # We use 'find' for compatibility
 while IFS= read -r en_file; do
     # Extract plugin directory path (remove /i18n/en.json)
-    plugin_dir=$(dirname $(dirname "$en_file"))
+    i18n_dir=$(dirname "$en_file")
+    plugin_dir=$(dirname "$i18n_dir")
     plugin_name=$(basename "$plugin_dir")
-    
+
     # Construct target translation file path
     target_file="${plugin_dir}/i18n/${TARGET_LANG}.json"
     
@@ -42,8 +45,16 @@ while IFS= read -r en_file; do
     
     if [ -f "$target_file" ]; then
         ((present_count++))
-        present_plugins+=("$plugin_name")
         echo -e "${GREEN}✓${NC} ${plugin_name}"
+
+        # Check line count parity
+        en_lines=$(wc -l < "$en_file")
+        target_lines=$(wc -l < "$target_file")
+        diff=$(( target_lines - en_lines))
+        if [ "$diff" -ne 0 ]; then
+          ((mismatch_count++))
+          mismatch_plugins+=("$plugin_name (diff: ${diff})")
+        fi
     else
         ((missing_count++))
         missing_plugins+=("$plugin_name")
@@ -63,8 +74,8 @@ fi
 echo -e "\n${BLUE}=== Statistics ===${NC}"
 echo "Total plugins (with i18n): ${total_plugins}"
 echo -e "${GREEN}Translated: ${present_count}${NC}"
-echo -e "${RED}Missing: ${missing_count}${NC}"
-echo "Coverage: ${coverage}%"
+echo -e "${RED}Missing:    ${missing_count}${NC}"
+echo "Coverage:   ${coverage}%"
 
 # List missing plugins if any
 if [ "$missing_count" -gt 0 ]; then
@@ -74,8 +85,17 @@ if [ "$missing_count" -gt 0 ]; then
     done
 fi
 
-# Exit with error if missing translations found
+# List mismatches if any
+if [ "$mismatch_count" -gt 0 ]; then
+  echo -e "\n${YELLOW}=== Plugins with line count mismatch (${mismatch_count}) ===${NC}"
+  for plugin in "${mismatch_plugins[@]}"; do
+    echo " - ${plugin}"
+  done
+fi
+
+# Exit with error if any issues found
 if [ "$missing_count" -eq 0 ]; then
+  echo -e "\n${GREEN}All translations are present and in sync!${NC}"
     exit 0
 else
     exit 1

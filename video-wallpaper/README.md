@@ -149,5 +149,5 @@ If you want your monitors to have different wallpaper configurations, go to the 
 
 ## Acknowledgments
 
-- **Author**: Spyridon Siarapis <spiros.siarapis@gmail.com>
+- **Author**: spiros132 <spiros.siarapis@gmail.com>
 - Thank you to the Noctalia Shell team for such an amazing desktop environment!

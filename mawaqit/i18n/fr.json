@@ -20,14 +20,20 @@
     "close": "Fermer",
     "configure": "Configurez votre ville dans les paramètres",
     "now": "Maintenant",
-    "iftar": "Iftar",
+    "jumuah": "Jumu'ah",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
     "imsak": "Imsak",
     "fajr": "Fajr",
     "sunrise": "Lever du soleil",
     "dhuhr": "Dhuhr",
     "asr": "Asr",
     "maghrib": "Maghrib",
-    "isha": "Isha"
+    "isha": "Isha",
+    "tab": {
+      "prayers": "Temps des Prières",
+      "calendar": "Calendrier"
+    }
   },
   "settings": {
     "location": {
@@ -44,14 +50,14 @@
     },
     "method": {
       "label": "Méthode de calcul",
-      "desc": "Détermine comment les temps de prières sont calculés. Choisissez l'autorité suivie dans votre région."
+      "desc": "Détermine comment les temps de prières sont calculés."
     },
     "display": {
       "header": "Affichage"
     },
     "showCountdown": {
       "label": "Afficher le compte à rebours",
-      "desc": "Afficher un compte à rebours en direct dans la barre au lieu de l'heure statique."
+      "desc": "Afficher un compte à rebours en direct dans la barre."
     },
     "notifications": {
       "header": "Notifications",
@@ -83,15 +89,27 @@
     },
     "hijriDayOffset": {
       "label": "Ajustement du jour Hijri",
-      "desc": "Décaler le jour Hijri affiché si la date de l'API ne correspond pas à l'observation locale de la lune."
+      "desc": "Décaler le jour Hijri affiché si la date de l'API ne correspond pas."
     },
     "school": {
       "label": "École de calcul de l'Asr",
-      "desc": "Shafi/Maliki/Hanbali utilise le facteur d'ombre 1. Hanafi utilise le facteur 2, donnant une heure d'Asr plus tardive."
+      "desc": "Shafi/Maliki/Hanbali utilise le facteur d'ombre 1. Hanafi utilise le facteur 2."
+    },
+    "calendar": {
+      "header": "Calendrier"
+    },
+    "weekStartDay": {
+      "label": "Premier jour de la semaine",
+      "desc": "Choisissez le jour de début de la semaine."
     }
   },
   "error": {
-    "network": "La requête réseau a échoué. Vérifiez votre connexion internet.",
+    "network": "La requête réseau a échoué.",
     "generic": "Échec du chargement des temps de prière."
+  },
+  "calendar": {
+    "today": "Retour à aujourd'hui",
+    "refresh": "Rafraîchir le mois",
+    "approximate": "Estimation mathématique — non vérifiée par observation"
   }
 }

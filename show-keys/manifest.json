@@ -1,0 +1,31 @@
+{
+    "id": "show-keys",
+    "name": "Show Keys",
+    "version": "1.0.1",
+    "minNoctaliaVersion": "3.6.0",
+    "author": "onez3r0",
+    "license": "MIT",
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+    "description": "Floating OSD that displays keyboard input in real-time via evtest.",
+    "tags": [
+        "Indicator",
+        "System"
+    ],
+    "entryPoints": {
+        "main": "Main.qml",
+        "settings": "Settings.qml"
+    },
+    "dependencies": {
+        "plugins": []
+    },
+    "metadata": {
+        "defaultSettings": {
+            "captureEnabled": true,
+            "evtestDevice": "/dev/input/event3",
+            "position": "bottom",
+            "marginPx": 60,
+            "hideDelaySec": 2,
+            "disabledScreens": []
+        }
+    }
+}

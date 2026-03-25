@@ -30,6 +30,8 @@ Item {
     property var modelUsage: ({})
 
     property string tierLabel: ""
+    property string authHelpText: "Run `codex` to authenticate."
+    property bool hasLocalStats: true
 
     property string configModel: ""
     property var providerSettings: ({})

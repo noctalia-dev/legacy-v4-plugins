@@ -1,0 +1,39 @@
+{
+  "panel": {
+    "title": "Disposition des colonnes",
+    "single": "Une",
+    "columns": "{count} Colonnes",
+    "status-active": "Actif — {count} colonnes",
+    "status-active-ws": "Actif — {count} colonnes (WS {ws})",
+    "status-starting": "Demarrage...",
+    "status-disabled": "Desactive"
+  },
+  "bar": {
+    "running": "Auto-Tile: en cours ({count} colonnes)",
+    "starting": "Auto-Tile: demarrage...",
+    "disabled": "Auto-Tile: desactive",
+    "enable": "Activer Auto-Tile",
+    "disable": "Desactiver Auto-Tile",
+    "settings": "Parametres"
+  },
+  "settings": {
+    "enabled": "Activer Auto-Tile",
+    "enabled-desc": "Redistribuer automatiquement les largeurs de colonnes a l'ouverture ou fermeture de fenetres",
+    "per-workspace": "Par espace de travail",
+    "per-workspace-desc": "Chaque espace de travail a sa propre configuration de colonnes",
+    "only-at-max": "Uniquement au maximum",
+    "only-at-max-desc": "Redistribuer uniquement lorsque le nombre de colonnes atteint le maximum",
+    "max-visible": "Colonnes visibles: {value}",
+    "max-visible-desc": "Nombre maximal de colonnes visibles simultanement a l'ecran",
+    "debounce": "Delai de debounce: {value}ms",
+    "debounce-desc": "Delai avant redistribution pour regrouper les evenements rapides",
+    "rate-limit": "Limite d'evenements: {value}/s",
+    "rate-limit-desc": "Nombre maximal d'evenements traites par seconde",
+    "status-running": "Daemon en cours d'execution",
+    "status-error": "Erreur du daemon — redemarrage...",
+    "status-stopped": "Daemon arrete",
+    "about-title": "A propos",
+    "about-credit": "Developpe par Pir0c0pter0 avec Claude",
+    "about-date": "Date: {date}"
+  }
+}

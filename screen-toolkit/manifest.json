@@ -1,0 +1,34 @@
+{
+  "id": "screen-toolkit",
+  "name": "Screen Toolkit",
+  "version": "1.0.2",
+  "minNoctaliaVersion": "4.5.0",
+  "author": "ycf-anon",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A set of screen tools: color picker, annotate, record, pin, OCR, QR scanner, palette, measure, and webcam mirror.",
+  "tags": [
+    "Panel",
+    "Bar",
+    "Utility",
+    "System"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "colorHistory": [],
+      "paletteColors": [],
+      "installedLangs": ["eng"],
+      "transAvailable": false,
+      "selectedOcrLang": "eng"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 {
   "id": "video-wallpaper",
   "name": "Video Wallpaper",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "minNoctaliaVersion": "3.6.0",
-  "author": "Spyridon Siarapis",
+  "author": "spiros132",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "A plugin that uses a backend renderer to play videos as your wallpaper.",

@@ -1,0 +1,30 @@
+{
+  "id": "valent-connect",
+  "name": "Valent Connect",
+  "version": "1.2.0",
+  "minNoctaliaVersion": "4.6.7",
+  "author": "Suyash",
+  "license": "GPLv2",
+  "description": "A plugin integrating your mobile devices into a panel using Valent",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Utility",
+    "System"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "mainDeviceId": ""
+    }
+  }
+}

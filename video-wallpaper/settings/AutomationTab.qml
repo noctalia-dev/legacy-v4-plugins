@@ -22,13 +22,13 @@ ColumnLayout {
     required property string selectedMonitor
 
     // Monitor specific properties
-    property bool   automation:     pluginApi?.pluginSettings?.[selectedMonitor]?.automation     || false
-    property string automationMode: pluginApi?.pluginSettings?.[selectedMonitor]?.automationMode || pluginApi?.manifest?.metadata?.defaultSettings?.automationMode || ""
-    property real   automationTime: pluginApi?.pluginSettings?.[selectedMonitor]?.automationTime || pluginApi?.manifest?.metadata?.defaultSettings?.automationTime || 0
-    
+    property bool   automation:     pluginApi?.pluginSettings?.[selectedMonitor]?.automation     ?? false
+    property string automationMode: pluginApi?.pluginSettings?.[selectedMonitor]?.automationMode ?? pluginApi?.manifest?.metadata?.defaultSettings?.automationMode ?? ""
+    property real   automationTime: pluginApi?.pluginSettings?.[selectedMonitor]?.automationTime ?? pluginApi?.manifest?.metadata?.defaultSettings?.automationTime ?? 0
+
     // Global properties
-    property list<int> automationCustomTime: pluginApi?.pluginSettings?.automationCustomTime || []
-    
+    property list<int> automationCustomTime: pluginApi?.pluginSettings?.automationCustomTime ?? []
+
     // Signals
     signal saveMonitorProperty(key: string, value: var);
 
@@ -37,9 +37,9 @@ ColumnLayout {
     ***************************/
     onSelectedMonitorChanged: {
         // Update the local variables
-        automation =     pluginApi?.pluginSettings?.[selectedMonitor]?.automation     || false;
-        automationMode = pluginApi?.pluginSettings?.[selectedMonitor]?.automationMode || pluginApi?.manifest?.metadata?.defaultSettings?.automationMode || "";
-        automationTime = pluginApi?.pluginSettings?.[selectedMonitor]?.automationTime || pluginApi?.manifest?.metadata?.defaultSettings?.automationTime || 0;
+        automation =     pluginApi?.pluginSettings?.[selectedMonitor]?.automation     ?? false;
+        automationMode = pluginApi?.pluginSettings?.[selectedMonitor]?.automationMode ?? pluginApi?.manifest?.metadata?.defaultSettings?.automationMode ?? "";
+        automationTime = pluginApi?.pluginSettings?.[selectedMonitor]?.automationTime ?? pluginApi?.manifest?.metadata?.defaultSettings?.automationTime ?? 0;
     }
 
 
@@ -50,8 +50,8 @@ ColumnLayout {
     NToggle {
         enabled: root.enabled
         Layout.fillWidth: true
-        label: root.pluginApi?.tr("settings.automation.toggle.label") || "Automation"
-        description: root.pluginApi?.tr("settings.automation.toggle.description") || "Schedule automatic wallpaper change."
+        label:       root.pluginApi?.tr("settings.automation.toggle.label")
+        description: root.pluginApi?.tr("settings.automation.toggle.description")
         checked: root.automation
         onToggled: checked => root.automation = checked
     }
@@ -60,17 +60,17 @@ ColumnLayout {
     NComboBox {
         enabled: root.enabled && root.automation
         Layout.fillWidth: true
-        label: root.pluginApi?.tr("settings.automation.mode.label") || "Change mode"
-        description: root.pluginApi?.tr("settings.automation.mode.description") || "The mode to select the new wallpaper."
+        label:       root.pluginApi?.tr("settings.automation.mode.label")
+        description: root.pluginApi?.tr("settings.automation.mode.description")
         defaultValue: "random"
         model: [
             {
                 "key": "random",
-                "name": root.pluginApi?.tr("settings.automation.mode.random") || "Random"
+                "name": root.pluginApi?.tr("settings.automation.mode.random")
             },
             {
                 "key": "alphabetically",
-                "name": root.pluginApi?.tr("settings.automation.mode.alphabetically") || "Alphabetically"
+                "name": root.pluginApi?.tr("settings.automation.mode.alphabetically")
             }
         ]
         currentKey: root.automationMode
@@ -80,8 +80,8 @@ ColumnLayout {
     ColumnLayout {
         NLabel {
             enabled: root.enabled && root.automation
-            label: root.pluginApi?.tr("settings.automation.time.label") || "Time"
-            description: root.pluginApi?.tr("settings.automation.time.description") || "How long it should take to switch the wallpaper."
+            label:       root.pluginApi?.tr("settings.automation.time.label")
+            description: root.pluginApi?.tr("settings.automation.time.description")
         }
 
         RowLayout {
@@ -119,7 +119,7 @@ ColumnLayout {
 
             NIconButton {
                 icon: "plus"
-                tooltipText: root.pluginApi?.tr("settings.automation.time.custom.create.tooltip") || "Create a custom time."
+                tooltipText: root.pluginApi?.tr("settings.automation.time.custom.create.tooltip")
                 enabled: root.enabled && root.automation
                 onClicked: createCustomTime.open();
             }
@@ -130,8 +130,8 @@ ColumnLayout {
                 text: {
                     const hour = Math.floor(time / 3600.0);
                     const minute = Math.max(Math.floor(time / 60.0), 1) - (hour * 60);
-                    const hourTranslation = root.pluginApi?.tr("settings.automation.time.h", {hour: hour}) || `${hour}h`;
-                    const minuteTranslation = root.pluginApi?.tr("settings.automation.time.m", {minute: minute}) || `${minute}m`;
+                    const hourTranslation =   root.pluginApi?.tr("settings.automation.time.h", {hour: hour});
+                    const minuteTranslation = root.pluginApi?.tr("settings.automation.time.m", {minute: minute});
 
                     if (hour == 0) {
                         return minuteTranslation;
@@ -144,8 +144,8 @@ ColumnLayout {
                 tooltipText: {
                     const hour = Math.floor(time / 3600.0);
                     const minute = Math.max(Math.floor(time / 60.0), 1) - (hour * 60);
-                    const hourTranslation = root.pluginApi?.trp("settings.automation.time.hour", hour, "1 hour", "{count} hours") || "";
-                    const minuteTranslation = root.pluginApi?.trp("settings.automation.time.minute", minute, "1 minute", "{count} minutes") || "";
+                    const hourTranslation =   root.pluginApi?.trp("settings.automation.time.hour", hour, "1 hour", "{count} hours");
+                    const minuteTranslation = root.pluginApi?.trp("settings.automation.time.minute", minute, "1 minute", "{count} minutes");
 
                     if (hour == 0) {
                         return minuteTranslation;
@@ -230,9 +230,9 @@ ColumnLayout {
 
             NTextInput {
                 id: customTimeInput
-                label: root.pluginApi?.tr("settings.automation.time.custom.create.label") || "Add Custom Time"
-                description: root.pluginApi?.tr("settings.automation.time.custom.create.description") || "Enter time as HH:MM, (e.g. 1:20)"
-                placeholderText: root.pluginApi?.tr("settings.automation.time.custom.create.placeholder") || "Example, 1:15"
+                label:           root.pluginApi?.tr("settings.automation.time.custom.create.label")
+                description:     root.pluginApi?.tr("settings.automation.time.custom.create.description")
+                placeholderText: root.pluginApi?.tr("settings.automation.time.custom.create.placeholder")
                 Layout.fillWidth: true
                 onEditingFinished: createCustomTime.save();
 
@@ -265,12 +265,12 @@ ColumnLayout {
                 }
 
                 NButton {
-                    text: root.pluginApi?.tr("settings.automation.time.custom.create.cancel") || "Cancel"
+                    text: root.pluginApi?.tr("settings.automation.time.custom.create.cancel")
                     onClicked: createCustomTime.close();
                 }
 
                 NButton {
-                    text: root.pluginApi?.tr("settings.automation.time.custom.create.save") || "Save"
+                    text: root.pluginApi?.tr("settings.automation.time.custom.create.save")
                     enabled: customTimeInput.isCorrectFormat();
                     onClicked: createCustomTime.save();
                 }
@@ -284,7 +284,7 @@ ColumnLayout {
 
         model: [
             {
-                "label": root.pluginApi?.tr("settings.automation.time.custom.remove") || "Remove",
+                "label": root.pluginApi?.tr("settings.automation.time.custom.remove"),
                 "action": "remove",
                 "icon": "x"
             },
@@ -313,9 +313,9 @@ ColumnLayout {
         target: root.pluginApi
         function onPluginSettingsChanged() {
             // Update the local properties on change
-            root.automation =     root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.automation     || false;
-            root.automationMode = root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.automationMode || root.pluginApi?.manifest?.metadata?.defaultSettings?.automationMode || "";
-            root.automationTime = root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.automationTime || root.pluginApi?.manifest?.metadata?.defaultSettings?.automationTime || 0;
+            root.automation =     root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.automation     ?? false;
+            root.automationMode = root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.automationMode ?? root.pluginApi?.manifest?.metadata?.defaultSettings?.automationMode ?? "";
+            root.automationTime = root.pluginApi?.pluginSettings?.[root.selectedMonitor]?.automationTime ?? root.pluginApi?.manifest?.metadata?.defaultSettings?.automationTime ?? 0;
         }
     }
 

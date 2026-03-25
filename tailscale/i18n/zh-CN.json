@@ -13,6 +13,8 @@
     "show-peers-desc": "在栏中显示连接的设备数量",
     "hide-disconnected": "隐藏断开的对等设备",
     "hide-disconnected-desc": "在面板中仅显示在线对等设备",
+    "hide-mullvad-exit-nodes": "隐藏Mullvad出口节点",
+    "hide-mullvad-exit-nodes-desc": "从对等设备列表中隐藏Mullvad VPN出口节点",
     "terminal": "终端配置",
     "terminal-command": "终端命令",
     "terminal-command-desc": "启动终端以进行SSH/ping的命令（例如，'ghostty'、'alacritty'、'kitty'）",
@@ -32,6 +34,7 @@
     "not-installed": "未安装Tailscale",
     "settings": "设置",
     "copy-ip": "复制IP",
+    "copy-fqdn": "复制FQDN",
     "ssh": "SSH到主机",
     "ping": "Ping主机"
   },
@@ -41,6 +44,9 @@
     "disconnected": "Tailscale已断开",
     "ip-copied": {
       "title": "IP已复制"
+    },
+    "fqdn-copied": {
+      "title": "FQDN已复制"
     },
     "terminal-not-configured": {
       "title": "终端未配置",

@@ -21,14 +21,14 @@ Item {
 
     NText {
       Layout.alignment: Qt.AlignHCenter
-      text: emptyState.pluginApi?.tr("notes.empty") || "No notes yet"
+      text: emptyState.pluginApi?.tr("notes.empty")
       font.pointSize: Style.fontSizeM * Style.uiScaleRatio
       color: Color.mOnSurfaceVariant
     }
 
     NText {
       Layout.alignment: Qt.AlignHCenter
-      text: emptyState.pluginApi?.tr("notes.create-first") || "Click + to create your first note"
+      text: emptyState.pluginApi?.tr("notes.create-first")
       font.pointSize: Style.fontSizeS * Style.uiScaleRatio
       color: Color.mOutline
     }

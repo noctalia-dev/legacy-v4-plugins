@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Manifest Noctalia Plugin",
+  "description": "The schema of how the noctalia manifest is.",
+  "examples": [{}],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The unique identifier for your plugin. NOTE: This id MUST be the same value as the folder of the plugin.",
+      "examples": ["my-plugin"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable plugin name that is displayed in the UI.",
+      "examples": ["My Plugin"]
+    },
+    "version": {
+      "type": "string",
+      "description": "The version number of this plugin. Bump this version up when updating the qml code of the plugin!",
+      "examples": ["1.0.0", "0.0.1"]
+    },
+    "minNoctaliaVersion": {
+      "type": "string",
+      "description": "The minimum version of noctalia that the plugin requires to run. Some features have come out later than others, always check that this is correct!",
+      "examples": ["3.6.0"]
+    },
+    "author": {
+      "type": "string",
+      "description": "The name / username of the author.",
+      "examples": ["John Doe", "Foo Bar"]
+    },
+    "license": {
+      "type": "string",
+      "description": "The license this plugin is under. The noctalia-plugins repository is under the MIT license.",
+      "examples": ["MIT", "GPL-3.0", "Apache-2.0"]
+    },
+    "repository": {
+      "type": "string",
+      "description": "The git repository for your plugin.",
+      "examples": ["https://github.com/noctalia-dev/noctalia-plugins"]
+    },
+    "description": {
+      "type": "string",
+      "description": "A brief description of what the plugin does. Recommended to keep this under 100 characters.",
+      "examples": ["My very cool plugin, that does this thing, and that thing."]
+    },
+    "entryPoints": {
+      "type": "object",
+      "description": "Which components your plugin provides. At least one entry point must be specified!",
+      "examples": [],
+      "minProperties": 1,
+      "properties": {
+        "main": {
+          "type": "string",
+          "description": "Entrypoint for the main file.",
+          "examples": ["Main.qml"]
+        },
+        "barWidget": {
+          "type": "string",
+          "description": "Entrypoint for the bar widget.",
+          "examples": ["BarWidget.qml"]
+        },
+        "controlCenterWidget": {
+          "type": "string",
+          "description": "Entrypoint for the control center widget.",
+          "examples": ["ControlCenterWidget.qml"]
+        },
+        "desktopWidget": {
+          "type": "string",
+          "description": "Entrypoint for the desktop widget.",
+          "examples": ["DesktopWidget.qml"]
+        },
+        "desktopWidgetSettings": {
+          "type": "string",
+          "description": "Entrypoint for the desktop widget settings.",
+          "examples": ["DesktopWidgetSettings.qml"]
+        },
+        "launcherProvider": {
+          "type": "string",
+          "description": "Entrypoint for the launcher provider.",
+          "examples": ["LauncherProvider.qml"]
+        },
+        "panel": {
+          "type": "string",
+          "description": "Entrypoint for the panel component.",
+          "examples": ["Panel.qml"]
+        },
+        "settings": {
+          "type": "string",
+          "description": "Entrypoint for the settings component.",
+          "examples": ["Settings.qml"]
+        }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "The dependencies of your plugin.",
+      "properties": {
+        "plugins": {
+          "type": "array",
+          "description": "The plugins that must be installed for this plugin to work.",
+          "examples": [["other-plugin"]],
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "The metadata that your plugin has",
+      "properties": {
+        "commandPrefix": {
+          "type": "string",
+          "description": "The command prefix used to activate the plugins launcher provider."
+        },
+        "defaultSettings": {
+          "type": "object",
+          "description": "The default values for your plugin.",
+          "examples": [{ "my_variable": "hello", "customValue": 10 }]
+        }
+      }
+    }
+  },
+  "required": ["id", "name", "description", "version", "author"]
+}

@@ -1,0 +1,381 @@
+{
+  "plugin": {
+    "name": "music-search"
+  },
+  "command": {
+    "description": "Search with music-search ({provider}), play audio, and save favorites."
+  },
+  "common": {
+    "untitled": "Untitled",
+    "customUrl": "Custom URL",
+    "downloadedTrack": "Downloaded Track",
+    "queuedUrl": "Queued URL",
+    "music": "music-search",
+    "onePlay": "1 play",
+    "plays": "{count} plays"
+  },
+  "providers": {
+    "youtube": "YouTube",
+    "soundcloud": "SoundCloud",
+    "local": "Local"
+  },
+  "sort": {
+    "savedDate": "Saved date",
+    "date": "Date",
+    "title": "Title",
+    "duration": "Duration",
+    "rating": "Rating"
+  },
+  "status": {
+    "starting": "Starting playback",
+    "nowPlaying": "Now playing",
+    "ready": "music-search ready",
+    "backgroundPlayback": "Background mpv playback",
+    "searchPrompt": "Search {provider}, paste a URL, or open a saved track.",
+    "startingProviderPlayback": "Starting {provider} playback...",
+    "connectingYoutube": "Connecting to YouTube...",
+    "connectingSoundcloud": "Connecting to SoundCloud...",
+    "openingLocal": "Opening local track...",
+    "startingPlayback": "Starting playback..."
+  },
+  "notices": {
+    "libraryUpdated": "Library updated.",
+    "playlistsUpdated": "Playlists updated.",
+    "savedMp3": "Saved mp3 locally.",
+    "savedMp3To": "Saved mp3 to {path}",
+    "addedToQueue": "Added to queue.",
+    "folderImported": "Folder imported as playlist.",
+    "importingFolder": "Importing folder as playlist...",
+    "syncingFolder": "Syncing folder playlist...",
+    "savingMp3": "Saving current track as mp3...",
+    "downloadFolderUpdated": "Download folder updated.",
+    "cacheLimitUpdated": "MP3 cache limit updated.",
+    "playlistEmpty": "Playlist is empty.",
+    "switchedTo": "Switched to {provider}.",
+    "ytClientSet": "YouTube player client set to {client}.",
+    "sortSet": "Default sort set to {sort}.",
+    "addedPlaylistToQueue": "Added playlist \"{name}\" to queue.",
+    "addedShuffledPlaylistToQueue": "Added shuffled playlist \"{name}\" to queue.",
+    "playingPlaylist": "Playing playlist \"{name}\".",
+    "playingShuffledPlaylist": "Playing shuffled playlist \"{name}\"."
+  },
+  "errors": {
+    "playbackFailed": "music-search playback command failed.",
+    "libraryFailed": "music-search library command failed.",
+    "mp3SaveFailed": "Could not save mp3 locally.",
+    "queueFailed": "Could not add track to queue.",
+    "queuePlaylistTrackFailed": "Could not add playlist track to queue.",
+    "queueActionFailed": "Could not {action} queue.",
+    "folderImportFailed": "Could not import folder as playlist.",
+    "seekMalformed": "Seek response was malformed.",
+    "seekFailed": "Could not seek playback.",
+    "speedFailed": "Could not change playback speed.",
+    "searchMalformed": "Search results were malformed.",
+    "lastError": "Last error: {error}"
+  },
+  "search": {
+    "searching": "Searching {provider}",
+    "failed": "Search failed",
+    "failedDefault": "yt-dlp could not resolve results.",
+    "title": "Search with music-search",
+    "hint": "Try `>music-search burial`, `yt: burial`, `sc: artist`, `local: song`, `queue`, `#night`, `artist:name`, `rating:>=4`, `provider:local`, `playlist:name`, `speed:1.05`, or paste a URL.",
+    "noResults": "No saved or search results for \"{query}\".",
+    "typeMore": "Type at least 2 characters to search {provider}."
+  },
+  "library": {
+    "label": "Library",
+    "empty": "Library is empty",
+    "emptyDesc": "Save search results and they will show up here next time.",
+    "saved": "Saved",
+    "playlistOnly": "Playlist-only",
+    "savedTracks": "Saved tracks",
+    "libraryEmpty": "Your library is empty.",
+    "savedEmpty": "Your saved library is empty.",
+    "noMatches": "No saved tracks matched \"{query}\".",
+    "noFilterMatches": "No saved tracks matched your filters.",
+    "noTagged": "No tracks tagged \"{tag}\".",
+    "oneTrack": "1 saved track",
+    "trackCount": "{count} saved tracks"
+  },
+  "home": {
+    "recentlyPlayed": "Recently Played",
+    "recentlyPlayedDesc": "Your latest saved listens.",
+    "mostPlayed": "Most Played",
+    "mostPlayedDesc": "The tracks you come back to most.",
+    "tags": "Tags",
+    "tagsDesc": "Browse your library by mood and theme.",
+    "artists": "Artists",
+    "artistsDesc": "Jump through your saved library by uploader.",
+    "playlists": "Playlists",
+    "playlistsDesc": "Quick launch your saved lists.",
+    "recent": "Recent",
+    "recentWithTime": "Recent • {time}",
+    "top": "Top",
+    "topWithPlays": "Top • {plays}",
+    "artist": "Artist",
+    "artistWithTime": "Artist • {time}"
+  },
+  "queue": {
+    "title": "Queue",
+    "active": "Queue is active and waiting for the next finish.",
+    "idle": "Queue is idle.",
+    "start": "Start queue",
+    "startNow": "Begin queued playback now.",
+    "startArm": "Arm the queue or start the first queued track.",
+    "stop": "Stop queue",
+    "stopPause": "Pause queue mode without clearing the list.",
+    "stopKeep": "Disable auto-advance and keep queued tracks.",
+    "skip": "Skip to next",
+    "skipNow": "Start the next queued track now.",
+    "skipJump": "Jump to the next queued track.",
+    "clear": "Clear queue",
+    "clearRemove": "Remove all queued tracks.",
+    "clearEmpty": "Empty the queue list.",
+    "autoplaySaved": "Autoplay saved tracks",
+    "autoplaySavedDesc": "Load the saved library into queue and start playing it.",
+    "autoplaySavedActiveDesc": "Turn your saved music library into the active queue.",
+    "autoplaySavedShuffle": "Autoplay saved tracks (shuffle)",
+    "autoplaySavedShuffleDesc": "Shuffle the saved library into queue and start playing it.",
+    "autoplaySavedShuffleActiveDesc": "Shuffle your saved music library into the active queue.",
+    "empty": "Queue is empty",
+    "emptyDesc": "Use save, playlists, or inline queue actions to add tracks."
+  },
+  "speed": {
+    "title": "Playback Speed",
+    "setTo": "Set speed to {speed}",
+    "desc": "Adjust current playback speed.",
+    "current": "Current: {speed}",
+    "noPlayback": "Start playback first, then use `speed:1.05` or the preview buttons.",
+    "useNumber": "Use a number like `speed:1.05`."
+  },
+  "import": {
+    "title": "Import folder as playlist",
+    "desc": "Use `import: /path/to/folder` to turn local audio into a playlist.",
+    "createPlaylist": "Create playlist \"{name}\" from {path}",
+    "hint": "Type `import: /path/to/folder` to import local audio files as a playlist."
+  },
+  "tags": {
+    "manage": "Manage tags",
+    "noTags": "No tags yet",
+    "oneTag": "1 tag",
+    "tagCount": "{count} tags",
+    "editor": "Tag editor",
+    "chooseTrack": "Choose a saved track first, then use the tag action to edit its tags.",
+    "add": "Add #{tag}",
+    "remove": "Remove #{tag}",
+    "applyTo": "Apply to {title}",
+    "removeFrom": "Remove from {title}",
+    "noMatch": "No tag matches \"{query}\" yet. Select the add action to create it.",
+    "hint": "Type after `tag:` to add a new tag, or select an existing tag to remove it."
+  },
+  "metadata": {
+    "titleField": "Title",
+    "artistField": "Artist",
+    "albumField": "Album",
+    "label": "Metadata",
+    "edit": "Edit metadata",
+    "chooseTrack": "Choose a library track first, then use the edit action to update title, artist, or album.",
+    "fieldEditor": "{field} editor",
+    "currentlyEmpty": "currently empty",
+    "editField": "Edit {field}",
+    "empty": "Currently empty",
+    "setField": "Set {field}",
+    "clearField": "Clear {field}",
+    "clearValue": "Clear value",
+    "chooseField": "Choose which field to edit for \"{title}\".",
+    "albumHint": "Type a new album name, or choose the clear action to remove it.",
+    "typeNew": "Type a new {field} value."
+  },
+  "playlists": {
+    "none": "No playlists",
+    "createHint": "Type `playlist:name` to create one.",
+    "untitled": "Untitled Playlist",
+    "oneTrack": "1 track",
+    "trackCount": "{count} tracks",
+    "syncedFolder": "synced folder",
+    "rename": "Rename playlist",
+    "renameTitle": "Playlist rename",
+    "typeNewName": "Type a new name for \"{name}\".",
+    "typeDifferent": "Type a different name to rename this playlist.",
+    "alreadyExists": "Playlist \"{name}\" already exists.",
+    "renameTo": "Rename to \"{name}\"",
+    "updateTitle": "Update playlist title.",
+    "create": "Create playlist \"{name}\"",
+    "createAndAdd": "Create playlist \"{name}\" and add track",
+    "addAfterCreate": "Add {title} after creating it.",
+    "createNew": "Create a new playlist.",
+    "addTo": "Add to {name}",
+    "choose": "Choose a playlist",
+    "chooseFor": "Type a playlist name to create one for {title}.",
+    "chooseFirst": "Choose a playlist first, then use the rename action."
+  },
+  "actions": {
+    "stopMusic": "Stop music",
+    "stopTitle": "Stop {title}",
+    "stopDesc": "Stop background playback.",
+    "alreadyStopped": "music-search is already stopped",
+    "nothingPlaying": "Nothing is currently playing.",
+    "playUrl": "Play URL",
+    "saveUrl": "Save URL to library",
+    "saveUrlMp3": "Save URL as mp3",
+    "downloadDesc": "Download to ~/Music/Noctalia"
+  },
+  "tooltip": {
+    "addToQueue": "Add to queue",
+    "saveToLibrary": "Save to library",
+    "saveMp3Current": "Save current track as mp3",
+    "resume": "Resume",
+    "pause": "Pause",
+    "editMetadata": "Edit metadata",
+    "manageTags": "Manage tags",
+    "addToPlaylist": "Add to playlist",
+    "addSavedToPlaylist": "Add saved track to playlist",
+    "switchProvider": "Switch provider ({provider})",
+    "sort": "Sort: {sort}",
+    "removeFromLibrary": "Remove from library",
+    "saveMp3": "Save as mp3",
+    "saveFirst": "Save first, then add to a playlist",
+    "saveUrlToLibrary": "Save URL to library",
+    "rate": "Rate ({rating})",
+    "playPlaylist": "Play playlist",
+    "shufflePlay": "Shuffle play",
+    "queuePlaylist": "Queue playlist",
+    "renamePlaylist": "Rename playlist",
+    "deletePlaylist": "Delete playlist",
+    "syncFolder": "Sync folder playlist",
+    "removeFromPlaylist": "Remove from playlist"
+  },
+  "artists": {
+    "noArtists": "Save tracks with uploader metadata to browse artists here.",
+    "noMatch": "No saved artists matched \"{query}\"."
+  },
+  "preview": {
+    "chipSaved": "Saved",
+    "chipStarting": "Starting",
+    "length": "Length",
+    "album": "Album",
+    "plays": "Plays",
+    "lastPlayed": "Last played",
+    "uploaded": "Uploaded",
+    "reach": "Reach",
+    "status": "Status",
+    "lastPlaybackError": "Last playback error: {error}",
+    "readLess": "Read less",
+    "readMore": "Read more",
+    "loadingMetadata": "Loading richer metadata...",
+    "metadataParseError": "Metadata preview could not be parsed.",
+    "metadataUnavailable": "Metadata preview unavailable.",
+    "viewCount": "{count} views"
+  },
+  "settings": {
+    "provider": {
+      "label": "Global provider",
+      "desc": "Choose the default provider used for normal music searches when you do not use a prefix like `yt:` or `sc:`."
+    },
+    "sort": {
+      "label": "Default sort",
+      "desc": "Choose how saved tracks are sorted in your library views."
+    },
+    "ytClient": {
+      "label": "YouTube player client",
+      "desc": "Which yt-dlp player client to use for YouTube streams. Try switching if playback fails or is throttled.",
+      "android": "Android",
+      "web": "Web",
+      "default": "Default (yt-dlp decides)"
+    },
+    "downloads": {
+      "title": "Downloads",
+      "currentFolder": "Current folder: {path}",
+      "chooseFolder": "Choose MP3 folder",
+      "applyFolder": "Apply folder",
+      "folderPickerTitle": "Choose MP3 download folder"
+    },
+    "cache": {
+      "label": "Max MP3 cache size",
+      "desc": "Limit the download folder size in MB. Older files are pruned after downloads. Set 0 for unlimited.",
+      "apply": "Apply cache limit"
+    },
+    "autoSave": {
+      "label": "Save remote tracks as mp3 after playback starts",
+      "desc": "After a YouTube or SoundCloud track successfully starts playing, also save an mp3 copy into the current download folder."
+    },
+    "home": {
+      "title": "Home",
+      "recent": {
+        "label": "Show Recently Played",
+        "desc": "Show the recent listens section on the launcher home."
+      },
+      "top": {
+        "label": "Show Most Played",
+        "desc": "Show your top-played tracks on the launcher home."
+      },
+      "tags": {
+        "label": "Show Tags",
+        "desc": "Show tag shortcuts on the launcher home."
+      },
+      "artists": {
+        "label": "Show Artists",
+        "desc": "Show artist browse shortcuts on the launcher home."
+      },
+      "playlists": {
+        "label": "Show Playlists",
+        "desc": "Show playlist shortcuts on the launcher home."
+      }
+    },
+    "preview": {
+      "title": "Preview",
+      "metadata": {
+        "label": "Rich Preview Metadata",
+        "desc": "Choose when the launcher preview should fetch thumbnails, descriptions, views, and upload details.",
+        "all": "All previews",
+        "playing": "Only playing track",
+        "disabled": "Disabled",
+        "neverHint": "Preview panels will stay lightweight and use only the metadata already present in the launcher results.",
+        "playingHint": "Only the currently playing item will fetch richer preview data. Saved and search results stay fast.",
+        "alwaysHint": "Every preview can fetch richer metadata, including thumbnails and long-form details."
+      },
+      "thumbnail": {
+        "label": "Thumbnail size",
+        "desc": "Choose how large the preview artwork appears in the side panel.",
+        "small": "Small",
+        "comfortable": "Comfortable",
+        "large": "Large"
+      },
+      "chips": {
+        "label": "Show preview chips",
+        "desc": "Show source, saved, starting, and tag chips above the track title in the preview."
+      }
+    },
+    "metadata": {
+      "title": "Visible Metadata",
+      "uploader": {
+        "label": "Show uploader",
+        "desc": "Display artist/uploader names in launcher results and preview panels."
+      },
+      "album": {
+        "label": "Show album",
+        "desc": "Display album metadata when it is available, especially for local files."
+      },
+      "duration": {
+        "label": "Show duration",
+        "desc": "Display track length in launcher descriptions and preview details."
+      },
+      "rating": {
+        "label": "Show ratings",
+        "desc": "Include star ratings in launcher descriptions for saved tracks."
+      },
+      "tags": {
+        "label": "Show tags",
+        "desc": "Include track tags in launcher descriptions."
+      },
+      "playStats": {
+        "label": "Show play stats",
+        "desc": "Display play counts and last-played information in the home view and preview."
+      },
+      "status": {
+        "label": "Show status",
+        "desc": "Display availability metadata like public or unlisted in rich preview details."
+      }
+    }
+  }
+}

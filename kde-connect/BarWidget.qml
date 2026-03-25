@@ -25,8 +25,11 @@ Item {
 
   implicitWidth: pill.width
   implicitHeight: pill.height
+  visible: !hideIfNoDeviceConnected ? true : KDEConnect.anyDevicesConnected;
+  opacity: (!hideIfNoDeviceConnected ? true : KDEConnect.anyDevicesConnected) ? 1.0 : 0.0;
 
-  visible: true
+  property bool hideIfNoDeviceConnected: !(root.pluginApi?.mainInstance?.hideIfNoDeviceConnected ?? false)
+
 
   BarPill {
     id: pill

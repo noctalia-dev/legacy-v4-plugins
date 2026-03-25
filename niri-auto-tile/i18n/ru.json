@@ -1,0 +1,39 @@
+{
+  "panel": {
+    "title": "Расположение столбцов",
+    "single": "Один",
+    "columns": "{count} Столбца",
+    "status-active": "Активно — {count} столбцов",
+    "status-active-ws": "Активно — {count} столбцов (WS {ws})",
+    "status-starting": "Запуск...",
+    "status-disabled": "Отключено"
+  },
+  "bar": {
+    "running": "Auto-Tile: работает ({count} столбцов)",
+    "starting": "Auto-Tile: запуск...",
+    "disabled": "Auto-Tile: отключено",
+    "enable": "Включить Auto-Tile",
+    "disable": "Отключить Auto-Tile",
+    "settings": "Настройки"
+  },
+  "settings": {
+    "enabled": "Включить Auto-Tile",
+    "enabled-desc": "Автоматически перераспределять ширину столбцов при открытии или закрытии окон",
+    "per-workspace": "По рабочему пространству",
+    "per-workspace-desc": "Каждое рабочее пространство имеет собственную настройку столбцов",
+    "only-at-max": "Только при максимуме",
+    "only-at-max-desc": "Перераспределять только когда количество столбцов достигнет максимума",
+    "max-visible": "Видимые столбцы: {value}",
+    "max-visible-desc": "Максимальное количество столбцов, видимых на экране одновременно",
+    "debounce": "Задержка debounce: {value}ms",
+    "debounce-desc": "Задержка перед перераспределением для группировки быстрых событий",
+    "rate-limit": "Лимит событий: {value}/s",
+    "rate-limit-desc": "Максимум событий, обрабатываемых в секунду",
+    "status-running": "Демон работает",
+    "status-error": "Ошибка демона — перезапуск...",
+    "status-stopped": "Демон остановлен",
+    "about-title": "О программе",
+    "about-credit": "Разработано Pir0c0pter0 с использованием Claude",
+    "about-date": "Дата: {date}"
+  }
+}

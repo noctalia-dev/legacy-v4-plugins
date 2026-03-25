@@ -41,7 +41,8 @@ Item {
       id: deviceData
 
       function getBatteryIcon(percentage, isCharging) {
-        if (isCharging) return "battery-charging"
+        if (percentage < 0) return "battery-exclamation"
+        if (isCharging) return "battery-charging-2"
         if (percentage < 5) return "battery"
         if (percentage < 25) return "battery-1"
         if (percentage < 50) return "battery-2"
@@ -106,7 +107,7 @@ Item {
           case 4:
             return pluginApi?.tr("panel.signal.excellent")
           default:
-            return pluginApi?.tr("panel.signal.unknown")
+            return pluginApi?.tr("panel.unknown")
         }
       }
 
@@ -117,6 +118,7 @@ Item {
       spacing: Style.marginL
 
       NBox {
+        id: headerBox
         Layout.fillWidth: true
         implicitHeight: headerRow.implicitHeight + (Style.marginXL)
 
@@ -171,14 +173,14 @@ Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
         active: true
-        sourceComponent:  (KDEConnect.qdbusCmd === null || KDEConnect.qdbusCmd === "")         ? qdbusNotFoundCard                :
+        sourceComponent:  (KDEConnect.busctlCmd === null || KDEConnect.busctlCmd === "")       ? busctlNotFoundCard               :
                           (!KDEConnect.daemonAvailable)                                        ? kdeConnectDaemonNotRunningCard   :
                           (deviceSwitcherOpen)                                                 ? deviceSwitcherCard               :
                           (KDEConnect.mainDevice !== null && !KDEConnect.mainDevice.reachable) ? deviceNotReachableCard           :
                           (KDEConnect.mainDevice !== null &&  KDEConnect.mainDevice.paired)    ? deviceConnectedCard              :
                           (KDEConnect.mainDevice !== null && !KDEConnect.mainDevice.paired)    ? noDevicePairedCard               :
                           (KDEConnect.devices.length === 0)                                    ? noDevicesAvailableCard           :
-                          ""
+                          null
       }
 
       Component {
@@ -186,11 +188,19 @@ Item {
 
         Rectangle {
           Layout.fillWidth: true
-          Layout.fillHeight: true
           color: Color.mSurfaceVariant
           radius: Style.radiusM
 
+          Component.onCompleted: {
+            root.contentPreferredHeight = headerBox.height + contentLayout.implicitHeight + (Style.marginL * 8)
+          }
+
+          Component.onDestruction: {
+            root.contentPreferredHeight = 360 * Style.uiScaleRatio * Settings.data.ui.fontDefaultScale
+          }
+
           ColumnLayout {
+            id: contentLayout
             anchors {
               fill: parent
               margins: Style.marginL
@@ -218,6 +228,14 @@ Item {
                       KDEConnect.shareFile(KDEConnect.mainDevice.id, path)
                     }
                   }
+                }
+              }
+
+              NIconButton {
+                icon: "device-mobile-search"
+                tooltipText: pluginApi?.tr("panel.browse-device")
+                onClicked: {
+                  KDEConnect.browseFiles(KDEConnect.mainDevice.id)
                 }
               }
 
@@ -263,6 +281,8 @@ Item {
                 PhoneDisplay {
                   Layout.alignment: Qt.AlignCenter
                   backgroundImage: ""
+
+                  onClicked: KDEConnect.wakeUpDevice(KDEConnect.mainDevice.id)
                 }
               }
 
@@ -298,7 +318,7 @@ Item {
                     }
 
                     NText {
-                      text: KDEConnect.mainDevice.battery + "%"
+                      text: KDEConnect.mainDevice.battery < 0 ? pluginApi?.tr("panel.unknown") : (KDEConnect.mainDevice.battery + "%")
                       pointSize: Style.fontSizeL
                       font.weight: Style.fontWeightMedium
                       color: Color.mOnSurface
@@ -327,7 +347,7 @@ Item {
                     }
 
                     NText {
-                      text: KDEConnect.mainDevice.cellularNetworkType || pluginApi?.tr("panel.signal.unknown")
+                      text: KDEConnect.mainDevice.cellularNetworkType || pluginApi?.tr("panel.unknown")
                       pointSize: Style.fontSizeL
                       font.weight: Style.fontWeightMedium
                       color: Color.mOnSurface
@@ -584,7 +604,7 @@ Item {
 
 
       Component {
-        id: qdbusNotFoundCard
+        id: busctlNotFoundCard
 
         Rectangle {
           Layout.fillWidth: true
@@ -612,7 +632,7 @@ Item {
             Item {}
 
             NText {
-              text: pluginApi?.tr("panel.qdbus-error.unavailable-title")
+              text: pluginApi?.tr("panel.busctl-error.unavailable-title")
               pointSize: Style.fontSizeL
               color: Color.mOnSurfaceVariant
               Layout.alignment: Qt.AlignCenter
@@ -621,7 +641,7 @@ Item {
             }
 
             NText {
-              text: pluginApi?.tr("panel.qdbus-error.unavailable-desc")
+              text: pluginApi?.tr("panel.busctl-error.unavailable-desc")
               pointSize: Style.fontSizeS
               color: Color.mOnSurfaceVariant
               Layout.alignment: Qt.AlignCenter
@@ -723,7 +743,7 @@ Item {
                   required property var modelData
                   text: modelData.name
                   Layout.fillWidth: true
-                  backgroundColor: modelData.id === KDEConnect.mainDeviceId ? Color.mSecondary : Color.mPrimary
+                  backgroundColor: modelData.id === KDEConnect.mainDevice.id ? Color.mSecondary : Color.mPrimary
 
                   onClicked: {
                     KDEConnect.setMainDevice(modelData.id);

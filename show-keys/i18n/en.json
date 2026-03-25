@@ -1,0 +1,59 @@
+{
+    "settings": {
+        "capture": {
+            "label": "Capture Enabled",
+            "description": "Start or stop keyboard event capture"
+        },
+        "ipc": {
+            "title": "IPC Commands",
+            "toggleCommand": "Toggle Capture: qs -c noctalia-shell ipc call plugin:show-keys toggle"
+        },
+        "security": {
+            "title": "Security Disclaimer",
+            "message": "Show Keys reads raw keyboard events from /dev/input/event*. Compositors such as niri do not currently expose a native secure API for this use case, so this plugin must rely on direct input-device access. Granting your user access to the 'input' group weakens Wayland's input isolation and may allow other processes running as your user to observe key presses.",
+            "disclaimer": "Until niri or other Wayland compositors provide an appropriate native API, this plugin operates with that security tradeoff. If you enable it, you accept and assume the associated risk."
+        },
+        "device": {
+            "label": "Device Path (IMPORTANT)",
+            "description": "Your keyboard device event path, RESTART noctalia-shell to apply changes.",
+            "placeholder": "/dev/input/event3"
+        },
+        "guide": {
+            "title": "Setup Guide",
+            "steps": "• FIRST-TIME users: RUN 'sudo evtest' to find your keyboard device path.\n• For non-root capture, ADD your user to the 'input' group with 'sudo usermod -aG input $USER', then REBOOT or log in again.\n• WARNING: this is a convenience tradeoff and may allow other processes running as your user to read raw keyboard input.\n• If you do not accept that risk, do not enable this plugin until compositor-native support exists."
+        },
+        "position": {
+            "label": "OSD Position",
+            "description": "Where the key overlay appears on screen",
+            "bottom": "Bottom",
+            "top": "Top"
+        },
+        "margin": {
+            "label": "Edge Margin",
+            "description": "Distance from screen edge: {value} px"
+        },
+        "delay": {
+            "label": "Auto-hide Delay",
+            "description": "Seconds before OSD fades out: {value} s"
+        },
+        "pillColor": {
+            "label": "Pill Text Color",
+            "description": "Color of the key label text"
+        },
+        "pillBg": {
+            "label": "Pill Background Color",
+            "description": "Background color of each key pill"
+        },
+        "useCustomColors": {
+            "label": "Use Custom Colors",
+            "description": "Override your Noctalia shell theme colors"
+        },
+        "monitors": {
+            "label": "Active Monitors",
+            "description": "Select which monitors will display the key overlay"
+        },
+        "preview": {
+            "label": "Preview"
+        }
+    }
+}

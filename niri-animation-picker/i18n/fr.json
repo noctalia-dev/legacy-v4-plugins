@@ -1,0 +1,33 @@
+{
+  "widget": {
+    "tooltip": "Choisir une animation pour niri"
+  },
+  "panel": {
+    "title": "Preset d'animation pour niri",
+    "presetsAvailable": "{count} presets disponibles",
+    "scanning": "Recherche…",
+    "noPresetsFound": "Aucuns presets trouvés",
+    "noFilesFound": "Aucuns fichier .kdl trouvés",
+    "scanningAnimations": "Recherche d'animations…",
+    "applied": "Appliqué: {file}",
+    "animationSet": "Appliqué l'animation {file}",
+    "writeFailed": "écriture avorté (exit {code})",
+    "writeFailedToast": "Impossible d'écrire dans le fichier"
+  },
+  "settings": {
+    "browse": "Chercher…",
+    "animationsFolder": {
+      "label": "Dossier Animations",
+      "description": "Dossier contenant vos fichier preset .KDL",
+      "pickerTitle": "Choisir le dossier d'animations"
+    },
+    "targetFile": {
+      "label": "Choisir le fichier KDL",
+      "description": "Fichier où la ligne Include seras écrite"
+    },
+    "iconColor": {
+      "label": "Couleur d'icone",
+      "description": "Couleur de l'icone dans la barre"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "panel": {
+    "title": "Подключённые устройства",
+    "signal": {
+      "very-weak": "Очень слабое",
+      "weak": "Слабое",
+      "fair": "Среднее",
+      "good": "Хорошее",
+      "excellent": "Отличное"
+    },
+    "unknown": "Неизвестно",
+    "card": {
+      "battery": "Батарея",
+      "network": "Сеть",
+      "signal-strength": "Качество сигнала",
+      "notifications": "Уведомления"
+    },
+    "other-devices": "Другие устройства",
+    "send-file-picker": "Выберите файл для отправки на устройство",
+    "send-file": "Отправить файл",
+    "browse-device": "Просмотреть файлы на устройстве",
+    "find-device": "Найти моё устройство",
+    "pair": "Сопрячь устройство",
+    "unpair": "Разорвать сопряжение",
+    "kdeconnect-error": {
+      "no-devices": "Устройства с KDE Connect не обнаружены",
+      "unavailable-title": "Похоже, kdeconnectd не запущен!",
+      "unavailable-desc": "Убедитесь, что KDE Connect установлен в системе и служба kdeconnectd работает.",
+       "device-unavailable": "Устройство сейчас недоступно"
+    },
+    "busctl-error": {
+      "unavailable-title": "Не удаётся найти busctl!",
+      "unavailable-desc": "Убедитесь, что busctl установлен в вашей системе"
+    }
+  },
+   "bar": {
+    "tooltip": "Подключённые устройства"
+  },
+  "control_center": {
+    "state-label": "Статус",
+    "state": {
+      "connected": "Подключено",
+      "disconnected": "Не подключено",
+      "unavailable": "Недоступно",
+      "no-device": "Нет устройства",
+      "not-paired": "Нет сопряжения"
+    }
+  }
+}

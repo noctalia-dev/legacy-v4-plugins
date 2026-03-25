@@ -1,7 +1,7 @@
 {
     "id": "polkit-agent",
     "name": "Polkit Agent",
-    "version": "1.0.2",
+    "version": "1.0.5",
     "minNoctaliaVersion": "4.4.3",
     "author": "Noctalia Team <team@noctalia.dev>",
     "official": true,

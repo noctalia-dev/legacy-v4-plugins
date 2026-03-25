@@ -1,0 +1,39 @@
+{
+  "panel": {
+    "title": "Spaltenlayout",
+    "single": "Einzel",
+    "columns": "{count} Spalten",
+    "status-active": "Aktiv – {count} Spalten",
+    "status-active-ws": "Aktiv – {count} Spalten (WS {ws})",
+    "status-starting": "Starten...",
+    "status-disabled": "Deaktiviert"
+  },
+  "bar": {
+    "running": "Auto-Tile: lauft ({count} Spalten)",
+    "starting": "Auto-Tile: Starten...",
+    "disabled": "Auto-Tile: Deaktiviert",
+    "enable": "Auto-Tile aktivieren",
+    "disable": "Auto-Tile deaktivieren",
+    "settings": "Einstellungen"
+  },
+  "settings": {
+    "enabled": "Aktiviere Auto-Tile",
+    "enabled-desc": "Spaltenbreiten automatisch neu verteilen, wenn Fenster geoffnet oder geschlossen werden",
+    "per-workspace": "Pro Arbeitsbereich",
+    "per-workspace-desc": "Jeder Arbeitsbereich verfugt uber eine eigene Spaltenanzahl-Einstellung",
+    "only-at-max": "Nur bei maximaler Einstellung",
+    "only-at-max-desc": "Erst dann neu verteilen, wenn die Spaltenanzahl das Maximum erreicht hat",
+    "max-visible": "Maximal anzeigbare Spalten: {value}",
+    "max-visible-desc": "Maximale Anzahl der Spalten, die gleichzeitig auf dem Bildschirm angezeigt werden konnen",
+    "debounce": "Debounce-Verzogerung: {value}ms",
+    "debounce-desc": "Verzogerung vor der Neuverteilung, um schnelle Ereignisse zusammenzufuhren",
+    "rate-limit": "Rate Limit: {value}/s",
+    "rate-limit-desc": "Maximale Anzahl der pro Sekunde verarbeiteten Ereignisse",
+    "status-running": "Daemon lauft",
+    "status-error": "Daemon-Fehler – Neustart...",
+    "status-stopped": "Daemon gestoppt",
+    "about-title": "Uber",
+    "about-credit": "Entwickelt von Pir0c0pter0 mit Claude",
+    "about-date": "Datum: {date}"
+  }
+}

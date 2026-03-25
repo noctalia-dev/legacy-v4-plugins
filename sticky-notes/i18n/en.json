@@ -15,20 +15,47 @@
     "new": "New Note",
     "empty": "No notes yet",
     "create-first": "Click + to create your first note",
+    "hint-unselect": "ESC to UnSelect",
+    "hint-click-select": "Click to Select",
     "delete-confirm": "Delete this note?",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close",
+    "window-title": "Sticky Note",
+    "mode-preview": "Preview",
+    "mode-edit": "Editing",
+    "switch-preview": "Preview",
+    "switch-edit": "Edit"
   },
   "editor": {
     "back": "Back to list",
     "save": "Save",
     "delete": "Delete",
     "placeholder": "Start writing in Markdown...",
-    "hint": "Ctrl+Enter save · Esc cancel"
+    "hint": "Ctrl+S to save",
+    "hint-esc-save": "ESC to Save"
   },
   "settings": {
-    "notesDir": {
-      "label": "Notes Directory",
-      "desc": "Path to the folder where notes are stored."
+    "saved": "Sticky Notes settings saved",
+    "syncNow": "Sync now",
+    "syncEnabled": {
+      "label": "Enable GitHub Gist sync",
+      "desc": "Automatically sync notes to a private gist after changes."
+    },
+    "githubToken": {
+      "label": "GitHub Token",
+      "desc": "Personal access token with gist permission.",
+      "placeholder": "ghp_xxx",
+      "help": "The plugin creates or reuses a private gist named `noctalia-sticky-notes`. Each note is stored as one file whose filename is the note id."
+    }
+  },
+  "sync": {
+    "syncing": "Syncing notes to GitHub Gist...",
+    "success": {
+      "created": "Created gist and synced notes.",
+      "updated": "Synced notes to GitHub Gist."
+    },
+    "errors": {
+      "missing-token": "GitHub token is required before syncing."
     }
   }
 }

@@ -1,0 +1,21 @@
+{
+  "settings": {
+    "list": {
+      "remove": "Remove the following desktop widget setup."
+    },
+    "load_widgets": {
+      "description": "Enable the loading of the widgets when the wallpaper changes.",
+      "label": "Load Widgets"
+    },
+    "save_widgets": {
+      "description": "Enable saving the widgets whenever they are changed.",
+      "label": "Save Widgets"
+    },
+    "tool_row": {
+      "nuke": {
+        "text": "Nuke",
+        "tooltip": "Remove all setups. WARNING: THIS WILL REMOVE ALL THE OTHER SETUPS EXCEPT THE CURRENT ONE!"
+      }
+    }
+  }
+}

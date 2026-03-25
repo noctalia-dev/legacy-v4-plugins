@@ -23,8 +23,8 @@ Item {
     property string pendingQuery: ""
 
     // Settings
-    property string kagiSessionToken: pluginApi.pluginSettings.kagiSessionToken
-    property int debounceMs: pluginApi.pluginSettings.debounceMs ?? 500
+    property string kagiSessionToken: pluginApi?.pluginSettings?.kagiSessionToken ?? ""
+    property int debounceMs: pluginApi?.pluginSettings?.debounceMs ?? 500
 
     function handleCommand(searchText) {
         return searchText.startsWith(">kagi");

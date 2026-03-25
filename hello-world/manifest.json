@@ -1,8 +1,8 @@
 {
   "id": "hello-world",
   "name": "Hello World",
-  "version": "1.1.1",
-  "minNoctaliaVersion": "4.1.2",
+  "version": "1.2.1",
+  "minNoctaliaVersion": "4.6.6",
   "author": "Noctalia Team",
   "official": true,
   "license": "MIT",
@@ -13,6 +13,7 @@
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",
     "desktopWidget": "DesktopWidget.qml",
+    "desktopWidgetSettings": "DesktopWidgetSettings.qml",
     "controlCenterWidget": "ControlCenterWidget.qml",
     "panel": "Panel.qml",
     "settings": "Settings.qml"

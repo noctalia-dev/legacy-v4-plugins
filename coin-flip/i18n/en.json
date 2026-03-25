@@ -1,0 +1,12 @@
+{
+  "common": {
+    "heads": "Heads",
+    "tails": "Tails"
+  },
+  "settings": {
+
+  },
+  "widget": {
+    "tooltip": "Coin flip"
+  }
+}

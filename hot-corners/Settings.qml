@@ -206,7 +206,7 @@ ColumnLayout {
               Layout.fillWidth: true
               placeholderText: "e.g., noctalia-shell ipc call settings toggle"
               text: popupOverlay.initialText
-              inputItem.onAccepted: column.saveAndClose()
+              inputItem.onEditingFinished: column.saveAndClose()
             }
           }
 

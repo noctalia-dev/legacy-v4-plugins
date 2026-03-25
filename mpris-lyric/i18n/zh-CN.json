@@ -8,9 +8,11 @@
   "settings": {
     "player-name": "播放器名称",
     "player-name-desc": "MPRIS 播放器名称（如 musicfox、spotify、firefox）",
-    "update-interval": "更新间隔",
+    "hide-when-inactive": "空闲时隐藏",
+    "hide-when-inactive-desc": "播放暂停或停止时隐藏组件",
+    "update-interval": "更新间隔：{value}毫秒",
     "update-interval-desc": "歌词更新频率（毫秒）",
-    "width": "宽度",
+    "width": "宽度：{value}像素",
     "width-desc": "歌词组件的宽度（像素）"
   }
 }

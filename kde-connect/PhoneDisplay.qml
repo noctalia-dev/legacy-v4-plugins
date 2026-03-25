@@ -7,18 +7,29 @@ import qs.Widgets
 Rectangle {
   id: phoneRoot
 
-  // Public properties
   property string backgroundImage: "" // Path to background image
 
-  // Scale to parent while maintaining iPhone-like proportions
   height: parent ? parent.height : 235
   width: (height / 235) * 115
 
-  // Dynamically scaled corner radius based on size
   readonly property real scaleFactor: Math.min(width / 115, height / 235)
   radius: 20 * scaleFactor
 
   color: "#1c1c1e"
+
+  signal clicked;
+
+  MultiEffect {
+    source: phoneRect
+    anchors.fill: phoneRect
+    shadowEnabled: true
+    shadowBlur: phoneRect.scale > 0.97 ? 0.8 : 0.3
+    shadowVerticalOffset: phoneRect.scale > 0.97 ? 8 : 2
+    shadowColor: "#80000000"
+
+    Behavior on shadowBlur { NumberAnimation { duration: 100 } }
+    Behavior on shadowVerticalOffset { NumberAnimation { duration: 100 } }
+  }
 
   RectangularShadow {
     anchors.fill: phoneRect
@@ -30,6 +41,21 @@ Rectangle {
   // Bezel/frame
   Rectangle {
     id: phoneRect
+
+    Behavior on scale {
+        NumberAnimation { duration: 100; easing.type: Easing.OutCubic }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+
+        onEntered: phoneRect.scale = 1.02
+        onExited:  phoneRect.scale = 1.0
+        onPressed: phoneRect.scale = 0.99
+        onReleased: phoneRect.scale = containsMouse ? 1.02 : 1.0
+        onClicked: phoneRoot.clicked();
+    }
 
     anchors {
       fill: parent

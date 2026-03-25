@@ -29,6 +29,8 @@ Item {
     property var modelUsage: ({})
 
     property string tierLabel: ""
+    property string authHelpText: "Check your OpenRouter API key."
+    property bool hasLocalStats: true
 
     property real usageDaily: 0
     property real usageWeekly: 0

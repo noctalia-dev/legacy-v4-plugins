@@ -1,7 +1,7 @@
 {
     "id": "screen-shot-and-record",
     "name": "ScreenShot & Record in Hyprland",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "minNoctaliaVersion": "3.6.0",
     "author": "Pulsar",
     "license": "GPL-3.0-or-later",

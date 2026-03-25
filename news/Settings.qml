@@ -41,8 +41,10 @@ ColumnLayout {
     label: "API Key"
     description: "Get your free API key from newsapi.org/register"
     text: apiKeyValue
-    onTextChanged: apiKeyValue = text
-    onEditingFinished: saveSettings()
+    onTextChanged: {
+      apiKeyValue = text
+      saveSettings()
+    }
   }
 
   NButton {

@@ -25,17 +25,18 @@ Item {
 
   readonly property bool showCountdown: cfg.showCountdown ?? defaults.showCountdown ?? true
   readonly property bool use12h:        Settings.data.location.use12hourFormat
+  readonly property bool isJumuah:      new Date().getDay() === 5
 
   readonly property var    mainInstance:   pluginApi?.mainInstance
   readonly property var    prayerTimings:  mainInstance?.prayerTimings  ?? null
   readonly property bool   isRamadan:      mainInstance?.isRamadan      ?? false
   readonly property bool   isLoading:      mainInstance?.isLoading      ?? false
   readonly property bool   hasError:       mainInstance?.hasError       ?? false
-  readonly property int    secondsToNext: mainInstance?.secondsToNext ?? -1
+  readonly property int    secondsToNext:  mainInstance?.secondsToNext  ?? -1
   readonly property string nextPrayerName: mainInstance?.nextPrayerName ?? ""
   readonly property bool   azanPlaying:    mainInstance?.azanPlaying    ?? false
+  readonly property bool   prayerNow:      secondsToNext === 0 && nextPrayerName !== ""
 
-  // Per-second update only in last hour
   Timer {
     interval: 1000
     running: secondsToNext > 0 && secondsToNext <= 3600
@@ -44,7 +45,7 @@ Item {
   }
 
   readonly property string nextPrayerLabel: {
-    if (!nextPrayerName) return ""
+    if (nextPrayerName === "Dhuhr" && isJumuah) return "Jumu'ah"
     return nextPrayerName
   }
 
@@ -67,20 +68,34 @@ Item {
     const m = Math.floor((secondsToNext % 3600) / 60)
     if (h > 0) return `${h}h ${m}m`
     if (m > 0) return `${m}m`
-    return pluginApi?.tr("widget.soon") || "soon"
+    return pluginApi?.tr("widget.soon")
   }
 
   readonly property string displayText: {
     if (isLoading && !prayerTimings) return "..."
     if (hasError) return "!"
     if (!prayerTimings || !nextPrayerName) return "—"
+    if (prayerNow) return `${nextPrayerLabel} · ${pluginApi?.tr("widget.now")}`
     if (showCountdown && secondsToNext > 0) return `${nextPrayerLabel} ${countdownStr}`
     return `${nextPrayerLabel} ${nextPrayerTimeStr}`
   }
 
+  readonly property string verticalLine1: {
+    if (isLoading && !prayerTimings) return "..."
+    if (hasError) return "!"
+    if (!prayerTimings || !nextPrayerName) return "—"
+    return nextPrayerLabel
+  }
+  readonly property string verticalLine2: {
+    if (!prayerTimings || !nextPrayerName) return ""
+    if (prayerNow) return pluginApi?.tr("widget.now")
+    if (showCountdown && secondsToNext > 0) return countdownStr
+    return nextPrayerTimeStr
+  }
+
   readonly property string tooltipText: {
-    if (!prayerTimings) return pluginApi?.tr("widget.tooltip.noData") || "No prayer data"
-    return `${nextPrayerLabel}: ${nextPrayerTimeStr}\n${pluginApi?.tr("widget.tooltip.countdown") || "Time remaining"}: ${countdownStr}`
+    if (!prayerTimings) return pluginApi?.tr("widget.tooltip.noData")
+    return `${nextPrayerLabel}: ${nextPrayerTimeStr}\n${pluginApi?.tr("widget.tooltip.countdown")}: ${countdownStr}`
   }
 
   readonly property real iconSize: Style.toOdd(capsuleHeight * 0.55)
@@ -92,13 +107,11 @@ Item {
     return w
   }
   readonly property real contentHeight: isVertical
-    ? capsuleHeight + Style.marginM * 2
+    ? capsuleHeight * 2
     : capsuleHeight
 
   implicitWidth:  contentWidth
   implicitHeight: contentHeight
-
-  // ── Visual capsule ────────────────────────────────────────────────────────
 
   Rectangle {
     id: capsule
@@ -130,7 +143,6 @@ Item {
         Layout.alignment: Qt.AlignVCenter
       }
 
-      // Volume icon — pulsing right after mosque when azan playing
       NIcon {
         icon: "volume"
         pointSize: root.iconSize
@@ -150,11 +162,11 @@ Item {
         text: root.displayText
         pointSize: root.barFontSize
         applyUiScale: false
-        color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+        color: mouseArea.containsMouse ? Color.mOnHover : (prayerNow ? Color.mPrimary : Color.mOnSurface)
         Layout.alignment: Qt.AlignVCenter
+        Behavior on color { ColorAnimation { duration: 300 } }
       }
 
-      // Stop icon
       NIcon {
         id: stopIconH
         icon: "player-stop-filled"
@@ -196,15 +208,23 @@ Item {
       }
 
       NText {
-        text: {
-          var parts = root.displayText.split(" ");
-          return parts[0] + "\n" + parts.slice(1).join(" ");
-        }
-        pointSize: root.barFontSize * 0.65
+        text: root.verticalLine1
+        pointSize: root.barFontSize * 0.7
         applyUiScale: false
-        color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
+        font.weight: Font.Medium
+        color: mouseArea.containsMouse ? Color.mOnHover : (prayerNow ? Color.mPrimary : Color.mOnSurface)
         Layout.alignment: Qt.AlignHCenter
-        horizontalAlignment: Text.AlignHCenter
+        Behavior on color { ColorAnimation { duration: 300 } }
+      }
+      NText {
+        text: root.verticalLine2
+        pointSize: root.barFontSize * 0.8
+        applyUiScale: false
+        opacity: 0.75
+        color: mouseArea.containsMouse ? Color.mOnHover : (prayerNow ? Color.mPrimary : Color.mOnSurface)
+        Layout.alignment: Qt.AlignHCenter
+        visible: root.verticalLine2 !== ""
+        Behavior on color { ColorAnimation { duration: 300 } }
       }
 
       NIcon {
@@ -217,7 +237,6 @@ Item {
       }
     }
 
-    // ── Main click — opens panel (blocked when azan playing) ──────────
     MouseArea {
       id: mouseArea
       anchors.fill: parent
@@ -238,11 +257,9 @@ Item {
       onExited:  TooltipService.hide()
     }
 
-    // ── Stop area horizontal — declared after mouseArea to win ────────
     MouseArea {
       id: stopAreaH
       visible: azanPlaying && !isVertical
-      // Cover stop icon area
       x: stopIconH.x + hLayout.x
       y: 0
       width:  stopIconH.width + Style.marginM
@@ -253,11 +270,10 @@ Item {
         mouse.accepted = true
         mainInstance?.stopAzanFile()
       }
-      onEntered: TooltipService.show(stopIconH, pluginApi?.tr("widget.stopAzan") || "Stop Azan", BarService.getTooltipDirection(root.screen?.name))
+      onEntered: TooltipService.show(stopIconH, pluginApi?.tr("widget.stopAzan"), BarService.getTooltipDirection(root.screen?.name))
       onExited:  TooltipService.hide()
     }
 
-    // ── Stop area vertical — declared after mouseArea to win ──────────
     MouseArea {
       id: stopAreaV
       visible: azanPlaying && isVertical
@@ -271,26 +287,16 @@ Item {
         mouse.accepted = true
         mainInstance?.stopAzanFile()
       }
-      onEntered: TooltipService.show(stopIconV, pluginApi?.tr("widget.stopAzan") || "Stop Azan", BarService.getTooltipDirection(root.screen?.name))
+      onEntered: TooltipService.show(stopIconV, pluginApi?.tr("widget.stopAzan"), BarService.getTooltipDirection(root.screen?.name))
       onExited:  TooltipService.hide()
     }
   }
 
-  // ── Context menu ──────────────────────────────────────────────────────────
-
   NPopupContextMenu {
     id: contextMenu
     model: [
-      {
-        "label": pluginApi?.tr("menu.openPanel") || "Open Prayer Times",
-        "action": "open",
-        "icon": "building-mosque"
-      },
-      {
-        "label": pluginApi?.tr("menu.settings") || "Widget Settings",
-        "action": "settings",
-        "icon": "settings"
-      }
+      { "label": pluginApi?.tr("menu.openPanel"), "action": "open", "icon": "building-mosque" },
+      { "label": pluginApi?.tr("menu.settings"),  "action": "settings", "icon": "settings" }
     ]
     onTriggered: function(action) {
       contextMenu.close()

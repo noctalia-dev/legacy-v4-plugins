@@ -1,0 +1,9 @@
+{
+  "launcher": {
+    "command_description": "Durchsuchen deine Projekte",
+    "open_folder": "Öffne {path}",
+    "search_folder": "Suchen: {path}",
+    "not_installed": "Zed ist nicht installiert",
+    "not_installed_desc": "Installiere Zed, um diesen Anbieter zu nutzen"
+  }
+}

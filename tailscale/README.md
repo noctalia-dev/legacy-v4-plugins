@@ -12,6 +12,7 @@ A Tailscale status plugin for Noctalia that shows your Tailscale connection stat
 - **IP Address Display**: Shows your current Tailscale IP address when connected
 - **Peer Count**: Displays the number of connected devices in your tailnet
 - **Quick Toggle**: Click to connect/disconnect Tailscale
+- **Peer Context Menu**: Right-click a peer in the panel to copy its IP or FQDN, or launch SSH/ping actions
 - **Context Menu**: Right-click for additional options (connect, disconnect, refresh, settings)
 - **Configurable Refresh**: Customize how often the plugin checks Tailscale status
 - **Compact Mode**: Option to show only the icon for a minimal display
@@ -72,8 +73,9 @@ qs -c noctalia-shell ipc call plugin:tailscale refresh
 
 1. **Click** the icon to toggle Tailscale connection (connect/disconnect)
 2. **Right-click** to open the context menu with options to connect, disconnect, refresh, or open settings
-3. The icon will be colored when connected and gray when disconnected
-4. Your Tailscale IP and peer count are displayed (unless in compact mode)
+3. **Right-click a peer** in the panel to copy its Tailscale FQDN, such as `raspberrypi-stugan.taildb1a3.ts.net`
+4. The icon will be colored when connected and gray when disconnected
+5. Your Tailscale IP and peer count are displayed (unless in compact mode)
 
 ## Troubleshooting
 

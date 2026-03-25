@@ -6,9 +6,31 @@ It allows you to quickly jot down thoughts, code snippets, and to-do lists in be
 
 ---
 
+## IPC
+
+Use Noctalia IPC to control the panel:
+
+```bash
+qs -c noctalia-shell ipc call plugin:sticky-notes toggle
+```
+
+---
+
 ## 📸 Screenshots
 
-<img src="screenshot.png" width="350" title="sticky notes">
+<img src="https://github.com/noctalia-dev/noctalia-plugins/raw/main/sticky-notes/screenshot.png" width="350" title="sticky notes">
+
+---
+
+## 🖱️ Interaction Guide
+
+- **Scroll list (no note selected)**: Use mouse wheel anywhere
+- **Select a note**: click on a note card.
+- **Unselect a note**: press `Esc` when a note is selected.
+- **Scroll note content (selected note)**: While selected, mouse wheel scrolls inside that note's content area.
+- **Edit note**: Click the `pencil` icon or press `E` when a note is selected.
+  - In editor: `Esc` or `Ctrl+S` to save.
+- **Expand note window**: Click the `arrow` icon or press `F` when a note is selected.
 
 ---
 

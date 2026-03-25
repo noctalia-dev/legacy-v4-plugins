@@ -92,30 +92,43 @@ You can quickly open the translator via IPC, which is useful for keybindings:
 ```bash
 # Toggle the translator launcher (opens with >translate )
 # Pass empty string "" to use default (no language pre-selected)
-qs -c noctalia-shell ipc call plugin:translator toggle ""
+qs -c noctalia-shell ipc call plugin:translator toggle "" ""
 
 # Open translator with a specific language (e.g., French)
-qs -c noctalia-shell ipc call plugin:translator toggle "fr"
+qs -c noctalia-shell ipc call plugin:translator toggle "fr" ""
 
 # You can use language codes or names (fr, french, français, etc.)
-qs -c noctalia-shell ipc call plugin:translator toggle "english"
+qs -c noctalia-shell ipc call plugin:translator toggle "english" ""
 
 # Open translator with text to be translated (e.g. selected text)
 qs -c noctalia-shell ipc call plugin:translator toggle "english" "$(wl-paste -n -p)"
-
 ```
 
 ### Integration with Keybindings
 
-Add this to your Noctalia keybinds configuration:
+Add this to your Window Manager's keybinds configuration:
+
+#### Niri
+
+`spawn`
 
 ```json
-{
-  "keybinds": {
-    "Super+T": "qs -c noctalia-shell ipc call plugin:translator toggle \"\"",
-    "Super+Shift+T": "qs -c noctalia-shell ipc call plugin:translator toggle \"fr\""
-  }
-}
+Super+T { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:translator" "toggle" "" "" }
+Super+Shift+T { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:translator" "toggle" "fr" "" }
+```
+
+`spawn-sh`
+
+```json
+Super+T { spawn-sh "qs -c noctalia-shell ipc call plugin:translator toggle \"\" \"\"" }
+Super+Shift+T { spawn-sh "qs -c noctalia-shell ipc call plugin:translator toggle \"fr\" \"\"" }
+```
+
+#### Sway
+
+```json
+bindsym Super+t exec qs -c noctalia-shell ipc call plugin:translator toggle "" ""
+bindsym Super+Shift+t exec qs -c noctalia-shell ipc call plugin:translator toggle "fr" ""
 ```
 
 - With empty string `""`: Opens the launcher with `>translate ` already entered, ready for you to select a language and type text to translate.
@@ -124,5 +137,5 @@ Add this to your Noctalia keybinds configuration:
 
 ## Requirements
 
-- Noctalia 1.0.0 or later
+- Noctalia 4.4.1 or later
 - Internet connection (for translation requests)

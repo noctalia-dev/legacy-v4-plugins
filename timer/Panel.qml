@@ -45,25 +45,12 @@ Item {
   
   function setTimerStopwatchMode(mode) { 
     if (mainInstance) {
-        if (mainInstance.timerStopwatchMode !== mode) {
-            if (mainInstance.timerRunning) mainInstance.timerPause();
-            SoundService.stopSound("alarm-beep.wav");
-            mainInstance.timerSoundPlaying = false;
-            mainInstance.timerStopwatchMode = mode;
-            if (mode) {
-                mainInstance.timerElapsedSeconds = 0;
-            } else {
-                // When switching to timer mode, maybe also reset to 0? 
-                // Or should we pre-fill? User said "when reset it shows 20:00... ONLY display time when running"
-                // Safer to show 0.
-                mainInstance.timerRemainingSeconds = 0;
-            }
-        }
+      mainInstance.timerStopwatchMode = mode;
     } 
   }
   
   function setTimerRemainingSeconds(seconds) {
-      if (mainInstance) mainInstance.timerRemainingSeconds = seconds;
+      if (mainInstance) mainInstance.cdRemainingSeconds = seconds;
   }
 
   function formatTime(seconds, totalTimeSeconds) {
@@ -142,6 +129,14 @@ Item {
     }
   }
 
+  onVisibleChanged: {
+    if (visible) {
+      if (!isRunning && !isStopwatchMode && totalSeconds === 0) {
+        timerInput.forceActiveFocus();
+      }
+    }
+  }
+
   Rectangle {
     id: panelContainer
     anchors.fill: parent
@@ -203,10 +198,10 @@ Item {
             }
             const step = 5;
             if (event.angleDelta.y > 0) {
-              mainInstance.timerRemainingSeconds = Math.max(0, mainInstance.timerRemainingSeconds + step);
+              mainInstance.cdRemainingSeconds = Math.max(0, mainInstance.cdRemainingSeconds + step);
               event.accepted = true;
             } else if (event.angleDelta.y < 0) {
-              mainInstance.timerRemainingSeconds = Math.max(0, mainInstance.timerRemainingSeconds - step);
+              mainInstance.cdRemainingSeconds = Math.max(0, mainInstance.cdRemainingSeconds - step);
               event.accepted = true;
             }
           }
@@ -370,11 +365,17 @@ Item {
 
             Keys.onPressed: event => {
               if (isRunning || isStopwatchMode || totalSeconds > 0) {
+                if (event.key === Qt.Key_Space) {
+                  if (isRunning) mainInstance.timerPause();
+                  else mainInstance.timerStart();
+                  event.accepted = true;
+                  return;
+                }
                 event.accepted = true;
                 return;
               }
               
-              const keyText = event.text;
+              const keyText = event.text.toLowerCase();
 
               if (event.key === Qt.Key_Backspace) {
                 if (timerDisplayItem.isEditing && timerDisplayItem.inputBuffer.length > 0) {
@@ -398,10 +399,13 @@ Item {
                 return;
               }
 
-              if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+              if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter || event.key === Qt.Key_Space) {
                 applyTimeFromBuffer();
                 timerDisplayItem.isEditing = false;
                 timerInput.focus = false;
+                if (remainingSeconds > 0) {
+                  mainInstance.timerStart();
+                }
                 event.accepted = true;
                 return;
               }
@@ -411,6 +415,23 @@ Item {
                 setTimerRemainingSeconds(0);
                 timerDisplayItem.isEditing = false;
                 timerInput.focus = false;
+                event.accepted = true;
+                return;
+              }
+
+              if (keyText === 'h' || keyText === 'm' || keyText === 's') {
+                if (timerDisplayItem.inputBuffer.length > 0) {
+                  let val = parseInt(timerDisplayItem.inputBuffer) || 0;
+                  let secs = 0;
+                  if (keyText === 'h') secs = val * 3600;
+                  else if (keyText === 'm') secs = val * 60;
+                  else if (keyText === 's') secs = val;
+                  
+                  setTimerRemainingSeconds(Math.min(99 * 3600 + 59 * 60 + 59, secs));
+                  timerDisplayItem.inputBuffer = "";
+                  timerDisplayItem.isEditing = false;
+                  timerInput.focus = false;
+                }
                 event.accepted = true;
                 return;
               }
@@ -472,7 +493,12 @@ Item {
           NButton {
             id: startButton
             anchors.fill: parent
-            text: isRunning ? (pluginApi?.tr("panel.pause") || "Pause") : (totalSeconds > 0 ? (pluginApi?.tr("panel.resume") || "Resume") : (pluginApi?.tr("panel.start") || "Start"))
+            text: {
+              if (isRunning) return pluginApi?.tr("panel.pause") || "Pause";
+              if (isStopwatchMode && elapsedSeconds > 0) return pluginApi?.tr("panel.resume") || "Resume";
+              if (!isStopwatchMode && totalSeconds > 0) return pluginApi?.tr("panel.resume") || "Resume";
+              return pluginApi?.tr("panel.start") || "Start";
+            }
             icon: isRunning ? "player-pause" : "player-play"
             enabled: isStopwatchMode || remainingSeconds > 0
             onClicked: {
@@ -550,6 +576,16 @@ Item {
         }
       }
         }
+      }
+    }
+  }
+
+  Shortcut {
+    sequence: "Space"
+    onActivated: {
+      if (!timerInput.activeFocus) {
+        if (isRunning) mainInstance.timerPause();
+        else if (isStopwatchMode || remainingSeconds > 0) mainInstance.timerStart();
       }
     }
   }

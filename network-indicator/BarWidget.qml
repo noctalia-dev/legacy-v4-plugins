@@ -1,8 +1,10 @@
+
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import qs.Commons
 import qs.Widgets
+import qs.Services.UI
 import qs.Services.System
 
 Item {
@@ -29,7 +31,7 @@ Item {
     property color colorSilent: root.useCustomColors && cfg.colorSilent || Color.mSurfaceVariant
     property color colorTx: root.useCustomColors && cfg.colorTx || Color.mSecondary
     property color colorRx: root.useCustomColors && cfg.colorRx || Color.mPrimary
-    property color colorText: root.useCustomColors && cfg.colorText || Qt.alpha(Color.mOnSurfaceVariant, 0.3)
+    property color colorText: root.useCustomColors && cfg.colorText || Color.mOnSurfaceVariant
 
     property int byteThresholdActive: cfg.byteThresholdActive || defaults.byteThresholdActive || 1024
     property real fontSizeModifier: cfg.fontSizeModifier || defaults.fontSizeModifier || 1
@@ -105,6 +107,39 @@ Item {
                 }
             }
         }
+    }
+
+    // ---------- Interaction ----------
+
+    MouseArea {
+      anchors.fill: parent
+      acceptedButtons: Qt.RightButton
+
+      onPressed: mouse => {
+        if (mouse.button == Qt.RightButton)
+          PanelService.showContextMenu(contextMenu, root, screen);
+      }
+
+      NPopupContextMenu {
+        id: contextMenu
+
+        model: [
+          {
+            "label": I18n.tr("actions.widget-settings"),
+            "action": "widget-settings",
+            "icon": "settings"
+          },
+        ]
+
+        onTriggered: action => {
+          contextMenu.close();
+          PanelService.closeContextMenu(screen);
+
+          if (action === "widget-settings") {
+            BarService.openPluginSettings(screen, pluginApi.manifest);
+          }
+        }
+      }
     }
 
     // ---------- Utilities ----------

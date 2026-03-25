@@ -30,16 +30,19 @@ PanelWindow {
     // Layer above everything else (critical system prompt)
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-    
-    // Explicit size
-    implicitWidth: 400 * Style.uiScaleRatio
-    implicitHeight: contentLayout.implicitHeight + (Style.marginL * 2)
+
+    readonly property real shadowPadding: Style.shadowBlurMax + Style.marginL
+
+    // Explicit size - include shadowPadding so the shadow isn't clipped at window corners
+    implicitWidth: 400 * Style.uiScaleRatio + shadowPadding * 2
+    implicitHeight: contentLayout.implicitHeight + (Style.marginL * 2) + shadowPadding * 2
 
     color: "transparent"
 
     Item {
         id: contentContainer
         anchors.fill: parent
+        anchors.margins: shadowPadding
         focus: true
 
         Keys.onPressed: function(event) {

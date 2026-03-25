@@ -16,7 +16,7 @@ Item {
     /***************************
     * PROPERTIES
     ***************************/
-    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder || pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder || ""
+    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder ?? pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder ?? ""
 
     readonly property string thumbCacheFolderPath: ImageCacheService.wpThumbDir + "video-wallpaper"
 
@@ -69,7 +69,7 @@ Item {
             readonly property int screenWidth:  modelData.width
             readonly property int screenHeight: modelData.height
 
-            readonly property string activeBackend: root.pluginApi?.pluginSettings?.activeBackend || root.pluginApi?.manifest?.metadata?.defaultSettings?.activeBackend || ""
+            readonly property string activeBackend: root.pluginApi?.pluginSettings?.activeBackend ?? root.pluginApi?.manifest?.metadata?.defaultSettings?.activeBackend ?? ""
 
             /***************************
             * FUNCTIONALITY
@@ -120,7 +120,7 @@ Item {
                 onStatusChanged: {
                     // Most likely if status is error and active backend is qt6-multimedia, is that qt6-multimedia wasn't found.
                     if (status === Loader.Error && screenItem.activeBackend === "qt6-multimedia") {
-                        ToastService.showError(root.pluginApi?.tr("main.no_backend_found", {"backend": "Qt6-multimedia"}) || "Qt6-multimedia wasn't found!");
+                        ToastService.showError(root.pluginApi?.tr("main.no_backend_found", {"backend": "Qt6-multimedia"}));
                     }
                 }
             }

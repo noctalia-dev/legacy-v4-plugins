@@ -7,6 +7,7 @@
     "iftar": "Iftar",
     "imsak": "Imsak",
     "soon": "soon",
+    "now": "Now",
     "stopAzan": "Stop Azan",
     "tooltip": {
       "noData": "Prayer data not loaded",
@@ -18,13 +19,21 @@
     "refresh": "Refresh",
     "close": "Close",
     "configure": "Configure your city in Settings",
+    "now": "Now",
+    "jumuah": "Jumu'ah",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
     "imsak": "Imsak",
     "fajr": "Fajr",
     "sunrise": "Sunrise",
     "dhuhr": "Dhuhr",
     "asr": "Asr",
     "maghrib": "Maghrib",
-    "isha": "Isha"
+    "isha": "Isha",
+    "tab": {
+      "prayers": "Prayer Times",
+      "calendar": "Calendar"
+    }
   },
   "settings": {
     "location": {
@@ -85,10 +94,22 @@
     "school": {
       "label": "Asr Calculation School",
       "desc": "Shafi/Maliki/Hanbali uses shadow factor 1. Hanafi uses shadow factor 2, giving a later Asr time."
+    },
+    "calendar": {
+      "header": "Calendar"
+    },
+    "weekStartDay": {
+      "label": "First day of week",
+      "desc": "Choose which day starts the calendar week."
     }
   },
   "error": {
     "network": "Network request failed. Check your internet connection.",
     "generic": "Failed to load prayer times."
+  },
+  "calendar": {
+    "today": "Back to today",
+    "refresh": "Refresh month",
+    "approximate": "Mathematical estimation — not moon-sighted"
   }
 }

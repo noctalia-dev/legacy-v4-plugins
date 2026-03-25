@@ -1,0 +1,136 @@
+{
+  "widget": {
+    "tooltip": "Screen Toolkit"
+  },
+  "panel": {
+    "title": "Screen Toolkit",
+    "running": "Running...",
+    "lang": "Lang:",
+    "format": "Format:",
+    "audio": "Audio:",
+    "scan": "Scan",
+    "record": "Record",
+    "system": "System",
+    "mic": "Mic",
+    "translate": "Translate",
+    "translateLabel": "Translate",
+    "copyAll": "Copy All",
+    "clearResult": "Clear result",
+    "history": "History",
+    "historyCleared": "History cleared",
+    "clear": "Clear",
+    "copy": "Copy",
+    "openUrl": "Open URL",
+    "composeEmail": "Compose Email",
+    "searchText": "Search text",
+    "copyText": "Copy text",
+    "passwordCopied": "Password copied",
+    "translationCopied": "Translation copied",
+    "cssVarsCopied": "CSS vars copied",
+    "hexListCopied": "Hex list copied",
+    "allFormatsCopied": "All formats copied",
+    "copied": "Copied"
+  },
+  "tools": {
+    "colorpicker": "Color",
+    "annotate": "Annotate",
+    "ocr": "OCR",
+    "pin": "Pin",
+    "palette": "Palette",
+    "measure": "Measure",
+    "qr": "QR",
+    "lens": "Lens",
+    "record": "Record",
+    "mirror": "Mirror"
+  },
+  "tooltips": {
+    "colorpicker": "Pick a color from screen",
+    "palette": "Extract dominant colors from a region",
+    "ocr": "Extract text from screen",
+    "lens": "Search image with Google Lens",
+    "qr": "Scan a QR or barcode",
+    "annotate": "Draw and annotate a region",
+    "record": "Record a screen region as GIF or MP4",
+    "pin": "Pin a screen region as floating overlay",
+    "measure": "Measure distance in pixels",
+    "mirror": "Floating webcam mirror",
+    "flipCamera": "Flip camera",
+    "switchToWide": "Switch to wide (16:9)",
+    "switchToSquare": "Switch to square",
+    "systemAudio": "Record system audio (desktop output)",
+    "microphone": "Record microphone",
+    "composeEmail": "Compose email",
+    "openUrl": "Open URL",
+    "clearResult": "Clear result",
+    "unflipcamera": "Unflip camera"
+  },
+  "mirror": {
+    "title": "Webcam Mirror",
+    "hint": "Floating camera preview. Drag to move, resize from corners.",
+    "open": "Open Mirror",
+    "close": "Close Mirror"
+  },
+  "ocr": {
+    "title": "OCR",
+    "translateSection": "Translate",
+    "noTranslateTool": "translate-shell not found"
+  },
+  "palette": {
+    "title": "Palette",
+    "cssVars": "Copy as CSS vars",
+    "hexList": "Copy hex list"
+  },
+  "messages": {
+    "picker-cancelled": "Color picker cancelled.",
+    "no-text": "No text detected.",
+    "no-qr": "No QR code detected.",
+    "lens-failed": "Google Lens upload failed.",
+    "capture-failed": "Screen capture failed.",
+    "pinned": "Pinned to screen.",
+    "palette-failed": "Palette extraction failed.",
+    "translate-failed": "Translation failed.",
+    "measure-saved": "Saved to {dest}",
+    "measure-failed": "Screenshot failed.",
+    "measure-copied": "Measurement copied.",
+    "measure-pinned": "Pinned."
+  },
+  "settings": {
+    "ocrLanguages": "OCR Languages",
+    "deps": "System Dependencies"
+  },
+  "annotate": {
+    "copied": "Copied to clipboard",
+    "copyFailed": "Failed to copy",
+    "saveFailed": "Failed to save annotation",
+    "savedTo": "Saved to {dest}",
+    "saveFileFailed": "Failed to save file",
+    "colorSize": "Color & size"
+  },
+  "record": {
+    "stop": "Stop",
+    "saveMp4": "Save MP4",
+    "saveGif": "Save GIF",
+    "savingMp4": "Saving MP4...",
+    "convertingGif": "Converting to GIF...",
+    "mp4Ready": "MP4 ready",
+    "gifReady": "GIF ready",
+    "saved": "Saved to ~/Videos",
+    "failed": "Recording failed or cancelled",
+    "saveMp4Failed": "Failed to save MP4",
+    "saveGifFailed": "GIF conversion failed",
+    "discard": "Discard"
+  },
+  "pin": {
+    "close": "Close"
+  },
+  "measure": {
+    "hint": "Click and drag to measure",
+    "subHint": "Pin to keep it \u00b7 drag again to replace \u00b7 ESC to close",
+    "copyMeasurement": "Copy measurement",
+    "screenshot": "Screenshot with lines",
+    "pin": "Pin",
+    "discard": "Discard",
+    "copy": "Copy",
+    "remove": "Remove"
+  }
+}

@@ -1,0 +1,115 @@
+name: Automatic Code Quality Review
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Automatic Code Quality
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Get all the qml file changes
+          diff_changes=$(git diff origin/main...HEAD |
+            awk '/^diff --git.*\.qml /{found=1} /^diff --git/{if(!/\.qml /) found=0} found{print}' |
+            grep -v "^(index|\+\+\+|-)") || (
+            echo "Failed to get the diff changes from $PR_NUMBER, most probably no diff with qml files found!"
+            exit 0
+          )
+
+          if [ -z "$diff_changes" ] || [ "$diff_changes" = "" ]; then
+            echo "No diff changes found!"
+            exit 0
+          fi
+
+          comment_body=$(printf -- '# Automatic Code Quality Review')
+
+          issues=0
+          line_index=0
+
+          l_priority="[(L)]($PR_NUMBER 'Low priority, it is okay for this to remain unfixed before merging')"
+          h_priority="[(H)]($PR_NUMBER 'High priority, this needs to be fixed for the PR to be merged')"
+
+          # Helper function to reduce repetitive code
+          # - First argument ($1): Priority string.
+          # - Second argument ($2): Line index.
+          # - Third argument ($3): The comment itself.
+          # - Fourth argument ($4): The line itself.
+          function print_line() {
+            local priority=$1
+            local index=$2
+            local comment=$3
+            local code_line=$4
+
+            printf -- '\n- %s Line %d: %s\n```qml\n%s\n```' "$priority" "$index" "$comment" "$code_line"
+          }
+
+          # Check line by line
+          while IFS= read -r line; do
+            if echo "$line" | grep -E "^diff --git" >/dev/null; then
+              # We have come to the starting line for a file
+              file_title="$(echo "$line" | sed 's/diff --git a\/\(.*\.qml\) .*/\1/g' || (
+                echo "Failed to get file title! Line: $line"
+                exit 1
+              ))"
+              comment_body+=$(printf -- '\n## File: %s' "$file_title")
+            elif echo "$line" | grep -E "^@@" >/dev/null; then
+              # We have come to a hunk header describing which lines we are looking at, update the current line_index
+              line_index=$(echo "$line" | grep -oE "\+[0-9]+" | grep -oE "[0-9]+") || (
+                echo "Failed to get line_index! Line: $line"
+                exit 1
+              )
+            else
+              # Check for usual hard-coded values
+              if echo "$line" | grep -E "(border(\.width)*|spacing|pointSize|radius|margin(s)*): [0-9]+" >/dev/null; then
+                comment_body+=$(print_line "$h_priority" "$line_index" 'Do not use hardcoded values, always prefer to use the `Style` singleton instead' "$line")
+                issues=$((issues + 1))
+              fi
+
+              # Check for console.log usage
+              if echo "$line" | grep -E "console.log" >/dev/null; then
+                comment_body+=$(print_line "$h_priority" "$line_index" 'Do not use `console.log`, always prefer to use the `Logger` singleton instead' "$line")
+                issues=$((issues + 1))
+              fi
+
+              # Check for non-noctalia widget usage
+              if echo "$line" | grep -E "^( )+(Text|Button|Checkbox|Switch)" >/dev/null; then
+                comment_body+=$(print_line "$h_priority" "$line_index" 'Always prefer to use noctalia-widgets instead of qml widgets to keep it consistent with the shell. For example instead of `Text`, use `NText`' "$line")
+                issues=$((issues + 1))
+              fi
+
+              # Check for applyUiScale: false
+              if echo "$line" | grep -E "applyUiScale: *false" >/dev/null; then
+                comment_body+=$(print_line "$l_priority" "$line_index" 'The `applyUiScale: false` would make it so that the component does not support ui scaling. Always check if this is the correct behaviour you want when changing the ui scale!' "$line")
+                issues=$((issues + 1))
+              fi
+
+              # Check for translation fallbacks that aren't needed anymore
+              if echo "$line" | grep -E "pluginApi(\?)+\.tr\((.)*\) *(\?\?|\|\|)" >/dev/null; then
+                comment_body+=$(print_line "$l_priority" "$line_index" 'When it comes to translations there is no need for fallback values. From: `pluginApi?.tr("example") || "value"`. To: `pluginApi?.tr("example")`' "$line")
+                issues=$((issues + 1))
+              fi
+
+              line_index=$((line_index + 1))
+            fi
+          done <<<"$diff_changes"
+
+          # Post comment using gh CLI if there are any issues
+          [[ "$issues" -ne 0 ]] && gh pr comment "$PR_NUMBER" --body "$comment_body"

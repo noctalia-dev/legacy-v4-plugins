@@ -6,9 +6,9 @@
       "weak": "Weak",
       "fair": "Fair",
       "good": "Good",
-      "excellent": "Excellent",
-      "unknown": "Unknown"
+      "excellent": "Excellent"
     },
+    "unknown": "Unknown",
     "card": {
       "battery": "Battery",
       "network": "Network",
@@ -18,6 +18,7 @@
     "other-devices": "Other Devices",
     "send-file-picker": "Pick file to send to device",
     "send-file": "Send File",
+    "browse-device": "Browse Device Files",
     "find-device": "Find my Device",
     "pair": "Pair with Device",
     "unpair": "Unpair Device",
@@ -27,9 +28,9 @@
       "unavailable-desc": "Make sure you've installed the KDE Connect Application on your system and that it has started the kdeconnectd daemon",
       "device-unavailable": "Device is currently unavailable"
     },
-    "qdbus-error": {
-      "unavailable-title": "qdbus cannot be found!",
-      "unavailable-desc": "Make sure qdbus (or qdbus6 on some systems) is installed on your system"
+    "busctl-error": {
+      "unavailable-title": "busctl cannot be found!",
+      "unavailable-desc": "Make sure busctl (part of systemd) is installed on your system"
     }
   },
   "bar": {
@@ -43,6 +44,12 @@
       "unavailable": "Unavailable",
       "no-device": "No device",
       "not-paired": "Not paired"
+    }
+  },
+  "settings": {
+    "no-device-connected-hide": {
+      "label": "Hide if unavailable",
+      "description": "Hide the bar button entirely if no device is connected"
     }
   }
 }

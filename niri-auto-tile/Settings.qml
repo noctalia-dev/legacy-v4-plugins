@@ -34,8 +34,8 @@ ColumnLayout {
     // ─── Enable / Disable ───
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.enabled") ?? "Enable Auto-Tile"
-        description: pluginApi?.tr("settings.enabled-desc") ?? "Automatically redistribute column widths when windows open or close"
+        label: pluginApi?.tr("settings.enabled")
+        description: pluginApi?.tr("settings.enabled-desc")
         checked: root.valueEnabled
         onToggled: checked => {
             root.valueEnabled = checked;
@@ -46,8 +46,8 @@ ColumnLayout {
     // ─── Per Workspace ───
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.per-workspace") ?? "Per workspace"
-        description: pluginApi?.tr("settings.per-workspace-desc") ?? "Each workspace has its own column count setting"
+        label: pluginApi?.tr("settings.per-workspace")
+        description: pluginApi?.tr("settings.per-workspace-desc")
         checked: root.valuePerWorkspace
         onToggled: checked => {
             root.valuePerWorkspace = checked;
@@ -59,8 +59,8 @@ ColumnLayout {
     // ─── Only at Max ───
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.only-at-max") ?? "Only at max"
-        description: pluginApi?.tr("settings.only-at-max-desc") ?? "Only redistribute when column count reaches the maximum"
+        label: pluginApi?.tr("settings.only-at-max")
+        description: pluginApi?.tr("settings.only-at-max-desc")
         checked: root.valueOnlyAtMax
         onToggled: checked => {
             root.valueOnlyAtMax = checked;
@@ -75,8 +75,8 @@ ColumnLayout {
         spacing: Style.marginS
 
         NLabel {
-            label: (pluginApi?.tr("settings.max-visible") ?? "Max visible columns") + ": " + root.valueMaxVisible
-            description: pluginApi?.tr("settings.max-visible-desc") ?? "Maximum number of columns visible on screen at once"
+            label: pluginApi?.tr("settings.max-visible", {"value": root.valueMaxVisible})
+            description: pluginApi?.tr("settings.max-visible-desc")
         }
 
         NSlider {
@@ -99,8 +99,8 @@ ColumnLayout {
         spacing: Style.marginS
 
         NLabel {
-            label: (pluginApi?.tr("settings.debounce") ?? "Debounce delay") + ": " + root.valueDebounceMs + "ms"
-            description: pluginApi?.tr("settings.debounce-desc") ?? "Delay before redistribution to coalesce rapid events"
+            label: pluginApi?.tr("settings.debounce", {"value": root.valueDebounceMs})
+            description: pluginApi?.tr("settings.debounce-desc")
         }
 
         NSlider {
@@ -123,8 +123,8 @@ ColumnLayout {
         spacing: Style.marginS
 
         NLabel {
-            label: (pluginApi?.tr("settings.rate-limit") ?? "Rate limit") + ": " + root.valueMaxEventsPerSecond + "/s"
-            description: pluginApi?.tr("settings.rate-limit-desc") ?? "Maximum events processed per second"
+            label: pluginApi?.tr("settings.rate-limit", {"value": root.valueMaxEventsPerSecond})
+            description: pluginApi?.tr("settings.rate-limit-desc")
         }
 
         NSlider {
@@ -145,12 +145,12 @@ ColumnLayout {
     RowLayout {
         Layout.fillWidth: true
         Layout.topMargin: Style.marginM
-        spacing: 8
+        spacing: Style.marginM
 
         Rectangle {
-            width: 8
-            height: 8
-            radius: 4
+            width: Math.round(8 * Style.uiScaleRatio)
+            height: Math.round(8 * Style.uiScaleRatio)
+            radius: Math.round(4 * Style.uiScaleRatio)
             color: {
                 const status = pluginApi?.mainInstance?.status ?? "stopped";
                 if (status === "running") return Color.mPrimary;
@@ -162,9 +162,9 @@ ColumnLayout {
         NText {
             text: {
                 const status = pluginApi?.mainInstance?.status ?? "stopped";
-                if (status === "running") return pluginApi?.tr("settings.status-running") ?? "Daemon running";
-                if (status === "error") return pluginApi?.tr("settings.status-error") ?? "Daemon error — restarting...";
-                return pluginApi?.tr("settings.status-stopped") ?? "Daemon stopped";
+                if (status === "running") return pluginApi?.tr("settings.status-running");
+                if (status === "error") return pluginApi?.tr("settings.status-error");
+                return pluginApi?.tr("settings.status-stopped");
             }
             Layout.fillWidth: true
         }
@@ -174,29 +174,29 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
         Layout.topMargin: Style.marginM
-        spacing: 4
+        spacing: Style.marginXS
 
         NText {
-            text: pluginApi?.tr("settings.about-title") ?? "About"
+            text: pluginApi?.tr("settings.about-title")
             font.bold: true
         }
 
         NText {
-            text: pluginApi?.tr("settings.about-credit") ?? "Developed by Pir0c0pter0 using Claude"
+            text: pluginApi?.tr("settings.about-credit")
             opacity: 0.7
-            font.pixelSize: 12
+            pointSize: Style.fontSizeS
         }
 
         NText {
-            text: (pluginApi?.tr("settings.about-date") ?? "Date") + ": 2026-02-19"
+            text: pluginApi?.tr("settings.about-date", {"date": "2026-02-19"})
             opacity: 0.5
-            font.pixelSize: 11
+            pointSize: Style.fontSizeXS
         }
 
         NText {
             text: "v" + (pluginApi?.manifest?.version ?? "1.1.0")
             opacity: 0.5
-            font.pixelSize: 11
+            pointSize: Style.fontSizeXS
         }
     }
 }

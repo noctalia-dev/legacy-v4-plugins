@@ -1,0 +1,15 @@
+{
+  "menu": {
+    "settings": "Widget settings",
+    "title": "Calendar Preferences"
+  },
+  "notifications": {
+    "save-error": "Failed to save",
+    "saved": "Setting saved successfully"
+  },
+  "settings": {
+      "text": "Week starts on ",
+      "day1": "Sunday",
+      "day2": "Monday"
+  } 
+}

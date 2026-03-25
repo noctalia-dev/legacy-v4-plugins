@@ -24,9 +24,9 @@ Item {
     required property FolderModel thumbFolderModel
 
     // Global properties
-    readonly property bool   enabled:          pluginApi?.pluginSettings?.enabled          || false
-    readonly property bool   thumbCacheReady:  pluginApi?.pluginSettings?.thumbCacheReady  || false
-    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder || pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder || ""
+    readonly property bool   enabled:          pluginApi?.pluginSettings?.enabled          ?? false
+    readonly property bool   thumbCacheReady:  pluginApi?.pluginSettings?.thumbCacheReady  ?? false
+    readonly property string wallpapersFolder: pluginApi?.pluginSettings?.wallpapersFolder ?? pluginApi?.manifest?.metadata?.defaultSettings?.wallpapersFolder ?? ""
 
     // Local properties
     property bool oldWallpapersSaved: false

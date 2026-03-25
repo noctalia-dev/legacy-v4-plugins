@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v qs >/dev/null 2>&1; then
+  echo "obs-control: qs runtime not found in PATH" >&2
+  exit 1
+fi
+
+case "${1:-}" in
+  launch)
+    command="launchObs"
+    ;;
+  toggle-record)
+    command="toggleRecord"
+    ;;
+  toggle-replay)
+    command="toggleReplay"
+    ;;
+  toggle-stream)
+    command="toggleStream"
+    ;;
+  save-replay)
+    command="saveReplay"
+    ;;
+  refresh)
+    command="refreshStatus"
+    ;;
+  settings|open-settings)
+    command="openSettings"
+    ;;
+  open-videos)
+    command="openVideos"
+    ;;
+  primary)
+    command="primaryAction"
+    ;;
+  secondary)
+    command="secondaryAction"
+    ;;
+  middle)
+    command="middleAction"
+    ;;
+  panel|toggle-panel)
+    command="togglePanel"
+    ;;
+  *)
+    echo "usage: run-action <launch|toggle-record|toggle-replay|toggle-stream|save-replay|refresh|settings|open-videos|primary|secondary|middle|panel>" >&2
+    exit 2
+    ;;
+esac
+
+exec qs -c noctalia-shell ipc call plugin:obs-control "$command"

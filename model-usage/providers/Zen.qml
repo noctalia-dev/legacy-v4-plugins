@@ -29,6 +29,8 @@ Item {
     property var modelUsage: ({})
 
     property string tierLabel: ""
+    property string authHelpText: "Check your Zen API key."
+    property bool hasLocalStats: true
 
     property var providerSettings: ({})
     property string apiBaseUrl: providerSettings?.apiBaseUrl ?? "https://opencode.ai/zen/v1"

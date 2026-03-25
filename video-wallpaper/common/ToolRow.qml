@@ -94,32 +94,32 @@ RowLayout {
     NButton {
         icon: "dice"
         enabled:     root.enabled
-        text:        root.pluginApi?.tr("common.tool_row.random.text")    || "Random"
-        tooltipText: root.pluginApi?.tr("common.tool_row.random.tooltip") || "Choose a random wallpaper from the wallpapers folder."
+        text:        root.pluginApi?.tr("common.tool_row.random.text")
+        tooltipText: root.pluginApi?.tr("common.tool_row.random.tooltip")
         onClicked:   root.random()
     }
 
     NButton {
         icon: "clear-all"
         enabled:     root.enabled
-        text:        root.pluginApi?.tr("common.tool_row.clear.text")    || "Clear"
-        tooltipText: root.pluginApi?.tr("common.tool_row.clear.tooltip") || "Clear the current wallpaper."
+        text:        root.pluginApi?.tr("common.tool_row.clear.text")
+        tooltipText: root.pluginApi?.tr("common.tool_row.clear.tooltip")
         onClicked:   root.clear()
     }
 
     NButton {
         enabled:     root.enabled
         icon:        root.isPlaying ? "media-pause" : "media-play"
-        text:        root.isPlaying ? root.pluginApi?.tr("common.tool_row.pause.text")    || "Pause"                      : root.pluginApi?.tr("common.tool_row.play.text")    || "Play";
-        tooltipText: root.isPlaying ? root.pluginApi?.tr("common.tool_row.pause.tooltip") || "Pause the video wallpaper." : root.pluginApi?.tr("common.tool_row.play.tooltip") || "Resume the video wallpaper.";
+        text:        root.isPlaying ? root.pluginApi?.tr("common.tool_row.pause.text")    : root.pluginApi?.tr("common.tool_row.play.text")
+        tooltipText: root.isPlaying ? root.pluginApi?.tr("common.tool_row.pause.tooltip") : root.pluginApi?.tr("common.tool_row.play.tooltip")
         onClicked:   root.togglePlaying();
     }
 
     NButton {
         enabled:     root.enabled
         icon:        root.isMuted ? "volume-high" : "volume-mute"
-        text:        root.isMuted ? root.pluginApi?.tr("common.tool_row.unmute.text")    || "Unmute" :                      root.pluginApi?.tr("common.tool_row.mute.text")    || "Mute";
-        tooltipText: root.isMuted ? root.pluginApi?.tr("common.tool_row.unmute.tooltip") || "Unmute the video wallpaper." : root.pluginApi?.tr("common.tool_row.mute.tooltip") || "Mute the video wallpaper.";
+        text:        root.isMuted ? root.pluginApi?.tr("common.tool_row.unmute.text")    : root.pluginApi?.tr("common.tool_row.mute.text")
+        tooltipText: root.isMuted ? root.pluginApi?.tr("common.tool_row.unmute.tooltip") : root.pluginApi?.tr("common.tool_row.mute.tooltip")
         onClicked:   root.toggleMute()
     }
 }

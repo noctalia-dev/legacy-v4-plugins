@@ -25,15 +25,15 @@ PanelWindow {
     required property int    screenHeight
 
     // Monitor specific properties
-    readonly property string currentWallpaper: pluginApi?.pluginSettings?.[screenName]?.currentWallpaper || ""
-    readonly property string fillMode:         pluginApi?.pluginSettings?.[screenName]?.fillMode         || pluginApi?.manifest?.metadata?.defaultSettings?.fillMode || ""
-    readonly property bool   isMuted:          pluginApi?.pluginSettings?.[screenName]?.isMuted          || false
-    readonly property bool   isPlaying:        pluginApi?.pluginSettings?.[screenName]?.isPlaying        || false
-    readonly property int    orientation:      pluginApi?.pluginSettings?.[screenName]?.orientation      || 0
-    readonly property double volume:           pluginApi?.pluginSettings?.[screenName]?.volume           || pluginApi?.manifest?.metadata?.defaultSettings?.volume || 0
+    readonly property string currentWallpaper: pluginApi?.pluginSettings?.[screenName]?.currentWallpaper ?? ""
+    readonly property string fillMode:         pluginApi?.pluginSettings?.[screenName]?.fillMode         ?? pluginApi?.manifest?.metadata?.defaultSettings?.fillMode ?? ""
+    readonly property bool   isMuted:          pluginApi?.pluginSettings?.[screenName]?.isMuted          ?? false
+    readonly property bool   isPlaying:        pluginApi?.pluginSettings?.[screenName]?.isPlaying        ?? false
+    readonly property int    orientation:      pluginApi?.pluginSettings?.[screenName]?.orientation      ?? 0
+    readonly property double volume:           pluginApi?.pluginSettings?.[screenName]?.volume           ?? pluginApi?.manifest?.metadata?.defaultSettings?.volume ?? 0
 
     // Global properties
-    readonly property bool enabled: pluginApi?.pluginSettings?.enabled || false
+    readonly property bool enabled: pluginApi?.pluginSettings?.enabled ?? false
 
 
     /***************************
@@ -87,12 +87,7 @@ PanelWindow {
                 // Pausing is the same as putting the speed to veryyyyyyy tiny amount
                 else return 0.00000001
             }
-            source: {
-                // Make sure to use the correct format
-                if      (root.currentWallpaper == "")                 return ""
-                else if (root.currentWallpaper.startsWith("file://")) return root.currentWallpaper
-                else                                                  return `file://${root.currentWallpaper}`
-            }
+            source: Qt.resolvedUrl(root.currentWallpaper)
             volume: root.volume
 
             onErrorOccurred: (error, errorString) => {

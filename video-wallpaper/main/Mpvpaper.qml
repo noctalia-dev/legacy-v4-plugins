@@ -20,18 +20,18 @@ Item {
     required property int    screenHeight
 
     // Monitor specific properties
-    readonly property string currentWallpaper:     pluginApi?.pluginSettings?.[screenName]?.currentWallpaper     || ""
-    readonly property bool   hardwareAcceleration: pluginApi?.pluginSettings?.[screenName]?.hardwareAcceleration || pluginApi?.manifest?.metadata?.defaultSettings?.hardwareAcceleration || false
-    readonly property string fillMode:             pluginApi?.pluginSettings?.[screenName]?.fillMode             || pluginApi?.manifest?.metadata?.defaultSettings?.fillMode             || ""
-    readonly property bool   isMuted:              pluginApi?.pluginSettings?.[screenName]?.isMuted              || false
-    readonly property bool   isPlaying:            pluginApi?.pluginSettings?.[screenName]?.isPlaying            || false
-    readonly property int    orientation:          pluginApi?.pluginSettings?.[screenName]?.orientation          || 0
-    readonly property string profile:              pluginApi?.pluginSettings?.[screenName]?.profile              || pluginApi?.manifest?.metadata?.defaultSettings?.profile || ""
-    readonly property double volume:               pluginApi?.pluginSettings?.[screenName]?.volume               || pluginApi?.manifest?.metadata?.defaultSettings?.volume  || 0
+    readonly property string currentWallpaper:     pluginApi?.pluginSettings?.[screenName]?.currentWallpaper     ?? ""
+    readonly property bool   hardwareAcceleration: pluginApi?.pluginSettings?.[screenName]?.hardwareAcceleration ?? pluginApi?.manifest?.metadata?.defaultSettings?.hardwareAcceleration ?? false
+    readonly property string fillMode:             pluginApi?.pluginSettings?.[screenName]?.fillMode             ?? pluginApi?.manifest?.metadata?.defaultSettings?.fillMode             ?? ""
+    readonly property bool   isMuted:              pluginApi?.pluginSettings?.[screenName]?.isMuted              ?? false
+    readonly property bool   isPlaying:            pluginApi?.pluginSettings?.[screenName]?.isPlaying            ?? false
+    readonly property int    orientation:          pluginApi?.pluginSettings?.[screenName]?.orientation          ?? 0
+    readonly property string profile:              pluginApi?.pluginSettings?.[screenName]?.profile              ?? pluginApi?.manifest?.metadata?.defaultSettings?.profile ?? ""
+    readonly property double volume:               pluginApi?.pluginSettings?.[screenName]?.volume               ?? pluginApi?.manifest?.metadata?.defaultSettings?.volume  ?? 0
 
     // Global properties
-    readonly property bool   enabled:   pluginApi?.pluginSettings?.enabled   || false
-    readonly property string mpvSocket: pluginApi?.pluginSettings?.mpvSocket || pluginApi?.manifest?.metadata?.defaultSettings?.mpvSocket || ""
+    readonly property bool   enabled:   pluginApi?.pluginSettings?.enabled   ?? false
+    readonly property string mpvSocket: pluginApi?.pluginSettings?.mpvSocket ?? pluginApi?.manifest?.metadata?.defaultSettings?.mpvSocket ?? ""
 
     // Constants
     readonly property string mpvSocketScreen: `${mpvSocket}-${screenName}`
@@ -254,7 +254,7 @@ Item {
             if (exitCode === 0) {
                 root.mpvpaperExists = true;
             } else {
-                ToastService.showError(root.pluginApi?.tr("main.no_backend_found", {"backend": "Mpvpaper"}) || "Mpvpaper wasn't found!");
+                ToastService.showError(root.pluginApi?.tr("main.no_backend_found", {"backend": "Mpvpaper"}));
             }
         }
     }

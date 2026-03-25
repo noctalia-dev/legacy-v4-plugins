@@ -8,7 +8,10 @@ DraggableDesktopWidget {
   id: root
   property var pluginApi: null
 
-  readonly property string message: pluginApi?.pluginSettings?.message || "Hello World"
+  readonly property var cfg: pluginApi?.pluginSettings ?? ({})
+  readonly property var defaults: pluginApi?.manifest?.metadata?.defaultSettings ?? ({})
+
+  readonly property string message: widgetData.message ?? cfg.message ?? defaults.message ?? "Hello World"
 
   implicitWidth: 200
   implicitHeight: 120

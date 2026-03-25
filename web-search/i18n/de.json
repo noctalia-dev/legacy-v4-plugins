@@ -1,0 +1,26 @@
+{
+  "settings": {
+    "engine": {
+      "label": "Suchmaschine",
+      "description": "Standard-Suchmaschine, die beim Suchen im Internet geöffnet wird"
+    },
+    "suggestions": {
+      "label": "Suchvorschläge anzeigen",
+      "description": "Echtzeit-Vorschläge während der Eingabe abrufen"
+    },
+    "maxResults": {
+      "label": "Maximale Ergebnisse",
+      "description": "Begrenze die Anzahl der angezeigten Vorschläge"
+    }
+  },
+  "launcher": {
+    "typeSomething": "Etwas eingeben...",
+    "searchInternet": "Mit {engine} im Internet suchen",
+    "search": "„{query}“ suchen",
+    "openIn": "In {engine} öffnen",
+    "suggestion": "Vorschlag von {engine}",
+    "command": {
+      "description": "Im Internet nach etwas suchen"
+    }
+  }
+}

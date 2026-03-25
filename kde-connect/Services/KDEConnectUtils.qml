@@ -10,10 +10,13 @@ QtObject {
     if (device === null || !device.reachable)
       return "device-mobile-off";
 
+    if (device.battery >= 0 && device.battery < 10)
+      return "device-mobile-exclamation"
+
     if (device.notificationIds.length > 0)
       return "device-mobile-message";
     else if (device.charging)
-      return "device-mobile-charging";
+      return "device-mobile-bolt";
     else
       return "device-mobile";
   }
