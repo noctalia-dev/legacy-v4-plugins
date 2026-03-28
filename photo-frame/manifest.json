@@ -1,0 +1,28 @@
+{
+  "id": "marco-fotos",
+  "name": "Photo Frame",
+  "version": "1.0.1",
+  "minNoctaliaVersion": "4.6.6",
+  "official": false,
+  "license": "MIT",
+  "description": "Desktop widget that displays an image with a configurable frame.",
+  "author": "Evergaster",
+  "tags": [
+    "Desktop",
+    "Media"
+  ],
+  "entryPoints": {
+    "desktopWidget": "PhotoFrame.qml",
+    "desktopWidgetSettings": "PhotoFrameSettings.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "imageSource": "",
+      "transparentBg": false
+    }
+  }
+}

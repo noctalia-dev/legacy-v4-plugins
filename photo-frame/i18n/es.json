@@ -1,0 +1,50 @@
+{
+  "common": {
+    "save": "Guardar",
+    "apply": "Aplicar"
+  },
+  "widget": {
+    "loading": "Cargando...",
+    "noImage": "Sin imagen"
+  },
+  "settings": {
+    "title": "Marco de Fotos",
+    "description": "Configura la imagen predeterminada del widget",
+    "imagePath": {
+      "label": "Ruta de imagen",
+      "description": "Pega una ruta manual o elige una con el selector",
+      "placeholder": "file:///ruta/a/imagen.jpg"
+    },
+    "imagePicker": {
+      "label": "Seleccionar imagen",
+      "description": "Abre el menu de seleccion de archivos",
+      "tooltip": "Elegir imagen",
+      "dialogTitle": "Seleccionar imagen"
+    },
+    "transparentBg": {
+      "label": "Fondo transparente",
+      "description": "Valor predeterminado para nuevas instancias del widget"
+    },
+    "note": "El marco usa esta imagen por defecto en nuevas instancias."
+  },
+  "desktopWidgetSettings": {
+    "title": "Marco de Fotos",
+    "description": "Ajustes de esta instancia del widget",
+    "imagePath": {
+      "label": "Ruta de imagen",
+      "description": "Ruta manual o seleccionada desde el menu",
+      "placeholder": "file:///ruta/a/imagen.jpg"
+    },
+    "imagePicker": {
+      "label": "Seleccionar imagen",
+      "description": "Abre el menu de seleccion de archivos",
+      "tooltip": "Elegir imagen",
+      "dialogTitle": "Seleccionar imagen"
+    },
+    "transparentBg": {
+      "label": "Fondo transparente",
+      "description": "Oculta el marco y el fondo; solo se muestra la imagen"
+    },
+    "note": "Esta pantalla afecta solo a la instancia actual del widget."
+  }
+}

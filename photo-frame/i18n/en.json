@@ -1,0 +1,50 @@
+{
+  "common": {
+    "save": "Save",
+    "apply": "Apply"
+  },
+  "widget": {
+    "loading": "Loading...",
+    "noImage": "No image"
+  },
+  "settings": {
+    "title": "Photo Frame",
+    "description": "Configure the default image for the widget",
+    "imagePath": {
+      "label": "Image path",
+      "description": "Paste a manual path or choose one using the picker",
+      "placeholder": "file:///path/to/image.jpg"
+    },
+    "imagePicker": {
+      "label": "Select image",
+      "description": "Open the file selection menu",
+      "tooltip": "Choose image",
+      "dialogTitle": "Select image"
+    },
+    "transparentBg": {
+      "label": "Transparent background",
+      "description": "Default value for new widget instances"
+    },
+    "note": "The frame uses this image as default for new instances."
+  },
+  "desktopWidgetSettings": {
+    "title": "Photo Frame",
+    "description": "Settings for this widget instance",
+    "imagePath": {
+      "label": "Image path",
+      "description": "Manual path or selected from the menu",
+      "placeholder": "file:///path/to/image.jpg"
+    },
+    "imagePicker": {
+      "label": "Select image",
+      "description": "Open the file selection menu",
+      "tooltip": "Choose image",
+      "dialogTitle": "Select image"
+    },
+    "transparentBg": {
+      "label": "Transparent background",
+      "description": "Hide frame and background; only the image is shown"
+    },
+    "note": "This screen affects only the current widget instance."
+  }
+}
