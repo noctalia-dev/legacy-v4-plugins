@@ -18,8 +18,16 @@ ColumnLayout {
         if (!widgetSettings)
             return
 
-        widgetSettings.data.imageSource = localImageSource
-        widgetSettings.data.transparentBg = localTransparentBg
+        var currentData = widgetSettings.data || ({})
+        var nextData = {}
+
+        for (var key in currentData)
+            nextData[key] = currentData[key]
+
+        nextData.imageSource = localImageSource
+        nextData.transparentBg = localTransparentBg
+
+        widgetSettings.data = nextData
         widgetSettings.save()
     }
 

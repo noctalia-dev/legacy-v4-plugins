@@ -7,17 +7,28 @@ DraggableDesktopWidget {
 
     property var pluginApi: null
 
-    readonly property string imageSource:       widgetData.imageSource       ?? ""
-    readonly property bool   transparentBg:     widgetData.transparentBg     ?? false
-    
-    Component.onCompleted: {
-        if (!widgetData.imageSource && pluginApi?.pluginSettings?.imageSource) {
-            widgetData.imageSource = pluginApi?.pluginSettings?.imageSource
-        }
-        if (widgetData.transparentBg === undefined && pluginApi?.pluginSettings?.transparentBg !== undefined) {
-            widgetData.transparentBg = pluginApi?.pluginSettings?.transparentBg
-        }
+    property string imageSource: ""
+    property bool   transparentBg: false
+
+    function hasWidgetValue(key) {
+        if (!widgetData)
+            return false
+        return widgetData[key] !== undefined
     }
+
+    function syncEffectiveSettings() {
+        imageSource = hasWidgetValue("imageSource")
+                ? (widgetData.imageSource ?? "")
+                : (pluginApi?.pluginSettings?.imageSource ?? "")
+
+        transparentBg = hasWidgetValue("transparentBg")
+                ? (widgetData.transparentBg ?? false)
+                : (pluginApi?.pluginSettings?.transparentBg ?? false)
+    }
+
+    Component.onCompleted: syncEffectiveSettings()
+    onWidgetDataChanged: syncEffectiveSettings()
+    onPluginApiChanged: syncEffectiveSettings()
 
     readonly property int baseWidth:    300
     readonly property int baseHeight:   220
