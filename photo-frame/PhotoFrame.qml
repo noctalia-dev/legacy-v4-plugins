@@ -7,8 +7,17 @@ DraggableDesktopWidget {
 
     property var pluginApi: null
 
-    readonly property string imageSource:       widgetData.imageSource       ?? pluginApi?.pluginSettings?.imageSource ?? ""
-    readonly property bool   transparentBg:     widgetData.transparentBg     ?? pluginApi?.pluginSettings?.transparentBg ?? false
+    readonly property string imageSource:       widgetData.imageSource       ?? ""
+    readonly property bool   transparentBg:     widgetData.transparentBg     ?? false
+    
+    Component.onCompleted: {
+        if (!widgetData.imageSource && pluginApi?.pluginSettings?.imageSource) {
+            widgetData.imageSource = pluginApi?.pluginSettings?.imageSource
+        }
+        if (widgetData.transparentBg === undefined && pluginApi?.pluginSettings?.transparentBg !== undefined) {
+            widgetData.transparentBg = pluginApi?.pluginSettings?.transparentBg
+        }
+    }
 
     readonly property int baseWidth:    300
     readonly property int baseHeight:   220
@@ -80,8 +89,8 @@ DraggableDesktopWidget {
                     anchors.centerIn: parent
                     visible:  !transparentBg
                     text:     photo.status === Image.Loading
-                                ? (pluginApi?.tr("widget.loading") || "Loading...")
-                                : (pluginApi?.tr("widget.noImage") || "No image")
+                                ? pluginApi?.tr("widget.loading")
+                                : pluginApi?.tr("widget.noImage")
                     color:    Color.mOnSurfaceVariant
                     font.pixelSize: Math.round(13 * widgetScale)
                 }

@@ -32,15 +32,15 @@ ColumnLayout {
     }
 
     NHeader {
-        label: pluginApi?.tr("settings.title") || "Photo Frame"
-        description: pluginApi?.tr("settings.description") || "Configure the default image for the widget"
+        label: pluginApi?.tr("settings.title")
+        description: pluginApi?.tr("settings.description")
     }
 
     NTextInput {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.imagePath.label") || "Image path"
-        description: pluginApi?.tr("settings.imagePath.description") || "Paste a manual path or choose one using the picker"
-        placeholderText: pluginApi?.tr("settings.imagePath.placeholder") || "file:///path/to/image.jpg"
+        label: pluginApi?.tr("settings.imagePath.label")
+        description: pluginApi?.tr("settings.imagePath.description")
+        placeholderText: pluginApi?.tr("settings.imagePath.placeholder")
         text: root.localImageSource
         onTextChanged: root.localImageSource = text
     }
@@ -49,20 +49,20 @@ ColumnLayout {
         spacing: Style.marginS
 
         NLabel {
-            label: pluginApi?.tr("settings.imagePicker.label") || "Select image"
-            description: pluginApi?.tr("settings.imagePicker.description") || "Open the file selection menu"
+            label: pluginApi?.tr("settings.imagePicker.label")
+            description: pluginApi?.tr("settings.imagePicker.description")
         }
 
         NIconButton {
             icon: "wallpaper-selector"
-            tooltipText: pluginApi?.tr("settings.imagePicker.tooltip") || "Choose image"
+            tooltipText: pluginApi?.tr("settings.imagePicker.tooltip")
             onClicked: imagePicker.openFilePicker()
         }
     }
 
     NFilePicker {
         id: imagePicker
-        title: pluginApi?.tr("settings.imagePicker.dialogTitle") || "Select image"
+        title: pluginApi?.tr("settings.imagePicker.dialogTitle")
         initialPath: root.localImageSource === "" ? "" : root.localImageSource
         selectionMode: "files"
 
@@ -75,14 +75,14 @@ ColumnLayout {
     }
 
     NButton {
-        text: pluginApi?.tr("common.save") || "Save"
+        text: pluginApi?.tr("common.save")
         onClicked: root.saveSettings()
     }
 
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.transparentBg.label") || "Transparent background"
-        description: pluginApi?.tr("settings.transparentBg.description") || "Default value for new widget instances"
+        label: pluginApi?.tr("settings.transparentBg.label")
+        description: pluginApi?.tr("settings.transparentBg.description")
         checked: root.localTransparentBg
         onToggled: checked => {
             root.localTransparentBg = checked
@@ -91,7 +91,7 @@ ColumnLayout {
 
     NText {
         Layout.fillWidth: true
-        text: pluginApi?.tr("settings.note") || "The frame uses this image as default for new instances."
+        text: pluginApi?.tr("settings.note")
         color: Color.mOnSurfaceVariant
         pointSize: Style.fontSizeS
         wrapMode: Text.WordWrap

@@ -32,15 +32,15 @@ ColumnLayout {
     }
 
     NHeader {
-        label: pluginApi?.tr("desktopWidgetSettings.title") || "Photo Frame"
-        description: pluginApi?.tr("desktopWidgetSettings.description") || "Settings for this widget instance"
+        label: pluginApi?.tr("desktopWidgetSettings.title")
+        description: pluginApi?.tr("desktopWidgetSettings.description")
     }
 
     NTextInput {
         Layout.fillWidth: true
-        label: pluginApi?.tr("desktopWidgetSettings.imagePath.label") || "Image path"
-        description: pluginApi?.tr("desktopWidgetSettings.imagePath.description") || "Manual path or selected from the menu"
-        placeholderText: pluginApi?.tr("desktopWidgetSettings.imagePath.placeholder") || "file:///path/to/image.jpg"
+        label: pluginApi?.tr("desktopWidgetSettings.imagePath.label")
+        description: pluginApi?.tr("desktopWidgetSettings.imagePath.description")
+        placeholderText: pluginApi?.tr("desktopWidgetSettings.imagePath.placeholder")
         text: settingsRoot.localImageSource
         onTextChanged: settingsRoot.localImageSource = text
     }
@@ -50,25 +50,25 @@ ColumnLayout {
         spacing: Style.marginS
 
         NLabel {
-            label: pluginApi?.tr("desktopWidgetSettings.imagePicker.label") || "Select image"
-            description: pluginApi?.tr("desktopWidgetSettings.imagePicker.description") || "Open the file selection menu"
+            label: pluginApi?.tr("desktopWidgetSettings.imagePicker.label")
+            description: pluginApi?.tr("desktopWidgetSettings.imagePicker.description")
         }
 
         NIconButton {
             icon: "wallpaper-selector"
-            tooltipText: pluginApi?.tr("desktopWidgetSettings.imagePicker.tooltip") || "Choose image"
+            tooltipText: pluginApi?.tr("desktopWidgetSettings.imagePicker.tooltip")
             onClicked: imagePicker.openFilePicker()
         }
 
         NButton {
-            text: pluginApi?.tr("common.apply") || "Apply"
+            text: pluginApi?.tr("common.apply")
             onClicked: settingsRoot.commitSettings()
         }
     }
 
     NFilePicker {
         id: imagePicker
-        title: pluginApi?.tr("desktopWidgetSettings.imagePicker.dialogTitle") || "Select image"
+        title: pluginApi?.tr("desktopWidgetSettings.imagePicker.dialogTitle")
         initialPath: settingsRoot.localImageSource === "" ? "" : settingsRoot.localImageSource
         selectionMode: "files"
 
@@ -82,8 +82,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("desktopWidgetSettings.transparentBg.label") || "Transparent background"
-        description: pluginApi?.tr("desktopWidgetSettings.transparentBg.description") || "Hide frame and background; only the image is shown"
+        label: pluginApi?.tr("desktopWidgetSettings.transparentBg.label")
+        description: pluginApi?.tr("desktopWidgetSettings.transparentBg.description")
         checked: settingsRoot.localTransparentBg
         onToggled: checked => {
             settingsRoot.localTransparentBg = checked
@@ -93,7 +93,7 @@ ColumnLayout {
 
     NText {
         Layout.fillWidth: true
-        text: pluginApi?.tr("desktopWidgetSettings.note") || "This screen affects only the current widget instance."
+        text: pluginApi?.tr("desktopWidgetSettings.note")
         color: Color.mOnSurfaceVariant
         pointSize: Style.fontSizeS
         wrapMode: Text.WordWrap
