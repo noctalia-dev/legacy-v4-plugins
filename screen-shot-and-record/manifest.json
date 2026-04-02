@@ -5,7 +5,7 @@
   "minNoctaliaVersion": "3.6.0",
   "author": "Pulsar",
   "license": "GPL-3.0-or-later",
-  "repository": "https://github.com/Pulsar33550336/pulsar-ns-plugins",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "A screenshot plugin with OCR, Google Lens integration, and screen recording for Hyprland, Sway, and Niri.",
   "tags": [
     "Bar",
