@@ -317,7 +317,7 @@ Item {
             color: Qt.alpha(Color.mTertiary, 0.08)
             radius: Style.radiusM
             border.color: Qt.alpha(Color.mTertiary, 0.3)
-            border.width: 1
+            border.width: Style.borderS
 
             // Qualifier extracted from the pending tool call
             readonly property string qualifier: {

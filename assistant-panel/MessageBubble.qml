@@ -269,7 +269,7 @@ Item {
           Rectangle {
             width: 24
             height: 24
-            radius: 4
+            radius: Style.radiusS
             color: expandMouse.containsMouse ? Color.mSurfaceVariant : "transparent"
 
             NIcon {

@@ -654,7 +654,7 @@ ColumnLayout {
       Rectangle {
         width: 24
         height: 24
-        radius: 4
+        radius: Style.radiusS
         color: entryRemoveMouse.containsMouse ? Qt.alpha(Color.mError, 0.15) : "transparent"
 
         NIcon {
