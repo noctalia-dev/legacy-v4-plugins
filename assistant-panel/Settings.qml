@@ -440,7 +440,7 @@ ColumnLayout {
   // Tool Settings Section
   // ==================
   NText {
-    text: pluginApi?.tr("settings.toolsSection") || "Tool Use (Function Calling)"
+    text: pluginApi?.tr("settings.toolsSection")
     pointSize: Style.fontSizeM
     font.weight: Font.Bold
     color: Color.mOnSurface
@@ -448,8 +448,8 @@ ColumnLayout {
 
   NToggle {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.toolsEnabled") || "Enable Tool Use"
-    description: pluginApi?.tr("settings.toolsEnabledDesc") || "Allow the AI to call external tools during conversation"
+    label: pluginApi?.tr("settings.toolsEnabled")
+    description: pluginApi?.tr("settings.toolsEnabledDesc")
     checked: root.editToolsEnabled
     onToggled: function (checked) {
       root.editToolsEnabled = checked;
@@ -459,8 +459,8 @@ ColumnLayout {
 
   NTextInput {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.toolsDirectory") || "Tools Directory"
-    description: pluginApi?.tr("settings.toolsDirectoryDesc") || "Path to tools directory (leave blank for default)"
+    label: pluginApi?.tr("settings.toolsDirectory")
+    description: pluginApi?.tr("settings.toolsDirectoryDesc")
     text: root.editToolsDirectory
     placeholderText: "tools/ (relative to plugin directory)"
     onTextChanged: root.editToolsDirectory = text
@@ -471,8 +471,8 @@ ColumnLayout {
     spacing: Style.marginS
 
     NLabel {
-      label: (pluginApi?.tr("settings.maxToolIterations") || "Max Tool Iterations") + ": " + root.editMaxToolIterations
-      description: pluginApi?.tr("settings.maxToolIterationsDesc") || "Maximum number of tool use rounds per message (safety limit)"
+      label: pluginApi?.tr("settings.maxToolIterations") + ": " + root.editMaxToolIterations
+      description: pluginApi?.tr("settings.maxToolIterationsDesc")
     }
 
     NSlider {
@@ -490,8 +490,8 @@ ColumnLayout {
     spacing: Style.marginS
 
     NLabel {
-      label: (pluginApi?.tr("settings.toolTimeout") || "Tool Timeout") + ": " + root.editToolTimeout + "s"
-      description: pluginApi?.tr("settings.toolTimeoutDesc") || "Maximum seconds each tool execution can take"
+      label: pluginApi?.tr("settings.toolTimeout") + ": " + root.editToolTimeout + "s"
+      description: pluginApi?.tr("settings.toolTimeoutDesc")
     }
 
     NSlider {
@@ -507,7 +507,7 @@ ColumnLayout {
   // Discovered tools list with allowlist controls
   NText {
     Layout.topMargin: Style.marginM
-    text: pluginApi?.tr("settings.toolsList") || "Discovered Tools"
+    text: pluginApi?.tr("settings.toolsList")
     pointSize: Style.fontSizeS
     font.weight: Font.Bold
     color: Color.mOnSurface
@@ -515,7 +515,7 @@ ColumnLayout {
 
   NText {
     visible: !toolListRepeater.model || toolListRepeater.model.length === 0
-    text: pluginApi?.tr("settings.noTools") || "No tools found. Add tools to the tools/ directory."
+    text: pluginApi?.tr("settings.noTools")
     color: Color.mOnSurfaceVariant
     pointSize: Style.fontSizeXS
   }
@@ -559,9 +559,9 @@ ColumnLayout {
           NComboBox {
             Layout.preferredWidth: 160
             model: [
-              { "key": "confirm", "name": pluginApi?.tr("settings.toolAskEveryTime") || "Ask every time" },
-              { "key": "always", "name": pluginApi?.tr("settings.toolAlwaysAllow") || "Always allow" },
-              { "key": "never", "name": pluginApi?.tr("settings.toolNeverAllow") || "Never allow" }
+              { "key": "confirm", "name": pluginApi?.tr("settings.toolAskEveryTime") },
+              { "key": "always", "name": pluginApi?.tr("settings.toolAlwaysAllow") },
+              { "key": "never", "name": pluginApi?.tr("settings.toolNeverAllow") }
             ]
             currentKey: {
               var allowlist = pluginApi?.pluginSettings?.tools?.allowlist;
@@ -594,14 +594,14 @@ ColumnLayout {
   // Qualified allowlist entries (e.g. shell:ls, shell:cat)
   NText {
     Layout.topMargin: Style.marginM
-    text: pluginApi?.tr("settings.allowlistEntries") || "Allowlist Rules"
+    text: pluginApi?.tr("settings.allowlistEntries")
     pointSize: Style.fontSizeS
     font.weight: Font.Bold
     color: Color.mOnSurface
   }
 
   NText {
-    text: pluginApi?.tr("settings.allowlistEntriesDesc") || "Fine-grained rules. Use tool:qualifier for sub-permissions (e.g. shell:ls, shell:git). Use tool:* for wildcard."
+    text: pluginApi?.tr("settings.allowlistEntriesDesc")
     color: Color.mOnSurfaceVariant
     pointSize: Style.fontSizeXS
     Layout.fillWidth: true
@@ -623,7 +623,7 @@ ColumnLayout {
 
   NText {
     visible: root.qualifiedEntries.length === 0
-    text: pluginApi?.tr("settings.noAllowlistEntries") || "No rules yet. Rules are added when you approve tools in the chat."
+    text: pluginApi?.tr("settings.noAllowlistEntries")
     color: Color.mOnSurfaceVariant
     pointSize: Style.fontSizeXS
   }
@@ -692,12 +692,12 @@ ColumnLayout {
     NTextInput {
       id: newAllowlistInput
       Layout.fillWidth: true
-      placeholderText: pluginApi?.tr("settings.allowlistAddPlaceholder") || "e.g. shell:ls, shell:git, shell:*"
+      placeholderText: pluginApi?.tr("settings.allowlistAddPlaceholder")
       text: ""
     }
 
     NButton {
-      text: pluginApi?.tr("settings.allowlistAdd") || "Add"
+      text: pluginApi?.tr("settings.allowlistAdd")
       backgroundColor: Color.mPrimary
       textColor: Color.mOnPrimary
       hoverColor: Qt.lighter(Color.mPrimary, 1.2)

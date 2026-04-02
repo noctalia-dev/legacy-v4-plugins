@@ -191,7 +191,7 @@ Item {
     }
 
     if (toolCount > 0) {
-      tooltip += "\n" + (pluginApi?.tr("widget.tools") || "Tools") + ": " + toolCount;
+      tooltip += "\n" + pluginApi?.tr("widget.tools") + ": " + toolCount;
     }
 
     if (isGenerating) {

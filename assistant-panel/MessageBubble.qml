@@ -203,7 +203,7 @@ Item {
           spacing: Style.marginXS
 
           NText {
-            text: pluginApi?.tr("chat.usingTools") || "Using tools..."
+            text: pluginApi?.tr("chat.usingTools")
             color: Color.mTertiary
             pointSize: Style.fontSizeS
             applyUiScale: false

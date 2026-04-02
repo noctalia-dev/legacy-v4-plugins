@@ -66,7 +66,7 @@ Item {
         applyUiScale: false
 
         ToolTip.visible: toolCountMouse.containsMouse
-        ToolTip.text: (pluginApi?.tr("chat.toolsAvailable") || "Tools available") + ": " + toolCount
+        ToolTip.text: pluginApi?.tr("chat.toolsAvailable") + ": " + toolCount
 
         MouseArea {
           id: toolCountMouse
@@ -300,7 +300,7 @@ Item {
             }
 
             NText {
-              text: pluginApi?.tr("chat.executingTools") || "Executing tools..."
+              text: pluginApi?.tr("chat.executingTools")
               color: Color.mTertiary
               pointSize: Style.fontSizeS
               applyUiScale: false
@@ -350,7 +350,7 @@ Item {
                 }
 
                 NText {
-                  text: pluginApi?.tr("chat.toolConfirmTitle") || "Tool wants to run"
+                  text: pluginApi?.tr("chat.toolConfirmTitle")
                   color: Color.mOnSurface
                   pointSize: Style.fontSizeS
                   applyUiScale: false
@@ -403,7 +403,7 @@ Item {
                 spacing: Style.marginS
 
                 NButton {
-                  text: pluginApi?.tr("chat.approveOnce") || "Approve Once"
+                  text: pluginApi?.tr("chat.approveOnce")
                   backgroundColor: Color.mPrimary
                   textColor: Color.mOnPrimary
                   hoverColor: Qt.lighter(Color.mPrimary, 1.2)
@@ -416,7 +416,7 @@ Item {
                 // Qualified: "Allow <tool:qualifier>" button
                 NButton {
                   visible: confirmRect.hasQualifier
-                  text: (pluginApi?.tr("chat.allowCommand") || "Allow") + " `" + confirmRect.qualifiedKey + "`"
+                  text: pluginApi?.tr("chat.allowCommand") + " `" + confirmRect.qualifiedKey + "`"
                   backgroundColor: Color.mSurface
                   textColor: Color.mOnSurface
                   hoverColor: Qt.lighter(Color.mSurface, 1.3)
@@ -429,7 +429,7 @@ Item {
                 // Non-qualified: "Always Allow" button
                 NButton {
                   visible: !confirmRect.hasQualifier
-                  text: pluginApi?.tr("chat.approveAlways") || "Always Allow"
+                  text: pluginApi?.tr("chat.approveAlways")
                   backgroundColor: Color.mSurface
                   textColor: Color.mOnSurface
                   hoverColor: Qt.lighter(Color.mSurface, 1.3)
@@ -440,7 +440,7 @@ Item {
                 }
 
                 NButton {
-                  text: pluginApi?.tr("chat.deny") || "Deny"
+                  text: pluginApi?.tr("chat.deny")
                   backgroundColor: Qt.alpha(Color.mError, 0.15)
                   textColor: Color.mError
                   hoverColor: Qt.alpha(Color.mError, 0.25)
