@@ -28,7 +28,7 @@ NIconButton {
   applyUiScale: false
   customRadius: Style.radiusL
   icon: "screenshot"
-  tooltipText: pluginApi?.tr("panel.title") || "Screenshot"
+  tooltipText: pluginApi?.tr("panel.title")
   tooltipDirection: BarService.getTooltipDirection(screenName)
   colorBg: recording ? Color.mError : Style.capsuleColor
   colorFg: recording ? Color.mOnError : Color.mOnSurface

@@ -1,7 +1,7 @@
 {
   "id": "screen-shot-and-record",
   "name": "Screenshot, OCR & Record (Hyprland/Sway/Niri)",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "minNoctaliaVersion": "3.6.0",
   "author": "Pulsar",
   "license": "GPL-3.0-or-later",

@@ -31,10 +31,41 @@ PanelWindow {
 
     readonly property real monitorOffsetX: Number(root.screen?.x ?? 0)
     readonly property real monitorOffsetY: Number(root.screen?.y ?? 0)
+    property int activeWorkspaceId: -1
+    property int activeMonitorId: -1
+    property string frozenSourceFile: ""
+    property bool frozenSourceReady: false
 
     property list<var> windowRegions: []
 
-    // 启动时拉取窗口列表
+    // Resolve monitor workspace first so only current-workspace windows are shown.
+    Process {
+        id: hyprMonitorsProc
+        command: ["hyprctl", "-j", "monitors"]
+        running: false
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.activeWorkspaceId = -1
+                root.activeMonitorId = -1
+
+                try {
+                    const monitors = JSON.parse(text)
+                    const currentOutput = root.screen?.name
+                    const targetMonitor = monitors.find(m => m.name === currentOutput)
+
+                    if (targetMonitor) {
+                        root.activeWorkspaceId = Number(targetMonitor.activeWorkspace?.id ?? -1)
+                        root.activeMonitorId = Number(targetMonitor.id ?? -1)
+                    }
+                } catch (e) {
+                    Logger.w("ScreenShot", "[RegionSelector] hyprctl monitors parse error:", e)
+                }
+
+                hyprctlProc.running = true
+            }
+        }
+    }
+
     Process {
         id: hyprctlProc
         command: ["hyprctl", "-j", "clients"]
@@ -42,11 +73,26 @@ PanelWindow {
         stdout: StdioCollector {
             onStreamFinished: {
                 try {
-                    const clients = JSON.parse(text);
-                    const ox = root.monitorOffsetX;
-                    const oy = root.monitorOffsetY;
-                    root.windowRegions = clients
-                        .filter(w => !w.hidden && w.mapped)
+                    const clients = JSON.parse(text)
+                    const ox = root.monitorOffsetX
+                    const oy = root.monitorOffsetY
+                    const currentOutput = root.screen?.name
+                    const activeWs = root.activeWorkspaceId
+                    const activeMon = root.activeMonitorId
+
+                    const filteredClients = clients.filter(w => {
+                        if (w.hidden || !w.mapped) {
+                            return false
+                        }
+
+                        const sameWorkspace = (activeWs < 0) || (Number(w.workspace?.id ?? -2) === activeWs)
+                        const monitorNameMatches = (typeof w.monitor === "string") && (w.monitor === currentOutput)
+                        const monitorIdMatches = (activeMon >= 0) && (Number(w.monitorID ?? -2) === activeMon)
+                        const sameMonitor = monitorNameMatches || monitorIdMatches
+                        return sameWorkspace && sameMonitor
+                    })
+
+                    root.windowRegions = filteredClients
                         .map(w => ({
                             x: w.at[0] - ox,
                             y: w.at[1] - oy,
@@ -57,9 +103,9 @@ PanelWindow {
                             address: w.address
                         }))
                         .filter(w => w.width > 0 && w.height > 0)
-                        .filter(w => w.x < root.width && w.y < root.height && (w.x + w.width) > 0 && (w.y + w.height) > 0);
+                        .filter(w => w.x < root.width && w.y < root.height && (w.x + w.width) > 0 && (w.y + w.height) > 0)
 
-                    Logger.d("ScreenShot", "[RegionSelector] Found", root.windowRegions.length, "windows on output", root.screen?.name);
+                    Logger.d("ScreenShot", "[RegionSelector] Found", root.windowRegions.length, "windows on output", root.screen?.name, "workspace", root.activeWorkspaceId)
                 } catch (e) {
                     Logger.w("ScreenShot", "[RegionSelector] hyprctl parse error:", e)
                 }
@@ -78,8 +124,16 @@ PanelWindow {
                     if (pluginApi?.mainInstance) {
                         pluginApi.mainInstance.recordingActive = false
                     }
-                    Logger.d("ScreenShot", `bash '` + pluginApi.pluginDir + `/record.sh'`)
-                    Quickshell.execDetached(["bash", pluginApi.pluginDir + "/record.sh"])
+                    const stopRecordingNotificationsEnabled = pluginApi?.pluginSettings?.recordingNotifications
+                                                          ?? pluginApi?.manifest?.metadata?.defaultSettings?.recordingNotifications
+                                                          ?? true
+                    const stopArgs = ["bash", pluginApi.pluginDir + "/record.sh"]
+                    if (stopRecordingNotificationsEnabled) {
+                        stopArgs.push("--notify")
+                    }
+                    stopArgs.push(...buildRecordingNotifyArgs())
+                    Logger.d("ScreenShot", "[Panel] Executing stop command args:", stopArgs)
+                    Quickshell.execDetached(stopArgs)
                     root.visible = false
                     root.closed()
                 }
@@ -87,14 +141,39 @@ PanelWindow {
         }
     }
 
+    Process {
+        id: freezeCaptureProc
+        running: false
+        onExited: (exitCode) => {
+            root.frozenSourceReady = (exitCode === 0)
+            if (!root.frozenSourceReady) {
+                Logger.w("ScreenShot", "[RegionSelector] Frozen source capture failed; falling back to live region capture")
+            }
+        }
+    }
+
     function startCapture() {
-        checkRecordingProc.running = true
+        const isRecordingTarget = (root.target === "record" || root.target === "recordsound")
+        if (isRecordingTarget) {
+            checkRecordingProc.running = true
+        }
+
+        if (root.target === "screenshot" || root.target === "search" || root.target === "ocr") {
+            const outputName = root.screen ? root.screen.name : "unknown"
+            const safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
+            root.frozenSourceFile = `/tmp/screen-${safeOutputName}-${Date.now()}-frozen.png`
+            root.frozenSourceReady = false
+            freezeCaptureProc.command = ["sh", "-c", "command -v grim >/dev/null 2>&1 && grim \"$1\" && test -s \"$1\"", "sh", root.frozenSourceFile]
+            freezeCaptureProc.running = true
+        }
 
         const windowsEnabled = pluginApi?.pluginSettings?.enableWindowsSelection
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
                                ?? true
 
-        hyprctlProc.running = windowsEnabled && CompositorService.isHyprland
+        if (windowsEnabled && CompositorService.isHyprland) {
+            hyprMonitorsProc.running = true
+        }
     }
 
     property real mouseX: 0
@@ -127,6 +206,44 @@ PanelWindow {
         return null;
     }
 
+    function shellQuote(value) {
+        return "'" + String(value ?? "").replace(/'/g, "'\"'\"'") + "'"
+    }
+
+    function buildShellRequireCmdFn(appName, failedTitle, missingMessage) {
+        return `require_cmd() { if ! command -v "$1" >/dev/null 2>&1; then notify-send -a ${shellQuote(appName)} ${shellQuote(failedTitle)} ${shellQuote(missingMessage)}; exit 1; fi; }`
+    }
+
+    function buildFrozenCropCmd(sourceFile, cropGeometry, fallbackGeometry, outputPath, streamOutput) {
+        const sourceArg = shellQuote(sourceFile)
+        const cropArg = shellQuote(cropGeometry)
+        const fallbackArg = shellQuote(fallbackGeometry)
+        const magickOut = streamOutput ? "png:-" : shellQuote(outputPath)
+        const grimOut = streamOutput ? "-" : shellQuote(outputPath)
+
+        return `if command -v magick >/dev/null 2>&1; then magick ${sourceArg} -crop ${cropArg} +repage ${magickOut}; elif command -v convert >/dev/null 2>&1; then convert ${sourceArg} -crop ${cropArg} +repage ${magickOut}; else grim -g ${fallbackArg} ${grimOut}; fi`
+    }
+
+    function buildEditorCmd(editor, inputFile, outputFile) {
+        if (editor === "satty") {
+            return `satty --filename ${shellQuote(inputFile)} --output-filename ${shellQuote(outputFile)}`
+        }
+
+        return `${editor} -f ${shellQuote(inputFile)} -o ${shellQuote(outputFile)}`
+    }
+
+    function buildRecordingNotifyArgs() {
+        return [
+            "--notify-app", pluginApi?.tr("notify.app.recorder"),
+            "--notify-cancelled-title", pluginApi?.tr("notify.recording.cancelledTitle"),
+            "--notify-no-region-body", pluginApi?.tr("notify.recording.noRegionBody"),
+            "--notify-no-dir-body", pluginApi?.tr("notify.recording.noDirBody"),
+            "--notify-stopped-title", pluginApi?.tr("notify.recording.stoppedTitle"),
+            "--notify-stopped-body", pluginApi?.tr("notify.recording.stoppedBody"),
+            "--notify-starting-title", pluginApi?.tr("notify.recording.startingTitle")
+        ]
+    }
+
     function processRegion(x, y, width, height, mode) {
         const globalX = Math.round(x + root.monitorOffsetX)
         const globalY = Math.round(y + root.monitorOffsetY)
@@ -147,11 +264,21 @@ PanelWindow {
         var timestamp = Qt.formatDateTime(new Date(), "yyyy-MM-dd_HH.mm.ss")
         var sourceFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}_source.png`
         var outputFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}.png`
+        const useFrozenSource = root.frozenSourceReady && root.frozenSourceFile !== ""
+        const frozenSourceFile = root.frozenSourceFile
+        const cropGeometry = `${globalW}x${globalH}+${globalX}+${globalY}`
 
         Logger.d("ScreenShot", root.target)
         if (root.target === "screenshot") {
+            const notifyApp = pluginApi?.tr("notify.app.screenshot")
+            const copiedTitle = pluginApi?.tr("notify.screenshot.copiedTitle")
+            const copiedBody = pluginApi?.tr("notify.screenshot.copiedBody")
+            const savedTitle = pluginApi?.tr("notify.screenshot.savedTitle")
+
             if (mode === "copy") {
-                const copyCmd = `grim -g '${geometry}' - | wl-copy --type image/png && notify-send -a "Screenshot" "Screenshot copied" "Image copied to clipboard"`
+                const copyCmd = useFrozenSource
+                    ? `${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, "", true)} | wl-copy --type image/png && rm -f '${frozenSourceFile}' && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(copiedTitle)} ${shellQuote(copiedBody)}`
+                    : `grim -g '${geometry}' - | wl-copy --type image/png && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(copiedTitle)} ${shellQuote(copiedBody)}`
                 Logger.d("ScreenShot", "[Panel] Executing copy command:", copyCmd)
                 Quickshell.execDetached(["sh", "-c", copyCmd])
             } else if (mode === "edit") {
@@ -163,16 +290,30 @@ PanelWindow {
                                            ?? pluginApi?.manifest?.metadata?.defaultSettings?.keepSourceScreenshot
                                            ?? false
 
-                const editCmd = `mkdir -p '${screenshotDir}' && grim -g '${geometry}' '${sourceFile}' && ${editor} -f '${sourceFile}' -o '${outputFile}' && if [ '${keepSourceScreenshot ? "true" : "false"}' != 'true' ]; then rm -f '${sourceFile}'; fi && notify-send -a "Screenshot" "Screenshot saved" "${outputFile}"`
+                const editorCmd = buildEditorCmd(editor, sourceFile, outputFile)
+                const editCmd = useFrozenSource
+                    ? `mkdir -p '${screenshotDir}' && ${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, sourceFile, false)} && rm -f '${frozenSourceFile}' && ${editorCmd} && if [ '${keepSourceScreenshot ? "true" : "false"}' != 'true' ]; then rm -f '${sourceFile}'; fi && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(savedTitle)} "${outputFile}"`
+                    : `mkdir -p '${screenshotDir}' && grim -g '${geometry}' '${sourceFile}' && ${editorCmd} && if [ '${keepSourceScreenshot ? "true" : "false"}' != 'true' ]; then rm -f '${sourceFile}'; fi && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(savedTitle)} "${outputFile}"`
                 Logger.d("ScreenShot", "[Panel] Executing edit command:", editCmd)
                 Quickshell.execDetached(["sh", "-c", editCmd])
             }
         } else if (root.target === "search") {
-            const searchCmd = `grim -g '${geometry}' '${tempFile}' && xdg-open \"https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')\"`
+            const searchCmd = useFrozenSource
+                ? `${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, tempFile, false)} && rm -f '${frozenSourceFile}' && xdg-open \"https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')\"`
+                : `grim -g '${geometry}' '${tempFile}' && xdg-open \"https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')\"`
             Logger.d("ScreenShot", "[Panel] Executing search command:", searchCmd)
             Quickshell.execDetached(["sh", "-c", searchCmd])
         } else if (root.target === "ocr") {
-            const ocrCmd = `if ! command -v grim >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "grim is not installed"; exit 1; fi; if ! command -v tesseract >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "tesseract is not installed"; exit 1; fi; if ! command -v wl-copy >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "wl-copy is not installed"; exit 1; fi; OCR_TEXT=""; if grim -g '${geometry}' '${tempFile}'; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a "Screenshot" "OCR complete" "Recognized text copied to clipboard"; else notify-send -a "Screenshot" "OCR complete" "No text detected in selection"; fi`
+            const notifyApp = pluginApi?.tr("notify.app.screenshot")
+            const depMissing = pluginApi?.tr("notify.dependencyMissing")
+            const failedTitle = pluginApi?.tr("notify.ocr.failed")
+            const doneTitle = pluginApi?.tr("notify.ocr.doneTitle")
+            const doneCopied = pluginApi?.tr("notify.ocr.copiedBody")
+            const doneNoText = pluginApi?.tr("notify.ocr.emptyBody")
+            const ocrPreamble = buildShellRequireCmdFn(notifyApp, failedTitle, depMissing)
+            const ocrCmd = useFrozenSource
+                ? `${ocrPreamble}; require_cmd grim; require_cmd tesseract; require_cmd wl-copy; OCR_TEXT=""; ${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, tempFile, false)} && rm -f '${frozenSourceFile}'; if [ -s '${tempFile}' ]; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneCopied)}; else notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneNoText)}; fi`
+                : `${ocrPreamble}; require_cmd grim; require_cmd tesseract; require_cmd wl-copy; OCR_TEXT=""; if grim -g '${geometry}' '${tempFile}'; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneCopied)}; else notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneNoText)}; fi`
             Logger.d("ScreenShot", "[Panel] Executing ocr command:", ocrCmd)
             Quickshell.execDetached(["sh", "-c", ocrCmd])
         } else if (root.target === "record" || root.target === "recordsound") {
@@ -200,6 +341,7 @@ PanelWindow {
             if (recordingNotificationsEnabled) {
                 recordArgs.push("--notify")
             }
+            recordArgs.push(...buildRecordingNotifyArgs())
 
             Logger.d("ScreenShot", "[Panel] Executing record command args:", recordArgs)
             const recordStarted = Quickshell.execDetached(recordArgs)

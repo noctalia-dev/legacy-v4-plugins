@@ -30,11 +30,18 @@ MANUAL_REGION=""
 SOUND_FLAG=0
 NOTIFY_FLAG=0
 CUSTOM_DIR=""
+NOTIFY_APP="Recorder"
+NOTIFY_CANCELLED_TITLE="Recording cancelled"
+NOTIFY_NO_REGION_BODY="No region specified. Use --region <geometry>"
+NOTIFY_NO_DIR_BODY="No folder specified for --dir"
+NOTIFY_STOPPED_TITLE="Recording Stopped"
+NOTIFY_STOPPED_BODY="Stopped"
+NOTIFY_STARTING_TITLE="Starting recording"
 
 send_notify() {
     # Notifications are optional and only sent when --notify is provided.
     if [[ "$NOTIFY_FLAG" -eq 1 ]] && command -v notify-send >/dev/null 2>&1; then
-        notify-send "$1" "$2" -a 'Recorder' & disown
+        notify-send "$1" "$2" -a "$NOTIFY_APP" & disown
     fi
 }
 
@@ -43,14 +50,14 @@ for ((i=0;i<${#ARGS[@]};i++)); do
         if (( i+1 < ${#ARGS[@]} )); then
             MANUAL_REGION="${ARGS[i+1]}"
         else
-            send_notify "Recording cancelled" "No region specified for --region"
+            send_notify "$NOTIFY_CANCELLED_TITLE" "$NOTIFY_NO_REGION_BODY"
             exit 1
         fi
     elif [[ "${ARGS[i]}" == "--dir" ]]; then
         if (( i+1 < ${#ARGS[@]} )); then
             CUSTOM_DIR="${ARGS[i+1]}"
         else
-            send_notify "Recording cancelled" "No folder specified for --dir"
+            send_notify "$NOTIFY_CANCELLED_TITLE" "$NOTIFY_NO_DIR_BODY"
             exit 1
         fi
     elif [[ "${ARGS[i]}" == "--sound" ]]; then
@@ -58,6 +65,34 @@ for ((i=0;i<${#ARGS[@]};i++)); do
     elif [[ "${ARGS[i]}" == "--notify" ]]; then
         # Keep notifications opt-in to avoid overlay/pop-up interference while recording.
         NOTIFY_FLAG=1
+    elif [[ "${ARGS[i]}" == "--notify-app" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            NOTIFY_APP="${ARGS[i+1]}"
+        fi
+    elif [[ "${ARGS[i]}" == "--notify-cancelled-title" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            NOTIFY_CANCELLED_TITLE="${ARGS[i+1]}"
+        fi
+    elif [[ "${ARGS[i]}" == "--notify-no-region-body" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            NOTIFY_NO_REGION_BODY="${ARGS[i+1]}"
+        fi
+    elif [[ "${ARGS[i]}" == "--notify-no-dir-body" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            NOTIFY_NO_DIR_BODY="${ARGS[i+1]}"
+        fi
+    elif [[ "${ARGS[i]}" == "--notify-stopped-title" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            NOTIFY_STOPPED_TITLE="${ARGS[i+1]}"
+        fi
+    elif [[ "${ARGS[i]}" == "--notify-stopped-body" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            NOTIFY_STOPPED_BODY="${ARGS[i+1]}"
+        fi
+    elif [[ "${ARGS[i]}" == "--notify-starting-title" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            NOTIFY_STARTING_TITLE="${ARGS[i+1]}"
+        fi
     fi
 done
 
@@ -71,15 +106,15 @@ mkdir -p "$RECORDING_DIR"
 cd "$RECORDING_DIR" || exit
 
 if pgrep wf-recorder > /dev/null; then
-    send_notify "Recording Stopped" "Stopped"
+    send_notify "$NOTIFY_STOPPED_TITLE" "$NOTIFY_STOPPED_BODY"
     pkill wf-recorder &
 else
     if [[ -z "$MANUAL_REGION" ]]; then
-        send_notify "Recording cancelled" "No region specified. Use --region <geometry>"
+        send_notify "$NOTIFY_CANCELLED_TITLE" "$NOTIFY_NO_REGION_BODY"
         exit 1
     fi
 
-    send_notify "Starting recording" 'recording_'"$(getdate)"'.mp4'
+    send_notify "$NOTIFY_STARTING_TITLE" 'recording_'"$(getdate)"'.mp4'
     if [[ $SOUND_FLAG -eq 1 ]]; then
         wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$MANUAL_REGION" --audio="$(getaudiooutput)"
     else

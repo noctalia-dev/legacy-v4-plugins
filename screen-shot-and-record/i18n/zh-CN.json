@@ -40,5 +40,36 @@
             "label": "录屏通知",
             "description": "在开始/停止录屏或发生错误时显示通知。"
         }
+    },
+    "notify": {
+        "app": {
+            "screenshot": "截图",
+            "recorder": "录屏"
+        },
+        "dependencyMissing": "缺少必需的依赖。",
+        "screenshot": {
+            "failed": "截图失败",
+            "savedTitle": "截图已保存",
+            "copiedTitle": "截图已复制",
+            "copiedBody": "图像已复制到剪贴板"
+        },
+        "search": {
+            "failed": "图像搜索失败"
+        },
+        "ocr": {
+            "failed": "文字识别失败",
+            "doneTitle": "文字识别完成",
+            "copiedBody": "识别文本已复制到剪贴板",
+            "emptyBody": "所选区域未检测到文字"
+        },
+        "recording": {
+            "failed": "录屏失败",
+            "cancelledTitle": "录屏已取消",
+            "noRegionBody": "未指定区域。请使用 --region <geometry>",
+            "noDirBody": "未为 --dir 指定文件夹",
+            "stoppedTitle": "录屏已停止",
+            "stoppedBody": "已停止",
+            "startingTitle": "正在开始录屏"
+        }
     }
 }

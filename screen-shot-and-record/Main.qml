@@ -45,8 +45,46 @@ Item {
             return
         }
 
+        const recordingNotificationsEnabled = pluginApi?.pluginSettings?.recordingNotifications
+                                           ?? pluginApi?.manifest?.metadata?.defaultSettings?.recordingNotifications
+                                           ?? true
+
         recordingActive = false
-        Quickshell.execDetached(["bash", pluginApi.pluginDir + "/record.sh"])
+        const stopArgs = ["bash", pluginApi.pluginDir + "/record.sh"]
+        if (recordingNotificationsEnabled) {
+            stopArgs.push("--notify")
+        }
+        stopArgs.push(...buildRecordingNotifyArgs())
+        Quickshell.execDetached(stopArgs)
+    }
+
+    function shellQuote(value) {
+        return "'" + String(value ?? "").replace(/'/g, "'\"'\"'") + "'"
+    }
+
+    function buildShellRequireCmdFn(appName, failedTitle, missingMessage) {
+        return `require_cmd() { if ! command -v "$1" >/dev/null 2>&1; then notify-send -a ${shellQuote(appName)} ${shellQuote(failedTitle)} ${shellQuote(missingMessage)}; exit 1; fi; }`
+    }
+
+    function buildRecordingNotifyArgs() {
+        return [
+            "--notify-app", pluginApi?.tr("notify.app.recorder"),
+            "--notify-cancelled-title", pluginApi?.tr("notify.recording.cancelledTitle"),
+            "--notify-no-region-body", pluginApi?.tr("notify.recording.noRegionBody"),
+            "--notify-no-dir-body", pluginApi?.tr("notify.recording.noDirBody"),
+            "--notify-stopped-title", pluginApi?.tr("notify.recording.stoppedTitle"),
+            "--notify-stopped-body", pluginApi?.tr("notify.recording.stoppedBody"),
+            "--notify-starting-title", pluginApi?.tr("notify.recording.startingTitle")
+        ]
+    }
+
+    function buildRecordingNotifyShellArgs() {
+        const args = buildRecordingNotifyArgs()
+        let shellArgs = ""
+        for (let i = 0; i < args.length; i += 2) {
+            shellArgs += ` ${shellQuote(args[i])} ${shellQuote(args[i + 1])}`
+        }
+        return shellArgs
     }
 
     function runNiriTarget(target) {
@@ -74,22 +112,41 @@ Item {
             const timestamp = Qt.formatDateTime(new Date(), "yyyy-MM-dd_HH.mm.ss")
             const sourceFile = `${screenshotDir}/screenshot_${timestamp}_niri_source.png`
             const outputFile = `${screenshotDir}/screenshot_${timestamp}_niri.png`
+            const notifyApp = pluginApi?.tr("notify.app.screenshot")
+            const depMissing = pluginApi?.tr("notify.dependencyMissing")
+            const failedTitle = pluginApi?.tr("notify.screenshot.failed")
+            const savedTitle = pluginApi?.tr("notify.screenshot.savedTitle")
+            const copiedTitle = pluginApi?.tr("notify.screenshot.copiedTitle")
+            const copiedBody = pluginApi?.tr("notify.screenshot.copiedBody")
 
-            const cmd = `if ! command -v slurp >/dev/null 2>&1; then notify-send -a "Screenshot" "Screenshot failed" "slurp is not installed"; exit 1; fi; if ! command -v grim >/dev/null 2>&1; then notify-send -a "Screenshot" "Screenshot failed" "grim is not installed"; exit 1; fi; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; mkdir -p "$1"; if command -v "$4" >/dev/null 2>&1; then grim -g "$REGION" "$2" && "$4" -f "$2" -o "$3" && if [ "$5" != "true" ]; then rm -f "$2"; fi && notify-send -a "Screenshot" "Screenshot saved" "$3"; else if ! command -v wl-copy >/dev/null 2>&1; then notify-send -a "Screenshot" "Screenshot failed" "Editor '$4' and wl-copy are not installed"; exit 1; fi; grim -g "$REGION" - | wl-copy --type image/png && notify-send -a "Screenshot" "Screenshot copied" "Editor '$4' not found; copied to clipboard"; fi`
-            Quickshell.execDetached(["bash", "-c", cmd, "bash", screenshotDir, sourceFile, outputFile, editor, keepSourceScreenshot ? "true" : "false"])
+            const screenshotPreamble = buildShellRequireCmdFn(notifyApp, failedTitle, depMissing)
+            const cmd = `${screenshotPreamble}; require_cmd slurp; require_cmd grim; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; mkdir -p "$1"; grim -s 1 "$2"; read -r RX RY RW RH <<<"$(printf '%s' "$REGION" | awk -F'[, x]+' '{printf "%d %d %d %d", $1, $2, $3, $4}')"; CROP="$(printf '%sx%s+%s+%s' "$RW" "$RH" "$RX" "$RY")"; if command -v "$4" >/dev/null 2>&1; then if command -v magick >/dev/null 2>&1; then magick "$2" -crop "$CROP" +repage "$6"; elif command -v convert >/dev/null 2>&1; then convert "$2" -crop "$CROP" +repage "$6"; else grim -g "$REGION" "$6"; fi && if [ "$4" = "satty" ]; then satty --filename "$6" --output-filename "$3"; else "$4" -f "$6" -o "$3"; fi && if [ "$5" != "true" ]; then rm -f "$2" "$6"; fi && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(savedTitle)} "$3"; else require_cmd wl-copy; if command -v magick >/dev/null 2>&1; then magick "$2" -crop "$CROP" +repage png:- | wl-copy --type image/png; elif command -v convert >/dev/null 2>&1; then convert "$2" -crop "$CROP" +repage png:- | wl-copy --type image/png; else grim -g "$REGION" - | wl-copy --type image/png; fi && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(copiedTitle)} ${shellQuote(copiedBody)}; fi`
+            const regionFile = `${screenshotDir}/screenshot_${timestamp}_niri_region.png`
+            Quickshell.execDetached(["bash", "-c", cmd, "bash", screenshotDir, sourceFile, outputFile, editor, keepSourceScreenshot ? "true" : "false", regionFile])
             return true
         }
 
         if (target === "search") {
             const tempFile = `/tmp/screen-niri-${Date.now()}.png`
-            const cmd = `if ! command -v slurp >/dev/null 2>&1; then notify-send -a "Screenshot" "Search failed" "slurp is not installed"; exit 1; fi; if ! command -v grim >/dev/null 2>&1; then notify-send -a "Screenshot" "Search failed" "grim is not installed"; exit 1; fi; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; grim -g "$REGION" '${tempFile}' && xdg-open "https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')"`
+            const notifyApp = pluginApi?.tr("notify.app.screenshot")
+            const depMissing = pluginApi?.tr("notify.dependencyMissing")
+            const failedTitle = pluginApi?.tr("notify.search.failed")
+            const searchPreamble = buildShellRequireCmdFn(notifyApp, failedTitle, depMissing)
+            const cmd = `${searchPreamble}; require_cmd slurp; require_cmd grim; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; grim -g "$REGION" '${tempFile}' && xdg-open "https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')"`
             Quickshell.execDetached(["bash", "-c", cmd])
             return true
         }
 
         if (target === "ocr") {
             const tempFile = `/tmp/screen-niri-ocr-${Date.now()}.png`
-            const cmd = `if ! command -v slurp >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "slurp is not installed"; exit 1; fi; if ! command -v grim >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "grim is not installed"; exit 1; fi; if ! command -v tesseract >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "tesseract is not installed"; exit 1; fi; if ! command -v wl-copy >/dev/null 2>&1; then notify-send -a "Screenshot" "OCR failed" "wl-copy is not installed"; exit 1; fi; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; OCR_TEXT=""; if grim -g "$REGION" '${tempFile}'; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a "Screenshot" "OCR complete" "Recognized text copied to clipboard"; else notify-send -a "Screenshot" "OCR complete" "No text detected in selection"; fi`
+            const notifyApp = pluginApi?.tr("notify.app.screenshot")
+            const depMissing = pluginApi?.tr("notify.dependencyMissing")
+            const failedTitle = pluginApi?.tr("notify.ocr.failed")
+            const doneTitle = pluginApi?.tr("notify.ocr.doneTitle")
+            const doneCopied = pluginApi?.tr("notify.ocr.copiedBody")
+            const doneNoText = pluginApi?.tr("notify.ocr.emptyBody")
+            const ocrPreamble = buildShellRequireCmdFn(notifyApp, failedTitle, depMissing)
+            const cmd = `${ocrPreamble}; require_cmd slurp; require_cmd grim; require_cmd tesseract; require_cmd wl-copy; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; OCR_TEXT=""; if grim -g "$REGION" '${tempFile}'; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneCopied)}; else notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneNoText)}; fi`
             Quickshell.execDetached(["bash", "-c", cmd])
             return true
         }
@@ -114,7 +171,12 @@ Item {
             const scriptPath = pluginApi.pluginDir + "/record.sh"
             const soundArg = (target === "recordsound") ? " --sound" : ""
             const notifyArg = recordingNotificationsEnabled ? " --notify" : ""
-            const cmd = `if ! command -v slurp >/dev/null 2>&1; then notify-send -a "Recorder" "Recording failed" "slurp is not installed"; exit 1; fi; if ! command -v wf-recorder >/dev/null 2>&1; then notify-send -a "Recorder" "Recording failed" "wf-recorder is not installed"; exit 1; fi; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; bash "$2" --region "$REGION" --dir "$1"${soundArg}${notifyArg}`
+            const notifyTextArgs = buildRecordingNotifyShellArgs()
+            const notifyApp = pluginApi?.tr("notify.app.recorder")
+            const depMissing = pluginApi?.tr("notify.dependencyMissing")
+            const failedTitle = pluginApi?.tr("notify.recording.failed")
+            const recordPreamble = buildShellRequireCmdFn(notifyApp, failedTitle, depMissing)
+            const cmd = `${recordPreamble}; require_cmd slurp; require_cmd wf-recorder; REGION="$(slurp)"; [[ -n "$REGION" ]] || exit 0; bash "$2" --region "$REGION" --dir "$1"${soundArg}${notifyArg}${notifyTextArgs}`
             const recordStarted = Quickshell.execDetached(["bash", "-c", cmd, "bash", recordingDir, scriptPath])
             recordingActive = (recordStarted !== false)
             return true

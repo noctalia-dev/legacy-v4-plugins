@@ -23,6 +23,53 @@
     "screenshotEditor": {
       "label": "Tool zum Bearbeiten von Screenshots",
       "description": "Ein Tool zum Bearbeiten von Screenshots. Muss vorinstalliert werden."
+    },
+    "keepSourceScreenshot": {
+      "label": "Quell-Screenshot behalten",
+      "description": "Die temporäre Datei *_source.png nach dem Speichern des bearbeiteten Screenshots behalten."
+    },
+    "savePath": {
+      "label": "Speicherordner für Screenshots",
+      "description": "Ordner, in dem bearbeitete Screenshots gespeichert werden."
+    },
+    "recordingSavePath": {
+      "label": "Speicherordner für Aufnahmen",
+      "description": "Ordner, in dem Bildschirmaufnahmen gespeichert werden."
+    },
+    "recordingNotifications": {
+      "label": "Aufnahme-Benachrichtigungen",
+      "description": "Benachrichtigungen anzeigen, wenn eine Aufnahme startet/stoppt oder Fehler auftreten."
+    }
+  },
+  "notify": {
+    "app": {
+      "screenshot": "Screenshot",
+      "recorder": "Aufnahme"
+    },
+    "dependencyMissing": "Eine erforderliche Abhängigkeit ist nicht installiert.",
+    "screenshot": {
+      "failed": "Screenshot fehlgeschlagen",
+      "savedTitle": "Screenshot gespeichert",
+      "copiedTitle": "Screenshot kopiert",
+      "copiedBody": "Bild in die Zwischenablage kopiert"
+    },
+    "search": {
+      "failed": "Bildersuche fehlgeschlagen"
+    },
+    "ocr": {
+      "failed": "OCR fehlgeschlagen",
+      "doneTitle": "OCR abgeschlossen",
+      "copiedBody": "Erkannter Text in die Zwischenablage kopiert",
+      "emptyBody": "Kein Text in der Auswahl erkannt"
+    },
+    "recording": {
+      "failed": "Aufnahme fehlgeschlagen",
+      "cancelledTitle": "Aufnahme abgebrochen",
+      "noRegionBody": "Keine Region angegeben. Verwende --region <Geometrie>",
+      "noDirBody": "Kein Ordner für --dir angegeben",
+      "stoppedTitle": "Aufnahme gestoppt",
+      "stoppedBody": "Gestoppt",
+      "startingTitle": "Aufnahme wird gestartet"
     }
   }
 }

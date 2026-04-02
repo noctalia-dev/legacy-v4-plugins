@@ -40,5 +40,36 @@
             "label": "Notificaciones de grabación",
             "description": "Mostrar notificaciones al iniciar/detener la grabación o cuando ocurren errores."
         }
+    },
+    "notify": {
+        "app": {
+            "screenshot": "Captura de pantalla",
+            "recorder": "Grabador"
+        },
+        "dependencyMissing": "Falta una dependencia requerida.",
+        "screenshot": {
+            "failed": "La captura falló",
+            "savedTitle": "Captura guardada",
+            "copiedTitle": "Captura copiada",
+            "copiedBody": "Imagen copiada al portapapeles"
+        },
+        "search": {
+            "failed": "La búsqueda de imágenes falló"
+        },
+        "ocr": {
+            "failed": "OCR falló",
+            "doneTitle": "OCR completado",
+            "copiedBody": "Texto reconocido copiado al portapapeles",
+            "emptyBody": "No se detectó texto en la selección"
+        },
+        "recording": {
+            "failed": "La grabación falló",
+            "cancelledTitle": "Grabación cancelada",
+            "noRegionBody": "No se especificó una región. Usa --region <geometría>",
+            "noDirBody": "No se especificó una carpeta para --dir",
+            "stoppedTitle": "Grabación detenida",
+            "stoppedBody": "Detenida",
+            "startingTitle": "Iniciando grabación"
+        }
     }
 }

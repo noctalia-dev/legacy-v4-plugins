@@ -10,7 +10,7 @@ Install from the plugin marketplace. You also need to install the following pack
 
 | Feature | Packages |
 | :-: | :-: |
-| Screenshot | `grim` (screen capture), `wl-copy`, `satty`/`swappy` (editor) |
+| Screenshot | `grim` (screen capture), `wl-copy`, `satty`/`swappy` (editor), `imagemagick` (`magick`/`convert`, used for frozen-frame crop when available) |
 | Text Recognition | `tesseract` (OCR, also install language packages, e.g., `tesseract-data-chi_sim`) |
 | Google Lens | `xdg-open`, `jq` |
 | Screen Recording | `wf-recorder` |

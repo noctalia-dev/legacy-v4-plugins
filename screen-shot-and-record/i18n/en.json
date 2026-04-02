@@ -40,5 +40,36 @@
             "label": "Recording Notifications",
             "description": "Show notifications when recording starts/stops or errors occur."
         }
+    },
+    "notify": {
+        "app": {
+            "screenshot": "Screenshot",
+            "recorder": "Recorder"
+        },
+        "dependencyMissing": "A required dependency is not installed.",
+        "screenshot": {
+            "failed": "Screenshot failed",
+            "savedTitle": "Screenshot saved",
+            "copiedTitle": "Screenshot copied",
+            "copiedBody": "Image copied to clipboard"
+        },
+        "search": {
+            "failed": "Image search failed"
+        },
+        "ocr": {
+            "failed": "OCR failed",
+            "doneTitle": "OCR complete",
+            "copiedBody": "Recognized text copied to clipboard",
+            "emptyBody": "No text detected in selection"
+        },
+        "recording": {
+            "failed": "Recording failed",
+            "cancelledTitle": "Recording cancelled",
+            "noRegionBody": "No region specified. Use --region <geometry>",
+            "noDirBody": "No folder specified for --dir",
+            "stoppedTitle": "Recording stopped",
+            "stoppedBody": "Stopped",
+            "startingTitle": "Starting recording"
+        }
     }
 }
