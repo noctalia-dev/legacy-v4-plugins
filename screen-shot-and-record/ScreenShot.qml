@@ -32,6 +32,7 @@ PanelWindow {
     readonly property real monitorOffsetX: Number(root.screen?.x ?? 0)
     readonly property real monitorOffsetY: Number(root.screen?.y ?? 0)
     property int activeWorkspaceId: -1
+    property string activeWorkspaceName: ""
     property int activeMonitorId: -1
     property string frozenSourceFile: ""
     property bool frozenSourceReady: false
@@ -46,6 +47,7 @@ PanelWindow {
         stdout: StdioCollector {
             onStreamFinished: {
                 root.activeWorkspaceId = -1
+                root.activeWorkspaceName = ""
                 root.activeMonitorId = -1
 
                 try {
@@ -55,6 +57,7 @@ PanelWindow {
 
                     if (targetMonitor) {
                         root.activeWorkspaceId = Number(targetMonitor.activeWorkspace?.id ?? -1)
+                        root.activeWorkspaceName = String(targetMonitor.activeWorkspace?.name ?? "")
                         root.activeMonitorId = Number(targetMonitor.id ?? -1)
                     }
                 } catch (e) {
@@ -78,6 +81,7 @@ PanelWindow {
                     const oy = root.monitorOffsetY
                     const currentOutput = root.screen?.name
                     const activeWs = root.activeWorkspaceId
+                    const activeWsName = root.activeWorkspaceName
                     const activeMon = root.activeMonitorId
 
                     const filteredClients = clients.filter(w => {
@@ -85,9 +89,19 @@ PanelWindow {
                             return false
                         }
 
-                        const sameWorkspace = (activeWs < 0) || (Number(w.workspace?.id ?? -2) === activeWs)
-                        const monitorNameMatches = (typeof w.monitor === "string") && (w.monitor === currentOutput)
-                        const monitorIdMatches = (activeMon >= 0) && (Number(w.monitorID ?? -2) === activeMon)
+                        const workspaceId = Number(w.workspace?.id ?? NaN)
+                        const workspaceName = String(w.workspace?.name ?? "")
+                        const sameWorkspace = (activeWs < 0)
+                            || (Number.isFinite(workspaceId) && workspaceId === activeWs)
+                            || (activeWsName !== "" && workspaceName === activeWsName)
+
+                        const monitorName = String(w.monitorName ?? "")
+                        const monitorNameMatches = monitorName === currentOutput
+                            || ((typeof w.monitor === "string") && (w.monitor === currentOutput))
+
+                        // Hyprland clients JSON can expose monitor id as `monitor`, `monitorID`, or `monitorId`.
+                        const monitorId = Number(w.monitor ?? w.monitorID ?? w.monitorId ?? NaN)
+                        const monitorIdMatches = (activeMon >= 0) && Number.isFinite(monitorId) && (monitorId === activeMon)
                         const sameMonitor = monitorNameMatches || monitorIdMatches
                         return sameWorkspace && sameMonitor
                     })
@@ -163,8 +177,9 @@ PanelWindow {
             const safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
             root.frozenSourceFile = `/tmp/screen-${safeOutputName}-${Date.now()}-frozen.png`
             root.frozenSourceReady = false
-            // Keep frozen capture in logical coordinates so selection crop stays aligned on HiDPI.
-            freezeCaptureProc.command = ["sh", "-c", "command -v grim >/dev/null 2>&1 && grim -s 1 \"$1\" && test -s \"$1\"", "sh", root.frozenSourceFile]
+            // Capture only the current output at scale 1 so crop coordinates stay
+            // in output-local logical pixels, which is correct for all resolutions.
+            freezeCaptureProc.command = ["sh", "-c", "command -v grim >/dev/null 2>&1 && grim -s 1 -o \"$2\" \"$1\" && test -s \"$1\"", "sh", root.frozenSourceFile, outputName]
             freezeCaptureProc.running = true
         }
 
@@ -195,6 +210,7 @@ PanelWindow {
     property real regionY: Math.min(dragStartY, draggingY)
     property real regionWidth: Math.abs(draggingX - dragStartX)
     property real regionHeight: Math.abs(draggingY - dragStartY)
+    readonly property real uiScale: Style.uiScaleRatio
 
     function findWindowAt(x, y) {
         for (let i = root.windowRegions.length - 1; i >= 0; i--) {
@@ -246,8 +262,10 @@ PanelWindow {
     }
 
     function processRegion(x, y, width, height, mode) {
-        const globalX = Math.round(x + root.monitorOffsetX)
-        const globalY = Math.round(y + root.monitorOffsetY)
+        const localX = Math.round(x)
+        const localY = Math.round(y)
+        const globalX = Math.round(localX + root.monitorOffsetX)
+        const globalY = Math.round(localY + root.monitorOffsetY)
         const globalW = Math.max(1, Math.round(width))
         const globalH = Math.max(1, Math.round(height))
         const geometry = `${globalX},${globalY} ${globalW}x${globalH}`
@@ -267,7 +285,8 @@ PanelWindow {
         var outputFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}.png`
         const useFrozenSource = root.frozenSourceReady && root.frozenSourceFile !== ""
         const frozenSourceFile = root.frozenSourceFile
-        const cropGeometry = `${globalW}x${globalH}+${globalX}+${globalY}`
+        // Frozen source is per-output, so crop in output-local coords.
+        const cropGeometry = `${globalW}x${globalH}+${localX}+${localY}`
 
         Logger.d("ScreenShot", root.target)
         if (root.target === "screenshot") {
@@ -391,7 +410,7 @@ PanelWindow {
                 height: modelData.height
                 color: targeted ? "#22ffffff" : "transparent"
                 border.color: targeted ? "#aaffffff" : "#55ffffff"
-                border.width: targeted ? 3 : 1
+                border.width: targeted ? Math.max(1, Math.round(3 * root.uiScale)) : Math.max(1, Math.round(1 * root.uiScale))
                 visible: !root.dragging
 
                 readonly property bool targeted:
@@ -428,17 +447,17 @@ PanelWindow {
             height: root.regionHeight
             color: "transparent"
             border.color: "#cccccc"
-            border.width: 2
+            border.width: Math.max(1, Math.round(2 * root.uiScale))
             visible: root.dragging
         }
 
         Text {
             z: 3
-            x: root.regionX + root.regionWidth - width - 8
-            y: root.regionY + root.regionHeight + 8
+            x: root.regionX + root.regionWidth - width - (8 * root.uiScale)
+            y: root.regionY + root.regionHeight + (8 * root.uiScale)
             text: root.dragging ? `${Math.round(root.regionWidth)} x ${Math.round(root.regionHeight)}` : ""
             color: "#cccccc"
-            font.pixelSize: 13
+            font.pixelSize: Math.max(10, Math.round(13 * root.uiScale))
             visible: root.dragging
         }
 
@@ -449,7 +468,7 @@ PanelWindow {
             z: 2
             x: root.mouseX
             anchors { top: parent.top; bottom: parent.bottom }
-            width: 1
+            width: Math.max(1, Math.round(root.uiScale))
             color: "#cccccc"
         }
         Rectangle {
@@ -458,7 +477,7 @@ PanelWindow {
             z: 2
             y: root.mouseY
             anchors { left: parent.left; right: parent.right }
-            height: 1
+            height: Math.max(1, Math.round(root.uiScale))
             color: "#cccccc"
         }
 
