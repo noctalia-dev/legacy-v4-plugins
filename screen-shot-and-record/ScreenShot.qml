@@ -28,6 +28,9 @@ PanelWindow {
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableCross
                                ?? true
 
+    // Track if mouse is currently on this screen
+    property bool mouseOnThisScreen: false
+
     readonly property real monitorOffsetX: Number(root.screen?.x ?? 0)
     readonly property real monitorOffsetY: Number(root.screen?.y ?? 0)
     property string frozenSourceFile: ""
@@ -321,7 +324,7 @@ PanelWindow {
             color: "transparent"
             border.color: "#88111111"
             border.width: Math.max(root.width, root.height)
-            visible: root.dragging
+            visible: root.dragging && root.mouseOnThisScreen
         }
 
         Rectangle {
@@ -333,7 +336,7 @@ PanelWindow {
             color: "transparent"
             border.color: "#cccccc"
             border.width: Math.max(1, Math.round(2 * root.uiScale))
-            visible: root.dragging
+            visible: root.dragging && root.mouseOnThisScreen
         }
 
         Text {
@@ -343,12 +346,12 @@ PanelWindow {
             text: root.dragging ? `${Math.round(root.regionWidth)} x ${Math.round(root.regionHeight)}` : ""
             color: "#cccccc"
             font.pixelSize: Math.max(10, Math.round(13 * root.uiScale))
-            visible: root.dragging
+            visible: root.dragging && root.mouseOnThisScreen
         }
 
         // 十字准星
         Rectangle {
-            visible: root.mouseInside && root.enableCross
+            visible: root.mouseInside && root.enableCross && root.mouseOnThisScreen
             opacity: 0.4
             z: 2
             x: root.mouseX
@@ -357,7 +360,7 @@ PanelWindow {
             color: "#cccccc"
         }
         Rectangle {
-            visible: root.mouseInside && root.enableCross
+            visible: root.mouseInside && root.enableCross && root.mouseOnThisScreen
             opacity: 0.4
             z: 2
             y: root.mouseY
@@ -370,7 +373,7 @@ PanelWindow {
         Rectangle {
             anchors.fill: parent
             color: "#88111111"
-            visible: !root.dragging
+            visible: !root.dragging && root.mouseOnThisScreen
             z: 0
         }
 
@@ -384,6 +387,7 @@ PanelWindow {
             z: 10
 
             onPositionChanged: (mouse) => {
+                root.mouseOnThisScreen = true
                 root.mouseX = mouse.x
                 root.mouseY = mouse.y
                 root.mouseInside = true
@@ -392,8 +396,13 @@ PanelWindow {
                     root.draggingY = mouse.y
                 }
             }
+            onEntered: {
+                root.mouseOnThisScreen = true
+                root.mouseInside = true
+            }
             onExited: {
                 root.mouseInside = false
+                root.mouseOnThisScreen = false
             }
             onPressed: (mouse) => {
                 root.dragStartX = mouse.x
@@ -420,6 +429,8 @@ PanelWindow {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Style.marginM
         z: 20
+        visible: root.mouseOnThisScreen
+        opacity: root.mouseOnThisScreen ? 1 : 0
 
         RowLayout {
             z: 20
