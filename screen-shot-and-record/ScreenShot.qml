@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import Quickshell.Io
 import qs.Commons
 import qs.Widgets
@@ -31,100 +32,47 @@ PanelWindow {
 
     readonly property real monitorOffsetX: Number(root.screen?.x ?? 0)
     readonly property real monitorOffsetY: Number(root.screen?.y ?? 0)
-    property int activeWorkspaceId: -1
-    property string activeWorkspaceName: ""
-    property int activeMonitorId: -1
     property string frozenSourceFile: ""
     property bool frozenSourceReady: false
 
-    property list<var> windowRegions: []
+    readonly property list<var> windowRegions: {
+        const windowsEnabled = pluginApi?.pluginSettings?.enableWindowsSelection
+                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
+                               ?? true
+        if (!windowsEnabled || !CompositorService.isHyprland) return []
 
-    // Resolve monitor workspace first so only current-workspace windows are shown.
-    Process {
-        id: hyprMonitorsProc
-        command: ["hyprctl", "-j", "monitors"]
-        running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                root.activeWorkspaceId = -1
-                root.activeWorkspaceName = ""
-                root.activeMonitorId = -1
+        const currentOutput = root.screen?.name
+        if (!currentOutput) return []
 
-                try {
-                    const monitors = JSON.parse(text)
-                    const currentOutput = root.screen?.name
-                    const targetMonitor = monitors.find(m => m.name === currentOutput)
+        const monitors = Hyprland.monitors.values
+        const targetMonitor = monitors.find(m => m.name === currentOutput)
+        if (!targetMonitor?.activeWorkspace) return []
 
-                    if (targetMonitor) {
-                        root.activeWorkspaceId = Number(targetMonitor.activeWorkspace?.id ?? -1)
-                        root.activeWorkspaceName = String(targetMonitor.activeWorkspace?.name ?? "")
-                        root.activeMonitorId = Number(targetMonitor.id ?? -1)
-                    }
-                } catch (e) {
-                    Logger.w("ScreenShot", "[RegionSelector] hyprctl monitors parse error:", e)
-                }
+        const ox = root.monitorOffsetX
+        const oy = root.monitorOffsetY
+        const toplevels = targetMonitor.activeWorkspace.toplevels?.values ?? []
 
-                hyprctlProc.running = true
-            }
+        const regions = []
+        for (let i = 0; i < toplevels.length; i++) {
+            const tlv = toplevels[i]
+            const ipcObj = tlv.lastIpcObject
+            if (!ipcObj?.at || !ipcObj?.size) continue
+            if (ipcObj.hidden || tlv.mapped === false) continue
+            const wx = ipcObj.at[0] - ox
+            const wy = ipcObj.at[1] - oy
+            const ww = ipcObj.size[0]
+            const wh = ipcObj.size[1]
+            if (ww <= 0 || wh <= 0) continue
+            if (wx >= root.width || wy >= root.height || (wx + ww) <= 0 || (wy + wh) <= 0) continue
+            regions.push({
+                x: wx, y: wy,
+                width: ww, height: wh,
+                title: tlv.title ?? "",
+                cls: ipcObj.class ?? "",
+                address: ipcObj.address ?? ""
+            })
         }
-    }
-
-    Process {
-        id: hyprctlProc
-        command: ["hyprctl", "-j", "clients"]
-        running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                try {
-                    const clients = JSON.parse(text)
-                    const ox = root.monitorOffsetX
-                    const oy = root.monitorOffsetY
-                    const currentOutput = root.screen?.name
-                    const activeWs = root.activeWorkspaceId
-                    const activeWsName = root.activeWorkspaceName
-                    const activeMon = root.activeMonitorId
-
-                    const filteredClients = clients.filter(w => {
-                        if (w.hidden || !w.mapped) {
-                            return false
-                        }
-
-                        const workspaceId = Number(w.workspace?.id ?? NaN)
-                        const workspaceName = String(w.workspace?.name ?? "")
-                        const sameWorkspace = (activeWs < 0)
-                            || (Number.isFinite(workspaceId) && workspaceId === activeWs)
-                            || (activeWsName !== "" && workspaceName === activeWsName)
-
-                        const monitorName = String(w.monitorName ?? "")
-                        const monitorNameMatches = monitorName === currentOutput
-                            || ((typeof w.monitor === "string") && (w.monitor === currentOutput))
-
-                        // Hyprland clients JSON can expose monitor id as `monitor`, `monitorID`, or `monitorId`.
-                        const monitorId = Number(w.monitor ?? w.monitorID ?? w.monitorId ?? NaN)
-                        const monitorIdMatches = (activeMon >= 0) && Number.isFinite(monitorId) && (monitorId === activeMon)
-                        const sameMonitor = monitorNameMatches || monitorIdMatches
-                        return sameWorkspace && sameMonitor
-                    })
-
-                    root.windowRegions = filteredClients
-                        .map(w => ({
-                            x: w.at[0] - ox,
-                            y: w.at[1] - oy,
-                            width: w.size[0],
-                            height: w.size[1],
-                            title: w.title,
-                            cls: w.class,
-                            address: w.address
-                        }))
-                        .filter(w => w.width > 0 && w.height > 0)
-                        .filter(w => w.x < root.width && w.y < root.height && (w.x + w.width) > 0 && (w.y + w.height) > 0)
-
-                    Logger.d("ScreenShot", "[RegionSelector] Found", root.windowRegions.length, "windows on output", root.screen?.name, "workspace", root.activeWorkspaceId)
-                } catch (e) {
-                    Logger.w("ScreenShot", "[RegionSelector] hyprctl parse error:", e)
-                }
-            }
-        }
+        return regions
     }
 
     Process {
@@ -181,14 +129,6 @@ PanelWindow {
             // in output-local logical pixels, which is correct for all resolutions.
             freezeCaptureProc.command = ["sh", "-c", "command -v grim >/dev/null 2>&1 && grim -s 1 -o \"$2\" \"$1\" && test -s \"$1\"", "sh", root.frozenSourceFile, outputName]
             freezeCaptureProc.running = true
-        }
-
-        const windowsEnabled = pluginApi?.pluginSettings?.enableWindowsSelection
-                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
-                               ?? true
-
-        if (windowsEnabled && CompositorService.isHyprland) {
-            hyprMonitorsProc.running = true
         }
     }
 
