@@ -163,7 +163,8 @@ PanelWindow {
             const safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
             root.frozenSourceFile = `/tmp/screen-${safeOutputName}-${Date.now()}-frozen.png`
             root.frozenSourceReady = false
-            freezeCaptureProc.command = ["sh", "-c", "command -v grim >/dev/null 2>&1 && grim \"$1\" && test -s \"$1\"", "sh", root.frozenSourceFile]
+            // Keep frozen capture in logical coordinates so selection crop stays aligned on HiDPI.
+            freezeCaptureProc.command = ["sh", "-c", "command -v grim >/dev/null 2>&1 && grim -s 1 \"$1\" && test -s \"$1\"", "sh", root.frozenSourceFile]
             freezeCaptureProc.running = true
         }
 
