@@ -27,6 +27,7 @@ getaudiooutput() {
 # parse --region <value> without modifying $@ so other flags like --fullscreen still work
 ARGS=("$@")
 MANUAL_REGION=""
+VIDEO_TARGET_SIZE=""
 SOUND_FLAG=0
 NOTIFY_FLAG=0
 CUSTOM_DIR=""
@@ -52,6 +53,10 @@ for ((i=0;i<${#ARGS[@]};i++)); do
         else
             send_notify "$NOTIFY_CANCELLED_TITLE" "$NOTIFY_NO_REGION_BODY"
             exit 1
+        fi
+    elif [[ "${ARGS[i]}" == "--video-target-size" ]]; then
+        if (( i+1 < ${#ARGS[@]} )); then
+            VIDEO_TARGET_SIZE="${ARGS[i+1]}"
         fi
     elif [[ "${ARGS[i]}" == "--dir" ]]; then
         if (( i+1 < ${#ARGS[@]} )); then
@@ -115,9 +120,22 @@ else
     fi
 
     send_notify "$NOTIFY_STARTING_TITLE" 'recording_'"$(getdate)"'.mp4'
+    FILTER_ARGS=()
+    if [[ "$VIDEO_TARGET_SIZE" =~ ^([0-9]+)x([0-9]+)$ ]]; then
+        TARGET_W="${BASH_REMATCH[1]}"
+        TARGET_H="${BASH_REMATCH[2]}"
+        if [[ "$TARGET_W" -gt 0 && "$TARGET_H" -gt 0 ]]; then
+            # H264 encoding prefers even dimensions.
+            TARGET_W=$(( (TARGET_W / 2) * 2 ))
+            TARGET_H=$(( (TARGET_H / 2) * 2 ))
+            if [[ "$TARGET_W" -lt 2 ]]; then TARGET_W=2; fi
+            if [[ "$TARGET_H" -lt 2 ]]; then TARGET_H=2; fi
+            FILTER_ARGS=( -F "scale=${TARGET_W}:${TARGET_H}:flags=lanczos" )
+        fi
+    fi
     if [[ $SOUND_FLAG -eq 1 ]]; then
-        wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$MANUAL_REGION" --audio="$(getaudiooutput)"
+        wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$MANUAL_REGION" "${FILTER_ARGS[@]}" --audio="$(getaudiooutput)"
     else
-        wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$MANUAL_REGION"
+        wf-recorder --pixel-format yuv420p -f './recording_'"$(getdate)"'.mp4' -t --geometry "$MANUAL_REGION" "${FILTER_ARGS[@]}"
     fi
 fi

@@ -12,10 +12,6 @@
         }
     },
     "settings": {
-        "enableWindowsSelection": {
-            "label": "启用窗口检测",
-            "description": "是否在选择区域时检测窗口。仅支持 Hyprland。"
-        },
         "enableCross": {
             "label": "启用十字线瞄准",
             "description": "是否启用十字线瞄准。"

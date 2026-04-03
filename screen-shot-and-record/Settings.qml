@@ -11,10 +11,6 @@ ColumnLayout {
     property var pluginApi: null
 
     // Local state for editing
-    property bool enableWindowsSelection: pluginApi?.pluginSettings?.enableWindowsSelection
-                                          ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
-                                          ?? true
-
     property bool enableCross: pluginApi?.pluginSettings?.enableCross
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableCross
                                ?? true
@@ -42,16 +38,6 @@ ColumnLayout {
     spacing: Style.marginM
 
     // Your settings controls here
-
-    NToggle {
-        Layout.fillWidth: true
-        label: pluginApi?.tr("settings.enableWindowsSelection.label")
-        description: pluginApi?.tr("settings.enableWindowsSelection.description")
-        checked: root.enableWindowsSelection
-        onToggled: (checked) => {
-            root.enableWindowsSelection = checked
-        }
-    }
 
     NToggle {
         Layout.fillWidth: true
@@ -156,7 +142,6 @@ ColumnLayout {
 
     // Required: Save function called by the dialog
     function saveSettings() {
-        pluginApi.pluginSettings.enableWindowsSelection = root.enableWindowsSelection
         pluginApi.pluginSettings.enableCross = root.enableCross
         pluginApi.pluginSettings.screenshotEditor = root.screenshotEditor
         pluginApi.pluginSettings.keepSourceScreenshot = root.keepSourceScreenshot

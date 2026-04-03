@@ -12,10 +12,6 @@
     }
   },
   "settings": {
-    "enableWindowsSelection": {
-      "label": "Fenstererkennung aktivieren",
-      "description": "Ob bei der Auswahl eines Bereichs Fenster erkannt werden sollen. Wird nur auf Hyprland unterstützt."
-    },
     "enableCross": {
       "label": "Fadenkreuz aktivieren",
       "description": "Ob das Zielen mit Fadenkreuz aktiviert werden soll."

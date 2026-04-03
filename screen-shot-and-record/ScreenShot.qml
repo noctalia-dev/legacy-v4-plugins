@@ -2,12 +2,10 @@ import QtQuick
 import QtQuick.Shapes
 import Quickshell
 import Quickshell.Wayland
-import Quickshell.Hyprland
 import Quickshell.Io
 import qs.Commons
 import qs.Widgets
 import QtQuick.Layouts
-import qs.Services.Compositor
 
 PanelWindow {
     id: root
@@ -35,46 +33,6 @@ PanelWindow {
     property string frozenSourceFile: ""
     property bool frozenSourceReady: false
 
-    readonly property list<var> windowRegions: {
-        const windowsEnabled = pluginApi?.pluginSettings?.enableWindowsSelection
-                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
-                               ?? true
-        if (!windowsEnabled || !CompositorService.isHyprland) return []
-
-        const currentOutput = root.screen?.name
-        if (!currentOutput) return []
-
-        const monitors = Hyprland.monitors.values
-        const targetMonitor = monitors.find(m => m.name === currentOutput)
-        if (!targetMonitor?.activeWorkspace) return []
-
-        const ox = root.monitorOffsetX
-        const oy = root.monitorOffsetY
-        const toplevels = targetMonitor.activeWorkspace.toplevels?.values ?? []
-
-        const regions = []
-        for (let i = 0; i < toplevels.length; i++) {
-            const tlv = toplevels[i]
-            const ipcObj = tlv.lastIpcObject
-            if (!ipcObj?.at || !ipcObj?.size) continue
-            if (ipcObj.hidden || tlv.mapped === false) continue
-            const wx = ipcObj.at[0] - ox
-            const wy = ipcObj.at[1] - oy
-            const ww = ipcObj.size[0]
-            const wh = ipcObj.size[1]
-            if (ww <= 0 || wh <= 0) continue
-            if (wx >= root.width || wy >= root.height || (wx + ww) <= 0 || (wy + wh) <= 0) continue
-            regions.push({
-                x: wx, y: wy,
-                width: ww, height: wh,
-                title: tlv.title ?? "",
-                cls: ipcObj.class ?? "",
-                address: ipcObj.address ?? ""
-            })
-        }
-        return regions
-    }
-
     Process {
         id: checkRecordingProc
         command: ["pidof", "wf-recorder"]
@@ -96,8 +54,7 @@ PanelWindow {
                     stopArgs.push(...buildRecordingNotifyArgs())
                     Logger.d("ScreenShot", "[Panel] Executing stop command args:", stopArgs)
                     Quickshell.execDetached(stopArgs)
-                    root.visible = false
-                    root.closed()
+                    root.closeSelector()
                 }
             }
         }
@@ -143,25 +100,11 @@ PanelWindow {
     property bool dragging: false
     property var mouseButton: null
 
-    property var hoveredWindow: null
-    property var selectedWindow: null
-
     property real regionX: Math.min(dragStartX, draggingX)
     property real regionY: Math.min(dragStartY, draggingY)
     property real regionWidth: Math.abs(draggingX - dragStartX)
     property real regionHeight: Math.abs(draggingY - dragStartY)
     readonly property real uiScale: Style.uiScaleRatio
-
-    function findWindowAt(x, y) {
-        for (let i = root.windowRegions.length - 1; i >= 0; i--) {
-            const w = root.windowRegions[i];
-            if (x >= w.x && x <= w.x + w.width &&
-                y >= w.y && y <= w.y + w.height) {
-                return w;
-            }
-        }
-        return null;
-    }
 
     function shellQuote(value) {
         return "'" + String(value ?? "").replace(/'/g, "'\"'\"'") + "'"
@@ -199,6 +142,23 @@ PanelWindow {
             "--notify-stopped-body", pluginApi?.tr("notify.recording.stoppedBody"),
             "--notify-starting-title", pluginApi?.tr("notify.recording.startingTitle")
         ]
+    }
+
+    function shouldNormalizeRecordingResolution() {
+        const outputName = String(root.screen?.name ?? "")
+        const screens = Quickshell.screens ?? []
+
+        let matched = root.screen
+        for (let i = 0; i < screens.length; i++) {
+            if (String(screens[i]?.name ?? "") === outputName) {
+                matched = screens[i]
+                break
+            }
+        }
+
+        const scale = Number(matched?.scale ?? 1)
+        const dpr = Number(matched?.devicePixelRatio ?? 1)
+        return (Number.isFinite(scale) && scale > 1.01) || (Number.isFinite(dpr) && dpr > 1.01)
     }
 
     function processRegion(x, y, width, height, mode) {
@@ -295,6 +255,10 @@ PanelWindow {
             const region = `${globalX},${globalY} ${globalW}x${globalH}`
 
             const recordArgs = ["bash", scriptPath, "--region", region, "--dir", recordingDir]
+            if (shouldNormalizeRecordingResolution()) {
+                const targetSize = `${globalW}x${globalH}`
+                recordArgs.push("--video-target-size", targetSize)
+            }
             if (root.target === "recordsound") {
                 recordArgs.push("--sound")
             }
@@ -312,23 +276,29 @@ PanelWindow {
         }
     }
 
+    function closeSelector() {
+        if (!root.visible) {
+            return
+        }
+
+        // Avoid destroying the selector while Qt is still dispatching pointer/hover events.
+        Qt.callLater(() => {
+            if (!root.visible) {
+                return
+            }
+            root.visible = false
+            root.closed()
+        })
+    }
+
     function finish() {
         const mode = (root.mouseButton === Qt.RightButton) ? "edit" : "copy"
 
         if (root.regionWidth > 0 && root.regionHeight > 0) {
             root.processRegion(root.regionX, root.regionY, root.regionWidth, root.regionHeight, mode)
-        } else if (root.hoveredWindow) {
-            root.processRegion(
-                root.hoveredWindow.x,
-                root.hoveredWindow.y,
-                root.hoveredWindow.width,
-                root.hoveredWindow.height,
-                mode
-            )
         }
 
-        root.visible = false
-        root.closed()
+        root.closeSelector()
     }
 
     ScreencopyView {
@@ -336,31 +306,6 @@ PanelWindow {
         live: false
         captureSource: root.screen
     }
-
-
-
-        Repeater {
-            model: root.windowRegions
-            delegate: Rectangle {
-                required property var modelData
-                z: 1
-                x: modelData.x
-                y: modelData.y
-                width: modelData.width
-                height: modelData.height
-                color: targeted ? "#22ffffff" : "transparent"
-                border.color: targeted ? "#aaffffff" : "#55ffffff"
-                border.width: targeted ? Math.max(1, Math.round(3 * root.uiScale)) : Math.max(1, Math.round(1 * root.uiScale))
-                visible: !root.dragging
-
-                readonly property bool targeted:
-                    root.hoveredWindow !== null &&
-                    root.hoveredWindow.address === modelData.address
-
-                Behavior on border.width { NumberAnimation { duration: 80 } }
-                Behavior on color { ColorAnimation { duration: 80 } }
-            }
-        }
 
         Rectangle {
             id: darkenOverlay
@@ -445,13 +390,10 @@ PanelWindow {
                 if (root.dragging) {
                     root.draggingX = mouse.x
                     root.draggingY = mouse.y
-                } else {
-                    root.hoveredWindow = root.findWindowAt(mouse.x, mouse.y)
                 }
             }
             onExited: {
                 root.mouseInside = false
-                root.hoveredWindow = null
             }
             onPressed: (mouse) => {
                 root.dragStartX = mouse.x
@@ -460,24 +402,9 @@ PanelWindow {
                 root.draggingY = mouse.y
                 root.dragging = true
                 root.mouseButton = mouse.button
-
-                if (root.hoveredWindow) {
-                    root.selectedWindow = root.hoveredWindow
-                } else {
-                    root.selectedWindow = null
-                }
             }
             onReleased: (mouse) => {
                 root.dragging = false
-
-                const dragDistance = Math.sqrt(
-                    Math.pow(root.draggingX - root.dragStartX, 2) +
-                    Math.pow(root.draggingY - root.dragStartY, 2)
-                );
-
-                if (dragDistance == 0 && root.hoveredWindow) {
-                    Logger.d("ScreenShot", "[RegionSelector] Click detected on window:", root.hoveredWindow.cls);
-                }
 
                 root.finish()
             }
@@ -517,8 +444,7 @@ PanelWindow {
                 backgroundColor: Color.mError
                 textColor: Color.mOnError
                 onClicked: {
-                    root.visible = false
-                    root.closed()
+                    root.closeSelector()
                 }
             }
         }
@@ -531,9 +457,8 @@ PanelWindow {
         focus: true
         Keys.onPressed: (event) => {
             if (event.key === Qt.Key_Escape) {
-                root.visible = false
                 event.accepted = true
-                root.closed()
+                root.closeSelector()
             }
         }
 

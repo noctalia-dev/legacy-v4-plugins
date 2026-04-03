@@ -12,10 +12,6 @@
         }
     },
     "settings": {
-        "enableWindowsSelection": {
-            "label": "Activar Detección de Ventanas",
-            "description": "Si se deben detectar ventanas al seleccionar área. Solo compatible con Hyprland."
-        },
         "enableCross": {
             "label": "Activar Mira",
             "description": "Si se debe activar la mira."

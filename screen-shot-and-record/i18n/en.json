@@ -12,10 +12,6 @@
         }
     },
     "settings": {
-        "enableWindowsSelection": {
-            "label": "Enable Window Detection",
-            "description": "Whether to detect windows when selecting area. Only supported on Hyprland."
-        },
         "enableCross": {
             "label": "Enable Crosshair",
             "description": "Whether to enable crosshair aiming."
