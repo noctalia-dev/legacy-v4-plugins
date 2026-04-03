@@ -47,8 +47,8 @@ This plugin has the following configuration options:
 
 | Name | Default | Description |
 | :-: | :-: | :-: |
-| `enableCross` | `true` | Enable crosshair overlay |
-| `screenshotEditor` | `swappy` | Screenshot editor tool, possible values: `swappy` and `satty` |
+| `enableCross` | `true` | Enable the crosshair cursor and guide lines during region selection |
+| `screenshotEditor` | `swappy` | Screenshot editor tool for right-click edit mode, possible values: `swappy` and `satty` |
 | `keepSourceScreenshot` | `false` | Keep the temporary `*_source.png` file after saving an edited screenshot |
 | `savePath` | `$HOME/Pictures/Screenshots` | Folder where edited screenshots are saved |
 | `recordingSavePath` | `$HOME/Videos` | Folder where screen recordings are saved |
@@ -57,12 +57,10 @@ This plugin has the following configuration options:
 ## Changelog
 
 - v1.0.0: Initial release with Hyprland-only support.
-- v1.0.1: Added Sway support and UX improvements.
-- v1.0.2: Updated plugin name and metadata to reflect Hyprland, Sway, and Niri support.
-- v1.1.3: Simplified plugin to Sway-focused behavior by removing Hyprland/Niri-specific paths.
+- v1.2.0: Added Niri and Sway Support.  Refactored Hyprland support.
 
 ## Acknowledgements
 
 Thanks to [end-4/dots-hyprland](https://github.com/end-4/dots-hyprland) for inspiration and the `record.sh` script.
 
-Contributor: [Mathew-D](https://github.com/Mathew-D) (Sway support, recording/settings improvements).
+Contributor: [Mathew-D](https://github.com/Mathew-D) (Sway, Niri support, recording/settings improvements).

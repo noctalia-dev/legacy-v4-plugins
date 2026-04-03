@@ -382,7 +382,7 @@ PanelWindow {
         MouseArea {
             anchors.fill: parent
             hoverEnabled: true
-            cursorShape: Qt.CrossCursor
+            cursorShape: root.enableCross ? Qt.CrossCursor : Qt.ArrowCursor
             acceptedButtons: Qt.LeftButton | Qt.RightButton
             z: 10
 
