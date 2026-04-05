@@ -1,0 +1,39 @@
+{
+  "id": "screen-shot-and-record-remix",
+  "name": "Screenshot, OCR & Record Remix",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Mathew-D",
+  "license": "GPL-3.0-or-later",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Remix of the original Screenshot, OCR & Record plugin by Pulsar. Removes Hyprland-only window detection, adds region-only selection, and supports Sway, Niri, and Hyprland.",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Utility",
+    "Hyprland",
+    "Niri",
+    "Sway"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "remixOf": "screen-shot-and-record",
+    "originalAuthor": "Pulsar",
+    "defaultSettings": {
+      "enableCross": true,
+      "screenshotEditor": "swappy",
+      "keepSourceScreenshot": false,
+      "savePath": "~/Pictures/Screenshots",
+      "recordingSavePath": "~/Videos",
+      "recordingNotifications": true
+    }
+  }
+}

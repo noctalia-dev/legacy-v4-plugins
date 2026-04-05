@@ -1,0 +1,71 @@
+{
+    "panel": {
+        "title": "Captura de Pantalla",
+        "target": {
+            "screenshot": "Captura",
+            "ocr": "OCR",
+            "search": "Búsqueda de Imágenes",
+            "record": "Grabación de Pantalla",
+            "recordsound": "Grabación de Pantalla (con Audio)",
+            "bug": "¡Soy un bug!",
+            "stop": "Detener grabación"
+        }
+    },
+    "settings": {
+        "enableCross": {
+            "label": "Activar Mira",
+            "description": "Si se debe activar la mira."
+        },
+        "screenshotEditor": {
+            "label": "Herramienta de Anotación de Capturas",
+            "description": "Herramienta para anotar capturas de pantalla. Debe estar preinstalada."
+        },
+        "keepSourceScreenshot": {
+            "label": "Conservar captura de origen",
+            "description": "Conservar el archivo temporal *_source.png después de guardar la captura editada."
+        },
+        "savePath": {
+            "label": "Carpeta de guardado de capturas",
+            "description": "Carpeta donde se guardan las capturas editadas."
+        },
+        "recordingSavePath": {
+            "label": "Carpeta de guardado de grabaciones",
+            "description": "Carpeta donde se guardan las grabaciones de pantalla."
+        },
+        "recordingNotifications": {
+            "label": "Notificaciones de grabación",
+            "description": "Mostrar notificaciones al iniciar/detener la grabación o cuando ocurren errores."
+        }
+    },
+    "notify": {
+        "app": {
+            "screenshot": "Captura de pantalla",
+            "recorder": "Grabador"
+        },
+        "dependencyMissing": "Falta una dependencia requerida.",
+        "screenshot": {
+            "failed": "La captura falló",
+            "savedTitle": "Captura guardada",
+            "copiedTitle": "Captura copiada",
+            "copiedBody": "Imagen copiada al portapapeles"
+        },
+        "search": {
+            "failed": "La búsqueda de imágenes falló"
+        },
+        "ocr": {
+            "failed": "OCR falló",
+            "doneTitle": "OCR completado",
+            "copiedBody": "Texto reconocido copiado al portapapeles",
+            "emptyBody": "No se detectó texto en la selección"
+        },
+        "recording": {
+            "failed": "La grabación falló",
+            "cancelledTitle": "Grabación cancelada",
+            "noRegionBody": "No se especificó una región. Usa --region <geometría>",
+            "noDirBody": "No se especificó una carpeta para --dir",
+            "stoppedTitle": "Grabación detenida",
+            "stoppedBody": "Detenida",
+            "startingTitle": "Iniciando grabación"
+        }
+    }
+}

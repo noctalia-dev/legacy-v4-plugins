@@ -1,0 +1,71 @@
+{
+    "panel": {
+        "title": "Screenshot",
+        "target": {
+            "screenshot": "Screenshot",
+            "ocr": "OCR",
+            "search": "Image Search",
+            "record": "Screen Recording",
+            "recordsound": "Screen Recording (with Audio)",
+            "bug": "I'm a Bug!",
+            "stop": "Stop Recording"
+        }
+    },
+    "settings": {
+        "enableCross": {
+            "label": "Enable Crosshair",
+            "description": "Whether to enable crosshair aiming."
+        },
+        "screenshotEditor": {
+            "label": "Screenshot Annotation Tool",
+            "description": "Tool used for annotating screenshots. Needs to be pre-installed."
+        },
+        "keepSourceScreenshot": {
+            "label": "Keep Source Screenshot",
+            "description": "Keep the temporary *_source.png file after saving the edited screenshot."
+        },
+        "savePath": {
+            "label": "Screenshot Save Folder",
+            "description": "Folder where edited screenshots are saved."
+        },
+        "recordingSavePath": {
+            "label": "Recording Save Folder",
+            "description": "Folder where screen recordings are saved."
+        },
+        "recordingNotifications": {
+            "label": "Recording Notifications",
+            "description": "Show notifications when recording starts/stops or errors occur."
+        }
+    },
+    "notify": {
+        "app": {
+            "screenshot": "Screenshot",
+            "recorder": "Recorder"
+        },
+        "dependencyMissing": "A required dependency is not installed.",
+        "screenshot": {
+            "failed": "Screenshot failed",
+            "savedTitle": "Screenshot saved",
+            "copiedTitle": "Screenshot copied",
+            "copiedBody": "Image copied to clipboard"
+        },
+        "search": {
+            "failed": "Image search failed"
+        },
+        "ocr": {
+            "failed": "OCR failed",
+            "doneTitle": "OCR complete",
+            "copiedBody": "Recognized text copied to clipboard",
+            "emptyBody": "No text detected in selection"
+        },
+        "recording": {
+            "failed": "Recording failed",
+            "cancelledTitle": "Recording cancelled",
+            "noRegionBody": "No region specified. Use --region <geometry>",
+            "noDirBody": "No folder specified for --dir",
+            "stoppedTitle": "Recording stopped",
+            "stoppedBody": "Stopped",
+            "startingTitle": "Starting recording"
+        }
+    }
+}
