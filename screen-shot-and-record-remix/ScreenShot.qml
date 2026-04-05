@@ -165,31 +165,49 @@ PanelWindow {
     }
 
     function processRegion(x, y, width, height, mode) {
-        const localX = Math.round(x)
-        const localY = Math.round(y)
-        const globalX = Math.round(localX + root.monitorOffsetX)
-        const globalY = Math.round(localY + root.monitorOffsetY)
-        const globalW = Math.max(1, Math.round(width))
-        const globalH = Math.max(1, Math.round(height))
-        const geometry = `${globalX},${globalY} ${globalW}x${globalH}`
+        // (Removed duplicate declarations; see below for correct logic)
+            // Use logical coordinates for selection
+            const scale = Number(root.screen?.scale ?? 1)
+            const dpr = Number(root.screen?.devicePixelRatio ?? 1)
+            const factor = (Number.isFinite(scale) && scale > 0.01) ? scale : ((Number.isFinite(dpr) && dpr > 0.01) ? dpr : 1)
 
-        var outputName = root.screen ? root.screen.name : "unknown"
-        var safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
-        var tempFile = `/tmp/screen-${safeOutputName}.png`
-        var configuredSavePath = pluginApi?.pluginSettings?.savePath
-                                 ?? pluginApi?.manifest?.metadata?.defaultSettings?.savePath
-                                 ?? ""
-        var screenshotDir = Settings.preprocessPath(configuredSavePath)
-        if (!screenshotDir || screenshotDir === "") {
-            screenshotDir = Quickshell.env("HOME") + "/Pictures/Screenshots"
-        }
-        var timestamp = Qt.formatDateTime(new Date(), "yyyy-MM-dd_HH.mm.ss")
-        var sourceFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}_source.png`
-        var outputFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}.png`
-        const useFrozenSource = root.frozenSourceReady && root.frozenSourceFile !== ""
-        const frozenSourceFile = root.frozenSourceFile
-        // Frozen source is per-output, so crop in output-local coords.
-        const cropGeometry = `${globalW}x${globalH}+${localX}+${localY}`
+            // Only apply scale when passing to grim/crop
+            // Use logical coordinates for selection
+            const globalX = Math.round(x + root.monitorOffsetX)
+            const globalY = Math.round(y + root.monitorOffsetY)
+            const globalW = Math.max(1, Math.round(width))
+            const globalH = Math.max(1, Math.round(height))
+            // For grim/crop, scale the geometry
+            const scaledGlobalX = Math.round(globalX * factor)
+            const scaledGlobalY = Math.round(globalY * factor)
+            const scaledGlobalW = Math.max(1, Math.round(globalW * factor))
+            const scaledGlobalH = Math.max(1, Math.round(globalH * factor))
+            const geometry = `${scaledGlobalX},${scaledGlobalY} ${scaledGlobalW}x${scaledGlobalH}`
+
+            // For cropGeometry (magick/convert), scale local coords
+            const scaledLocalX = Math.round(x * factor)
+            const scaledLocalY = Math.round(y * factor)
+            const scaledLocalW = Math.max(1, Math.round(width * factor))
+            const scaledLocalH = Math.max(1, Math.round(height * factor))
+            const cropGeometry = `${scaledLocalW}x${scaledLocalH}+${scaledLocalX}+${scaledLocalY}`
+
+            var outputName = root.screen ? root.screen.name : "unknown"
+            var safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
+            var tempFile = `/tmp/screen-${safeOutputName}.png`
+            var configuredSavePath = pluginApi?.pluginSettings?.savePath
+                                     ?? pluginApi?.manifest?.metadata?.defaultSettings?.savePath
+                                     ?? ""
+            var screenshotDir = Settings.preprocessPath(configuredSavePath)
+            if (!screenshotDir || screenshotDir === "") {
+                screenshotDir = Quickshell.env("HOME") + "/Pictures/Screenshots"
+            }
+            var timestamp = Qt.formatDateTime(new Date(), "yyyy-MM-dd_HH.mm.ss")
+            var sourceFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}_source.png`
+            var outputFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}.png`
+            const useFrozenSource = root.frozenSourceReady && root.frozenSourceFile !== ""
+            const frozenSourceFile = root.frozenSourceFile
+            // Frozen source is per-output, so crop in output-local coords.
+            // (cropGeometry already declared above with scaling)
 
         Logger.d("ScreenShot", root.target)
         if (root.target === "screenshot") {
