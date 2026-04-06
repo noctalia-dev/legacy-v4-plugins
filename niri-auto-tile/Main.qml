@@ -19,6 +19,7 @@ Item {
     readonly property int maxEventsPerSecond: pluginApi?.pluginSettings?.maxEventsPerSecond ?? 20
 
     readonly property string scriptPath: (pluginApi?.pluginDir ?? "") + "/auto-tile.py"
+    readonly property string configFilePath: (pluginApi?.pluginDir ?? "/tmp") + "/runtime-config.json"
 
     // Serialize workspace config as JSON string for CLI
     function workspaceConfigJson() {
@@ -37,15 +38,15 @@ Item {
     }
 
     onMaxVisibleChanged: {
-        if (running) restartDaemon();
+        if (running) hotReloadConfig();
     }
 
     onPerWorkspaceChanged: {
-        if (running) restartDaemon();
+        if (running) hotReloadConfig();
     }
 
     onOnlyAtMaxChanged: {
-        if (running) restartDaemon();
+        if (running) hotReloadConfig();
     }
 
     Component.onCompleted: {
@@ -72,6 +73,21 @@ Item {
         stopDaemon();
     }
 
+    function hotReloadConfig() {
+        // Build command with current values, then write config + send SIGUSR1
+        const config = JSON.stringify({
+            maxVisible: maxVisible,
+            onlyAtMax: onlyAtMax,
+            perWorkspace: perWorkspace,
+            workspaceMaxVisible: workspaceMaxVisible
+        });
+        configWriter.command = [
+            "bash", "-c",
+            "echo '" + config + "' > " + configFilePath
+        ];
+        configWriter.running = true;
+    }
+
     function setMaxVisible(count) {
         if (count < 1 || count > 8) return;
         if (!pluginApi?.pluginSettings) return;
@@ -89,7 +105,7 @@ Item {
         updated[String(wsId)] = count;
         pluginApi.pluginSettings.workspaceMaxVisible = updated;
         pluginApi.saveSettings();
-        if (running) restartDaemon();
+        if (running) hotReloadConfig();
     }
 
     function setPerWorkspace(value) {
@@ -114,13 +130,25 @@ Item {
         return maxVisible;
     }
 
+    readonly property Process configWriter: Process {
+        running: false
+
+        onExited: {
+            // Config file written, now send SIGUSR1 to daemon
+            if (root.running) {
+                root.daemonProcess.signal(10); // SIGUSR1
+            }
+        }
+    }
+
     readonly property Process daemonProcess: Process {
         command: {
             const args = [
                 "python3", root.scriptPath,
                 "--max-visible", String(root.maxVisible),
                 "--debounce", String(root.debounceMs / 1000.0),
-                "--max-events", String(root.maxEventsPerSecond)
+                "--max-events", String(root.maxEventsPerSecond),
+                "--config-file", root.configFilePath
             ];
             if (root.onlyAtMax) {
                 args.push("--only-at-max");
@@ -164,7 +192,7 @@ Item {
             onStreamFinished: {
                 const msg = text.trim();
                 if (msg) {
-                    console.warn("[auto-tile]", msg);
+                    Logger.w("[auto-tile]", msg);
                 }
             }
         }
