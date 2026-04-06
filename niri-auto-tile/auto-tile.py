@@ -10,6 +10,7 @@ Supports per-workspace max-visible settings via --workspace-config.
 import argparse
 import json
 import logging
+import os
 import signal
 import subprocess
 import threading
@@ -25,6 +26,7 @@ MAX_EVENTS_PER_SECOND = 20
 PER_WORKSPACE = False
 WORKSPACE_MAX_VISIBLE: dict[int, int] = {}
 ONLY_AT_MAX = True
+CONFIG_FILE: str = ""
 
 # ─── Logging ───
 logging.basicConfig(
@@ -41,6 +43,7 @@ _debounce_timer: threading.Timer | None = None
 _lock = threading.Lock()
 _event_count = 0
 _event_window_start = 0.0
+_pending_event: dict | None = None  # {"type": "open"/"close", "window_id": int}
 
 
 # ─── Validation ───
@@ -191,79 +194,256 @@ def get_active_workspaces() -> set[int]:
     return ws_ids
 
 
-def _redistribute_workspace(ws_id: int, focused_id: int | None) -> None:
-    """Redistribute columns on a single workspace.
+def _build_column_map(windows: list[dict], ws_id: int) -> dict[int, list[int]]:
+    """Build a map of col_idx -> [window_ids] for tiled windows on a workspace.
 
-    Only redistributes when col_count >= max_visible. Below that threshold,
-    niri's default layout is preserved.
+    Returns sorted by column index.
     """
-    col_count = count_columns(ws_id)
+    col_map: dict[int, list[int]] = {}
+    for w in windows:
+        if w.get("workspace_id") != ws_id or w.get("is_floating", False):
+            continue
+        win_id = _valid_id(w.get("id"))
+        if win_id is None:
+            continue
+        layout = w.get("layout")
+        if not isinstance(layout, dict):
+            continue
+        pos = layout.get("pos_in_scrolling_layout")
+        if isinstance(pos, (list, tuple)) and len(pos) > 0:
+            col_idx = _valid_id(pos[0])
+            if col_idx is not None:
+                if col_idx not in col_map:
+                    col_map[col_idx] = []
+                col_map[col_idx].append(win_id)
+    return col_map
+
+
+def _calc_widths(col_count: int, max_vis: int) -> tuple[int, int]:
+    """Calculate base percentage and remainder for even distribution."""
+    visible = min(col_count, max_vis)
+    base_pct = 100 // visible
+    remainder = 100 - (base_pct * visible)
+    return base_pct, remainder
+
+
+def _set_column_width_by_id(win_id: int, pct: str) -> None:
+    """Focus a window by ID and set its column width (no walking)."""
+    niri_action("focus-window", "--id", str(win_id))
+    niri_action("set-column-width", pct)
+
+
+def _redistribute_incremental_open(ws_id: int, new_window_id: int) -> None:
+    """Handle window open: set only the new column's width.
+
+    Avoids scrolling to the beginning — focuses the new window directly by ID.
+    """
+    windows = _get_windows()
+    col_map = _build_column_map(windows, ws_id)
+    col_count = len(col_map)
     if col_count == 0:
         return
 
-    # Safety cap
     if col_count > MAX_COLUMNS:
-        log.warning("col_count=%d exceeds max=%d, capping", col_count, MAX_COLUMNS)
         col_count = MAX_COLUMNS
 
     max_vis = get_max_visible(ws_id)
 
-    # Thread-safe check: skip if state unchanged for this workspace
+    # Cache check
     cache_key = (col_count, max_vis)
     with _lock:
         if _prev_col_counts.get(ws_id) == cache_key:
             return
         _prev_col_counts[ws_id] = cache_key
 
-    # Below max_visible: keep niri default layout if onlyAtMax is set
+    if ONLY_AT_MAX and col_count < max_vis:
+        log.info("ws=%d: %d cols < max=%d, keeping default layout (open)", ws_id, col_count, max_vis)
+        return
+
+    # At threshold (col_count == max_vis): full redistribute to set all columns
+    if col_count == max_vis:
+        log.info("ws=%d: reached max_visible=%d, full redistribute", ws_id, max_vis)
+        _redistribute_full(ws_id, col_map, col_count, max_vis)
+        return
+
+    # Above threshold: only set the new column's width (incremental)
+    base_pct, remainder = _calc_widths(col_count, max_vis)
+    sorted_cols = sorted(col_map.keys())
+
+    new_col_idx = None
+    for col_idx, win_ids in col_map.items():
+        if new_window_id in win_ids:
+            new_col_idx = col_idx
+            break
+
+    if new_col_idx is None:
+        log.debug("ws=%d: new window %d not in column map, full redistribute", ws_id, new_window_id)
+        _redistribute_full(ws_id, col_map, col_count, max_vis)
+        return
+
+    i = sorted_cols.index(new_col_idx)
+    pct = f"{base_pct + remainder}%" if i == len(sorted_cols) - 1 and remainder > 0 else f"{base_pct}%"
+    log.info("ws=%d: open window %d at col %d, setting %s (incremental)", ws_id, new_window_id, i, pct)
+
+    _set_column_width_by_id(new_window_id, pct)
+    niri_action("center-visible-columns")
+
+
+def _redistribute_incremental_close(ws_id: int, original_focused: int | None) -> None:
+    """Handle window close: let niri reposition, then center if needed.
+
+    When remaining columns >= max_visible, waits for niri to settle and
+    then centers visible columns around the focused window.
+    """
+    col_count = count_columns(ws_id)
+    max_vis = get_max_visible(ws_id)
+    with _lock:
+        _prev_col_counts[ws_id] = (col_count, max_vis)
+
+    if col_count >= max_vis:
+        # Wait for niri to finish repositioning
+        time.sleep(0.15)
+        # Find the focused window's column, then focus max_vis columns back
+        # to bring the leftmost needed column into view
+        windows = _get_windows()
+        col_map = _build_column_map(windows, ws_id)
+        sorted_cols = sorted(col_map.keys())
+
+        # Find focused window's column index
+        focused_col_pos = len(sorted_cols) - 1  # default to last
+        if original_focused is not None:
+            for col_idx, win_ids in col_map.items():
+                if original_focused in win_ids:
+                    focused_col_pos = sorted_cols.index(col_idx)
+                    break
+
+        # The leftmost column that should be visible
+        leftmost_pos = max(0, focused_col_pos - max_vis + 1)
+        leftmost_col_idx = sorted_cols[leftmost_pos]
+        leftmost_win_id = col_map[leftmost_col_idx][0]
+
+        # Focus the leftmost column to bring it into view
+        niri_action("focus-window", "--id", str(leftmost_win_id))
+        niri_action("center-visible-columns")
+        # Restore original focus
+        if original_focused is not None:
+            niri_action("focus-window", "--id", str(original_focused))
+        log.info("ws=%d: close event, %d cols >= max=%d — pulled columns to fill viewport", ws_id, col_count, max_vis)
+    else:
+        # Fewer than max_visible: center remaining columns on screen
+        time.sleep(0.15)
+        niri_action("center-visible-columns")
+        log.info("ws=%d: close event, %d cols < max=%d — centered remaining", ws_id, col_count, max_vis)
+
+
+def _redistribute_full(ws_id: int, col_map: dict[int, list[int]] | None = None,
+                       col_count: int | None = None, max_vis: int | None = None) -> None:
+    """Full redistribute using direct window ID focus (no focus-column-first walk).
+
+    Used as fallback and for close events. Much less disruptive than the old
+    approach because it uses focus-window --id instead of walking columns.
+
+    When col_map/col_count/max_vis are passed, cache was already checked by caller.
+    """
+    caller_checked_cache = col_map is not None
+
+    if col_map is None:
+        windows = _get_windows()
+        col_map = _build_column_map(windows, ws_id)
+
+    if col_count is None:
+        col_count = len(col_map)
+    if col_count == 0:
+        return
+
+    if col_count > MAX_COLUMNS:
+        col_count = MAX_COLUMNS
+
+    if max_vis is None:
+        max_vis = get_max_visible(ws_id)
+
+    # Cache check only when called directly (not from incremental callers)
+    if not caller_checked_cache:
+        cache_key = (col_count, max_vis)
+        with _lock:
+            if _prev_col_counts.get(ws_id) == cache_key:
+                return
+            _prev_col_counts[ws_id] = cache_key
+
     if ONLY_AT_MAX and col_count < max_vis:
         log.info("ws=%d: %d cols < max=%d, keeping default layout", ws_id, col_count, max_vis)
         return
 
-    # At or above max_visible: redistribute evenly and center
-    visible = min(col_count, max_vis)
-    base_pct = 100 // visible
-    remainder = 100 - (base_pct * visible)
-    log.info("ws=%d: %d cols, max=%d -> %d%% each (+%d%% last)", ws_id, col_count, max_vis, base_pct, remainder)
+    base_pct, remainder = _calc_widths(col_count, max_vis)
+    sorted_cols = sorted(col_map.keys())
 
-    # Focus a window on this workspace to operate on it
-    windows = _get_windows()
-    ws_window_id = None
-    for w in windows:
-        if w.get("workspace_id") == ws_id and not w.get("is_floating", False):
-            ws_window_id = _valid_id(w.get("id"))
-            if ws_window_id is not None:
-                break
+    log.info("ws=%d: %d cols, max=%d -> %d%% each (+%d%% last) [direct ID]",
+             ws_id, col_count, max_vis, base_pct, remainder)
 
-    if ws_window_id is not None:
-        niri_action("focus-window", "--id", str(ws_window_id))
+    # Set each column width by focusing a window in it directly (no walking)
+    for i, col_idx in enumerate(sorted_cols):
+        win_id = col_map[col_idx][0]
+        pct = f"{base_pct + remainder}%" if i == len(sorted_cols) - 1 and remainder > 0 else f"{base_pct}%"
+        _set_column_width_by_id(win_id, pct)
 
-    # Walk columns and set widths
-    niri_action("focus-column-first")
-    for i in range(col_count):
-        pct = f"{base_pct + remainder}%" if i == col_count - 1 and remainder > 0 else f"{base_pct}%"
-        niri_action("set-column-width", pct)
-        if i < col_count - 1:
-            niri_action("focus-column-right")
-
-    # Center all visible columns on screen
-    niri_action("focus-column-first")
     niri_action("center-visible-columns")
 
 
+def _redistribute_workspace(ws_id: int, focused_id: int | None,
+                            event_type: str | None = None,
+                            event_window_id: int | None = None) -> None:
+    """Redistribute columns on a single workspace (dispatch to incremental or full)."""
+    if event_type == "open" and event_window_id is not None:
+        _redistribute_incremental_open(ws_id, event_window_id)
+    elif event_type == "close":
+        _redistribute_incremental_close(ws_id, focused_id)
+    else:
+        _redistribute_full(ws_id)
+
+
 def redistribute() -> None:
-    """Redistribute all active workspaces, restoring original focus afterwards."""
+    """Redistribute workspaces, using incremental mode when possible."""
+    global _pending_event
     original_ws, original_focused = get_focused_workspace()
 
-    for active_ws in get_active_workspaces():
-        _redistribute_workspace(active_ws, None)
+    # Consume pending event context
+    with _lock:
+        event = _pending_event
+        _pending_event = None
 
-    # Restore focus to the original window/workspace
+    event_type = event.get("type") if event else None
+    event_window_id = event.get("window_id") if event else None
+
+    if event_type == "open" and event_window_id is not None:
+        # Incremental: only handle the workspace of the new window
+        windows = _get_windows()
+        target_ws = None
+        for w in windows:
+            if _valid_id(w.get("id")) == event_window_id:
+                target_ws = _valid_id(w.get("workspace_id"))
+                break
+        if target_ws is not None:
+            _redistribute_workspace(target_ws, original_focused, "open", event_window_id)
+        else:
+            # Window not found yet, full redistribute
+            for active_ws in get_active_workspaces():
+                _redistribute_workspace(active_ws, original_focused)
+    elif event_type == "close":
+        # Incremental close: redistribute with direct ID focus, no focus change
+        for active_ws in get_active_workspaces():
+            _redistribute_workspace(active_ws, original_focused, "close", event_window_id)
+        # Close handler restores focus itself — skip global restore
+        return
+    else:
+        # Full redistribute (startup, batch events)
+        for active_ws in get_active_workspaces():
+            _redistribute_workspace(active_ws, original_focused)
+
+    # Restore focus to the original window (open + full only)
     if original_focused is not None:
         niri_action("focus-window", "--id", str(original_focused))
         niri_action("center-visible-columns")
     elif original_ws is not None:
-        # No focused window (e.g. panel open) — focus any window on original workspace
         for w in _get_windows():
             if w.get("workspace_id") == original_ws and not w.get("is_floating", False):
                 win_id = _valid_id(w.get("id"))
@@ -301,8 +481,9 @@ def should_redistribute(event: dict) -> bool:
     """Determine if an event warrants redistribution.
 
     Only triggers on actual window open/close, NOT title changes.
+    Stores event context in _pending_event for incremental redistribution.
     """
-    global _known_window_ids
+    global _known_window_ids, _pending_event
 
     if "WindowClosed" in event:
         closed = event["WindowClosed"]
@@ -311,6 +492,7 @@ def should_redistribute(event: dict) -> bool:
             if win_id is not None:
                 with _lock:
                     _known_window_ids.discard(win_id)
+                    _pending_event = {"type": "close", "window_id": win_id}
         return True
 
     if "WindowOpenedOrChanged" in event:
@@ -325,12 +507,13 @@ def should_redistribute(event: dict) -> bool:
             with _lock:
                 if win_id not in _known_window_ids:
                     _known_window_ids.add(win_id)
+                    _pending_event = {"type": "open", "window_id": win_id}
                     return True
             return False
         return False
 
     if "WindowsChanged" in event:
-        # Batch event (startup) — sync known IDs
+        # Batch event (startup) — sync known IDs, full redistribute
         changed = event["WindowsChanged"]
         if not isinstance(changed, dict):
             return False
@@ -341,6 +524,7 @@ def should_redistribute(event: dict) -> bool:
         with _lock:
             if new_ids != _known_window_ids:
                 _known_window_ids = new_ids
+                _pending_event = None  # full redistribute
                 return True
         return False
 
@@ -426,17 +610,64 @@ def parse_args() -> argparse.Namespace:
         help='JSON map of workspace_id -> maxVisible, e.g. \'{"3":2,"1":4}\'',
     )
     parser.add_argument(
+        "--config-file", type=str, default=None,
+        help="path to runtime config file for hot-reload via SIGUSR1",
+    )
+    parser.add_argument(
         "--debug", action="store_true",
         help="enable debug logging",
     )
     return parser.parse_args()
 
 
+# ─── Hot Reload ───
+def reload_config() -> None:
+    """Reload configuration from CONFIG_FILE and trigger redistribution."""
+    global MAX_VISIBLE, PER_WORKSPACE, WORKSPACE_MAX_VISIBLE, ONLY_AT_MAX
+
+    if not CONFIG_FILE or not os.path.isfile(CONFIG_FILE):
+        log.warning("no config file to reload")
+        return
+
+    try:
+        with open(CONFIG_FILE) as f:
+            cfg = json.load(f)
+    except (OSError, json.JSONDecodeError) as exc:
+        log.warning("failed to read config file: %s", exc)
+        return
+
+    if not isinstance(cfg, dict):
+        return
+
+    old_max = MAX_VISIBLE
+    if "maxVisible" in cfg:
+        MAX_VISIBLE = max(1, int(cfg["maxVisible"]))
+    if "onlyAtMax" in cfg:
+        ONLY_AT_MAX = bool(cfg["onlyAtMax"])
+    if "perWorkspace" in cfg:
+        PER_WORKSPACE = bool(cfg["perWorkspace"])
+    if "workspaceMaxVisible" in cfg:
+        raw = cfg["workspaceMaxVisible"]
+        if isinstance(raw, dict):
+            WORKSPACE_MAX_VISIBLE = {
+                int(k): max(1, int(v))
+                for k, v in raw.items()
+                if str(k).isdigit() and str(v).isdigit()
+            }
+
+    log.info("config reloaded (max_visible=%d)", MAX_VISIBLE)
+
+    # Clear cached state so redistribution runs with new config
+    with _lock:
+        _prev_col_counts.clear()
+    redistribute()
+
+
 # ─── Main ───
 def main() -> None:
     """Main entry point with reconnection loop."""
     global MAX_VISIBLE, DEBOUNCE_SECONDS, MAX_EVENTS_PER_SECOND
-    global PER_WORKSPACE, WORKSPACE_MAX_VISIBLE, ONLY_AT_MAX
+    global PER_WORKSPACE, WORKSPACE_MAX_VISIBLE, ONLY_AT_MAX, CONFIG_FILE
 
     args = parse_args()
 
@@ -462,6 +693,8 @@ def main() -> None:
                 }
         except (json.JSONDecodeError, ValueError) as exc:
             log.warning("invalid --workspace-config: %s", exc)
+    if args.config_file:
+        CONFIG_FILE = args.config_file
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
@@ -473,6 +706,11 @@ def main() -> None:
             t.cancel()
         raise KeyboardInterrupt
     signal.signal(signal.SIGTERM, _shutdown)
+
+    # Handle SIGUSR1 for hot config reload (no restart needed)
+    def _reload(signum, frame):
+        reload_config()
+    signal.signal(signal.SIGUSR1, _reload)
 
     mode = "per-workspace" if PER_WORKSPACE else "global"
     ws_cfg = f", ws_config={WORKSPACE_MAX_VISIBLE}" if WORKSPACE_MAX_VISIBLE else ""
