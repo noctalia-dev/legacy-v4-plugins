@@ -70,12 +70,12 @@ Item {
             return
         }
 
-        if (CompositorService.isNiri) {
-            // Show a notification that Niri is not supported (i18n only)
-            pluginApi?.mainInstance?.showToast?.(pluginApi?.tr("screenshot.niriNotSupported"));
-            Logger.w("ScreenShot", "Niri is not supported for screenshots.");
-            return;
-        }
+     //   if (CompositorService.isNiri) {
+     //       // Show a notification that Niri is not supported (i18n only)
+     //       pluginApi?.mainInstance?.showToast?.(pluginApi?.tr("screenshot.niriNotSupported"));
+    //        Logger.w("ScreenShot", "Niri is not supported for screenshots.");
+    //        return;
+    //    }
 
         root.target = target
         active = true
