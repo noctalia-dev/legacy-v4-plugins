@@ -29,6 +29,7 @@
     "originalAuthor": "Pulsar",
     "defaultSettings": {
       "enableCross": true,
+      "enableWindowsSelection": true,
       "screenshotEditor": "swappy",
       "keepSourceScreenshot": false,
       "savePath": "~/Pictures/Screenshots",

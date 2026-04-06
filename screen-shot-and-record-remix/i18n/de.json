@@ -16,6 +16,10 @@
       "label": "Fadenkreuz aktivieren",
       "description": "Ob das Zielen mit Fadenkreuz aktiviert werden soll."
     },
+    "enableWindowsSelection": {
+      "label": "Fenstererkennung aktivieren",
+      "description": "Erlaubt das Anklicken von Fenstern zur automatischen Regionsauswahl auf unterstutzten Compositors."
+    },
     "screenshotEditor": {
       "label": "Tool zum Bearbeiten von Screenshots",
       "description": "Ein Tool zum Bearbeiten von Screenshots. Muss vorinstalliert werden."
@@ -66,6 +70,7 @@
       "stoppedTitle": "Aufnahme gestoppt",
       "stoppedBody": "Gestoppt",
       "startingTitle": "Aufnahme wird gestartet"
-    }
+    },
+    "niriNotSupported": "Niri wird für Screenshots nicht unterstützt."
   }
 }

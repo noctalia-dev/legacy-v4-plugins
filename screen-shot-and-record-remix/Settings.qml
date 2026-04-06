@@ -15,6 +15,10 @@ ColumnLayout {
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableCross
                                ?? true
 
+    property bool enableWindowsSelection: pluginApi?.pluginSettings?.enableWindowsSelection
+                                          ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableWindowsSelection
+                                          ?? true
+
     property string screenshotEditor: pluginApi?.pluginSettings?.screenshotEditor
                                       ?? pluginApi?.manifest?.metadata?.defaultSettings?.screenshotEditor
                                       ?? "swappy"
@@ -46,6 +50,16 @@ ColumnLayout {
         checked: root.enableCross
         onToggled: (checked) => {
             root.enableCross = checked
+        }
+    }
+
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.enableWindowsSelection.label")
+        description: pluginApi?.tr("settings.enableWindowsSelection.description")
+        checked: root.enableWindowsSelection
+        onToggled: (checked) => {
+            root.enableWindowsSelection = checked
         }
     }
 
@@ -143,6 +157,7 @@ ColumnLayout {
     // Required: Save function called by the dialog
     function saveSettings() {
         pluginApi.pluginSettings.enableCross = root.enableCross
+        pluginApi.pluginSettings.enableWindowsSelection = root.enableWindowsSelection
         pluginApi.pluginSettings.screenshotEditor = root.screenshotEditor
         pluginApi.pluginSettings.keepSourceScreenshot = root.keepSourceScreenshot
         pluginApi.pluginSettings.savePath = root.savePath

@@ -16,6 +16,10 @@
             "label": "Enable Crosshair",
             "description": "Whether to enable crosshair aiming."
         },
+        "enableWindowsSelection": {
+            "label": "Enable Window Detection",
+            "description": "Allow clicking windows to auto-select their region on supported compositors."
+        },
         "screenshotEditor": {
             "label": "Screenshot Annotation Tool",
             "description": "Tool used for annotating screenshots. Needs to be pre-installed."
@@ -47,7 +51,8 @@
             "failed": "Screenshot failed",
             "savedTitle": "Screenshot saved",
             "copiedTitle": "Screenshot copied",
-            "copiedBody": "Image copied to clipboard"
+            "copiedBody": "Image copied to clipboard",
+            "niriNotSupported": "Niri is not supported for screenshots."
         },
         "search": {
             "failed": "Image search failed"

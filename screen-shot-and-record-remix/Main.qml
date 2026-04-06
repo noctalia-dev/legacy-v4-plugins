@@ -4,6 +4,7 @@ import qs.Services.UI
 import QtQml.Models
 import Quickshell
 import qs.Commons
+import qs.Services.Compositor
 
 Item {
     id: root
@@ -69,12 +70,22 @@ Item {
             return
         }
 
+        if (CompositorService.isNiri) {
+            // Show a notification that Niri is not supported (i18n only)
+            pluginApi?.mainInstance?.showToast?.(pluginApi?.tr("screenshot.niriNotSupported"));
+            Logger.w("ScreenShot", "Niri is not supported for screenshots.");
+            return;
+        }
+
         root.target = target
         active = true
     }
 
     // 存储当前所有屏幕
     property var screens: Quickshell.screens
+    readonly property string selectorSource: CompositorService.isSway ? "ScreenShotSway.qml"
+                                           : CompositorService.isHyprland ? "ScreenShotHypr.qml"
+                                           : "ScreenShot.qml"
 
     // 使用 Instantiator 管理选择框
     Instantiator {
@@ -83,7 +94,7 @@ Item {
         model: Quickshell.screens
         delegate: Loader {
             required property int index
-            source: "ScreenShot.qml"
+            source: root.selectorSource
             onLoaded: {
                 item.pluginApi = root.pluginApi
                 item.screen = Quickshell.screens[index]

@@ -16,6 +16,10 @@
             "label": "启用十字线瞄准",
             "description": "是否启用十字线瞄准。"
         },
+        "enableWindowsSelection": {
+            "label": "启用窗口检测",
+            "description": "在支持的合成器上，允许点击窗口自动选择其区域。"
+        },
         "screenshotEditor": {
             "label": "截图标注工具",
             "description": "用于标注截图的工具。需要预先安装。"
@@ -67,5 +71,6 @@
             "stoppedBody": "已停止",
             "startingTitle": "正在开始录屏"
         }
-    }
+    },
+    "niriNotSupported": "Niri 不支持屏幕截图。"
 }

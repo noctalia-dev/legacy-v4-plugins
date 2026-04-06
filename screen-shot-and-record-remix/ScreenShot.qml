@@ -54,7 +54,7 @@ PanelWindow {
                     if (stopRecordingNotificationsEnabled) {
                         stopArgs.push("--notify")
                     }
-                    stopArgs.push(...buildRecordingNotifyArgs())
+                    stopArgs.push(...captureCommon.buildRecordingNotifyArgs(pluginApi))
                     Logger.d("ScreenShot", "[Panel] Executing stop command args:", stopArgs)
                     Quickshell.execDetached(stopArgs)
                     root.closeSelector()
@@ -78,6 +78,8 @@ PanelWindow {
         const isRecordingTarget = (root.target === "record" || root.target === "recordsound")
         if (isRecordingTarget) {
             checkRecordingProc.running = true
+        } else if (typeof root.onNonRecordingStart === "function") {
+            root.onNonRecordingStart()
         }
 
         if (root.target === "screenshot" || root.target === "search" || root.target === "ocr") {
@@ -108,193 +110,12 @@ PanelWindow {
     property real regionWidth: Math.abs(draggingX - dragStartX)
     property real regionHeight: Math.abs(draggingY - dragStartY)
     readonly property real uiScale: Style.uiScaleRatio
+    property var targetMeta: root
+    property var onNonRecordingStart: null
+    property var resolveFallbackRegion: null
 
-    function shellQuote(value) {
-        return "'" + String(value ?? "").replace(/'/g, "'\"'\"'") + "'"
-    }
-
-    function buildShellRequireCmdFn(appName, failedTitle, missingMessage) {
-        return `require_cmd() { if ! command -v "$1" >/dev/null 2>&1; then notify-send -a ${shellQuote(appName)} ${shellQuote(failedTitle)} ${shellQuote(missingMessage)}; exit 1; fi; }`
-    }
-
-    function buildFrozenCropCmd(sourceFile, cropGeometry, fallbackGeometry, outputPath, streamOutput) {
-        const sourceArg = shellQuote(sourceFile)
-        const cropArg = shellQuote(cropGeometry)
-        const fallbackArg = shellQuote(fallbackGeometry)
-        const magickOut = streamOutput ? "png:-" : shellQuote(outputPath)
-        const grimOut = streamOutput ? "-" : shellQuote(outputPath)
-
-        return `if command -v magick >/dev/null 2>&1; then magick ${sourceArg} -crop ${cropArg} +repage ${magickOut}; elif command -v convert >/dev/null 2>&1; then convert ${sourceArg} -crop ${cropArg} +repage ${magickOut}; else grim -g ${fallbackArg} ${grimOut}; fi`
-    }
-
-    function buildEditorCmd(editor, inputFile, outputFile) {
-        if (editor === "satty") {
-            return `satty --filename ${shellQuote(inputFile)} --output-filename ${shellQuote(outputFile)}`
-        }
-
-        return `${editor} -f ${shellQuote(inputFile)} -o ${shellQuote(outputFile)}`
-    }
-
-    function buildRecordingNotifyArgs() {
-        return [
-            "--notify-app", pluginApi?.tr("notify.app.recorder"),
-            "--notify-cancelled-title", pluginApi?.tr("notify.recording.cancelledTitle"),
-            "--notify-no-region-body", pluginApi?.tr("notify.recording.noRegionBody"),
-            "--notify-no-dir-body", pluginApi?.tr("notify.recording.noDirBody"),
-            "--notify-stopped-title", pluginApi?.tr("notify.recording.stoppedTitle"),
-            "--notify-stopped-body", pluginApi?.tr("notify.recording.stoppedBody"),
-            "--notify-starting-title", pluginApi?.tr("notify.recording.startingTitle")
-        ]
-    }
-
-    function shouldNormalizeRecordingResolution() {
-        const outputName = String(root.screen?.name ?? "")
-        const screens = Quickshell.screens ?? []
-
-        let matched = root.screen
-        for (let i = 0; i < screens.length; i++) {
-            if (String(screens[i]?.name ?? "") === outputName) {
-                matched = screens[i]
-                break
-            }
-        }
-
-        const scale = Number(matched?.scale ?? 1)
-        const dpr = Number(matched?.devicePixelRatio ?? 1)
-        return (Number.isFinite(scale) && scale > 1.01) || (Number.isFinite(dpr) && dpr > 1.01)
-    }
-
-    function processRegion(x, y, width, height, mode) {
-        // (Removed duplicate declarations; see below for correct logic)
-            // Use logical coordinates for selection
-            const scale = Number(root.screen?.scale ?? 1)
-            const dpr = Number(root.screen?.devicePixelRatio ?? 1)
-            const factor = (Number.isFinite(scale) && scale > 0.01) ? scale : ((Number.isFinite(dpr) && dpr > 0.01) ? dpr : 1)
-
-            // Only apply scale when passing to grim/crop
-            // Use logical coordinates for selection
-            const globalX = Math.round(x + root.monitorOffsetX)
-            const globalY = Math.round(y + root.monitorOffsetY)
-            const globalW = Math.max(1, Math.round(width))
-            const globalH = Math.max(1, Math.round(height))
-            // For grim/crop, scale the geometry
-            const scaledGlobalX = Math.round(globalX * factor)
-            const scaledGlobalY = Math.round(globalY * factor)
-            const scaledGlobalW = Math.max(1, Math.round(globalW * factor))
-            const scaledGlobalH = Math.max(1, Math.round(globalH * factor))
-            const geometry = `${scaledGlobalX},${scaledGlobalY} ${scaledGlobalW}x${scaledGlobalH}`
-
-            // For cropGeometry (magick/convert), scale local coords
-            const scaledLocalX = Math.round(x * factor)
-            const scaledLocalY = Math.round(y * factor)
-            const scaledLocalW = Math.max(1, Math.round(width * factor))
-            const scaledLocalH = Math.max(1, Math.round(height * factor))
-            const cropGeometry = `${scaledLocalW}x${scaledLocalH}+${scaledLocalX}+${scaledLocalY}`
-
-            var outputName = root.screen ? root.screen.name : "unknown"
-            var safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
-            var tempFile = `/tmp/screen-${safeOutputName}.png`
-            var configuredSavePath = pluginApi?.pluginSettings?.savePath
-                                     ?? pluginApi?.manifest?.metadata?.defaultSettings?.savePath
-                                     ?? ""
-            var screenshotDir = Settings.preprocessPath(configuredSavePath)
-            if (!screenshotDir || screenshotDir === "") {
-                screenshotDir = Quickshell.env("HOME") + "/Pictures/Screenshots"
-            }
-            var timestamp = Qt.formatDateTime(new Date(), "yyyy-MM-dd_HH.mm.ss")
-            var sourceFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}_source.png`
-            var outputFile = `${screenshotDir}/screenshot_${timestamp}_${safeOutputName}.png`
-            const useFrozenSource = root.frozenSourceReady && root.frozenSourceFile !== ""
-            const frozenSourceFile = root.frozenSourceFile
-            // Frozen source is per-output, so crop in output-local coords.
-            // (cropGeometry already declared above with scaling)
-
-        Logger.d("ScreenShot", root.target)
-        if (root.target === "screenshot") {
-            const notifyApp = pluginApi?.tr("notify.app.screenshot")
-            const copiedTitle = pluginApi?.tr("notify.screenshot.copiedTitle")
-            const copiedBody = pluginApi?.tr("notify.screenshot.copiedBody")
-            const savedTitle = pluginApi?.tr("notify.screenshot.savedTitle")
-
-            if (mode === "copy") {
-                const copyCmd = useFrozenSource
-                    ? `${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, "", true)} | wl-copy --type image/png && rm -f '${frozenSourceFile}' && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(copiedTitle)} ${shellQuote(copiedBody)}`
-                    : `grim -g '${geometry}' - | wl-copy --type image/png && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(copiedTitle)} ${shellQuote(copiedBody)}`
-                Logger.d("ScreenShot", "[Panel] Executing copy command:", copyCmd)
-                Quickshell.execDetached(["sh", "-c", copyCmd])
-            } else if (mode === "edit") {
-                const editor = pluginApi?.pluginSettings?.screenshotEditor
-                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.screenshotEditor
-                               ?? "swappy"
-
-                const keepSourceScreenshot = pluginApi?.pluginSettings?.keepSourceScreenshot
-                                           ?? pluginApi?.manifest?.metadata?.defaultSettings?.keepSourceScreenshot
-                                           ?? false
-
-                const editorCmd = buildEditorCmd(editor, sourceFile, outputFile)
-                const editCmd = useFrozenSource
-                    ? `mkdir -p '${screenshotDir}' && ${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, sourceFile, false)} && rm -f '${frozenSourceFile}' && ${editorCmd} && if [ '${keepSourceScreenshot ? "true" : "false"}' != 'true' ]; then rm -f '${sourceFile}'; fi && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(savedTitle)} "${outputFile}"`
-                    : `mkdir -p '${screenshotDir}' && grim -g '${geometry}' '${sourceFile}' && ${editorCmd} && if [ '${keepSourceScreenshot ? "true" : "false"}' != 'true' ]; then rm -f '${sourceFile}'; fi && notify-send -a ${shellQuote(notifyApp)} ${shellQuote(savedTitle)} "${outputFile}"`
-                Logger.d("ScreenShot", "[Panel] Executing edit command:", editCmd)
-                Quickshell.execDetached(["sh", "-c", editCmd])
-            }
-        } else if (root.target === "search") {
-            const searchCmd = useFrozenSource
-                ? `${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, tempFile, false)} && rm -f '${frozenSourceFile}' && xdg-open \"https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')\"`
-                : `grim -g '${geometry}' '${tempFile}' && xdg-open \"https://lens.google.com/uploadbyurl?url=$(curl -sF files[]=@'${tempFile}' https://uguu.se/upload | jq -r '.files[0].url')\"`
-            Logger.d("ScreenShot", "[Panel] Executing search command:", searchCmd)
-            Quickshell.execDetached(["sh", "-c", searchCmd])
-        } else if (root.target === "ocr") {
-            const notifyApp = pluginApi?.tr("notify.app.screenshot")
-            const depMissing = pluginApi?.tr("notify.dependencyMissing")
-            const failedTitle = pluginApi?.tr("notify.ocr.failed")
-            const doneTitle = pluginApi?.tr("notify.ocr.doneTitle")
-            const doneCopied = pluginApi?.tr("notify.ocr.copiedBody")
-            const doneNoText = pluginApi?.tr("notify.ocr.emptyBody")
-            const ocrPreamble = buildShellRequireCmdFn(notifyApp, failedTitle, depMissing)
-            const ocrCmd = useFrozenSource
-                ? `${ocrPreamble}; require_cmd grim; require_cmd tesseract; require_cmd wl-copy; OCR_TEXT=""; ${buildFrozenCropCmd(frozenSourceFile, cropGeometry, geometry, tempFile, false)} && rm -f '${frozenSourceFile}'; if [ -s '${tempFile}' ]; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneCopied)}; else notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneNoText)}; fi`
-                : `${ocrPreamble}; require_cmd grim; require_cmd tesseract; require_cmd wl-copy; OCR_TEXT=""; if grim -g '${geometry}' '${tempFile}'; then OCR_TEXT=$(tesseract '${tempFile}' stdout 2>/dev/null); fi; if [ -n "$OCR_TEXT" ]; then printf "%s" "$OCR_TEXT" | wl-copy; notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneCopied)}; else notify-send -a ${shellQuote(notifyApp)} ${shellQuote(doneTitle)} ${shellQuote(doneNoText)}; fi`
-            Logger.d("ScreenShot", "[Panel] Executing ocr command:", ocrCmd)
-            Quickshell.execDetached(["sh", "-c", ocrCmd])
-        } else if (root.target === "record" || root.target === "recordsound") {
-
-
-            const scriptPath = pluginApi.pluginDir + '/record.sh'
-            var configuredRecordingSavePath = pluginApi?.pluginSettings?.recordingSavePath
-                                            ?? pluginApi?.manifest?.metadata?.defaultSettings?.recordingSavePath
-                                            ?? ""
-            var recordingDir = Settings.preprocessPath(configuredRecordingSavePath)
-            if (!recordingDir || recordingDir === "") {
-                recordingDir = Quickshell.env("HOME") + "/Videos"
-            }
-
-            var recordingNotificationsEnabled = pluginApi?.pluginSettings?.recordingNotifications
-                                               ?? pluginApi?.manifest?.metadata?.defaultSettings?.recordingNotifications
-                                               ?? true
-
-            const region = `${globalX},${globalY} ${globalW}x${globalH}`
-
-            const recordArgs = ["bash", scriptPath, "--region", region, "--dir", recordingDir]
-            if (shouldNormalizeRecordingResolution()) {
-                const targetSize = `${globalW}x${globalH}`
-                recordArgs.push("--video-target-size", targetSize)
-            }
-            if (root.target === "recordsound") {
-                recordArgs.push("--sound")
-            }
-            if (recordingNotificationsEnabled) {
-                recordArgs.push("--notify")
-            }
-            recordArgs.push(...buildRecordingNotifyArgs())
-
-            Logger.d("ScreenShot", "[Panel] Executing record command args:", recordArgs)
-            const recordStarted = Quickshell.execDetached(recordArgs)
-            if (pluginApi?.mainInstance) {
-                // Event-driven bar state update: red only when this plugin starts recording successfully.
-                pluginApi.mainInstance.recordingActive = (recordStarted !== false)
-            }
-        }
+    ScreenShotCaptureCommon {
+        id: captureCommon
     }
 
     function closeSelector() {
@@ -316,187 +137,22 @@ PanelWindow {
         const mode = (root.mouseButton === Qt.RightButton) ? "edit" : "copy"
 
         if (root.regionWidth > 0 && root.regionHeight > 0) {
-            root.processRegion(root.regionX, root.regionY, root.regionWidth, root.regionHeight, mode)
+            captureCommon.processRegion(root, root.regionX, root.regionY, root.regionWidth, root.regionHeight, mode)
+        } else if (typeof root.resolveFallbackRegion === "function") {
+            const fallback = root.resolveFallbackRegion()
+            if (fallback && fallback.width > 0 && fallback.height > 0) {
+                captureCommon.processRegion(root, fallback.x, fallback.y, fallback.width, fallback.height, mode)
+            }
         }
 
         root.closeSelector()
     }
 
-    ScreencopyView {
-        anchors.fill: parent
-        live: false
-        captureSource: root.screen
+    ScreenShotOverlayCommon {
+        host: root
     }
 
-        Rectangle {
-            id: darkenOverlay
-            z: 1
-            anchors {
-                left: parent.left
-                top: parent.top
-                leftMargin: root.regionX - border.width
-                topMargin: root.regionY - border.width
-            }
-            width: root.regionWidth + border.width * 2
-            height: root.regionHeight + border.width * 2
-            color: "transparent"
-            border.color: "#88111111"
-            border.width: Math.max(root.width, root.height)
-            visible: root.dragging && root.mouseOnThisScreen
-        }
-
-        Rectangle {
-            z: 2
-            x: root.regionX
-            y: root.regionY
-            width: root.regionWidth
-            height: root.regionHeight
-            color: "transparent"
-            border.color: "#cccccc"
-            border.width: Math.max(1, Math.round(2 * root.uiScale))
-            visible: root.dragging && root.mouseOnThisScreen
-        }
-
-        Text {
-            z: 3
-            x: root.regionX + root.regionWidth - width - (8 * root.uiScale)
-            y: root.regionY + root.regionHeight + (8 * root.uiScale)
-            text: root.dragging ? `${Math.round(root.regionWidth)} x ${Math.round(root.regionHeight)}` : ""
-            color: "#cccccc"
-            font.pixelSize: Math.max(10, Math.round(13 * root.uiScale))
-            visible: root.dragging && root.mouseOnThisScreen
-        }
-
-        // 十字准星
-        Rectangle {
-            visible: root.mouseInside && root.enableCross && root.mouseOnThisScreen
-            opacity: 0.4
-            z: 2
-            x: root.mouseX
-            anchors { top: parent.top; bottom: parent.bottom }
-            width: Math.max(1, Math.round(root.uiScale))
-            color: "#cccccc"
-        }
-        Rectangle {
-            visible: root.mouseInside && root.enableCross && root.mouseOnThisScreen
-            opacity: 0.4
-            z: 2
-            y: root.mouseY
-            anchors { left: parent.left; right: parent.right }
-            height: Math.max(1, Math.round(root.uiScale))
-            color: "#cccccc"
-        }
-
-        // 背景遮罩
-        Rectangle {
-            anchors.fill: parent
-            color: "#88111111"
-            visible: !root.dragging && root.mouseOnThisScreen
-            z: 0
-        }
-
-
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            cursorShape: root.enableCross ? Qt.CrossCursor : Qt.ArrowCursor
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-            z: 10
-
-            onPositionChanged: (mouse) => {
-                root.mouseOnThisScreen = true
-                root.mouseX = mouse.x
-                root.mouseY = mouse.y
-                root.mouseInside = true
-                if (root.dragging) {
-                    root.draggingX = mouse.x
-                    root.draggingY = mouse.y
-                }
-            }
-            onEntered: {
-                root.mouseOnThisScreen = true
-                root.mouseInside = true
-            }
-            onExited: {
-                root.mouseInside = false
-                root.mouseOnThisScreen = false
-            }
-            onPressed: (mouse) => {
-                root.dragStartX = mouse.x
-                root.dragStartY = mouse.y
-                root.draggingX = mouse.x
-                root.draggingY = mouse.y
-                root.dragging = true
-                root.mouseButton = mouse.button
-            }
-            onReleased: (mouse) => {
-                root.dragging = false
-
-                root.finish()
-            }
-    }
-
-    NBox {
-        id: rowBackground
-        color: Color.mPrimary
-        radius: Style.radiusM
-        width: rowLayout.implicitWidth + Style.marginL * 2
-        height: rowLayout.implicitHeight + Style.marginM * 2
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Style.marginM
-        z: 20
-        visible: root.mouseOnThisScreen
-        opacity: root.mouseOnThisScreen ? 1 : 0
-
-        RowLayout {
-            z: 20
-            id: rowLayout
-            anchors.fill: parent
-            anchors.margins: Style.marginM
-            spacing: Style.marginM
-
-            NIcon {
-                icon: iconForTarget(root.target)
-                color: Color.mOnPrimary
-            }
-
-            NText {
-                text: labelForTarget(root.target)
-                color: Color.mOnPrimary
-            }
-
-            NButton {
-                z: 20
-                icon: "close"
-                backgroundColor: Color.mError
-                textColor: Color.mOnError
-                onClicked: {
-                    root.closeSelector()
-                }
-            }
-        }
-
-        Behavior on opacity { NumberAnimation { duration: Style.animationNormal; easing.type: Easing.OutQuad } }
-    }
-
-    Item {
-        anchors.fill: parent
-        focus: true
-        Keys.onPressed: (event) => {
-            if (event.key === Qt.Key_Escape) {
-                event.accepted = true
-                root.closeSelector()
-            }
-        }
-
-        Component.onCompleted: {
-            forceActiveFocus()
-        }
-    }
-
-    function iconForTarget(t: string): string {
+    function iconForTarget(t) {
         switch (t) {
             case "screenshot": return "screenshot"
             case "ocr": return "text-recognition"
@@ -507,7 +163,7 @@ PanelWindow {
         }
     }
 
-    function labelForTarget(t: string): string {
+    function labelForTarget(pluginApi, t) {
         switch (t) {
             case "screenshot": return pluginApi?.tr("panel.target.screenshot")
             case "ocr": return pluginApi?.tr("panel.target.ocr")
