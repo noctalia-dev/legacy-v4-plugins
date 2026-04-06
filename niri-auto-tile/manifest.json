@@ -1,11 +1,11 @@
 {
   "id": "niri-auto-tile",
-  "name": "Niri Auto-Tile",
-  "version": "1.2.1",
+  "name": "Auto-Tile",
+  "version": "1.10.0",
   "minNoctaliaVersion": "4.4.0",
   "author": "pir0c0pter0",
   "license": "MIT",
-  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "repository": "https://github.com/pir0c0pter0/niri-auto-tile",
   "description": "Automatically redistributes niri column widths evenly when windows open or close",
   "tags": ["Bar", "Utility", "System", "Niri"],
 
@@ -21,15 +21,14 @@
   },
 
   "metadata": {
-    "commandPrefix": "auto-tile",
     "defaultSettings": {
       "maxVisible": 4,
       "debounceMs": 300,
       "maxEventsPerSecond": 20,
       "enabled": true,
-      "onlyAtMax": true,
       "perWorkspace": false,
-      "workspaceMaxVisible": {}
+      "workspaceMaxVisible": {},
+      "language": "auto"
     }
   }
 }
