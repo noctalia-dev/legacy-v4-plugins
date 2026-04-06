@@ -64,7 +64,7 @@ DraggableDesktopWidget {
         color: Color.mSurface
         opacity: 0.85
         radius: Style.radiusM
-        border.color: Color.mOutlineVariant
+        border.color: Color.mOutline
         border.width: 1
 
         ColumnLayout {
@@ -118,7 +118,7 @@ DraggableDesktopWidget {
                         Layout.preferredWidth: 28 * widgetScale
                         Layout.preferredHeight: 28 * widgetScale
 
-                        color: isActuallyToday ? Color.mPrimary : "transparent"
+                        color: isActuallyToday ? Color.mPrimary
                         radius: Style.radiusS
 
                         NText {
