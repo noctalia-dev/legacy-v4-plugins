@@ -2,17 +2,15 @@
   "id": "screen-shot-and-record-remix",
   "name": "Screenshot, OCR & Record Remix",
   "version": "1.0.0",
-  "minNoctaliaVersion": "3.6.0",
+  "minNoctaliaVersion": "4.4.1",
   "author": "Mathew-D",
   "license": "GPL-3.0-or-later",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-  "description": "Remix of the original Screenshot, OCR & Record plugin by Pulsar. Removes Hyprland-only window detection, adds region-only selection, and supports Sway, Niri, and Hyprland.",
+  "description": "Remix of the original Screenshot, OCR & Record plugin by Pulsar. Supports Sway, Hyprland, and MangoWM/MangoWC (region-only). Take screenshots, perform OCR, use Google Lens, and record your screen. Window detection lets you click a window to capture or record it (available on Sway and Hyprland, can be toggled in settings).",
   "tags": [
     "Bar",
     "Panel",
-    "Utility",
     "Hyprland",
-    "Niri",
     "Sway"
   ],
   "entryPoints": {
