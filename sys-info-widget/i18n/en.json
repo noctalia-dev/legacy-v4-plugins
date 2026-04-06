@@ -1,10 +1,14 @@
 {
   "widget": {
-    "distribution": "Distribution",
+    "distribution": "System",
     "kernel": "Kernel",
     "uptime": "Uptime",
-    "ipaddress": "IP Address",
-    "lanaddress": "LAN Address",
+    "cpu": "CPU",
+    "memory": "Memory",
+    "disk_root": "Disk /",
+    "disk_home": "Disk /home",
+    "ipaddress": "Public IP",
+    "lanaddress": "Local IP",
     "loading": "Loading..."
   }
 }
