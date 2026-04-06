@@ -153,13 +153,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.distribution")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.distroVal
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -168,13 +168,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.kernel")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.kernelVal
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -183,13 +183,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.uptime")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.uptimeVal
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -198,13 +198,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.cpu")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.cpuUsage + " @ " + root.cpuTemp
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -213,13 +213,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.memory")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.memUsage
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -228,13 +228,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.disk_root")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.rootDisk
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -243,13 +243,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.disk_home")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.homeDisk
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -269,13 +269,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.lanaddress")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.lanaddressVal
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
@@ -284,13 +284,13 @@ DraggableDesktopWidget {
                 NText {
                     text: pluginApi?.tr("widget.ipaddress")
                     color: Color.mOnSurfaceVariant
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                 }
                 NText {
                     text: root.ipaddressVal
                     color: Color.mOnSurface
                     font.bold: true
-                    font.pointSize: Style.fontSizeS * widgetScale
+                    font.pointSize: Style.fontSizeL * widgetScale
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignRight
                 }
