@@ -4,7 +4,6 @@
   "version": "1.2.2",
   "minNoctaliaVersion": "4.4.0",
   "author": "WerWolv",
-  "official": false,
   "license": "GPLv2",
   "repository": "https://github.com/WerWolv/noctalia-kde-connect",
   "description": "A Plugin integrating your mobile devices into a panel using KDEConnect",
