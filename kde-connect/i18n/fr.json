@@ -18,6 +18,7 @@
     "other-devices": "Autres appareils",
     "send-file-picker": "Choisir un fichier à envoyer à l'appareil",
     "send-file": "Envoyer un fichier",
+    "browse-device": "Parcourir les fichiers de l'appareil",
     "find-device": "Trouver mon appareil",
     "pair": "Coupler avec l'appareil",
     "unpair": "Découpler l'appareil",
@@ -26,6 +27,10 @@
       "unavailable-title": "kdeconnectd ne semble pas être en cours d'exécution !",
       "unavailable-desc": "Assurez-vous d'avoir installé l'application KDE Connect sur votre système et qu'elle a démarré le démon kdeconnectd",
       "device-unavailable": "L'appareil est actuellement indisponible"
+    },
+    "busctl-error": {
+      "unavailable-title": "busctl est introuvable !",
+      "unavailable-desc": "Assurez-vous que busctl (faisant partie de systemd) est installé sur votre système"
     }
   },
   "bar": {
@@ -39,6 +44,12 @@
       "unavailable": "Indisponible",
       "no-device": "Aucun appareil",
       "not-paired": "Non couplé"
+    }
+  },
+  "settings": {
+    "no-device-connected-hide": {
+      "label": "Masquer si indisponible",
+      "description": "Masquer entièrement le bouton de la barre si aucun appareil n'est connecté"
     }
   }
 }
