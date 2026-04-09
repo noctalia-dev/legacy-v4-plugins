@@ -1,0 +1,47 @@
+{
+  "id": "health-reminder",
+  "name": "Health Reminder",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "PaloMiku",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Healthy computer use reminders with sedentary and hydration toast notifications.",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Utility"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "enableSedentaryReminder": true,
+      "sedentaryIntervalMinutes": 45,
+      "sedentaryMessage": "你已经坐了很久，起来活动一下吧。",
+      "enableHydrationReminder": true,
+      "hydrationIntervalMinutes": 30,
+      "hydrationMessage": "该喝水了，休息一下补充水分。",
+      "debugMode": false,
+      "pausedAtTimestamp": 0,
+      "remindersPaused": false,
+      "iconColor": "none",
+      "medicationReminders": [
+        {
+          "id": "morning-medication",
+          "name": "Morning Medication",
+          "time": "08:00",
+          "enabled": true,
+          "message": ""
+        }
+      ]
+    }
+  }
+}

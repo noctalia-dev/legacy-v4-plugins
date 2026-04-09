@@ -1,0 +1,120 @@
+{
+  "widget": {
+    "tooltip": "健康リマインダー",
+    "sedentaryStatus": "座り過ぎリマインダーまで {time}",
+    "hydrationStatus": "水分補給リマインダーまで {time}"
+  },
+  "menu": {
+    "settings": "設定"
+  },
+  "panel": {
+    "title": "健康リマインダー",
+    "paused": "リマインダーを一時停止中",
+    "running": "リマインダー実行中",
+    "pausedDescription": "座り過ぎと水分補給のリマインダーは現在停止しています。",
+    "runningDescription": "設定した間隔に従って toast リマインダーを送信します。",
+    "interval": "間隔: {minutes} 分",
+    "nextReminder": "次のリマインダー: {time}",
+    "disabled": "このリマインダーは無効です",
+    "enableInSettings": "設定でこのリマインダーを有効にしてください",
+    "pause": "リマインダーを一時停止",
+    "resume": "リマインダーを再開",
+    "reset": "タイマーをリセット",
+    "openSettings": "設定を開く",
+    "testSedentary": "座り過ぎリマインダーをテスト",
+    "testHydration": "水分補給リマインダーをテスト",
+    "testMedication": "服薬リマインダーをテスト",
+    "system": {
+      "title": "通常リマインダー"
+    },
+    "sedentary": {
+      "title": "座り過ぎリマインダー"
+    },
+    "hydration": {
+      "title": "水分補給リマインダー"
+    },
+    "medication": {
+      "title": "服薬リマインダー",
+      "description": "薬やサプリメントのための毎日固定時刻のリマインダーです。",
+      "empty": "服薬リマインダーはまだ設定されていません。",
+      "defaultName": "服薬リマインダー"
+    },
+    "badge": {
+      "off": "オフ"
+    }
+  },
+  "settings": {
+    "sections": {
+      "general": {
+        "label": "一般",
+        "description": "プラグインの見た目とデバッグに関する設定です。"
+      },
+      "system": {
+        "label": "通常リマインダー",
+        "description": "座り過ぎと水分補給の通常リマインダーを設定します。"
+      }
+    },
+    "sedentary": {
+      "enabled": {
+        "label": "座り過ぎリマインダーを有効にする",
+        "description": "設定した間隔の後に立ち上がって体を動かすよう通知します。"
+      },
+      "interval": {
+        "label": "座り過ぎリマインダーの間隔",
+        "description": "座り過ぎリマインダーを何分ごとに送るかを選択します。"
+      },
+      "message": {
+        "label": "座り過ぎリマインダーのメッセージ",
+        "description": "座り過ぎリマインダー用の toast メッセージをカスタマイズします。",
+        "placeholder": "長時間座り続けています。立ち上がって少し体を動かしましょう。"
+      }
+    },
+    "hydration": {
+      "enabled": {
+        "label": "水分補給リマインダーを有効にする",
+        "description": "設定した間隔の後に水分補給を通知します。"
+      },
+      "interval": {
+        "label": "水分補給リマインダーの間隔",
+        "description": "水分補給リマインダーを何分ごとに送るかを選択します。"
+      },
+      "message": {
+        "label": "水分補給リマインダーのメッセージ",
+        "description": "水分補給リマインダー用の toast メッセージをカスタマイズします。",
+        "placeholder": "水を飲んで、少し休憩しましょう。"
+      }
+    },
+    "medication": {
+      "header": "服薬リマインダー",
+      "description": "毎日固定時刻のリマインダーを複数追加できます。",
+      "add": "服薬リマインダーを追加",
+      "remove": "リマインダーを削除",
+      "enabled": "有効",
+      "empty": "服薬リマインダーはまだ追加されていません。",
+      "name": {
+        "label": "リマインダー名",
+        "placeholder": "ビタミンD / 薬の名前"
+      },
+      "time": {
+        "label": "リマインダー時刻"
+      },
+      "message": {
+        "label": "カスタム toast メッセージ",
+        "placeholder": "このリマインダー用の任意メッセージ"
+      }
+    },
+    "debugMode": {
+      "label": "デバッグモードを有効にする",
+      "description": "パネル内のリマインダーカードに手動テストボタンを表示します。"
+    }
+  },
+  "toast": {
+    "title": "健康リマインダー",
+    "sedentary": "長時間座り続けています。立ち上がって少し体を動かしましょう。",
+    "hydration": "水を飲んで、少し休憩しましょう。",
+    "medication": "{name} を飲む時間です。",
+    "sedentaryTest": "これは座り過ぎリマインダーのテストです。",
+    "hydrationTest": "これは水分補給リマインダーのテストです。",
+    "medicationTest": "これは {name} のテスト用リマインダーです。"
+  }
+}

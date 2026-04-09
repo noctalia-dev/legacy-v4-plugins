@@ -1,0 +1,120 @@
+{
+  "widget": {
+    "tooltip": "健康提醒",
+    "sedentaryStatus": "久坐提醒剩余 {time}",
+    "hydrationStatus": "喝水提醒剩余 {time}"
+  },
+  "menu": {
+    "settings": "设置"
+  },
+  "panel": {
+    "title": "健康提醒",
+    "paused": "提醒已暂停",
+    "running": "提醒运行中",
+    "pausedDescription": "当前不会发送久坐或喝水提醒。",
+    "runningDescription": "按设定间隔发送久坐与喝水 toast 提醒。",
+    "interval": "提醒间隔：{minutes} 分钟",
+    "nextReminder": "下次提醒：{time}",
+    "disabled": "该提醒已关闭",
+    "enableInSettings": "可在设置中启用此提醒",
+    "pause": "暂停提醒",
+    "resume": "恢复提醒",
+    "reset": "重置计时",
+    "openSettings": "打开设置",
+    "testSedentary": "测试久坐提醒",
+    "testHydration": "测试喝水提醒",
+    "testMedication": "测试吃药提醒",
+    "system": {
+      "title": "常规提醒"
+    },
+    "sedentary": {
+      "title": "久坐提醒"
+    },
+    "hydration": {
+      "title": "喝水提醒"
+    },
+    "medication": {
+      "title": "吃药提醒",
+      "description": "按每天固定时间提醒服药或补充剂。",
+      "empty": "还没有配置吃药提醒。",
+      "defaultName": "吃药提醒"
+    },
+    "badge": {
+      "off": "关闭"
+    }
+  },
+  "settings": {
+    "sections": {
+      "general": {
+        "label": "通用设置",
+        "description": "插件的外观与调试相关选项。"
+      },
+      "system": {
+        "label": "常规提醒",
+        "description": "配置常规的久坐提醒与喝水提醒。"
+      }
+    },
+    "sedentary": {
+      "enabled": {
+        "label": "启用久坐提醒",
+        "description": "到达设定间隔后提醒你起身活动。"
+      },
+      "interval": {
+        "label": "久坐提醒间隔",
+        "description": "设置每隔多少分钟发送一次久坐提醒。"
+      },
+      "message": {
+        "label": "久坐提醒文案",
+        "description": "自定义久坐提醒的 toast 内容。",
+        "placeholder": "你已经坐了很久，起来活动一下吧。"
+      }
+    },
+    "hydration": {
+      "enabled": {
+        "label": "启用喝水提醒",
+        "description": "到达设定间隔后提醒你补充水分。"
+      },
+      "interval": {
+        "label": "喝水提醒间隔",
+        "description": "设置每隔多少分钟发送一次喝水提醒。"
+      },
+      "message": {
+        "label": "喝水提醒文案",
+        "description": "自定义喝水提醒的 toast 内容。",
+        "placeholder": "该喝水了，休息一下补充水分。"
+      }
+    },
+    "medication": {
+      "header": "吃药提醒",
+      "description": "添加多个每日固定时间的吃药提醒。",
+      "add": "新增吃药提醒",
+      "remove": "删除提醒",
+      "enabled": "启用",
+      "empty": "还没有添加吃药提醒。",
+      "name": {
+        "label": "提醒名称",
+        "placeholder": "维生素 D / 药品名称"
+      },
+      "time": {
+        "label": "提醒时间"
+      },
+      "message": {
+        "label": "自定义 toast 文案",
+        "placeholder": "可选，自定义这条提醒的 toast 内容"
+      }
+    },
+    "debugMode": {
+      "label": "启用调试模式",
+      "description": "在面板中显示各提醒卡片的手动测试按钮。"
+    }
+  },
+  "toast": {
+    "title": "健康提醒",
+    "sedentary": "你已经坐了很久，起来活动一下吧。",
+    "hydration": "该喝水了，休息一下补充水分。",
+    "medication": "该服用 {name} 了。",
+    "sedentaryTest": "这是一条测试久坐提醒。",
+    "hydrationTest": "这是一条测试喝水提醒。",
+    "medicationTest": "这是一条 {name} 的测试提醒。"
+  }
+}

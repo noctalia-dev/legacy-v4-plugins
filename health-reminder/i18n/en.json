@@ -1,0 +1,120 @@
+{
+  "widget": {
+    "tooltip": "Health Reminder",
+    "sedentaryStatus": "Sit reminder in {time}",
+    "hydrationStatus": "Drink water reminder in {time}"
+  },
+  "menu": {
+    "settings": "Settings"
+  },
+  "panel": {
+    "title": "Health Reminder",
+    "paused": "Reminders paused",
+    "running": "Reminders active",
+    "pausedDescription": "Sedentary and hydration reminders are currently paused.",
+    "runningDescription": "Toast reminders will be sent based on your configured intervals.",
+    "interval": "Interval: {minutes} minutes",
+    "nextReminder": "Next reminder: {time}",
+    "disabled": "This reminder is disabled",
+    "enableInSettings": "Enable this reminder in settings",
+    "pause": "Pause reminders",
+    "resume": "Resume reminders",
+    "reset": "Reset timers",
+    "openSettings": "Open settings",
+    "testSedentary": "Test sit reminder",
+    "testHydration": "Test drink reminder",
+    "testMedication": "Test medication reminder",
+    "system": {
+      "title": "System reminders"
+    },
+    "sedentary": {
+      "title": "Sedentary Reminder"
+    },
+    "hydration": {
+      "title": "Hydration Reminder"
+    },
+    "medication": {
+      "title": "Medication Reminders",
+      "description": "Daily reminders at fixed times for medication or supplements.",
+      "empty": "No medication reminders configured yet.",
+      "defaultName": "Medication reminder"
+    },
+    "badge": {
+      "off": "Off"
+    }
+  },
+  "settings": {
+    "sections": {
+      "general": {
+        "label": "General",
+        "description": "Visual and debugging controls for the plugin."
+      },
+      "system": {
+        "label": "System reminders",
+        "description": "Configure the regular sedentary and hydration reminders."
+      }
+    },
+    "sedentary": {
+      "enabled": {
+        "label": "Enable sedentary reminders",
+        "description": "Remind you to get up and move after the configured interval."
+      },
+      "interval": {
+        "label": "Sedentary reminder interval",
+        "description": "Choose how many minutes between sedentary reminders."
+      },
+      "message": {
+        "label": "Sedentary reminder message",
+        "description": "Customize the toast message for sedentary reminders.",
+        "placeholder": "You have been sitting for a while. Time to stand up and move."
+      }
+    },
+    "hydration": {
+      "enabled": {
+        "label": "Enable hydration reminders",
+        "description": "Remind you to drink water after the configured interval."
+      },
+      "interval": {
+        "label": "Hydration reminder interval",
+        "description": "Choose how many minutes between hydration reminders."
+      },
+      "message": {
+        "label": "Hydration reminder message",
+        "description": "Customize the toast message for hydration reminders.",
+        "placeholder": "Time to drink some water and take a short break."
+      }
+    },
+    "medication": {
+      "header": "Medication reminders",
+      "description": "Add multiple reminders at fixed daily times.",
+      "add": "Add medication reminder",
+      "remove": "Remove reminder",
+      "enabled": "Enabled",
+      "empty": "No medication reminders added yet.",
+      "name": {
+        "label": "Reminder name",
+        "placeholder": "Vitamin D / Medicine name"
+      },
+      "time": {
+        "label": "Reminder time"
+      },
+      "message": {
+        "label": "Custom toast message",
+        "placeholder": "Optional custom message for this reminder"
+      }
+    },
+    "debugMode": {
+      "label": "Enable debug mode",
+      "description": "Show manual test buttons for reminder cards in the panel."
+    }
+  },
+  "toast": {
+    "title": "Health Reminder",
+    "sedentary": "You have been sitting for a while. Time to stand up and move.",
+    "hydration": "Time to drink some water and take a short break.",
+    "medication": "Time for {name}.",
+    "sedentaryTest": "This is a test sedentary reminder.",
+    "hydrationTest": "This is a test hydration reminder.",
+    "medicationTest": "This is a test medication reminder for {name}."
+  }
+}
