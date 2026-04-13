@@ -1,0 +1,84 @@
+rules:
+  - id: manifest-required-id
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: '"id":\s*"[^"]+"'
+    message: 'Missing required property `id`. For example: "id": "my-plugin"'
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-required-name
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: '"name":\s*"[^"]+"'
+    message: 'Missing required property `name`. For example: "name": "My Awesome Plugin"'
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-required-version
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: '"version":\s*"[^"]+"'
+    message: 'Missing required property `version`. For example: "version": "1.2.3"'
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-required-author
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: '"author":\s*"[^"]+"'
+    message: 'Missing required property `author`. For example: "author": "John Doe"'
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-required-description
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: '"description":\s*"[^"]+"'
+    message: 'Missing required property `description`. For example: "description": "A very awesome plugin..."'
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-required-repository
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: '"repository":\s*"[^"]+"'
+    message: 'Missing required property `repository`. For example: "repository": "https://github.com/..."'
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-id-format
+    languages: [generic]
+    pattern-regex: '"id":\s*"[^"]*[^"a-z0-9\-][^"]*"'
+    message: "The id can only contain small characters [a-z], numbers [0-9] and dashes [-]"
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-invalid-repository
+    languages: [generic]
+    pattern-regex: '"repository":\s*"(?!https://github\.com/noctalia-dev/noctalia-plugins)[^"]+"'
+    message: 'The repository field needs to point to the "https://github.com/noctalia-dev/noctalia-plugins" github repository!'
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
+
+  - id: manifest-no-official-property
+    languages: [generic]
+    pattern-regex: '"official":\s*false'
+    message: "Do not add the 'official' property. It's automatically false and is NOT needed!"
+    severity: ERROR
+    paths:
+      include: ["**/manifest.json"]
