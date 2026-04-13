@@ -1,7 +1,7 @@
 {
   "id": "ip-monitor",
   "name": "IP Monitor",
-  "version": "0.0.2",
+  "version": "0.1.2",
   "minNoctaliaVersion": "4.4.3",
   "author": "deepalpha",
   "official": false,
