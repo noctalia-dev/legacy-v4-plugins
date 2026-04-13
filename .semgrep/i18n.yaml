@@ -1,0 +1,9 @@
+rules:
+  - id: i18n-fallback
+    languages: [generic]
+    patterns:
+      - pattern-regex: (\.tr\s*\(\s*["'][^"']+["']\s*\))\s*\|\|\s*["'][^"']+["']
+    message: 'When it comes to translations there is no need for fallback values. From: pluginApi?.tr("example") || "value". To: pluginApi?.tr("example")'
+    severity: WARNING
+    paths:
+      include: ["*.qml"]
