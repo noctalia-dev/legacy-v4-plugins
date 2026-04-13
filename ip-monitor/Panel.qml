@@ -17,8 +17,8 @@ Item {
   // SmartPanel
   readonly property var geometryPlaceholder: panelContainer
 
-  property real contentPreferredWidth: 440 * Style.uiScaleRatio
-  property real contentPreferredHeight: 640 * Style.uiScaleRatio
+  property real contentPreferredWidth: 425 * Style.uiScaleRatio
+  property real contentPreferredHeight: 530 * Style.uiScaleRatio
 
   readonly property bool allowAttach: true
 
@@ -160,15 +160,17 @@ Item {
 
             Repeater {
               model: [
-                { label: "IP Address", value: root.ipData?.ip ?? "n/a" },
-                { label: "Hostname", value: root.ipData?.hostname ?? "n/a" },
-                { label: "City", value: root.ipData?.city ?? "n/a" },
-                { label: "Region", value: root.ipData?.region ?? "n/a" },
-                { label: "Country", value: root.ipData?.country ?? "n/a" },
-                { label: "Location", value: root.ipData?.loc ?? "n/a" },
-                { label: "Postal Code", value: root.ipData?.postal ?? "n/a" },
-                { label: "Timezone", value: root.ipData?.timezone ?? "n/a" },
-                { label: "Organization", value: root.ipData?.org ?? "n/a" },
+                { label: "IP Address", value: root.ipData?.ip },
+								{ label: "City", value: root.ipData?.city },
+								{ label: "Country", value: root.ipData?.country },
+								{ label: "Region", value: root.ipData?.region },
+								{ label: "Continent", value: root.ipData?.continent },
+								{ label: "Postal Code", value: root.ipData?.postal },
+                { label: "Location", value: root.ipData?.loc },
+                { label: "Timezone", value: root.ipData?.timezone },
+								{ label: "Currency", value: root.ipData?.currency },
+                { label: "Organization", value: root.ipData?.org },
+								{ label: "AS Name", value: root.ipData?.as },
               ]
 
               RowLayout {
@@ -179,7 +181,7 @@ Item {
                   text: modelData.label + ":"
                   font.pointSize: Style.fontSizeS * Style.uiScaleRatio
                   color: Color.mOnSurfaceVariant
-                  Layout.preferredWidth: 120
+                  Layout.preferredWidth: 90
                 }
 
                 NText {
@@ -191,49 +193,6 @@ Item {
                   elide: Text.ElideRight
                 }
               }
-            }
-          }
-        }
-
-        // IPC Examples
-        NText {
-          text: "IPC Commands"
-          font.pointSize: Style.fontSizeM * Style.uiScaleRatio
-          font.weight: Font.Medium
-          color: Color.mOnSurface
-          Layout.topMargin: Style.marginM
-        }
-
-        Rectangle {
-          Layout.fillWidth: true
-          Layout.preferredHeight: examplesColumn.implicitHeight + Style.marginM * 2
-          color: Color.mSurfaceVariant
-          radius: Style.radiusM
-
-          ColumnLayout {
-            id: examplesColumn
-            anchors {
-              fill: parent
-              margins: Style.marginM
-            }
-            spacing: Style.marginS
-
-            NText {
-              text: "$ qs -c noctalia-shell ipc call plugin:ip-monitor refreshIp"
-              font.pointSize: Style.fontSizeS * Style.uiScaleRatio
-              font.family: Settings.data.ui.fontFixed
-              color: Color.mPrimary
-              Layout.fillWidth: true
-              wrapMode: Text.WrapAnywhere
-            }
-
-            NText {
-              text: "$ qs -c noctalia-shell ipc call plugin:ip-monitor toggle"
-              font.pointSize: Style.fontSizeS * Style.uiScaleRatio
-              font.family: Settings.data.ui.fontFixed
-              color: Color.mPrimary
-              Layout.fillWidth: true
-              wrapMode: Text.WrapAnywhere
             }
           }
         }
