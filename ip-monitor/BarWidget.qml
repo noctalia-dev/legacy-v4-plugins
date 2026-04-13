@@ -1,12 +1,12 @@
 import QtQuick
 import QtQuick.Layouts
 import Quickshell
+import "." as Local
 import qs.Commons
 import qs.Modules.Bar.Extras
 import qs.Modules.Panels.Settings
 import qs.Services.UI
 import qs.Widgets
-import "." as Local
 
 Item {
   id: root
@@ -41,8 +41,10 @@ Item {
   readonly property bool isVerticalBar: barPosition === "left" || barPosition === "right"
 
   readonly property string currentIcon: {
-    if (fetchState === "loading") return loadingIconKey;
-    if (fetchState === "error") return errorIconKey;
+    if (fetchState === "loading")
+      return loadingIconKey;
+    if (fetchState === "error")
+      return errorIconKey;
     return successIconKey;
   }
 
@@ -55,11 +57,11 @@ Item {
   onIpMonitorServiceChanged: {
     Logger.d("IpMonitor", "BarWidget ipMonitorService changed:", ipMonitorService !== null);
   }
-  
+
   onCurrentIpChanged: {
     Logger.d("IpMonitor", "BarWidget currentIp changed to:", currentIp);
   }
-  
+
   Component.onCompleted: {
     Logger.d("IpMonitor", "BarWidget completed refresh");
   }
@@ -84,8 +86,10 @@ Item {
         lines.push("");
         if (data.city || data.country) {
           var parts = [];
-          if (data.city) parts.push(data.city);
-          if (data.country) parts.push(data.country);
+          if (data.city)
+            parts.push(data.city);
+          if (data.country)
+            parts.push(data.country);
           lines.push(parts.join(", "));
         }
       }
@@ -144,4 +148,3 @@ Item {
     }
   }
 }
-
