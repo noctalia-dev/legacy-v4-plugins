@@ -37,6 +37,14 @@
       "desc": "Wie oft die IP-Informationen automatisch aktualisiert werden sollen. Auf 0 setzen, um die automatische Aktualisierung zu deaktivieren.",
       "label": "Automatisches Aktualisierungsintervall (Sekunden)",
       "placeholder": "300"
+    },
+    "commands": {
+      "title": "Befehle"
+    },
+    "ipcCommands": {
+      "title": "IPC-Befehle",
+      "refreshIp": "IP-Adresse aktualisieren",
+      "togglePanel": "Panel ein-/ausblenden"
     }
   }
 }

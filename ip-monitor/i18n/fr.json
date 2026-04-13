@@ -37,6 +37,14 @@
       "desc": "Fréquence de rafraîchissement automatique des informations IP. Mettre à 0 pour désactiver le rafraîchissement automatique.",
       "label": "Intervalle de rafraîchissement automatique (secondes)",
       "placeholder": "300"
+    },
+    "commands": {
+      "title": "Commandes"
+    },
+    "ipcCommands": {
+      "title": "Commandes IPC",
+      "refreshIp": "Actualiser l'adresse IP",
+      "togglePanel": "Afficher/Masquer le panneau"
     }
   }
 }

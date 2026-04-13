@@ -37,6 +37,14 @@
       "desc": "How often to automatically refresh IP info. Set to 0 to disable auto-refresh.",
       "label": "Auto-refresh Interval (seconds)",
       "placeholder": "300"
+    },
+    "commands": {
+      "title": "Commands"
+    },
+    "ipcCommands": {
+      "title": "IPC Commands",
+      "refreshIp": "Refresh IP",
+      "togglePanel": "Toggle panel"
     }
   }
 }

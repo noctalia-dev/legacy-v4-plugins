@@ -37,6 +37,14 @@
       "desc": "Jak często automatycznie odświeżać informacje o IP. Ustaw na 0, aby wyłączyć automatyczne odświeżanie.",
       "label": "Interwał automatycznego odświeżania (sekundy)",
       "placeholder": "300"
+    },
+    "commands": {
+      "title": "Polecenia"
+    },
+    "ipcCommands": {
+      "title": "Polecenia IPC",
+      "refreshIp": "Odśwież adres IP",
+      "togglePanel": "Pokaż/ukryj panel"
     }
   }
 }
