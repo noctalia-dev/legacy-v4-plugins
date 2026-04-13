@@ -164,6 +164,66 @@ ColumnLayout {
         }
       }
     }
+
+		// IPC keybinding
+		NText {
+      text: pluginApi?.tr("settings.commands.title")
+      font.pointSize: Style.fontSizeM * Style.uiScaleRatio
+      font.weight: Font.Medium
+      color: Color.mOnSurface
+      Layout.topMargin: Style.marginM
+    }
+
+		Rectangle {
+			Layout.fillWidth: true
+			Layout.preferredHeight: infoCol.implicitHeight + Style.marginM * 2
+			color: Color.mSurfaceVariant
+			radius: Style.radiusM
+
+			ColumnLayout {
+				id: infoCol
+				anchors {
+					fill: parent
+					margins: Style.marginM
+				}
+				spacing: Style.marginS
+
+				RowLayout {
+					spacing: Style.marginS
+
+					NIcon {
+						icon: "info-circle"
+						pointSize: Style.fontSizeS
+						color: Color.mPrimary
+					}
+
+					NText {
+						text: pluginApi?.tr("settings.ipcCommands.title")
+						pointSize: Style.fontSizeS
+						font.weight: Font.Medium
+						color: Color.mOnSurface
+					}
+				}
+
+				NText {
+					Layout.fillWidth: true
+					text: pluginApi?.tr("settings.ipcCommands.refreshIp") + ": qs -c noctalia-shell ipc call plugin:ip-monitor refreshIp"
+					pointSize: Style.fontSizeXS
+					font.family: Settings.data.ui.fontFixed
+					color: Color.mOnSurfaceVariant
+					wrapMode: Text.WrapAnywhere
+				}
+
+				NText {
+					Layout.fillWidth: true
+					text: pluginApi?.tr("settings.ipcCommands.togglePanel") + ": qs -c noctalia-shell ipc call plugin:ip-monitor toggle"
+					pointSize: Style.fontSizeXS
+					font.family: Settings.data.ui.fontFixed
+					color: Color.mOnSurfaceVariant
+					wrapMode: Text.WrapAnywhere
+				}
+			}
+		}
   }
 
   signal settingsChanged(var settings)
