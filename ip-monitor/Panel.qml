@@ -18,7 +18,7 @@ Item {
   // SmartPanel
   readonly property var geometryPlaceholder: panelContainer
 
-  property real contentPreferredWidth: 425 * Style.uiScaleRatio
+  property real contentPreferredWidth: 435 * Style.uiScaleRatio
   property real contentPreferredHeight: 530 * Style.uiScaleRatio
 
   readonly property bool allowAttach: true
@@ -150,7 +150,7 @@ Item {
         visible: root.fetchState === "success" && root.ipData
 
         NText {
-          text: "Details"
+          text: pluginApi?.tr("panel.details.title")
           font.pointSize: Style.fontSizeM * Style.uiScaleRatio
           font.weight: Font.Medium
           color: Color.mOnSurface
@@ -172,47 +172,47 @@ Item {
             Repeater {
               model: [
                 {
-                  label: "IP Address",
+                  label: pluginApi?.tr("panel.details.ip"),
                   value: root.ipData?.ip
                 },
                 {
-                  label: "City",
+                  label: pluginApi?.tr("panel.details.city"),
                   value: root.ipData?.city
                 },
                 {
-                  label: "Country",
+                  label: pluginApi?.tr("panel.details.country"),
                   value: root.ipData?.country
                 },
                 {
-                  label: "Region",
+                  label: pluginApi?.tr("panel.details.region"),
                   value: root.ipData?.region
                 },
                 {
-                  label: "Continent",
+                  label: pluginApi?.tr("panel.details.continent"),
                   value: root.ipData?.continent
                 },
                 {
-                  label: "Postal Code",
+                  label: pluginApi?.tr("panel.details.postal-code"),
                   value: root.ipData?.postal
                 },
                 {
-                  label: "Location",
+                  label: pluginApi?.tr("panel.details.location"),
                   value: root.ipData?.loc
                 },
                 {
-                  label: "Timezone",
+                  label: pluginApi?.tr("panel.details.timezone"),
                   value: root.ipData?.timezone
                 },
                 {
-                  label: "Currency",
+                  label: pluginApi?.tr("panel.details.currency"),
                   value: root.ipData?.currency
                 },
                 {
-                  label: "Organization",
+                  label: pluginApi?.tr("panel.details.org"),
                   value: root.ipData?.org
                 },
                 {
-                  label: "AS Name",
+                  label: pluginApi?.tr("panel.details.as-name"),
                   value: root.ipData?.as
                 },
               ]
@@ -225,7 +225,7 @@ Item {
                   text: modelData.label + ":"
                   font.pointSize: Style.fontSizeS * Style.uiScaleRatio
                   color: Color.mOnSurfaceVariant
-                  Layout.preferredWidth: 90
+                  Layout.preferredWidth: 100
                 }
 
                 NText {
