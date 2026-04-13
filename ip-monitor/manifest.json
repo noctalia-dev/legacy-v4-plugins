@@ -4,7 +4,6 @@
   "version": "0.1.2",
   "minNoctaliaVersion": "4.4.3",
   "author": "deepalpha",
-  "official": false,
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Plugin showing current external IP",
