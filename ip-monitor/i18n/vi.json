@@ -1,0 +1,50 @@
+{
+  "menu": {
+    "settings": "Cài đặt tiện ích"
+  },
+  "panel": {
+    "test": "Chuỗi này được dịch thông qua API plugin",
+    "open-settings": "Mở cài đặt plugin"
+  },
+  "settings": {
+    "appearance": {
+      "title": "Giao diện"
+    },
+    "iconColor": {
+      "desc": "Màu của biểu tượng khi lấy IP thành công",
+      "label": "Màu biểu tượng"
+    },
+    "stateIcons": {
+      "title": "Biểu tượng trạng thái"
+    },
+    "successIcon": {
+      "desc": "Biểu tượng hiển thị khi lấy IP thành công",
+      "label": "Biểu tượng thành công"
+    },
+    "errorIcon": {
+      "desc": "Biểu tượng hiển thị khi lấy IP thất bại",
+      "label": "Biểu tượng thất bại"
+    },
+    "loadingIcon": {
+      "desc": "Biểu tượng hiển thị trong khi đang lấy IP",
+      "label": "Biểu tượng đang tải"
+    },
+    "browseIcons": "Tìm biểu tượng",
+    "behavior": {
+      "title": "Hành vi"
+    },
+    "refreshInterval": {
+      "desc": "Tần suất tự động làm mới thông tin IP. Đặt 0 để tắt tự động làm mới.",
+      "label": "Khoảng thời gian tự động làm mới (giây)",
+      "placeholder": "300"
+    },
+    "commands": {
+      "title": "Các lệnh"
+    },
+    "ipcCommands": {
+      "title": "Lệnh IPC",
+      "refreshIp": "Làm mới IP",
+      "togglePanel": "Bật/tắt bảng"
+    }
+  }
+}
