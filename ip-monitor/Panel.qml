@@ -1,10 +1,11 @@
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Io
+import "." as Local
 import qs.Commons
 import qs.Services.UI
 import qs.Widgets
-import "." as Local
 
 // Panel Component
 Item {
@@ -37,7 +38,8 @@ Item {
   // Trigger refresh via service
   function refreshIp() {
     Logger.d("IpMonitor", "Panel triggering service refresh");
-    if (ipMonitorService) ipMonitorService.fetchIp();
+    if (ipMonitorService)
+      ipMonitorService.fetchIp();
   }
 
   Rectangle {
@@ -89,15 +91,19 @@ Item {
 
           NIcon {
             icon: {
-              if (root.fetchState === "loading") return "loader";
-              if (root.fetchState === "error") return "alert-circle";
+              if (root.fetchState === "loading")
+                return "loader";
+              if (root.fetchState === "error")
+                return "alert-circle";
               return "network";
             }
             Layout.alignment: Qt.AlignHCenter
             pointSize: Style.fontSizeXXL * 2 * Style.uiScaleRatio
             color: {
-              if (root.fetchState === "success") return Color.mPrimary;
-              if (root.fetchState === "error") return Color.mError;
+              if (root.fetchState === "success")
+                return Color.mPrimary;
+              if (root.fetchState === "error")
+                return Color.mError;
               return Color.mOnSurfaceVariant;
             }
           }
@@ -105,9 +111,12 @@ Item {
           NText {
             Layout.alignment: Qt.AlignHCenter
             text: {
-              if (root.fetchState === "loading") return "Fetching IP...";
-              if (root.fetchState === "error") return "Failed to fetch IP";
-              if (root.ipData?.ip) return root.ipData.ip;
+              if (root.fetchState === "loading")
+                return "Fetching IP...";
+              if (root.fetchState === "error")
+                return "Failed to fetch IP";
+              if (root.ipData?.ip)
+                return root.ipData.ip;
               return "n/a";
             }
             font.pointSize: Style.fontSizeXXL * Style.uiScaleRatio
@@ -121,8 +130,10 @@ Item {
             Layout.alignment: Qt.AlignHCenter
             text: {
               var parts = [];
-              if (root.ipData?.city) parts.push(root.ipData.city);
-              if (root.ipData?.country) parts.push(root.ipData.country);
+              if (root.ipData?.city)
+                parts.push(root.ipData.city);
+              if (root.ipData?.country)
+                parts.push(root.ipData.country);
               return parts.join(", ");
             }
             font.pointSize: Style.fontSizeM * Style.uiScaleRatio
@@ -160,17 +171,50 @@ Item {
 
             Repeater {
               model: [
-                { label: "IP Address", value: root.ipData?.ip },
-								{ label: "City", value: root.ipData?.city },
-								{ label: "Country", value: root.ipData?.country },
-								{ label: "Region", value: root.ipData?.region },
-								{ label: "Continent", value: root.ipData?.continent },
-								{ label: "Postal Code", value: root.ipData?.postal },
-                { label: "Location", value: root.ipData?.loc },
-                { label: "Timezone", value: root.ipData?.timezone },
-								{ label: "Currency", value: root.ipData?.currency },
-                { label: "Organization", value: root.ipData?.org },
-								{ label: "AS Name", value: root.ipData?.as },
+                {
+                  label: "IP Address",
+                  value: root.ipData?.ip
+                },
+                {
+                  label: "City",
+                  value: root.ipData?.city
+                },
+                {
+                  label: "Country",
+                  value: root.ipData?.country
+                },
+                {
+                  label: "Region",
+                  value: root.ipData?.region
+                },
+                {
+                  label: "Continent",
+                  value: root.ipData?.continent
+                },
+                {
+                  label: "Postal Code",
+                  value: root.ipData?.postal
+                },
+                {
+                  label: "Location",
+                  value: root.ipData?.loc
+                },
+                {
+                  label: "Timezone",
+                  value: root.ipData?.timezone
+                },
+                {
+                  label: "Currency",
+                  value: root.ipData?.currency
+                },
+                {
+                  label: "Organization",
+                  value: root.ipData?.org
+                },
+                {
+                  label: "AS Name",
+                  value: root.ipData?.as
+                },
               ]
 
               RowLayout {
@@ -189,8 +233,34 @@ Item {
                   font.pointSize: Style.fontSizeS * Style.uiScaleRatio
                   font.family: Settings.data.ui.fontFixed
                   color: Color.mOnSurface
-                  Layout.fillWidth: true
+                  Layout.fillWidth: index !== 0
                   elide: Text.ElideRight
+                }
+
+                NIcon {
+                  id: copyIcon
+                  visible: index === 0 && root.fetchState === "success"
+                  icon: "copy"
+                  pointSize: Style.fontSizeS * Style.uiScaleRatio
+                  color: copyHover.containsMouse ? Color.mOnSurfaceVariant : Color.mPrimary
+                  Layout.alignment: Qt.AlignVCenter
+
+                  MouseArea {
+                    id: copyHover
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                      var ip = root.ipData?.ip;
+                      if (ip && ip !== "n/a") {
+                        Quickshell.execDetached(["sh", "-c", `printf '%s' '${ip}' | wl-copy`]);
+                        ToastService.showNotice("IP copied to clipboard: " + ip);
+                        Logger.d("IpMonitor", "Copied IP to clipboard:", ip);
+                      } else {
+                        ToastService.showNotice("No IP to copy");
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -200,4 +270,3 @@ Item {
     }
   }
 }
-
