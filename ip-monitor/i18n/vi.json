@@ -3,8 +3,20 @@
     "settings": "Cài đặt tiện ích"
   },
   "panel": {
-    "test": "Chuỗi này được dịch thông qua API plugin",
-    "open-settings": "Mở cài đặt plugin"
+    "details": {
+      "title": "Chi tiết",
+      "ip": "Địa chỉ IP",
+      "city": "Thành phố",
+      "country": "Quốc gia",
+      "region": "Vùng",
+      "continent": "Châu lục",
+      "postal-code": "Mã bưu chính",
+      "location": "Vị trí",
+      "timezone": "Múi giờ",
+      "currency": "Tiền tệ",
+      "org": "Tổ chức",
+      "as-name": "Tên AS"
+    }
   },
   "settings": {
     "appearance": {

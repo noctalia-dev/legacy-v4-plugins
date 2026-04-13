@@ -3,8 +3,20 @@
     "settings": "Widget-Einstellungen"
   },
   "panel": {
-    "test": "Diese Zeichenfolge wird über die Plugin-API übersetzt",
-    "open-settings": "Plugin-Einstellungen öffnen"
+    "details": {
+      "title": "Details",
+      "ip": "IP-Adresse",
+      "city": "Stadt",
+      "country": "Land",
+      "region": "Region",
+      "continent": "Kontinent",
+      "postal-code": "Postleitzahl",
+      "location": "Standort",
+      "timezone": "Zeitzone",
+      "currency": "Währung",
+      "org": "Organisation",
+      "as-name": "AS-Name"
+    }
   },
   "settings": {
     "appearance": {

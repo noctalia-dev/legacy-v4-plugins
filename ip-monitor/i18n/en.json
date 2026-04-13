@@ -3,8 +3,20 @@
     "settings": "Widget settings"
   },
   "panel": {
-    "test": "This string is translated via the plugin API",
-    "open-settings": "Open Plugin Settings"
+    "details": {
+      "title": "Details",
+      "ip": "IP Address",
+      "city": "City",
+      "country": "Country",
+      "region": "Region",
+      "continent": "Continent",
+      "postal-code": "Postal Code",
+      "location": "Location",
+      "timezone": "Timezone",
+      "currency": "Currency",
+      "org": "Organization",
+      "as-name": "AS Name"
+    }
   },
   "settings": {
     "appearance": {

@@ -3,8 +3,20 @@
     "settings": "Ustawienia widżetu"
   },
   "panel": {
-    "test": "Ten ciąg jest tłumaczony przez API wtyczki",
-    "open-settings": "Otwórz ustawienia wtyczki"
+    "details": {
+      "title": "Szczegóły",
+      "ip": "Adres IP",
+      "city": "Miasto",
+      "country": "Kraj",
+      "region": "Region",
+      "continent": "Kontynent",
+      "postal-code": "Kod pocztowy",
+      "location": "Lokalizacja",
+      "timezone": "Strefa czasowa",
+      "currency": "Waluta",
+      "org": "Organizacja",
+      "as-name": "Nazwa AS"
+    }
   },
   "settings": {
     "appearance": {

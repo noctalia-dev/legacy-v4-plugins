@@ -3,8 +3,20 @@
     "settings": "Paramètres du widget"
   },
   "panel": {
-    "test": "Cette chaîne est traduite via l'API du plugin",
-    "open-settings": "Ouvrir les paramètres du plugin"
+    "details": {
+      "title": "Détails",
+      "ip": "Adresse IP",
+      "city": "Ville",
+      "country": "Pays",
+      "region": "Région",
+      "continent": "Continent",
+      "postal-code": "Code postal",
+      "location": "Emplacement",
+      "timezone": "Fuseau horaire",
+      "currency": "Devise",
+      "org": "Organisation",
+      "as-name": "Nom AS"
+    }
   },
   "settings": {
     "appearance": {
