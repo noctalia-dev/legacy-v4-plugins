@@ -1,7 +1,7 @@
 {
   "id": "tailscale",
   "name": "Tailscale",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "minNoctaliaVersion": "4.0.0",
   "author": "nineluj",
   "license": "MIT",
