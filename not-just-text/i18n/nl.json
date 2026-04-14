@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Widget-instellingen"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune niet geïnstalleerd",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Gewoon tekst",
+      "desc": "De tekst die in de balk wordt weergegeven"
+    },
+    "fortune": {
+      "label": "Fortune-modus",
+      "desc": "Toon een willekeurig citaat van fortune in plaats van aangepaste tekst"
+    },
+    "fortuneCategory": {
+      "label": "Categorie",
+      "desc": "Beperk citaten tot een specifieke fortune-categorie (bijv. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Max. citatlengte: {value}",
+      "desc": "Maximum aantal tekens dat een fortune-citaat mag bevatten"
+    },
+    "fortuneOffensive": {
+      "label": "Aanstootgevend inschakelen (-o)",
+      "desc": "Haal ook uit de aanstootgevende fortune-database"
+    },
+    "fortuneEqual": {
+      "label": "Gelijke kans (-e)",
+      "desc": "Geef alle categorieën een gelijke kans ongeacht hun omvang"
+    },
+    "list": {
+      "label": "Lijstmodus",
+      "desc": "Toon een willekeurig item uit een tekstbestand in plaats van aangepaste tekst"
+    },
+    "textFile": {
+      "label": "Tekstbestand",
+      "desc": "Pad naar een tekstbestand met één item per regel. Zie examples.txt als startpunt."
+    },
+    "refreshOnWallpaper": {
+      "label": "Vernieuwen bij achtergrondwijziging",
+      "desc": "Kies een nieuwe tekst wanneer de achtergrond verandert. Uitschakelen om slechts één keer per sessie te kiezen."
+    }
+  }
+}

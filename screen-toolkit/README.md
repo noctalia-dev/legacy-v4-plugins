@@ -1,115 +1,150 @@
 # Screen Toolkit
 
-Screen Toolkit is a Noctalia plugin that groups several screen utilities in one panel.
+A comprehensive collection of screen utilities for the Noctalia Shell, bundled into a single panel.
 
-Tools included:
-- Color Picker
-- Annotate
-- Measure
-- Pin
-- Palette Extractor
-- OCR (with optional translation)
-- QR / Barcode Scanner
-- Google Lens uploader
-- Screen Recorder
-- Webcam Mirror
+## 🛠️ Tools Included
 
-## Features:
+| Tool | Description |
+| :--- | :--- |
+| **Color Picker** | Pick any pixel and get HEX, RGB, HSV, and HSL values instantly. |
+| **Annotate** | Draw on screenshots with pencils, highlight, arrows, shapes, text, and blur effects. |
+| **Measure** | Draw lines to measure exact pixel distances on the screen. |
+| **Pin** | Capture a region or local image and keep it pinned as a floating, interactive overlay. |
+| **Palette** | Extract the dominant color palette from any selected screen region. |
+| **OCR** | Extract text from images with support for multiple languages and translation. |
+| **QR Scanner** | Scan QR codes and barcodes from any screen area. |
+| **Google Lens** | Upload a selected region directly to Google Lens for reverse image search. |
+| **Screen Recorder** | Record specific regions as MP4 or GIF (with audio support). |
+| **Webcam Mirror** | A floating, resizable webcam preview window with flip and aspect ratio controls. |
 
-Color Picker:
-Pick any pixel and get HEX, RGB, HSV, and HSL values. Includes copy buttons and color history.
+---
 
-Annotate:
-Select a region and draw on it (pencil, arrows, rectangles, text, blur). Save or copy the result.
+## 📦 Requirements
 
-Measure:
-Draw lines to measure pixel distances on screen.
+Ensure the following dependencies are installed on your system.
 
-Pin:
-Capture a region and keep it pinned as a floating overlay.
+### Core Dependencies
+*   `grim` (Screenshot)
+*   `slurp` (Region selection)
+*   `wl-clipboard` (Clipboard)
+*   `tesseract` (OCR engine)
+*   `imagemagick` (Image processing)
+*   `zbar` (QR/Barcode scanning)
+*   `curl` (Network uploads)
+*   `ffmpeg` (Video processing)
+*   `jq` (JSON parsing)
+*   `wl-screenrec` (Preferred recorder) or `wf-recorder` (Fallback)
 
-Palette:
-Extract dominant colors from a selected region.
+### Optional / Feature-Specific
+*   `translate-shell` (Required for OCR translation)
+*   `gifski` (High-quality GIF encoding)
 
-OCR:
-Select a region and extract text. Optional translation is supported.
+---
 
-QR Scanner:
-Scan QR codes or barcodes from a selected region.
+## 💻 Installation
 
-Google Lens:
-Upload a selected region to Google Lens.
-
-Screen Recorder:
-Record a selected region as MP4 or GIF (GIF limited to ~15s). Optional system audio or microphone.
-
-Webcam Mirror:
-Floating webcam preview window. Can be moved, resized, and flipped horizontally.
-
-Requirements:
-grim, slurp, wl-clipboard, tesseract, imagemagick, zbar, curl, translate-shell, ffmpeg
-Screen recording: wl-screenrec (preferred) or wf-recorder (fallback)
-For GIF recording: gifski
-
-## Install packages:
-
-Arch Linux:
-sudo pacman -S grim slurp wl-clipboard tesseract tesseract-data-eng imagemagick zbar curl translate-shell ffmpeg
-sudo pacman -S wl-screenrec   # preferred recorder
-# or: sudo pacman -S wf-recorder  # fallback
+### Arch Linux
+```bash
+sudo pacman -S grim slurp wl-clipboard tesseract tesseract-data-eng imagemagick zbar curl translate-shell ffmpeg jq wl-screenrec
 yay -S gifski
 ```
 
-Debian / Ubuntu:
-sudo apt install grim slurp wl-clipboard tesseract-ocr tesseract-ocr-eng imagemagick zbar-tools curl translate-shell wl-screenrec ffmpeg
-cargo install gifski
-```
-
-Fedora:
-sudo dnf install grim slurp wl-clipboard tesseract tesseract-langpack-eng ImageMagick zbar curl translate-shell wl-screenrec ffmpeg
-cargo install gifski
-```
-
-openSUSE:
-sudo zypper install grim slurp wl-clipboard tesseract-ocr tesseract-ocr-traineddata-english ImageMagick zbar curl translate-shell wl-screenrec ffmpeg
-cargo install gifski
-```
-
-## Compatibility:
-NixOS:
-Add to your configuration.nix or home.nix:
+### Debian / Ubuntu
 ```bash
+sudo apt install grim slurp wl-clipboard tesseract-ocr tesseract-ocr-eng imagemagick zbar-tools curl translate-shell ffmpeg jq
+cargo install gifski
+# Note: wl-screenrec may need to be built from source or substituted with wf-recorder
+```
+
+### Fedora
+```bash
+sudo dnf install grim slurp wl-clipboard tesseract tesseract-langpack-eng ImageMagick zbar curl translate-shell ffmpeg jq wl-screenrec
+cargo install gifski
+```
+
+### NixOS
+Add the following to your `configuration.nix` or `home.nix`:
+```nix
 environment.systemPackages = with pkgs; [
   grim slurp wl-clipboard tesseract imagemagick zbar curl
-  translate-shell wl-screenrec ffmpeg gifski
+  translate-shell wl-screenrec ffmpeg gifski jq
 ];
+# Enable extra languages if needed:
+# programs.tesseract.languages = [ "eng" "deu" "fra" ];
 ```
 
-For additional OCR languages, use e.g. ```(pkgs.tesseract.override { enableLanguages = [ "eng" "deu" ]; })```
+---
 
-Compatibility:
-Tested on Hyprland and Niri.
+## ⚙️ Compatibility
 
-IPC commands:
+| Compositor | Status | Notes |
+| :--- | :--- | :--- |
+| **Hyprland** | ✅ Fully Supported | All features enabled. |
+| **Niri** | ✅ Fully Supported | "Annotate Active Window" is disabled (unsupported by Niri API). |
+| **Other** | ⚠️ Untested | Basic features should work; compositor-specific tools may fail. |
 
-## Screen Toolkit Commands
+---
+## ⚙️ Settings & Customization
 
-plugin:screen-toolkit
+Configure paths and filename formats directly in the plugin settings panel:
 
-toggle        → Open or close the panel  
-colorPicker   → Launch color picker  
-ocr           → Run OCR on a region  
-qr            → Scan QR / barcode  
-lens          → Upload region to Google Lens  
-annotate      → Open annotation tool  
-measure       → Start measuring overlay  
-pin           → Pin a region to screen  
-palette       → Extract colors  
-record        → Start screen recording
-recordStop    → Stop an active recording (useful when if mouse click is blocked during capture)
-mirror        → Toggle webcam mirror
+| Setting | Description | Default |
+| :--- | :--- | :--- |
+| **Screenshot Path** | Custom directory for saved screenshots/annotations. Supports `~/` shorthand. | `~/Pictures/Screenshots` |
+| **Video Path** | Custom directory for saved recordings. Supports `~/` shorthand. | `~/Videos` |
+| **Filename Format** | Template for generated filenames.  | `{prefix}-{date}_{time}` |
 
-## Example:
-```bash
-qs -c noctalia-shell ipc call plugin:screen-toolkit toggle
-```
+The tools automatically add the correct file extensions (like .png .gif or .mp4) 
+
+---
+##  IPC Commands
+
+Control Screen Toolkit via scripts or keybindings using:
+`qs -c noctalia-shell ipc call plugin:screen-toolkit <command>`
+
+### General Controls
+| Command | Description |
+| :--- | :--- |
+| `toggle` | Open or close the main panel. |
+
+
+###  Annotation
+| Command | Description |
+| :--- | :--- |
+| `annotate` | Start region annotation. |
+| `annotateFullscreen` | Capture and annotate the entire screen. |
+| `annotateWindow` | Capture and annotate the active window (Hyprland only). |
+
+### Pin
+| Command | Description |
+| :--- | :--- |
+| `pin` | Pin a selected region to the screen. |
+| `pinImage` | Choose an existing image to pin. |
+
+### Recording
+| Command | Description |
+| :--- | :--- |
+| `record` | Start recording a region as GIF. |
+| `recordMp4` | Start recording a region as MP4. |
+| `recordStop` | Stop the current recording session. |
+
+###  Other
+| Command | Description |
+| :--- | :--- |
+| `mirror` | Toggle the webcam mirror overlay. |
+| `colorPicker` | Launch the color picker tool. |
+| `ocr` | Run Optical Character Recognition on a region. |
+| `qr` | Scan for QR codes or barcodes in a region. |
+| `palette` | Extract a color palette from a region. |
+| `lens` | Upload a region to Google Lens. |
+| `measure` | Start the measurement overlay. |
+
+---
+
+## 📄 License
+
+MIT License
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome at the [Noctalia Plugins Repository](https://github.com/noctalia-dev/noctalia-plugins).

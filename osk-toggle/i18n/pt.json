@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "Teclado ativo · Clique para ocultar",
+    "hidden": "Teclado oculto · Clique para mostrar",
+    "noGsettings": "gsettings indisponível",
+    "noSqueekboard": "Squeekboard não está em execução",
+    "noWvkbd": "wvkbd não encontrado",
+    "detecting": "Nenhum backend detectado · Abrir configurações"
+  },
+  "menu": {
+    "settings": "Configurações do widget"
+  },
+  "settings": {
+    "backend": {
+      "label": "Backend",
+      "desc": "Qual teclado na tela controlar: auto, squeekboard ou wvkbd (auto detecta na inicialização)",
+      "option": {
+        "auto": "Automático",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "Ocultar quando indisponível",
+      "desc": "Ocultar o widget completamente quando o teclado não está disponível"
+    },
+    "disableHoverIcon": {
+      "label": "Desativar ícone ao passar o cursor",
+      "desc": "Sempre mostrar o ícone do estado atual em vez de um ícone ao passar o cursor. Nota: os ícones ao passar o cursor só aparecem quando a barra está no topo ou na base."
+    },
+    "wvkbdBin": {
+      "label": "Binário wvkbd",
+      "desc": "Nome ou caminho do binário (ex. wvkbd-mobintl, wvkbd-comp, wvkbd-abc)"
+    },
+    "recheck": {
+      "label": "Verificar estado novamente",
+      "done": "Estado verificado!",
+      "desc": "Sincronizar manualmente o estado do teclado"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "widget": {
+    "tooltip": "Sessions SSH"
+  },
+  "bar": {
+    "noSessions": "Aucune session SSH active",
+    "oneSession": "1 session SSH active",
+    "multipleSessions": "sessions SSH actives"
+  },
+  "panel": {
+    "activeSessions": "Sessions actives",
+    "hosts": "Hôtes",
+    "search": "Rechercher des hôtes...",
+    "noActive": "Aucune session active",
+    "noHosts": "Aucun hôte dans ~/.ssh/config",
+    "refresh": "Actualiser",
+    "settings": "Paramètres"
+  },
+  "launcher": {
+    "name": "SSH",
+    "description": "Connectez-vous à un hôte SSH"
+  },
+  "settings": {
+    "terminal": "Terminal",
+    "terminalDetected": "Terminal auto-détecté : {terminal}",
+    "terminalNone": "Aucun émulateur de terminal détecté",
+    "terminalOverride": "Commande du terminal",
+    "terminalOverrideDesc": "Laissez vide pour utiliser le terminal auto-détecté",
+    "pollInterval": "Intervalle de rafraîchissement",
+    "pollIntervalDesc": "Fréquence de vérification des sessions (secondes) : ",
+    "showInactiveHosts": "Afficher les hôtes inactifs",
+    "showInactiveHostsDesc": "Affiche les hôtes sans session active dans le panneau"
+  },
+  "context": {
+    "refresh": "Actualiser",
+    "settings": "Paramètres"
+  }
+}

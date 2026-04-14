@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "Keyboard active · Click to hide",
+    "hidden": "Keyboard hidden · Click to show",
+    "noGsettings": "gsettings unavailable",
+    "noSqueekboard": "Squeekboard is not running",
+    "noWvkbd": "wvkbd not found",
+    "detecting": "No backend detected · Open settings"
+  },
+  "menu": {
+    "settings": "Widget settings"
+  },
+  "settings": {
+    "backend": {
+      "label": "Backend",
+      "desc": "Which on-screen keyboard to control (auto detects at startup)",
+      "option": {
+        "auto": "Auto",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "Hide when unavailable",
+      "desc": "Hide the widget entirely when the keyboard is not available"
+    },
+    "disableHoverIcon": {
+      "label": "Disable hover icon",
+      "desc": "Always show the current state icon instead of a hover icon. Note: hover icons only appear when the bar is at the top or bottom."
+    },
+    "wvkbdBin": {
+      "label": "wvkbd binary",
+      "desc": "Binary name or path (e.g. wvkbd-mobintl, wvkbd-comp, wvkbd-abc)"
+    },
+    "recheck": {
+      "label": "Recheck state",
+      "done": "State rechecked!",
+      "desc": "Manually sync keyboard state"
+    }
+  }
+}

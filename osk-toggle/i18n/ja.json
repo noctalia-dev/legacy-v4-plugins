@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "キーボード有効 · クリックで非表示",
+    "hidden": "キーボード非表示 · クリックで表示",
+    "noGsettings": "gsettings 利用不可",
+    "noSqueekboard": "Squeekboard が起動していません",
+    "noWvkbd": "wvkbd が見つかりません",
+    "detecting": "バックエンドが見つかりません · 設定を開く"
+  },
+  "menu": {
+    "settings": "ウィジェット設定"
+  },
+  "settings": {
+    "backend": {
+      "label": "バックエンド",
+      "desc": "操作するスクリーンキーボード：auto、squeekboard、または wvkbd（auto は起動時に自動検出）",
+      "option": {
+        "auto": "自動",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "利用不可時に非表示",
+      "desc": "キーボードが利用できない場合にウィジェットを完全に非表示にする"
+    },
+    "disableHoverIcon": {
+      "label": "ホバーアイコンを無効にする",
+      "desc": "ホバーアイコンの代わりに常に現在の状態アイコンを表示する。注: ホバーアイコンはバーが上または下にある場合のみ表示される。"
+    },
+    "wvkbdBin": {
+      "label": "wvkbd バイナリ",
+      "desc": "バイナリ名またはパス（例: wvkbd-mobintl、wvkbd-comp、wvkbd-abc）"
+    },
+    "recheck": {
+      "label": "状態を再確認",
+      "done": "状態を再確認しました！",
+      "desc": "キーボードの状態を手動で同期する"
+    }
+  }
+}

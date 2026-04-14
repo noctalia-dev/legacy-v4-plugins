@@ -1,0 +1,89 @@
+{
+  "widget": {
+    "tooltip": "ntfy Benachrichtigungen",
+    "tooltipWithCount": "{count} ungelesene Benachrichtigungen",
+    "noMessages": "Keine Benachrichtigungen"
+  },
+  "menu": {
+    "settings": "Einstellungen",
+    "refresh": "Jetzt aktualisieren",
+    "markAllRead": "Alle als gelesen markieren"
+  },
+  "panel": {
+    "title": "ntfy Benachrichtigungen",
+    "refresh": "Aktualisieren",
+    "markAllRead": "Alle als gelesen markieren",
+    "close": "Schließen",
+    "loading": "Benachrichtigungen werden geladen...",
+    "empty": "Noch keine Benachrichtigungen",
+    "emptyHint": "Konfiguriere Topics in den Einstellungen, um Benachrichtigungen zu empfangen.",
+    "noTopics": "Keine Topics konfiguriert",
+    "noTopicsHint": "Rechtsklick auf das Bar-Widget und Einstellungen öffnen, um ntfy Topics hinzuzufügen.",
+    "markRead": "Als gelesen markieren",
+    "openLink": "Link öffnen",
+    "topic": "Topic",
+    "priority": "Priorität",
+    "timeNow": "jetzt",
+    "timeMinutes": "vor {count} Min.",
+    "timeHours": "vor {count} Std.",
+    "timeDays": "vor {count} Tagen"
+  },
+  "settings": {
+    "server": {
+      "label": "Server-URL",
+      "desc": "Die ntfy Server-URL (Standard: https://ntfy.sh)"
+    },
+    "topics": {
+      "label": "Topics",
+      "desc": "Komma-getrennte Liste der Topics (z.B. alerts,backups,monitoring)"
+    },
+    "auth": {
+      "label": "Authentifizierung",
+      "desc": "Authentifizierungsmethode für private Server",
+      "none": "Keine (öffentliche Topics)",
+      "token": "Access Token",
+      "basic": "Benutzername & Passwort"
+    },
+    "token": {
+      "label": "Access Token",
+      "desc": "Dein ntfy Access Token"
+    },
+    "username": {
+      "label": "Benutzername",
+      "desc": "Benutzername für Basic Auth"
+    },
+    "password": {
+      "label": "Passwort",
+      "desc": "Passwort für Basic Auth"
+    },
+    "pollInterval": {
+      "label": "Abfrageintervall",
+      "desc": "Wie oft nach neuen Nachrichten geprüft wird (in Sekunden)"
+    },
+    "enableToasts": {
+      "label": "Desktop-Benachrichtigungen",
+      "desc": "Toast-Benachrichtigung anzeigen, wenn neue Nachrichten eintreffen"
+    },
+    "maxMessages": {
+      "label": "Max. Nachrichten",
+      "desc": "Maximale Anzahl gespeicherter Nachrichten im Verlauf"
+    }
+  },
+  "toast": {
+    "newMessage": "Neue ntfy Benachrichtigung",
+    "newMessages": "{count} neue Benachrichtigungen"
+  },
+  "error": {
+    "network": "Netzwerkfehler",
+    "auth": "Authentifizierung fehlgeschlagen",
+    "server": "Serverfehler",
+    "parse": "Antwort konnte nicht verarbeitet werden"
+  },
+  "priority": {
+    "min": "Minimal",
+    "low": "Niedrig",
+    "default": "Normal",
+    "high": "Hoch",
+    "urgent": "Dringend"
+  }
+}

@@ -6,7 +6,7 @@
   "author": "blackteaextract",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-  "description": "Toggle the Squeekboard on-screen keyboard with live availability detection, hover icons, and configurable settings.",
+  "description": "Toggle the Squeekboard on-screen keyboard with live availability detection, hover icons, and configurable settings. Note: This plugin is deprecated and got consolidated in osk-toggle.",
   "tags": [
     "System",
     "Bar",

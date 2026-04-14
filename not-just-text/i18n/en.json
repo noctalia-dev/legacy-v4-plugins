@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Widget settings"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune not installed",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Just text",
+      "desc": "The text to display in the bar"
+    },
+    "fortune": {
+      "label": "Fortune mode",
+      "desc": "Show a random quote from fortune instead of custom text"
+    },
+    "fortuneCategory": {
+      "label": "Category",
+      "desc": "Limit quotes to a specific fortune category (e.g. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Max quote length: {value}",
+      "desc": "Maximum number of characters a fortune quote may have"
+    },
+    "fortuneOffensive": {
+      "label": "Include offensive (-o)",
+      "desc": "Also draw from the offensive fortune database"
+    },
+    "fortuneEqual": {
+      "label": "Equal probability (-e)",
+      "desc": "Give all categories equal chance regardless of their size"
+    },
+    "list": {
+      "label": "List mode",
+      "desc": "Show a random entry from a text file instead of custom text"
+    },
+    "textFile": {
+      "label": "Text file",
+      "desc": "Path to a text file with one entry per line. See examples.txt for a starting point."
+    },
+    "refreshOnWallpaper": {
+      "label": "Refresh on wallpaper change",
+      "desc": "Pick a new text when the wallpaper changes. Disable to only pick once per session."
+    }
+  }
+}

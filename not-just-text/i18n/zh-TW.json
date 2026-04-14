@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "小工具設定"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune 未安裝",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "純文字",
+      "desc": "在狀態列中顯示的文字"
+    },
+    "fortune": {
+      "label": "Fortune 模式",
+      "desc": "顯示來自 fortune 的隨機引言，而非自訂文字"
+    },
+    "fortuneCategory": {
+      "label": "類別",
+      "desc": "將引言限制在特定的 fortune 類別（如 computers、science）"
+    },
+    "fortuneMaxLength": {
+      "label": "引言最大長度：{value}",
+      "desc": "fortune 引言允許的最大字元數"
+    },
+    "fortuneOffensive": {
+      "label": "包含冒犯性內容 (-o)",
+      "desc": "也從冒犯性 fortune 資料庫中獲取"
+    },
+    "fortuneEqual": {
+      "label": "等機率 (-e)",
+      "desc": "無論大小，給所有類別相同的機率"
+    },
+    "list": {
+      "label": "清單模式",
+      "desc": "顯示來自文字檔的隨機條目，而非自訂文字"
+    },
+    "textFile": {
+      "label": "文字檔",
+      "desc": "每行一個條目的文字檔路徑。可參考 examples.txt 作為起點。"
+    },
+    "refreshOnWallpaper": {
+      "label": "桌布切換時重新整理",
+      "desc": "桌布更換時選取新文字。停用後每次工作階段僅選取一次。"
+    }
+  }
+}

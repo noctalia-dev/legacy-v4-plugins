@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Impostazioni widget"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune non installato",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Solo testo",
+      "desc": "Il testo da visualizzare nella barra"
+    },
+    "fortune": {
+      "label": "Modalità fortune",
+      "desc": "Mostra una citazione casuale da fortune invece del testo personalizzato"
+    },
+    "fortuneCategory": {
+      "label": "Categoria",
+      "desc": "Limita le citazioni a una categoria fortune specifica (es. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Lunghezza massima citazione: {value}",
+      "desc": "Numero massimo di caratteri che una citazione fortune può avere"
+    },
+    "fortuneOffensive": {
+      "label": "Includi offensivo (-o)",
+      "desc": "Estrai anche dal database fortune offensivo"
+    },
+    "fortuneEqual": {
+      "label": "Probabilità uguale (-e)",
+      "desc": "Dai a tutte le categorie la stessa probabilità indipendentemente dalla dimensione"
+    },
+    "list": {
+      "label": "Modalità lista",
+      "desc": "Mostra una voce casuale da un file di testo invece del testo personalizzato"
+    },
+    "textFile": {
+      "label": "File di testo",
+      "desc": "Percorso a un file di testo con una voce per riga. Vedi examples.txt per un punto di partenza."
+    },
+    "refreshOnWallpaper": {
+      "label": "Aggiorna al cambio sfondo",
+      "desc": "Scegli un nuovo testo quando cambia lo sfondo. Disabilita per scegliere solo una volta per sessione."
+    }
+  }
+}

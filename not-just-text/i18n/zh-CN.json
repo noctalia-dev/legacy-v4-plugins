@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "小部件设置"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune 未安装",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "纯文字",
+      "desc": "在状态栏中显示的文字"
+    },
+    "fortune": {
+      "label": "Fortune 模式",
+      "desc": "显示来自 fortune 的随机引言，而非自定义文字"
+    },
+    "fortuneCategory": {
+      "label": "类别",
+      "desc": "将引言限制在特定的 fortune 类别（如 computers、science）"
+    },
+    "fortuneMaxLength": {
+      "label": "引言最大长度：{value}",
+      "desc": "fortune 引言允许的最大字符数"
+    },
+    "fortuneOffensive": {
+      "label": "包含冒犯性内容 (-o)",
+      "desc": "也从冒犯性 fortune 数据库中获取"
+    },
+    "fortuneEqual": {
+      "label": "等概率 (-e)",
+      "desc": "无论大小，给所有类别相同的概率"
+    },
+    "list": {
+      "label": "列表模式",
+      "desc": "显示来自文本文件的随机条目，而非自定义文字"
+    },
+    "textFile": {
+      "label": "文本文件",
+      "desc": "每行一个条目的文本文件路径。可参考 examples.txt 作为起点。"
+    },
+    "refreshOnWallpaper": {
+      "label": "壁纸切换时刷新",
+      "desc": "壁纸更换时选取新文本。禁用后每次会话仅选取一次。"
+    }
+  }
+}

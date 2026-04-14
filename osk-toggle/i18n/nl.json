@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "Toetsenbord actief · Klik om te verbergen",
+    "hidden": "Toetsenbord verborgen · Klik om te tonen",
+    "noGsettings": "gsettings niet beschikbaar",
+    "noSqueekboard": "Squeekboard is niet actief",
+    "noWvkbd": "wvkbd niet gevonden",
+    "detecting": "Geen backend gevonden · Instellingen openen"
+  },
+  "menu": {
+    "settings": "Widget-instellingen"
+  },
+  "settings": {
+    "backend": {
+      "label": "Backend",
+      "desc": "Welk schermtoetsenbord aansturen: auto, squeekboard of wvkbd (auto detecteert bij opstarten)",
+      "option": {
+        "auto": "Automatisch",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "Verbergen als niet beschikbaar",
+      "desc": "Widget volledig verbergen wanneer het toetsenbord niet beschikbaar is"
+    },
+    "disableHoverIcon": {
+      "label": "Zweefpictogram uitschakelen",
+      "desc": "Altijd het huidige statuspictogram tonen in plaats van een zweefpictogram. Opmerking: zweefpictogrammen verschijnen alleen wanneer de balk bovenaan of onderaan staat."
+    },
+    "wvkbdBin": {
+      "label": "wvkbd-programma",
+      "desc": "Programmanaam of pad (bijv. wvkbd-mobintl, wvkbd-comp, wvkbd-abc)"
+    },
+    "recheck": {
+      "label": "Status opnieuw controleren",
+      "done": "Status opnieuw gecontroleerd!",
+      "desc": "Toetsenbordstatus handmatig synchroniseren"
+    }
+  }
+}

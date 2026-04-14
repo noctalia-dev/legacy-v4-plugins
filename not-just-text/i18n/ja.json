@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "ウィジェット設定"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune がインストールされていません",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "テキストのみ",
+      "desc": "バーに表示するテキスト"
+    },
+    "fortune": {
+      "label": "フォーチュンモード",
+      "desc": "カスタムテキストの代わりにfortuneからランダムな引用を表示"
+    },
+    "fortuneCategory": {
+      "label": "カテゴリー",
+      "desc": "引用を特定のfortuneカテゴリーに限定する（例：computers、science）"
+    },
+    "fortuneMaxLength": {
+      "label": "引用の最大文字数：{value}",
+      "desc": "fortuneの引用に許可される最大文字数"
+    },
+    "fortuneOffensive": {
+      "label": "不適切な内容を含む (-o)",
+      "desc": "不適切なfortuneデータベースからも引用する"
+    },
+    "fortuneEqual": {
+      "label": "均等確率 (-e)",
+      "desc": "サイズに関係なく、すべてのカテゴリーに同じ確率を与える"
+    },
+    "list": {
+      "label": "リストモード",
+      "desc": "カスタムテキストの代わりにテキストファイルからランダムなエントリを表示"
+    },
+    "textFile": {
+      "label": "テキストファイル",
+      "desc": "1行に1エントリのテキストファイルへのパス。examples.txtを参照してください。"
+    },
+    "refreshOnWallpaper": {
+      "label": "壁紙変更時に更新",
+      "desc": "壁紙が変わるたびに新しいテキストを選択します。無効にするとセッションごとに一度だけ選択します。"
+    }
+  }
+}

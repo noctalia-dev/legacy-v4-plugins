@@ -1,0 +1,35 @@
+{
+  "id": "not-just-text",
+  "name": "Not Just Text",
+  "version": "1.0.1",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "blackteaextract",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Displays custom text, fortune quotes, or a random entry from a user-provided text file in the bar.",
+  "tags": [
+    "Bar",
+    "Fun"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "text": "Hello",
+      "fortuneEnabled": false,
+      "fortuneOffensive": false,
+      "fortuneEqual": false,
+      "fortuneCategory": "",
+      "fortuneMaxLength": 60,
+      "listEnabled": false,
+      "textFile": "",
+      "refreshOnWallpaper": true
+    }
+  }
+}

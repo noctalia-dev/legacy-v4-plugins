@@ -1,0 +1,31 @@
+{
+  "id": "osk-toggle",
+  "name": "OSK Toggle",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.4.3",
+  "author": "blackteaextract",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Toggle an on-screen keyboard (Squeekboard or wvkbd) with live availability detection, hover icons, and configurable settings. Supersedes squeekboard-toggle.",
+  "tags": [
+    "System",
+    "Bar",
+    "Utility"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "backend": "auto",
+      "hideWhenUnavailable": false,
+      "disableHoverIcon": false,
+      "wvkbdBin": "wvkbd-mobintl"
+    }
+  }
+}

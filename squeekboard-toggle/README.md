@@ -1,5 +1,9 @@
 # Squeekboard Toggle
 
+**Deprecated:** This plugin is superseded by [osk-toggle](https://github.com/noctalia-dev/noctalia-plugins/osk-toggle) Please use that instead, since it handles both Squeekboard and wvkbd from a single widget.
+
+---
+
 A [Noctalia](https://github.com/noctalia) plugin / bar widget that adds a bar widget to toggle the [Squeekboard](https://gitlab.gnome.org/World/Phosh/squeekboard) on-screen keyboard. Works with 2-in-1 Linux devices.
 
 ### Features

@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "Clavier affiché · Cliquer pour masquer",
+    "hidden": "Clavier masqué · Cliquer pour afficher",
+    "noGsettings": "gsettings indisponible",
+    "noSqueekboard": "Squeekboard n'est pas en cours d'exécution",
+    "noWvkbd": "wvkbd introuvable",
+    "detecting": "Aucun backend détecté · Ouvrir les paramètres"
+  },
+  "menu": {
+    "settings": "Paramètres du widget"
+  },
+  "settings": {
+    "backend": {
+      "label": "Backend",
+      "desc": "Quel clavier virtuel contrôler : auto, squeekboard ou wvkbd (auto détecte au démarrage)",
+      "option": {
+        "auto": "Automatique",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "Masquer si indisponible",
+      "desc": "Masquer complètement le widget quand le clavier n'est pas disponible"
+    },
+    "disableHoverIcon": {
+      "label": "Désactiver l'icône au survol",
+      "desc": "Toujours afficher l'icône d'état actuel au lieu d'une icône au survol. Remarque : les icônes au survol n'apparaissent que lorsque la barre est en haut ou en bas."
+    },
+    "wvkbdBin": {
+      "label": "Binaire wvkbd",
+      "desc": "Nom ou chemin du binaire (ex. wvkbd-mobintl, wvkbd-comp, wvkbd-abc)"
+    },
+    "recheck": {
+      "label": "Revérifier l'état",
+      "done": "État revérifié !",
+      "desc": "Synchroniser manuellement l'état du clavier"
+    }
+  }
+}

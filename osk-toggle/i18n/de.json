@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "Tastatur aktiv · Klicken zum Ausblenden",
+    "hidden": "Tastatur ausgeblendet · Klicken zum Anzeigen",
+    "noGsettings": "gsettings nicht verfügbar",
+    "noSqueekboard": "Squeekboard läuft nicht",
+    "noWvkbd": "wvkbd nicht gefunden",
+    "detecting": "Kein Backend erkannt · Einstellungen öffnen"
+  },
+  "menu": {
+    "settings": "Widget-Einstellungen"
+  },
+  "settings": {
+    "backend": {
+      "label": "Backend",
+      "desc": "Welche Bildschirmtastatur gesteuert werden soll: auto, squeekboard oder wvkbd (auto erkennt beim Start automatisch)",
+      "option": {
+        "auto": "Automatisch",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "Ausblenden wenn nicht verfügbar",
+      "desc": "Widget vollständig ausblenden, wenn die Tastatur nicht verfügbar ist"
+    },
+    "disableHoverIcon": {
+      "label": "Hover-Symbol deaktivieren",
+      "desc": "Immer das aktuelle Statussymbol anzeigen statt eines Hover-Symbols. Hinweis: Hover-Symbole erscheinen nur, wenn die Leiste oben oder unten ist."
+    },
+    "wvkbdBin": {
+      "label": "wvkbd-Programm",
+      "desc": "Programmname oder Pfad (z. B. wvkbd-mobintl, wvkbd-comp, wvkbd-abc)"
+    },
+    "recheck": {
+      "label": "Status neu prüfen",
+      "done": "Status neu geprüft!",
+      "desc": "Tastaturstatus manuell synchronisieren"
+    }
+  }
+}

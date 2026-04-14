@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "Klawiatura aktywna · Kliknij, aby ukryć",
+    "hidden": "Klawiatura ukryta · Kliknij, aby pokazać",
+    "noGsettings": "gsettings niedostępny",
+    "noSqueekboard": "Squeekboard nie działa",
+    "noWvkbd": "wvkbd nie znaleziono",
+    "detecting": "Nie wykryto backendu · Otwórz ustawienia"
+  },
+  "menu": {
+    "settings": "Ustawienia widżetu"
+  },
+  "settings": {
+    "backend": {
+      "label": "Backend",
+      "desc": "Którą klawiaturę ekranową obsługiwać: auto, squeekboard lub wvkbd (auto wykrywa przy uruchomieniu)",
+      "option": {
+        "auto": "Automatyczny",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "Ukryj gdy niedostępny",
+      "desc": "Ukryj widget całkowicie, gdy klawiatura jest niedostępna"
+    },
+    "disableHoverIcon": {
+      "label": "Wyłącz ikonę po najechaniu",
+      "desc": "Zawsze pokazuj ikonę bieżącego stanu zamiast ikony po najechaniu. Uwaga: ikony po najechaniu pojawiają się tylko gdy pasek jest na górze lub na dole."
+    },
+    "wvkbdBin": {
+      "label": "Plik wykonywalny wvkbd",
+      "desc": "Nazwa lub ścieżka pliku wykonywalnego (np. wvkbd-mobintl, wvkbd-comp, wvkbd-abc)"
+    },
+    "recheck": {
+      "label": "Sprawdź stan ponownie",
+      "done": "Stan ponownie sprawdzony!",
+      "desc": "Ręczna synchronizacja stanu klawiatury"
+    }
+  }
+}

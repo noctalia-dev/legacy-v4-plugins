@@ -1,0 +1,89 @@
+{
+  "widget": {
+    "tooltip": "ntfy Notifications",
+    "tooltipWithCount": "{count} unread notifications",
+    "noMessages": "No notifications"
+  },
+  "menu": {
+    "settings": "Settings",
+    "refresh": "Refresh now",
+    "markAllRead": "Mark all as read"
+  },
+  "panel": {
+    "title": "ntfy Notifications",
+    "refresh": "Refresh",
+    "markAllRead": "Mark all as read",
+    "close": "Close",
+    "loading": "Fetching notifications...",
+    "empty": "No notifications yet",
+    "emptyHint": "Configure topics in the settings to start receiving notifications.",
+    "noTopics": "No topics configured",
+    "noTopicsHint": "Right-click the bar widget and open settings to add ntfy topics.",
+    "markRead": "Mark as read",
+    "openLink": "Open link",
+    "topic": "Topic",
+    "priority": "Priority",
+    "timeNow": "now",
+    "timeMinutes": "{count}m ago",
+    "timeHours": "{count}h ago",
+    "timeDays": "{count}d ago"
+  },
+  "settings": {
+    "server": {
+      "label": "Server URL",
+      "desc": "The ntfy server URL (default: https://ntfy.sh)"
+    },
+    "topics": {
+      "label": "Topics",
+      "desc": "Comma-separated list of topics to subscribe to (e.g. alerts,backups,monitoring)"
+    },
+    "auth": {
+      "label": "Authentication",
+      "desc": "Authentication method for private servers",
+      "none": "None (public topics)",
+      "token": "Access Token",
+      "basic": "Username & Password"
+    },
+    "token": {
+      "label": "Access Token",
+      "desc": "Your ntfy access token"
+    },
+    "username": {
+      "label": "Username",
+      "desc": "Username for Basic Auth"
+    },
+    "password": {
+      "label": "Password",
+      "desc": "Password for Basic Auth"
+    },
+    "pollInterval": {
+      "label": "Poll Interval",
+      "desc": "How often to check for new messages (in seconds)"
+    },
+    "enableToasts": {
+      "label": "Desktop Notifications",
+      "desc": "Show a toast notification when new messages arrive"
+    },
+    "maxMessages": {
+      "label": "Max Messages",
+      "desc": "Maximum number of messages to keep in history"
+    }
+  },
+  "toast": {
+    "newMessage": "New ntfy notification",
+    "newMessages": "{count} new notifications"
+  },
+  "error": {
+    "network": "Network error",
+    "auth": "Authentication failed",
+    "server": "Server error",
+    "parse": "Failed to parse response"
+  },
+  "priority": {
+    "min": "Min",
+    "low": "Low",
+    "default": "Default",
+    "high": "High",
+    "urgent": "Urgent"
+  }
+}

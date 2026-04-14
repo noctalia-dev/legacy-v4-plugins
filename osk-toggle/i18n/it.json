@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "Tastiera attiva · Clic per nascondere",
+    "hidden": "Tastiera nascosta · Clic per mostrare",
+    "noGsettings": "gsettings non disponibile",
+    "noSqueekboard": "Squeekboard non è in esecuzione",
+    "noWvkbd": "wvkbd non trovato",
+    "detecting": "Nessun backend rilevato · Apri impostazioni"
+  },
+  "menu": {
+    "settings": "Impostazioni widget"
+  },
+  "settings": {
+    "backend": {
+      "label": "Backend",
+      "desc": "Quale tastiera su schermo controllare: auto, squeekboard o wvkbd (auto rileva all'avvio)",
+      "option": {
+        "auto": "Automatico",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "Nascondi quando non disponibile",
+      "desc": "Nascondi completamente il widget quando la tastiera non è disponibile"
+    },
+    "disableHoverIcon": {
+      "label": "Disabilita icona al passaggio del mouse",
+      "desc": "Mostra sempre l'icona dello stato corrente invece di un'icona al passaggio del mouse. Nota: le icone al passaggio del mouse appaiono solo quando la barra è in alto o in basso."
+    },
+    "wvkbdBin": {
+      "label": "Binario wvkbd",
+      "desc": "Nome o percorso del binario (es. wvkbd-mobintl, wvkbd-comp, wvkbd-abc)"
+    },
+    "recheck": {
+      "label": "Ricontrolla stato",
+      "done": "Stato ricontrollato!",
+      "desc": "Sincronizza manualmente lo stato della tastiera"
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Configurações do widget"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune não instalado",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Apenas texto",
+      "desc": "O texto a exibir na barra"
+    },
+    "fortune": {
+      "label": "Modo fortune",
+      "desc": "Mostrar uma citação aleatória do fortune em vez de texto personalizado"
+    },
+    "fortuneCategory": {
+      "label": "Categoria",
+      "desc": "Limitar as citações a uma categoria fortune específica (ex. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Comprimento máx. da citação: {value}",
+      "desc": "Número máximo de caracteres que uma citação fortune pode ter"
+    },
+    "fortuneOffensive": {
+      "label": "Incluir ofensivo (-o)",
+      "desc": "Também retirar da base de dados fortune ofensiva"
+    },
+    "fortuneEqual": {
+      "label": "Probabilidade igual (-e)",
+      "desc": "Dar a todas as categorias a mesma probabilidade independentemente do tamanho"
+    },
+    "list": {
+      "label": "Modo lista",
+      "desc": "Mostrar uma entrada aleatória de um ficheiro de texto em vez de texto personalizado"
+    },
+    "textFile": {
+      "label": "Ficheiro de texto",
+      "desc": "Caminho para um ficheiro de texto com uma entrada por linha. Veja examples.txt para um ponto de partida."
+    },
+    "refreshOnWallpaper": {
+      "label": "Atualizar ao mudar o fundo",
+      "desc": "Escolhe um novo texto quando o fundo muda. Desative para escolher apenas uma vez por sessão."
+    }
+  }
+}

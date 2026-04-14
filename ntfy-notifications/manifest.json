@@ -1,0 +1,39 @@
+{
+  "id": "ntfy-notifications",
+  "name": "ntfy Notifications",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "maxe",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Subscribe to ntfy topics and receive push notifications directly in your bar, with full theming support",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Network",
+    "Indicator"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "serverUrl": "https://ntfy.sh",
+      "topics": "",
+      "authMethod": "none",
+      "authToken": "",
+      "authUsername": "",
+      "authPassword": "",
+      "pollInterval": 30,
+      "enableToasts": true,
+      "maxMessages": 100,
+      "readMessageIds": []
+    }
+  }
+}

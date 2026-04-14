@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Ustawienia widżetu"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune nie jest zainstalowany",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Tylko tekst",
+      "desc": "Tekst wyświetlany na pasku"
+    },
+    "fortune": {
+      "label": "Tryb fortune",
+      "desc": "Wyświetlaj losowy cytat z fortune zamiast własnego tekstu"
+    },
+    "fortuneCategory": {
+      "label": "Kategoria",
+      "desc": "Ogranicz cytaty do określonej kategorii fortune (np. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Maks. długość cytatu: {value}",
+      "desc": "Maksymalna liczba znaków, jaką może mieć cytat fortune"
+    },
+    "fortuneOffensive": {
+      "label": "Uwzględnij obraźliwe (-o)",
+      "desc": "Pobieraj również z obraźliwej bazy danych fortune"
+    },
+    "fortuneEqual": {
+      "label": "Równe prawdopodobieństwo (-e)",
+      "desc": "Nadaj wszystkim kategoriom równe szanse niezależnie od ich rozmiaru"
+    },
+    "list": {
+      "label": "Tryb listy",
+      "desc": "Wyświetlaj losowy wpis z pliku tekstowego zamiast własnego tekstu"
+    },
+    "textFile": {
+      "label": "Plik tekstowy",
+      "desc": "Ścieżka do pliku tekstowego z jednym wpisem w każdym wierszu. Jako punkt startowy skorzystaj z examples.txt."
+    },
+    "refreshOnWallpaper": {
+      "label": "Odświeżaj przy zmianie tapety",
+      "desc": "Wybiera nowy tekst po zmianie tapety. Wyłącz, aby wybierać tylko raz na sesję."
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Paramètres du widget"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune non installé",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Texte simple",
+      "desc": "Le texte à afficher dans la barre"
+    },
+    "fortune": {
+      "label": "Mode fortune",
+      "desc": "Afficher une citation aléatoire de fortune au lieu d'un texte personnalisé"
+    },
+    "fortuneCategory": {
+      "label": "Catégorie",
+      "desc": "Limiter les citations à une catégorie fortune spécifique (ex. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Longueur max. de citation : {value}",
+      "desc": "Nombre maximum de caractères qu'une citation fortune peut contenir"
+    },
+    "fortuneOffensive": {
+      "label": "Inclure les offensants (-o)",
+      "desc": "Puiser aussi dans la base de données fortune offensive"
+    },
+    "fortuneEqual": {
+      "label": "Probabilité égale (-e)",
+      "desc": "Donner à toutes les catégories la même chance quelle que soit leur taille"
+    },
+    "list": {
+      "label": "Mode liste",
+      "desc": "Afficher une entrée aléatoire d'un fichier texte au lieu d'un texte personnalisé"
+    },
+    "textFile": {
+      "label": "Fichier texte",
+      "desc": "Chemin vers un fichier texte avec une entrée par ligne. Voir examples.txt pour commencer."
+    },
+    "refreshOnWallpaper": {
+      "label": "Actualiser au changement de fond d'écran",
+      "desc": "Choisir un nouveau texte lors du changement de fond d'écran. Désactiver pour ne choisir qu'une fois par session."
+    }
+  }
+}

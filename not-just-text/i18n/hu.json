@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Widget beállítások"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune nincs telepítve",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Csak szöveg",
+      "desc": "A sávban megjelenítendő szöveg"
+    },
+    "fortune": {
+      "label": "Fortune mód",
+      "desc": "Véletlenszerű idézet megjelenítése a fortune-ból egyedi szöveg helyett"
+    },
+    "fortuneCategory": {
+      "label": "Kategória",
+      "desc": "Idézetek korlátozása egy adott fortune kategóriára (pl. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Max. idézethossz: {value}",
+      "desc": "A fortune-idézet maximálisan megengedett karakterszáma"
+    },
+    "fortuneOffensive": {
+      "label": "Sértő tartalom (-o)",
+      "desc": "A sértő fortune adatbázisból is merítsen"
+    },
+    "fortuneEqual": {
+      "label": "Egyenlő valószínűség (-e)",
+      "desc": "Minden kategóriának egyenlő esélyt adjon méretüktől függetlenül"
+    },
+    "list": {
+      "label": "Listamód",
+      "desc": "Véletlenszerű bejegyzés megjelenítése szövegfájlból egyedi szöveg helyett"
+    },
+    "textFile": {
+      "label": "Szövegfájl",
+      "desc": "Szövegfájl elérési útja, soronként egy bejegyzéssel. Kiindulópontként lásd az examples.txt fájlt."
+    },
+    "refreshOnWallpaper": {
+      "label": "Frissítés háttérkép-váltáskor",
+      "desc": "Új szöveg választása háttérkép-váltáskor. Letiltva munkamenetenként csak egyszer választ."
+    }
+  }
+}

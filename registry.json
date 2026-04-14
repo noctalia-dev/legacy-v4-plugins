@@ -972,6 +972,22 @@
       "lastUpdated": "2026-02-23T20:48:07-05:00"
     },
     {
+      "id": "not-just-text",
+      "name": "Not Just Text",
+      "version": "1.0.1",
+      "official": false,
+      "author": "blackteaextract",
+      "description": "Displays custom text, fortune quotes, or a random entry from a user-provided text file in the bar.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.4.1",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Fun"
+      ],
+      "lastUpdated": "2026-04-13T22:31:42Z"
+    },
+    {
       "id": "notes-scratchpad",
       "name": "Notes Scratchpad",
       "version": "1.1.6",
@@ -987,6 +1003,24 @@
         "Productivity"
       ],
       "lastUpdated": "2026-03-29T19:05:12-04:00"
+    },
+    {
+      "id": "ntfy-notifications",
+      "name": "ntfy Notifications",
+      "version": "1.0.0",
+      "official": false,
+      "author": "maxe",
+      "description": "Subscribe to ntfy topics and receive push notifications directly in your bar, with full theming support",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.4.1",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "Network",
+        "Indicator"
+      ],
+      "lastUpdated": "2026-04-10T15:49:56+02:00"
     },
     {
       "id": "nvim-session-provider",
@@ -1037,6 +1071,23 @@
         "Panel"
       ],
       "lastUpdated": "2026-04-01T18:21:46+02:00"
+    },
+    {
+      "id": "osk-toggle",
+      "name": "OSK Toggle",
+      "version": "1.0.0",
+      "official": false,
+      "author": "blackteaextract",
+      "description": "Toggle an on-screen keyboard (Squeekboard or wvkbd) with live availability detection, hover icons, and configurable settings. Supersedes squeekboard-toggle.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.4.3",
+      "license": "MIT",
+      "tags": [
+        "System",
+        "Bar",
+        "Utility"
+      ],
+      "lastUpdated": "2026-04-13T18:05:30+02:00"
     },
     {
       "id": "parallax-wallpaper",
@@ -1218,7 +1269,7 @@
     {
       "id": "screen-toolkit",
       "name": "Screen Toolkit",
-      "version": "1.0.7",
+      "version": "1.1.1",
       "official": false,
       "author": "ycf-anon",
       "description": "A set of screen tools: color picker, annotate, record, pin, OCR, QR scanner, palette, measure, and webcam mirror.",
@@ -1231,7 +1282,7 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-04-04T16:57:23+07:00"
+      "lastUpdated": "2026-04-14T00:53:21+01:00"
     },
     {
       "id": "screenshot",
@@ -1340,7 +1391,7 @@
       "version": "1.1.0",
       "official": false,
       "author": "blackteaextract",
-      "description": "Toggle the Squeekboard on-screen keyboard with live availability detection, hover icons, and configurable settings.",
+      "description": "Toggle the Squeekboard on-screen keyboard with live availability detection, hover icons, and configurable settings. Note: This plugin is deprecated and got consolidated in osk-toggle.",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.4.3",
       "license": "MIT",
@@ -1349,12 +1400,12 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-04-01T14:56:10+02:00"
+      "lastUpdated": "2026-04-13T18:41:37+02:00"
     },
     {
       "id": "ssh-sessions",
       "name": "SSH Sessions",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "official": false,
       "author": "adriamartin91",
       "description": "Manage SSH connections from ~/.ssh/config with active session detection and launcher integration.",
@@ -1368,7 +1419,7 @@
         "Utility",
         "Development"
       ],
-      "lastUpdated": "2026-04-08T20:26:40+02:00"
+      "lastUpdated": "2026-04-13T20:17:59+02:00"
     },
     {
       "id": "steam-price-watcher",
@@ -1421,7 +1472,7 @@
     {
       "id": "sys-info-widget",
       "name": "System Info",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "official": false,
       "author": "Simon",
       "description": "Shows Distribution, Kernel, Uptime and IP addresses.",
@@ -1432,7 +1483,7 @@
         "Desktop",
         "System"
       ],
-      "lastUpdated": "2026-04-08T12:37:22+02:00"
+      "lastUpdated": "2026-04-13T19:54:20+02:00"
     },
     {
       "id": "tailscale",

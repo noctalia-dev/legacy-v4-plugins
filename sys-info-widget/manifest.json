@@ -1,7 +1,7 @@
 {
   "id": "sys-info-widget",
   "name": "System Info",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "minNoctaliaVersion": "4.6.6",
   "author": "Simon",
   "license": "MIT",

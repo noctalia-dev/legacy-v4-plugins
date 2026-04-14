@@ -3,8 +3,13 @@
     "distribution": "Distribution",
     "kernel": "Kernel",
     "uptime": "Betriebszeit",
-    "ipaddress": "IP Adresse",
-    "lanaddress": "LAN Adresse",
+    "cpu": "CPU",
+    "separator_at": "@",
+    "memory": "Speicher",
+    "disk_root": "Festplatte /",
+    "disk_home": "Festplatte /home",
+    "ipaddress": "Öffentliche IP-Adresse",
+    "lanaddress": "Lokale IP-Adresse",
     "loading": "Wird geladen..."
   }
 }

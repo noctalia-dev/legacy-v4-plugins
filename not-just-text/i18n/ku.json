@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Mîhengên wîdcetê"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune nehatiye saz kirin",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Tenê nivîs",
+      "desc": "Nivîsa ku di barê de were xuyang kirin"
+    },
+    "fortune": {
+      "label": "Moda fortune",
+      "desc": "Li şûna nivîsa xwerû ramaneke tesadufî ji fortune nîşan bide"
+    },
+    "fortuneCategory": {
+      "label": "Kategorî",
+      "desc": "Ramanan bi kategoriyeke fortune-ê ya taybet ve sînordar bike (wek: computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Dirêjahiya herî zêde ya ramanê: {value}",
+      "desc": "Hejmara herî zêde ya tîpên ku ramanek fortune-ê dikare hebe"
+    },
+    "fortuneOffensive": {
+      "label": "Naverokên saldirker bihewîne (-o)",
+      "desc": "Ji databaza fortune-ê ya saldirker jî bikşîne"
+    },
+    "fortuneEqual": {
+      "label": "Îhtîmala wekhev (-e)",
+      "desc": "Ji her kategoriyê re bêyî girêdana mezinahiyê şansek wekhev bide"
+    },
+    "list": {
+      "label": "Moda lîsteyê",
+      "desc": "Li şûna nivîsa xwerû têkelek tesadufî ji peleke nivîsê nîşan bide"
+    },
+    "textFile": {
+      "label": "Pelê nivîsê",
+      "desc": "Rêça peleke nivîsê ya bi têkelek di her rêzê de. Ji examples.txt re binêre."
+    },
+    "refreshOnWallpaper": {
+      "label": "Di guhertina dîmenê de nûve bike",
+      "desc": "Dema ku dîmen diguhere nivîseke nû hilbijêre. Neçalak bike da ku di her danişînê de tenê carekê were hilbijartin."
+    }
+  }
+}

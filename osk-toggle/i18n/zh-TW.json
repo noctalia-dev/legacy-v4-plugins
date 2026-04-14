@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "鍵盤已啟用 · 點擊隱藏",
+    "hidden": "鍵盤已隱藏 · 點擊顯示",
+    "noGsettings": "gsettings 無法使用",
+    "noSqueekboard": "Squeekboard 未執行",
+    "noWvkbd": "wvkbd 找不到",
+    "detecting": "未偵測到後端 · 開啟設定"
+  },
+  "menu": {
+    "settings": "小工具設定"
+  },
+  "settings": {
+    "backend": {
+      "label": "後端",
+      "desc": "要控制哪個螢幕鍵盤：auto、squeekboard 或 wvkbd（auto 在啟動時自動偵測）",
+      "option": {
+        "auto": "自動",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "不可用時隱藏",
+      "desc": "當鍵盤不可用時完全隱藏小工具"
+    },
+    "disableHoverIcon": {
+      "label": "停用懸停圖示",
+      "desc": "始終顯示目前狀態圖示而非懸停圖示。注意：懸停圖示僅在工具列位於頂部或底部時出現。"
+    },
+    "wvkbdBin": {
+      "label": "wvkbd 執行檔",
+      "desc": "執行檔名稱或路徑（例如 wvkbd-mobintl、wvkbd-comp、wvkbd-abc）"
+    },
+    "recheck": {
+      "label": "重新檢查狀態",
+      "done": "狀態已重新檢查！",
+      "desc": "手動同步鍵盤狀態"
+    }
+  }
+}

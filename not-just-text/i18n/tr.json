@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Widget ayarları"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune yüklü değil",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Sadece metin",
+      "desc": "Çubukta görüntülenecek metin"
+    },
+    "fortune": {
+      "label": "Fortune modu",
+      "desc": "Özel metin yerine fortune'dan rastgele bir alıntı göster"
+    },
+    "fortuneCategory": {
+      "label": "Kategori",
+      "desc": "Alıntıları belirli bir fortune kategorisiyle sınırla (ör. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Maks. alıntı uzunluğu: {value}",
+      "desc": "Bir fortune alıntısının sahip olabileceği maksimum karakter sayısı"
+    },
+    "fortuneOffensive": {
+      "label": "Saldırganı dahil et (-o)",
+      "desc": "Saldırgan fortune veritabanından da çek"
+    },
+    "fortuneEqual": {
+      "label": "Eşit olasılık (-e)",
+      "desc": "Tüm kategorilere boyutlarından bağımsız olarak eşit şans ver"
+    },
+    "list": {
+      "label": "Liste modu",
+      "desc": "Özel metin yerine metin dosyasından rastgele bir giriş göster"
+    },
+    "textFile": {
+      "label": "Metin dosyası",
+      "desc": "Her satırda bir giriş olan metin dosyasının yolu. Başlangıç noktası için examples.txt dosyasına bakın."
+    },
+    "refreshOnWallpaper": {
+      "label": "Duvar kağıdı değişince yenile",
+      "desc": "Duvar kağıdı değiştiğinde yeni bir metin seç. Oturum başına yalnızca bir kez seçmek için devre dışı bırak."
+    }
+  }
+}

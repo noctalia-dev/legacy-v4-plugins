@@ -1,0 +1,47 @@
+{
+  "menu": {
+    "settings": "Widget-Einstellungen"
+  },
+  "fortune": {
+    "notInstalled": "⚠ fortune nicht installiert",
+    "gaveUp": "(╯°□°）╯︵ ┻━┻"
+  },
+  "settings": {
+    "text": {
+      "label": "Nur Text",
+      "desc": "Der im Balken anzuzeigende Text"
+    },
+    "fortune": {
+      "label": "Fortune-Modus",
+      "desc": "Zufälliges Zitat von fortune statt eigenem Text anzeigen"
+    },
+    "fortuneCategory": {
+      "label": "Kategorie",
+      "desc": "Zitate auf eine bestimmte fortune-Kategorie beschränken (z. B. computers, science)"
+    },
+    "fortuneMaxLength": {
+      "label": "Max. Zitatlänge: {value}",
+      "desc": "Maximale Zeichenanzahl, die ein fortune-Zitat haben darf"
+    },
+    "fortuneOffensive": {
+      "label": "Anstößige einschließen (-o)",
+      "desc": "Auch aus der anstößigen fortune-Datenbank ziehen"
+    },
+    "fortuneEqual": {
+      "label": "Gleiche Wahrscheinlichkeit (-e)",
+      "desc": "Allen Kategorien die gleiche Chance geben, unabhängig von ihrer Größe"
+    },
+    "list": {
+      "label": "Listenmodus",
+      "desc": "Zufälligen Eintrag aus einer Textdatei statt eigenem Text anzeigen"
+    },
+    "textFile": {
+      "label": "Textdatei",
+      "desc": "Pfad zu einer Textdatei mit einem Eintrag pro Zeile. Unter examples.txt findest du eine Vorlage."
+    },
+    "refreshOnWallpaper": {
+      "label": "Bei Hintergrundbildwechsel aktualisieren",
+      "desc": "Neuen Text auswählen, wenn das Hintergrundbild wechselt. Deaktivieren, um den Text nur einmal pro Sitzung zu wählen."
+    }
+  }
+}

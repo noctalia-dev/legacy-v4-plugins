@@ -1,0 +1,41 @@
+{
+  "tooltip": {
+    "active": "键盘已激活 · 点击隐藏",
+    "hidden": "键盘已隐藏 · 点击显示",
+    "noGsettings": "gsettings 不可用",
+    "noSqueekboard": "Squeekboard 未运行",
+    "noWvkbd": "wvkbd 未找到",
+    "detecting": "未检测到后端 · 打开设置"
+  },
+  "menu": {
+    "settings": "小部件设置"
+  },
+  "settings": {
+    "backend": {
+      "label": "后端",
+      "desc": "要控制哪个屏幕键盘：auto、squeekboard 或 wvkbd（auto 在启动时自动检测）",
+      "option": {
+        "auto": "自动",
+        "squeekboard": "Squeekboard",
+        "wvkbd": "wvkbd"
+      }
+    },
+    "hideWhenUnavailable": {
+      "label": "不可用时隐藏",
+      "desc": "当键盘不可用时完全隐藏小部件"
+    },
+    "disableHoverIcon": {
+      "label": "禁用悬停图标",
+      "desc": "始终显示当前状态图标而不是悬停图标。注意：悬停图标仅在状态栏位于顶部或底部时出现。"
+    },
+    "wvkbdBin": {
+      "label": "wvkbd 可执行文件",
+      "desc": "可执行文件名或路径（如 wvkbd-mobintl、wvkbd-comp、wvkbd-abc）"
+    },
+    "recheck": {
+      "label": "重新检查状态",
+      "done": "状态已重新检查！",
+      "desc": "手动同步键盘状态"
+    }
+  }
+}
