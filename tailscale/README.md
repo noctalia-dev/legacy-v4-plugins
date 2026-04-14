@@ -87,6 +87,7 @@ qs -c noctalia-shell ipc call plugin:tailscale <command>
 | Command | Description | Example |
 |---|---|---|
 | `toggle` | Toggle Tailscale connection (connect/disconnect) | `qs -c noctalia-shell ipc call plugin:tailscale toggle` |
+| `togglePanel` | Toggle Tailscale panel | `qs -c noctalia-shell ipc call plugin:tailscale togglePanel` |
 | `status` | Get current Tailscale status | `qs -c noctalia-shell ipc call plugin:tailscale status` |
 | `refresh` | Force refresh Tailscale status | `qs -c noctalia-shell ipc call plugin:tailscale refresh` |
 | `receive` | Fetch any pending Taildrop files | `qs -c noctalia-shell ipc call plugin:tailscale receive` |
