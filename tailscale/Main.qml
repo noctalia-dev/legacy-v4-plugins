@@ -502,6 +502,12 @@ Item {
       toggleTailscale()
     }
 
+		function togglePanel() {
+			pluginApi.withCurrentScreen(screen => {
+				pluginApi.togglePanel(screen);
+			});
+		}
+
     function status() {
       return {
         "installed": root.tailscaleInstalled,
