@@ -1,0 +1,64 @@
+{
+  "widget": {
+    "tooltip": "Clipboard"
+  },
+  "menu": {
+    "settings": "Widget settings"
+  },
+  "popup": {
+    "title": "Clipboard"
+  },
+  "panel": {
+    "title": "Clipboard History",
+    "search-placeholder": "Search clipboard...",
+    "empty": "Clipboard is empty",
+    "no-results": "No results found",
+    "clear-all": "Clear all",
+    "close": "Close"
+  },
+  "item": {
+    "copy": "Copy",
+    "delete": "Delete",
+    "image-label": "[Image]"
+  },
+  "toast": {
+    "copied": "Copied to clipboard",
+    "deleted": "Item deleted",
+    "cleared": "Clipboard cleared",
+    "failed-to-copy": "Failed to copy"
+  },
+  "settings": {
+    "max-history": {
+      "label": "Max history items",
+      "desc": "Maximum number of clipboard entries to display"
+    },
+    "preview-width": {
+      "label": "Preview width",
+      "desc": "Number of characters for text preview"
+    },
+    "enable-images": {
+      "label": "Show image previews",
+      "desc": "Display thumbnail previews for image clipboard entries"
+    },
+    "enable-auto-paste": {
+      "label": "Auto-paste after copy",
+      "desc": "Automatically paste after selecting an item (requires wtype)"
+    },
+    "auto-paste-delay": {
+      "label": "Auto-paste delay (ms)",
+      "desc": "Delay before auto-paste in milliseconds"
+    },
+    "enable-floating-popup": {
+      "label": "Enable floating popup",
+      "desc": "Allow opening clipboard as a floating popup at cursor position"
+    },
+    "icon-color": {
+      "label": "Icon color",
+      "desc": "Color for the bar widget icon"
+    },
+    "show-item-count": {
+      "label": "Show item count",
+      "desc": "Display the number of clipboard items on the bar widget"
+    }
+  }
+}

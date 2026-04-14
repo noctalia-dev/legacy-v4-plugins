@@ -1,0 +1,64 @@
+{
+  "widget": {
+    "tooltip": "Schowek"
+  },
+  "menu": {
+    "settings": "Ustawienia widgetu"
+  },
+  "popup": {
+    "title": "Schowek"
+  },
+  "panel": {
+    "title": "Historia schowka",
+    "search-placeholder": "Szukaj w schowku...",
+    "empty": "Schowek jest pusty",
+    "no-results": "Brak wyników",
+    "clear-all": "Wyczyść wszystko",
+    "close": "Zamknij"
+  },
+  "item": {
+    "copy": "Kopiuj",
+    "delete": "Usuń",
+    "image-label": "[Obraz]"
+  },
+  "toast": {
+    "copied": "Skopiowano do schowka",
+    "deleted": "Element usunięty",
+    "cleared": "Schowek wyczyszczony",
+    "failed-to-copy": "Nie udało się skopiować"
+  },
+  "settings": {
+    "max-history": {
+      "label": "Maks. historia",
+      "desc": "Maksymalna liczba wpisów w historii schowka"
+    },
+    "preview-width": {
+      "label": "Szerokość podglądu",
+      "desc": "Liczba znaków podglądu tekstu"
+    },
+    "enable-images": {
+      "label": "Podgląd obrazów",
+      "desc": "Wyświetlaj miniatury obrazów ze schowka"
+    },
+    "enable-auto-paste": {
+      "label": "Automatyczne wklejanie",
+      "desc": "Automatycznie wklej po wybraniu elementu (wymaga wtype)"
+    },
+    "auto-paste-delay": {
+      "label": "Opóźnienie wklejania (ms)",
+      "desc": "Opóźnienie przed automatycznym wklejeniem w milisekundach"
+    },
+    "enable-floating-popup": {
+      "label": "Pływające okno",
+      "desc": "Pozwól na otwieranie schowka jako pływające okno przy kursorze"
+    },
+    "icon-color": {
+      "label": "Kolor ikony",
+      "desc": "Kolor ikony w pasku"
+    },
+    "show-item-count": {
+      "label": "Pokaż liczbę elementów",
+      "desc": "Wyświetlaj liczbę elementów schowka na widgecie paska"
+    }
+  }
+}

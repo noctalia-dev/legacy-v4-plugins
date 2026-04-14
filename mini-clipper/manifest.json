@@ -1,0 +1,33 @@
+{
+  "id": "mini-clipper",
+  "name": "Mini Clipper",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "Ulther",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Lightweight clipboard manager powered by cliphist with a floating popup at cursor position (Mod+V)",
+  "tags": ["Bar", "Panel", "Utility"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "maxHistory": 50,
+      "previewWidth": 80,
+      "enableImages": true,
+      "enableAutoPaste": false,
+      "autoPasteDelay": 300,
+      "enableFloatingPopup": true,
+      "iconColor": "none",
+      "showItemCount": true
+    }
+  }
+}
