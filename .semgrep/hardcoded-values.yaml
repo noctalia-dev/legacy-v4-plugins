@@ -1,0 +1,9 @@
+rules:
+  - id: no-hardcoded-text
+    languages: [generic]
+    patterns:
+      - pattern-regex: '\b(text|label|description|placeholderText):\s*["''`]([^"''`]+)["''`]'
+    message: 'Use translations instead of hardcoded text. Instead of: "$2". To: pluginApi?.tr("panel.your-key")'
+    severity: ERROR
+    paths:
+      include: ["*.qml"]
