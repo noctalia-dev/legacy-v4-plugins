@@ -1,0 +1,41 @@
+rules:
+  - id: no-hardcoded-colors
+    languages: [generic]
+    pattern-regex: 'color:\s*(?:"#(?:[A-Fa-f0-9]{3,4}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})"|["''](white|black|red|blue|green|yellow|gray|grey|magenta|cyan)["''])'
+    message: "Hardcoded color detected. Use theme constants (e.g. Theme.white) instead of hex codes or literal names."
+    severity: WARNING
+    paths:
+      include: ["*.qml"]
+
+  - id: no-hardcoded-style-values
+    languages: [generic]
+    pattern-regex: '\b(border\.width|spacing|pointSize|radius|margin|margins|topMargin|bottomMargin|leftMargin|rightMargin):\s*\d+'
+    message: "Do not use hardcoded numeric values for styling. Prefer using the `Style` singleton instead (e.g., Style.marginM, Style.radiusS)."
+    severity: WARNING
+    paths:
+      include: ["*.qml"]
+
+  - id: no-console-log
+    languages: [generic]
+    pattern-regex: 'console\.(log|debug|info|warn|error)\(.*\)'
+    message: "Do not use `console.log`. Prefer using the `Logger` singleton for better log management."
+    severity: WARNING
+    paths:
+      include: ["*.qml", "*.js"]
+
+  - id: prefer-noctalia-widgets
+    languages: [generic]
+    pattern-regex: '^\s*(Text|Button|CheckBox|Switch|TextField|TextArea|Slider|ProgressBar)\s*\{'
+    message: "Prefer using Noctalia widgets (e.g., NText, NButton) instead of standard QML widgets to ensure consistency with the shell's theme."
+    severity: WARNING
+    paths:
+      include: ["*.qml"]
+
+  - id: no-disable-ui-scale
+    languages: [generic]
+    pattern-regex: 'applyUiScale:\s*false'
+    message: "Disabling UI scaling (`applyUiScale: false`) is generally discouraged as it prevents the component from respecting the user's scale settings. Verify if this is absolutely necessary."
+    severity: WARNING
+    paths:
+      include: ["*.qml"]
+      exclude: ["**/BarWidget.qml"]
