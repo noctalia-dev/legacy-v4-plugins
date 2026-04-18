@@ -33,7 +33,9 @@ Item {
     initialPath: Quickshell.env("HOME") ?? ""
     onAccepted: function(paths) {
       if (!mainInstance || !root.sendTargetPeer || paths.length === 0) return
-      var target = root.sendTargetPeer.HostName + ":"
+      // Use Tailscale DNS name (not system HostName) to avoid LAN DNS resolution
+      var tsName = mainInstance.tailscaleName(root.sendTargetPeer.DNSName)
+      var target = (tsName || root.sendTargetPeer.TailscaleIPs[0]) + ":"
       mainInstance.sendFilesViaTaildrop(paths, target)
     }
   }
@@ -353,7 +355,7 @@ Item {
             NText {
               text: mainInstance?.tailscaleRunning
                 ? (mainInstance?.peerList?.length || 0) + " " + (pluginApi?.tr("panel.peers"))
-                : pluginApi?.tr("panel.not-connected")
+                : (mainInstance?.needsLogin ? pluginApi?.tr("panel.not-authenticated") : pluginApi?.tr("panel.not-connected"))
               pointSize: Style.fontSizeS
               color: Color.mOnSurfaceVariant
             }
@@ -510,7 +512,7 @@ Item {
                   Layout.fillWidth: true
                   Layout.preferredWidth: peerFlickable.width
                   implicitWidth: peerFlickable.width
-                  height: 48
+                  implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
                   topPadding: Style.marginS
                   bottomPadding: Style.marginS
                   leftPadding: Style.marginL
@@ -519,6 +521,7 @@ Item {
                   readonly property var peerData: modelData
                   readonly property string peerIp: filterIPv4(peerData.TailscaleIPs)[0] || ""
                   readonly property string peerHostname: peerData.HostName || normalizeFqdn(peerData.DNSName) || "Unknown"
+                  readonly property string peerTsName: mainInstance ? mainInstance.tailscaleName(peerData.DNSName) : ""
                   readonly property bool peerOnline: peerData.Online || false
 
                   background: Rectangle {
@@ -538,12 +541,26 @@ Item {
                       color: peerDelegate.peerOnline ? Color.mPrimary : Color.mOnSurfaceVariant
                     }
 
-                    NText {
-                      text: peerDelegate.peerHostname
-                      color: Color.mOnSurface
-                      font.weight: Style.fontWeightMedium
-                      elide: Text.ElideRight
+                    ColumnLayout {
+                      spacing: 0
                       Layout.fillWidth: true
+
+                      NText {
+                        text: peerDelegate.peerHostname
+                        color: Color.mOnSurface
+                        font.weight: Style.fontWeightMedium
+                        elide: Text.ElideRight
+                        Layout.fillWidth: true
+                      }
+
+                      NText {
+                        text: peerDelegate.peerTsName
+                        pointSize: Style.fontSizeXS
+                        color: Color.mOnSurfaceVariant
+                        elide: Text.ElideRight
+                        Layout.fillWidth: true
+                        visible: peerDelegate.peerTsName !== "" && peerDelegate.peerTsName !== peerDelegate.peerHostname
+                      }
                     }
 
                     NIcon {
@@ -625,7 +642,23 @@ Item {
 
       NButton {
         Layout.fillWidth: true
-        text: mainInstance?.tailscaleRunning 
+        visible: mainInstance?.needsLogin ?? false
+        text: pluginApi?.tr("context.login")
+        icon: "login"
+        backgroundColor: Color.mPrimary
+        textColor: Color.mOnPrimary
+        enabled: mainInstance?.tailscaleInstalled ?? false
+        onClicked: {
+          if (mainInstance) {
+            mainInstance.loginTailscale()
+          }
+        }
+      }
+
+      NButton {
+        Layout.fillWidth: true
+        visible: !(mainInstance?.needsLogin ?? false)
+        text: mainInstance?.tailscaleRunning
           ? pluginApi?.tr("context.disconnect")
           : pluginApi?.tr("context.connect")
         icon: mainInstance?.tailscaleRunning ? "plug-x" : "plug"

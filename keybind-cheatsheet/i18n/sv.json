@@ -18,7 +18,8 @@
     "title-niri": "Niri tangentkarta",
     "workspace-switching": "ARBETSYTOR - BYTA",
     "workspace-moving": "ARBETSYTOR - FLYTTA",
-    "workspace-mouse": "ARBETSYTOR - MUS"
+    "workspace-mouse": "ARBETSYTOR - MUS",
+    "search-placeholder": "Sök tangentbindningar..."
   },
   "settings": {
     "title": "Tangentbordsgenvägar Inställningar",

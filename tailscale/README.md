@@ -72,6 +72,7 @@ Right-click any online peer in the panel and choose **Send File**. A file picker
 | `taildropEnabled` | `true` | Enable Taildrop send/receive. When false, hides the Receive button and Send File option. |
 | `taildropDownloadDir` | `"~/Downloads"` | Directory where received files are saved |
 | `taildropReceiveMode` | `"operator"` | Taildrop receive mode: `operator` or `pkexec` |
+| `loginServer` | `""` | Custom login server URL (e.g. Headscale). Leave empty for default Tailscale. |
 
 ## IPC Commands
 
@@ -87,8 +88,10 @@ qs -c noctalia-shell ipc call plugin:tailscale <command>
 | Command | Description | Example |
 |---|---|---|
 | `toggle` | Toggle Tailscale connection (connect/disconnect) | `qs -c noctalia-shell ipc call plugin:tailscale toggle` |
+| `togglePanel` | Toggle Tailscale panel | `qs -c noctalia-shell ipc call plugin:tailscale togglePanel` |
 | `status` | Get current Tailscale status | `qs -c noctalia-shell ipc call plugin:tailscale status` |
 | `refresh` | Force refresh Tailscale status | `qs -c noctalia-shell ipc call plugin:tailscale refresh` |
+| `login` | Trigger Tailscale login (opens browser) | `qs -c noctalia-shell ipc call plugin:tailscale login` |
 | `receive` | Fetch any pending Taildrop files | `qs -c noctalia-shell ipc call plugin:tailscale receive` |
 
 ## Usage

@@ -1,0 +1,133 @@
+{
+  "barWidget": {
+    "contextMenu": {
+      "toggle": "Basculer",
+      "panel": "Panneau",
+      "play": "Lecture",
+      "pause": "Pause",
+      "mute": "Muet",
+      "unmute": "Rétablir le son"
+    }
+  },
+  "panel": {
+    "title": "Configurer mpvpaper",
+    "buttons": {
+      "folder": {
+        "text": "Dossier",
+        "tooltip": "Choisissez un autre dossier contenant vos fonds d'écran."
+      },
+      "refresh": {
+        "text": "Actualiser",
+        "tooltip": "Actualiser les miniatures, supprimer les anciennes et en créer de nouvelles."
+      },
+      "random": {
+        "text": "Aléatoire",
+        "tooltip": "Choisir une image aléatoire dans ce dossier."
+      },
+      "clear": {
+        "text": "Effacer",
+        "tooltip": "Effacer le fond d'écran actuel."
+      }
+    },
+    "loading": "Chargement..."
+  },
+  "settings": {
+    "toggle": {
+      "label": "Activer mpvpaper",
+      "description": "Activer l'intégration de mpvpaper"
+    },
+    "tab_bar": {
+      "playback": "Lecture",
+      "audio": "Audio",
+      "automation": "Automatisation",
+      "advanced": "Avancé"
+    },
+    "wallpapers_folder": {
+      "title_label": "Dossier des fonds d'écran",
+      "title_description": "Le dossier qui contient tous les fonds d'écran, utile lors de l'utilisation d'un fond d'écran aléatoire",
+      "input_placeholder": "/chemin/vers/dossier/avec/fonds/d'écran",
+      "icon_tooltip": "Sélectionner le dossier des fonds d'écran",
+      "file_picker_title": "Choisir le dossier des fonds d'écran"
+    },
+    "select_wallpaper": {
+      "title_label": "Sélectionner le fond d'écran",
+      "title_description": "Choisir le fond d'écran vidéo actuel.",
+      "icon_tooltip": "Sélectionner le fond d'écran actuel",
+      "file_picker_title": "Choisir le fond d'écran actuel"
+    },
+    "volume": {
+      "label": "Volume",
+      "description": "Le volume du fond d'écran vidéo en cours de lecture."
+    },
+    "mpv_socket": {
+      "title_label": "Socket mpvpaper",
+      "title_description": "Le socket mpvpaper auquel Noctalia se connecte.",
+      "input_placeholder": "Exemple : /tmp/mpv-socket"
+    },
+    "hardware_acceleration": {
+      "label": "Accélération matérielle",
+      "description": "Décharge le décodage vidéo du processeur vers le processeur graphique / matériel dédié."
+    },
+    "profile": {
+      "label": "Profil",
+      "description": "Le profil utilisé par mpv. Utilisez 'Rapide' pour de meilleures performances.",
+      "default": "Par défaut",
+      "fast": "Rapide",
+      "high_quality": "Haute Qualité",
+      "low_latency": "Basse Latence"
+    },
+    "fill_mode": {
+      "label": "Mode de remplissage",
+      "description": "Le mode de remplissage utilisé par mpvpaper.",
+      "fit": "Ajuster",
+      "crop": "Recadrer",
+      "stretch": "Étirer"
+    },
+    "automation": {
+      "label": "Automatisation",
+      "description": "Planifier le changement automatique de fond d'écran."
+    },
+    "automation_mode": {
+      "label": "Mode de changement",
+      "description": "Le mode pour sélectionner le nouveau fond d'écran.",
+      "random": "Aléatoire",
+      "alphabetically": "Alphabétiquement"
+    },
+    "automation_time": {
+      "label": "Temps",
+      "description": "Combien de temps il faut pour changer de fond d'écran.",
+      "5m": "5m",
+      "10m": "10m",
+      "30m": "30m",
+      "1h": "1h",
+      "1h30m": "1h 30m",
+      "2h": "2h"
+    },
+    "actions": {
+      "random": {
+        "text": "Aléatoire",
+        "tooltip": "Choisir un fond d'écran aléatoire dans le dossier des fonds d'écran."
+      },
+      "clear": {
+        "text": "Effacer",
+        "tooltip": "Effacer le fond d'écran actuel."
+      },
+      "pause": {
+        "text": "Pause",
+        "tooltip": "Mettre en pause le fond d'écran vidéo."
+      },
+      "resume": {
+        "text": "Reprendre",
+        "tooltip": "Reprendre le fond d'écran vidéo."
+      },
+      "mute": {
+        "text": "Muet",
+        "tooltip": "Couper le son du fond d'écran vidéo."
+      },
+      "unmute": {
+        "text": "Rétablir le son",
+        "tooltip": "Rétablir le son du fond d'écran vidéo."
+      }
+    }
+  }
+}

@@ -18,7 +18,8 @@
     "title-niri": "Mapa de teclas Niri",
     "workspace-switching": "ESPAÇOS DE TRABALHO - ALTERNAR",
     "workspace-moving": "ESPAÇOS DE TRABALHO - MOVER",
-    "workspace-mouse": "ESPAÇOS DE TRABALHO - MOUSE"
+    "workspace-mouse": "ESPAÇOS DE TRABALHO - MOUSE",
+    "search-placeholder": "Pesquisar atalhos..."
   },
   "settings": {
     "title": "Configuracoes de Atalhos de Teclado",

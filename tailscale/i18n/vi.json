@@ -34,7 +34,10 @@
     "taildrop-receive-mode": "Chế độ nhận",
     "taildrop-receive-mode-desc": "Cách chạy 'tailscale file get'. Chế độ operator không cần xác nhận nếu đã chạy 'sudo tailscale set --operator $USER'.",
     "taildrop-receive-mode-operator": "Operator (không cần xác nhận)",
-    "taildrop-receive-mode-pkexec": "pkexec (xác nhận mỗi lần)"
+    "taildrop-receive-mode-pkexec": "pkexec (xác nhận mỗi lần)",
+    "authentication": "Xác thực",
+    "login-server": "Máy chủ đăng nhập",
+    "login-server-desc": "URL máy chủ đăng nhập tùy chỉnh (ví dụ: Headscale). Để trống để sử dụng máy chủ Tailscale mặc định."
   },
   "actions": {
     "widget-settings": "Cài đặt tiện ích"
@@ -49,7 +52,8 @@
     "ssh": "SSH tới máy",
     "ping": "Ping máy",
     "use-exit-node": "Dùng làm exit node",
-    "send-file": "Gửi tệp"
+    "send-file": "Gửi tệp",
+    "login": "Đăng nhập"
   },
   "toast": {
     "title": "Tailscale",
@@ -66,12 +70,15 @@
     "terminal-not-configured": {
       "title": "Chưa cấu hình terminal",
       "message": "Vui lòng thiết lập lệnh terminal trong cài đặt plugin"
-    }
+    },
+    "login-browser-opened": "Trang xác thực đã mở trong trình duyệt",
+    "login-failed": "Đăng nhập thất bại"
   },
   "panel": {
     "title": "Mạng Tailscale",
     "peers": "thiết bị",
     "not-connected": "Chưa kết nối",
+    "not-authenticated": "Chưa xác thực",
     "no-peers": "Không có thiết bị nào đang kết nối",
     "admin-console": "Bảng điều khiển quản trị",
     "terminal-warning": {

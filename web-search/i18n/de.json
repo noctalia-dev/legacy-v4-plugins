@@ -4,6 +4,10 @@
       "label": "Suchmaschine",
       "description": "Standard-Suchmaschine, die beim Suchen im Internet geöffnet wird"
     },
+    "directUrl": {
+      "label": "Direkte URL-Öffnung",
+      "description": "URLs direkt im Browser öffnen, anstatt danach zu suchen"
+    },
     "suggestions": {
       "label": "Suchvorschläge anzeigen",
       "description": "Echtzeit-Vorschläge während der Eingabe abrufen"
@@ -18,6 +22,8 @@
     "searchInternet": "Mit {engine} im Internet suchen",
     "search": "„{query}“ suchen",
     "openIn": "In {engine} öffnen",
+    "openUrl": "{url} öffnen",
+    "openUrlDescription": "URL direkt im Browser öffnen",
     "suggestion": "Vorschlag von {engine}",
     "command": {
       "description": "Im Internet nach etwas suchen"

@@ -18,7 +18,8 @@
     "title-niri": "Mapa de teclas Niri",
     "workspace-switching": "ESPACIOS DE TRABAJO - CAMBIAR",
     "workspace-moving": "ESPACIOS DE TRABAJO - MOVER",
-    "workspace-mouse": "ESPACIOS DE TRABAJO - RATÓN"
+    "workspace-mouse": "ESPACIOS DE TRABAJO - RATÓN",
+    "search-placeholder": "Buscar atajos..."
   },
   "settings": {
     "title": "Configuracion de Atajos de Teclado",

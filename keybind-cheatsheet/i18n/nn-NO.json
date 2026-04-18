@@ -18,7 +18,8 @@
     "title-niri": "Niri tastatur-kart",
     "workspace-switching": "ARBEIDSOMRÅDE - BYTTE",
     "workspace-moving": "ARBEIDSOMRÅDE - FLYTTE",
-    "workspace-mouse": "ARBEIDSOMRÅDE - MUS"
+    "workspace-mouse": "ARBEIDSOMRÅDE - MUS",
+    "search-placeholder": "Søk etter snarveiar..."
   },
   "settings": {
     "title": "Tastesnarveg-jukselapp Innstillingar",

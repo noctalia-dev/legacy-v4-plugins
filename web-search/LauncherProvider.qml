@@ -20,6 +20,7 @@ Item {
     readonly property string engineName: cfg.search_engine ?? defaults.search_engine ?? "Google"
     readonly property bool showSuggestions: cfg.show_suggestions ?? defaults.show_suggestions ?? true
     readonly property int maxResults: cfg.max_results ?? defaults.max_results ?? 5
+    readonly property bool directUrl: cfg.direct_url ?? defaults.direct_url ?? true
 
     readonly property var engine: {
         if (engineName === "DuckDuckGo") {
@@ -33,6 +34,38 @@ Item {
         } else {
             return { "search": "https://www.google.com/search?q=", "suggest": "https://suggestqueries.google.com/complete/search?client=chrome&q=" };
         }
+    }
+
+    function isUrl(text) {
+        if (!text || text.includes(" ")) return false;
+
+        const protocolPattern = /^[a-z0-9]+:\/\/\S+/i;
+        if (protocolPattern.test(text)) return true;
+
+        const localhostPattern = /^localhost(\/\S*)?$/i;
+        const ipPattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:[0-9]+)?(\/\S*)?$/;
+        const domainPattern = /^([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}(:[0-9]+)?(\/\S*)?$/i;
+        const hostPortPattern = /^[a-zA-Z0-9-]+:[0-9]+(\/\S*)?$/i;
+
+        return localhostPattern.test(text) || ipPattern.test(text) || domainPattern.test(text) || hostPortPattern.test(text);
+    }
+
+    function normalizeUrl(text) {
+        text = text.trim();
+        if (!text) return "";
+
+        const protocolPattern = /^[a-z0-9]+:\/\/\S+/i;
+        if (protocolPattern.test(text)) return text;
+
+        const localhostPattern = /^localhost(\/\S*)?$/i;
+        const ipPattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(:[0-9]+)?(\/\S*)?$/;
+        const hostPortPattern = /^[a-zA-Z0-9-]+:[0-9]+(\/\S*)?$/i;
+        
+        if (localhostPattern.test(text) || ipPattern.test(text) || hostPortPattern.test(text)) {
+            return "http://" + text;
+        }
+
+        return "https://" + text;
     }
 
     function getResults(searchText) {
@@ -55,6 +88,21 @@ Item {
                 "icon": "search",
                 "isTablerIcon": true
             }];
+        }
+
+        if (directUrl && isUrl(query)) {
+            let url = normalizeUrl(query);
+            results.push({
+                "name": pluginApi?.tr("launcher.openUrl", { url: url }),
+                "description": pluginApi?.tr("launcher.openUrlDescription"),
+                "icon": "link",
+                "isTablerIcon": true,
+                "_score": isCommand ? 1000 : -4,
+                "onActivate": function() {
+                    Qt.openUrlExternally(url);
+                    if (launcher) launcher.close();
+                }
+            });
         }
 
         results.push({

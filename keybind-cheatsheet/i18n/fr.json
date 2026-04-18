@@ -18,7 +18,8 @@
     "title-niri": "Carte des touches Niri",
     "workspace-switching": "ESPACES DE TRAVAIL - BASCULER",
     "workspace-moving": "ESPACES DE TRAVAIL - DÉPLACER",
-    "workspace-mouse": "ESPACES DE TRAVAIL - SOURIS"
+    "workspace-mouse": "ESPACES DE TRAVAIL - SOURIS",
+    "search-placeholder": "Rechercher des raccourcis..."
   },
   "settings": {
     "title": "Parametres des Raccourcis Clavier",

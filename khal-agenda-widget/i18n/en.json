@@ -2,7 +2,7 @@
   "widget": {
     "loading": "Loading...",
     "no_events": "No upcoming events",
-    "heading": "Agenda for 7 days.",
+    "heading": "Upcoming events",
     "button": "calendar-month"
   }
 }

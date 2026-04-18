@@ -18,7 +18,8 @@
     "title-niri": "Карта клавіш Niri",
     "workspace-switching": "РОБОЧІ ОБЛАСТІ - ПЕРЕМИКАННЯ",
     "workspace-moving": "РОБОЧІ ОБЛАСТІ - ПЕРЕМІЩЕННЯ",
-    "workspace-mouse": "РОБОЧІ ОБЛАСТІ - МИША"
+    "workspace-mouse": "РОБОЧІ ОБЛАСТІ - МИША",
+    "search-placeholder": "Пошук сполучень клавіш..."
   },
   "settings": {
     "title": "Налаштування гарячих клавіш",

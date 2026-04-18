@@ -18,7 +18,8 @@
     "title-niri": "Niri tuş haritası",
     "workspace-switching": "ÇALIŞMA ALANLARI - GEÇİŞ",
     "workspace-moving": "ÇALIŞMA ALANLARI - TAŞIMA",
-    "workspace-mouse": "ÇALIŞMA ALANLARI - FARE"
+    "workspace-mouse": "ÇALIŞMA ALANLARI - FARE",
+    "search-placeholder": "Kısayol ara..."
   },
   "settings": {
     "title": "Klavye Kisayollari Ayarlari",

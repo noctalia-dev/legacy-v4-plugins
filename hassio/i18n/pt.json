@@ -1,0 +1,34 @@
+{
+  "widget": {
+    "status_connected": "Conectado",
+    "status_disconnected": "Desconectado",
+    "status_connecting": "Conectando",
+    "status_auth_failed": "Falha na Autenticação",
+    "status_unconfigured": "Não Configurado",
+    "tooltip": "Status: {status}"
+  },
+  "panel": {
+    "title": "Home Assistant",
+    "title_add": "Adicionar Entidades",
+    "error_connection_failed": "Falha na Conexão",
+    "btn_reconnect": "Tentar Reconectar",
+    "error_auth_failed": "Falha na Autenticação",
+    "error_token_missing": "Token Ausente",
+    "btn_retry_auth": "Tentar Auth Novamente",
+    "empty_no_entities": "Nenhuma entidade fixada",
+    "btn_add_entities": "Adicionar entidades",
+    "state_updating": "Atualizando...",
+    "state_on_brightness": "ligado · {percent}%"
+  },
+  "browser": {
+    "search_label": "Buscar",
+    "search_placeholder": "Filtrar por nome ou ID de entidade...",
+    "loading": "Carregando entidades..."
+  },
+  "settings": {
+    "url_label": "URL do Home Assistant",
+    "url_placeholder": "http://homeassistant.local:8123",
+    "token_label": "Token de Acesso de Longa Duração",
+    "token_placeholder": "Cole seu token aqui"
+  }
+}

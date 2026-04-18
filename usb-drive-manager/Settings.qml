@@ -41,6 +41,11 @@ ColumnLayout {
         pluginApi?.manifest?.metadata?.defaultSettings?.showBadge ??
         true
 
+    property string iconColor:
+        pluginApi?.pluginSettings?.iconColor ??
+        pluginApi?.manifest?.metadata?.defaultSettings?.iconColor ??
+        "none"
+
     // ===== SAVE =====
 
     function saveSettings() {
@@ -52,6 +57,7 @@ ColumnLayout {
         pluginApi.pluginSettings.showNotifications  = root.editShowNotifications
         pluginApi.pluginSettings.hideWhenEmpty      = root.editHideWhenEmpty
         pluginApi.pluginSettings.showBadge          = root.editShowBadge
+        pluginApi.pluginSettings.iconColor          = root.iconColor
 
         pluginApi.saveSettings()
     }
@@ -165,6 +171,23 @@ ColumnLayout {
             root.editTerminalCommand = key
             root.saveSettings()
         }
+    }
+    NDivider {
+        Layout.fillWidth: true
+    }
+
+    // Section: Colors
+    NText {
+        text: pluginApi?.tr("settings.icon-color")
+        pointSize: Style.fontSizeM
+        font.weight: Font.Bold
+        color: Color.mOnSurface
+    }
+    NColorChoice {
+        currentKey: root.iconColor
+        description: pluginApi?.tr("settings.icon-color-desc")
+        label: pluginApi?.tr("settings.icon-color")
+        onSelected: key => root.iconColor = key
     }
 
     Item { Layout.fillHeight: true }

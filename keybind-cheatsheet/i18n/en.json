@@ -18,7 +18,8 @@
     "title-niri": "Niri Keymap",
     "workspace-switching": "WORKSPACES - SWITCHING",
     "workspace-moving": "WORKSPACES - MOVING",
-    "workspace-mouse": "WORKSPACES - MOUSE"
+    "workspace-mouse": "WORKSPACES - MOUSE",
+    "search-placeholder": "Search keybinds..."
   },
   "settings": {
     "title": "Keybind Cheatsheet Settings",

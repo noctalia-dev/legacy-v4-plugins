@@ -18,7 +18,8 @@
     "title-niri": "Niri 키맵",
     "workspace-switching": "작업공간 - 전환",
     "workspace-moving": "작업공간 - 이동",
-    "workspace-mouse": "작업공간 - 마우스"
+    "workspace-mouse": "작업공간 - 마우스",
+    "search-placeholder": "단축키 검색..."
   },
   "settings": {
     "title": "키바인드 치트시트 설정",

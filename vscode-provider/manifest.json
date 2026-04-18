@@ -1,12 +1,11 @@
 {
     "id": "vscode-provider",
     "name": "VS Code Provider",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Open VS Code Folders and Workspaces",
     "tags": ["Launcher", "Development"],
     "minNoctaliaVersion": "4.5.0",
     "author": "Krendil",
-    "official": false,
     "license": "MIT",
     "repository": "https://github.com/noctalia-dev/noctalia-plugins",
     "entryPoints": {

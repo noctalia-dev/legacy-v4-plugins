@@ -139,7 +139,7 @@ Item {
                 }
 
                 if (root.useTappyMode) {
-                    root.onKeyPress(root.bassIntensity > root.bigBeatThreshold);
+                    root.musicEvent(root.bassIntensity > root.bigBeatThreshold);
                 }
 
                 beatCooldownTimer.restart();
@@ -168,8 +168,8 @@ Item {
         onTriggered: root.catState = root.pendingCatState
     }
 
-    // === KEY PRESS HANDLER ===
-    function onKeyPress(isBigHit = false) {
+    // === MUSIC HANDLER ===
+    function musicEvent(isBigHit = false) {
         if (root.paused) return;
         root.waiting = false;
 
@@ -192,6 +192,65 @@ Item {
         }
 
         idleTimer.restart();
+        waitingTimer.restart();
+    }
+
+    // === KEY PRESS HANDLER ===
+    function onKeyPress(isBigHit = false) {
+        if (root.paused) return;
+        root.waiting = false;
+
+        let targetState;
+        if (isBigHit) {
+            targetState = 3;
+        } else {
+            if (root.catState !== 0){
+                targetState = 3;
+            } else {
+                root.leftWasLast = !root.leftWasLast;
+                targetState = root.leftWasLast ? 1 : 2;
+            }
+        }
+
+        root.catState = targetState;
+        waitingTimer.restart();
+    }
+
+    function onKeyRelease(isBigHit = false) {
+        if (root.paused) return;
+        root.waiting = false;
+
+        let targetState;
+        if (isBigHit) {
+            targetState = 0;
+        } else {
+            if (root.catState === 3){
+                targetState = root.leftWasLast ? 1 : 2;
+            } else {
+                targetState = 0;
+            }
+        }
+
+        root.catState = targetState;
+        waitingTimer.restart();
+    }
+
+    function onKeyRepeat(isBigHit = false){
+        if (root.paused) return;
+        root.waiting = false;
+
+        let targetState;
+        if (root.catState !== 0) {
+            targetState = root.catState;
+        } else {
+            if (isBigHit){
+                targetState = 3;
+            } else {
+                targetState = root.leftWasLast ? 1 : 2;
+            }
+        }
+
+        root.catState = targetState;
         waitingTimer.restart();
     }
 
@@ -291,10 +350,20 @@ Item {
 
                 stdout: SplitParser {
                     onRead: data => {
-                        if (data.includes("EV_KEY") && data.includes("value 1")) {
-                            // Detect spacebar for double slap (both paws)
-                            const isSpace = data.includes("KEY_SPACE");
-                            root.onKeyPress(isSpace);
+                        if (data.includes("EV_KEY")) {
+                            // Detect spacebar/enter for double slap (both paws)
+                            const isBigHit = data.includes("KEY_SPACE") || data.includes("KEY_ENTER");
+                            // Key pressed
+                            // Ignore BTN_TOOL_ events to avoid double events with touchpads
+                            if (data.includes("value 1") && !data.includes("BTN_TOOL_")){
+                                root.onKeyPress(isBigHit);
+                            // Key released
+                            } else if (data.includes("value 0")) {
+                                root.onKeyRelease(isBigHit);
+                            // Key repeat
+                            } else if (data.includes("value 2")) {
+                                root.onKeyRepeat(isBigHit);
+                            }
                         }
                     }
                 }
@@ -356,9 +425,14 @@ Item {
                     if (exitCode === 0) {
                         Logger.i("Slow Bongo", "Device detected, restarting monitoring: " + deviceMonitor.modelData);
                         evtestProc.running = true;
-                    } else if (deviceMonitor.retryCount <= deviceMonitor.retryIntervals.length) {
-                        Logger.i("Slow Bongo", "Device not found, will check again: " + deviceMonitor.modelData);
+                    } else if (deviceMonitor.retryCount < deviceMonitor.retryIntervals.length) {
+                        deviceMonitor.retryCount++;;
+                        const interval = deviceMonitor.retryIntervals[deviceMonitor.retryCount - 1];
+                        Logger.i("Slow Bongo", "Device " + deviceMonitor.modelData + " not found, will retry in " + Math.floor(interval / 1000) + "s (attempt " + deviceMonitor.retryCount + "/" + deviceMonitor.retryIntervals.length + ")");
+                        restartTimer.interval = interval;
                         restartTimer.start();
+                    } else {
+                        Logger.w("Slow Bongo", "Max retries reached for device: " + deviceMonitor.modelData + ". Giving up.");
                     }
                 }
             }

@@ -1,0 +1,27 @@
+{
+  "id": "hassio",
+  "name": "Home Assistant",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Pozzoo",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Monitor and control Home Assistant entities from the bar. Requires qt6-websockets.",
+  "tags": ["Bar", "Panel", "Utility"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "haUrl": "",
+      "haToken": "",
+      "entities": []
+    }
+  }
+}

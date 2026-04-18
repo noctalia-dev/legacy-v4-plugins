@@ -34,7 +34,10 @@
     "taildrop-receive-mode": "接收模式",
     "taildrop-receive-mode-desc": "运行'tailscale file get'的方式。如果已运行'sudo tailscale set --operator $USER'，操作员模式无需提示。",
     "taildrop-receive-mode-operator": "操作员（无需提示）",
-    "taildrop-receive-mode-pkexec": "pkexec（每次提示）"
+    "taildrop-receive-mode-pkexec": "pkexec（每次提示）",
+    "authentication": "身份验证",
+    "login-server": "登录服务器",
+    "login-server-desc": "自定义登录服务器URL（例如Headscale）。留空使用默认Tailscale服务器。"
   },
   "actions": {
     "widget-settings": "部件设置"
@@ -49,7 +52,8 @@
     "ssh": "SSH到主机",
     "ping": "Ping主机",
     "use-exit-node": "用作出口节点",
-    "send-file": "发送文件"
+    "send-file": "发送文件",
+    "login": "登录"
   },
   "toast": {
     "title": "Tailscale",
@@ -66,12 +70,15 @@
     "terminal-not-configured": {
       "title": "终端未配置",
       "message": "请在插件设置中设置终端命令"
-    }
+    },
+    "login-browser-opened": "身份验证页面已在浏览器中打开",
+    "login-failed": "登录失败"
   },
   "panel": {
     "title": "Tailscale网络",
     "peers": "对等设备",
     "not-connected": "未连接",
+    "not-authenticated": "未认证",
     "no-peers": "没有连接的对等设备",
     "admin-console": "管理控制台",
     "terminal-warning": {

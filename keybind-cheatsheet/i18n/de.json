@@ -18,7 +18,8 @@
     "title-niri": "Niri Tastenbelegung",
     "workspace-switching": "ARBEITSBEREICHE - WECHSELN",
     "workspace-moving": "ARBEITSBEREICHE - VERSCHIEBEN",
-    "workspace-mouse": "ARBEITSBEREICHE - MAUS"
+    "workspace-mouse": "ARBEITSBEREICHE - MAUS",
+    "search-placeholder": "Tastenbelegung suchen..."
   },
   "settings": {
     "title": "Tastenkürzel-Ubersicht Einstellungen",

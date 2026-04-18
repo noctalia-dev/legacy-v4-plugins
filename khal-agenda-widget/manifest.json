@@ -1,7 +1,7 @@
 {
   "id": "khal-agenda-widget",
   "name": "Khal Agenda Info",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "minNoctaliaVersion": "4.6.6",
   "author": "Simon",
   "license": "MIT",

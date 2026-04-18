@@ -1,7 +1,7 @@
 {
   "id": "zed-provider",
   "name": "Zed Provider",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "justKevv",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",

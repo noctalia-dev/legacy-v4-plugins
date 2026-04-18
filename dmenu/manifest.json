@@ -1,0 +1,29 @@
+{
+  "id": "dmenu",
+  "name": "Dmenu Provider",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.9.0",
+  "author": "Ben Hilton",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "An IPC-driven dmenu replacement that lets external scripts present choices through a Noctalia panel.",
+  "tags": ["Panel", "Productivity", "Developer", "System", "Utility"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "resultFile": "/tmp/noctalia-dmenu-result",
+      "showToastOnSelect": false,
+      "maxResults": 200,
+      "panelPosition": "follow_launcher",
+      "showMatchCount": true,
+      "showFooter": true
+    }
+  }
+}

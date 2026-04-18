@@ -18,7 +18,8 @@
     "title-niri": "Niri billentyűzetkiosztás",
     "workspace-switching": "MUNKATERÜLETEK - VÁLTÁS",
     "workspace-moving": "MUNKATERÜLETEK - ÁTHELYEZÉS",
-    "workspace-mouse": "MUNKATERÜLETEK - EGÉR"
+    "workspace-mouse": "MUNKATERÜLETEK - EGÉR",
+    "search-placeholder": "Billentyűparancsok keresése..."
   },
   "settings": {
     "title": "Billentyuparancsok Beallitasai",

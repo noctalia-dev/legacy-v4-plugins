@@ -34,7 +34,10 @@
     "taildrop-receive-mode": "Mottagningsläge",
     "taildrop-receive-mode-desc": "Hur 'tailscale file get' körs. Operatörsläget kräver ingen bekräftelse om du har kört 'sudo tailscale set --operator $USER'.",
     "taildrop-receive-mode-operator": "Operatör (ingen bekräftelse)",
-    "taildrop-receive-mode-pkexec": "pkexec (bekräftelse varje gång)"
+    "taildrop-receive-mode-pkexec": "pkexec (bekräftelse varje gång)",
+    "authentication": "Autentisering",
+    "login-server": "Inloggningsserver",
+    "login-server-desc": "Anpassad inloggningsserver-URL (t.ex. Headscale). Lämna tomt för standard Tailscale-server."
   },
   "actions": {
     "widget-settings": "Widgetinställningar"
@@ -49,7 +52,8 @@
     "ssh": "SSH till värd",
     "ping": "Pinga värd",
     "use-exit-node": "Använd som utgångsnod",
-    "send-file": "Skicka fil"
+    "send-file": "Skicka fil",
+    "login": "Logga in"
   },
   "toast": {
     "title": "Tailscale",
@@ -66,12 +70,15 @@
     "terminal-not-configured": {
       "title": "Terminal ej konfigurerad",
       "message": "Ange ett terminalkommando i plugin-inställningarna"
-    }
+    },
+    "login-browser-opened": "Autentiseringssida öppnad i webbläsaren",
+    "login-failed": "Inloggning misslyckades"
   },
   "panel": {
     "title": "Tailscale-nätverk",
     "peers": "peers",
     "not-connected": "Ej ansluten",
+    "not-authenticated": "Ej autentiserad",
     "no-peers": "Inga anslutna peers",
     "admin-console": "Administrationskonsol",
     "terminal-warning": {

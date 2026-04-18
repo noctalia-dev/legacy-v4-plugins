@@ -23,7 +23,8 @@ DraggableDesktopWidget {
     // Main data process
     Process {
         id: calProc
-        command: ["sh", "-c", "khal list today 7d --format '{start-end-time-style} {title}' --day-format '{name}, {date}'"]
+        command: ["sh", "-c", "khal list --notstarted now 7d --format '{start-time} {title}' --day-format '{name}, {date}'"]
+        // command: ["sh", "-c", "khal list today 7d --format '{start-end-time-style} {title}' --day-format '{name}, {date}'"]
         running: root.pluginApi !== null
         stdout: StdioCollector {
             onTextChanged: root.calendarVal = text.trim().replace(/\n\s*\n/g, '\n')

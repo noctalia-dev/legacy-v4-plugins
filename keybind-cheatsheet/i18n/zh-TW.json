@@ -18,7 +18,8 @@
     "title-niri": "Niri 按鍵映射",
     "workspace-switching": "工作區 - 切換",
     "workspace-moving": "工作區 - 移動",
-    "workspace-mouse": "工作區 - 滑鼠"
+    "workspace-mouse": "工作區 - 滑鼠",
+    "search-placeholder": "搜尋按鍵綁定..."
   },
   "settings": {
     "title": "快捷鍵速查表設定",

@@ -18,7 +18,8 @@
     "title-niri": "Mapa klawiszy Niri",
     "workspace-switching": "OBSZARY ROBOCZE - PRZEŁĄCZANIE",
     "workspace-moving": "OBSZARY ROBOCZE - PRZENOSZENIE",
-    "workspace-mouse": "OBSZARY ROBOCZE - MYSZ"
+    "workspace-mouse": "OBSZARY ROBOCZE - MYSZ",
+    "search-placeholder": "Szukaj skrótów..."
   },
   "settings": {
     "title": "Ustawienia Skrotow Klawiszowych",

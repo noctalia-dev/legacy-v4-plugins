@@ -18,7 +18,8 @@
     "title-niri": "Раскладка клавиш Niri",
     "workspace-switching": "РАБОЧИЕ ОБЛАСТИ - ПЕРЕКЛЮЧЕНИЕ",
     "workspace-moving": "РАБОЧИЕ ОБЛАСТИ - ПЕРЕМЕЩЕНИЕ",
-    "workspace-mouse": "РАБОЧИЕ ОБЛАСТИ - МЫШЬ"
+    "workspace-mouse": "РАБОЧИЕ ОБЛАСТИ - МЫШЬ",
+    "search-placeholder": "Поиск сочетаний клавиш..."
   },
   "settings": {
     "title": "Настройки горячих клавиш",

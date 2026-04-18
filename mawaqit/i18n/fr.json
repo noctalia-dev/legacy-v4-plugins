@@ -50,7 +50,7 @@
     },
     "method": {
       "label": "Méthode de calcul",
-      "desc": "Détermine comment les temps de prières sont calculés."
+      "desc": "Détermine comment les temps de prières sont calculés. Choisissez l'autorité suivie dans votre région."
     },
     "fajrAngle": {
       "label": "Angle du Fajr",
@@ -65,7 +65,7 @@
     },
     "showCountdown": {
       "label": "Afficher le compte à rebours",
-      "desc": "Afficher un compte à rebours en direct dans la barre."
+      "desc": "Afficher un compte à rebours en direct de la prochaine prière dans la barre au lieu de l'heure statique."
     },
     "notifications": {
       "header": "Notifications",
@@ -97,27 +97,72 @@
     },
     "hijriDayOffset": {
       "label": "Ajustement du jour Hijri",
-      "desc": "Décaler le jour Hijri affiché si la date de l'API ne correspond pas."
+      "desc": "Décaler le jour Hijri affiché si la date de l'API ne correspond pas à votre observation locale."
     },
     "school": {
       "label": "École de calcul de l'Asr",
-      "desc": "Shafi/Maliki/Hanbali utilise le facteur d'ombre 1. Hanafi utilise le facteur 2."
+      "desc": "Shafi/Maliki/Hanbali utilise le facteur d'ombre 1. Hanafi utilise le facteur 2, donnant une heure d'Asr plus tardive."
     },
     "calendar": {
       "header": "Calendrier"
     },
     "weekStartDay": {
       "label": "Premier jour de la semaine",
-      "desc": "Choisissez le jour de début de la semaine."
+      "desc": "Choisissez le jour de début de la semaine du calendrier."
+    },
+    "methodCustom": {
+      "label": "ID de méthode personnalisée",
+      "desc": "Entrez l'ID numérique de la méthode depuis l'API Aladhan (ex. 19 pour l'Algérie / MESRS)."
+    },
+    "tune": {
+      "header": "Décalages des temps de prière",
+      "desc": "Ajustements en minutes appliqués par prière (négatif = plus tôt, positif = plus tard).",
+      "enable": "Activer",
+      "fajr": "Décalage Fajr (min)",
+      "dhuhr": "Décalage Dhuhr (min)",
+      "asr": "Décalage Asr (min)",
+      "maghrib": "Décalage Maghrib (min)",
+      "isha": "Décalage Isha (min)"
+    },
+    "showElapsed": {
+      "label": "Afficher le temps écoulé après la prière",
+      "desc": "Après le début d'une prière, compte (+) jusqu'à 1 heure. Limité au temps restant jusqu'à la prochaine prière. Remplace le compte à rebours durant cette fenêtre."
+    },
+    "hidePrayerName": {
+      "label": "Masquer le nom de la prière dans la barre",
+      "desc": "Afficher uniquement l'heure ou le compte à rebours dans le widget de la barre, sans le libellé du nom de la prière."
+    },
+    "styling": {
+      "header": "Style"
+    },
+    "widgetIcon": {
+      "label": "Icône par défaut de la barre",
+      "desc": "Icône par défaut à utiliser par le widget"
+    },
+    "dynamicIcon": {
+      "label": "Icône de prière dynamique",
+      "desc": "Utiliser la prière suivante/précédente dans le widget de la barre"
+    },
+    "textColor": {
+      "label": "Couleur du texte de la barre",
+      "desc": "Couleur utilisée pour le texte dans le widget de la barre"
+    },
+    "iconColor": {
+      "label": "Couleur de l'icône de la barre",
+      "desc": "Couleur utilisée pour l'icône dans le widget de la barre"
+    },
+    "activeColor": {
+      "label": "Couleur active",
+      "desc": "Couleur utilisée lorsque la prière est 'Maintenant' ou 'Écoulée'"
     }
   },
   "error": {
-    "network": "La requête réseau a échoué.",
+    "network": "La requête réseau a échoué. Vérifiez votre connexion internet.",
     "generic": "Échec du chargement des temps de prière."
   },
   "calendar": {
     "today": "Retour à aujourd'hui",
     "refresh": "Rafraîchir le mois",
-    "approximate": "Estimation mathématique — non vérifiée par observation"
+    "approximate": "Estimation mathématique — non basée sur l'observation de la lune"
   }
 }

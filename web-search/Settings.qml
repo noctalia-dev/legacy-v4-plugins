@@ -11,6 +11,7 @@ ColumnLayout {
     property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
 
     property string valueSearchEngine: cfg.search_engine ?? defaults.search_engine ?? "Google"
+    property bool valueDirectUrl: cfg.direct_url ?? defaults.direct_url ?? true
     property bool valueShowSuggestions: cfg.show_suggestions ?? defaults.show_suggestions ?? true
     property int valueMaxResults: cfg.max_results ?? defaults.max_results ?? 5
 
@@ -34,6 +35,13 @@ ColumnLayout {
             
             currentKey: root.valueSearchEngine
             onSelected: key => root.valueSearchEngine = key
+        }
+
+        NToggle {
+            label: pluginApi?.tr("settings.directUrl.label")
+            description: pluginApi?.tr("settings.directUrl.description")
+            checked: root.valueDirectUrl
+            onToggled: root.valueDirectUrl = checked
         }
 
         NToggle {
@@ -92,6 +100,7 @@ ColumnLayout {
         }
 
         pluginApi.pluginSettings.search_engine = root.valueSearchEngine;
+        pluginApi.pluginSettings.direct_url = root.valueDirectUrl;
         pluginApi.pluginSettings.show_suggestions = root.valueShowSuggestions;
         pluginApi.pluginSettings.max_results = root.valueMaxResults;
         pluginApi.saveSettings();

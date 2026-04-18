@@ -18,7 +18,8 @@
     "title-niri": "Mappa tasti Niri",
     "workspace-switching": "SPAZI DI LAVORO - CAMBIO",
     "workspace-moving": "SPAZI DI LAVORO - SPOSTAMENTO",
-    "workspace-mouse": "SPAZI DI LAVORO - MOUSE"
+    "workspace-mouse": "SPAZI DI LAVORO - MOUSE",
+    "search-placeholder": "Cerca scorciatoie..."
   },
   "settings": {
     "title": "Impostazioni Scorciatoie da Tastiera",

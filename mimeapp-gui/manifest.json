@@ -1,7 +1,7 @@
 {
   "id": "mimeapp-gui",
   "name": "MimeApp GUI",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "minNoctaliaVersion": "4.1.2",
   "author": "Mathew-D",
   "license": "MIT",
@@ -16,7 +16,8 @@
   "entryPoints": {
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",
-    "panel": "Panel.qml"
+    "panel": "Panel.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml"
   },
   "dependencies": {
     "plugins": []

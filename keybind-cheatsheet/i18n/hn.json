@@ -18,7 +18,8 @@
     "title-niri": "Niri कीमैप",
     "workspace-switching": "कार्यक्षेत्र - स्विच करना",
     "workspace-moving": "कार्यक्षेत्र - स्थानांतरण",
-    "workspace-mouse": "कार्यक्षेत्र - माउस"
+    "workspace-mouse": "कार्यक्षेत्र - माउस",
+    "search-placeholder": "कीबाइंड खोजें..."
   },
   "settings": {
     "title": "कीबाइंड चीटशीट सेटिंग्स",

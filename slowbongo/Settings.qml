@@ -19,7 +19,7 @@ ColumnLayout {
     property string editCatColor: {
         let saved = pluginApi?.pluginSettings?.catColor
         if (saved && saved.length > 0) return saved
-        return pluginApi?.manifest?.metadata?.defaultSettings?.catColor ?? "default"
+        return pluginApi?.manifest?.metadata?.defaultSettings?.catColor ?? "none"
     }
 
     property real editCatSize: {
@@ -63,14 +63,6 @@ ColumnLayout {
     // Status colors (with fallback for theme compatibility)
     readonly property color statusSuccessColor: Color.mPrimary
     readonly property color statusErrorColor: Color.mError ?? "#c00202"
-
-    // Configuration data
-    readonly property var colorOptions: [
-        { key: "default",   labelKey: "colors.default",   color: Color.mOnSurface },
-        { key: "primary",   labelKey: "colors.primary",   color: Color.mPrimary },
-        { key: "secondary", labelKey: "colors.secondary", color: Color.mSecondary },
-        { key: "tertiary",  labelKey: "colors.tertiary",  color: Color.mTertiary },
-    ]
 
     property var inputDevices: []
 
@@ -217,7 +209,7 @@ ColumnLayout {
 
     // Requirements Section
     Text {
-        text: pluginApi?.tr("settings.requirements") || "Requirements"
+        text: pluginApi?.tr("settings.requirements")
         color: Color.mOnSurface
         font.pointSize: Style.fontSizeM
         font.weight: Font.DemiBold
@@ -244,8 +236,8 @@ ColumnLayout {
                 }
                 Text {
                     text: root.evtestInstalled
-                        ? (pluginApi?.tr("settings.evtest-installed") || "evtest is installed")
-                        : (pluginApi?.tr("settings.evtest-not-installed") || "evtest is not installed")
+                        ? pluginApi?.tr("settings.evtest-installed")
+                        : pluginApi?.tr("settings.evtest-not-installed")
                     color: root.evtestInstalled ? root.statusSuccessColor : root.statusErrorColor
                     font.pointSize: Style.fontSizeM
                 }
@@ -260,13 +252,79 @@ ColumnLayout {
                 }
                 Text {
                     text: root.inInputGroup
-                        ? (pluginApi?.tr("settings.in-input-group") || "User is in the input group")
-                        : (pluginApi?.tr("settings.not-in-input-group") || "User is not in the input group")
+                        ? pluginApi?.tr("settings.in-input-group")
+                        : pluginApi?.tr("settings.not-in-input-group")
                     color: root.inInputGroup ? root.statusSuccessColor : root.statusErrorColor
                     font.pointSize: Style.fontSizeM
                 }
             }
         }
+    }
+
+    NDivider {
+        Layout.fillWidth: true
+    }
+
+    // Widget Color
+    NColorChoice {
+        label: pluginApi?.tr("settings.colours")
+        currentKey: root.editCatColor
+        onSelected: key => { root.editCatColor = key; }
+    }
+
+    // Cat Size Section
+    NValueSlider {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.cat-size")
+        value: root.editCatSize
+        from: 0.5
+        to: 1.5
+        stepSize: 0.01
+        defaultValue: 1.0
+        showReset: true
+        text: Math.round(root.editCatSize * 100) + "%"
+        onMoved: value => root.editCatSize = value
+    }
+
+    // Vertical Position Section
+    NValueSlider {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.vertical-position")
+        value: root.editCatOffsetY
+        from: -0.39
+        to: 0.61
+        stepSize: 0.01
+        defaultValue: 0.11
+        showReset: true
+        text: { let v = Math.round(-(root.editCatOffsetY - 0.11) * 100) / 100; return (v > 0 ? "+" : "") + v.toFixed(2) }
+        onMoved: value => root.editCatOffsetY = value
+    }
+
+    // Rave Mode
+    NToggle {
+        label: pluginApi?.tr("settings.rave-mode")
+        description: pluginApi?.tr("settings.rave-mode-desc")
+        checked: root.editRaveMode
+        onToggled: checked => root.editRaveMode = checked
+        defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.raveMode ?? false
+    }
+
+    // Tappy Mode
+    NToggle {
+        label: pluginApi?.tr("settings.tappy-mode")
+        description: pluginApi?.tr("settings.tappy-mode-desc")
+        checked: root.editTappyMode
+        onToggled: checked => root.editTappyMode = checked
+        defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.tappyMode ?? false
+    }
+
+    // MPRIS Filtering
+    NToggle {
+        label: pluginApi?.tr("settings.mpris-filter")
+        description: pluginApi?.tr("settings.mpris-filter-desc")
+        checked: root.editUseMprisFilter
+        onToggled: checked => root.editUseMprisFilter = checked
+        defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.useMprisFilter ?? false
     }
 
     NDivider {
@@ -377,161 +435,6 @@ ColumnLayout {
                 }
             }
         }
-    }
-
-    NDivider {
-        Layout.fillWidth: true
-    }
-
-    // Colours Section
-    Text {
-        text: pluginApi?.tr("settings.colours") || "Colours"
-        color: Color.mOnSurface
-        font.pointSize: Style.fontSizeM
-        font.weight: Font.DemiBold
-    }
-
-    NBox {
-        id: colourBox
-        Layout.fillWidth: true
-        implicitHeight: colourContent.implicitHeight + Style.marginM * 2
-
-        property int circleSize: Math.round(Style.baseWidgetSize * 0.9)
-        property int columnCount: root.colorOptions.length
-        property real availableInner: colourBox.width - Style.marginM * 2
-        property real columnWidth: columnCount > 0 ? availableInner / columnCount : 0
-
-        ColumnLayout {
-            id: colourContent
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.margins: Style.marginM
-            spacing: 0
-
-            Row {
-                id: colourRow
-                Layout.fillWidth: true
-
-                Repeater {
-                    model: root.colorOptions
-
-                    Item {
-                        required property var modelData
-                        required property int index
-
-                        width: colourBox.columnWidth
-                        height: colorCol.implicitHeight
-
-                        ColumnLayout {
-                            id: colorCol
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            spacing: Style.marginXS
-
-                            Rectangle {
-                                id: colorCircle
-                                property bool isSelected: root.editCatColor === modelData.key
-                                property bool isHovered: circleMouseArea.containsMouse
-
-                                Layout.alignment: Qt.AlignHCenter
-                                implicitWidth: colourBox.circleSize
-                                implicitHeight: implicitWidth
-                                radius: width / 2
-                                color: modelData.color
-                                border.color: isSelected ? Color.mOnSurface : "transparent"
-                                border.width: isSelected ? Style.borderS + 1 : 0
-                                scale: isHovered ? 1.15 : 1.0
-
-                                Behavior on scale {
-                                    NumberAnimation { duration: Style.animationFast; easing.type: Easing.OutCubic }
-                                }
-                                Behavior on border.color {
-                                    ColorAnimation { duration: Style.animationFast }
-                                }
-
-                                MouseArea {
-                                    id: circleMouseArea
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    cursorShape: Qt.PointingHandCursor
-                                    onClicked: root.editCatColor = modelData.key
-                                }
-
-                                NIcon {
-                                    anchors.centerIn: parent
-                                    icon: "check"
-                                    pointSize: Math.max(Style.fontSizeXS, colorCircle.implicitWidth * 0.4)
-                                    color: Color.mOnPrimary
-                                    visible: colorCircle.isSelected
-                                }
-                            }
-
-                            Text {
-                                Layout.alignment: Qt.AlignHCenter
-                                text: pluginApi?.tr(modelData.labelKey) || modelData.key.charAt(0).toUpperCase() + modelData.key.slice(1)
-                                color: Color.mOnSurfaceVariant
-                                font.pointSize: Style.fontSizeS
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // Rave Mode
-    NToggle {
-        label: pluginApi?.tr("settings.rave-mode") || "Rave Mode"
-        description: pluginApi?.tr("settings.rave-mode-desc") || "Change colors to the beat when music is playing"
-        checked: root.editRaveMode
-        onToggled: checked => root.editRaveMode = checked
-        defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.raveMode ?? false
-    }
-
-    // Tappy Mode
-    NToggle {
-        label: pluginApi?.tr("settings.tappy-mode") || "Tappy Mode"
-        description: pluginApi?.tr("settings.tappy-mode-desc") || "Make the cat tap along to the beat when music is playing"
-        checked: root.editTappyMode
-        onToggled: checked => root.editTappyMode = checked
-        defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.tappyMode ?? false
-    }
-
-    // MPRIS Filtering
-    NToggle {
-        label: pluginApi?.tr("settings.mpris-filter") || "MPRIS Filtering"
-        description: pluginApi?.tr("settings.mpris-filter-desc") || "Only react to audio when a non-blacklisted media player is playing (uses NoctalisShell audio blacklist)"
-        checked: root.editUseMprisFilter
-        onToggled: checked => root.editUseMprisFilter = checked
-        defaultValue: pluginApi?.manifest?.metadata?.defaultSettings?.useMprisFilter ?? false
-    }
-
-    NDivider {
-        Layout.fillWidth: true
-    }
-
-    // Cat Size Section
-    NValueSlider {
-        Layout.fillWidth: true
-        label: pluginApi?.tr("settings.cat-size") || "Cat Size"
-        value: root.editCatSize
-        from: 0.5
-        to: 1.5
-        stepSize: 0.01
-        text: Math.round(root.editCatSize * 100) + "%"
-        onMoved: value => root.editCatSize = value
-    }
-
-    // Vertical Position Section
-    NValueSlider {
-        Layout.fillWidth: true
-        label: pluginApi?.tr("settings.vertical-position") || "Vertical Position"
-        value: root.editCatOffsetY
-        from: -0.39
-        to: 0.61
-        stepSize: 0.01
-        text: { let v = Math.round(-(root.editCatOffsetY - 0.11) * 100) / 100; return (v > 0 ? "+" : "") + v.toFixed(2) }
-        onMoved: value => root.editCatOffsetY = value
     }
 
     function saveSettings() {

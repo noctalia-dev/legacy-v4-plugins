@@ -18,7 +18,8 @@
     "title-niri": "Niri toetsenbordindeling",
     "workspace-switching": "WERKRUIMTEN - WISSELEN",
     "workspace-moving": "WERKRUIMTEN - VERPLAATSEN",
-    "workspace-mouse": "WERKRUIMTEN - MUIS"
+    "workspace-mouse": "WERKRUIMTEN - MUIS",
+    "search-placeholder": "Sneltoetsen zoeken..."
   },
   "settings": {
     "title": "Sneltoetsen Overzicht Instellingen",

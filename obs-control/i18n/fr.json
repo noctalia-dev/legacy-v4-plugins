@@ -1,0 +1,250 @@
+{
+  "actions": {
+    "primary": {
+      "open_controls": "ouvre les contrôles",
+      "toggle_record": "bascule l'enregistrement",
+      "toggle_stream": "bascule le streaming"
+    }
+  },
+  "bar": {
+    "recording_label": "REC",
+    "replay_label": "RPL",
+    "streaming_label": "LIVE"
+  },
+  "control_center": {
+    "tooltip": {
+      "active": "OBS actif : {outputs}\nClic gauche {primaryAction}\nClic droit bascule l'enregistrement\nClic milieu bascule le tampon de relecture",
+      "ready": "OBS est prêt\nClic gauche {primaryAction}\nClic droit bascule l'enregistrement\nClic milieu bascule le tampon de relecture",
+      "needs_restart": "OBS est en cours d'exécution, mais le contrôle WebSocket est indisponible\nRedémarrez OBS une fois pour restaurer les contrôles",
+      "offline": "OBS est hors ligne\nClic gauche {primaryAction}\nClic droit lance OBS"
+    }
+  },
+  "panel": {
+    "header": {
+      "title": "Contrôle OBS",
+      "active": "Sorties actives : {outputs}. Gérez la capture, la relecture ou le streaming d'ici.",
+      "ready": "OBS est connecté et prêt pour l'enregistrement, la relecture ou le streaming.",
+      "qt_websockets_missing": "Le support Qt WebSockets est indisponible dans ce runtime Quickshell. Installez qt6-websockets pour activer les contrôles OBS.",
+      "config_missing": "La configuration WebSocket d'OBS est manquante ou désactivée. Ouvrez OBS, activez obs-websocket et réessayez.",
+      "needs_restart": "OBS est ouvert, mais le contrôle WebSocket est indisponible jusqu'à ce qu'il soit redémarré une fois.",
+      "offline": "OBS est hors ligne. Lancez-le ici et le widget suivra son état."
+    },
+    "status": {
+      "label": "État",
+      "recording": "Enregistrement",
+      "replay": "Tampon de relecture",
+      "streaming": "Streaming",
+      "ready": "Prêt",
+      "qt_websockets_missing": "Qt WebSockets manquant",
+      "config_missing": "WebSocket OBS non configuré",
+      "needs_restart": "Redémarrage d'OBS nécessaire",
+      "offline": "Hors ligne",
+      "connected_hint": "Clic gauche {primaryAction}. Clic droit bascule l'enregistrement, clic milieu bascule la relecture, et le panneau expose les actions de streaming et de sauvegarde.",
+      "qt_websockets_missing_hint": "Le support Qt WebSockets est manquant dans ce runtime Quickshell. Installez qt6-websockets, puis redémarrez Noctalia pour activer les contrôles OBS.",
+      "config_missing_hint": "La configuration WebSocket d'OBS est manquante ou désactivée. Ouvrez OBS, activez obs-websocket, puis redémarrez ou actualisez le plugin.",
+      "disconnected_hint": "Le contrôle WebSocket est indisponible pour le moment. Lancez ou redémarrez OBS pour restaurer les actions rapides.",
+      "recording_elapsed": "Temps d'enregistrement",
+      "streaming_elapsed": "Temps de streaming",
+      "managed_hint": "Les lancements gérés par le plugin peuvent fermer OBS après l'arrêt du dernier enregistrement, relecture ou flux actif."
+    },
+    "actions": {
+      "retry_connection": "Réessayer la connexion",
+      "launch_obs": "Lancer OBS",
+      "stop_recording": "Arrêter l'enregistrement",
+      "start_recording": "Démarrer l'enregistrement",
+      "stop_streaming": "Arrêter le streaming",
+      "start_streaming": "Démarrer le streaming",
+      "stop_replay": "Arrêter la relecture",
+      "start_replay": "Démarrer la relecture",
+      "save_replay": "Sauvegarder la relecture",
+      "open_videos": "Ouvrir les vidéos",
+      "refresh_status": "Actualiser l'état",
+      "open_settings": "Ouvrir les paramètres"
+    }
+  },
+  "settings": {
+    "header": {
+      "label": "Contrôle OBS",
+      "description": "Choisissez comment OBS apparaît dans la barre, le Centre de contrôle et les actions rapides."
+    },
+    "sections": {
+      "behavior": {
+        "label": "Actions rapides",
+        "description": "Définissez ce que font les clics et comment OBS se lance lorsque vous demandez au plugin de l'ouvrir."
+      },
+      "bar": {
+        "label": "Barre",
+        "description": "Gardez 'Toujours afficher' activé si vous voulez que le bouton OBS reste au même endroit tout le temps."
+      },
+      "control_center": {
+        "label": "Centre de contrôle",
+        "description": "Choisissez quand le raccourci doit apparaître. Laissez 'Prêt' désactivé si vous ne le voulez que pendant les sessions actives."
+      },
+      "videos": {
+        "label": "Vidéos & Automatisation",
+        "description": "Choisissez où les enregistrements s'ouvrent et ce que le plugin doit faire après l'arrêt de la capture."
+      }
+    },
+    "runtime": {
+      "qt_websockets_missing_title": "Qt WebSockets manquant",
+      "qt_websockets_missing": "Installez qt6-websockets et redémarrez Noctalia pour activer le contrôle OBS.",
+      "websocket_config_missing_title": "WebSocket OBS non configuré",
+      "websocket_config_missing": "Activez obs-websocket dans OBS, puis actualisez ou redémarrez Noctalia."
+    },
+    "poll_interval": {
+      "label": "Intervalle d'actualisation",
+      "description": "Fréquence d'actualisation de l'état d'OBS, en millisecondes."
+    },
+    "left_click_action": {
+      "label": "Clic gauche",
+      "description": "Choisissez l'action principale pour le bouton de la barre et du Centre de contrôle.",
+      "options": {
+        "open_controls": "Ouvrir les contrôles",
+        "toggle_recording": "Basculer l'enregistrement",
+        "toggle_streaming": "Basculer le streaming"
+      }
+    },
+    "launch_behavior": {
+      "label": "Lancer OBS",
+      "description": "Utilisé uniquement pour l'action manuelle 'Lancer OBS'. Les démarrages automatiques s'ouvrent toujours réduits dans la barre d'état.",
+      "options": {
+        "normal": "Fenêtre normale",
+        "minimized_to_tray": "Réduire dans la barre d'état"
+      }
+    },
+    "bar_label_mode": {
+      "label": "Style d'étiquette",
+      "description": "Choisissez comment les états actifs d'OBS apparaissent dans la barre.",
+      "options": {
+        "icon_only": "Icône uniquement",
+        "short_label": "Étiquettes courtes",
+        "duration": "Étiquettes de durée"
+      }
+    },
+    "videos_path": {
+      "label": "Dossier vidéos",
+      "description": "Laissez vide pour utiliser votre dossier Vidéos par défaut."
+    },
+    "videos_opener": {
+      "label": "Ouvreur de dossier",
+      "description": "Commande utilisée pour ouvrir le dossier Vidéos, par exemple xdg-open ou votre gestionnaire de fichiers."
+    },
+    "auto_close_managed": {
+      "label": "Fermer OBS après les sessions gérées",
+      "description": "Si le plugin a lancé OBS pour vous, refermez-le après l'arrêt de la dernière sortie active."
+    },
+    "open_videos_after_stop": {
+      "label": "Proposer d'ouvrir les vidéos après sauvegarde",
+      "description": "Afficher une action 'Ouvrir les vidéos' après l'arrêt de l'enregistrement ou la sauvegarde d'une relecture."
+    },
+    "show_elapsed_in_bar": {
+      "label": "Afficher le temps écoulé",
+      "description": "Afficher le minuteur dans la barre lorsque le style d'étiquette est réglé sur 'Étiquettes de durée'."
+    },
+    "show_bar_recording": {
+      "label": "Pendant l'enregistrement",
+      "description": "Garder le bouton de la barre visible pendant l'enregistrement."
+    },
+    "show_bar_replay": {
+      "label": "Pendant que la relecture est active",
+      "description": "Garder le bouton de la barre visible pendant que seul le tampon de relecture est en cours."
+    },
+    "show_bar_streaming": {
+      "label": "Pendant le streaming",
+      "description": "Garder le bouton de la barre visible pendant le streaming."
+    },
+    "always_show_in_bar": {
+      "label": "Toujours afficher dans la barre",
+      "description": "Garder le bouton de la barre visible même quand OBS est inactif ou hors ligne pour que sa position reste stable."
+    },
+    "show_control_center_recording": {
+      "label": "Pendant l'enregistrement",
+      "description": "Afficher le raccourci du Centre de contrôle pendant l'enregistrement."
+    },
+    "show_control_center_replay": {
+      "label": "Pendant que la relecture est active",
+      "description": "Afficher le raccourci du Centre de contrôle pendant que le tampon de relecture est actif."
+    },
+    "show_control_center_streaming": {
+      "label": "Pendant le streaming",
+      "description": "Afficher le raccourci du Centre de contrôle pendant le streaming."
+    },
+    "show_control_center_ready": {
+      "label": "Quand OBS est prêt",
+      "description": "Garder le raccourci visible pendant qu'OBS est connecté mais inactif."
+    }
+  },
+  "toast": {
+    "actions": {
+      "open_videos": "Ouvrir les vidéos"
+    },
+    "record_started": {
+      "title": "Enregistrement OBS démarré",
+      "body": "L'enregistrement local est en cours."
+    },
+    "record_started_launch": {
+      "title": "Enregistrement OBS démarré",
+      "body": "OBS a été lancé automatiquement pour l'enregistrement."
+    },
+    "record_stopped": {
+      "title": "Enregistrement OBS arrêté",
+      "body": "Enregistrement sauvegardé dans Vidéos."
+    },
+    "record_stopped_autoclose": {
+      "title": "Enregistrement OBS arrêté",
+      "body": "Enregistrement sauvegardé dans Vidéos. OBS fermé."
+    },
+    "stream_started": {
+      "title": "Streaming OBS démarré",
+      "body": "Le streaming en direct est actif."
+    },
+    "stream_started_launch": {
+      "title": "Streaming OBS démarré",
+      "body": "OBS a été lancé automatiquement pour le streaming."
+    },
+    "stream_stopped": {
+      "title": "Streaming OBS arrêté",
+      "body": "Le streaming en direct est terminé."
+    },
+    "stream_stopped_autoclose": {
+      "title": "Streaming OBS arrêté",
+      "body": "Le streaming en direct est terminé. OBS fermé."
+    },
+    "replay_started": {
+      "title": "Tampon de relecture OBS démarré",
+      "body": "Le tampon de relecture est actif."
+    },
+    "replay_started_launch": {
+      "title": "Tampon de relecture OBS démarré",
+      "body": "OBS a été lancé automatiquement pour la relecture."
+    },
+    "replay_stopped": {
+      "title": "Tampon de relecture OBS arrêté",
+      "body": "La relecture instantanée est désactivée."
+    },
+    "replay_stopped_autoclose": {
+      "title": "Tampon de relecture OBS arrêté",
+      "body": "La relecture instantanée est désactivée. OBS fermé."
+    },
+    "replay_saved": {
+      "title": "Relecture OBS sauvegardée",
+      "body": "Le dernier tampon de relecture a été sauvegardé dans Vidéos."
+    },
+    "offline": {
+      "title": "OBS est hors ligne",
+      "body": "Lancez OBS pour utiliser les contrôles d'enregistrement."
+    },
+    "qt_websockets_missing": {
+      "title": "Support Qt WebSockets manquant",
+      "body": "Le support Qt WebSockets est indisponible dans ce runtime Quickshell. Installez qt6-websockets pour activer les contrôles OBS."
+    },
+    "websocket_config_missing": {
+      "title": "WebSocket OBS non configuré",
+      "body": "La configuration WebSocket d'OBS est manquante ou désactivée. Ouvrez OBS, activez obs-websocket et réessayez."
+    },
+    "error": {
+      "title": "Échec du contrôle OBS",
+      "body": "Vérifiez la sortie websocket d'OBS."
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "bar": {
+    "tooltip-empty": "Aucun périphérique USB",
+    "tooltip-count": "%1 périphérique(s) monté(s)"
+  },
+  "panel": {
+    "title": "Gestionnaire USB",
+    "mounted": "monté",
+    "refresh": "Actualiser",
+    "empty": "Aucun périphérique USB détecté",
+    "empty-hint": "Branchez une clé USB pour commencer",
+    "unmount-all": "Tout démonter",
+    "eject-all": "Tout éjecter"
+  },
+  "device": {
+    "mounted": "Monté",
+    "used": "{size} utilisé",
+    "free": "{size} libre",
+    "action-open": "Ouvrir",
+    "action-mount": "Monter",
+    "action-unmount": "Démonter",
+    "action-eject": "Éjecter en toute sécurité",
+    "action-copy-path": "Copier le chemin"
+  },
+  "context": {
+    "open": "Ouvrir le gestionnaire USB",
+    "refresh": "Actualiser les périphériques",
+    "unmount-all": "Tout démonter",
+    "settings": "Paramètres"
+  },
+  "notifications": {
+    "mounted": "Monté",
+    "unmounted": "Démonté",
+    "ejected": "Éjecté en toute sécurité",
+    "mount-failed": "Échec du montage",
+    "unmount-failed": "Échec du démontage",
+    "eject-failed": "Échec de l'éjection",
+    "unmount-all": "Tous les périphériques ont été démontés",
+    "eject-all": "Tous les périphériques ont été éjectés",
+    "path-copied": "Chemin copié"
+  },
+  "settings": {
+    "section-bar": "Barre",
+    "hide-when-empty": "Masquer si vide",
+    "hide-when-empty-desc": "Masque l'icône de la barre lorsqu'aucun périphérique USB n'est connecté",
+    "show-badge": "Afficher le badge de nombre",
+    "show-badge-desc": "Affiche le nombre de périphériques montés sous forme de badge sur l'icône de la barre",
+    "icon-color": "Couleur de l'icône",
+    "icon-color-desc": "Couleur personnalisée de l'icône (laissez 'none' pour le défaut)",
+    "section-behavior": "Comportement",
+    "auto-mount": "Montage automatique",
+    "auto-mount-desc": "Monte automatiquement les clés USB lors du branchement",
+    "notifications": "Notifications",
+    "notifications-desc": "Affiche des notifications pour les événements de montage/démontage/éjection",
+    "section-browser": "Explorateur de fichiers",
+    "file-browser": "Explorateur de fichiers",
+    "file-browser-desc": "Commande utilisée pour ouvrir l'explorateur de fichiers (ex: yazi, ranger, xdg-open, dolphin)",
+    "terminal": "Émulateur de terminal",
+    "terminal-desc": "Terminal utilisé pour ouvrir les gestionnaires de fichiers en terminal (yazi, ranger, etc.)"
+  }
+}

@@ -34,7 +34,10 @@
     "taildrop-receive-mode": "Empfangsmodus",
     "taildrop-receive-mode-desc": "Wie 'tailscale file get' ausgeführt wird. Der Operator-Modus erfordert keine Eingabeaufforderung, wenn 'sudo tailscale set --operator $USER' ausgeführt wurde.",
     "taildrop-receive-mode-operator": "Operator (keine Eingabeaufforderung)",
-    "taildrop-receive-mode-pkexec": "pkexec (jedes Mal Eingabeaufforderung)"
+    "taildrop-receive-mode-pkexec": "pkexec (jedes Mal Eingabeaufforderung)",
+    "authentication": "Authentifizierung",
+    "login-server": "Anmeldeserver",
+    "login-server-desc": "Benutzerdefinierte Anmeldeserver-URL (z. B. Headscale). Leer lassen für den Standard-Tailscale-Server."
   },
   "actions": {
     "widget-settings": "Widget Einstellungen"
@@ -49,7 +52,8 @@
     "ssh": "SSH zum Host",
     "ping": "Host anpingen",
     "use-exit-node": "Als Ausgangsknoten verwenden",
-    "send-file": "Datei senden"
+    "send-file": "Datei senden",
+    "login": "Anmelden"
   },
   "toast": {
     "title": "Tailscale",
@@ -66,12 +70,15 @@
     "terminal-not-configured": {
       "title": "Terminal nicht konfiguriert",
       "message": "Bitte leg einen Terminalbefehl in den Plugin Einstellungen fest"
-    }
+    },
+    "login-browser-opened": "Authentifizierungsseite im Browser geöffnet",
+    "login-failed": "Anmeldung fehlgeschlagen"
   },
   "panel": {
     "title": "Tailscale Netzwerk",
     "peers": "Peers",
     "not-connected": "Nicht verbunden",
+    "not-authenticated": "Nicht authentifiziert",
     "no-peers": "Keine verbundenen Peers",
     "admin-console": "Admin Konsole",
     "terminal-warning": {

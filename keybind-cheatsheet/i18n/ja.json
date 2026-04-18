@@ -18,7 +18,8 @@
     "title-niri": "Niri キーマップ",
     "workspace-switching": "ワークスペース - 切り替え",
     "workspace-moving": "ワークスペース - 移動",
-    "workspace-mouse": "ワークスペース - マウス"
+    "workspace-mouse": "ワークスペース - マウス",
+    "search-placeholder": "キーバインドを検索..."
   },
   "settings": {
     "title": "キーバインド一覧の設定",

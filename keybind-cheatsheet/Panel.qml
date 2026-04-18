@@ -69,6 +69,8 @@ Item {
   onPanelOpenScreenChanged: {
     // Recalculate height when screen becomes available (important for bar widget opening)
     contentPreferredHeight = calculateDynamicHeight();
+    root.searchText = ""
+    searchInput.inputItem.forceActiveFocus()
   }
 
   onMaxScreenHeightChanged: {
@@ -92,6 +94,8 @@ Item {
   // Screen height limit (90% of screen)
   property var panelOpenScreen: pluginApi?.panelOpenScreen
   property real maxScreenHeight: panelOpenScreen ? panelOpenScreen.height * 0.9 : 800
+  
+  property string searchText: ""
 
   property real contentPreferredWidth: settingsWidth
   property real contentPreferredHeight: calculateDynamicHeight()
@@ -187,6 +191,17 @@ Item {
           font.pointSize: Style.fontSizeM
           font.weight: Font.Bold
           color: Color.mPrimary
+        }
+
+        NTextInput {
+          id: searchInput
+          placeholderText: pluginApi?.tr("panel.search-placeholder")
+          text: root.searchText
+
+          onTextChanged: {
+            root.searchText = text
+            root.updateColumnItems()
+          }
         }
 
         Item { Layout.fillWidth: true }
@@ -364,12 +379,15 @@ Item {
 
       var cat = categories[catIndex];
       result.push({ type: "header", title: cat.title });
+      var term = root.searchText.toLowerCase()
       for (var j = 0; j < cat.binds.length; j++) {
-        result.push({
-          type: "bind",
-          keys: cat.binds[j].keys,
-          desc: cat.binds[j].desc
-        });
+        if (!term || cat.binds[j].desc.toLowerCase().indexOf(term) !== -1) {
+          result.push({
+            type: "bind",
+            keys: cat.binds[j].keys,
+            desc: cat.binds[j].desc
+          });
+        }
       }
       if (i < categoryIndices.length - 1) {
         result.push({ type: "spacer" });

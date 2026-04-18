@@ -18,6 +18,7 @@ ColumnLayout {
   property string activeColor: cfg.activeColor ?? defaults.activeColor ?? "primary"
   property string inactiveColor: cfg.inactiveColor ?? defaults.inactiveColor ?? "none"
   property string micFilterRegex: cfg.micFilterRegex ?? defaults.micFilterRegex
+  property string camFilterRegex: cfg.camFilterRegex ?? defaults.camFilterRegex
 
   spacing: Style.marginL
 
@@ -102,11 +103,20 @@ ColumnLayout {
 
     NTextInput {
       Layout.fillWidth: true
-      label: pluginApi?.tr("settings.micFilterRegex.label") || "Microphone filter regex"
-      description: pluginApi?.tr("settings.micFilterRegex.desc") || "Regex pattern to filter out microphone applications"
+      label: pluginApi?.tr("settings.micFilterRegex.label")
+      description: pluginApi?.tr("settings.micFilterRegex.desc")
       placeholderText: "effect_input.rnnoise|easyeffects"
       text: root.micFilterRegex
       onTextChanged: root.micFilterRegex = text
+    }
+
+    NTextInput {
+      Layout.fillWidth: true
+      label: pluginApi?.tr("settings.camFilterRegex.label")
+      description: pluginApi?.tr("settings.camFilterRegex.desc")
+      placeholderText: "droidcam"
+      text: root.camFilterRegex
+      onTextChanged: root.camFilterRegex = text
     }
   }
 

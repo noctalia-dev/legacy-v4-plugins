@@ -31,6 +31,7 @@ Item {
   property bool enableToast: cfg.enableToast ?? defaults.enableToast ?? true
   property string activeColorKey: cfg.activeColor ?? defaults.activeColor ?? "primary"
   property string micFilterRegex: cfg.micFilterRegex ?? defaults.micFilterRegex ?? ""
+  property string camFilterRegex: cfg.camFilterRegex ?? defaults.camFilterRegex ?? ""
 
   PwObjectTracker {
     objects: Pipewire.ready ? Pipewire.nodes.values : []
@@ -44,8 +45,25 @@ Item {
       onStreamFinished: {
         var appsString = this.text.trim();
         var apps = appsString.length > 0 ? appsString.split(',') : [];
-        root.camApps = apps;
-        root.camActive = apps.length > 0;
+
+        var filterRegex = null;
+        if (root.camFilterRegex && root.camFilterRegex.length > 0) {
+          try {
+            filterRegex = new RegExp(root.camFilterRegex);
+          } catch (e) {
+            Logger.w("PrivacyIndicator: Invalid camFilterRegex:", root.camFilterRegex);
+          }
+        }
+
+        var appNames = [];
+        for (var i = 0; i < apps.length; i++) {
+            var appName = apps[i];
+            if (filterRegex && appName && filterRegex.test(appName)) continue;
+            if (appName && appNames.indexOf(appName) === -1) appNames.push(appName);
+        }
+
+        root.camApps = appNames;
+        root.camActive = appNames.length > 0;
       }
     }
   }
@@ -265,7 +283,7 @@ Item {
   property bool oldMicActive: false
   onMicActiveChanged: {
     if (enableToast && micActive && !oldMicActive) {
-        ToastService.showNotice(pluginApi?.tr("toast.mic-on") || "Microphone is active", "", "microphone");
+        ToastService.showNotice(pluginApi?.tr("toast.mic-on"), "", "microphone");
     }
     oldMicActive = micActive
   }
@@ -273,7 +291,7 @@ Item {
   property bool oldCamActive: false
   onCamActiveChanged: {
       if (enableToast && camActive && !oldCamActive) {
-          ToastService.showNotice(pluginApi?.tr("toast.cam-on") || "Camera is active", "", "camera");
+          ToastService.showNotice(pluginApi?.tr("toast.cam-on"), "", "camera");
       }
       oldCamActive = camActive
   }
@@ -285,7 +303,7 @@ Item {
   property bool oldScrActive: false
   onScrActiveChanged: {
       if (enableToast && scrActive && !oldScrActive) {
-          ToastService.showNotice(pluginApi?.tr("toast.screen-on") || "Screen sharing is active", "", "screen-share");
+          ToastService.showNotice(pluginApi?.tr("toast.screen-on"), "", "screen-share");
       }
       oldScrActive = scrActive
   }

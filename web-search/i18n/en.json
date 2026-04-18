@@ -4,6 +4,10 @@
             "label": "Search Engine",
             "description": "Default search engine to open when searching the web"
         },
+        "directUrl": {
+            "label": "Direct URL Opening",
+            "description": "Open URLs directly in the browser instead of searching for them"
+        },
         "suggestions": {
             "label": "Show Search Suggestions",
             "description": "Fetch real-time suggestions while typing"
@@ -18,6 +22,8 @@
         "searchInternet": "Search internet from {engine}",
         "search": "Search \"{query}\"",
         "openIn": "Open in {engine}",
+        "openUrl": "Open {url}",
+        "openUrlDescription": "Open URL directly in browser",
         "suggestion": "Suggestion from {engine}",
         "command": {
             "description": "Search something from the internet"

@@ -141,6 +141,7 @@ This allows the community to share and use plugins outside the main registry.
 | bennypowers | [GitHub](https://github.com/bennypowers/noctalia-plugins)           |
 | rukh-debug  | [GitHub](https://github.com/rukh-debug/noctalia-unofficial-plugins) |
 | ajunca      | [GitHub](https://github.com/ajunca/noctalia-dropdown-terminal)      |
+| phanindra   | [GitHub](https://github.com/pahnin/noctalia-unofficial-plugins)     |
 
 ## AI Development
 

@@ -75,6 +75,11 @@ ColumnLayout {
     pluginApi?.manifest?.metadata?.defaultSettings?.taildropReceiveMode ||
     "operator"
 
+  property string editLoginServer:
+    pluginApi?.pluginSettings?.loginServer ||
+    pluginApi?.manifest?.metadata?.defaultSettings?.loginServer ||
+    ""
+
   spacing: Style.marginM
 
   // Title section
@@ -183,6 +188,26 @@ ColumnLayout {
     description: pluginApi?.tr("settings.hide-mullvad-exit-nodes-desc")
     checked: root.editHideMullvadExitNodes
     onToggled: checked => root.editHideMullvadExitNodes = checked
+  }
+
+  // Authentication section
+  NDivider {
+    Layout.fillWidth: true
+    Layout.topMargin: Style.marginM
+    Layout.bottomMargin: Style.marginM
+  }
+
+  NLabel {
+    label: pluginApi?.tr("settings.authentication")
+  }
+
+  NTextInput {
+    Layout.fillWidth: true
+    label: pluginApi?.tr("settings.login-server")
+    description: pluginApi?.tr("settings.login-server-desc")
+    placeholderText: "https://login.tailscale.com"
+    text: root.editLoginServer
+    onTextChanged: root.editLoginServer = text
   }
 
   // Terminal section
@@ -316,6 +341,7 @@ ColumnLayout {
     pluginApi.pluginSettings.taildropEnabled = root.editTaildropEnabled
     pluginApi.pluginSettings.taildropDownloadDir = root.editTaildropDownloadDir
     pluginApi.pluginSettings.taildropReceiveMode = root.editTaildropReceiveMode
+    pluginApi.pluginSettings.loginServer = root.editLoginServer
 
     pluginApi.saveSettings()
 
