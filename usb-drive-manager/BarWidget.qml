@@ -43,7 +43,7 @@ NIconButton {
     property var cfg: pluginApi?.pluginSettings || ({})
     property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
     readonly property string iconColorKey: cfg.iconColor ?? defaults.iconColor ?? "none"
-    readonly property color resolvedIconColor: Color.resolveColorKeyOptional(iconColorKey)
+    readonly property bool hasCustomIconColor: iconColorKey !== "" && iconColorKey !== "none"
     readonly property color mountedBgColor: Color.mPrimaryContainer || Color.mPrimary || Style.capsuleColor
     readonly property color mountedFgColor: Color.mOnPrimaryContainer || Color.mOnPrimary || Color.mOnSurface
 
@@ -59,7 +59,7 @@ NIconButton {
     customRadius: Style.radiusL
 
     colorBg: hasMountedDevices ? mountedBgColor : Style.capsuleColor
-    colorFg: hasMountedDevices ? mountedFgColor : root.resolvedIconColor !== "transparent" ? root.resolvedIconColor : Color.mOnSurface
+    colorFg: hasMountedDevices ? mountedFgColor : hasCustomIconColor ? Color.resolveColorKey(iconColorKey) : Color.mOnSurface
     colorBgHover: Color.mHover
     colorFgHover: Color.mOnHover
     colorBorder: "transparent"
