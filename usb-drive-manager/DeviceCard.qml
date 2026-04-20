@@ -96,17 +96,19 @@ Rectangle {
             Rectangle {
                 visible: device?.isMounted ?? false
                 width: statusLabel.implicitWidth + Style.marginS * 2
-                height: statusLabel.implicitHeight + 4
+                height: statusLabel.implicitHeight + Style.marginXS * 2
                 radius: height / 2
-                color: Color.mPrimaryContainer || Qt.alpha(Color.mPrimary, 0.18)
+                color: Qt.alpha(Color.mPrimary, 0.18)
+                border.color: Qt.alpha(Color.mPrimary, 0.5)
+                border.width: Style.borderS
 
                 NText {
                     id: statusLabel
                     anchors.centerIn: parent
                     text: pluginApi?.tr("device.mounted")
                     pointSize: Style.fontSizeXXS
-                    color: Color.mOnPrimaryContainer || Color.mOnPrimary || Color.mOnSurface
-                    font.weight: Font.Medium
+                    color: Color.mPrimary
+                    font.weight: Font.DemiBold
                 }
             }
         }
