@@ -41,6 +41,14 @@ ColumnLayout {
         pluginApi?.manifest?.metadata?.defaultSettings?.showBadge ??
         true
 
+    property string defaultIconName:
+        pluginApi?.manifest?.metadata?.defaultSettings?.iconName ||
+        "usb"
+
+    property string editIconName:
+        pluginApi?.pluginSettings?.iconName ||
+        root.defaultIconName
+
     property string iconColor:
         pluginApi?.pluginSettings?.iconColor ??
         pluginApi?.manifest?.metadata?.defaultSettings?.iconColor ??
@@ -57,6 +65,7 @@ ColumnLayout {
         pluginApi.pluginSettings.showNotifications  = root.editShowNotifications
         pluginApi.pluginSettings.hideWhenEmpty      = root.editHideWhenEmpty
         pluginApi.pluginSettings.showBadge          = root.editShowBadge
+        pluginApi.pluginSettings.iconName           = root.editIconName
         pluginApi.pluginSettings.iconColor          = root.iconColor
 
         pluginApi.saveSettings()
@@ -90,6 +99,54 @@ ColumnLayout {
         checked: root.editShowBadge
         onToggled: checked => {
             root.editShowBadge = checked
+            root.saveSettings()
+        }
+    }
+
+    NTextInput {
+        id: iconNameInput
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.icon-name")
+        description: pluginApi?.tr("settings.icon-name-desc")
+        text: root.editIconName
+        placeholderText: root.defaultIconName
+        onEditingFinished: {
+            root.editIconName = text.trim()
+            text = root.editIconName
+            root.saveSettings()
+        }
+    }
+
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: Style.marginM
+
+        NIcon {
+            Layout.alignment: Qt.AlignVCenter
+            icon: root.editIconName || root.defaultIconName
+            pointSize: Style.fontSizeXXL
+            color: Color.mOnSurface
+        }
+
+        NButton {
+            text: pluginApi?.tr("settings.icon-name-browse")
+            onClicked: {
+                iconPicker.initialIcon = root.editIconName || root.defaultIconName
+                iconPicker.open()
+            }
+        }
+
+        Item {
+            Layout.fillWidth: true
+        }
+    }
+
+    NIconPicker {
+        id: iconPicker
+        initialIcon: root.editIconName || root.defaultIconName
+        onIconSelected: iconName => {
+            root.editIconName = iconName
+            iconNameInput.text = iconName
             root.saveSettings()
         }
     }
@@ -187,7 +244,10 @@ ColumnLayout {
         currentKey: root.iconColor
         description: pluginApi?.tr("settings.icon-color-desc")
         label: pluginApi?.tr("settings.icon-color")
-        onSelected: key => root.iconColor = key
+        onSelected: key => {
+            root.iconColor = key
+            root.saveSettings()
+        }
     }
 
     Item { Layout.fillHeight: true }
