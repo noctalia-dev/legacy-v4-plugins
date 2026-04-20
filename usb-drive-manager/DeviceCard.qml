@@ -36,6 +36,12 @@ Rectangle {
         return parts.join(" · ")
     }
 
+    readonly property string deviceIconName:
+        mainInstance?.iconName ||
+        pluginApi?.pluginSettings?.iconName ||
+        pluginApi?.manifest?.metadata?.defaultSettings?.iconName ||
+        "usb"
+
     // ===== APPEARANCE =====
     color: Color.mSurface
     radius: Style.radiusM
@@ -58,7 +64,7 @@ Rectangle {
 
             // USB icon
             NIcon {
-                icon: "usb"
+                icon: deviceIconName
                 pointSize: Style.fontSizeL
                 color: device?.isMounted ? Color.mPrimary : Color.mOnSurfaceVariant
             }
