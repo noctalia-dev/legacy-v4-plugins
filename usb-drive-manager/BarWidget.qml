@@ -27,6 +27,11 @@ NIconButton {
         pluginApi?.manifest?.metadata?.defaultSettings?.showBadge ??
         true
 
+    readonly property string iconName:
+        pluginApi?.pluginSettings?.iconName ||
+        pluginApi?.manifest?.metadata?.defaultSettings?.iconName ||
+        "usb"
+
     readonly property bool hideWhenEmpty:
         pluginApi?.pluginSettings?.hideWhenEmpty ??
         pluginApi?.manifest?.metadata?.defaultSettings?.hideWhenEmpty ??
@@ -44,7 +49,7 @@ NIconButton {
     visible: shouldShow
 
     // ===== APPEARANCE =====
-    icon: "usb"
+    icon: iconName
     tooltipText: mainInstance?.buildTooltip()
     tooltipDirection: BarService.getTooltipDirection(screen?.name)
     baseSize: Style.getCapsuleHeightForScreen(screen?.name)
