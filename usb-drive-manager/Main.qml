@@ -10,11 +10,16 @@ Item {
     property var pluginApi: null
     property var devices: []
     property bool loading: false
+    property bool autoMountPending: false
+    property var previousDevicePaths: []
+    property var mountQueue: []
+    property var ejectQueue: []
 
     readonly property int mountedCount: {
         let c = 0
         for (let i = 0; i < devices.length; i++) {
-            if (devices[i].isMounted) c++
+            if (devices[i].isMounted)
+                c++
         }
         return c
     }
@@ -57,15 +62,17 @@ Item {
 
         stdout: SplitParser {
             onRead: line => {
-                // Trigger refresh on USB add/remove events
-                if (line.startsWith("ACTION=add") || line.startsWith("ACTION=remove")) {
+                if (line.startsWith("ACTION=add")) {
+                    root.autoMountPending = root.autoMount
+                    refreshDebounce.restart()
+                } else if (line.startsWith("ACTION=remove")) {
+                    root.autoMountPending = false
                     refreshDebounce.restart()
                 }
             }
         }
 
         onExited: exitCode => {
-            // Restart watcher if it dies unexpectedly
             if (exitCode !== 0) {
                 restartWatcherTimer.start()
             }
@@ -84,17 +91,11 @@ Item {
         id: refreshDebounce
         interval: 800
         repeat: false
-        onTriggered: {
-            refreshDevices()
-            if (root.autoMount) {
-                autoMountNewDevices()
-            }
-        }
+        onTriggered: refreshDevices()
     }
 
     // ===== DEVICE ENUMERATION =====
 
-    // lsblk -J gives us structured JSON with all block device info
     Process {
         id: deviceQuery
         command: [
@@ -108,11 +109,25 @@ Item {
 
         onExited: exitCode => {
             root.loading = false
+
+            const shouldAutoMount = root.autoMountPending && root.autoMount
+            root.autoMountPending = false
+
             if (exitCode === 0) {
                 try {
                     const data = JSON.parse(String(stdout.text))
-                    root.devices = internal.parseDevices(data.blockdevices || [])
+                    const nextDevices = internal.parseDevices(data.blockdevices || [])
+                    const previousPaths = root.previousDevicePaths || []
+
+                    root.devices = nextDevices
                     root.devicesChanged()
+
+                    if (shouldAutoMount) {
+                        const mountCandidates = internal.getAutoMountCandidates(previousPaths, nextDevices)
+                        if (mountCandidates.length > 0) {
+                            Qt.callLater(() => root.queueMountDevices(mountCandidates))
+                        }
+                    }
                 } catch (e) {
                     console.warn("[usb-drive-manager] Failed to parse lsblk output:", e)
                 }
@@ -122,7 +137,6 @@ Item {
 
     // ===== DISK USAGE =====
 
-    // df gives us used/free space for mounted devices
     Process {
         id: dfQuery
         command: ["df", "--output=target,pcent,used,avail", "-h"]
@@ -162,7 +176,10 @@ Item {
                     errMsg || mountProc.devicePath
                 )
             }
+
+            root.autoMountPending = false
             refreshDebounce.restart()
+            root.processNextMount()
         }
     }
 
@@ -189,6 +206,8 @@ Item {
                     errMsg || unmountProc.devicePath
                 )
             }
+
+            root.autoMountPending = false
             refreshDebounce.restart()
         }
     }
@@ -216,7 +235,10 @@ Item {
                     errMsg || ejectProc.devicePath
                 )
             }
+
+            root.autoMountPending = false
             refreshDebounce.restart()
+            root.processNextEject()
         }
     }
 
@@ -225,7 +247,6 @@ Item {
     QtObject {
         id: internal
 
-        // Parse lsblk JSON output and extract USB partitions
         function parseDevices(blockdevices) {
             const result = []
 
@@ -233,16 +254,13 @@ Item {
                 const isUsb = parentIsUsb || dev.tran === "usb" || dev.hotplug === true || dev.hotplug === "1"
                 const isRemovable = dev.rm === true || dev.rm === "1"
 
-                // Process children (partitions) of USB devices
                 if (dev.children && dev.children.length > 0) {
                     for (const child of dev.children) {
                         processDevice(child, dev.path || ("/dev/" + dev.name), isUsb)
                     }
                 }
 
-                // Only include partitions (or whole-disk if no partitions) with a filesystem
                 const hasFs = dev.fstype && dev.fstype.length > 0
-                const isPartition = parentPath !== null
 
                 if ((isUsb || isRemovable) && hasFs) {
                     const mountpoint = dev.mountpoint || ""
@@ -271,7 +289,71 @@ Item {
             return result
         }
 
-        // Parse df output and update device usage stats
+        function collectDevicePaths(deviceList) {
+            const paths = []
+
+            for (let i = 0; i < deviceList.length; i++) {
+                const dev = deviceList[i]
+                if (!dev || !dev.path)
+                    continue
+                paths.push(dev.path)
+            }
+
+            return paths
+        }
+
+        function getAutoMountCandidates(previousPaths, nextDevices) {
+            const previous = previousPaths || []
+            const candidates = []
+
+            for (let i = 0; i < nextDevices.length; i++) {
+                const dev = nextDevices[i]
+                if (!dev || !dev.path || !dev.fstype || dev.isMounted)
+                    continue
+                if (previous.indexOf(dev.path) !== -1)
+                    continue
+
+                candidates.push({
+                    path: dev.path,
+                    label: dev.label || dev.name || dev.path
+                })
+            }
+
+            return candidates
+        }
+
+        function getMountedPathsForTarget(targetPath) {
+            const mounted = []
+
+            for (let i = 0; i < root.devices.length; i++) {
+                const dev = root.devices[i]
+                if (!dev || !dev.isMounted || !dev.path)
+                    continue
+
+                const parent = dev.parentPath || dev.path
+                if (dev.path === targetPath || parent === targetPath) {
+                    mounted.push(dev.path)
+                }
+            }
+
+            return mounted
+        }
+
+        function shellQuote(text) {
+            return "'" + String(text || "").replace(/'/g, "'\\''") + "'"
+        }
+
+        function buildEjectCommand(targetPath, mountedPaths) {
+            const steps = ["set -e"]
+
+            for (let i = 0; i < mountedPaths.length; i++) {
+                steps.push("udisksctl unmount -b " + shellQuote(mountedPaths[i]))
+            }
+
+            steps.push("udisksctl power-off -b " + shellQuote(targetPath))
+            return steps.join("\n")
+        }
+
         function parseDfOutput(text) {
             const lines = text.split("\n")
             const usageMap = {}
@@ -287,7 +369,6 @@ Item {
                 }
             }
 
-            // Update devices with usage info
             const updated = root.devices.map(dev => {
                 if (dev.isMounted && usageMap[dev.mountpoint]) {
                     const u = usageMap[dev.mountpoint]
@@ -309,9 +390,9 @@ Item {
 
     function refreshDevices() {
         root.loading = true
+        root.previousDevicePaths = internal.collectDevicePaths(root.devices)
         deviceQuery.running = false
         deviceQuery.running = true
-        // Also refresh disk usage after a short delay
         dfTimer.restart()
     }
 
@@ -326,15 +407,67 @@ Item {
     }
 
     function mountDevice(devicePath, deviceLabel) {
-        if (mountProc.running) return
-        mountProc.devicePath = devicePath
-        mountProc.deviceLabel = deviceLabel
-        mountProc.command = ["udisksctl", "mount", "-b", devicePath]
+        queueMountDevices([{
+            path: devicePath,
+            label: deviceLabel
+        }])
+    }
+
+    function queueMountDevices(devicesToMount) {
+        if (!devicesToMount || devicesToMount.length === 0)
+            return
+
+        const queue = root.mountQueue.slice()
+
+        for (let i = 0; i < devicesToMount.length; i++) {
+            const dev = devicesToMount[i]
+            if (!dev || !dev.path)
+                continue
+
+            let alreadyQueued = false
+            for (let j = 0; j < queue.length; j++) {
+                if (queue[j].path === dev.path) {
+                    alreadyQueued = true
+                    break
+                }
+            }
+
+            const alreadyRunning = mountProc.running && mountProc.devicePath === dev.path
+            if (!alreadyQueued && !alreadyRunning) {
+                queue.push({
+                    path: dev.path,
+                    label: dev.label || dev.path
+                })
+            }
+        }
+
+        root.mountQueue = queue
+        processNextMount()
+    }
+
+    function processNextMount() {
+        if (mountProc.running || root.mountQueue.length === 0)
+            return
+
+        const queue = root.mountQueue.slice()
+        const next = queue.shift()
+        root.mountQueue = queue
+
+        if (!next || !next.path) {
+            processNextMount()
+            return
+        }
+
+        mountProc.devicePath = next.path
+        mountProc.deviceLabel = next.label || next.path
+        mountProc.command = ["udisksctl", "mount", "-b", next.path]
         mountProc.running = true
     }
 
     function unmountDevice(devicePath, deviceLabel) {
-        if (unmountProc.running) return
+        if (unmountProc.running)
+            return
+
         unmountProc.devicePath = devicePath
         unmountProc.deviceLabel = deviceLabel
         unmountProc.command = ["udisksctl", "unmount", "-b", devicePath]
@@ -342,14 +475,49 @@ Item {
     }
 
     function ejectDevice(devicePath, parentPath, deviceLabel) {
-        // First unmount the partition, then power off the parent disk
         const target = parentPath || devicePath
-        if (ejectProc.running) return
-        ejectProc.devicePath = target
-        ejectProc.deviceLabel = deviceLabel
+        const queue = root.ejectQueue.slice()
+
+        let alreadyQueued = false
+        for (let i = 0; i < queue.length; i++) {
+            if (queue[i].target === target) {
+                alreadyQueued = true
+                break
+            }
+        }
+
+        const alreadyRunning = ejectProc.running && ejectProc.devicePath === target
+        if (alreadyQueued || alreadyRunning)
+            return
+
+        queue.push({
+            target: target,
+            label: deviceLabel || target
+        })
+        root.ejectQueue = queue
+        processNextEject()
+    }
+
+    function processNextEject() {
+        if (ejectProc.running || root.ejectQueue.length === 0)
+            return
+
+        const queue = root.ejectQueue.slice()
+        const next = queue.shift()
+        root.ejectQueue = queue
+
+        if (!next || !next.target) {
+            processNextEject()
+            return
+        }
+
+        const mountedPaths = internal.getMountedPathsForTarget(next.target)
+
+        ejectProc.devicePath = next.target
+        ejectProc.deviceLabel = next.label || next.target
         ejectProc.command = [
             "sh", "-c",
-            "udisksctl unmount -b " + devicePath + " 2>/dev/null; udisksctl power-off -b " + target
+            internal.buildEjectCommand(next.target, mountedPaths)
         ]
         ejectProc.running = true
     }
@@ -357,8 +525,7 @@ Item {
     function openInFileBrowser(mountpoint) {
         const browser = root.fileBrowser || "yazi"
         if (browser === "yazi" || browser === "ranger" || browser === "lf" || browser === "nnn") {
-            // Terminal file managers need a terminal emulator
-                const term = root.terminalCommand || "kitty"
+            const term = root.terminalCommand || "kitty"
             Quickshell.execDetached([term, "-e", browser, mountpoint])
         } else {
             Quickshell.execDetached([browser, mountpoint])
@@ -372,41 +539,31 @@ Item {
                 Quickshell.execDetached(["udisksctl", "unmount", "-b", dev.path])
             }
         }
+
         if (root.showNotifications) {
             ToastService.showNotice(
                 pluginApi?.tr("notifications.unmount-all")
             )
         }
+
+        root.autoMountPending = false
         refreshDebounce.restart()
     }
 
     function ejectAll() {
-        const ejected = []
-        for (let i = 0; i < devices.length; i++) {
-            const dev = devices[i]
-            const parent = dev.parentPath || dev.path
-            if (!ejected.includes(parent)) {
-                ejected.push(parent)
-                Quickshell.execDetached([
-                    "sh", "-c",
-                    "udisksctl unmount -b " + dev.path + " 2>/dev/null; udisksctl power-off -b " + parent
-                ])
-            }
-        }
-        if (root.showNotifications) {
-            ToastService.showNotice(
-                pluginApi?.tr("notifications.eject-all")
-            )
-        }
-        refreshDebounce.restart()
-    }
+        const targets = []
 
-    function autoMountNewDevices() {
         for (let i = 0; i < devices.length; i++) {
             const dev = devices[i]
-            if (!dev.isMounted && dev.fstype) {
-                mountDevice(dev.path, dev.label)
-            }
+            if (!dev)
+                continue
+
+            const parent = dev.parentPath || dev.path
+            if (targets.indexOf(parent) !== -1)
+                continue
+
+            targets.push(parent)
+            ejectDevice(dev.path, parent, dev.label || dev.name || parent)
         }
     }
 
