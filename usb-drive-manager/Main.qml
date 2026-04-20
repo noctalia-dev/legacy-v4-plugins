@@ -31,6 +31,7 @@ Item {
     readonly property string terminalCommand:  pluginApi?.pluginSettings?.terminalCommand    || "kitty"
     readonly property bool showNotifications:  pluginApi?.pluginSettings?.showNotifications  ?? true
     readonly property bool hideWhenEmpty:      pluginApi?.pluginSettings?.hideWhenEmpty      ?? false
+    readonly property string iconName:         pluginApi?.pluginSettings?.iconName            || pluginApi?.manifest?.metadata?.defaultSettings?.iconName || "usb"
 
     // ===== INIT =====
 
