@@ -6,6 +6,7 @@ import qs.Services.UI
 import qs.Services.System
 import qs.Services.Compositor
 import qs.Widgets
+import "."
 
 NIconButton {
     id: root
