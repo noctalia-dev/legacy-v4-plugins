@@ -14,7 +14,7 @@
   "entryPoints": {
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",
-    "settings": "Settings.qml"
+    "settings": "PluginSettings.qml"
   },
   "metadata": {
     "defaultSettings": {
