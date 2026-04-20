@@ -92,14 +92,14 @@ Rectangle {
                 width: statusLabel.implicitWidth + Style.marginS * 2
                 height: statusLabel.implicitHeight + 4
                 radius: height / 2
-                color: Color.mPrimaryContainer
+                color: Color.mPrimaryContainer || Qt.alpha(Color.mPrimary, 0.18)
 
                 NText {
                     id: statusLabel
                     anchors.centerIn: parent
                     text: pluginApi?.tr("device.mounted")
                     pointSize: Style.fontSizeXXS
-                    color: Color.mOnPrimaryContainer
+                    color: Color.mOnPrimaryContainer || Color.mOnPrimary || Color.mOnSurface
                     font.weight: Font.Medium
                 }
             }
@@ -127,14 +127,14 @@ Rectangle {
                 Layout.fillWidth: true
                 height: Style.marginXS
                 radius: height / 2
-                color: Color.mOutlineVariant
+                color: Color.mOutlineVariant || Qt.alpha(Color.mOutline, 0.35)
 
                 Rectangle {
                     width: parent.width * Math.min((device?.usedPercent ?? 0) / 100, 1)
                     height: parent.height
                     radius: parent.radius
                     color: (device?.usedPercent ?? 0) > 90 ? Color.mError
-                         : (device?.usedPercent ?? 0) > 75 ? Color.mWarning
+                         : (device?.usedPercent ?? 0) > 75 ? (Color.mWarning || Color.mTertiary || Color.mSecondary || Color.mPrimary)
                          : Color.mPrimary
 
                     Behavior on width {
@@ -223,8 +223,8 @@ Rectangle {
                 baseSize: Style.baseWidgetSize * 0.8
                 colorBg: Color.mSurfaceVariant
                 colorFg: Color.mOnSurfaceVariant
-                colorBgHover: Color.mErrorContainer
-                colorFgHover: Color.mOnErrorContainer
+                colorBgHover: Color.mErrorContainer || Qt.alpha(Color.mError, 0.18)
+                colorFgHover: Color.mOnErrorContainer || Color.mOnError || Color.mError
                 colorBorder: "transparent"
                 colorBorderHover: "transparent"
                 onClicked: root.ejectRequested(device.path, device.parentPath, root.displayLabel)
