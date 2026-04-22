@@ -232,7 +232,7 @@ Item {
                         callback(null, pluginApi?.tr("messages.error") || "Translation error"); 
                         }
                 } else if (xhr.status === 403) {
-                    callback(null, pluginApi?.tr("messages.invalidApiKey") || "Invalid API Key");
+                    callback(null, pluginApi?.tr("messages.invalidApiKey"));
                 } else {
                     callback(null, getErrorMessage(xhr.status));
                 }
