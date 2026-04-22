@@ -769,7 +769,7 @@ Item {
     var lines = text.split('\n');
     var categories = [];
     var currentCategory = null;
-    var defaultCategoryName = pluginApi?.tr("default-category") || "Keybinds";
+    var defaultCategoryName = pluginApi?.tr("default-category");
 
     for (var i = 0; i < lines.length; i++) {
       var line = lines[i].trim();
