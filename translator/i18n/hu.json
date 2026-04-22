@@ -104,12 +104,17 @@
     "error": "Fordítási hiba",
     "targetLanguage": "Célnyelv: {code}",
     "translating": "Fordítás...",
-    "translation": "Fordítás ({code})"
+    "translation": "Fordítás ({code})",
+    "missingApiUrl": "Hiányzó API URL"
   },
   "settings": {
     "backend": {
       "description": "Válaszd ki a használni kívánt fordítószolgáltatást",
       "label": "Fordítóprogram háttérszolgáltatás"
-    }
+    },
+    "apiUrl-label": "API URL",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "API-kulcs",
+    "optional-placeholder": "Opcionális"
   }
 }

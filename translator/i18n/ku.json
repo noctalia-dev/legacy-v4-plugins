@@ -104,12 +104,17 @@
     "error": "Xeta wergerandinê",
     "targetLanguage": "Zimanê armanc: {code}",
     "translating": "Wergerandin...",
-    "translation": "Wergera ({code})"
+    "translation": "Wergera ({code})",
+    "missingApiUrl": "URL-a API tune ye"
   },
   "settings": {
     "backend": {
       "description": "Xizmeta wergerê ya ku tê bikar anîn hilbijêre",
       "label": "Paşmaya Wergerandinê"
-    }
+    },
+    "apiUrl-label": "URL-a API",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "Mifteya API",
+    "optional-placeholder": "Vebijarkî"
   }
 }

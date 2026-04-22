@@ -104,12 +104,17 @@
     "error": "Errore di traduzione",
     "targetLanguage": "Lingua di destinazione: {code}",
     "translating": "Traduzione in corso...",
-    "translation": "Traduzione ({code})"
+    "translation": "Traduzione ({code})",
+    "missingApiUrl": "URL API mancante"
   },
   "settings": {
     "backend": {
       "description": "Scegli il servizio di traduzione da utilizzare",
       "label": "Servizio di traduzione"
-    }
+    },
+    "apiUrl-label": "URL API",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "Chiave API",
+    "optional-placeholder": "Facoltativo"
   }
 }

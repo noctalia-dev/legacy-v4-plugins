@@ -137,12 +137,7 @@ Item {
     }
 
     function getErrorMessage(status, fallback) {
-        if (status === 401) return "Invalid API Key";
-        if (status === 403) return "Forbidden";
-        if (status === 404) return "API endpoint not found";
-        if (status === 429) return "Rate limited";
-        if (status >= 500) return "Upstream service error";
-        return fallback || (pluginApi?.tr("messages.connectionError") || "Connection error");
+        return fallback || pluginApi?.tr("messages.connectionError");
     }
 
     function translateText(text, targetLanguage, cacheKey) {
@@ -170,7 +165,7 @@ Item {
         } else if (backend === "deeplxLike") {
             translateDeepLXLike(text, targetLanguage, callback);
         } else {
-            callback(null, pluginApi?.tr("messages.error") || "Unknown backend");
+            callback(null, pluginApi?.tr("messages.error"));
         }
     }
 
@@ -236,6 +231,8 @@ Item {
                     } catch (e) { 
                         callback(null, pluginApi?.tr("messages.error") || "Translation error"); 
                         }
+                } else if (xhr.status === 403) {
+                    callback(null, pluginApi?.tr("messages.invalidApiKey") || "Invalid API Key");
                 } else {
                     callback(null, getErrorMessage(xhr.status));
                 }
@@ -249,7 +246,7 @@ Item {
         var apiKey = (pluginApi?.pluginSettings?.deeplxApiKey || "").trim();
 
         if (!url) {
-            callback(null, "Missing API URL");
+            callback(null, pluginApi?.tr("messages.missingApiUrl"));
             return;
         }
 
@@ -273,10 +270,10 @@ Item {
                         if (translatedText) {
                             callback(translatedText, null);
                         } else {
-                            callback(null, pluginApi?.tr("messages.error") || "Translation error");
+                            callback(null, pluginApi?.tr("messages.error"));
                         }
                     } catch (e) {
-                        callback(null, pluginApi?.tr("messages.error") || "Translation error");
+                        callback(null, pluginApi?.tr("messages.error"));
                     }
                 } else {
                     callback(null, getErrorMessage(xhr.status));

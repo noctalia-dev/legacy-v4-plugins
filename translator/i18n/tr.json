@@ -104,12 +104,17 @@
     "error": "Çeviri hatası",
     "targetLanguage": "Hedef dil: {code}",
     "translating": "Çevriliyor...",
-    "translation": "Çeviri ({code})"
+    "translation": "Çeviri ({code})",
+    "missingApiUrl": "API URL eksik"
   },
   "settings": {
     "backend": {
       "description": "Kullanılacak çeviri hizmetini seçin",
       "label": "Çeviri Arka Ucu"
-    }
+    },
+    "apiUrl-label": "API URL",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "API Anahtarı",
+    "optional-placeholder": "İsteğe bağlı"
   }
 }

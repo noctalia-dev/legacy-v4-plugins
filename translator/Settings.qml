@@ -54,19 +54,19 @@ ColumnLayout {
     NTextInput {
         visible: root.editBackend === "deeplxLike"
         Layout.fillWidth: true
-        label: "API URL"
+        label: pluginApi?.tr("settings.apiUrl-label")
         text: root.editDeepLXApiUrl
         onTextChanged: root.editDeepLXApiUrl = text
-        placeholderText: "http://127.0.0.1:1188/translate"
+        placeholderText: pluginApi?.tr("settings.apiUrl-placeholder")
     }
 
     NTextInput {
         visible: root.editBackend === "deeplxLike"
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.apiKey-label") || "API Key"
+        label: pluginApi?.tr("settings.apiKey-label")
         text: root.editDeepLXApiKey
         onTextChanged: root.editDeepLXApiKey = text
-        placeholderText: "Optional"
+        placeholderText: pluginApi?.tr("settings.optional-placeholder")
     }
 
     NToggle {

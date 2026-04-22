@@ -104,12 +104,17 @@
     "error": "Ошибка перевода",
     "targetLanguage": "Целевой язык: {code}",
     "translating": "Перевод...",
-    "translation": "Перевод ({code})"
+    "translation": "Перевод ({code})",
+    "missingApiUrl": "Отсутствует URL API"
   },
   "settings": {
     "backend": {
       "description": "Выберите службу перевода для использования",
       "label": "Механизм перевода"
-    }
+    },
+    "apiUrl-label": "URL API",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "Ключ API",
+    "optional-placeholder": "Необязательно"
   }
 }

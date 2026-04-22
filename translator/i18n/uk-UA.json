@@ -104,12 +104,17 @@
     "error": "Помилка перекладу",
     "targetLanguage": "Цільова мова: {code}",
     "translating": "Переклад...",
-    "translation": "Переклад ({code})"
+    "translation": "Переклад ({code})",
+    "missingApiUrl": "Відсутній URL API"
   },
   "settings": {
     "backend": {
       "description": "Виберіть службу перекладу для використання",
       "label": "Серверна частина перекладу"
-    }
+    },
+    "apiUrl-label": "URL API",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "Ключ API",
+    "optional-placeholder": "Необов’язково"
   }
 }

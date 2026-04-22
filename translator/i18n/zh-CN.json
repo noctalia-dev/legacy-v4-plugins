@@ -107,7 +107,8 @@
     "translation": "翻译 ({code})",
     "missingApiKey": "缺少 API 密钥",
     "invalidApiKey": "API 密钥无效",
-    "pressEnter": "按回车键翻译"
+    "pressEnter": "按回车键翻译",
+    "missingApiUrl": "缺少 API URL"
   },
   "settings": {
     "backend-label": "翻译后端",
@@ -116,6 +117,9 @@
     "realTime-description": "输入时即时翻译（可能导致大量 token 消耗）",
     "apiKey-label": "API 密钥",
     "apiKey-placeholder": "在此处输入您的 API 密钥",
+    "apiUrl-label": "API URL",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "optional-placeholder": "可选",
     "showPreview-label": "翻译预览",
     "showPreview-description": "在预览面板中显示翻译结果"
   }

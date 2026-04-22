@@ -107,7 +107,8 @@
     "translation": "Translation ({code})",
     "missingApiKey": "Missing API key",
     "invalidApiKey": "Invalid API key",
-    "pressEnter": "Press enter to translate"
+    "pressEnter": "Press enter to translate",
+    "missingApiUrl": "Missing API URL"
   },
   "settings": {
       "backend-description": "Choose the translation service to use",
@@ -116,6 +117,9 @@
       "realTime-description": "Translate as you type (May result in significant token consumption)",
       "apiKey-placeholder": "Enter your API key here",
       "apiKey-label": "API Key",
+      "apiUrl-label": "API URL",
+      "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+      "optional-placeholder": "Optional",
       "showPreview-label": "Translation Preview",
       "showPreview-description": "Show the translation result in the preview panel"
   }
