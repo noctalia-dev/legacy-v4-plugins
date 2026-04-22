@@ -74,7 +74,9 @@ Item {
             }];
         }
 
-        var cacheKey = targetLang + "|" + textToTranslate;
+        var backend = getBackend();
+        var deeplxApiUrl = (pluginApi?.pluginSettings?.deeplxApiUrl || "").trim();
+        var cacheKey = backend + "|" + deeplxApiUrl + "|" + targetLang + "|" + textToTranslate;
         var cached = translationCache[cacheKey];
         if (cached) {
             return [{
@@ -134,6 +136,15 @@ Item {
         return pluginApi?.pluginSettings?.backend || pluginApi?.manifest?.metadata?.defaultSettings?.backend || "google";
     }
 
+    function getErrorMessage(status, fallback) {
+        if (status === 401) return "Invalid API Key";
+        if (status === 403) return "Forbidden";
+        if (status === 404) return "API endpoint not found";
+        if (status === 429) return "Rate limited";
+        if (status >= 500) return "Upstream service error";
+        return fallback || (pluginApi?.tr("messages.connectionError") || "Connection error");
+    }
+
     function translateText(text, targetLanguage, cacheKey) {
         var backend = getBackend();
         
@@ -156,6 +167,8 @@ Item {
             translateGoogle(text, targetLanguage, callback);
         } else if (backend === "deepl") {
             translateDeepL(text, targetLanguage, callback);
+        } else if (backend === "deeplxLike") {
+            translateDeepLXLike(text, targetLanguage, callback);
         } else {
             callback(null, pluginApi?.tr("messages.error") || "Unknown backend");
         }
@@ -186,7 +199,7 @@ Item {
                         } 
                     } catch (e) { callback(null, pluginApi?.tr("messages.error") || "Translation error"); }
                 } else {
-                    callback(null, pluginApi?.tr("messages.connectionError") || "Connection error");
+                    callback(null, getErrorMessage(xhr.status));
                 }
             }
         };
@@ -223,13 +236,57 @@ Item {
                     } catch (e) { 
                         callback(null, pluginApi?.tr("messages.error") || "Translation error"); 
                         }
-                } else if (xhr.status === 403) {
-                     callback(null, pluginApi?.tr("messages.invalidApiKey") || "Invalid API Key");
                 } else {
-                    callback(null, pluginApi?.tr("messages.connectionError") || "Connection error");
+                    callback(null, getErrorMessage(xhr.status));
                 }
             }
         };
         xhr.send(postData);
+    }
+
+    function translateDeepLXLike(text, targetLanguage, callback) {
+        var url = (pluginApi?.pluginSettings?.deeplxApiUrl || "").trim();
+        var apiKey = (pluginApi?.pluginSettings?.deeplxApiKey || "").trim();
+
+        if (!url) {
+            callback(null, "Missing API URL");
+            return;
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        if (apiKey) {
+            xhr.setRequestHeader("Authorization", "Bearer " + apiKey);
+        }
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        var translatedText =
+                            response?.data ||
+                            (response?.translations && response.translations[0] && response.translations[0].text) ||
+                            "";
+
+                        if (translatedText) {
+                            callback(translatedText, null);
+                        } else {
+                            callback(null, pluginApi?.tr("messages.error") || "Translation error");
+                        }
+                    } catch (e) {
+                        callback(null, pluginApi?.tr("messages.error") || "Translation error");
+                    }
+                } else {
+                    callback(null, getErrorMessage(xhr.status));
+                }
+            }
+        };
+
+        xhr.send(JSON.stringify({
+            text: text,
+            target_lang: targetLanguage.toUpperCase()
+        }));
     }
 }

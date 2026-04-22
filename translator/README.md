@@ -81,9 +81,21 @@ You can use either the language code (e.g., `fr`, `ja`, `ru`) or the language na
 
 ## Configuration
 
-- **Translation Backend**: Choose the translation service to use (currently supports Google Translate and DeepL/DeepL Free)
+- **Translation Backend**: Choose the translation service to use (currently supports Google Translate, DeepL/DeepL Free, and DeepLX-like APIs)
 - **Realtime Translation**: Toggle between translating as you type or only upon pressing Enter (useful for saving API usage)
-- **API Key**: The API key required for premium backends like DeepL
+- **API Key**: The API key required for premium backends like DeepL, or an optional bearer token for DeepLX-like APIs
+- **API URL**: The endpoint URL for DeepLX-like APIs
+
+### DeepLX-like API Example
+
+Configure the backend as `DeepLX-like API` and set:
+
+- **API URL**: `http://127.0.0.1:1188/translate`
+- **API Key**: Leave empty, or provide a bearer token if your service requires one
+
+If your DeepLX instance uses a query token, include it directly in the URL, for example:
+
+- **API URL**: `http://127.0.0.1:1188/translate?token=YOUR_TOKEN`
 
 ## IPC Commands
 
