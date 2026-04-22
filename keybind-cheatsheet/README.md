@@ -1,13 +1,13 @@
 # Keybind Cheatsheet for Noctalia
 
-Universal keyboard shortcuts cheatsheet plugin for Noctalia that **automatically detects** your compositor (Hyprland or Niri) and displays your keybindings with **recursive config parsing**.
+Universal keyboard shortcuts cheatsheet plugin for Noctalia that **automatically detects** your compositor (Hyprland, Niri, or MangoWC) and displays your keybindings with **recursive config parsing**.
 
 ![Preview](preview.png)
 
 ## Features
 
-- **Automatic compositor detection** (Hyprland or Niri)
-- **Recursive config parsing** - follows all `source` (Hyprland) and `include` (Niri) directives
+- **Automatic compositor detection** (Hyprland, Niri, or MangoWC)
+- **Recursive config parsing** - follows all `source` (Hyprland/MangoWC) and `include` (Niri) directives
 - **Glob pattern support** - parses `~/.config/hypr/*.conf` style includes
 - **Configurable paths** - set custom config file locations in settings
 - **Smart key formatting** - XF86 keys display as readable names (Vol Up, Bright Down, etc.)
@@ -22,6 +22,7 @@ Universal keyboard shortcuts cheatsheet plugin for Noctalia that **automatically
 |------------|----------------|--------|
 | **Hyprland** | `~/.config/hypr/hyprland.conf` | Hyprland config format |
 | **Niri** | `~/.config/niri/config.kdl` | KDL format |
+| **MangoWC** | `~/.config/mango/config.conf` | `bind=MODS,KEY,ACTION,ARGS` |
 
 ## Installation
 
@@ -49,6 +50,12 @@ Add to your config:
 binds {
     Mod+F1 { spawn-sh "qs -c noctalia-shell ipc call plugin:keybind-cheatsheet toggle"; }
 }
+```
+
+#### MangoWC
+Add to your config:
+```
+bind=SUPER,F1,spawn_shell,noctalia-shell ipc call plugin:keybind-cheatsheet toggle
 ```
 
 ## Config Format
@@ -114,6 +121,52 @@ binds {
 include "~/.config/niri/binds.kdl"
 ```
 
+### MangoWC
+
+The plugin parses `~/.config/mango/config.conf` and follows every `source=` include.
+
+**Keybind format:**
+```
+# Applications
+bind=SUPER,Return,spawn,ghostty
+bind=SUPER,b,spawn,firefox
+bind=SUPER,d,spawn_shell,noctalia-shell ipc call launcher toggle
+
+# Window management
+bind=SUPER,q,killclient,
+bind=SUPER,f,togglemaximizescreen,
+bind=SUPER+SHIFT,f,togglefullscreen,
+
+# Workspaces
+bind=SUPER,1,view,1,0
+bind=SUPER+CTRL,1,tag,1,0
+
+# Scroll binds (mouse wheel)
+axisbind=SUPER,UP,focusdir,left
+axisbind=SUPER,DOWN,focusdir,right
+```
+
+**Requirements:**
+- Categories are drawn from `#` comment lines. The parser accepts a comment as a category heading when **all** of these hold:
+  - After stripping any leading or trailing horizontal rule characters (box drawing `U+2500`, heavy `U+2501`, light quadruple `U+2505`, em dash `U+2014`, en dash `U+2013`, ASCII `-`, `=`, `_`), the text is 1 to 100 characters long.
+  - It does not start with `(` (filters parenthetical continuations such as `# (replaces the old behaviour)`).
+  - It does not contain a Unicode flow arrow (`U+2192` or `U+2190`), which filters description lines.
+  - `# N. Name` is also accepted (Hyprland style).
+- A heading only materialises as a section in the cheatsheet when at least one `bind`/`axisbind`/`mousebind` follows it; headings with no binds are discarded silently.
+- Modifiers: `SUPER`, `SHIFT`, `CTRL`, `ALT`, `NONE` (and aliases `LOGO`, `CONTROL`, `MOD1`), combined with `+` (e.g. `SUPER+SHIFT`).
+- Directives supported: `bind=`, `axisbind=` (mouse wheel), `mousebind=` (mouse buttons).
+- Optional per-bind description: trailing `#"description"` overrides the auto-generated text.
+- Actions without explicit descriptions are auto-formatted (`killclient` → "Close window", `view,1,0` → "Workspace 1", `focusdir,left` → "Focus Left", `set_proportion,0.5` → "Column width 50%", `moveresize,curmove` → "Move window", etc.).
+- Mouse button names translate (`btn_left` → "Left Click", `btn_side` → "Mouse Side").
+- `code:NN` keycodes are kept verbatim so you can still recognise the raw evdev code.
+- Noctalia IPC calls via `spawn_shell,noctalia-shell ipc call ...` map to friendly labels, including `plugin:<name>` targets.
+
+**Source directives (automatically followed):**
+```
+source=~/.config/mango/bind.conf
+source-optional=~/.config/mango/host.conf
+```
+
 ## Auto-Categorization (Niri)
 
 When no category comment is provided, keybindings are grouped by action:
@@ -154,7 +207,7 @@ Access settings via the gear icon in the panel header:
 - **Window width** - 400-3000px
 - **Height** - Auto or manual (300-2000px)
 - **Columns** - 1-4 columns
-- **Config paths** - Custom paths for Hyprland/Niri configs
+- **Config paths** - Custom paths for Hyprland, Niri, and MangoWC configs
 - **Refresh** - Force reload keybindings
 
 ## Troubleshooting
@@ -171,14 +224,16 @@ Access settings via the gear icon in the panel header:
 
 **Niri:** Use `// #"Category Name"` format for custom categories.
 
+**MangoWC:** `# Heading` comments become categories as described in [Config Format → MangoWC](#mangowc). Comments that start with `(`, contain `→`/`←`, or exceed 100 characters are skipped. A heading only renders when at least one bind follows it, so explanatory comments above config blocks do not leak into the cheatsheet.
+
 ### Keybinds from included files not showing
 
-The plugin follows `source` (Hyprland) and `include` (Niri) directives automatically. Check logs to see which files are being parsed.
+The plugin follows `source` (Hyprland/MangoWC) and `include` (Niri) directives automatically. Check logs to see which files are being parsed.
 
 ## Requirements
 
 - Noctalia Shell 4.1.0+
-- Hyprland or Niri compositor
+- Hyprland, Niri, or MangoWC compositor
 
 ## License
 

@@ -19,7 +19,8 @@
     "workspace-switching": "ESPAÇOS DE TRABALHO - ALTERNAR",
     "workspace-moving": "ESPAÇOS DE TRABALHO - MOVER",
     "workspace-mouse": "ESPAÇOS DE TRABALHO - MOUSE",
-    "search-placeholder": "Pesquisar atalhos..."
+    "search-placeholder": "Pesquisar atalhos...",
+    "title-mango": "MangoWC Keymap"
   },
   "settings": {
     "title": "Configuracoes de Atalhos de Teclado",
@@ -51,7 +52,10 @@
     "width-range": "px (400-3000)",
     "height-range": "px (300-2000)",
     "hyprland-path": "Caminho Hyprland",
-    "niri-path": "Caminho Niri"
+    "niri-path": "Caminho Niri",
+    "mango-path": "Mango Path",
+    "mango-format-hint": "Expected format: bind=MODS,KEY,ACTION,ARGS\nCategories: # Category Name (horizontal rules stripped)\nOptional per-bind description: trailing #\"description\"",
+    "keybind-example-mango": "Mango example: bind=SUPER,F1,spawn_shell,noctalia-shell ipc call plugin:keybind-cheatsheet toggle"
   },
   "barwidget": {
     "tooltip": "Folha de dicas de atalhos",

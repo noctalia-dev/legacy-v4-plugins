@@ -19,7 +19,8 @@
     "workspace-switching": "MUNKATERÜLETEK - VÁLTÁS",
     "workspace-moving": "MUNKATERÜLETEK - ÁTHELYEZÉS",
     "workspace-mouse": "MUNKATERÜLETEK - EGÉR",
-    "search-placeholder": "Billentyűparancsok keresése..."
+    "search-placeholder": "Billentyűparancsok keresése...",
+    "title-mango": "MangoWC Keymap"
   },
   "settings": {
     "title": "Billentyuparancsok Beallitasai",
@@ -51,7 +52,10 @@
     "width-range": "px (400-3000)",
     "height-range": "px (300-2000)",
     "hyprland-path": "Hyprland útvonal",
-    "niri-path": "Niri útvonal"
+    "niri-path": "Niri útvonal",
+    "mango-path": "Mango Path",
+    "mango-format-hint": "Expected format: bind=MODS,KEY,ACTION,ARGS\nCategories: # Category Name (horizontal rules stripped)\nOptional per-bind description: trailing #\"description\"",
+    "keybind-example-mango": "Mango example: bind=SUPER,F1,spawn_shell,noctalia-shell ipc call plugin:keybind-cheatsheet toggle"
   },
   "barwidget": {
     "tooltip": "Billentyűparancs súgó",

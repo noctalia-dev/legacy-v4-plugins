@@ -19,7 +19,8 @@
     "workspace-switching": "QADÊN XEBATÊ - GUHEZTIN",
     "workspace-moving": "QADÊN XEBATÊ - VEGUHESTIN",
     "workspace-mouse": "QADÊN XEBATÊ - MIŞK",
-    "search-placeholder": "Bişkokan lêbigere..."
+    "search-placeholder": "Bişkokan lêbigere...",
+    "title-mango": "MangoWC Keymap"
   },
   "settings": {
     "title": "Mîhengên Kurterêyên Klavyeyê",
@@ -51,7 +52,10 @@
     "width-range": "px (400-3000)",
     "height-range": "px (300-2000)",
     "hyprland-path": "Rêça Hyprland",
-    "niri-path": "Rêça Niri"
+    "niri-path": "Rêça Niri",
+    "mango-path": "Mango Path",
+    "mango-format-hint": "Expected format: bind=MODS,KEY,ACTION,ARGS\nCategories: # Category Name (horizontal rules stripped)\nOptional per-bind description: trailing #\"description\"",
+    "keybind-example-mango": "Mango example: bind=SUPER,F1,spawn_shell,noctalia-shell ipc call plugin:keybind-cheatsheet toggle"
   },
   "barwidget": {
     "tooltip": "Çavkaniya Kurterêyan",

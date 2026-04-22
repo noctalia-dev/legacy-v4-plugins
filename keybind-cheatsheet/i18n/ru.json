@@ -19,7 +19,8 @@
     "workspace-switching": "РАБОЧИЕ ОБЛАСТИ - ПЕРЕКЛЮЧЕНИЕ",
     "workspace-moving": "РАБОЧИЕ ОБЛАСТИ - ПЕРЕМЕЩЕНИЕ",
     "workspace-mouse": "РАБОЧИЕ ОБЛАСТИ - МЫШЬ",
-    "search-placeholder": "Поиск сочетаний клавиш..."
+    "search-placeholder": "Поиск сочетаний клавиш...",
+    "title-mango": "MangoWC Keymap"
   },
   "settings": {
     "title": "Настройки горячих клавиш",
@@ -51,7 +52,10 @@
     "width-range": "px (400-3000)",
     "height-range": "px (300-2000)",
     "hyprland-path": "Путь Hyprland",
-    "niri-path": "Путь Niri"
+    "niri-path": "Путь Niri",
+    "mango-path": "Mango Path",
+    "mango-format-hint": "Expected format: bind=MODS,KEY,ACTION,ARGS\nCategories: # Category Name (horizontal rules stripped)\nOptional per-bind description: trailing #\"description\"",
+    "keybind-example-mango": "Mango example: bind=SUPER,F1,spawn_shell,noctalia-shell ipc call plugin:keybind-cheatsheet toggle"
   },
   "barwidget": {
     "tooltip": "Шпаргалка горячих клавиш",

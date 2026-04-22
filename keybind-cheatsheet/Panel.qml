@@ -187,6 +187,7 @@ Item {
         NText {
           text: CompositorService.isHyprland ? pluginApi?.tr("panel.title-hyprland") :
                 CompositorService.isNiri     ? pluginApi?.tr("panel.title-niri") :
+                CompositorService.isMango    ? pluginApi?.tr("panel.title-mango") :
                                                pluginApi?.tr("panel.title")
           font.pointSize: Style.fontSizeM
           font.weight: Font.Bold

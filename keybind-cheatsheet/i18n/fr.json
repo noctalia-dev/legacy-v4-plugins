@@ -19,7 +19,8 @@
     "workspace-switching": "ESPACES DE TRAVAIL - BASCULER",
     "workspace-moving": "ESPACES DE TRAVAIL - DÉPLACER",
     "workspace-mouse": "ESPACES DE TRAVAIL - SOURIS",
-    "search-placeholder": "Rechercher des raccourcis..."
+    "search-placeholder": "Rechercher des raccourcis...",
+    "title-mango": "MangoWC Keymap"
   },
   "settings": {
     "title": "Parametres des Raccourcis Clavier",
@@ -51,7 +52,10 @@
     "width-range": "px (400-3000)",
     "height-range": "px (300-2000)",
     "hyprland-path": "Chemin Hyprland",
-    "niri-path": "Chemin Niri"
+    "niri-path": "Chemin Niri",
+    "mango-path": "Mango Path",
+    "mango-format-hint": "Expected format: bind=MODS,KEY,ACTION,ARGS\nCategories: # Category Name (horizontal rules stripped)\nOptional per-bind description: trailing #\"description\"",
+    "keybind-example-mango": "Mango example: bind=SUPER,F1,spawn_shell,noctalia-shell ipc call plugin:keybind-cheatsheet toggle"
   },
   "barwidget": {
     "tooltip": "Aide-mémoire des raccourcis",

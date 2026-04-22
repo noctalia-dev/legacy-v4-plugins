@@ -70,6 +70,7 @@ Item {
   property string editModKeyVariable: cfg.modKeyVariable || defaults.modKeyVariable || "$mod"
   property string editHyprlandConfigPath: cfg.hyprlandConfigPath || defaults.hyprlandConfigPath || "~/.config/hypr/hyprland.conf"
   property string editNiriConfigPath: cfg.niriConfigPath || defaults.niriConfigPath || "~/.config/niri/config.kdl"
+  property string editMangoConfigPath: cfg.mangoConfigPath || defaults.mangoConfigPath || "~/.config/mango/config.conf"
 
   // Header
   NText {
@@ -409,6 +410,52 @@ Item {
           wrapMode: Text.WordWrap
         }
       }
+
+      Rectangle {
+        Layout.preferredHeight: 1
+        color: Color.mOutline
+        opacity: 0.3
+      }
+
+      // Mango path
+      ColumnLayout {
+        spacing: Style.marginXS
+
+        RowLayout {
+          spacing: Style.marginS
+          NIcon {
+            icon: "terminal"
+            pointSize: Style.fontSizeM
+            color: Color.mTertiary
+          }
+          NText {
+            text: rootItem.pluginApi?.tr("settings.mango-path")
+            color: Color.mOnSurface
+            pointSize: Style.fontSizeM
+            font.weight: Style.fontWeightBold
+          }
+        }
+
+        NTextInput {
+          id: mangoPathInput
+          Layout.fillWidth: true
+          Layout.preferredHeight: Style.baseWidgetSize
+          text: root.editMangoConfigPath
+          placeholderText: "~/.config/mango/config.conf"
+
+          onTextChanged: {
+            if (text.length > 0) root.editMangoConfigPath = text;
+          }
+        }
+
+        NText {
+          Layout.fillWidth: true
+          text: rootItem.pluginApi?.tr("settings.mango-format-hint")
+          color: Color.mOnSurfaceVariant
+          pointSize: Style.fontSizeXS
+          wrapMode: Text.WordWrap
+        }
+      }
     }
   }
 
@@ -457,12 +504,14 @@ Item {
             root.editModKeyVariable = defaults.modKeyVariable || "$mod";
             root.editHyprlandConfigPath = defaults.hyprlandConfigPath || "~/.config/hypr/hyprland.conf";
             root.editNiriConfigPath = defaults.niriConfigPath || "~/.config/niri/config.kdl";
+            root.editMangoConfigPath = defaults.mangoConfigPath || "~/.config/mango/config.conf";
 
             widthInput.text = root.editWindowWidth.toString();
             heightInput.text = "850";
             modVarInput.text = root.editModKeyVariable;
             hyprlandPathInput.text = root.editHyprlandConfigPath;
             niriPathInput.text = root.editNiriConfigPath;
+            mangoPathInput.text = root.editMangoConfigPath;
 
             if (rootItem.pluginApi && rootItem.pluginApi.pluginSettings) {
               rootItem.pluginApi.pluginSettings.cheatsheetData = [];
@@ -539,6 +588,14 @@ Item {
         pointSize: Style.fontSizeXS
         wrapMode: Text.WordWrap
       }
+
+      NText {
+        Layout.fillWidth: true
+        text: rootItem.pluginApi?.tr("settings.keybind-example-mango")
+        color: Color.mOnSurfaceVariant
+        pointSize: Style.fontSizeXS
+        wrapMode: Text.WordWrap
+      }
     }
   }
 
@@ -559,6 +616,7 @@ Item {
     pluginApi.pluginSettings.modKeyVariable = root.editModKeyVariable;
     pluginApi.pluginSettings.hyprlandConfigPath = root.editHyprlandConfigPath;
     pluginApi.pluginSettings.niriConfigPath = root.editNiriConfigPath;
+    pluginApi.pluginSettings.mangoConfigPath = root.editMangoConfigPath;
     pluginApi.saveSettings();
     ToastService.showNotice(
       pluginApi?.tr("settings.saved")

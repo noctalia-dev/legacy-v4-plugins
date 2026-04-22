@@ -19,7 +19,8 @@
     "workspace-switching": "WERKRUIMTEN - WISSELEN",
     "workspace-moving": "WERKRUIMTEN - VERPLAATSEN",
     "workspace-mouse": "WERKRUIMTEN - MUIS",
-    "search-placeholder": "Sneltoetsen zoeken..."
+    "search-placeholder": "Sneltoetsen zoeken...",
+    "title-mango": "MangoWC Keymap"
   },
   "settings": {
     "title": "Sneltoetsen Overzicht Instellingen",
@@ -51,7 +52,10 @@
     "width-range": "px (400-3000)",
     "height-range": "px (300-2000)",
     "hyprland-path": "Hyprland pad",
-    "niri-path": "Niri pad"
+    "niri-path": "Niri pad",
+    "mango-path": "Mango Path",
+    "mango-format-hint": "Expected format: bind=MODS,KEY,ACTION,ARGS\nCategories: # Category Name (horizontal rules stripped)\nOptional per-bind description: trailing #\"description\"",
+    "keybind-example-mango": "Mango example: bind=SUPER,F1,spawn_shell,noctalia-shell ipc call plugin:keybind-cheatsheet toggle"
   },
   "barwidget": {
     "tooltip": "Sneltoetsen Spiekbriefje",

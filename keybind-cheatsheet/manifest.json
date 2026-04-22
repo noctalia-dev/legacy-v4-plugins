@@ -6,7 +6,7 @@
   "author": "blacku",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-  "description": "Universal keyboard shortcuts keymap that automatically detects and displays keybindings for Hyprland or Niri compositors.",
+  "description": "Universal keyboard shortcuts keymap that automatically detects and displays keybindings for Hyprland, Niri, or MangoWC compositors.",
   "tags": ["Bar", "Panel", "System", "Indicator"],
   "entryPoints": {
     "main": "Main.qml",
@@ -27,7 +27,8 @@
       "columnCount": 3,
       "modKeyVariable": "$mod",
       "hyprlandConfigPath": "~/.config/hypr/hyprland.conf",
-      "niriConfigPath": "~/.config/niri/config.kdl"
+      "niriConfigPath": "~/.config/niri/config.kdl",
+      "mangoConfigPath": "~/.config/mango/config.conf"
     }
   }
 }
