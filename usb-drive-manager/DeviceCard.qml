@@ -223,8 +223,8 @@ Rectangle {
                 baseSize: Style.baseWidgetSize * 0.8
                 colorBg: Color.mSurfaceVariant
                 colorFg: Color.mOnSurfaceVariant
-                colorBgHover: Color.mErrorContainer
-                colorFgHover: Color.mOnErrorContainer
+                colorBgHover: Color.mHover
+                colorFgHover: Color.mOnHover
                 colorBorder: "transparent"
                 colorBorderHover: "transparent"
                 onClicked: root.ejectRequested(device.path, device.parentPath, root.displayLabel)
