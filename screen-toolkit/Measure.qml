@@ -252,8 +252,21 @@ Variants {
                 hoverEnabled: true
                 onPositionChanged: (mouse) => {
                     if (overlayWin.measuring) {
-                        overlayWin.x2 = mouse.x
-                        overlayWin.y2 = mouse.y
+                        if (mouse.modifiers & Qt.AltModifier) {
+                            var dx = Math.abs(mouse.x - overlayWin.x1)
+                            var dy = Math.abs(mouse.y - overlayWin.y1)
+                
+                            if (dx > dy) {
+                                overlayWin.x2 = mouse.x
+                                overlayWin.y2 = overlayWin.y1
+                            } else {
+                                overlayWin.x2 = overlayWin.x1
+                                overlayWin.y2 = mouse.y
+                            }
+                        } else {
+                            overlayWin.x2 = mouse.x
+                            overlayWin.y2 = mouse.y
+                        }
                         measureCanvas.requestPaint()
                     }
                 }
@@ -264,15 +277,38 @@ Variants {
                     overlayWin.x2 = mouse.x; overlayWin.y2 = mouse.y
                 }
                 onReleased: (mouse) => {
-                    overlayWin.x2 = mouse.x; overlayWin.y2 = mouse.y
+                    if (mouse.modifiers & Qt.AltModifier) {
+                        var dx = Math.abs(mouse.x - overlayWin.x1)
+                        var dy = Math.abs(mouse.y - overlayWin.y1)
+                        
+                        if (dx > dy) {
+                            overlayWin.x2 = mouse.x
+                            overlayWin.y2 = overlayWin.y1
+                        } else {
+                            overlayWin.x2 = overlayWin.x1
+                            overlayWin.y2 = mouse.y
+                        }
+                    } else {
+                        overlayWin.x2 = mouse.x
+                        overlayWin.y2 = mouse.y
+                    }
+                
                     overlayWin.measuring = false
+                    
                     var dist = Math.sqrt(
                         Math.pow(overlayWin.x2 - overlayWin.x1, 2) +
                         Math.pow(overlayWin.y2 - overlayWin.y1, 2))
-                    if (dist > 4)
-                        overlayWin.current = { x1: overlayWin.x1, y1: overlayWin.y1, x2: overlayWin.x2, y2: overlayWin.y2 }
-                    else
+                        
+                    if (dist > 4) {
+                        overlayWin.current = { 
+                            x1: overlayWin.x1, 
+                            y1: overlayWin.y1, 
+                            x2: overlayWin.x2, 
+                            y2: overlayWin.y2 
+                        }
+                    } else {
                         overlayWin.current = null
+                    }
                 }
             }
         }
