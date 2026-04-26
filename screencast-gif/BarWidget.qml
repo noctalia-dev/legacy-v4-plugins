@@ -21,7 +21,9 @@ NIconButton {
     applyUiScale: false
     customRadius: Style.radiusL
     icon: "circle-filled"
-    tooltipText: recording ? "Recording GIF — click to stop" : "Record GIF"
+    tooltipText: recording
+                 ? pluginApi?.tr("widget.tooltip.recording")
+                 : pluginApi?.tr("widget.tooltip.idle")
     tooltipDirection: BarService.getTooltipDirection(screenName)
     colorBg: recording ? Color.mError : Style.capsuleColor
     colorFg: recording ? Color.mOnError : Color.mOnSurface

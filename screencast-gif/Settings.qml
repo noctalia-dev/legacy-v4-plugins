@@ -19,24 +19,24 @@ ColumnLayout {
 
     NTextInput {
         Layout.fillWidth: true
-        label: "Output directory"
-        description: "Where to save the .gif files. Leading ~ is expanded to $HOME."
+        label: pluginApi?.tr("settings.outputDir.label")
+        description: pluginApi?.tr("settings.outputDir.description")
         text: root.valueOutputDir
         onTextChanged: root.valueOutputDir = text
     }
 
     NTextInput {
         Layout.fillWidth: true
-        label: "Frame rate"
-        description: "GIF frame rate. 15-25 is a good balance between smoothness and file size."
+        label: pluginApi?.tr("settings.fps.label")
+        description: pluginApi?.tr("settings.fps.description")
         text: String(root.valueFps)
         onTextChanged: root.valueFps = parseInt(text) || 20
     }
 
     NTextInput {
         Layout.fillWidth: true
-        label: "Auto-stop after (seconds)"
-        description: "Maximum recording duration before auto-stopping. Use 0 to disable."
+        label: pluginApi?.tr("settings.maxRecordingSeconds.label")
+        description: pluginApi?.tr("settings.maxRecordingSeconds.description")
         text: String(root.valueMaxRecordingSeconds)
         onTextChanged: root.valueMaxRecordingSeconds = parseInt(text) || 0
     }
