@@ -27,6 +27,11 @@ NIconButton {
         pluginApi?.manifest?.metadata?.defaultSettings?.showBadge ??
         true
 
+    readonly property string iconName:
+        pluginApi?.pluginSettings?.iconName ||
+        pluginApi?.manifest?.metadata?.defaultSettings?.iconName ||
+        "usb"
+
     readonly property bool hideWhenEmpty:
         pluginApi?.pluginSettings?.hideWhenEmpty ??
         pluginApi?.manifest?.metadata?.defaultSettings?.hideWhenEmpty ??
@@ -38,21 +43,23 @@ NIconButton {
     property var cfg: pluginApi?.pluginSettings || ({})
     property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
     readonly property string iconColorKey: cfg.iconColor ?? defaults.iconColor ?? "none"
-    readonly property color iconColor: Color.resolveColorKey(iconColorKey)
+    readonly property bool hasCustomIconColor: iconColorKey !== "" && iconColorKey !== "none"
+    readonly property color mountedBgColor: Color.mPrimaryContainer || Color.mPrimary || Style.capsuleColor
+    readonly property color mountedFgColor: Color.mOnPrimaryContainer || Color.mOnPrimary || Color.mOnSurface
 
     // ===== VISIBILITY =====
     visible: shouldShow
 
     // ===== APPEARANCE =====
-    icon: "usb"
+    icon: iconName
     tooltipText: mainInstance?.buildTooltip()
     tooltipDirection: BarService.getTooltipDirection(screen?.name)
     baseSize: Style.getCapsuleHeightForScreen(screen?.name)
     applyUiScale: false
     customRadius: Style.radiusL
 
-    colorBg: hasMountedDevices ? Color.mPrimaryContainer : Style.capsuleColor
-    colorFg: hasMountedDevices ? Color.mOnPrimaryContainer : root.iconColor !== "transparent" ? root.iconColor : Color.mOnSurface
+    colorBg: hasMountedDevices ? mountedBgColor : Style.capsuleColor
+    colorFg: hasMountedDevices ? mountedFgColor : hasCustomIconColor ? Color.resolveColorKey(iconColorKey) : Color.mOnSurface
     colorBgHover: Color.mHover
     colorFgHover: Color.mOnHover
     colorBorder: "transparent"

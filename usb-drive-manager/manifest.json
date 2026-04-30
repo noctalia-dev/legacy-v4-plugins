@@ -30,6 +30,7 @@
       "showNotifications": true,
       "hideWhenEmpty": false,
       "showBadge": false,
+      "iconName": "usb",
       "iconColor": "none"
     }
   }

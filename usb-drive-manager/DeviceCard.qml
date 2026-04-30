@@ -36,6 +36,12 @@ Rectangle {
         return parts.join(" · ")
     }
 
+    readonly property string deviceIconName:
+        mainInstance?.iconName ||
+        pluginApi?.pluginSettings?.iconName ||
+        pluginApi?.manifest?.metadata?.defaultSettings?.iconName ||
+        "usb"
+
     // ===== APPEARANCE =====
     color: Color.mSurface
     radius: Style.radiusM
@@ -58,7 +64,7 @@ Rectangle {
 
             // USB icon
             NIcon {
-                icon: "usb"
+                icon: deviceIconName
                 pointSize: Style.fontSizeL
                 color: device?.isMounted ? Color.mPrimary : Color.mOnSurfaceVariant
             }
@@ -90,17 +96,19 @@ Rectangle {
             Rectangle {
                 visible: device?.isMounted ?? false
                 width: statusLabel.implicitWidth + Style.marginS * 2
-                height: statusLabel.implicitHeight + 4
+                height: statusLabel.implicitHeight + Style.marginXS * 2
                 radius: height / 2
-                color: Color.mPrimaryContainer
+                color: Qt.alpha(Color.mPrimary, 0.18)
+                border.color: Qt.alpha(Color.mPrimary, 0.5)
+                border.width: Style.borderS
 
                 NText {
                     id: statusLabel
                     anchors.centerIn: parent
                     text: pluginApi?.tr("device.mounted")
                     pointSize: Style.fontSizeXXS
-                    color: Color.mOnPrimaryContainer
-                    font.weight: Font.Medium
+                    color: Color.mPrimary
+                    font.weight: Font.DemiBold
                 }
             }
         }
@@ -127,14 +135,14 @@ Rectangle {
                 Layout.fillWidth: true
                 height: Style.marginXS
                 radius: height / 2
-                color: Color.mOutlineVariant
+                color: Color.mOutlineVariant || Qt.alpha(Color.mOutline, 0.35)
 
                 Rectangle {
                     width: parent.width * Math.min((device?.usedPercent ?? 0) / 100, 1)
                     height: parent.height
                     radius: parent.radius
                     color: (device?.usedPercent ?? 0) > 90 ? Color.mError
-                         : (device?.usedPercent ?? 0) > 75 ? Color.mWarning
+                         : (device?.usedPercent ?? 0) > 75 ? (Color.mWarning || Color.mTertiary || Color.mSecondary || Color.mPrimary)
                          : Color.mPrimary
 
                     Behavior on width {
@@ -223,8 +231,8 @@ Rectangle {
                 baseSize: Style.baseWidgetSize * 0.8
                 colorBg: Color.mSurfaceVariant
                 colorFg: Color.mOnSurfaceVariant
-                colorBgHover: Color.mErrorContainer
-                colorFgHover: Color.mOnErrorContainer
+                colorBgHover: Color.mErrorContainer || Qt.alpha(Color.mError, 0.18)
+                colorFgHover: Color.mOnErrorContainer || Color.mOnError || Color.mError
                 colorBorder: "transparent"
                 colorBorderHover: "transparent"
                 onClicked: root.ejectRequested(device.path, device.parentPath, root.displayLabel)

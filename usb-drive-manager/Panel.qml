@@ -17,6 +17,7 @@ Item {
     readonly property var mainInstance: pluginApi?.mainInstance
     readonly property var devices: mainInstance?.devices ?? []
     readonly property int mountedCount: mainInstance?.mountedCount ?? 0
+    readonly property string panelIconName: mainInstance?.iconName || pluginApi?.pluginSettings?.iconName || pluginApi?.manifest?.metadata?.defaultSettings?.iconName || "usb"
 
     Component.onCompleted: {
         mainInstance?.refreshDevices()
@@ -58,7 +59,7 @@ Item {
                         spacing: Style.marginM
 
                         NIcon {
-                            icon: "usb"
+                            icon: panelIconName
                             pointSize: Style.fontSizeXL
                         }
 
@@ -105,7 +106,7 @@ Item {
 
                                 NIcon {
                                     Layout.alignment: Qt.AlignHCenter
-                                    icon: "usb"
+                                    icon: panelIconName
                                     pointSize: Style.fontSizeXXL
                                     color: Color.mOnSurfaceVariant
                                     opacity: 0.4
