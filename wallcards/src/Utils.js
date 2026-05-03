@@ -26,12 +26,12 @@ var mpvpaperOptions = [
     "--tscale=oversample"
 ].join(" ");
 
-function mpvpaperRun(filePath) {
-    return "mpvpaper -o '" + mpvpaperOptions + "' '*' \"" + filePath + "\" >/dev/null 2>&1 & disown";
+function mpvpaperRun(filePath, duration) {
+    return "sleep " + duration / 1000 + " && mpvpaper -o '" + mpvpaperOptions + "' '*' \"" + filePath + "\" >/dev/null 2>&1 & disown";
 }
 
-function wallpaperCommand(entry) {
+function wallpaperCommand(entry, duration) {
     if (entry.isVideo)
-        return mpvpaperKill + "; " + mpvpaperRun(entry.filePath);
+        return mpvpaperKill + "; " + mpvpaperRun(entry.filePath, duration);
     return mpvpaperKill;
 }
