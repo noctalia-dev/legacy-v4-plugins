@@ -27,9 +27,7 @@ NIconButton {
     readonly property string outputsText: main?.outputSummary ? main.outputSummary() : ""
 
     visible: root.alwaysShowBarWidget || (!!main && main.inhibitorActive)
-    icon: root.alwaysShowBarWidget
-        ? (root.isActive ? "display" : (root.isDisabled ? "display-off" : "laptop"))
-        : "display"
+    icon: "device-desktop"
     tooltipText: outputsText ? stateText + "\n" + outputsText : stateText
     tooltipDirection: BarService.getTooltipDirection(screen?.name)
     baseSize: Style.getCapsuleHeightForScreen(screen?.name)

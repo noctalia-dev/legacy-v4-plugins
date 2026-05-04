@@ -12,6 +12,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Services.UI
 
 Item {
     id: root
@@ -480,20 +481,7 @@ Item {
         var msg = active
             ? (pluginApi?.tr("notify.on") || "Clamshell ON - lid switch inhibited")
             : (pluginApi?.tr("notify.off") || "Clamshell OFF - normal lid behavior");
-        var icon = active ? "display" : "laptop";
-
-        notifyProc.exec([
-            "notify-send",
-            "--app-name=noctalia-clamshell",
-            "--icon=" + icon,
-            msg
-        ]);
-    }
-
-    Process {
-        id: notifyProc
-        stdout: StdioCollector {}
-        stderr: StdioCollector {}
+        ToastService.showNotice("Clamshell Mode", msg, "device-desktop");
     }
 
     // ─────────────────────────────────────────────────────────────────────
@@ -520,9 +508,6 @@ Item {
         }
         if (inhibitorProc.running) {
             inhibitorProc.running = false;
-        }
-        if (notifyProc.running) {
-            notifyProc.running = false;
         }
     }
 }

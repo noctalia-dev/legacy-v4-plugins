@@ -16,7 +16,7 @@ NIconButtonHot {
     readonly property string stateText: main?.stateLabel ? main.stateLabel() : (pluginApi?.tr("state.disabled") || "Off")
     readonly property string outputsText: main?.outputSummary ? main.outputSummary() : ""
 
-    icon: isActive ? "display" : (isDisabled ? "display-off" : "laptop")
+    icon: "device-desktop"
     tooltipText: outputsText ? stateText + "\n" + outputsText : stateText
 
     onClicked: {
