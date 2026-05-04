@@ -1,0 +1,14 @@
+{
+  "state.active": "On — external display detected",
+  "state.standby": "Auto — no external display",
+  "state.disabled": "Off",
+  "notify.on": "Clamshell ON — lid switch inhibited",
+  "notify.off": "Clamshell OFF — normal lid behavior",
+  "settings.enabled": "Enable clamshell mode",
+  "settings.alwaysShowBarWidget": "Always show bar icon",
+  "settings.notify": "Show notifications",
+  "settings.internalConnectorRegex": "Internal connector pattern",
+  "settings.inhibitorWho": "Inhibitor identifier",
+  "error.noInhibit": "systemd-inhibit not found — plugin disabled",
+  "error.noSocket": "niri socket unavailable"
+}

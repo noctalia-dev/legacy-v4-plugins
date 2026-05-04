@@ -1,0 +1,33 @@
+{
+  "id": "clamshell",
+  "name": "Clamshell Mode",
+  "description": "Auto clamshell on external display, with manual override",
+  "version": "0.1.0",
+  "author": "Sovego",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "minNoctaliaVersion": "3.6.0",
+  "tags": ["Bar", "System", "Utility", "Niri"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "enabled": true,
+      "alwaysShowBarWidget": false,
+      "notify": true,
+      "internalConnectorRegex": "^(eDP|LVDS|DSI)",
+      "inhibitorWho": "noctalia-clamshell"
+    },
+    "ipc": {
+      "target": "plugin:clamshell",
+      "functions": ["enable", "disable", "toggle", "status", "refresh"]
+    }
+  }
+}
