@@ -15,6 +15,12 @@
     "internalConnectorRegex": "Паттерн внутренних коннекторов",
     "inhibitorWho": "Идентификатор инхибитора"
   },
+  "status": {
+    "title": "Статус",
+    "state": "Состояние: {value}",
+    "inhibitorPid": "PID инхибитора: {value}",
+    "unknown": "Неизвестно"
+  },
   "error": {
     "noInhibit": "systemd-inhibit не найден - плагин отключён",
     "noSocket": "niri socket недоступен"

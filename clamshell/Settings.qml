@@ -38,26 +38,26 @@ ColumnLayout {
         Layout.fillWidth: true
 
         NToggle {
-            label: pluginApi?.tr("settings.enabled") || "Enable clamshell mode"
+            label: pluginApi?.tr("settings.enabled")
             checked: root.editEnabled
             onToggled: checked => root.editEnabled = checked
         }
 
         NToggle {
-            label: pluginApi?.tr("settings.alwaysShowBarWidget") || "Always show bar icon"
+            label: pluginApi?.tr("settings.alwaysShowBarWidget")
             checked: root.editAlwaysShowBarWidget
             onToggled: checked => root.editAlwaysShowBarWidget = checked
         }
 
         NToggle {
-            label: pluginApi?.tr("settings.notify") || "Show notifications"
+            label: pluginApi?.tr("settings.notify")
             checked: root.editNotify
             onToggled: checked => root.editNotify = checked
         }
 
         NTextInput {
             Layout.fillWidth: true
-            label: pluginApi?.tr("settings.internalConnectorRegex") || "Internal connector pattern"
+            label: pluginApi?.tr("settings.internalConnectorRegex")
             placeholderText: "^(eDP|LVDS|DSI)"
             text: root.editInternalConnectorRegex
             onTextChanged: root.editInternalConnectorRegex = text
@@ -65,7 +65,7 @@ ColumnLayout {
 
         NTextInput {
             Layout.fillWidth: true
-            label: pluginApi?.tr("settings.inhibitorWho") || "Inhibitor identifier"
+            label: pluginApi?.tr("settings.inhibitorWho")
             placeholderText: "noctalia-clamshell"
             text: root.editInhibitorWho
             onTextChanged: root.editInhibitorWho = text
@@ -75,7 +75,7 @@ ColumnLayout {
     NText {
         visible: root.main.inhibitorAvailable === false
         Layout.fillWidth: true
-        text: pluginApi?.tr("error.noInhibit") || "systemd-inhibit not found - plugin disabled"
+        text: pluginApi?.tr("error.noInhibit")
         color: Color.mError
         pointSize: Style.fontSizeM
         wrapMode: Text.WordWrap
@@ -86,7 +86,7 @@ ColumnLayout {
         Layout.fillWidth: true
 
         NText {
-            text: "Status"
+            text: pluginApi?.tr("status.title")
             color: Color.mOnSurface
             pointSize: Style.fontSizeL
             font.weight: Font.DemiBold
@@ -94,14 +94,18 @@ ColumnLayout {
 
         NText {
             Layout.fillWidth: true
-            text: "State: " + (root.main.stateLabel ? root.main.stateLabel() : "Unknown")
+            text: pluginApi?.tr("status.state", {
+                "value": root.main.stateLabel ? root.main.stateLabel() : pluginApi?.tr("status.unknown")
+            })
             color: Color.mOnSurfaceVariant
             wrapMode: Text.WordWrap
         }
 
         NText {
             Layout.fillWidth: true
-            text: "Inhibitor PID: " + (root.main.inhibitorPid > 0 ? String(root.main.inhibitorPid) : "-")
+            text: pluginApi?.tr("status.inhibitorPid", {
+                "value": root.main.inhibitorPid > 0 ? String(root.main.inhibitorPid) : "-"
+            })
             color: Color.mOnSurfaceVariant
             wrapMode: Text.WordWrap
         }

@@ -154,9 +154,9 @@ Item {
     }
 
     function stateLabel() {
-        if (!root.enabled) return pluginApi?.tr("state.disabled") || "Off";
-        if (root.externalPresent) return pluginApi?.tr("state.active") || "On - external display detected";
-        return pluginApi?.tr("state.standby") || "Auto - no external display";
+        if (!root.enabled) return pluginApi?.tr("state.disabled");
+        if (root.externalPresent) return pluginApi?.tr("state.active");
+        return pluginApi?.tr("state.standby");
     }
 
     function outputSummary() {
@@ -479,8 +479,8 @@ Item {
         if (!root.componentReady || !root.notifyEnabled) return;
 
         var msg = active
-            ? (pluginApi?.tr("notify.on") || "Clamshell ON - lid switch inhibited")
-            : (pluginApi?.tr("notify.off") || "Clamshell OFF - normal lid behavior");
+            ? pluginApi?.tr("notify.on")
+            : pluginApi?.tr("notify.off");
         ToastService.showNotice("Clamshell Mode", msg, "device-desktop");
     }
 

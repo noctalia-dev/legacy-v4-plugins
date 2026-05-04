@@ -13,7 +13,7 @@ NIconButtonHot {
     readonly property bool isActive: !!main && main.enabled && main.externalPresent
     readonly property bool isStandby: !!main && main.enabled && !main.externalPresent
     readonly property bool isDisabled: !main || !main.enabled
-    readonly property string stateText: main?.stateLabel ? main.stateLabel() : (pluginApi?.tr("state.disabled") || "Off")
+    readonly property string stateText: main?.stateLabel ? main.stateLabel() : pluginApi?.tr("state.disabled")
     readonly property string outputsText: main?.outputSummary ? main.outputSummary() : ""
 
     icon: "device-desktop"

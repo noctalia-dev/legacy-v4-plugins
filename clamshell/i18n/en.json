@@ -15,6 +15,12 @@
     "internalConnectorRegex": "Internal connector pattern",
     "inhibitorWho": "Inhibitor identifier"
   },
+  "status": {
+    "title": "Status",
+    "state": "State: {value}",
+    "inhibitorPid": "Inhibitor PID: {value}",
+    "unknown": "Unknown"
+  },
   "error": {
     "noInhibit": "systemd-inhibit not found - plugin disabled",
     "noSocket": "niri socket unavailable"

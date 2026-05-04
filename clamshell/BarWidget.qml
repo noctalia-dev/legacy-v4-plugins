@@ -23,7 +23,7 @@ NIconButton {
     readonly property var main: pluginApi ? pluginApi.mainInstance : null
     readonly property bool isActive: !!main && main.enabled && main.externalPresent
     readonly property bool isDisabled: !main || !main.enabled
-    readonly property string stateText: main?.stateLabel ? main.stateLabel() : (pluginApi?.tr("state.disabled") || "Off")
+    readonly property string stateText: main?.stateLabel ? main.stateLabel() : pluginApi?.tr("state.disabled")
     readonly property string outputsText: main?.outputSummary ? main.outputSummary() : ""
 
     visible: root.alwaysShowBarWidget || (!!main && main.inhibitorActive)
@@ -50,7 +50,7 @@ NIconButton {
 
         model: [
             {
-                "label": pluginApi?.tr("menu.settings") || "Settings",
+                "label": pluginApi?.tr("menu.settings"),
                 "action": "settings",
                 "icon": "settings"
             }
