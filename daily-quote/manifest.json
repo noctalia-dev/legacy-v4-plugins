@@ -1,0 +1,29 @@
+{
+  "id": "daily-quote",
+  "name": "Daily Quote",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.7.0",
+  "author": "Vikthor",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Desktop widget that displays a daily quote with a scramble decode animation",
+  "tags": ["Desktop", "Fun"],
+  "entryPoints": {
+    "desktopWidget": "DesktopWidget.qml",
+    "desktopWidgetSettings": "DesktopWidgetSettings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "quoteFont": "",
+      "authorFont": "",
+      "showBackground": true,
+      "showGradientOverlay": true,
+      "gradientDirection": "vertical",
+      "quoteColor": "primary",
+      "textAlign": "left"
+    }
+  }
+}
