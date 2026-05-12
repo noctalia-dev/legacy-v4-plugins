@@ -1,9 +1,9 @@
 {
   "id": "ideapad-battery-health",
   "name": "Ideapad Battery Health",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "minNoctaliaVersion": "3.6.0",
-  "author": "Christophe Branchereau",
+  "author": "Christophe Branchereau, Marc Salat",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Set the battery charging mode for ideapad laptop batteries, to extend battery lifespan",
