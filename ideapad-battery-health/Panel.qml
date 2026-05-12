@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import Quickshell.Io
 import qs.Commons
@@ -15,16 +14,13 @@ Item {
     readonly property bool allowAttach: true
     anchors.fill: parent
 
-    BatteryPreservationService {
-        id: service
-        pluginApi: root.pluginApi
-    }
+    readonly property var service: pluginApi?.mainInstance?.service
 
     property string batteryModelName: ""
 
     FileView {
         id: modelNameView
-        path: "/sys/class/power_supply/BAT0/model_name"
+        path: service?.batteryDir ? `${service.batteryDir}/model_name` : ""
         printErrors: false
 
         onLoaded: {
@@ -33,7 +29,7 @@ Item {
     }
 
     function writePreservation(value) {
-        if (!service.isWritable)
+        if (!service?.isWritable)
             return
         service.setPreservation(value)
     }
@@ -61,9 +57,9 @@ Item {
                 }
 
                 NText {
-                    visible: !service.isAvailable
+                    visible: !service?.isAvailable
                              || root.batteryModelName !== ""
-                    text: !service.isAvailable ? "Not available on this system" : root.batteryModelName
+                    text: !service?.isAvailable ? "Not available on this system" : root.batteryModelName
                     pointSize: Style.fontSizeM
                     color: Color.mOnSurfaceVariant
                 }
@@ -79,7 +75,7 @@ Item {
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: Style.marginS
-                visible: service.isAvailable
+                visible: service?.isAvailable
 
                 RowLayout {
                     Layout.fillWidth: true
@@ -94,8 +90,8 @@ Item {
                     NToggle {
                         id: preservationToggle
                         Layout.fillWidth: true
-                        enabled: service.isWritable
-                        checked: service.currentPreservation !== 0
+                        enabled: service?.isWritable ?? false
+                        checked: (service?.currentPreservation ?? 0) !== 0
                         onToggled: root.writePreservation(checked ? 1 : 0)
                     }
 

@@ -19,7 +19,8 @@ NIconButton {
 
   readonly property string iconColorKey: cfg.iconColor ?? defaults.iconColor
 
-  readonly property var preservationMode: pluginApi?.pluginSettings?.preservationMode
+  readonly property var service: pluginApi?.mainInstance?.service
+  readonly property var preservationMode: service?.currentPreservation ?? pluginApi?.pluginSettings?.preservationMode
 
   icon: root.preservationMode == 1 ? "battery-vertical-eco" : "battery-vertical-charging"
   baseSize: Style.getCapsuleHeightForScreen(screen?.name)
