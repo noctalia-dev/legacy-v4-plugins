@@ -6,11 +6,13 @@ Hardware-accelerated screen recording for Noctalia using [gpu-screen-recorder](h
 
 - Hardware-accelerated screen recording
 - **Replay buffer** — continuously capture and save the last N seconds on demand
+- Configurable bar widget button action
 - Customizable video codecs (H264, HEVC, AV1, VP8, VP9, HDR variants)
 - Audio recording with multiple sources (system output, microphone, both, or none)
-- Adjustable frame rates (30-240 FPS)
+- Adjustable frame rates
 - Configurable output resolution (Full HD, WUXGA, 4K, QHD, HD, or original)
 - Configurable output directory
+- Optional post-recording script
 - Optional clipboard copy after recording
 - Optional cursor recording
 - Multiple quality presets
@@ -34,17 +36,18 @@ Hardware-accelerated screen recording for Noctalia using [gpu-screen-recorder](h
 
 ### Bar Widget
 
-- **Left Click**: Start/stop recording
-- **Right Click**: Open plugin settings
+- **Left Click**: Configurable action (toggle recording by default)
+- **Right Click**: Context menu with recording/replay controls, panel, and settings
 
 ### Settings
 
 Configure the plugin through the settings panel:
 
+- **Button Action**: Action performed when clicking the bar widget
 - **Output Folder**: Where recordings will be saved (defaults to `~/Videos`)
-- **Filename Pattern**: Pattern for generated filenames. Supports standard Qt date format tokens (e.g., `yyyy`, `MM`, `dd` etc.) and `unix` for Unix timestamp.
+- **Post-recording Script**: Optional script to run after a recording saves
 - **Video Source**: Choose between Portal (recommended) or Screen
-- **Frame Rate**: Target FPS (30, 60, 100, 120, 144, 165, 240)
+- **Frame Rate**: Target FPS (30, 60, 120, or custom)
 - **Video Quality**: Medium, High, Very High, or Ultra
 - **Video Codec**: H264, HEVC, AV1, VP8, VP9 (+ HDR variants for screen source)
 - **Color Range**: Limited (recommended) or Full
@@ -53,12 +56,13 @@ Configure the plugin through the settings panel:
 - **Audio Codec**: Opus (recommended) or AAC
 - **Show Cursor**: Include mouse cursor in recording
 - **Copy to Clipboard**: Automatically copy file after recording
+- **Restore Portal Session**: Skip the screen selection dialog on subsequent recordings
 
 #### Replay
 
-- **Enable Replay Buffer**: Toggle the replay buffer feature on/off
 - **Replay Duration**: Buffer length (15s, 30s, 60s, 2 min, 5 min, or custom)
 - **Replay Storage**: Store buffer in RAM (faster, recommended) or Disk
+- **Replay Notifications**: Show notifications when the replay buffer starts, stops, or saves
 
 ### IPC Commands
 
@@ -66,13 +70,16 @@ Control the screen recorder via IPC for keybindings or scripts:
 
 ```bash
 # Toggle recording on/off
-qs -c noctalia-shell ipc call plugin:screen-recorder toggle
+qs -c noctalia-shell ipc call plugin:screen-recorder toggleRecording
 
 # Explicitly start recording
-qs -c noctalia-shell ipc call plugin:screen-recorder start
+qs -c noctalia-shell ipc call plugin:screen-recorder startRecording
 
 # Explicitly stop recording
-qs -c noctalia-shell ipc call plugin:screen-recorder stop
+qs -c noctalia-shell ipc call plugin:screen-recorder stopRecording
+
+# Toggle replay buffer on/off
+qs -c noctalia-shell ipc call plugin:screen-recorder toggleReplay
 
 # Start the replay buffer
 qs -c noctalia-shell ipc call plugin:screen-recorder startReplay
@@ -82,9 +89,6 @@ qs -c noctalia-shell ipc call plugin:screen-recorder saveReplay
 
 # Stop the replay buffer
 qs -c noctalia-shell ipc call plugin:screen-recorder stopReplay
-
-# Toggle replay buffer on/off
-qs -c noctalia-shell ipc call plugin:screen-recorder toggleReplay
 ```
 
 ## Video Codecs
