@@ -16,7 +16,7 @@ import qs.Services.UI
 Item {
     id: root
 
-    property var pluginApi
+    property var pluginApi: null
 
     // ── Connection state ────────────────────────────────────────────────────
     property bool bridgeReady: false
