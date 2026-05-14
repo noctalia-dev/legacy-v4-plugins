@@ -51,10 +51,7 @@ Item {
         pointSize: Style.fontSizeL
         applyUiScale: false
         crossed: !(mainInstance?.tailscaleRunning ?? false)
-        color: {
-          if (mainInstance?.tailscaleRunning ?? false) return Color.mOnPrimary
-          return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-        }
+        color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
         opacity: 1.0
       }
 
