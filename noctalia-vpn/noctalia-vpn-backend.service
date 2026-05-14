@@ -1,0 +1,23 @@
+[Unit]
+Description=Noctalia VPN plugin backend (sing-box DBus driver)
+Documentation=https://github.com/noctalia-dev/noctalia-plugins
+After=dbus.socket
+Requires=dbus.socket
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/noctalia-vpn-plugin
+ExecStart=%h/dev/noctalia-vpn-plugin/.venv/bin/python3 -m backend.app
+Restart=on-failure
+RestartSec=3
+StandardOutput=append:/tmp/noctalia-vpn-backend.log
+StandardError=append:/tmp/noctalia-vpn-backend.log
+
+# Soft hardening — the backend manages sing-box subprocesses and writes
+# config files under ~/.config, so we can't lock it down too aggressively.
+NoNewPrivileges=true
+PrivateTmp=false
+ProtectSystem=false
+
+[Install]
+WantedBy=default.target
