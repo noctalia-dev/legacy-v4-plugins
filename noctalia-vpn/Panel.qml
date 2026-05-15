@@ -41,7 +41,9 @@ Item {
         readonly property color accent:      "#cfe04e"
         readonly property color accentDim:   "#a8b73f"
         readonly property color accentText:  "#1b1c17"
-        readonly property color text:        "#e8e7df"
+        // Design token (foreground colour for body copy). Suffixed *Color to avoid
+        // colliding with QML `text` properties on string components.
+        readonly property color textColor:   "#e8e7df"
         readonly property color textDim:     "#a3a497"
         readonly property color muted:       "#7d7e71"
         readonly property color success:     "#9bd17a"
@@ -121,7 +123,7 @@ Item {
     // ──────────────────────────────────────────────────────────────────────
 
     component HCard: Rectangle {
-        radius: 14
+        radius: Style.radiusL
         color: tokens.card
         border.color: tokens.borderSoft
         border.width: Style.borderS
@@ -164,7 +166,7 @@ Item {
         implicitWidth: w; implicitHeight: h
         Layout.preferredWidth: w
         Layout.preferredHeight: h
-        radius: 99
+        radius: height / 2
         color: on ? tokens.accent : tokens.cardHi
         border.color: on ? tokens.accent : tokens.border
         border.width: Style.borderS
@@ -211,16 +213,16 @@ Item {
     // Ping badge: dot (with glow) + ms (mono, tabular)
     component PingBadge: Row {
         property int ms: -1
-        spacing: 5
+        spacing: Style.marginS
         visible: ms >= 0
 
         Rectangle {
-            width: 6; height: 6; radius: 3
+            width: Style.marginS; height: Style.marginS; radius: width / 2
             anchors.verticalCenter: parent.verticalCenter
             color: pingTone(parent.ms)
             Rectangle {
                 anchors.centerIn: parent
-                width: 10; height: 10; radius: 5
+                width: Style.fontSizeS; height: Style.fontSizeS; radius: width / 2
                 color: "transparent"
                 border.color: pingTone(parent.parent.ms)
                 border.width: Style.borderS
@@ -244,7 +246,7 @@ Item {
 
         Layout.fillWidth: true
         height: 38
-        radius: 10
+        radius: Style.radiusM
         color: selected ? tokens.accent : tokens.card
         border.color: selected ? tokens.accent : tokens.border
         border.width: Style.borderS
@@ -252,7 +254,7 @@ Item {
         NText {
             anchors.centerIn: parent
             text: parent.label
-            color: parent.selected ? tokens.accentText : tokens.text
+            color: parent.selected ? tokens.accentText : tokens.textColor
             font.weight: Font.Bold
             pointSize: Style.fontSizeM
         }
@@ -276,7 +278,7 @@ Item {
         Rectangle {
             id: surface
             anchors.fill: parent
-            radius: 18
+            radius: Style.radiusL
             color: tokens.bg
             border.color: tokens.borderSoft
             border.width: Style.borderS
@@ -309,13 +311,13 @@ Item {
                         anchors.rightMargin: 16
                         anchors.topMargin: 14
                         anchors.bottomMargin: 10
-                        spacing: 10
+                        spacing: Style.marginM
 
                         NText {
                             text: _tr("panel.title", "V2Ray Proxy")
-                            color: tokens.text
+                            color: tokens.textColor
                             font.weight: Font.DemiBold
-                            font.pointSize: 14
+                            font.pointSize: Style.fontSizeL
                             font.letterSpacing: -0.1
                             Layout.fillWidth: true
                         }
@@ -353,13 +355,13 @@ Item {
                         anchors.rightMargin: 14
                         anchors.topMargin: 14
                         anchors.bottomMargin: 14
-                        spacing: 12
+                        spacing: Style.marginL
 
                         // Shield disk
                         Rectangle {
                             Layout.preferredWidth: 38
                             Layout.preferredHeight: 38
-                            radius: 19
+                            radius: Style.radiusL
                             color: heroAccent(0.14)
                             border.color: heroAccent(0.28)
                             border.width: Style.borderS
@@ -386,7 +388,7 @@ Item {
                                     color: heroIconColor()
                                     Rectangle {
                                         anchors.centerIn: parent
-                                        width: 13; height: 13; radius: 7
+                                        width: Style.marginL; height: Style.marginL; radius: width / 2
                                         color: "transparent"
                                         border.color: parent.color
                                         border.width: Style.borderS
@@ -395,13 +397,13 @@ Item {
                                 }
                                 NText {
                                     text: heroTitle()
-                                    color: tokens.text
+                                    color: tokens.textColor
                                     font.weight: Font.DemiBold
-                                    font.pointSize: 12
+                                    font.pointSize: Style.fontSizeM
                                 }
                                 NText {
                                     visible: heroSubtitle().length > 0
-                                    text: "· " + heroSubtitle()
+                                    text: _tr("panel.bullet-prefix", "· ") + heroSubtitle()
                                     color: tokens.muted
                                     font.pointSize: Style.fontSizeM
                                     Layout.fillWidth: true
@@ -410,7 +412,7 @@ Item {
                             }
 
                             RowLayout {
-                                spacing: 8
+                                spacing: Style.marginM
                                 Layout.fillWidth: true
 
                                 NText {
@@ -447,12 +449,12 @@ Item {
                             Layout.rightMargin: 14
                             Layout.topMargin: 11
                             Layout.bottomMargin: 10
-                            spacing: 10
+                            spacing: Style.marginM
 
                             NIcon {
                                 icon: "bolt"
                                 color: tokens.textDim
-                                pointSize: 12
+                                pointSize: Style.fontSizeM
                             }
 
                             ColumnLayout {
@@ -462,7 +464,7 @@ Item {
                                     text: root.testRunning
                                           ? _tr("speed.testing", "Testing…")
                                           : _tr("speed.title", "Network test")
-                                    color: tokens.text
+                                    color: tokens.textColor
                                     font.pointSize: Style.fontSizeM
                                     font.weight: Font.DemiBold
                                 }
@@ -482,7 +484,7 @@ Item {
                             Rectangle {
                                 Layout.preferredHeight: 28
                                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                                radius: 10
+                                radius: Style.radiusM
                                 color: root.testRunning ? tokens.cardHi : tokens.accent
                                 border.width: 0
                                 implicitWidth: runText.implicitWidth + 28
@@ -550,11 +552,11 @@ Item {
                                     ColumnLayout {
                                         id: cellCol
                                         anchors.centerIn: parent
-                                        spacing: 3
+                                        spacing: Style.marginXS
 
                                         RowLayout {
                                             Layout.alignment: Qt.AlignHCenter
-                                            spacing: 3
+                                            spacing: Style.marginXS
 
                                             NIcon {
                                                 visible: modelData.icon.length > 0
@@ -577,7 +579,7 @@ Item {
 
                                             NText {
                                                 text: statValue(modelData.key)
-                                                color: root.testRunning ? tokens.muted : tokens.text
+                                                color: root.testRunning ? tokens.muted : tokens.textColor
                                                 font.pointSize: root.testRunning ? 12 : 14
                                                 font.family: tokens.fontMono
                                                 font.weight: Font.DemiBold
@@ -627,7 +629,7 @@ Item {
                     Layout.leftMargin: 16
                     Layout.rightMargin: 16
                     Layout.topMargin: 12
-                    spacing: 8
+                    spacing: Style.marginM
 
                     ModeSummaryChip {
                         title: _tr("mode.routing", "ROUTING")
@@ -659,16 +661,16 @@ Item {
                     Layout.rightMargin: 16
                     Layout.topMargin: 16
                     Layout.bottomMargin: 8
-                    spacing: 8
+                    spacing: Style.marginM
 
                     NText {
                         text: _tr("panel.servers", "Servers")
-                        color: tokens.text
+                        color: tokens.textColor
                         font.weight: Font.DemiBold
-                        font.pointSize: 12
+                        font.pointSize: Style.fontSizeM
                     }
                     NText {
-                        text: "· " + (root.main ? (root.main.servers || []).length : 0)
+                        text: _tr("panel.bullet-prefix", "· ") + (root.main ? (root.main.servers || []).length : 0)
                         color: tokens.muted
                         font.pointSize: Style.fontSizeS
                         Layout.fillWidth: true
@@ -677,7 +679,7 @@ Item {
                     Rectangle {
                         Layout.preferredHeight: 28
                         implicitWidth: addRow.implicitWidth + 18
-                        radius: 10
+                        radius: Style.radiusM
                         color: "transparent"
                         border.color: tokens.border
                         border.width: Style.borderS
@@ -685,12 +687,12 @@ Item {
                         RowLayout {
                             id: addRow
                             anchors.centerIn: parent
-                            spacing: 5
+                            spacing: Style.marginS
 
-                            NIcon { icon: "plus"; color: tokens.text; pointSize: Style.fontSizeM }
+                            NIcon { icon: "plus"; color: tokens.textColor; pointSize: Style.fontSizeM }
                             NText {
                                 text: _tr("panel.add", "Add")
-                                color: tokens.text
+                                color: tokens.textColor
                                 font.pointSize: Style.fontSizeS
                                 font.family: tokens.fontUi
                             }
@@ -731,7 +733,7 @@ Item {
 
                         width: ListView.view ? ListView.view.width : implicitWidth
                         implicitHeight: row.implicitHeight + 20
-                        radius: 10
+                        radius: Style.radiusM
                         color: isActive
                                ? tokens.cardActive
                                : (isSelected ? withAlpha(tokens.accent, 0.05) : "transparent")
@@ -747,7 +749,7 @@ Item {
                             anchors.rightMargin: 8
                             anchors.topMargin: 10
                             anchors.bottomMargin: 10
-                            spacing: 10
+                            spacing: Style.marginM
 
                             // active / selected dot (with halo when active)
                             Rectangle {
@@ -760,7 +762,7 @@ Item {
                                 Rectangle {
                                     visible: row.parent.isActive
                                     anchors.centerIn: parent
-                                    width: 13; height: 13; radius: 7
+                                    width: Style.marginL; height: Style.marginL; radius: width / 2
                                     color: "transparent"
                                     border.color: tokens.success
                                     border.width: Style.borderS
@@ -770,7 +772,7 @@ Item {
 
                             NText {
                                 text: flagFor(modelData ? (modelData.country || "") : "")
-                                font.pointSize: 14
+                                font.pointSize: Style.fontSizeL
                                 visible: text.length > 0
                             }
 
@@ -783,7 +785,7 @@ Item {
 
                                     NText {
                                         text: modelData ? (modelData.name || _tr("panel.fallback-server-name", "Server")) : ""
-                                        color: tokens.text
+                                        color: tokens.textColor
                                         font.weight: row.parent.isSelected ? Font.DemiBold : Font.Medium
                                         font.pointSize: Style.fontSizeM
                                     }
@@ -843,13 +845,13 @@ Item {
 
                         ColumnLayout {
                             anchors.centerIn: parent
-                            spacing: 8
+                            spacing: Style.marginM
 
-                            NIcon { icon: "shield"; color: tokens.textDim; pointSize: 28; Layout.alignment: Qt.AlignHCenter }
+                            NIcon { icon: "shield"; color: tokens.textDim; pointSize: Style.fontSizeXXXL; Layout.alignment: Qt.AlignHCenter }
                             NText {
                                 text: _tr("panel.no-servers-title", "No servers yet")
                                 color: tokens.textDim
-                                font.pointSize: 12
+                                font.pointSize: Style.fontSizeM
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             NText {
@@ -880,7 +882,7 @@ Item {
 
         Layout.fillWidth: true
         Layout.preferredHeight: chipCol.implicitHeight + 18
-        radius: 10
+        radius: Style.radiusM
         color: tokens.card
         border.color: tokens.borderSoft
         border.width: Style.borderS
@@ -889,7 +891,7 @@ Item {
             anchors.fill: parent
             anchors.leftMargin: 12
             anchors.rightMargin: 12
-            spacing: 8
+            spacing: Style.marginM
 
             ColumnLayout {
                 id: chipCol
@@ -905,16 +907,16 @@ Item {
                 }
                 NText {
                     text: chipRoot.value
-                    color: tokens.text
+                    color: tokens.textColor
                     font.pointSize: Style.fontSizeM
                     font.weight: Font.DemiBold
                 }
             }
 
             NText {
-                text: "⇅"
+                text: _tr("panel.swap-icon", "⇅")
                 color: tokens.textDim
-                font.pointSize: 14
+                font.pointSize: Style.fontSizeL
                 font.family: tokens.fontUi
             }
         }
@@ -979,7 +981,7 @@ Item {
                         anchors.rightMargin: 12
                         anchors.topMargin: 14
                         anchors.bottomMargin: 12
-                        spacing: 10
+                        spacing: Style.marginM
 
                         ColumnLayout {
                             Layout.fillWidth: true
@@ -988,7 +990,7 @@ Item {
                                 text: serverEditorPayload && serverEditorPayload.id
                                       ? _tr("editor.title-edit", "Edit server")
                                       : _tr("editor.title-add",  "Add server")
-                                color: tokens.text
+                                color: tokens.textColor
                                 font.weight: Font.DemiBold
                                 font.pointSize: Style.fontSizeL
                                 font.letterSpacing: -0.1
@@ -1013,7 +1015,7 @@ Item {
                     Layout.rightMargin: 16
                     Layout.topMargin: 12
                     implicitHeight: importRow.implicitHeight + 14
-                    radius: 10
+                    radius: Style.radiusM
                     color: withAlpha(tokens.accent, 0.06)
                     border.color: withAlpha(tokens.accent, 0.30)
                     border.width: Style.borderS
@@ -1023,7 +1025,7 @@ Item {
                         anchors.fill: parent
                         anchors.leftMargin: 11
                         anchors.rightMargin: 8
-                        spacing: 8
+                        spacing: Style.marginM
 
                         NIcon { icon: "world"; color: tokens.textDim; pointSize: Style.fontSizeM }
                         NText {
@@ -1035,7 +1037,7 @@ Item {
                         Rectangle {
                             Layout.preferredHeight: 22
                             implicitWidth: importBtnText.implicitWidth + 14
-                            radius: 6
+                            radius: Style.radiusS
                             color: "transparent"
                             NText {
                                 id: importBtnText
@@ -1066,11 +1068,11 @@ Item {
 
                     ColumnLayout {
                         width: serverEditorPanel.width - 32
-                        spacing: 16
+                        spacing: Style.marginL
 
                         // Protocol picker
                         ColumnLayout {
-                            spacing: 8
+                            spacing: Style.marginM
                             Layout.fillWidth: true
 
                             NText {
@@ -1093,7 +1095,7 @@ Item {
 
                                         implicitWidth: protoCol.implicitWidth + 22
                                         implicitHeight: protoCol.implicitHeight + 14
-                                        radius: 10
+                                        radius: Style.radiusM
                                         color: selected ? tokens.accent : tokens.card
                                         border.color: selected ? tokens.accent : tokens.borderSoft
                                         border.width: Style.borderS
@@ -1106,7 +1108,7 @@ Item {
                                             spacing: Style.marginXXXS
                                             NText {
                                                 text: protoDisplayLabel(modelData)
-                                                color: parent.parent.selected ? tokens.accentText : tokens.text
+                                                color: parent.parent.selected ? tokens.accentText : tokens.textColor
                                                 font.family: tokens.fontMono
                                                 font.weight: Font.Bold
                                                 font.pointSize: Style.fontSizeS
@@ -1135,7 +1137,7 @@ Item {
                         // Connection
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 8
+                            spacing: Style.marginM
 
                             NText {
                                 text: _tr("editor.section-connection", "CONNECTION")
@@ -1146,7 +1148,7 @@ Item {
                             }
                             RowLayout {
                                 Layout.fillWidth: true
-                                spacing: 8
+                                spacing: Style.marginM
 
                                 SeField { Layout.fillWidth: true; Layout.preferredWidth: 2
                                           label: _tr("editor.field-host", "HOST"); binding: hostFieldKey(); mono: true }
@@ -1193,13 +1195,13 @@ Item {
                         anchors.rightMargin: 16
                         anchors.topMargin: 12
                         anchors.bottomMargin: 12
-                        spacing: 10
+                        spacing: Style.marginM
 
                         // Test connection
                         Rectangle {
                             Layout.preferredHeight: 32
                             implicitWidth: testBtnRow.implicitWidth + 22
-                            radius: 10
+                            radius: Style.radiusM
                             color: "transparent"
                             border.color: tokens.border
                             border.width: Style.borderS
@@ -1208,8 +1210,8 @@ Item {
                                 id: testBtnRow
                                 anchors.centerIn: parent
                                 spacing: Style.marginS
-                                NIcon { icon: "bolt"; color: tokens.text; pointSize: Style.fontSizeM }
-                                NText { text: _tr("editor.test-connection", "Test connection"); color: tokens.text; font.pointSize: Style.fontSizeM }
+                                NIcon { icon: "bolt"; color: tokens.textColor; pointSize: Style.fontSizeM }
+                                NText { text: _tr("editor.test-connection", "Test connection"); color: tokens.textColor; font.pointSize: Style.fontSizeM }
                             }
                             MouseArea {
                                 anchors.fill: parent
@@ -1224,7 +1226,7 @@ Item {
                         Rectangle {
                             Layout.preferredHeight: 32
                             implicitWidth: cancelTxt.implicitWidth + 20
-                            radius: 10
+                            radius: Style.radiusM
                             color: "transparent"
                             NText { id: cancelTxt; anchors.centerIn: parent; text: _tr("editor.cancel", "Cancel")
                                     color: tokens.textDim; font.pointSize: Style.fontSizeM }
@@ -1239,12 +1241,12 @@ Item {
                         Rectangle {
                             Layout.preferredHeight: 32
                             implicitWidth: saveTxt.implicitWidth + 36
-                            radius: 10
+                            radius: Style.radiusM
                             color: tokens.accent
                             border.width: 0
                             NText { id: saveTxt; anchors.centerIn: parent; text: _tr("editor.save", "Save")
                                     color: tokens.accentText
-                                    font.pointSize: 12; font.weight: Font.Bold }
+                                    font.pointSize: Style.fontSizeM; font.weight: Font.Bold }
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
@@ -1342,7 +1344,7 @@ Item {
         property bool secret: false
 
         Layout.fillWidth: true
-        spacing: 5
+        spacing: Style.marginS
 
         NText {
             text: seRoot.label.toUpperCase()
@@ -1356,7 +1358,7 @@ Item {
             id: seBox
             Layout.fillWidth: true
             implicitHeight: tin.implicitHeight + 18
-            radius: 9
+            radius: Style.radiusM
             color: tokens.card
             border.color: tin.activeFocus ? tokens.accent : tokens.borderSoft
             border.width: Style.borderS
@@ -1367,7 +1369,7 @@ Item {
                 anchors.leftMargin: 11
                 anchors.rightMargin: 11
                 verticalAlignment: TextInput.AlignVCenter
-                color: tokens.text
+                color: tokens.textColor
                 selectionColor: tokens.accent
                 selectedTextColor: tokens.accentText
                 font.family: seRoot.mono ? tokens.fontMono : tokens.fontUi
@@ -1472,12 +1474,12 @@ Item {
                         anchors.rightMargin: 12
                         anchors.topMargin: 14
                         anchors.bottomMargin: 12
-                        spacing: 10
+                        spacing: Style.marginM
 
                         ColumnLayout {
                             Layout.fillWidth: true
                             spacing: Style.marginXXXS
-                            NText { text: _tr("panel.settings", "Settings"); color: tokens.text
+                            NText { text: _tr("panel.settings", "Settings"); color: tokens.textColor
                                     font.weight: Font.DemiBold; font.pointSize: Style.fontSizeL
                                     font.letterSpacing: -0.1 }
                             NText { text: _tr("panel.settings-subtitle", "V2Ray Proxy · sing-box · OpenSSH")
@@ -1564,7 +1566,7 @@ Item {
                         anchors.rightMargin: 16
                         anchors.topMargin: 8
                         anchors.bottomMargin: 8
-                        spacing: 10
+                        spacing: Style.marginM
 
                         NText { text: _tr("panel.backend-label", "Backend: ") + bridgeStatusText()
                                 color: tokens.muted
@@ -1597,7 +1599,7 @@ Item {
 
             NText {
                 text: stRoot.label
-                color: stRoot.selected ? tokens.text : tokens.textDim
+                color: stRoot.selected ? tokens.textColor : tokens.textDim
                 font.weight: stRoot.selected ? Font.DemiBold : Font.Medium
                 font.pointSize: Style.fontSizeS
                 font.family: tokens.fontUi
@@ -1606,12 +1608,12 @@ Item {
                 visible: stRoot.badge > 0
                 implicitWidth: badgeText.implicitWidth + 12
                 implicitHeight: badgeText.implicitHeight + 2
-                radius: 99
+                radius: height / 2
                 color: stRoot.selected ? tokens.accent : tokens.border
                 NText {
                     id: badgeText
                     anchors.centerIn: parent
-                    text: "" + stRoot.badge
+                    text: stRoot.badge.toString()
                     color: stRoot.selected ? tokens.accentText : tokens.textDim
                     font.weight: Font.Bold
                     font.pointSize: Style.fontSizeXXS
@@ -1701,7 +1703,7 @@ Item {
                 control: Rectangle {
                     Layout.preferredHeight: 30
                     implicitWidth: resetTxt.implicitWidth + 22
-                    radius: 10
+                    radius: Style.radiusM
                     color: "transparent"
                     border.color: tokens.danger
                     border.width: Style.borderS
@@ -1773,7 +1775,7 @@ Item {
                                 spacing: Style.marginXXXS
                                 NText {
                                     text: modelData.name || modelData.key
-                                    color: tokens.text
+                                    color: tokens.textColor
                                     font.weight: Font.Bold
                                     font.pointSize: Style.fontSizeM
                                 }
@@ -1830,8 +1832,8 @@ Item {
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: Style.marginS
-                        NIcon { icon: "filter"; color: tokens.text; pointSize: Style.fontSizeM }
-                        NText { text: _tr("rules.add-title", "Add routing rule"); color: tokens.text
+                        NIcon { icon: "filter"; color: tokens.textColor; pointSize: Style.fontSizeM }
+                        NText { text: _tr("rules.add-title", "Add routing rule"); color: tokens.textColor
                                 font.weight: Font.Bold; font.pointSize: Style.fontSizeM
                                 Layout.fillWidth: true }
                     }
@@ -1851,14 +1853,14 @@ Item {
                                 readonly property bool selected: ruleType === modelData.v
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 32
-                                radius: 10
+                                radius: Style.radiusM
                                 color: selected ? tokens.accent : tokens.card
                                 border.color: selected ? tokens.accent : tokens.borderSoft
                                 border.width: Style.borderS
                                 NText {
                                     anchors.centerIn: parent
                                     text: modelData.t
-                                    color: parent.selected ? tokens.accentText : tokens.text
+                                    color: parent.selected ? tokens.accentText : tokens.textColor
                                     font.weight: Font.DemiBold
                                     font.pointSize: Style.fontSizeM
                                 }
@@ -1874,7 +1876,7 @@ Item {
                     Rectangle {
                         Layout.fillWidth: true
                         implicitHeight: 36
-                        radius: 9
+                        radius: Style.radiusM
                         color: tokens.card
                         border.color: rulePatternInput.activeFocus ? tokens.accent : tokens.borderSoft
                         border.width: Style.borderS
@@ -1884,7 +1886,7 @@ Item {
                             anchors.fill: parent
                             anchors.leftMargin: 11
                             anchors.rightMargin: 11
-                            color: tokens.text
+                            color: tokens.textColor
                             selectionColor: tokens.accent
                             selectedTextColor: tokens.accentText
                             verticalAlignment: TextInput.AlignVCenter
@@ -1946,7 +1948,7 @@ Item {
                         Layout.alignment: Qt.AlignRight
                         Layout.preferredHeight: 32
                         implicitWidth: addRuleBtnTxt.implicitWidth + 28
-                        radius: 10
+                        radius: Style.radiusM
                         color: tokens.accent
                         NText { id: addRuleBtnTxt; anchors.centerIn: parent; text: _tr("rules.add-rule", "Add rule")
                                 color: tokens.accentText
@@ -2011,7 +2013,7 @@ Item {
                             }
                             NText {
                                 text: modelData.pattern || ""
-                                color: tokens.text
+                                color: tokens.textColor
                                 font.family: tokens.fontMono
                                 font.pointSize: Style.fontSizeS
                                 Layout.fillWidth: true
@@ -2060,12 +2062,12 @@ Item {
                     anchors.margins: Style.marginM
                     spacing: Style.marginS
 
-                    NText { text: _tr("subs.import-title", "Import subscription"); color: tokens.text
+                    NText { text: _tr("subs.import-title", "Import subscription"); color: tokens.textColor
                             font.weight: Font.Bold; font.pointSize: Style.fontSizeM }
 
                     Rectangle {
                         Layout.fillWidth: true; implicitHeight: 36
-                        radius: 9; color: tokens.card
+                        radius: Style.radiusM; color: tokens.card
                         border.color: subUrlInput.activeFocus ? tokens.accent : tokens.borderSoft
                         border.width: Style.borderS
                         TextInput {
@@ -2073,7 +2075,7 @@ Item {
                             anchors.fill: parent
                             anchors.leftMargin: 11
                             anchors.rightMargin: 11
-                            color: tokens.text
+                            color: tokens.textColor
                             selectionColor: tokens.accent
                             selectedTextColor: tokens.accentText
                             font.family: tokens.fontMono
@@ -2095,7 +2097,7 @@ Item {
 
                     Rectangle {
                         Layout.fillWidth: true; implicitHeight: 36
-                        radius: 9; color: tokens.card
+                        radius: Style.radiusM; color: tokens.card
                         border.color: subNameInput.activeFocus ? tokens.accent : tokens.borderSoft
                         border.width: Style.borderS
                         TextInput {
@@ -2103,7 +2105,7 @@ Item {
                             anchors.fill: parent
                             anchors.leftMargin: 11
                             anchors.rightMargin: 11
-                            color: tokens.text
+                            color: tokens.textColor
                             selectionColor: tokens.accent
                             selectedTextColor: tokens.accentText
                             font.pointSize: Style.fontSizeM
@@ -2125,7 +2127,7 @@ Item {
                         Layout.alignment: Qt.AlignRight
                         Layout.preferredHeight: 32
                         implicitWidth: addSubBtnTxt.implicitWidth + 28
-                        radius: 10
+                        radius: Style.radiusM
                         color: tokens.accent
                         NText { id: addSubBtnTxt; anchors.centerIn: parent; text: _tr("subs.add", "Add subscription")
                                 color: tokens.accentText
@@ -2176,7 +2178,7 @@ Item {
                                 Layout.fillWidth: true
                                 spacing: Style.marginXXXS
                                 NText { text: modelData ? (modelData.name || modelData.url) : ""
-                                        color: tokens.text
+                                        color: tokens.textColor
                                         font.weight: Font.Bold
                                         pointSize: Style.fontSizeM
                                         elide: Text.ElideRight
@@ -2240,12 +2242,12 @@ Item {
                 control: Rectangle {
                     Layout.preferredHeight: 30
                     implicitWidth: dnsCheckTxt.implicitWidth + 22
-                    radius: 10
+                    radius: Style.radiusM
                     color: "transparent"
                     border.color: tokens.border
                     border.width: Style.borderS
                     NText { id: dnsCheckTxt; anchors.centerIn: parent
-                            text: _tr("advanced.check", "Check"); color: tokens.text; font.pointSize: Style.fontSizeM }
+                            text: _tr("advanced.check", "Check"); color: tokens.textColor; font.pointSize: Style.fontSizeM }
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
@@ -2265,16 +2267,16 @@ Item {
             SettingsRow {
                 label: _tr("advanced.transport-port-label", "Local transport port")
                 hint: _tr("advanced.transport-port-hint", "sing-box / ssh listens here.")
-                control: NText { text: "" + (root.main ? root.main.transportPort : 11080)
-                                 color: tokens.text
+                control: NText { text: (root.main ? root.main.transportPort : 11080).toString()
+                                 color: tokens.textColor
                                  pointSize: Style.fontSizeS
                                  font.family: tokens.fontMono }
             }
             SettingsRow {
                 label: _tr("advanced.mux-port-label", "Mux port (active)")
                 hint: _tr("advanced.mux-port-hint", "11081 rules · 11082 global")
-                control: NText { text: "" + (root.main ? root.main.muxPort : 11081)
-                                 color: tokens.text
+                control: NText { text: (root.main ? root.main.muxPort : 11081).toString()
+                                 color: tokens.textColor
                                  pointSize: Style.fontSizeS
                                  font.family: tokens.fontMono }
             }
@@ -2293,12 +2295,12 @@ Item {
                 control: Rectangle {
                     Layout.preferredHeight: 30
                     implicitWidth: openLogTxt.implicitWidth + 22
-                    radius: 10
+                    radius: Style.radiusM
                     color: "transparent"
                     border.color: tokens.border
                     border.width: Style.borderS
                     NText { id: openLogTxt; anchors.centerIn: parent; text: _tr("advanced.reveal", "Reveal")
-                            color: tokens.text; font.pointSize: Style.fontSizeM }
+                            color: tokens.textColor; font.pointSize: Style.fontSizeM }
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
@@ -2336,14 +2338,14 @@ Item {
             anchors.rightMargin: 14
             anchors.topMargin: 12
             anchors.bottomMargin: 12
-            spacing: 14
+            spacing: Style.marginL
 
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: Style.marginXXS
                 NText {
                     text: srRoot.label
-                    color: srRoot.danger ? tokens.danger : tokens.text
+                    color: srRoot.danger ? tokens.danger : tokens.textColor
                     font.pointSize: Style.fontSizeM
                     font.weight: Font.Medium
                 }

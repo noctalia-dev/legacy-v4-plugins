@@ -77,7 +77,7 @@ Item {
                 spacing: Style.marginXXS
 
                 Rectangle {
-                    width: 6; height: 6; radius: 3
+                    width: Style.marginS; height: Style.marginS; radius: width / 2
                     color: root.main ? root.main.pingColor(root.latencyMs) : Color.mPrimary
                 }
                 NText {

@@ -13,7 +13,9 @@
     "settings": "Settings",
     "settings-subtitle": "V2Ray Proxy · sing-box · OpenSSH",
     "backend-label": "Backend: ",
-    "fallback-server-name": "Server"
+    "fallback-server-name": "Server",
+    "bullet-prefix": "· ",
+    "swap-icon": "⇅"
   },
   "hero": {
     "connecting": "Connecting…",
