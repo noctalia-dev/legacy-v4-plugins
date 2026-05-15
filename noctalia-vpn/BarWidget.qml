@@ -55,11 +55,12 @@ Item {
         }
 
         NText {
+            readonly property string fallbackLabel: pluginApi ? pluginApi.tr("widget.label") : "VPN"
             text: root.active
-                  ? (root.serverName.length ? root.serverName : "VPN")
-                  : "VPN"
+                  ? (root.serverName.length ? root.serverName : fallbackLabel)
+                  : fallbackLabel
             color: root.tintColor
-            pointSize: Style.barFontSize !== undefined ? Style.barFontSize : Style.fontSizeM
+            pointSize: Style.barFontSize
 
             Behavior on color { ColorAnimation { duration: Style.animationFast } }
         }
@@ -80,7 +81,9 @@ Item {
                     color: root.main ? root.main.pingColor(root.latencyMs) : Color.mPrimary
                 }
                 NText {
-                    text: root.latencyMs + "ms"
+                    text: pluginApi
+                          ? pluginApi.tr("widget.latency-ms", { ms: root.latencyMs })
+                          : root.latencyMs + "ms"
                     color: Color.mOnSurfaceVariant
                     pointSize: Style.fontSizeXS
                     font.family: "JetBrains Mono, monospace"
@@ -92,8 +95,13 @@ Item {
         NText {
             visible: root.showTraffic && root.active && root.main !== null
             text: root.main
-                  ? "↓ " + root.main.formatBytes(root.main.trafficRecv)
-                    + " ↑ " + root.main.formatBytes(root.main.trafficSent)
+                  ? (pluginApi
+                     ? pluginApi.tr("widget.traffic", {
+                         down: root.main.formatBytes(root.main.trafficRecv),
+                         up:   root.main.formatBytes(root.main.trafficSent)
+                       })
+                     : "↓ " + root.main.formatBytes(root.main.trafficRecv)
+                       + " ↑ " + root.main.formatBytes(root.main.trafficSent))
                   : ""
             color: Color.mOnSurfaceVariant
             pointSize: Style.fontSizeXS

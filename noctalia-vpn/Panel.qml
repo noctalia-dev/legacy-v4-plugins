@@ -55,6 +55,22 @@ Item {
         readonly property string fontMono: "JetBrains Mono, ui-monospace, Menlo, monospace"
     }
 
+    // Translation helper — uses pluginApi.tr() when available, otherwise the fallback.
+    // Re-evaluates when the plugin's translation version bumps.
+    readonly property int _trBump: pluginApi ? pluginApi.translationVersion : 0
+    function _tr(key, fallback, interpolations) {
+        void _trBump
+        if (!pluginApi) return fallback
+        const out = pluginApi.tr(key, interpolations || {})
+        // tr() returns "!!key!!" if the key is missing — fall back to the literal.
+        if (typeof out === "string" && out.length >= 4
+                && out.substring(0, 2) === "!!"
+                && out.substring(out.length - 2) === "!!") {
+            return fallback
+        }
+        return out
+    }
+
     function pingTone(ms) {
         if (ms === undefined || ms === null || ms < 0) return tokens.muted
         if (ms < 60)  return tokens.pingGood
@@ -108,7 +124,7 @@ Item {
         radius: 14
         color: tokens.card
         border.color: tokens.borderSoft
-        border.width: 1
+        border.width: Style.borderS
     }
 
     component SmallIcon: Rectangle {
@@ -151,7 +167,7 @@ Item {
         radius: 99
         color: on ? tokens.accent : tokens.cardHi
         border.color: on ? tokens.accent : tokens.border
-        border.width: 1
+        border.width: Style.borderS
 
         Rectangle {
             width: parent.knob; height: parent.knob
@@ -173,10 +189,10 @@ Item {
     component ProtoTag: Rectangle {
         property string proto: ""
         readonly property var pc: protoTokens(proto)
-        radius: 4
+        radius: Style.radiusXXS
         color: pc.bg
         border.color: pc.bd
-        border.width: 1
+        border.width: Style.borderS
         implicitWidth: protoLabel.implicitWidth + 12
         implicitHeight: protoLabel.implicitHeight + 3
 
@@ -185,7 +201,7 @@ Item {
             anchors.centerIn: parent
             text: parent.proto.toUpperCase()
             color: parent.pc.fg
-            font.pointSize: 9
+            font.pointSize: Style.fontSizeXS
             font.family: tokens.fontMono
             font.weight: Font.Bold
             font.letterSpacing: 0.6
@@ -207,14 +223,14 @@ Item {
                 width: 10; height: 10; radius: 5
                 color: "transparent"
                 border.color: pingTone(parent.parent.ms)
-                border.width: 1
+                border.width: Style.borderS
                 opacity: 0.4
             }
         }
         NText {
             text: parent.ms + "ms"
             color: tokens.textDim
-            pointSize: 10
+            pointSize: Style.fontSizeS
             font.family: tokens.fontMono
         }
     }
@@ -231,7 +247,7 @@ Item {
         radius: 10
         color: selected ? tokens.accent : tokens.card
         border.color: selected ? tokens.accent : tokens.border
-        border.width: 1
+        border.width: Style.borderS
 
         NText {
             anchors.centerIn: parent
@@ -263,7 +279,7 @@ Item {
             radius: 18
             color: tokens.bg
             border.color: tokens.borderSoft
-            border.width: 1
+            border.width: Style.borderS
 
             // ── Main column ────────────────────────────────────────────────
             ColumnLayout {
@@ -296,7 +312,7 @@ Item {
                         spacing: 10
 
                         NText {
-                            text: "V2Ray Proxy"
+                            text: _tr("panel.title", "V2Ray Proxy")
                             color: tokens.text
                             font.weight: Font.DemiBold
                             font.pointSize: 14
@@ -346,34 +362,34 @@ Item {
                             radius: 19
                             color: heroAccent(0.14)
                             border.color: heroAccent(0.28)
-                            border.width: 1
+                            border.width: Style.borderS
 
                             NIcon {
                                 anchors.centerIn: parent
                                 icon: heroIconName()
                                 color: heroIconColor()
-                                pointSize: 16
+                                pointSize: Style.fontSizeXL
                             }
                         }
 
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 4
+                            spacing: Style.marginXS
 
                             RowLayout {
-                                spacing: 6
+                                spacing: Style.marginS
 
                                 Rectangle {
                                     Layout.preferredWidth: 7
                                     Layout.preferredHeight: 7
-                                    radius: 4
+                                    radius: Style.radiusXXS
                                     color: heroIconColor()
                                     Rectangle {
                                         anchors.centerIn: parent
                                         width: 13; height: 13; radius: 7
                                         color: "transparent"
                                         border.color: parent.color
-                                        border.width: 1
+                                        border.width: Style.borderS
                                         opacity: 0.45
                                     }
                                 }
@@ -387,7 +403,7 @@ Item {
                                     visible: heroSubtitle().length > 0
                                     text: "· " + heroSubtitle()
                                     color: tokens.muted
-                                    font.pointSize: 11
+                                    font.pointSize: Style.fontSizeM
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
                                 }
@@ -400,7 +416,7 @@ Item {
                                 NText {
                                     text: heroLine2()
                                     color: tokens.textDim
-                                    font.pointSize: 10
+                                    font.pointSize: Style.fontSizeS
                                     font.family: tokens.fontMono
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
@@ -440,22 +456,24 @@ Item {
                             }
 
                             ColumnLayout {
-                                spacing: 1
+                                spacing: Style.marginXXXS
 
                                 NText {
-                                    text: root.testRunning ? "Testing…" : "Network test"
+                                    text: root.testRunning
+                                          ? _tr("speed.testing", "Testing…")
+                                          : _tr("speed.title", "Network test")
                                     color: tokens.text
-                                    font.pointSize: 11
+                                    font.pointSize: Style.fontSizeM
                                     font.weight: Font.DemiBold
                                 }
                                 NText {
                                     text: root.testRunning
-                                          ? "measuring through tunnel"
+                                          ? _tr("speed.measuring", "measuring through tunnel")
                                           : (root.testTakenAt.length
-                                             ? "Last run " + root.testTakenAt
-                                             : "Tap Run to test current server")
+                                             ? _tr("speed.last-run", "Last run " + root.testTakenAt, { when: root.testTakenAt })
+                                             : _tr("speed.prompt", "Tap Run to test current server"))
                                     color: tokens.muted
-                                    font.pointSize: 9
+                                    font.pointSize: Style.fontSizeXS
                                 }
                             }
 
@@ -472,10 +490,12 @@ Item {
                                 NText {
                                     id: runText
                                     anchors.centerIn: parent
-                                    text: root.testRunning ? "STOP" : "RUN TEST"
+                                    text: root.testRunning
+                                          ? _tr("speed.stop", "STOP")
+                                          : _tr("speed.run", "RUN TEST")
                                     color: root.testRunning ? tokens.textDim : tokens.accentText
                                     font.weight: Font.Bold
-                                    font.pointSize: 10
+                                    font.pointSize: Style.fontSizeS
                                     font.letterSpacing: 0.3
                                     font.family: tokens.fontUi
                                 }
@@ -503,10 +523,10 @@ Item {
 
                             Repeater {
                                 model: [
-                                    { label: "Ping",   unit: "ms",   key: "ping",   icon: "" },
-                                    { label: "Jitter", unit: "ms",   key: "jitter", icon: "" },
-                                    { label: "Down",   unit: "Mbps", key: "down",   icon: "arrow-down" },
-                                    { label: "Up",     unit: "Mbps", key: "up",     icon: "arrow-up" }
+                                    { label: _tr("speed.stat-ping",   "Ping"),   unit: "ms",   key: "ping",   icon: "" },
+                                    { label: _tr("speed.stat-jitter", "Jitter"), unit: "ms",   key: "jitter", icon: "" },
+                                    { label: _tr("speed.stat-down",   "Down"),   unit: "Mbps", key: "down",   icon: "arrow-down" },
+                                    { label: _tr("speed.stat-up",     "Up"),     unit: "Mbps", key: "up",     icon: "arrow-up" }
                                 ]
                                 delegate: Rectangle {
                                     required property var modelData
@@ -540,12 +560,12 @@ Item {
                                                 visible: modelData.icon.length > 0
                                                 icon: modelData.icon
                                                 color: tokens.muted
-                                                pointSize: 10
+                                                pointSize: Style.fontSizeS
                                             }
                                             NText {
                                                 text: modelData.label.toUpperCase()
                                                 color: tokens.muted
-                                                font.pointSize: 9
+                                                font.pointSize: Style.fontSizeXS
                                                 font.weight: Font.Bold
                                                 font.letterSpacing: 0.7
                                             }
@@ -553,7 +573,7 @@ Item {
 
                                         RowLayout {
                                             Layout.alignment: Qt.AlignHCenter
-                                            spacing: 2
+                                            spacing: Style.marginXXS
 
                                             NText {
                                                 text: statValue(modelData.key)
@@ -567,7 +587,7 @@ Item {
                                                 Layout.alignment: Qt.AlignBottom
                                                 text: modelData.unit
                                                 color: tokens.muted
-                                                font.pointSize: 9
+                                                font.pointSize: Style.fontSizeXS
                                                 font.weight: Font.Medium
                                             }
                                         }
@@ -610,8 +630,10 @@ Item {
                     spacing: 8
 
                     ModeSummaryChip {
-                        title: "ROUTING"
-                        value: (root.main && root.main.mode === "global") ? "Global" : "Rules"
+                        title: _tr("mode.routing", "ROUTING")
+                        value: (root.main && root.main.mode === "global")
+                               ? _tr("mode.global", "Global")
+                               : _tr("mode.rules", "Rules")
                         onClicked: {
                             if (!root.main) return
                             root.main.setMode(root.main.mode === "rules" ? "global" : "rules")
@@ -619,8 +641,10 @@ Item {
                     }
 
                     ModeSummaryChip {
-                        title: "VIA"
-                        value: (root.main && root.main.proxyMode === "tun") ? "VPN (TUN)" : "System proxy"
+                        title: _tr("mode.via", "VIA")
+                        value: (root.main && root.main.proxyMode === "tun")
+                               ? _tr("mode.vpn-tun", "VPN (TUN)")
+                               : _tr("mode.system-proxy", "System proxy")
                         onClicked: {
                             if (!root.main) return
                             root.main.setProxyMode(root.main.proxyMode === "system" ? "tun" : "system")
@@ -638,7 +662,7 @@ Item {
                     spacing: 8
 
                     NText {
-                        text: "Servers"
+                        text: _tr("panel.servers", "Servers")
                         color: tokens.text
                         font.weight: Font.DemiBold
                         font.pointSize: 12
@@ -646,7 +670,7 @@ Item {
                     NText {
                         text: "· " + (root.main ? (root.main.servers || []).length : 0)
                         color: tokens.muted
-                        font.pointSize: 10
+                        font.pointSize: Style.fontSizeS
                         Layout.fillWidth: true
                     }
                     // "+ Add" button
@@ -656,18 +680,18 @@ Item {
                         radius: 10
                         color: "transparent"
                         border.color: tokens.border
-                        border.width: 1
+                        border.width: Style.borderS
 
                         RowLayout {
                             id: addRow
                             anchors.centerIn: parent
                             spacing: 5
 
-                            NIcon { icon: "plus"; color: tokens.text; pointSize: 11 }
+                            NIcon { icon: "plus"; color: tokens.text; pointSize: Style.fontSizeM }
                             NText {
-                                text: "Add"
+                                text: _tr("panel.add", "Add")
                                 color: tokens.text
-                                font.pointSize: 10
+                                font.pointSize: Style.fontSizeS
                                 font.family: tokens.fontUi
                             }
                         }
@@ -693,7 +717,7 @@ Item {
                     Layout.topMargin: 0
                     Layout.bottomMargin: 12
                     clip: true
-                    spacing: 4
+                    spacing: Style.marginXS
                     model: filteredServers()
 
                     delegate: Rectangle {
@@ -714,7 +738,7 @@ Item {
                         border.color: isActive
                                       ? tokens.border
                                       : (isSelected ? withAlpha(tokens.accent, 0.4) : "transparent")
-                        border.width: 1
+                        border.width: Style.borderS
 
                         RowLayout {
                             id: row
@@ -729,7 +753,7 @@ Item {
                             Rectangle {
                                 Layout.preferredWidth: 7
                                 Layout.preferredHeight: 7
-                                radius: 4
+                                radius: Style.radiusXXS
                                 color: row.parent.isActive
                                        ? tokens.success
                                        : (row.parent.isSelected ? withAlpha(tokens.accent, 0.7) : tokens.border)
@@ -739,7 +763,7 @@ Item {
                                     width: 13; height: 13; radius: 7
                                     color: "transparent"
                                     border.color: tokens.success
-                                    border.width: 1
+                                    border.width: Style.borderS
                                     opacity: 0.45
                                 }
                             }
@@ -752,16 +776,16 @@ Item {
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 1
+                                spacing: Style.marginXXXS
 
                                 RowLayout {
-                                    spacing: 6
+                                    spacing: Style.marginS
 
                                     NText {
-                                        text: modelData ? (modelData.name || "Server") : ""
+                                        text: modelData ? (modelData.name || _tr("panel.fallback-server-name", "Server")) : ""
                                         color: tokens.text
                                         font.weight: row.parent.isSelected ? Font.DemiBold : Font.Medium
-                                        font.pointSize: 11
+                                        font.pointSize: Style.fontSizeM
                                     }
 
                                     ProtoTag { proto: protoLabelFor(modelData) }
@@ -770,7 +794,7 @@ Item {
                                 NText {
                                     text: serverEndpoint(modelData)
                                     color: tokens.muted
-                                    font.pointSize: 9
+                                    font.pointSize: Style.fontSizeXS
                                     font.family: tokens.fontMono
                                     elide: Text.ElideMiddle
                                     Layout.fillWidth: true
@@ -823,15 +847,15 @@ Item {
 
                             NIcon { icon: "shield"; color: tokens.textDim; pointSize: 28; Layout.alignment: Qt.AlignHCenter }
                             NText {
-                                text: "No servers yet"
+                                text: _tr("panel.no-servers-title", "No servers yet")
                                 color: tokens.textDim
                                 font.pointSize: 12
                                 Layout.alignment: Qt.AlignHCenter
                             }
                             NText {
-                                text: "Tap + Add to import or paste a share link"
+                                text: _tr("panel.no-servers-hint", "Tap + Add to import or paste a share link")
                                 color: tokens.muted
-                                font.pointSize: 10
+                                font.pointSize: Style.fontSizeS
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
@@ -859,7 +883,7 @@ Item {
         radius: 10
         color: tokens.card
         border.color: tokens.borderSoft
-        border.width: 1
+        border.width: Style.borderS
 
         RowLayout {
             anchors.fill: parent
@@ -870,19 +894,19 @@ Item {
             ColumnLayout {
                 id: chipCol
                 Layout.fillWidth: true
-                spacing: 1
+                spacing: Style.marginXXXS
 
                 NText {
                     text: chipRoot.title
                     color: tokens.muted
-                    font.pointSize: 9
+                    font.pointSize: Style.fontSizeXS
                     font.weight: Font.Bold
                     font.letterSpacing: 0.7
                 }
                 NText {
                     text: chipRoot.value
                     color: tokens.text
-                    font.pointSize: 11
+                    font.pointSize: Style.fontSizeM
                     font.weight: Font.DemiBold
                 }
             }
@@ -923,10 +947,10 @@ Item {
             anchors.centerIn: parent
             width: parent.width - 32
             height: Math.min(parent.height - 32, 640)
-            radius: 16
+            radius: Style.radiusM
             color: tokens.bg
             border.color: tokens.border
-            border.width: 1
+            border.width: Style.borderS
 
             MouseArea { anchors.fill: parent }  // swallow scrim clicks
 
@@ -959,21 +983,23 @@ Item {
 
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 1
+                            spacing: Style.marginXXXS
                             NText {
                                 text: serverEditorPayload && serverEditorPayload.id
-                                      ? "Edit server" : "Add server"
+                                      ? _tr("editor.title-edit", "Edit server")
+                                      : _tr("editor.title-add",  "Add server")
                                 color: tokens.text
                                 font.weight: Font.DemiBold
-                                font.pointSize: 13
+                                font.pointSize: Style.fontSizeL
                                 font.letterSpacing: -0.1
                             }
                             NText {
                                 text: (serverEditorPayload && serverEditorPayload.name
                                        ? serverEditorPayload.name
-                                       : "New server") + " · " + (currentProto || "VLESS").toUpperCase()
+                                       : _tr("editor.new-server", "New server"))
+                                      + " · " + (currentProto || "VLESS").toUpperCase()
                                 color: tokens.muted
-                                font.pointSize: 10
+                                font.pointSize: Style.fontSizeS
                             }
                         }
                         SmallIcon { icon: "x"; onClicked: root.closeServerEditor() }
@@ -990,7 +1016,7 @@ Item {
                     radius: 10
                     color: withAlpha(tokens.accent, 0.06)
                     border.color: withAlpha(tokens.accent, 0.30)
-                    border.width: 1
+                    border.width: Style.borderS
 
                     RowLayout {
                         id: importRow
@@ -999,11 +1025,11 @@ Item {
                         anchors.rightMargin: 8
                         spacing: 8
 
-                        NIcon { icon: "world"; color: tokens.textDim; pointSize: 11 }
+                        NIcon { icon: "world"; color: tokens.textDim; pointSize: Style.fontSizeM }
                         NText {
-                            text: "Paste share link to auto-fill"
+                            text: _tr("editor.import-banner", "Paste share link to auto-fill")
                             color: tokens.textDim
-                            font.pointSize: 10
+                            font.pointSize: Style.fontSizeS
                             Layout.fillWidth: true
                         }
                         Rectangle {
@@ -1014,10 +1040,10 @@ Item {
                             NText {
                                 id: importBtnText
                                 anchors.centerIn: parent
-                                text: "Import"
+                                text: _tr("editor.import", "Import")
                                 color: tokens.accent
                                 font.weight: Font.DemiBold
-                                font.pointSize: 10
+                                font.pointSize: Style.fontSizeS
                             }
                             MouseArea {
                                 anchors.fill: parent
@@ -1048,16 +1074,16 @@ Item {
                             Layout.fillWidth: true
 
                             NText {
-                                text: "PROTOCOL"
+                                text: _tr("editor.section-protocol", "PROTOCOL")
                                 color: tokens.textDim
-                                font.pointSize: 9
+                                font.pointSize: Style.fontSizeXS
                                 font.weight: Font.Bold
                                 font.letterSpacing: 0.7
                             }
 
                             Flow {
                                 Layout.fillWidth: true
-                                spacing: 6
+                                spacing: Style.marginS
 
                                 Repeater {
                                     model: ["vless", "vmess", "shadowsocks", "ssh", "socks5"]
@@ -1070,25 +1096,25 @@ Item {
                                         radius: 10
                                         color: selected ? tokens.accent : tokens.card
                                         border.color: selected ? tokens.accent : tokens.borderSoft
-                                        border.width: 1
+                                        border.width: Style.borderS
 
                                         ColumnLayout {
                                             id: protoCol
                                             anchors.left: parent.left
                                             anchors.leftMargin: 11
                                             anchors.verticalCenter: parent.verticalCenter
-                                            spacing: 1
+                                            spacing: Style.marginXXXS
                                             NText {
                                                 text: protoDisplayLabel(modelData)
                                                 color: parent.parent.selected ? tokens.accentText : tokens.text
                                                 font.family: tokens.fontMono
                                                 font.weight: Font.Bold
-                                                font.pointSize: 10
+                                                font.pointSize: Style.fontSizeS
                                             }
                                             NText {
                                                 text: protoEngine(modelData)
                                                 color: parent.parent.selected ? tokens.accentText : tokens.muted
-                                                font.pointSize: 8
+                                                font.pointSize: Style.fontSizeXXS
                                                 opacity: parent.parent.selected ? 0.7 : 1
                                             }
                                         }
@@ -1104,7 +1130,7 @@ Item {
                         }
 
                         // Identity
-                        SeField { label: "NAME"; binding: "name" }
+                        SeField { label: _tr("editor.field-name", "NAME"); binding: "name" }
 
                         // Connection
                         ColumnLayout {
@@ -1112,9 +1138,9 @@ Item {
                             spacing: 8
 
                             NText {
-                                text: "CONNECTION"
+                                text: _tr("editor.section-connection", "CONNECTION")
                                 color: tokens.muted
-                                font.pointSize: 9
+                                font.pointSize: Style.fontSizeXS
                                 font.weight: Font.Bold
                                 font.letterSpacing: 0.7
                             }
@@ -1123,9 +1149,9 @@ Item {
                                 spacing: 8
 
                                 SeField { Layout.fillWidth: true; Layout.preferredWidth: 2
-                                          label: "HOST"; binding: hostFieldKey(); mono: true }
+                                          label: _tr("editor.field-host", "HOST"); binding: hostFieldKey(); mono: true }
                                 SeField { Layout.fillWidth: true; Layout.preferredWidth: 1
-                                          label: "PORT"; binding: "port"; mono: true }
+                                          label: _tr("editor.field-port", "PORT"); binding: "port"; mono: true }
                             }
                         }
 
@@ -1176,14 +1202,14 @@ Item {
                             radius: 10
                             color: "transparent"
                             border.color: tokens.border
-                            border.width: 1
+                            border.width: Style.borderS
 
                             RowLayout {
                                 id: testBtnRow
                                 anchors.centerIn: parent
-                                spacing: 6
-                                NIcon { icon: "bolt"; color: tokens.text; pointSize: 11 }
-                                NText { text: "Test connection"; color: tokens.text; font.pointSize: 11 }
+                                spacing: Style.marginS
+                                NIcon { icon: "bolt"; color: tokens.text; pointSize: Style.fontSizeM }
+                                NText { text: _tr("editor.test-connection", "Test connection"); color: tokens.text; font.pointSize: Style.fontSizeM }
                             }
                             MouseArea {
                                 anchors.fill: parent
@@ -1200,8 +1226,8 @@ Item {
                             implicitWidth: cancelTxt.implicitWidth + 20
                             radius: 10
                             color: "transparent"
-                            NText { id: cancelTxt; anchors.centerIn: parent; text: "Cancel"
-                                    color: tokens.textDim; font.pointSize: 11 }
+                            NText { id: cancelTxt; anchors.centerIn: parent; text: _tr("editor.cancel", "Cancel")
+                                    color: tokens.textDim; font.pointSize: Style.fontSizeM }
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
@@ -1216,7 +1242,7 @@ Item {
                             radius: 10
                             color: tokens.accent
                             border.width: 0
-                            NText { id: saveTxt; anchors.centerIn: parent; text: "Save"
+                            NText { id: saveTxt; anchors.centerIn: parent; text: _tr("editor.save", "Save")
                                     color: tokens.accentText
                                     font.pointSize: 12; font.weight: Font.Bold }
                             MouseArea {
@@ -1237,19 +1263,19 @@ Item {
         ColumnLayout {
             spacing: Style.marginS
             NText {
-                text: "AUTHENTICATION"
+                text: _tr("editor.section-auth", "AUTHENTICATION")
                 color: tokens.muted
-                font.pointSize: 9
+                font.pointSize: Style.fontSizeXS
                 font.weight: Font.Bold
                 font.letterSpacing: 0.7
             }
-            SeField { label: "USER"; binding: "user"; mono: true }
-            SeField { label: "KEY FILE"; binding: "keyFile"; mono: true; placeholder: "~/.ssh/id_ed25519" }
-            SeField { label: "PASSWORD"; binding: "password"; mono: true; secret: true }
+            SeField { label: _tr("editor.field-user", "USER"); binding: "user"; mono: true }
+            SeField { label: _tr("editor.field-key-file", "KEY FILE"); binding: "keyFile"; mono: true; placeholder: "~/.ssh/id_ed25519" }
+            SeField { label: _tr("editor.field-password", "PASSWORD"); binding: "password"; mono: true; secret: true }
             NText {
-                text: "Either key file or password is required."
+                text: _tr("editor.auth-hint-ssh", "Either key file or password is required.")
                 color: tokens.muted
-                font.pointSize: 10
+                font.pointSize: Style.fontSizeS
             }
         }
     }
@@ -1258,16 +1284,16 @@ Item {
         id: vlessAuthBlock
         ColumnLayout {
             spacing: Style.marginS
-            NText { text: "AUTHENTICATION"; color: tokens.muted
-                    font.pointSize: 9; font.weight: Font.Bold; font.letterSpacing: 0.7 }
-            SeField { label: "UUID";      binding: "uuid";      mono: true }
-            SeField { label: "TRANSPORT"; binding: "transport"; mono: true; placeholder: "tcp" }
-            SeField { label: "FLOW";      binding: "flow";      mono: true; placeholder: "xtls-rprx-vision" }
-            SeField { label: "SECURITY";  binding: "security";  mono: true; placeholder: "reality | tls | none" }
-            SeField { label: "SNI";       binding: "sni";       mono: true }
-            SeField { label: "FINGERPRINT"; binding: "fp";      mono: true; placeholder: "chrome" }
-            SeField { label: "REALITY PBK"; binding: "pbk";     mono: true }
-            SeField { label: "REALITY SID"; binding: "sid";     mono: true }
+            NText { text: _tr("editor.section-auth", "AUTHENTICATION"); color: tokens.muted
+                    font.pointSize: Style.fontSizeXS; font.weight: Font.Bold; font.letterSpacing: 0.7 }
+            SeField { label: _tr("editor.field-uuid", "UUID");      binding: "uuid";      mono: true }
+            SeField { label: _tr("editor.field-transport", "TRANSPORT"); binding: "transport"; mono: true; placeholder: "tcp" }
+            SeField { label: _tr("editor.field-flow", "FLOW");      binding: "flow";      mono: true; placeholder: "xtls-rprx-vision" }
+            SeField { label: _tr("editor.field-security", "SECURITY");  binding: "security";  mono: true; placeholder: "reality | tls | none" }
+            SeField { label: _tr("editor.field-sni", "SNI");       binding: "sni";       mono: true }
+            SeField { label: _tr("editor.field-fingerprint", "FINGERPRINT"); binding: "fp";      mono: true; placeholder: "chrome" }
+            SeField { label: _tr("editor.field-reality-pbk", "REALITY PBK"); binding: "pbk";     mono: true }
+            SeField { label: _tr("editor.field-reality-sid", "REALITY SID"); binding: "sid";     mono: true }
         }
     }
 
@@ -1275,12 +1301,12 @@ Item {
         id: vmessAuthBlock
         ColumnLayout {
             spacing: Style.marginS
-            NText { text: "AUTHENTICATION"; color: tokens.muted
-                    font.pointSize: 9; font.weight: Font.Bold; font.letterSpacing: 0.7 }
-            SeField { label: "UUID";      binding: "uuid";     mono: true }
-            SeField { label: "ALTER ID";  binding: "alterId";  mono: true; placeholder: "0" }
-            SeField { label: "SECURITY";  binding: "security"; mono: true; placeholder: "auto" }
-            SeField { label: "TRANSPORT"; binding: "transport"; mono: true; placeholder: "tcp" }
+            NText { text: _tr("editor.section-auth", "AUTHENTICATION"); color: tokens.muted
+                    font.pointSize: Style.fontSizeXS; font.weight: Font.Bold; font.letterSpacing: 0.7 }
+            SeField { label: _tr("editor.field-uuid", "UUID");      binding: "uuid";     mono: true }
+            SeField { label: _tr("editor.field-alter-id", "ALTER ID");  binding: "alterId";  mono: true; placeholder: "0" }
+            SeField { label: _tr("editor.field-security", "SECURITY");  binding: "security"; mono: true; placeholder: "auto" }
+            SeField { label: _tr("editor.field-transport", "TRANSPORT"); binding: "transport"; mono: true; placeholder: "tcp" }
         }
     }
 
@@ -1288,10 +1314,10 @@ Item {
         id: ssAuthBlock
         ColumnLayout {
             spacing: Style.marginS
-            NText { text: "AUTHENTICATION"; color: tokens.muted
-                    font.pointSize: 9; font.weight: Font.Bold; font.letterSpacing: 0.7 }
-            SeField { label: "METHOD";   binding: "method";   mono: true; placeholder: "aes-256-gcm" }
-            SeField { label: "PASSWORD"; binding: "password"; mono: true; secret: true }
+            NText { text: _tr("editor.section-auth", "AUTHENTICATION"); color: tokens.muted
+                    font.pointSize: Style.fontSizeXS; font.weight: Font.Bold; font.letterSpacing: 0.7 }
+            SeField { label: _tr("editor.field-method", "METHOD");   binding: "method";   mono: true; placeholder: "aes-256-gcm" }
+            SeField { label: _tr("editor.field-password", "PASSWORD"); binding: "password"; mono: true; secret: true }
         }
     }
 
@@ -1299,10 +1325,10 @@ Item {
         id: socks5AuthBlock
         ColumnLayout {
             spacing: Style.marginS
-            NText { text: "AUTHENTICATION"; color: tokens.muted
-                    font.pointSize: 9; font.weight: Font.Bold; font.letterSpacing: 0.7 }
-            SeField { label: "USERNAME"; binding: "username"; mono: true }
-            SeField { label: "PASSWORD"; binding: "password"; mono: true; secret: true }
+            NText { text: _tr("editor.section-auth", "AUTHENTICATION"); color: tokens.muted
+                    font.pointSize: Style.fontSizeXS; font.weight: Font.Bold; font.letterSpacing: 0.7 }
+            SeField { label: _tr("editor.field-username", "USERNAME"); binding: "username"; mono: true }
+            SeField { label: _tr("editor.field-password", "PASSWORD"); binding: "password"; mono: true; secret: true }
         }
     }
 
@@ -1321,7 +1347,7 @@ Item {
         NText {
             text: seRoot.label.toUpperCase()
             color: tokens.muted
-            font.pointSize: 9
+            font.pointSize: Style.fontSizeXS
             font.weight: Font.Bold
             font.letterSpacing: 0.7
         }
@@ -1333,7 +1359,7 @@ Item {
             radius: 9
             color: tokens.card
             border.color: tin.activeFocus ? tokens.accent : tokens.borderSoft
-            border.width: 1
+            border.width: Style.borderS
 
             TextInput {
                 id: tin
@@ -1345,7 +1371,7 @@ Item {
                 selectionColor: tokens.accent
                 selectedTextColor: tokens.accentText
                 font.family: seRoot.mono ? tokens.fontMono : tokens.fontUi
-                font.pointSize: 11
+                font.pointSize: Style.fontSizeM
                 selectByMouse: true
                 clip: true
                 activeFocusOnTab: true
@@ -1414,10 +1440,10 @@ Item {
             anchors.centerIn: parent
             width: parent.width - 32
             height: Math.min(parent.height - 32, 700)
-            radius: 16
+            radius: Style.radiusM
             color: tokens.bg
             border.color: tokens.border
-            border.width: 1
+            border.width: Style.borderS
 
             MouseArea { anchors.fill: parent }
 
@@ -1450,12 +1476,12 @@ Item {
 
                         ColumnLayout {
                             Layout.fillWidth: true
-                            spacing: 1
-                            NText { text: "Settings"; color: tokens.text
-                                    font.weight: Font.DemiBold; font.pointSize: 13
+                            spacing: Style.marginXXXS
+                            NText { text: _tr("panel.settings", "Settings"); color: tokens.text
+                                    font.weight: Font.DemiBold; font.pointSize: Style.fontSizeL
                                     font.letterSpacing: -0.1 }
-                            NText { text: "V2Ray Proxy · sing-box · OpenSSH"
-                                    color: tokens.muted; font.pointSize: 10 }
+                            NText { text: _tr("panel.settings-subtitle", "V2Ray Proxy · sing-box · OpenSSH")
+                                    color: tokens.muted; font.pointSize: Style.fontSizeS }
                         }
                         SmallIcon { icon: "x"; onClicked: root.closeSettings() }
                     }
@@ -1480,20 +1506,20 @@ Item {
                         anchors.rightMargin: 10
                         anchors.topMargin: 8
                         anchors.bottomMargin: 8
-                        spacing: 2
+                        spacing: Style.marginXXS
 
-                        SettingsTab { label: "General";  value: "general";
+                        SettingsTab { label: _tr("tabs.general", "General");  value: "general";
                                       selected: settingsTab === "general"
                                       onClicked: settingsTab = "general" }
-                        SettingsTab { label: "Routing";  value: "rules";
+                        SettingsTab { label: _tr("tabs.routing", "Routing");  value: "rules";
                                       selected: settingsTab === "rules"
                                       badge: (root.main && root.main.rules) ? root.main.rules.length : 0
                                       onClicked: settingsTab = "rules" }
-                        SettingsTab { label: "Subs";     value: "lists";
+                        SettingsTab { label: _tr("tabs.subs", "Subs");     value: "lists";
                                       selected: settingsTab === "lists"
                                       badge: (root.main && root.main.subscriptions) ? root.main.subscriptions.length : 0
                                       onClicked: settingsTab = "lists" }
-                        SettingsTab { label: "Advanced"; value: "advanced";
+                        SettingsTab { label: _tr("tabs.advanced", "Advanced"); value: "advanced";
                                       selected: settingsTab === "advanced"
                                       onClicked: settingsTab = "advanced" }
                     }
@@ -1540,9 +1566,9 @@ Item {
                         anchors.bottomMargin: 8
                         spacing: 10
 
-                        NText { text: "Backend: " + bridgeStatusText()
+                        NText { text: _tr("panel.backend-label", "Backend: ") + bridgeStatusText()
                                 color: tokens.muted
-                                font.pointSize: 10
+                                font.pointSize: Style.fontSizeS
                                 Layout.fillWidth: true; elide: Text.ElideRight }
                     }
                 }
@@ -1561,19 +1587,19 @@ Item {
 
         implicitWidth: tabRowInner.implicitWidth + 24
         implicitHeight: tabRowInner.implicitHeight + 16
-        radius: 8
+        radius: Style.radiusXS
         color: selected ? tokens.cardHi : "transparent"
 
         RowLayout {
             id: tabRowInner
             anchors.centerIn: parent
-            spacing: 6
+            spacing: Style.marginS
 
             NText {
                 text: stRoot.label
                 color: stRoot.selected ? tokens.text : tokens.textDim
                 font.weight: stRoot.selected ? Font.DemiBold : Font.Medium
-                font.pointSize: 10
+                font.pointSize: Style.fontSizeS
                 font.family: tokens.fontUi
             }
             Rectangle {
@@ -1588,7 +1614,7 @@ Item {
                     text: "" + stRoot.badge
                     color: stRoot.selected ? tokens.accentText : tokens.textDim
                     font.weight: Font.Bold
-                    font.pointSize: 8
+                    font.pointSize: Style.fontSizeXXS
                     font.family: tokens.fontMono
                 }
             }
@@ -1609,8 +1635,8 @@ Item {
             spacing: 0
 
             SettingsRow {
-                label: "Auto-start on shell launch"
-                hint: "Activate the last-used server when this plugin loads."
+                label: _tr("general.auto-start-label", "Auto-start on shell launch")
+                hint: _tr("general.auto-start-hint", "Activate the last-used server when this plugin loads.")
                 control: MasterToggle {
                     on: pluginApi && pluginApi.pluginSettings.autoStart === true
                     onToggled: {
@@ -1621,14 +1647,14 @@ Item {
                 }
             }
             SettingsRow {
-                label: "Active server"
+                label: _tr("general.active-server-label", "Active server")
                 hint: root.main && root.main.activeServer()
                       ? root.main.activeServer().name + " · " + serverEndpoint(root.main.activeServer())
-                      : "Nothing selected"
+                      : _tr("general.active-server-empty", "Nothing selected")
                 control: null
             }
             SettingsRow {
-                label: "Bridge"
+                label: _tr("general.bridge-label", "Bridge")
                 hint: bridgeStatusText()
                 control: null
             }
@@ -1639,15 +1665,15 @@ Item {
                 Layout.leftMargin: 14
                 Layout.rightMargin: 14
                 NText {
-                    text: "Bar widget"
+                    text: _tr("general.bar-widget", "Bar widget")
                     color: tokens.muted
-                    font.pointSize: 10
+                    font.pointSize: Style.fontSizeS
                     font.weight: Font.DemiBold
                 }
             }
             SettingsRow {
-                label: "Show ping"
-                hint: "Display the active server's latency next to the VPN name (e.g. • 18ms)."
+                label: _tr("general.show-ping-label", "Show ping")
+                hint: _tr("general.show-ping-hint", "Display the active server's latency next to the VPN name (e.g. • 18ms).")
                 control: MasterToggle {
                     on: root.main && root.main.showPingInBar === true
                     onToggled: {
@@ -1657,8 +1683,8 @@ Item {
                 }
             }
             SettingsRow {
-                label: "Show traffic speed"
-                hint: "Display download/upload counters in the bar (↓ down  ↑ up)."
+                label: _tr("general.show-traffic-label", "Show traffic speed")
+                hint: _tr("general.show-traffic-hint", "Display download/upload counters in the bar (↓ down  ↑ up).")
                 control: MasterToggle {
                     on: root.main && root.main.showTrafficInBar === true
                     onToggled: {
@@ -1669,8 +1695,8 @@ Item {
             }
 
             SettingsRow {
-                label: "Reset all servers"
-                hint: "Clear every server from the backend. Settings stay."
+                label: _tr("general.reset-servers-label", "Reset all servers")
+                hint: _tr("general.reset-servers-hint", "Clear every server from the backend. Settings stay.")
                 danger: true
                 control: Rectangle {
                     Layout.preferredHeight: 30
@@ -1678,9 +1704,9 @@ Item {
                     radius: 10
                     color: "transparent"
                     border.color: tokens.danger
-                    border.width: 1
-                    NText { id: resetTxt; anchors.centerIn: parent; text: "Remove"
-                            color: tokens.danger; font.pointSize: 11 }
+                    border.width: Style.borderS
+                    NText { id: resetTxt; anchors.centerIn: parent; text: _tr("general.remove", "Remove")
+                            color: tokens.danger; font.pointSize: Style.fontSizeM }
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
@@ -1710,9 +1736,9 @@ Item {
                 Layout.leftMargin: Style.marginL
                 Layout.rightMargin: Style.marginL
                 NText {
-                    text: "Routing presets"
+                    text: _tr("rules.presets", "Routing presets")
                     color: tokens.muted
-                    font.pointSize: 10
+                    font.pointSize: Style.fontSizeS
                     font.weight: Font.DemiBold
                 }
                 Item { Layout.fillWidth: true }
@@ -1739,22 +1765,22 @@ Item {
 
                             NText {
                                 text: modelData.flag || ""
-                                font.pointSize: 18
+                                font.pointSize: Style.fontSizeXXL
                                 Layout.alignment: Qt.AlignVCenter
                             }
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 1
+                                spacing: Style.marginXXXS
                                 NText {
                                     text: modelData.name || modelData.key
                                     color: tokens.text
                                     font.weight: Font.Bold
-                                    font.pointSize: 11
+                                    font.pointSize: Style.fontSizeM
                                 }
                                 NText {
                                     text: modelData.description || ""
                                     color: tokens.muted
-                                    font.pointSize: 9
+                                    font.pointSize: Style.fontSizeXS
                                     elide: Text.ElideRight
                                     Layout.fillWidth: true
                                 }
@@ -1780,9 +1806,9 @@ Item {
                 Layout.rightMargin: Style.marginL
                 Layout.topMargin: Style.marginS
                 NText {
-                    text: "Custom rules"
+                    text: _tr("rules.custom", "Custom rules")
                     color: tokens.muted
-                    font.pointSize: 10
+                    font.pointSize: Style.fontSizeS
                     font.weight: Font.DemiBold
                 }
                 Item { Layout.fillWidth: true }
@@ -1805,7 +1831,7 @@ Item {
                         Layout.fillWidth: true
                         spacing: Style.marginS
                         NIcon { icon: "filter"; color: tokens.text; pointSize: Style.fontSizeM }
-                        NText { text: "Add routing rule"; color: tokens.text
+                        NText { text: _tr("rules.add-title", "Add routing rule"); color: tokens.text
                                 font.weight: Font.Bold; font.pointSize: Style.fontSizeM
                                 Layout.fillWidth: true }
                     }
@@ -1813,12 +1839,12 @@ Item {
                     // type chips (pill buttons matching design)
                     RowLayout {
                         Layout.fillWidth: true
-                        spacing: 6
+                        spacing: Style.marginS
                         Repeater {
                             model: [
-                                { v: "force-proxy", t: "Force proxy" },
-                                { v: "direct",      t: "Direct" },
-                                { v: "block",       t: "Block" }
+                                { v: "force-proxy", t: _tr("rules.type-force-proxy", "Force proxy") },
+                                { v: "direct",      t: _tr("rules.type-direct",      "Direct") },
+                                { v: "block",       t: _tr("rules.type-block",       "Block") }
                             ]
                             delegate: Rectangle {
                                 required property var modelData
@@ -1828,13 +1854,13 @@ Item {
                                 radius: 10
                                 color: selected ? tokens.accent : tokens.card
                                 border.color: selected ? tokens.accent : tokens.borderSoft
-                                border.width: 1
+                                border.width: Style.borderS
                                 NText {
                                     anchors.centerIn: parent
                                     text: modelData.t
                                     color: parent.selected ? tokens.accentText : tokens.text
                                     font.weight: Font.DemiBold
-                                    font.pointSize: 11
+                                    font.pointSize: Style.fontSizeM
                                 }
                                 MouseArea {
                                     anchors.fill: parent
@@ -1851,7 +1877,7 @@ Item {
                         radius: 9
                         color: tokens.card
                         border.color: rulePatternInput.activeFocus ? tokens.accent : tokens.borderSoft
-                        border.width: 1
+                        border.width: Style.borderS
 
                         TextInput {
                             id: rulePatternInput
@@ -1865,7 +1891,7 @@ Item {
                             selectByMouse: true
                             cursorVisible: activeFocus
                             font.family: tokens.fontMono
-                            font.pointSize: 11
+                            font.pointSize: Style.fontSizeM
                             clip: true
                             cursorDelegate: Rectangle {
                                 width: 1
@@ -1891,7 +1917,7 @@ Item {
 
                             NText {
                                 visible: rulePatternInput.text.length === 0
-                                text: "*.openai.com  or  10.0.0.0/8  or  example.com"
+                                text: _tr("rules.pattern-placeholder", "*.openai.com  or  10.0.0.0/8  or  example.com")
                                 color: tokens.muted
                                 font.family: rulePatternInput.font.family
                                 font.pointSize: rulePatternInput.font.pointSize
@@ -1909,9 +1935,9 @@ Item {
                     NText {
                         visible: rulePatternInput.text.length > 0
                                  && /\s/.test(rulePatternInput.text.trim())
-                        text: "Use a domain, *.wildcard, or CIDR — no URLs or spaces."
+                        text: _tr("rules.pattern-error", "Use a domain, *.wildcard, or CIDR — no URLs or spaces.")
                         color: tokens.danger
-                        font.pointSize: 9
+                        font.pointSize: Style.fontSizeXS
                         Layout.fillWidth: true
                         wrapMode: Text.WordWrap
                     }
@@ -1922,9 +1948,9 @@ Item {
                         implicitWidth: addRuleBtnTxt.implicitWidth + 28
                         radius: 10
                         color: tokens.accent
-                        NText { id: addRuleBtnTxt; anchors.centerIn: parent; text: "Add rule"
+                        NText { id: addRuleBtnTxt; anchors.centerIn: parent; text: _tr("rules.add-rule", "Add rule")
                                 color: tokens.accentText
-                                font.weight: Font.Bold; font.pointSize: 11 }
+                                font.weight: Font.Bold; font.pointSize: Style.fontSizeM }
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
@@ -1973,7 +1999,7 @@ Item {
                             spacing: Style.marginS
 
                             Rectangle {
-                                Layout.preferredWidth: 8; Layout.preferredHeight: 8; radius: 4
+                                Layout.preferredWidth: 8; Layout.preferredHeight: 8; radius: Style.radiusXXS
                                 color: ruleTypeColor(modelData.type)
                             }
                             NText {
@@ -1986,7 +2012,7 @@ Item {
                             NText {
                                 text: modelData.pattern || ""
                                 color: tokens.text
-                                font.family: "JetBrains Mono, monospace"
+                                font.family: tokens.fontMono
                                 font.pointSize: Style.fontSizeS
                                 Layout.fillWidth: true
                                 elide: Text.ElideRight
@@ -2001,7 +2027,7 @@ Item {
 
                 NText {
                     visible: !root.main || (root.main && (root.main.rules || []).length === 0)
-                    text: "No rules yet. Add one above."
+                    text: _tr("rules.no-rules", "No rules yet. Add one above.")
                     color: tokens.textDim
                     pointSize: Style.fontSizeS
                     opacity: 0.7
@@ -2034,14 +2060,14 @@ Item {
                     anchors.margins: Style.marginM
                     spacing: Style.marginS
 
-                    NText { text: "Import subscription"; color: tokens.text
+                    NText { text: _tr("subs.import-title", "Import subscription"); color: tokens.text
                             font.weight: Font.Bold; font.pointSize: Style.fontSizeM }
 
                     Rectangle {
                         Layout.fillWidth: true; implicitHeight: 36
                         radius: 9; color: tokens.card
                         border.color: subUrlInput.activeFocus ? tokens.accent : tokens.borderSoft
-                        border.width: 1
+                        border.width: Style.borderS
                         TextInput {
                             id: subUrlInput
                             anchors.fill: parent
@@ -2051,13 +2077,13 @@ Item {
                             selectionColor: tokens.accent
                             selectedTextColor: tokens.accentText
                             font.family: tokens.fontMono
-                            font.pointSize: 11
+                            font.pointSize: Style.fontSizeM
                             verticalAlignment: TextInput.AlignVCenter
                             selectByMouse: true; clip: true
                             cursorVisible: activeFocus
                             cursorDelegate: Rectangle { width: 1; color: tokens.accent; visible: subUrlInput.cursorVisible }
                             NText { visible: subUrlInput.text.length === 0
-                                    text: "https://example.com/subscription.txt"
+                                    text: _tr("subs.url-placeholder", "https://example.com/subscription.txt")
                                     color: tokens.muted
                                     font.family: subUrlInput.font.family
                                     font.pointSize: subUrlInput.font.pointSize
@@ -2071,7 +2097,7 @@ Item {
                         Layout.fillWidth: true; implicitHeight: 36
                         radius: 9; color: tokens.card
                         border.color: subNameInput.activeFocus ? tokens.accent : tokens.borderSoft
-                        border.width: 1
+                        border.width: Style.borderS
                         TextInput {
                             id: subNameInput
                             anchors.fill: parent
@@ -2080,13 +2106,13 @@ Item {
                             color: tokens.text
                             selectionColor: tokens.accent
                             selectedTextColor: tokens.accentText
-                            font.pointSize: 11
+                            font.pointSize: Style.fontSizeM
                             verticalAlignment: TextInput.AlignVCenter
                             selectByMouse: true; clip: true
                             cursorVisible: activeFocus
                             cursorDelegate: Rectangle { width: 1; color: tokens.accent; visible: subNameInput.cursorVisible }
                             NText { visible: subNameInput.text.length === 0
-                                    text: "Friendly name (optional)"
+                                    text: _tr("subs.name-placeholder", "Friendly name (optional)")
                                     color: tokens.muted
                                     font.pointSize: subNameInput.font.pointSize
                                     anchors.verticalCenter: parent.verticalCenter }
@@ -2101,9 +2127,9 @@ Item {
                         implicitWidth: addSubBtnTxt.implicitWidth + 28
                         radius: 10
                         color: tokens.accent
-                        NText { id: addSubBtnTxt; anchors.centerIn: parent; text: "Add subscription"
+                        NText { id: addSubBtnTxt; anchors.centerIn: parent; text: _tr("subs.add", "Add subscription")
                                 color: tokens.accentText
-                                font.weight: Font.Bold; font.pointSize: 11 }
+                                font.weight: Font.Bold; font.pointSize: Style.fontSizeM }
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
@@ -2148,7 +2174,7 @@ Item {
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 1
+                                spacing: Style.marginXXXS
                                 NText { text: modelData ? (modelData.name || modelData.url) : ""
                                         color: tokens.text
                                         font.weight: Font.Bold
@@ -2175,7 +2201,7 @@ Item {
 
                 NText {
                     visible: !root.main || (root.main && (root.main.subscriptions || []).length === 0)
-                    text: "No subscriptions imported."
+                    text: _tr("subs.none", "No subscriptions imported.")
                     color: tokens.textDim
                     pointSize: Style.fontSizeS
                     opacity: 0.7
@@ -2193,12 +2219,12 @@ Item {
         ColumnLayout {
             spacing: 0
             SettingsRow {
-                label: "Kill switch"
+                label: _tr("advanced.kill-switch-label", "Kill switch")
                 hint: (root.main && root.main.killSwitch && root.main.killSwitch.enabled
                        ? (root.main.killSwitch.active
-                          ? "Active: all non-tunnel traffic blocked."
-                          : "Setting persisted but nftables rules failed to install (needs root or polkit).")
-                       : "Block all traffic when proxy fails. Prevents leaks.")
+                          ? _tr("advanced.kill-switch-active", "Active: all non-tunnel traffic blocked.")
+                          : _tr("advanced.kill-switch-failed", "Setting persisted but nftables rules failed to install (needs root or polkit)."))
+                       : _tr("advanced.kill-switch-hint", "Block all traffic when proxy fails. Prevents leaks."))
                 control: MasterToggle {
                     on: root.main && root.main.killSwitch && root.main.killSwitch.enabled
                     onToggled: {
@@ -2209,17 +2235,17 @@ Item {
                 }
             }
             SettingsRow {
-                label: "DNS leak status"
-                hint: "Run a check against /etc/resolv.conf and current proxy mode."
+                label: _tr("advanced.dns-leak-label", "DNS leak status")
+                hint: _tr("advanced.dns-leak-hint", "Run a check against /etc/resolv.conf and current proxy mode.")
                 control: Rectangle {
                     Layout.preferredHeight: 30
                     implicitWidth: dnsCheckTxt.implicitWidth + 22
                     radius: 10
                     color: "transparent"
                     border.color: tokens.border
-                    border.width: 1
+                    border.width: Style.borderS
                     NText { id: dnsCheckTxt; anchors.centerIn: parent
-                            text: "Check"; color: tokens.text; font.pointSize: 11 }
+                            text: _tr("advanced.check", "Check"); color: tokens.text; font.pointSize: Style.fontSizeM }
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
@@ -2237,23 +2263,23 @@ Item {
                 }
             }
             SettingsRow {
-                label: "Local transport port"
-                hint: "sing-box / ssh listens here."
+                label: _tr("advanced.transport-port-label", "Local transport port")
+                hint: _tr("advanced.transport-port-hint", "sing-box / ssh listens here.")
                 control: NText { text: "" + (root.main ? root.main.transportPort : 11080)
                                  color: tokens.text
                                  pointSize: Style.fontSizeS
-                                 font.family: "JetBrains Mono, monospace" }
+                                 font.family: tokens.fontMono }
             }
             SettingsRow {
-                label: "Mux port (active)"
-                hint: "11081 rules · 11082 global"
+                label: _tr("advanced.mux-port-label", "Mux port (active)")
+                hint: _tr("advanced.mux-port-hint", "11081 rules · 11082 global")
                 control: NText { text: "" + (root.main ? root.main.muxPort : 11081)
                                  color: tokens.text
                                  pointSize: Style.fontSizeS
-                                 font.family: "JetBrains Mono, monospace" }
+                                 font.family: tokens.fontMono }
             }
             SettingsRow {
-                label: "Traffic"
+                label: _tr("advanced.traffic-label", "Traffic")
                 hint: root.main
                       ? ("↓ " + root.main.formatBytes(root.main.trafficRecv) +
                          "  ↑ " + root.main.formatBytes(root.main.trafficSent) +
@@ -2262,17 +2288,17 @@ Item {
                 control: null
             }
             SettingsRow {
-                label: "Open log file"
-                hint: "/tmp/noctalia-vpn-backend.log"
+                label: _tr("advanced.open-log-label", "Open log file")
+                hint: _tr("advanced.open-log-hint", "/tmp/noctalia-vpn-backend.log")
                 control: Rectangle {
                     Layout.preferredHeight: 30
                     implicitWidth: openLogTxt.implicitWidth + 22
                     radius: 10
                     color: "transparent"
                     border.color: tokens.border
-                    border.width: 1
-                    NText { id: openLogTxt; anchors.centerIn: parent; text: "Reveal"
-                            color: tokens.text; font.pointSize: 11 }
+                    border.width: Style.borderS
+                    NText { id: openLogTxt; anchors.centerIn: parent; text: _tr("advanced.reveal", "Reveal")
+                            color: tokens.text; font.pointSize: Style.fontSizeM }
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
@@ -2314,18 +2340,18 @@ Item {
 
             ColumnLayout {
                 Layout.fillWidth: true
-                spacing: 2
+                spacing: Style.marginXXS
                 NText {
                     text: srRoot.label
                     color: srRoot.danger ? tokens.danger : tokens.text
-                    font.pointSize: 11
+                    font.pointSize: Style.fontSizeM
                     font.weight: Font.Medium
                 }
                 NText {
                     visible: srRoot.hint.length > 0
                     text: srRoot.hint
                     color: tokens.muted
-                    font.pointSize: 10
+                    font.pointSize: Style.fontSizeS
                     Layout.fillWidth: true
                     wrapMode: Text.WordWrap
                     lineHeight: 1.35
@@ -2367,13 +2393,10 @@ Item {
         return Qt.rgba(c.r, c.g, c.b, a)
     }
     function heroTitle() {
-        if (!root.main) return "Connecting…"
-        if (!root.main.bridgeReady) return "Connecting backend…"
-        if (root.main.running) {
-            const s = root.main.activeServer()
-            return s ? "Connected" : "Connected"
-        }
-        return "Disconnected"
+        if (!root.main) return _tr("hero.connecting", "Connecting…")
+        if (!root.main.bridgeReady) return _tr("hero.connecting-backend", "Connecting backend…")
+        if (root.main.running) return _tr("hero.connected", "Connected")
+        return _tr("hero.disconnected", "Disconnected")
     }
     function heroSubtitle() {
         if (!root.main || !root.main.running) return ""
@@ -2384,25 +2407,33 @@ Item {
         if (!root.main) return ""
         if (!root.main.running) {
             const s = root.main.activeServer()
-            if (s) return "Will connect via: " + (s.name || "selected server")
+            if (s) return _tr("hero.will-connect",
+                              "Will connect via: " + (s.name || "selected server"),
+                              { server: s.name || _tr("hero.selected-server", "selected server") })
             if (root.main.statusMessage) return root.main.statusMessage
-            return "Select a server to connect."
+            return _tr("hero.select-server", "Select a server to connect.")
         }
         const s = root.main.activeServer()
-        if (!s) return "Active"
+        if (!s) return _tr("hero.connected", "Connected")
         const addr = (s.address || s.host || "?") + (s.port ? (":" + s.port) : "")
-        const mode = root.main.mode === "global" ? "Global" : "Rules"
-        const via  = root.main.proxyMode === "tun" ? "VPN (TUN)" : "System proxy"
+        const mode = root.main.mode === "global"
+                     ? _tr("mode.global", "Global")
+                     : _tr("mode.rules", "Rules")
+        const via  = root.main.proxyMode === "tun"
+                     ? _tr("mode.vpn-tun", "VPN (TUN)")
+                     : _tr("mode.system-proxy", "System proxy")
         return "IP " + addr + "  ·  " + mode + " · " + via
     }
 
     function bridgeStatusText() {
-        if (!root.main) return "idle"
-        if (!root.main.bridgeReady) return "starting backend…"
+        if (!root.main) return _tr("bridge-status.idle", "idle")
+        if (!root.main.bridgeReady) return _tr("bridge-status.starting", "starting backend…")
         if (root.main.statusLevel === "error" || root.main.statusLevel === "failed")
-            return root.main.statusReason || "backend error"
-        if (root.main.busy) return "talking to backend…"
-        return root.main.running ? "connected" : "ready"
+            return root.main.statusReason || _tr("bridge-status.error", "backend error")
+        if (root.main.busy) return _tr("bridge-status.busy", "talking to backend…")
+        return root.main.running
+               ? _tr("bridge-status.connected", "connected")
+               : _tr("bridge-status.ready", "ready")
     }
 
     function statValue(key) {
@@ -2486,15 +2517,19 @@ Item {
     function subSummary(s) {
         if (!s) return ""
         const n = s.server_count || 0
-        if (!s.last_updated) return "Never updated · " + n + " servers"
+        if (!s.last_updated)
+            return _tr("subs.summary-never", "Never updated · " + n + " servers", { count: n })
         const d = new Date(s.last_updated * 1000)
-        return "Updated " + Qt.formatDateTime(d, "yyyy-MM-dd hh:mm") + "  ·  " + n + " servers"
+        const when = Qt.formatDateTime(d, "yyyy-MM-dd hh:mm")
+        return _tr("subs.summary-updated",
+                   "Updated " + when + "  ·  " + n + " servers",
+                   { when: when, count: n })
     }
 
     function ruleTypeLabel(t) {
-        if (t === "force-proxy") return "PROXY"
-        if (t === "direct") return "DIRECT"
-        if (t === "block") return "BLOCK"
+        if (t === "force-proxy") return _tr("rules.label-proxy", "PROXY")
+        if (t === "direct") return _tr("rules.label-direct", "DIRECT")
+        if (t === "block") return _tr("rules.label-block", "BLOCK")
         return t.toUpperCase()
     }
     function ruleTypeColor(t) {
@@ -2586,7 +2621,7 @@ Item {
         const host = p.address || p.host
         const port = parseInt(p.port, 10) || 0
         if (!host || !port) {
-            root.main.toastWarn("Host and port required")
+            root.main.toastWarn(_tr("toast.host-port-required", "Host and port required"))
             return
         }
         // Use a transient ID by pinging a saved server only — for new entries
@@ -2594,11 +2629,13 @@ Item {
         if (p.id) {
             root.main.pingServer(p.id, function(ms) {
                 if (typeof ToastService !== "undefined")
-                    ToastService.showNotice(ms > 0 ? ("Ping " + ms + " ms") : "Server unreachable")
+                    ToastService.showNotice(ms > 0
+                                            ? _tr("toast.ping-result", "Ping " + ms + " ms", { ms: ms })
+                                            : _tr("toast.server-unreachable", "Server unreachable"))
             })
         } else {
             if (typeof ToastService !== "undefined")
-                ToastService.showNotice("Save first to enable a live test")
+                ToastService.showNotice(_tr("toast.save-first", "Save first to enable a live test"))
         }
     }
 
@@ -2616,7 +2653,7 @@ Item {
             return
         }
         if (!root.main || !root.main.activeServerId) {
-            root.main && root.main.toastWarn("No active server")
+            root.main && root.main.toastWarn(_tr("toast.no-active-server", "No active server"))
             return
         }
         testRunning = true
@@ -2625,8 +2662,10 @@ Item {
         testTakenSamples = []
         speedTestTimer.start()
         root.main.runSpeedTest(function(err) {
-            if (err && root.main) root.main.toastWarn("Speed test failed: " + err)
-            testTakenAt = "just now"
+            if (err && root.main) root.main.toastWarn(_tr("toast.speed-test-failed",
+                                                          "Speed test failed: " + err,
+                                                          { error: String(err) }))
+            testTakenAt = _tr("speed.just-now", "just now")
             testRunning = false
         })
     }
@@ -2663,6 +2702,7 @@ Item {
         // to use Subscriptions instead — paste a tiny single-line "URL" of
         // their link by base64-encoding it themselves. Here we just toast.
         if (typeof ToastService !== "undefined")
-            ToastService.showNotice("Paste share links via Settings → Subs (base64 or plain list)")
+            ToastService.showNotice(_tr("toast.share-link-hint",
+                                        "Paste share links via Settings → Subs (base64 or plain list)"))
     }
 }
