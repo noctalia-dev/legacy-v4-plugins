@@ -56,14 +56,9 @@ PanelWindow {
         var wallpaperPath = f.isVideo ? f.thumbnail : f.filePath;
         WallpaperService.changeWallpaper(wallpaperPath);
 
-        if (f.isVideo) {
-            applicant.command = ["bash", "-c", Utils.wallpaperCommand(f, duration)];
-            applicant.running = true;
-        } else {
-            applicant.command = ["bash", "-c", Utils.mpvpaperKill];
-            applicant.running = true;
-        }
-    }
+        applicant.command = ["bash", "-c", Utils.wallpaperCommand(f, duration)];
+        applicant.running = true;
+  }
 
   function applyFilterToFiles() {
     var currentFile = filteredFiles[cardDeck.currentIndex]?.filePath ?? "";
