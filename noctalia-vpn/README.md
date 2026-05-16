@@ -1,154 +1,213 @@
-# Noctalia VPN
+# Noctalia VPN Plugin
 
-VPN/proxy manager for [Noctalia Shell](https://noctalia.dev). Drives a local
-[sing-box](https://sing-box.sagernet.org) instance through a Python DBus
-backend; the plugin itself is a QML front-end that talks to the backend over
-the session bus.
+VPN / proxy manager for [Noctalia Shell](https://noctalia.dev). One repository
+ships two pieces:
 
-![Preview](preview.png)
+- `backend/` — a Python DBus service that drives `sing-box` and `ssh`.
+- `plugin/` — the Noctalia Shell QML front-end that talks to that backend.
 
-## What it does
+## What it is
 
-- Manage proxy servers (add / edit / switch / ping)
-- Toggle the system SOCKS5 proxy or a TUN device, both transparently
-- Route blocked sites through the tunnel via country presets (RU / CN / IR)
-- Add custom rules to force a domain through the proxy, force it direct, or
-  block it outright
-- Watch live latency, jitter, and up/down throughput
-- One-shot network speed test that always measures the tunnel (not the
-  direct-Internet bypass) regardless of mode
-- Kill switch via `nft` rules — only the configured server endpoint stays
-  reachable when the proxy is down
-- Subscription import for VLESS / VMess / SS / SOCKS5 share links
+A self-contained VPN control panel that lives in your Noctalia bar:
 
-## Supported protocols
+- Browse and switch between SSH / VLESS / VMess / Shadowsocks / SOCKS5 servers.
+- Toggle the system SOCKS5 proxy or a TUN device.
+- Route blocked sites via country presets (RU / CN / IR) or your own custom rules.
+- See live latency, jitter, throughput, and a one-shot tunnel speed test.
+- Optional `nftables` kill switch.
+- Import `vless://` / `vmess://` / `ss://` subscription links.
 
-- **SSH** (password or key file) — handled directly by OpenSSH
-- **VLESS** (including Reality, WS, gRPC, HTTP/2)
-- **VMess**
-- **Shadowsocks**
-- **SOCKS5**
+## Screenshots
 
-## Features
-
-- Bar widget showing connection state, server name, ping, and traffic counters
-  (ping/traffic visibility independently toggleable in Settings → General)
-- Panel with server list, live health, routing chips, network test card
-- Two routing modes:
-  - `rules` — blocked sites + active country presets go through proxy; everything else direct
-  - `global` — everything through proxy
-- Two proxy modes:
-  - `system` — sets system SOCKS5 proxy via `gsettings` / KDE config
-  - `tun` — creates a TUN device, intercepts all traffic (needs polkit/root)
-- Hot-reload of sing-box rules when a preset or custom rule changes — no
-  reconnect needed
+![Preview](plugin/preview.png)
 
 ## Requirements
 
 System:
-- `sing-box` ≥ 1.10 (in `$PATH`)
-- `python3` ≥ 3.12
-- DBus session bus
-- `nft` (only if you want the kill switch)
-- `openssh` (only for SSH servers)
 
-Python (installed via the backend `.venv`):
+- Python 3.12+
+- [`sing-box`](https://sing-box.sagernet.org) 1.8+ on `$PATH`
+- `openssh` and `sshpass` (only if you use SSH servers)
+- A DBus session bus (always present on a normal desktop)
+- `nft` (only if you want the kill switch)
+
+Python (installed via the `.venv` below):
+
 - `dbus-next` ≥ 0.2.3
 - `pydantic` ≥ 2.0
 - `aiofiles` ≥ 23.0
 - `aiohttp` ≥ 3.9
-- `aiohttp-socks` (for the speed test to measure through the proxy)
+- `aiohttp-socks` (for the speed test to measure through the tunnel)
+
+## TUN/VPN mode prerequisites
+
+TUN (VPN) mode requires additional privileges for sing-box.
+
+**Option A — One-time setup (recommended):**
+Grant CAP_NET_ADMIN to sing-box permanently:
+```bash
+sudo setcap cap_net_admin+ep /usr/bin/sing-box
+```
+After this, no password prompts when using TUN mode.
+
+**Option B — Polkit (automatic password prompt):**
+The plugin will automatically request privileges via Polkit dialog when TUN mode is activated.
+
+Install the included Polkit rules to avoid repeated password prompts for DNS/routing operations:
+```bash
+sudo install -m 0644 polkit/10-noctalia-vpn-tun.rules /etc/polkit-1/rules.d/
+sudo install -m 0644 polkit/org.noctalia.vpn.policy /usr/share/polkit-1/actions/
+```
+
+**Note:** System Proxy mode works without any additional privileges.
 
 ## Installation
 
-### 1. Install the plugin
+### Install backend
 
 ```bash
-cd ~/.config/noctalia/plugins
-git clone https://github.com/noctalia-dev/noctalia-plugins.git tmp-plugins
-cp -r tmp-plugins/noctalia-vpn .
-rm -rf tmp-plugins
-```
-
-Or copy this directory directly into `~/.config/noctalia/plugins/noctalia-vpn`.
-
-### 2. Install the backend
-
-The backend lives in a separate repo so it can be updated independently:
-
-```bash
-git clone https://github.com/<your-account>/noctalia-vpn-plugin.git ~/dev/noctalia-vpn-plugin
-cd ~/dev/noctalia-vpn-plugin
+git clone https://github.com/UmedjonBA/noctalia-vpn-plugin
+cd noctalia-vpn-plugin
 python3 -m venv .venv
 .venv/bin/pip install -e .
-.venv/bin/pip install aiohttp-socks
 ```
 
-`Main.qml` looks for the backend at `~/dev/noctalia-vpn-plugin/.venv/bin/python3`.
-Change `venvPython` in `Main.qml` if you put it somewhere else.
-
-### 3. Start the backend
-
-Manual start:
+### Install plugin
 
 ```bash
-cd ~/dev/noctalia-vpn-plugin
-nohup .venv/bin/python3 -m backend.app >> /tmp/noctalia-vpn-backend.log 2>&1 &
-disown
+cp -r plugin ~/.config/noctalia/plugins/noctalia-vpn
 ```
 
-Auto-start on login (recommended): copy the included unit file:
+### Start backend
 
 ```bash
-mkdir -p ~/.config/systemd/user
 cp noctalia-vpn-backend.service ~/.config/systemd/user/
 systemctl --user daemon-reload
 systemctl --user enable --now noctalia-vpn-backend.service
 ```
 
-The bridge (`dbus-bridge.py`) will also spawn the backend itself if the DBus
-name isn't yet owned when the plugin loads — the systemd unit is just there to
-get an early start before the bar comes up.
-
-### 4. TUN mode (optional)
-
-TUN mode needs `CAP_NET_ADMIN` on `sing-box`. The plugin will ask polkit for
-permission to set the capability the first time you switch to TUN mode — you'll
-get a normal "authenticate" dialog.
-
-Install the polkit action (one-time, recommended):
+Or manually, for development:
 
 ```bash
-sudo cp polkit/org.noctalia.vpn.policy /usr/share/polkit-1/actions/
+.venv/bin/python3 -m backend.app
 ```
 
-Or grant the capability manually (no polkit dialog after this):
+The bridge (`plugin/dbus-bridge.py`) will also auto-spawn the backend when the
+plugin loads if the DBus name isn't already owned — the systemd unit just gets
+it up before the bar so the first paint already shows live status.
 
-```bash
-sudo setcap cap_net_admin+ep /usr/bin/sing-box
+### TUN/VPN mode setup
+
+See [TUN/VPN mode prerequisites](#tunvpn-mode-prerequisites) above for the
+capability and Polkit setup. TL;DR: either `setcap` once, or install the two
+files in `polkit/`.
+
+## Usage
+
+1. Add the Noctalia VPN widget to your bar.
+2. Open the panel and click **Add server** — paste a share URL or fill the form.
+3. Click the server to activate it.
+4. Pick a mode chip:
+   - **Rules** — only blocked sites + active presets go through the tunnel.
+   - **Global** — everything goes through the tunnel.
+5. Pick a proxy mode chip:
+   - **System** — sets the system SOCKS5 proxy.
+   - **TUN** — creates a TUN device (needs polkit/root).
+6. Settings → Routing lets you toggle country presets and add custom rules.
+7. Settings → General toggles the bar widget's ping / traffic readouts.
+
+## How it works
+
+```
+        ┌─────────────────────────────────────────────────┐
+        │   Noctalia Shell plugin (QML)                   │
+        │   plugin/Main.qml, BarWidget.qml, Panel.qml     │
+        └────────────────┬────────────────────────────────┘
+                         │ stdin/stdout JSON
+                ┌────────▼─────────┐
+                │  dbus-bridge.py  │  (child process of the plugin)
+                └────────┬─────────┘
+                         │ DBus  (org.noctalia.VpnPlugin)
+        ┌────────────────▼────────────────────────────────┐
+        │   Python backend (this repo, backend/)          │
+        │   - server CRUD, settings, routing rules         │
+        │   - sing-box / ssh process supervisor            │
+        │   - health monitor, traffic stats, kill switch   │
+        └────────────────┬────────────────────────────────┘
+                         │ spawn / signal
+            ┌────────────▼────────────┐
+            │  sing-box   │   ssh     │
+            │  (mixed in) │  (-D)     │
+            └────────────┬────────────┘
+                         │
+                      Internet
 ```
 
-## Ports
+Three sing-box instances run in parallel when the proxy is up:
 
-The backend listens on:
+- **Transport** (`11080`) talks to the remote VPN endpoint.
+- **Rules mux** (`11081`) classifies traffic per routing rules and either
+  forwards through the transport or sends it direct.
+- **Global mux** (`11082`) bypasses the rules engine and forwards everything
+  through the transport.
 
-- `11080` — transport SOCKS5 (talks to the remote VPN server)
-- `11081` — rules-mode mux (route-aware SOCKS5/HTTP)
-- `11082` — global-mode mux (everything → proxy)
-- `11089` — clash API (used internally for hot-reload)
+Only one of the mux ports is "exposed" to the system at a time — the choice
+follows the mode chip in the panel.
 
-Don't put anything else on those ports.
+## DBus API
 
-## Configuration files
+- **Service:** `org.noctalia.VpnPlugin`
+- **Object path:** `/org/noctalia/VpnPlugin`
+- **Interface:** `org.noctalia.VpnPlugin`
 
-Persisted under `~/.config/noctalia-vpn/`:
+Methods:
 
-- `servers.json` — saved server entries
-- `rules.json` — user routing rules
-- `settings.json` — active server, mode, ports, active presets, UI toggles
-- `subscriptions.json` — subscription URLs
+| Method | Signature | What it does |
+|---|---|---|
+| `StartProxy(server_id, mode, proxy_mode)` | `sss → b` | Activate a server in the given routing/proxy mode |
+| `StopProxy()` | `→ b` | Tear everything down |
+| `GetStatus()` | `→ a{sv}` | Current status snapshot |
+| `GetServers()` | `→ aa{sv}` | List saved servers |
+| `AddServer(server)` | `a{sv} → s` | Create a server, returns id |
+| `UpdateServer(server)` | `a{sv} → b` | Replace by id |
+| `RemoveServer(id)` | `s → b` | Delete by id |
+| `SwitchServer(id)` | `s → b` | Reconnect with a different server |
+| `SetMode(mode)` | `s → b` | `"rules"` or `"global"` |
+| `SetProxyMode(mode)` | `s → b` | `"system"` or `"tun"` |
+| `PingServer(id)` | `s → i` | TCP ping, returns ms or -1 |
+| `RunSpeedTest()` | `→ a{sv}` | Measures down/up Mbps through the tunnel |
+| `GetHealth()` | `→ a{sv}` | Latest health snapshot |
+| `GetRoutingRules()` | `→ aa{sv}` | List custom routing rules |
+| `AddRoutingRule(rule)` | `a{sv} → s` | Add a force-proxy / direct / block rule |
+| `RemoveRoutingRule(id)` | `s → b` | Delete by id |
+| `GetPresets()` | `→ aa{sv}` | List country presets with `enabled` flag |
+| `TogglePreset(key, enabled)` | `sb → b` | Enable/disable a preset (RU/CN/IR) |
+| `GetSubscriptions()` | `→ aa{sv}` | List subscription URLs |
+| `AddSubscription(url, name)` | `ss → b` | Import + fetch a subscription |
+| `RemoveSubscription(url)` | `s → b` | Delete by URL |
+| `UpdateSubscription(url)` | `s → i` | Re-fetch, returns server count |
+| `GetTrafficStats()` | `→ a{sv}` | Bytes sent/recv, uptime |
+| `GetSettings()` | `→ a{sv}` | All persisted settings |
+| `UpdateSettings(patch)` | `a{sv} → a{sv}` | Patch UI toggles |
+| `SetKillSwitch(enabled)` | `b → b` | Apply/remove the nft kill switch |
+| `GetKillSwitchStatus()` | `→ a{sv}` | Is the kill switch armed? |
+| `CheckDnsLeak()` | `→ a{sv}` | Heuristic DNS-leak report |
+| `GetLogs()` | `→ as` | Last ~100 backend log lines |
 
-Generated sing-box configs go to `~/.config/sing-box/noctalia-vpn-*.json`.
+Signals: `StatusChanged`, `ServerListChanged`, `LogMessage`, `TrafficUpdate`.
+
+## Ports used
+
+| Port | Role |
+|---|---|
+| `11080` | Transport — SSH tunnel or sing-box outbound to the remote endpoint |
+| `11081` | Rules mux — sing-box with custom rules and country presets |
+| `11082` | Global mux — sing-box, everything → tunnel |
+| `11089` | sing-box Clash API (internal hot-reload) |
+
+Persisted state: `~/.config/noctalia-vpn/` (`servers.json`, `rules.json`,
+`settings.json`, `subscriptions.json`). Generated sing-box configs:
+`~/.config/sing-box/noctalia-vpn-*.json`.
 
 ## License
 
