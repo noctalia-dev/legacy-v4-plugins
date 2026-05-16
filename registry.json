@@ -1300,6 +1300,22 @@
       "lastUpdated": "2026-04-21T17:26:58+02:00"
     },
     {
+      "id": "pass",
+      "name": "Password Store",
+      "version": "1.0.0",
+      "official": false,
+      "author": "Bojan Jovanovic",
+      "description": "Search pass (password-store) from the launcher. Type 'pass <name>' to copy a password or 'po <name>' to copy a TOTP code to clipboard.",
+      "repository": "https://github.com/virogenesis/noctalia-pass-plugin",
+      "minNoctaliaVersion": "3.6.0",
+      "license": "MIT",
+      "tags": [
+        "Launcher",
+        "Utility"
+      ],
+      "lastUpdated": "2026-05-16T16:25:57+02:00"
+    },
+    {
       "id": "plugin-manager",
       "name": "Plugin Manager",
       "version": "1.0.1",
