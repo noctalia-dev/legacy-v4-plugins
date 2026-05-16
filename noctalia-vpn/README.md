@@ -110,6 +110,24 @@ The bridge (`dbus-bridge.py`) will also spawn the backend itself if the DBus
 name isn't yet owned when the plugin loads — the systemd unit is just there to
 get an early start before the bar comes up.
 
+### 4. TUN mode (optional)
+
+TUN mode needs `CAP_NET_ADMIN` on `sing-box`. The plugin will ask polkit for
+permission to set the capability the first time you switch to TUN mode — you'll
+get a normal "authenticate" dialog.
+
+Install the polkit action (one-time, recommended):
+
+```bash
+sudo cp polkit/org.noctalia.vpn.policy /usr/share/polkit-1/actions/
+```
+
+Or grant the capability manually (no polkit dialog after this):
+
+```bash
+sudo setcap cap_net_admin+ep /usr/bin/sing-box
+```
+
 ## Ports
 
 The backend listens on:
