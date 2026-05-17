@@ -43,26 +43,38 @@ Hardware-accelerated screen recording for Noctalia using [gpu-screen-recorder](h
 
 Configure the plugin through the settings panel:
 
-- **Button Action**: Action performed when clicking the bar widget
+#### General
+
+- **Button Action**: Action performed when clicking the bar widget (toggle recording, toggle replay, save replay, or open panel)
+- **Hide When Inactive**: Hide the bar indicator when not recording
 - **Output Folder**: Where recordings will be saved (defaults to `~/Videos`)
 - **Post-recording Script**: Optional script to run after a recording saves
-- **Video Source**: Choose between Portal (recommended) or Screen
-- **Frame Rate**: Target FPS (30, 60, 120, or custom)
-- **Video Quality**: Medium, High, Very High, or Ultra
-- **Video Codec**: H264, HEVC, AV1, VP8, VP9 (+ HDR variants for screen source)
-- **Color Range**: Limited (recommended) or Full
-- **Resolution**: Output resolution limit (1920x1080, 1920x1200, 2560x1440, 3840x2160, 1280x720, or Original)
-- **Audio Source**: None, System Output, Microphone, or Both
-- **Audio Codec**: Opus (recommended) or AAC
 - **Show Cursor**: Include mouse cursor in recording
 - **Copy to Clipboard**: Automatically copy file after recording
 - **Restore Portal Session**: Skip the screen selection dialog on subsequent recordings
+
+#### Video
+
+- **Video Source**: Portal (recommended) or Screen
+- **Resolution**: Output resolution (Original, 1920x1080, 1920x1200, 2560x1440, 3840x2160, or 1280x720)
+- **Frame Rate**: Target FPS (30, 60, 120, or custom)
+- **Rate Control**: QP, VBR, or CBR
+- **Video Quality**: Medium, High, Very High, or Ultra (QP and VBR only)
+- **Bitrate**: Target bitrate in kbps (CBR only)
+- **Video Codec**: H264, HEVC, AV1, VP8, VP9 (+ HDR variants for screen source)
+- **Color Range**: Limited (recommended) or Full
+
+#### Audio
+
+- **Audio Source**: None, System Output, Microphone, or Both
+- **Audio Codec**: Opus (recommended) or AAC
 
 #### Replay
 
 - **Replay Duration**: Buffer length (15s, 30s, 60s, 2 min, 5 min, or custom)
 - **Replay Storage**: Store buffer in RAM (faster, recommended) or Disk
 - **Replay Notifications**: Show notifications when the replay buffer starts, stops, or saves
+- **Auto-start Replay**: Automatically start the replay buffer when the plugin loads
 
 ### IPC Commands
 
