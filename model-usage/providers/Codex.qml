@@ -260,17 +260,44 @@ Item {
                 return;
             }
 
-            const rl = lastTokenCount.rate_limits?.primary;
-            if (rl) {
-                root.rateLimitPercent = (rl.used_percent ?? 0) / 100;
-                if (rl.window_minutes === 10080)
+            // Normalize a rate-limit window regardless of field spelling
+            function normalizeWindow(w) {
+                if (!w || typeof w !== "object") return null;
+                const usedPct = w.used_percent ?? w.used ?? 0;
+                const durationMins = w.window_minutes ?? w.window_duration_mins ?? 0;
+                const resetAt = w.resets_at ?? w.reset_at ?? null;
+                return { usedPct, durationMins, resetAt };
+            }
+
+            const primary = normalizeWindow(lastTokenCount.rate_limits?.primary);
+            if (primary) {
+                root.rateLimitPercent = primary.usedPct / 100;
+                if (primary.durationMins >= 10080)
                     root.rateLimitLabel = "Weekly (7-day)";
                 else
-                    root.rateLimitLabel = Math.round(rl.window_minutes / 60) + "h window";
-                if (rl.resets_at) {
-                    const resetDate = new Date(rl.resets_at * 1000);
+                    root.rateLimitLabel = Math.round(primary.durationMins / 60) + "h window";
+                if (primary.resetAt) {
+                    const resetDate = new Date(primary.resetAt * 1000);
                     root.rateLimitResetAt = resetDate.toISOString();
                 }
+            }
+
+            const secondary = normalizeWindow(lastTokenCount.rate_limits?.secondary);
+            if (secondary) {
+                root.secondaryRateLimitPercent = secondary.usedPct / 100;
+                if (secondary.durationMins >= 10080)
+                    root.secondaryRateLimitLabel = "Weekly (7-day)";
+                else
+                    root.secondaryRateLimitLabel = Math.round(secondary.durationMins / 60) + "h window";
+                if (secondary.resetAt) {
+                    const resetDate = new Date(secondary.resetAt * 1000);
+                    root.secondaryRateLimitResetAt = resetDate.toISOString();
+                }
+            } else {
+                // No secondary window in this snapshot — clear stale value
+                root.secondaryRateLimitPercent = -1;
+                root.secondaryRateLimitLabel = "";
+                root.secondaryRateLimitResetAt = "";
             }
 
             const usage = lastTokenCount.info?.total_token_usage;

@@ -374,6 +374,81 @@ ColumnLayout {
                     }
                 }
             }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: Style.marginXS
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: Style.marginM
+                    NToggle {
+                        checked: editSettings?.providers?.minimax?.enabled ?? false
+                        onToggled: value => {
+                            if (!editSettings.providers)
+                                editSettings.providers = {};
+                            if (!editSettings.providers.minimax)
+                                editSettings.providers.minimax = {};
+                            editSettings.providers.minimax.enabled = value;
+                            editSettingsChanged();
+                        }
+                    }
+                    NText {
+                        text: "MiniMax"
+                        pointSize: Style.fontSizeM
+                        color: Color.mOnSurface
+                        Layout.fillWidth: true
+                    }
+                    NText {
+                        text: "API key"
+                        pointSize: Style.fontSizeXS
+                        color: Color.mOnSurfaceVariant
+                    }
+                }
+
+                NTextInput {
+                    visible: editSettings?.providers?.minimax?.enabled ?? false
+                    Layout.fillWidth: true
+                    Layout.leftMargin: Style.marginXL
+                    placeholderText: "MINIMAX_API_KEY env var or enter key here"
+                    text: editSettings?.providers?.minimax?.apiKey ?? ""
+
+                    onTextChanged: {
+                        if (!editSettings.providers)
+                            editSettings.providers = {};
+                        if (!editSettings.providers.minimax)
+                            editSettings.providers.minimax = {};
+                        editSettings.providers.minimax.apiKey = text;
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: Style.marginM
+                    visible: editSettings?.providers?.minimax?.enabled ?? false
+                    Layout.leftMargin: Style.marginXL
+
+                    NText {
+                        text: "Region"
+                        pointSize: Style.fontSizeM
+                        color: Color.mOnSurface
+                    }
+                    NComboBox {
+                        model: [
+                            { key: "international", name: "International" },
+                            { key: "china",          name: "China" }
+                        ]
+                        currentKey: editSettings?.providers?.minimax?.region ?? "international"
+                        onSelected: key => {
+                            if (!editSettings.providers)
+                                editSettings.providers = {};
+                            if (!editSettings.providers.minimax)
+                                editSettings.providers.minimax = {};
+                            editSettings.providers.minimax.region = key;
+                        }
+                    }
+                }
+            }
         }
     }
 

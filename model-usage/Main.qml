@@ -33,13 +33,19 @@ Item {
         providerSettings: root.pluginSettings?.providers?.copilot ?? ({})
     }
 
+    MiniMax {
+        id: minimaxProvider
+        enabled: root.providerEnabled("minimax")
+        providerSettings: root.pluginSettings?.providers?.minimax ?? ({})
+    }
+
     Zen {
         id: zenProvider
         enabled: root.providerEnabled("zen")
         providerSettings: root.pluginSettings?.providers?.zen ?? ({})
     }
 
-    property var providers: [claudeProvider, codexProvider, copilotProvider, openRouterProvider, zenProvider]
+    property var providers: [claudeProvider, codexProvider, copilotProvider, openRouterProvider, minimaxProvider, zenProvider]
 
     property var enabledProviders: {
         const result = [];
@@ -51,6 +57,8 @@ Item {
             result.push(copilotProvider);
         if (openRouterProvider.enabled)
             result.push(openRouterProvider);
+        if (minimaxProvider.enabled)
+            result.push(minimaxProvider);
         if (zenProvider.enabled)
             result.push(zenProvider);
         return result;
