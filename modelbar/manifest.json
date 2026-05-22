@@ -1,0 +1,41 @@
+{
+  "id": "modelbar",
+  "name": "ModelBar",
+  "version": "0.1.0",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "John",
+  "license": "MIT",
+  "description": "Codex and Claude Code usage limits for Noctalia, backed by live OAuth data.",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "tags": [
+    "Bar",
+    "Productivity",
+    "AI",
+    "Codex",
+    "Claude"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "providerMode": "auto",
+      "sourceMode": "auto",
+      "claudeSourceMode": "auto",
+      "barMetric": "remaining",
+      "refreshIntervalSec": 300,
+      "pythonPath": "python3",
+      "codexBinary": "codex",
+      "claudeBinary": "claude",
+      "codexHome": "",
+      "claudeHome": "",
+      "requestTimeoutSec": 8
+    }
+  }
+}
