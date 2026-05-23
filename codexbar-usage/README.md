@@ -1,4 +1,4 @@
-# Noctalia CodexBar Usage
+# Codex Usage for Noctalia
 
 A compact Noctalia/Quickshell plugin that shows OpenAI Codex usage limits in the Noctalia bar and opens an attached details panel on click.
 
@@ -31,7 +31,7 @@ That is deliberate:
 
 ## Settings
 
-Default `settings.json`:
+Default settings:
 
 ```json
 {
@@ -61,11 +61,11 @@ The output must be valid JSON.
 
 ## Install
 
-Copy the plugin into Noctalia's plugin directory:
+Install from the Noctalia plugin manager once the plugin is listed, or copy/clone this repository into Noctalia's plugin directory:
 
 ```bash
 mkdir -p ~/.config/noctalia/plugins
-cp -r noctalia-codexbar-usage ~/.config/noctalia/plugins/codexbar-usage
+git clone https://github.com/rayoplateado/noctalia-codex-usage ~/.config/noctalia/plugins/codexbar-usage
 ```
 
 Enable it in `~/.config/noctalia/plugins.json`:
@@ -81,13 +81,7 @@ Enable it in `~/.config/noctalia/plugins.json`:
 }
 ```
 
-Reload Noctalia/Quickshell.
-
-On Ray's local setup:
-
-```bash
-pkill qs && qs -c /etc/xdg/quickshell/noctalia-shell
-```
+Reload Noctalia/Quickshell if hot reload does not pick it up.
 
 ## Local development
 
@@ -104,7 +98,6 @@ rsync -a --delete ./ ~/.config/noctalia/plugins/codexbar-usage/
 - `Panel.qml` — attached detail panel.
 - `Settings.qml` — Noctalia settings UI for command path, source, and refresh interval.
 - `codexbar.js` — shared CodexBar command construction and JSON parsing.
-- `settings.json` — default/local settings.
 
 ## License
 
