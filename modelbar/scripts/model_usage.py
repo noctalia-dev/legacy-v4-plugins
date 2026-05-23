@@ -123,6 +123,7 @@ def http_json(
     headers: dict[str, str] | None = None,
     body: bytes | None = None,
     timeout: float = 30,
+    auth_errors_as_http: bool = False,
 ) -> dict[str, Any]:
     request = urllib.request.Request(url, data=body, headers=headers or {}, method=method)
     try:
@@ -130,7 +131,7 @@ def http_json(
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         raw = exc.read().decode("utf-8", errors="replace")
-        if exc.code in (401, 403):
+        if exc.code in (401, 403) and not auth_errors_as_http:
             raise FetchError("unauthorized")
         retry_after = parse_retry_after(exc.headers.get("Retry-After") if exc.headers else None)
         raise HTTPFetchError(exc.code, raw, retry_after) from exc
@@ -238,6 +239,21 @@ def claude_code_version(claude_bin: str, timeout: float) -> str:
         return "2.1.0"
     token = (result.stdout or "").strip().split()
     return token[0] if token else "2.1.0"
+
+
+def fetch_claude_usage_response(oauth: dict[str, Any], version: str, timeout: float) -> dict[str, Any]:
+    return http_json(
+        CLAUDE_USAGE_ENDPOINT,
+        headers={
+            "Authorization": f"Bearer {oauth['accessToken']}",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "anthropic-beta": CLAUDE_BETA_HEADER,
+            "User-Agent": f"claude-code/{version}",
+        },
+        timeout=timeout,
+        auth_errors_as_http=True,
+    )
 
 
 def modelbar_cache_dir() -> pathlib.Path:
@@ -528,17 +544,25 @@ def fetch_claude_oauth(home: pathlib.Path, claude_bin: str, timeout: float) -> d
         oauth = refresh_claude_oauth(path, root, oauth, timeout)
 
     version = claude_code_version(claude_bin, timeout)
-    response = http_json(
-        CLAUDE_USAGE_ENDPOINT,
-        headers={
-            "Authorization": f"Bearer {oauth['accessToken']}",
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "anthropic-beta": CLAUDE_BETA_HEADER,
-            "User-Agent": f"claude-code/{version}",
-        },
-        timeout=timeout,
-    )
+    try:
+        response = fetch_claude_usage_response(oauth, version, timeout)
+    except HTTPFetchError as exc:
+        if exc.code not in (401, 403):
+            raise
+
+        # Claude Code can refresh credentials after a reboot even when expiresAt
+        # has not passed. Mirror that by forcing one refresh on auth rejection.
+        refresh_token = oauth.get("refreshToken")
+        if not isinstance(refresh_token, str) or not refresh_token:
+            raise FetchError("unauthorized") from exc
+
+        oauth = refresh_claude_oauth(path, root, oauth, timeout)
+        try:
+            response = fetch_claude_usage_response(oauth, version, timeout)
+        except HTTPFetchError as retry_exc:
+            if retry_exc.code in (401, 403):
+                raise FetchError("unauthorized") from retry_exc
+            raise
 
     primary = make_claude_window(response.get("five_hour"), 5 * 60, "Session")
     secondary = make_claude_window(response.get("seven_day"), 7 * 24 * 60, "Weekly")
