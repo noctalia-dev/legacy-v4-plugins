@@ -1,0 +1,35 @@
+{
+  "id": "codexbar-usage",
+  "name": "Codex Usage",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.0",
+  "author": "Ray García",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Codex usage limits in the Noctalia bar via CodexBar CLI.",
+  "tags": [
+    "Bar",
+    "Panel",
+    "AI",
+    "Development",
+    "Indicator"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "icon": "ai",
+    "name": "CodexBar",
+    "description": "Codex rate-limit usage from codexbar usage --source cli",
+    "defaultSettings": {
+      "refreshIntervalSec": 60,
+      "codexbarPath": "codexbar",
+      "codexbarSource": "cli"
+    }
+  }
+}
