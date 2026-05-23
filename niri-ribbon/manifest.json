@@ -1,0 +1,18 @@
+{
+  "id": "niri-ribbon",
+  "name": "Niri Ribbon",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.7.0",
+  "license": "MIT",
+  "description": "Tracks off-screen windows in niri ribbon",
+  "author": "J Pablo Puerta <ews@folksonomy.com>",
+  "tags": [
+    "Utility",
+    "Bar",
+    "Niri"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml"
+  }
+}
