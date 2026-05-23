@@ -170,7 +170,7 @@ Item {
                     Layout.alignment: Qt.AlignVCenter
 
                     NText {
-                        text: "5h"
+                        text: pluginApi?.tr("bar.primary-short")
                         pointSize: root.meterFontSize
                         applyUiScale: false
                         font.weight: Style.fontWeightSemiBold
@@ -188,7 +188,7 @@ Item {
                     }
 
                     NText {
-                        text: "W"
+                        text: pluginApi?.tr("bar.secondary-short")
                         pointSize: root.meterFontSize
                         applyUiScale: false
                         font.weight: Style.fontWeightSemiBold
@@ -226,7 +226,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
 
                     NText {
-                        text: "5h"
+                        text: pluginApi?.tr("bar.primary-short")
                         pointSize: root.meterFontSize
                         applyUiScale: false
                         font.weight: Style.fontWeightSemiBold
@@ -247,7 +247,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
 
                     NText {
-                        text: "W"
+                        text: pluginApi?.tr("bar.secondary-short")
                         pointSize: root.meterFontSize
                         applyUiScale: false
                         font.weight: Style.fontWeightSemiBold

@@ -165,7 +165,7 @@ Item {
                     spacing: Style.marginXXS
 
                     NText {
-                        text: "Codex usage"
+                        text: pluginApi?.tr("panel.title")
                         pointSize: Style.fontSizeL
                         font.weight: Style.fontWeightBold
                         color: Color.mOnSurface
@@ -273,18 +273,18 @@ Item {
                     rowSpacing: Style.marginS
                     columnSpacing: Style.marginL
 
-                    MetaItem { label: "Login"; value: root.loginMethod !== "" ? root.loginMethod : "—" }
-                    MetaItem { label: "Provider"; value: root.providerId !== "" ? root.providerId : root.providerName }
-                    MetaItem { label: "Source"; value: root.sourceName !== "" ? root.sourceName : "—" }
-                    MetaItem { label: "CodexBar"; value: root.versionText !== "" ? "v" + root.versionText : "—" }
-                    MetaItem { label: "Credits"; value: String(root.creditsRemaining) + " remaining" }
-                    MetaItem { label: "Credit events"; value: String(root.creditEventsCount) }
+                    MetaItem { label: pluginApi?.tr("panel.login"); value: root.loginMethod !== "" ? root.loginMethod : "—" }
+                    MetaItem { label: pluginApi?.tr("panel.provider"); value: root.providerId !== "" ? root.providerId : root.providerName }
+                    MetaItem { label: pluginApi?.tr("panel.source"); value: root.sourceName !== "" ? root.sourceName : "—" }
+                    MetaItem { label: pluginApi?.tr("panel.codexbar"); value: root.versionText !== "" ? "v" + root.versionText : "—" }
+                    MetaItem { label: pluginApi?.tr("panel.credits"); value: pluginApi?.tr("panel.credits-remaining", { count: root.creditsRemaining }) }
+                    MetaItem { label: pluginApi?.tr("panel.credit-events"); value: String(root.creditEventsCount) }
                 }
             }
 
             NText {
                 Layout.fillWidth: true
-                text: "Updated " + root.updatedLabel()
+                text: pluginApi?.tr("panel.updated", { time: root.updatedLabel() })
                 pointSize: Style.fontSizeXS
                 color: Color.mOnSurfaceVariant
                 horizontalAlignment: Text.AlignHCenter
@@ -376,7 +376,7 @@ Item {
                 spacing: Style.marginS
 
                 NText {
-                    text: "Resets"
+                    text: pluginApi?.tr("panel.resets")
                     pointSize: Style.fontSizeXS
                     color: Color.mOnSurfaceVariant
                 }

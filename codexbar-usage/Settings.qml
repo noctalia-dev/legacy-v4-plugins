@@ -42,7 +42,7 @@ ColumnLayout {
     onPluginApiChanged: loadSettings()
 
     NText {
-        text: "CodexBar Usage Settings"
+        text: pluginApi?.tr("settings.title")
         pointSize: Style.fontSizeXL
         font.weight: Style.fontWeightBold
         color: Color.mOnSurface
@@ -66,7 +66,7 @@ ColumnLayout {
             spacing: Style.marginM
 
             NText {
-                text: "CodexBar CLI"
+                text: pluginApi?.tr("settings.cli-section")
                 pointSize: Style.fontSizeL
                 font.weight: Style.fontWeightSemiBold
                 color: Color.mPrimary
@@ -75,8 +75,8 @@ ColumnLayout {
 
             NTextInput {
                 Layout.fillWidth: true
-                label: "CodexBar path"
-                description: "Command name or absolute path available to Noctalia/Quickshell. Use an absolute path if your graphical session does not inherit shell PATH."
+                label: pluginApi?.tr("settings.codexbar-path.label")
+                description: pluginApi?.tr("settings.codexbar-path.description")
                 placeholderText: "codexbar"
                 text: root.codexbarPath
                 onTextChanged: {
@@ -90,7 +90,7 @@ ColumnLayout {
                 spacing: Style.marginXS
 
                 NText {
-                    text: "Source"
+                    text: pluginApi?.tr("settings.source.label")
                     pointSize: Style.fontSizeM
                     font.weight: Style.fontWeightSemiBold
                     color: Color.mOnSurface
@@ -98,7 +98,7 @@ ColumnLayout {
                 }
 
                 NText {
-                    text: "Passed to `codexbar usage --source`. `cli` reads local Codex CLI state; use another source if your CodexBar setup requires it."
+                    text: pluginApi?.tr("settings.source.description")
                     pointSize: Style.fontSizeXS
                     color: Color.mOnSurfaceVariant
                     wrapMode: Text.WordWrap
@@ -127,7 +127,7 @@ ColumnLayout {
                 spacing: Style.marginXS
 
                 NText {
-                    text: "Refresh interval (seconds)"
+                    text: pluginApi?.tr("settings.refresh-interval")
                     pointSize: Style.fontSizeM
                     font.weight: Style.fontWeightSemiBold
                     color: Color.mOnSurface
@@ -165,7 +165,7 @@ ColumnLayout {
             spacing: Style.marginS
 
             NText {
-                text: "Command preview"
+                text: pluginApi?.tr("settings.command-preview")
                 pointSize: Style.fontSizeM
                 font.weight: Style.fontWeightSemiBold
                 color: Color.mPrimary

@@ -1,0 +1,32 @@
+{
+  "bar": {
+    "primary-short": "5h",
+    "secondary-short": "W"
+  },
+  "panel": {
+    "title": "Codex usage",
+    "login": "Login",
+    "provider": "Provider",
+    "source": "Source",
+    "codexbar": "CodexBar",
+    "credits": "Credits",
+    "credits-remaining": "{count} remaining",
+    "credit-events": "Credit events",
+    "updated": "Updated {time}",
+    "resets": "Resets"
+  },
+  "settings": {
+    "title": "CodexBar Usage Settings",
+    "cli-section": "CodexBar CLI",
+    "codexbar-path": {
+      "label": "CodexBar path",
+      "description": "Command name or absolute path available to Noctalia/Quickshell. Use an absolute path if your graphical session does not inherit shell PATH."
+    },
+    "source": {
+      "label": "Source",
+      "description": "Passed to `codexbar usage --source`. `cli` reads local Codex CLI state; use another source if your CodexBar setup requires it."
+    },
+    "refresh-interval": "Refresh interval (seconds)",
+    "command-preview": "Command preview"
+  }
+}

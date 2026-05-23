@@ -98,6 +98,7 @@ rsync -a --delete ./ ~/.config/noctalia/plugins/codexbar-usage/
 - `Panel.qml` — attached detail panel.
 - `Settings.qml` — Noctalia settings UI for command path, source, and refresh interval.
 - `codexbar.js` — shared CodexBar command construction and JSON parsing.
+- `settings.json` — default/local settings.
 
 ## License
 
