@@ -8,16 +8,16 @@ import "Components"
 import qs.Commons
 import qs.Services.System
 import qs.Widgets
+import qs.Modules.MainScreen
 
 Item {
     id: root
 
     property var pluginApi: null
-    readonly property var geometryPlaceholder: panelContainer
+    // readonly property var geometryPlaceholder: panelContainer
     readonly property bool allowAttach: true
     property real contentPreferredWidth: 850 * Style.uiScaleRatio
     property real contentPreferredHeight: 600 * Style.uiScaleRatio
-    property bool sidebarExpanded: false
     property int currentTabIndex: 0
     property var _cachedContainers: []
     property var _pendingCallback: null
@@ -31,7 +31,7 @@ Item {
     function runCommand(cmdArgs, callback) {
         if (commandRunner.running) {
             console.warn("Command runner busy, ignoring:", cmdArgs);
-            return ;
+            return;
         }
         root._pendingCallback = callback;
         commandRunner.command = cmdArgs;
@@ -68,8 +68,8 @@ Item {
 
     function attemptRunImage(repo, tag) {
         // Reset dialog and start inspect to get default port
-        runImageDialog.resetFields(repo, tag, "8080"); 
-        
+        runImageDialog.resetFields(repo, tag, "8080");
+
         inspectProcess.targetImage = repo + ":" + tag;
         inspectProcess.running = true;
     }
@@ -81,7 +81,7 @@ Item {
             cmd.push(name.trim());
         }
         if (envVars && envVars.length > 0) {
-            envVars.forEach(function(e) {
+            envVars.forEach(function (e) {
                 cmd.push("-e");
                 cmd.push(e);
             });
@@ -101,213 +101,221 @@ Item {
     anchors.fill: parent
     Component.onCompleted: refreshAll()
 
-    ListModel { id: containersModel }
-    ListModel { id: imagesModel }
-    ListModel { id: volumesModel }
-    ListModel { id: networksModel }
+    ListModel {
+        id: containersModel
+    }
+    ListModel {
+        id: imagesModel
+    }
+    ListModel {
+        id: volumesModel
+    }
+    ListModel {
+        id: networksModel
+    }
 
-    Rectangle {
-        id: panelContainer
-
+    ColumnLayout {
+        id: mainColumn
         anchors.fill: parent
-        color: "transparent"
+        anchors.margins: Style.marginL
+        spacing: Style.marginM
 
-        Rectangle {
-            anchors.fill: parent
-            anchors.margins: Style.marginL
-            color: Color.mSurface
-            radius: Style.radiusL
-            border.color: Color.mOutline
-            border.width: Style.borderS
-            clip: true
+        NBox {
+            id: headerBox
+            Layout.fillWidth: true
+            implicitHeight: header.implicitHeight + Style.marginM + Style.marginM
 
-            RowLayout {
+            ColumnLayout {
+                id: header
                 anchors.fill: parent
-                spacing: 0
+                anchors.margins: Style.marginM
+                spacing: Style.marginM
 
-                // Sidebar
-                Rectangle {
-                    Layout.fillHeight: true
-                    Layout.preferredWidth: root.sidebarExpanded ? 200 * Style.uiScaleRatio : 56 * Style.uiScaleRatio
-                    color: Color.mSurfaceVariant
-                    clip: true
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        anchors.margins: Style.marginS
-                        spacing: Style.marginS
-
-                        NButton {
-                            icon: root.sidebarExpanded ? "layout-sidebar-right-expand" : "layout-sidebar-left-expand"
-                            Layout.preferredWidth: 40 * Style.uiScaleRatio
-                            Layout.preferredHeight: 40 * Style.uiScaleRatio
-                            onClicked: root.sidebarExpanded = !root.sidebarExpanded
-                        }
-
-                        Item { height: Style.marginS; width: 1 }
-
-                        SidebarItem { iconName: "brand-docker"; itemText: "Containers"; idx: 0 }
-                        SidebarItem { iconName: "photo"; itemText: "Images"; idx: 1 }
-                        SidebarItem { iconName: "database"; itemText: "Volumes"; idx: 2 }
-                        SidebarItem { iconName: "network"; itemText: "Networks"; idx: 3 }
-
-                        Item { Layout.fillHeight: true }
+                RowLayout {
+                    id: headerRow
+                    NIcon {
+                        icon: "brand-docker"
+                        pointSize: Style.fontSizeXXL
+                        color: Color.mPrimary
                     }
 
-                    Rectangle {
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        width: 1
-                        color: Color.mOutline
-                        opacity: 0.5
+                    NText {
+                        text: "Mini Docker"
+                        pointSize: Style.fontSizeL
+                        font.weight: Style.fontWeightBold
+                        color: Color.mOnSurface
+                        Layout.fillWidth: true
                     }
 
-                    Behavior on Layout.preferredWidth {
-                        NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+                    NIconButton {
+                        icon: "refresh"
+                        tooltipText: "Refresh"
+                        onClicked: refreshAll()
+                        baseSize: Style.baseWidgetSize * 0.8
+                    }
+
+                    NIconButton {
+                        icon: "close"
+                        tooltipText: I18n.tr("common.close")
+                        baseSize: Style.baseWidgetSize * 0.8
+                        onClicked: root.close()
                     }
                 }
 
-                // Main Content
-                ColumnLayout {
+                NTabBar {
+                    id: tabsBox
                     Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    spacing: 0
+                    currentIndex: 0 // panelContent.currentRange
+                    tabHeight: Style.toOdd(Style.baseWidgetSize * 0.8)
+                    spacing: Style.marginXS
+                    distributeEvenly: true
 
-                    // Header
-                    Rectangle {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: 60 * Style.uiScaleRatio
-                        color: "transparent"
-
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: Style.marginL
-                            spacing: Style.marginM
-
-                            Text {
-                                text: {
-                                    if (root.currentTabIndex === 0) return "Containers";
-                                    if (root.currentTabIndex === 1) return "Images";
-                                    if (root.currentTabIndex === 2) return "Volumes";
-                                    return "Networks";
-                                }
-                                font.bold: true
-                                font.pixelSize: 20
-                                color: Color.mOnSurface
-                            }
-
-                            Item { Layout.fillWidth: true }
-
-                            NButton {
-                                icon: "refresh"
-                                text: "Refresh"
-                                onClicked: refreshAll()
-                            }
-                        }
+                    NTabButton {
+                        tabIndex: 0
+                        icon: "brand-docker"
+                        text: "Containers"
+                        checked: root.currentTabIndex === 0
+                        onClicked: root.currentTabIndex = 0
+                        pointSize: Style.fontSizeXS
                     }
 
-                    StackLayout {
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                        currentIndex: root.currentTabIndex
-
-                        // Containers Tab
-                        Item {
-                            ListView {
-                                id: containersList
-                                anchors.fill: parent
-                                anchors.margins: Style.marginM
-                                model: containersModel
-                                delegate: ContainerDelegate {
-                                    width: ListView.view.width - (ListView.view.ScrollBar.vertical ? 10 : 0)
-                                    onRequestStart: (id) => startContainer(id)
-                                    onRequestStop: (id) => stopContainer(id)
-                                    onRequestRestart: (id) => restartContainer(id)
-                                    onRequestRemove: (id) => removeContainer(id)
-                                }
-                                spacing: Style.marginS
-                                clip: true
-                                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded; active: containersList.moving }
-                            }
-                            Text {
-                                anchors.centerIn: parent
-                                visible: containersModel.count === 0
-                                text: "No containers found"
-                                color: Color.mOnSurfaceVariant
-                            }
-                        }
-
-                        // Images Tab
-                        Item {
-                            ListView {
-                                id: imagesList
-                                anchors.fill: parent
-                                anchors.margins: Style.marginM
-                                model: imagesModel
-                                delegate: ImageDelegate {
-                                    width: ListView.view.width - (ListView.view.ScrollBar.vertical ? 10 : 0)
-                                    onRequestRun: (repo, tag) => attemptRunImage(repo, tag)
-                                    onRequestRemove: (id) => removeImage(id)
-                                }
-                                spacing: Style.marginS
-                                clip: true
-                                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded; active: imagesList.moving }
-                            }
-                            Text {
-                                anchors.centerIn: parent
-                                visible: imagesModel.count === 0
-                                text: "No images found"
-                                color: Color.mOnSurfaceVariant
-                            }
-                        }
-
-                        // Volumes Tab
-                        Item {
-                            ListView {
-                                id: volumesList
-                                anchors.fill: parent
-                                anchors.margins: Style.marginM
-                                model: volumesModel
-                                delegate: VolumeDelegate {
-                                    width: ListView.view.width - (ListView.view.ScrollBar.vertical ? 10 : 0)
-                                    onRequestRemove: (name) => removeVolume(name)
-                                }
-                                spacing: Style.marginS
-                                clip: true
-                                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded; active: volumesList.moving }
-                            }
-                            Text {
-                                anchors.centerIn: parent
-                                visible: volumesModel.count === 0
-                                text: "No volumes found"
-                                color: Color.mOnSurfaceVariant
-                            }
-                        }
-
-                        // Networks Tab
-                        Item {
-                            ListView {
-                                id: networksList
-                                anchors.fill: parent
-                                anchors.margins: Style.marginM
-                                model: networksModel
-                                delegate: NetworkDelegate {
-                                    width: ListView.view.width - (ListView.view.ScrollBar.vertical ? 10 : 0)
-                                    onRequestRemove: (id) => removeNetwork(id)
-                                }
-                                spacing: Style.marginS
-                                clip: true
-                                ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded; active: networksList.moving }
-                            }
-                            Text {
-                                anchors.centerIn: parent
-                                visible: networksModel.count === 0
-                                text: "No networks found"
-                                color: Color.mOnSurfaceVariant
-                            }
-                        }
+                    NTabButton {
+                        tabIndex: 1
+                        text: "Images"
+                        icon: "photo"
+                        checked: root.currentTabIndex === 1
+                        onClicked: root.currentTabIndex = 1
+                        pointSize: Style.fontSizeXS
                     }
+
+                    NTabButton {
+                        tabIndex: 2
+                        text: "Volumes"
+                        icon: "database"
+                        checked: root.currentTabIndex === 2
+                        onClicked: root.currentTabIndex = 2
+                        pointSize: Style.fontSizeXS
+                    }
+
+                    NTabButton {
+                        tabIndex: 3
+                        text: "Networks"
+                        icon: "network"
+                        checked: root.currentTabIndex === 3
+                        onClicked: root.currentTabIndex = 3
+                        pointSize: Style.fontSizeXS
+                    }
+                }
+            }
+        }
+
+        StackLayout {
+            id: contentColumns
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            currentIndex: root.currentTabIndex
+
+            // Containers Tab
+            Item {
+                ListView {
+                    id: containersList
+                    anchors.fill: parent
+                    model: containersModel
+                    delegate: ContainerDelegate {
+                        width: ListView.view.width
+                        onRequestStart: id => startContainer(id)
+                        onRequestStop: id => stopContainer(id)
+                        onRequestRestart: id => restartContainer(id)
+                        onRequestRemove: id => removeContainer(id)
+                    }
+                    spacing: Style.marginS
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
+                        active: containersList.moving
+                    }
+                }
+                Text {
+                    anchors.centerIn: parent
+                    visible: containersModel.count === 0
+                    text: "No containers found"
+                    color: Color.mOnSurfaceVariant
+                }
+            }
+
+            // Images Tab
+            Item {
+                ListView {
+                    id: imagesList
+                    anchors.fill: parent
+                    model: imagesModel
+                    delegate: ImageDelegate {
+                        width: ListView.view.width
+                        onRequestRun: (repo, tag) => attemptRunImage(repo, tag)
+                        onRequestRemove: id => removeImage(id)
+                    }
+                    spacing: Style.marginS
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
+                        active: imagesList.moving
+                    }
+                }
+                Text {
+                    anchors.centerIn: parent
+                    visible: imagesModel.count === 0
+                    text: "No images found"
+                    color: Color.mOnSurfaceVariant
+                }
+            }
+
+            // Volumes Tab
+            Item {
+                ListView {
+                    id: volumesList
+                    anchors.fill: parent
+                    model: volumesModel
+                    delegate: VolumeDelegate {
+                        width: ListView.view.width
+                        onRequestRemove: name => removeVolume(name)
+                    }
+                    spacing: Style.marginS
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
+                        active: volumesList.moving
+                    }
+                }
+                Text {
+                    anchors.centerIn: parent
+                    visible: volumesModel.count === 0
+                    text: "No volumes found"
+                    color: Color.mOnSurfaceVariant
+                }
+            }
+
+            // Networks Tab
+            Item {
+                ListView {
+                    id: networksList
+                    anchors.fill: parent
+                    model: networksModel
+                    delegate: NetworkDelegate {
+                        width: ListView.view.width
+                        onRequestRemove: id => removeNetwork(id)
+                    }
+                    spacing: Style.marginS
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {
+                        policy: ScrollBar.AsNeeded
+                        active: networksList.moving
+                    }
+                }
+                Text {
+                    anchors.centerIn: parent
+                    visible: networksModel.count === 0
+                    text: "No networks found"
+                    color: Color.mOnSurfaceVariant
                 }
             }
         }
@@ -332,7 +340,9 @@ Item {
                 var data = DockerUtils.parseContainers(this.text);
                 root._cachedContainers = data;
                 containersModel.clear();
-                data.forEach(function(c) { containersModel.append(c); });
+                data.forEach(function (c) {
+                    containersModel.append(c);
+                });
                 imageProcess.running = true;
             }
         }
@@ -345,7 +355,9 @@ Item {
             onStreamFinished: {
                 var data = DockerUtils.parseImages(this.text, root._cachedContainers);
                 imagesModel.clear();
-                data.forEach(function(img) { imagesModel.append(img); });
+                data.forEach(function (img) {
+                    imagesModel.append(img);
+                });
             }
         }
     }
@@ -357,7 +369,9 @@ Item {
             onStreamFinished: {
                 var data = DockerUtils.parseVolumes(this.text);
                 volumesModel.clear();
-                data.forEach(function(v) { volumesModel.append(v); });
+                data.forEach(function (v) {
+                    volumesModel.append(v);
+                });
             }
         }
     }
@@ -369,7 +383,9 @@ Item {
             onStreamFinished: {
                 var data = DockerUtils.parseNetworks(this.text);
                 networksModel.clear();
-                data.forEach(function(n) { networksModel.append(n); });
+                data.forEach(function (n) {
+                    networksModel.append(n);
+                });
             }
         }
     }
@@ -384,7 +400,8 @@ Item {
                 if (!detectedPort)
                     detectedPort = DockerUtils.guessDefaultPort(runImageDialog.imageRepo);
 
-                if (runImageDialog.portField) runImageDialog.portField.text = detectedPort;
+                if (runImageDialog.portField)
+                    runImageDialog.portField.text = detectedPort;
                 runImageDialog.placeholderPort = detectedPort;
                 runImageDialog.open();
             }
@@ -419,59 +436,6 @@ Item {
             portCheckProcess.pendingPort = port;
             portCheckProcess.pendingNetwork = network;
             portCheckProcess.running = true;
-        }
-    }
-
-    component SidebarItem: Rectangle {
-        id: sideItem
-        property string iconName
-        property string itemText
-        property int idx
-        Layout.fillWidth: true
-        Layout.preferredHeight: 40 * Style.uiScaleRatio
-        color: root.currentTabIndex === idx ? Color.mSurface : "transparent"
-        radius: Style.radiusS
-
-        Rectangle {
-            visible: root.currentTabIndex === idx
-            width: 3
-            height: 16
-            radius: 2
-            color: Color.mPrimary
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin: 4
-        }
-
-        RowLayout {
-            anchors.fill: parent
-            anchors.leftMargin: 12
-            spacing: 12
-
-            NIcon {
-                icon: iconName
-                color: Color.mOnSurface
-                Layout.preferredWidth: 24
-                Layout.preferredHeight: 24
-            }
-
-            Text {
-                text: sideItem.itemText
-                color: Color.mOnSurface
-                font.weight: root.currentTabIndex === idx ? Font.DemiBold : Font.Normal
-                opacity: root.sidebarExpanded ? 1 : 0
-                Layout.fillWidth: true
-                elide: Text.ElideRight
-                Behavior on opacity { NumberAnimation { duration: 150 } }
-            }
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: root.currentTabIndex = idx
-            onEntered: if (root.currentTabIndex !== idx) parent.color = Qt.rgba(1, 1, 1, 0.05);
-            onExited: if (root.currentTabIndex !== idx) parent.color = "transparent";
         }
     }
 }
