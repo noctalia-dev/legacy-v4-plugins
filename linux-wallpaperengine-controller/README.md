@@ -5,9 +5,9 @@ A Noctalia plugin that provides a Wallpaper-Engine wallpaper selector powered by
 ## Features
 
 - Bar widget with quick access to the wallpaper selector panel
-- Panel with wallpaper search by name or workshop ID, type filter, resolution filter, sorting, and pagination
+- Panel with wallpaper search by name or ID, type filter, resolution filter, sorting, and pagination
 - Apply wallpapers to all displays or select a specific display target
-- Sidebar preview with wallpaper badges for resolution, type, dynamic/static state, and possible compatibility issues, plus a clickable workshop ID
+- Sidebar preview with wallpaper badges for resolution, type, dynamic/static state, and possible compatibility issues
 - Runtime controls for scaling, clamp mode, volume, mute, audio reactive effects, mouse input, and parallax
 - Optional `Sync wallpaper colors` flow that generates per-display color screenshots and applies Noctalia wallpaper colors for the configured source monitor
 - Settings resource tools to view and clear color image cache (while preserving cache entries for currently online displays)

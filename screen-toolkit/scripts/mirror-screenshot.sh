@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # mirror-screenshot.sh — process and save a mirror screenshot
 # Args: $1=src $2=destDir $3=destFile $4=filters (optional, comma-separated ffmpeg -vf string)
 # Exit codes:

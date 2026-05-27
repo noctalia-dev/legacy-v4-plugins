@@ -23,7 +23,7 @@ A [Noctalia](https://github.com/noctalia-dev/noctalia) bar widget for toggling a
 | `backend` | `auto` | `auto`, `squeekboard`, or `wvkbd` |
 | `hideWhenUnavailable` | `false` | Hide the widget entirely when the OSK is unavailable |
 | `disableHoverIcon` | `false` | Always show the state icon; never show the directional hover icon |
-| `wvkbdBin` | `wvkbd-mobintl` | wvkbd binary name or path (wvkbd backend only) |
+| `wvkbdBin -l full,special --landscape-layers full,special` | `wvkbd-mobintl` | wvkbd binary name or path (wvkbd backend only), can use flags too |
 
 ### Backend selection
 

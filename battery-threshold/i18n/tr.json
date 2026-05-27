@@ -1,0 +1,16 @@
+{
+	"settings": {
+		"battery-device": "Batarya Cihazı",
+		"battery-device-desc": "Alt Sınırı ayarlanacak batarya",
+		"no-battery-device": "Bu cihazda ayarlanabilecek batarya bulunamadı"
+	},
+	"actions": {
+		"widget-settings": "Widget Ayarları"
+	},
+	"panel": {
+		"title": "Batarya Alt Sınırı",
+		"not-available": "Bu cihazda kullanılamaz",
+		"adjust-limit": "Sınırı ayarlamak için kaydırıcıyı sürükleyin",
+		"read-only": "Salt-okunur: Yazma erişimi için udev kurallarını yükleyin"
+	}
+}

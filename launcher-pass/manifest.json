@@ -1,0 +1,28 @@
+{
+  "id": "launcher-pass",
+  "name": "Launcher pass",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.7.7",
+  "author": "Marco Melletti",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Noctalia Launcher gnu pass provider",
+  "tags": ["Launcher"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "launcherProvider": "LauncherProvider.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "commandPrefix": "pass",
+    "defaultSettings": {
+      "storePath": "",
+      "typeDelay": 500,
+      "wtypeDelay": 12,
+      "clipTimeout": ""
+    }
+  }
+}

@@ -90,7 +90,7 @@ NIconButton {
       } else if (action === "start") {
         mainInstance?.reload(true);
       } else if (action === "settings") {
-        BarService.openPluginSettings(root.screen, pluginApi.manifest);
+        BarService.openPluginSettings(root.screen, pluginApi?.manifest);
       }
     }
   }

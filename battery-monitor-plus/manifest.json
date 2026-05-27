@@ -1,0 +1,33 @@
+{
+  "id": "battery-monitor-plus",
+  "name": "Battery Monitor Plus",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "krteke",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Extended battery monitor with current power draw, remaining time, battery health, and current power profile.",
+  "tags": ["Bar", "Panel", "Indicator", "System"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "displayMode": "graphic-clean",
+      "deviceNativePath": "__default__",
+      "showPowerProfiles": false,
+      "showNoctaliaPerformance": false,
+      "hideIfNotDetected": true,
+      "hideIfIdle": false,
+      "refreshIntervalSeconds": 5,
+      "showPowerInBar": true,
+      "showTimeInBar": true
+    }
+  }
+}

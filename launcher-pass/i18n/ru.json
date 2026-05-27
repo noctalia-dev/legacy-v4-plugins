@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Поиск записей паролей gnu pass"
+  },
+  "result": {
+    "goBack": "Назад",
+    "folder": "Папка",
+    "password": "Пароль",
+    "passwordEntry": "Запись пароля",
+    "loading": "Загрузка записей паролей..."
+  },
+  "action": {
+    "copyPassword": "Копировать пароль",
+    "copyPasswordDesc": "Копировать пароль в буфер обмена",
+    "typePassword": "Ввести пароль",
+    "typePasswordDesc": "Ввести пароль с помощью wtype",
+    "copyField": "Копировать {key}",
+    "typeField": "Ввести {key}",
+    "copyOtp": "Копировать OTP",
+    "typeOtp": "Ввести OTP",
+    "otpDesc": "Копировать/ввести текущий OTP-код"
+  },
+  "settings": {
+    "tab": {
+      "general": "Общие",
+      "advanced": "Расширенные"
+    },
+    "storePath": {
+      "label": "Путь к хранилищу паролей",
+      "desc": "Пользовательский путь к хранилищу паролей (по умолчанию: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Задержка закрытия лаунчера",
+      "desc": "Задержка перед началом ввода в миллисекундах (по умолчанию: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Задержка ввода wtype",
+      "desc": "Задержка между нажатиями клавиш в мс для wtype (по умолчанию: 12)"
+    },
+    "clipTimeout": {
+      "label": "Тайм-аут буфера обмена",
+      "desc": "Секунды до очистки буфера обмена (по умолчанию PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Скопировано в буфер обмена"
+  }
+}

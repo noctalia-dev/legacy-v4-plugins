@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "Ustawienia widgetu"
+    "widget-settings": "Ustawienia widgetu",
+    "toggle-panel": "Przełącz Monitor"
+  },
+  "panel": {
+    "title": "Aktywność sieciowa",
+    "close": "Zamknij",
+    "download": "Pobieranie",
+    "upload": "Wysyłanie"
   },
   "settings": {
+    "layout": {
+      "label": "Układ",
+      "desc": "Rozmieść komórki w rzędzie (poziomo) lub w siatce 2×2 (pionowo).",
+      "horizontal": "Poziomy",
+      "vertical": "Pionowy"
+    },
+    "slots": {
+      "label": "Przypisanie komórek",
+      "desc": "Wybierz, co wyświetla każda komórka. Duplikaty nie są możliwe. Np. użyj pustych komórek, aby wyświetlać tylko ikony."
+    },
+    "slot": {
+      "txIcon": "Ikona TX",
+      "rxIcon": "Ikona RX",
+      "txSpeed": "Prędkość TX",
+      "rxSpeed": "Prędkość RX",
+      "none": "Pusty"
+    },
+    "iconType": {
+      "desc": "Wybierz styl ikony używany dla wskaźników TX/RX.",
+      "label": "Typ Ikony"
+    },
     "byteThresholdActive": {
-      "desc": "Ustaw próg aktywności w bajtach na sekundę (B/s).",
-      "label": "Pokaż Aktywny Próg"
+      "desc": "Ruch poniżej tej wartości (B/s) jest wyświetlany jako nieaktywny.",
+      "label": "Próg aktywności"
     },
-    "colorRx": {
-      "desc": "Ustaw kolor ikony pobierania (RX), gdy wartość przekroczy próg.",
-      "label": "RX Aktywny"
+    "fontSizeModifier": {
+      "desc": "Skaluj rozmiar tekstu względem domyślnego.",
+      "label": "Rozmiar czcionki"
     },
-    "colorSilent": {
-      "desc": "Ustaw kolor ikony, gdy ruch jest poniżej progu.",
-      "label": "RX/TX Nieaktywne"
+    "iconSizeModifier": {
+      "desc": "Skaluj rozmiar ikony względem domyślnego.",
+      "label": "Rozmiar ikony"
     },
-    "colorText": {
-      "desc": "Ustaw kolor tekstu używany zarówno dla wartości RX, jak i TX.",
-      "label": "Tekst"
-    },
-    "colorTx": {
-      "desc": "Ustaw kolor ikony wysyłania (TX), gdy przekroczony zostanie próg.",
-      "label": "TX Aktywny"
-    },
-    "contentMargin": {
-      "desc": "Poziomy padding po obu stronach treści widgetu.",
-      "label": "Margines treści"
-    },
-    "customFontBold": {
-      "desc": "Wyświetlaj wartości prędkości pogrubionym tekstem.",
-      "label": "Pogrubiony"
+    "useCustomFont": {
+      "desc": "Zastąp domyślną czcionkę dla wartości prędkości.",
+      "label": "Własna czcionka"
     },
     "customFontFamily": {
       "desc": "Wybierz czcionkę dla wartości prędkości.",
@@ -37,41 +53,49 @@
       "placeholder": "Wybierz czcionkę",
       "searchPlaceholder": "Szukaj czcionek…"
     },
+    "customFontBold": {
+      "desc": "Wyświetlaj wartości prędkości pogrubionym tekstem.",
+      "label": "Pogrubiony"
+    },
     "customFontItalic": {
       "desc": "Wyświetlaj wartości prędkości kursywą.",
       "label": "Kursywa"
-    },
-    "fontSizeModifier": {
-      "desc": "Skaluj rozmiar tekstu względem domyślnego.",
-      "label": "Modyfikator rozmiaru czcionki"
-    },
-    "horizontalLayout": {
-      "desc": "Umieść wartości TX i RX obok siebie zamiast jedna nad drugą.",
-      "label": "Układ poziomy"
-    },
-    "iconSizeModifier": {
-      "desc": "Skaluj rozmiar ikony względem domyślnego.",
-      "label": "Modyfikator rozmiaru ikony"
-    },
-    "iconType": {
-      "desc": "Wybierz styl ikony używany dla wskaźników TX/RX.",
-      "label": "Typ Ikony"
-    },
-    "showNumbers": {
-      "desc": "Wyświetlaj aktualne prędkości RX/TX jako liczby.",
-      "label": "Pokaż wartości"
-    },
-    "spacingInbetween": {
-      "desc": "Dostosuj odstępy między elementami RX/TX.",
-      "label": "Odstęp pionowy"
     },
     "useCustomColors": {
       "desc": "Włącz własne kolory zamiast domyślnych motywu.",
       "label": "Własne kolory"
     },
-    "useCustomFont": {
-      "desc": "Zastąp domyślną czcionkę dla wartości prędkości.",
-      "label": "Własna czcionka"
+    "colorTx": {
+      "desc": "Kolor ikony wysyłania (TX), gdy przekroczony jest próg.",
+      "label": "TX Aktywny"
+    },
+    "colorRx": {
+      "desc": "Kolor ikony pobierania (RX), gdy wartość przekroczy próg.",
+      "label": "RX Aktywny"
+    },
+    "colorSilent": {
+      "desc": "Kolor ikony, gdy ruch jest poniżej progu.",
+      "label": "Nieaktywne"
+    },
+    "colorText": {
+      "desc": "Kolor tekstu dla wartości prędkości.",
+      "label": "Tekst"
+    },
+    "paddingLeft": {
+      "label": "Padding lewy",
+      "desc": "Padding treści po lewej stronie."
+    },
+    "paddingRight": {
+      "label": "Padding prawy",
+      "desc": "Padding treści po prawej stronie."
+    },
+    "columnSpacing": {
+      "label": "Odstęp kolumn",
+      "desc": "Odstęp między kolumnami w układzie siatki."
+    },
+    "rowSpacing": {
+      "label": "Odstęp wierszy",
+      "desc": "Odstęp między wierszami w układzie siatki (bez efektu w układzie poziomym)."
     }
   }
 }

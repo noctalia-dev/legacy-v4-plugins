@@ -10,5 +10,9 @@
     "windows_found": "{count} Steam ablakot találtam",
     "windows_moved": "Ablakok áthelyezve, kilépési kód: {code}",
     "workspace_toggled": "Munkaterület váltva"
+  },
+  "settings": {
+    "custom-layout-label": "Use custom Hyprland layout (Lua)",
+    "custom-layout-description": "Let a Hyprland custom Lua layout tile the windows instead of floating+positioning them. Requires Hyprland 0.55+ Lua config and steam-layout.lua (see README). When enabled, the width sliders below are handled by the Lua layout."
   }
 }

@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "gnu passのパスワードエントリを検索"
+  },
+  "result": {
+    "goBack": "戻る",
+    "folder": "フォルダ",
+    "password": "パスワード",
+    "passwordEntry": "パスワードエントリ",
+    "loading": "パスワードエントリを読み込み中..."
+  },
+  "action": {
+    "copyPassword": "パスワードをコピー",
+    "copyPasswordDesc": "パスワードをクリップボードにコピー",
+    "typePassword": "パスワードを入力",
+    "typePasswordDesc": "wtypeでパスワードを入力",
+    "copyField": "{key}をコピー",
+    "typeField": "{key}を入力",
+    "copyOtp": "OTPをコピー",
+    "typeOtp": "OTPを入力",
+    "otpDesc": "現在のOTPコードをコピー/入力"
+  },
+  "settings": {
+    "tab": {
+      "general": "一般",
+      "advanced": "詳細設定"
+    },
+    "storePath": {
+      "label": "パスワードストアパス",
+      "desc": "パスワードストアへのカスタムパス（デフォルト：~/.password-store）"
+    },
+    "typeDelay": {
+      "label": "ランチャー閉じる遅延",
+      "desc": "入力開始前の遅延ミリ秒（デフォルト：500）"
+    },
+    "wtypeDelay": {
+      "label": "Wtypeキー入力遅延",
+      "desc": "wtypeのキー間遅延ミリ秒（デフォルト：12）"
+    },
+    "clipTimeout": {
+      "label": "クリップボードタイムアウト",
+      "desc": "クリップボードが消去されるまでの秒数（デフォルト PASSWORD_STORE_CLIP_TIME: {value}）"
+    }
+  },
+  "notification": {
+    "copied": "クリップボードにコピーしました"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "id": "arch-updater",
   "name": "Arch Updater",
-  "version": "2.1.9",
+  "version": "2.1.10",
   "minNoctaliaVersion": "3.6.0",
   "author": "Ast",
   "license": "MIT",

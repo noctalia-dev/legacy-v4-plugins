@@ -1,0 +1,28 @@
+{
+  "launcher": {
+    "command": {
+      "description": "Open an Obsidian vault"
+    },
+    "loading": {
+      "name": "Loading...",
+      "description": "Reading Obsidian config"
+    },
+    "error": {
+      "name": "Obsidian vaults not loaded",
+      "description": "Click to retry — check config path in settings"
+    }
+  },
+  "settings": {
+    "configPath": {
+      "label": "Obsidian config path",
+      "desc": "Path to Obsidian's obsidian.json (contains the vault list)",
+      "placeholder": "~/.config/obsidian/obsidian.json",
+      "buttonTooltip": "Select file",
+      "pickerTitle": "Select obsidian.json"
+    },
+    "includeInSearch": {
+      "label": "Include in main search",
+      "desc": "Show Obsidian vaults in the main launcher search without the >obs prefix"
+    }
+  }
+}

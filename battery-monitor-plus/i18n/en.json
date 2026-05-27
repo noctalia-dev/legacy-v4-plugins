@@ -1,0 +1,48 @@
+{
+  "common": {
+    "close": "Close",
+    "unavailable": "-"
+  },
+  "menu": {
+    "settings": "Battery Monitor Plus settings"
+  },
+  "panel": {
+    "batteryHealth": "Battery health",
+    "batteryLevel": "Battery level",
+    "chargingPower": "Charging power",
+    "currentPower": "Current power draw",
+    "powerProfile": "Current power profile",
+    "remainingTime": "Remaining time",
+    "status": "Status",
+    "timeUntilFull": "Time until full",
+    "title": "Battery Monitor Plus"
+  },
+  "profile": {
+    "balanced": "balanced",
+    "performance": "performance",
+    "powerSaver": "power-saver",
+    "unavailable": "unavailable",
+    "unknown": "unknown"
+  },
+  "settings": {
+    "refreshInterval": {
+      "desc": "How often the bar and panel refresh battery power and time text.",
+      "label": "Refresh interval"
+    },
+    "showPowerInBar": {
+      "desc": "Show the current battery charge or discharge rate next to the battery graphic in the bar.",
+      "label": "Show power draw in bar"
+    },
+    "showTimeInBar": {
+      "desc": "Show the estimated time to empty or full next to the battery graphic in the bar.",
+      "label": "Show remaining time in bar"
+    }
+  },
+  "status": {
+    "charging": "Charging",
+    "discharging": "Discharging",
+    "fullyCharged": "Fully charged",
+    "noBattery": "No battery detected",
+    "pluggedIn": "Plugged in"
+  }
+}

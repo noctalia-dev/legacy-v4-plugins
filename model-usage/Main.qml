@@ -33,13 +33,19 @@ Item {
         providerSettings: root.pluginSettings?.providers?.copilot ?? ({})
     }
 
+    Gemini {
+        id: geminiProvider
+        enabled: root.providerEnabled("gemini")
+        providerSettings: root.pluginSettings?.providers?.gemini ?? ({})
+    }
+
     Zen {
         id: zenProvider
         enabled: root.providerEnabled("zen")
         providerSettings: root.pluginSettings?.providers?.zen ?? ({})
     }
 
-    property var providers: [claudeProvider, codexProvider, copilotProvider, openRouterProvider, zenProvider]
+    property var providers: [claudeProvider, codexProvider, copilotProvider, geminiProvider, openRouterProvider, zenProvider]
 
     property var enabledProviders: {
         const result = [];
@@ -49,6 +55,8 @@ Item {
             result.push(codexProvider);
         if (copilotProvider.enabled)
             result.push(copilotProvider);
+        if (geminiProvider.enabled)
+            result.push(geminiProvider);
         if (openRouterProvider.enabled)
             result.push(openRouterProvider);
         if (zenProvider.enabled)

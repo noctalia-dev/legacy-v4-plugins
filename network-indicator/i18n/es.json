@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "Configuración del widget"
+    "widget-settings": "Configuración del widget",
+    "toggle-panel": "Alternar Monitor"
+  },
+  "panel": {
+    "title": "Actividad de Red",
+    "close": "Cerrar",
+    "download": "Descarga",
+    "upload": "Subida"
   },
   "settings": {
+    "layout": {
+      "label": "Diseño",
+      "desc": "Disponer las celdas en una fila (horizontal) o en una cuadrícula 2×2 (vertical).",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "slots": {
+      "label": "Asignación de celdas",
+      "desc": "Elige qué muestra cada celda. No se permiten duplicados. P. ej., usa celdas vacías para mostrar solo iconos."
+    },
+    "slot": {
+      "txIcon": "Icono TX",
+      "rxIcon": "Icono RX",
+      "txSpeed": "Velocidad TX",
+      "rxSpeed": "Velocidad RX",
+      "none": "Vacío"
+    },
+    "iconType": {
+      "desc": "Elige el estilo de icono utilizado para los indicadores TX/RX.",
+      "label": "Tipo de icono"
+    },
     "byteThresholdActive": {
-      "desc": "Establecer el umbral de actividad en bytes por segundo (B/s).",
-      "label": "Mostrar umbral activo"
+      "desc": "El tráfico por debajo de este valor (B/s) se muestra como inactivo.",
+      "label": "Umbral de actividad"
     },
-    "colorRx": {
-      "desc": "Establecer el color del icono de descarga (RX) cuando esté por encima del umbral.",
-      "label": "RX Activo"
+    "fontSizeModifier": {
+      "desc": "Escalar el tamaño del texto en relación con el predeterminado.",
+      "label": "Tamaño de fuente"
     },
-    "colorSilent": {
-      "desc": "Establecer el color del icono cuando el tráfico esté por debajo del umbral.",
-      "label": "RX/TX Inactivo"
+    "iconSizeModifier": {
+      "desc": "Escalar el tamaño del icono en relación con el tamaño predeterminado.",
+      "label": "Tamaño del icono"
     },
-    "colorText": {
-      "desc": "Establecer el color del texto utilizado tanto para los valores RX como TX.",
-      "label": "Texto"
-    },
-    "colorTx": {
-      "desc": "Establecer el color del icono de carga (TX) cuando esté por encima del umbral.",
-      "label": "TX Activo"
-    },
-    "contentMargin": {
-      "desc": "Relleno horizontal en ambos lados del contenido del widget.",
-      "label": "Margen del contenido"
-    },
-    "customFontBold": {
-      "desc": "Mostrar los valores de velocidad en negrita.",
-      "label": "Negrita"
+    "useCustomFont": {
+      "desc": "Reemplazar la fuente predeterminada para los valores de velocidad.",
+      "label": "Fuente personalizada"
     },
     "customFontFamily": {
       "desc": "Elegir una fuente para los valores de velocidad.",
@@ -37,41 +53,49 @@
       "placeholder": "Seleccionar fuente",
       "searchPlaceholder": "Buscar fuentes…"
     },
+    "customFontBold": {
+      "desc": "Mostrar los valores de velocidad en negrita.",
+      "label": "Negrita"
+    },
     "customFontItalic": {
       "desc": "Mostrar los valores de velocidad en cursiva.",
       "label": "Cursiva"
-    },
-    "fontSizeModifier": {
-      "desc": "Escalar el tamaño del texto en relación con el predeterminado.",
-      "label": "Modificador de tamaño de fuente"
-    },
-    "horizontalLayout": {
-      "desc": "Colocar los valores TX y RX uno al lado del otro en lugar de apilados.",
-      "label": "Diseño horizontal"
-    },
-    "iconSizeModifier": {
-      "desc": "Escalar el tamaño del icono en relación con el tamaño predeterminado.",
-      "label": "Modificador del tamaño del icono"
-    },
-    "iconType": {
-      "desc": "Elige el estilo de icono utilizado para los indicadores TX/RX.",
-      "label": "Tipo de icono"
-    },
-    "showNumbers": {
-      "desc": "Mostrar las velocidades actuales de RX/TX como números.",
-      "label": "Mostrar valores"
-    },
-    "spacingInbetween": {
-      "desc": "Ajustar el espaciado entre los elementos RX/TX.",
-      "label": "Espaciado vertical"
     },
     "useCustomColors": {
       "desc": "Activar colores personalizados en lugar de los predeterminados del tema.",
       "label": "Colores personalizados"
     },
-    "useCustomFont": {
-      "desc": "Reemplazar la fuente predeterminada para los valores de velocidad.",
-      "label": "Fuente personalizada"
+    "colorTx": {
+      "desc": "Color del icono de subida (TX) cuando esté por encima del umbral.",
+      "label": "TX Activo"
+    },
+    "colorRx": {
+      "desc": "Color del icono de descarga (RX) cuando esté por encima del umbral.",
+      "label": "RX Activo"
+    },
+    "colorSilent": {
+      "desc": "Color del icono cuando el tráfico esté por debajo del umbral.",
+      "label": "Inactivo"
+    },
+    "colorText": {
+      "desc": "Color del texto para los valores de velocidad.",
+      "label": "Texto"
+    },
+    "paddingLeft": {
+      "label": "Relleno izquierdo",
+      "desc": "Relleno del contenido a la izquierda."
+    },
+    "paddingRight": {
+      "label": "Relleno derecho",
+      "desc": "Relleno del contenido a la derecha."
+    },
+    "columnSpacing": {
+      "label": "Espaciado de columnas",
+      "desc": "Espaciado entre columnas en el diseño de cuadrícula."
+    },
+    "rowSpacing": {
+      "label": "Espaciado de filas",
+      "desc": "Espaciado entre filas en el diseño de cuadrícula (sin efecto en el diseño horizontal)."
     }
   }
 }

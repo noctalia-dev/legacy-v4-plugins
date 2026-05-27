@@ -1,0 +1,52 @@
+{
+  "menu": {
+    "settings": "小工具設定"
+  },
+  "panel": {
+    "auth-error": "請進行身份驗證以使用此插件：{bin} auth login",
+    "issues": "問題",
+    "issues-count": "問題 ({count})",
+    "mr": "合併請求",
+    "mr-count": "合併請求 ({count})",
+    "open-settings": "開啟插件設定",
+    "pr": "拉取請求",
+    "pr-count": "拉取請求 ({count})",
+    "bin-not-installed": "{bin} 未安裝。請安裝它以使用此插件。",
+    "refresh": "重新整理",
+    "no-scope": "在設定中設定群組或儲存庫以查看分配給您的項目。",
+    "no-prs": "沒有開放的拉取請求",
+    "no-mrs": "沒有開放的合併請求",
+    "no-issues": "沒有開放的問題",
+    "no-bio": "無簡介",
+    "loading": "載入中…",
+    "title": "Git Companion"
+  },
+  "settings": {
+    "platform": {
+      "desc": "選擇您的 git 平台（Gitlab 或 Github）。",
+      "label": "平台"
+    },
+    "refreshInterval": {
+      "desc": "資料重新整理的頻率，單位為秒。",
+      "label": "重新整理間隔（秒）"
+    },
+    "repo": {
+      "label": "儲存庫",
+      "desc": "限定為特定儲存庫（例如 owner/repo）。留空以使用群組。"
+    },
+    "group": {
+      "label": "群組",
+      "desc": "GitLab 群組 slug。設定後優先於儲存庫。"
+    },
+    "org": {
+      "label": "組織",
+      "desc": "GitHub 組織。留空以在您的所有儲存庫中全域搜尋。"
+    }
+  },
+  "widget": {
+    "tooltip": "{issues} 問題 - {requestCount} {requestLabel}"
+  },
+  "desktop": {
+    "text": "{issues} 問題 - {requestCount} {requestLabel}"
+  }
+}

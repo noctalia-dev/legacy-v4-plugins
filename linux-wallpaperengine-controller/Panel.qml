@@ -1,7 +1,5 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
-import QtMultimedia
 import Quickshell
 import Quickshell.Io
 
@@ -9,9 +7,14 @@ import qs.Commons
 import qs.Services.UI
 import qs.Widgets
 
-import "components"
-import "helpers/WallpaperMetaHelpers.js" as WallpaperMetaHelpers
-import "helpers/PropertyHelpers.js" as PropertyHelpers
+import "components/panel"
+import "components/wallpaper"
+import "helpers/panel/BadgeHelpers.js" as BadgeHelpers
+import "helpers/panel/WallpaperFilterHelpers.js" as WallpaperFilterHelpers
+import "helpers/panel/WallpaperMetaHelpers.js" as WallpaperMetaHelpers
+import "helpers/panel/WallpaperUiHelpers.js" as WallpaperUiHelpers
+import "helpers/shared/ColorCacheHelpers.js" as ColorCacheHelpers
+import "helpers/panel/PropertyHelpers.js" as PropertyHelpers
 
 Item {
   id: root
@@ -29,8 +32,6 @@ Item {
   property real contentPreferredHeight: 860 * Style.uiScaleRatio
 
   readonly property bool allowAttach: true
-  readonly property bool panelAnchorHorizontalCenter: false
-  readonly property bool panelAnchorVerticalCenter: false
 
   // Panel state and current selection.
   readonly property string wallpapersFolder: cfg.wallpapersFolder ?? defaults.wallpapersFolder ?? ""
@@ -38,6 +39,7 @@ Item {
   property string selectedScreenName: pluginApi?.panelOpenScreen?.name ?? ""
   property string selectedPath: ""
   property string pendingPath: ""
+  property string lastPersistedPath: ""
   property string selectedScaling: "fill"
   property string selectedClamp: "clamp"
   property int selectedVolume: 100
@@ -50,7 +52,6 @@ Item {
   readonly property bool scanningWallpapers: mainInstance?.scanningWallpapers ?? false
   property bool loadingWallpaperProperties: false
   property bool scanningCompatibility: false
-  property bool pendingCompatibilityScan: false
   readonly property bool folderAccessible: mainInstance?.wallpapersFolderAccessible ?? true
 
   property string searchText: ""
@@ -59,24 +60,28 @@ Item {
   property string sortMode: "name"
   property bool sortAscending: true
   property int currentPage: 0
-  property int pageSize: 24
+  readonly property int pageSize: Math.max(1, Number(cfg.panelPageSize ?? defaults.panelPageSize ?? 24) || 24)
   readonly property bool singleScreenMode: Quickshell.screens.length <= 1
   property bool applyAllDisplays: !singleScreenMode && root._applyAllDisplays
   property bool _applyAllDisplays: true
+  property bool sidebarVisible: true
+  readonly property var defaultBadgeOrder: BadgeHelpers.normalizedDefaultOrder(defaults.badgeOrder)
+  readonly property var defaultBadgeEnabled: BadgeHelpers.normalizedDefaultEnabled(defaults.badgeEnabled)
+  readonly property var badgeOrder: BadgeHelpers.normalizeBadgeOrder(cfg.badgeOrder, defaultBadgeOrder)
+  readonly property var badgeEnabled: BadgeHelpers.normalizeBadgeEnabled(cfg.badgeEnabled, defaultBadgeEnabled)
+  readonly property var visibleBadgeOrder: BadgeHelpers.filterVisibleBadgeOrder(badgeOrder, badgeEnabled, defaultBadgeEnabled)
+  readonly property bool showSidebarDescription: cfg.showSidebarDescription ?? defaults.showSidebarDescription ?? false
   property bool applyTargetExpanded: false
   property bool filterDropdownOpen: false
-  property bool resolutionDropdownOpen: false
   property bool sortDropdownOpen: false
   property bool errorDetailsExpanded: false
   property real filterDropdownX: 0
   property real filterDropdownY: 0
   property real filterDropdownWidth: 220 * Style.uiScaleRatio
-  property real resolutionDropdownX: 0
-  property real resolutionDropdownY: 0
-  property real resolutionDropdownWidth: 220 * Style.uiScaleRatio
   property real sortDropdownX: 0
   property real sortDropdownY: 0
   property real sortDropdownWidth: 220 * Style.uiScaleRatio
+  property bool panelInitialized: false
 
   // Data models and derived UI state.
   property var screenModel: []
@@ -88,91 +93,77 @@ Item {
   property var wallpaperPropertyValues: ({})
   property string wallpaperPropertyError: ""
   property string wallpaperPropertyRequestPath: ""
+  readonly property var propertyTranslationApi: ({
+    translatePropertyLabelKey: key => pluginApi?.tr(key),
+    createColor: (r, g, b, a) => Qt.rgba(r, g, b, a)
+  })
+  readonly property var propertyEditorApi: ({
+    propertyValueFor: definition => root.propertyValueFor(definition),
+    numberOr: (value, fallback) => PropertyHelpers.numberOr(value, fallback),
+    formatSliderValue: (value, step) => PropertyHelpers.formatSliderValue(value, step),
+    comboChoicesFor: definition => PropertyHelpers.comboChoicesFor(definition),
+    ensureColorValue: value => PropertyHelpers.ensureColorValue(
+      value,
+      (rawValue, type) => PropertyHelpers.parsePropertyValue(rawValue, type, root.propertyTranslationApi.createColor),
+      root.propertyTranslationApi.createColor
+    ),
+    resolvePropertyImageSource: rawValue => PropertyHelpers.resolvePropertyImageSource(rawValue, pendingPath),
+    serializePropertyValue: (value, type) => PropertyHelpers.serializePropertyValue(value, type),
+    setPropertyValue: (key, value) => root.setPropertyValue(key, value)
+  })
   readonly property bool extraPropertiesEditorEnabled: cfg.enableExtraPropertiesEditor ?? defaults.enableExtraPropertiesEditor ?? true
-  readonly property string engineStatusBadgeText: {
-    if (mainInstance?.checkingEngine ?? false) {
-      return pluginApi?.tr("panel.statusChecking");
-    }
-    if (!(mainInstance?.engineAvailable ?? false)) {
-      return pluginApi?.tr("panel.statusUnavailable");
-    }
-    if (mainInstance?.engineRunning ?? false) {
-      return pluginApi?.tr("panel.statusRunning");
-    }
-    if (mainInstance?.hasAnyConfiguredWallpaper && mainInstance.hasAnyConfiguredWallpaper()) {
-      return pluginApi?.tr("panel.statusReady");
-    }
-    return pluginApi?.tr("panel.statusStopped");
-  }
-  readonly property color engineStatusBadgeFg: {
-    if (mainInstance?.checkingEngine ?? false) {
-      return Color.mSecondary;
-    }
-    if (!(mainInstance?.engineAvailable ?? false)) {
-      return Color.mError;
-    }
-    if (mainInstance?.engineRunning ?? false) {
-      return Color.mPrimary;
-    }
-    if (mainInstance?.hasAnyConfiguredWallpaper && mainInstance.hasAnyConfiguredWallpaper()) {
-      return Color.mTertiary;
-    }
-    return Color.mOnSurfaceVariant;
-  }
-  readonly property color engineStatusBadgeBg: Qt.alpha(engineStatusBadgeFg, 0.16)
   readonly property int pageCount: Math.max(1, Math.ceil(visibleWallpapers.length / Math.max(pageSize, 1)))
   readonly property bool paginationVisible: visibleWallpapers.length > pageSize
   readonly property int currentPageDisplay: visibleWallpapers.length === 0 ? 0 : currentPage + 1
   readonly property int currentPageStartIndex: visibleWallpapers.length === 0 ? 0 : currentPage * pageSize + 1
   readonly property int currentPageEndIndex: Math.min((currentPage + 1) * pageSize, visibleWallpapers.length)
-  readonly property var selectedWallpaperData: {
+
+  // Named timer intervals.
+  readonly property int searchDebounceDelay: 250
+  readonly property int propertyLoadDelay: 500
+
+  // O(1) lookup map rebuilt when wallpaper items change.
+  property var wallpaperByPath: ({})
+
+  function rebuildWallpaperByPath() {
+    const map = Object.create(null);
+    for (const item of wallpaperItems) {
+      map[String(item.path || "")] = item;
+    }
+    wallpaperByPath = map;
+  }
+
+  function getSelectedWallpaperData() {
     const target = String(pendingPath || "");
     if (target.length === 0) {
       return null;
     }
-    for (const item of wallpaperItems) {
-      if (String(item.path || "") === target) {
-        return item;
-      }
-    }
-    return null;
+    return wallpaperByPath[target] || null;
   }
 
   // Basic file and metadata helpers.
-  function basename(path) {
-    return WallpaperMetaHelpers.basename(path);
-  }
-
-  function workshopUrlForWallpaper(item) {
-    return WallpaperMetaHelpers.workshopUrlForWallpaper(item);
-  }
-
-  function fileExt(path) {
-    return WallpaperMetaHelpers.fileExt(path);
-  }
-
   function isVideoMotion(path) {
     return WallpaperMetaHelpers.isVideoMotion(path);
   }
 
   function typeLabel(value) {
-    const key = String(value || "all").toLowerCase();
-    if (key === "scene") return pluginApi?.tr("panel.typeScene");
-    if (key === "video") return pluginApi?.tr("panel.typeVideo");
-    if (key === "web") return pluginApi?.tr("panel.typeWeb");
-    if (key === "application") return pluginApi?.tr("panel.typeApplication");
-    return pluginApi?.tr("panel.filterAll");
+    return WallpaperUiHelpers.typeLabel(value, key => pluginApi?.tr(key));
+  }
+
+  function typeBadgeIcon(value) {
+    return WallpaperUiHelpers.typeBadgeIcon(value);
+  }
+
+  function dynamicBadgeIcon(isDynamic) {
+    return WallpaperUiHelpers.dynamicBadgeIcon(isDynamic);
   }
 
   function formatBytes(bytesValue) {
-    return WallpaperMetaHelpers.formatBytes(bytesValue);
+    return ColorCacheHelpers.formatBytes(bytesValue);
   }
 
   function sortLabel(value) {
-    if (value === "date") return pluginApi?.tr("panel.sortDateAdded");
-    if (value === "size") return pluginApi?.tr("panel.sortSize");
-    if (value === "recent") return pluginApi?.tr("panel.sortRecent");
-    return pluginApi?.tr("panel.sortName");
+    return WallpaperUiHelpers.sortLabel(value, key => pluginApi?.tr(key));
   }
 
   // Resolution helpers for badges and filtering.
@@ -189,39 +180,7 @@ Item {
   }
 
   function resolutionFilterLabel(value) {
-    if (value === "8k") return pluginApi?.tr("panel.filterRes8k");
-    if (value === "4k") return pluginApi?.tr("panel.filterRes4k");
-    if (value === "unknown") return pluginApi?.tr("panel.filterResUnknown");
-    return pluginApi?.tr("panel.filterResAll");
-  }
-
-  // Extra property parsing and normalization helpers.
-  function stripHtml(rawText) {
-    return PropertyHelpers.stripHtml(rawText);
-  }
-
-  function cleanedPropertyLabel(rawText, fallbackKey) {
-    return PropertyHelpers.cleanedPropertyLabel(rawText, fallbackKey, key => pluginApi?.tr(key));
-  }
-
-  function normalizePropertyLabel(value) {
-    return PropertyHelpers.normalizePropertyLabel(value, key => pluginApi?.tr(key));
-  }
-
-  function isNoisePropertyKey(value) {
-    return PropertyHelpers.isNoisePropertyKey(value);
-  }
-
-  function isNoisePropertyLabel(value) {
-    return PropertyHelpers.isNoisePropertyLabel(value);
-  }
-
-  function parsePropertyValue(rawValue, type) {
-    return PropertyHelpers.parsePropertyValue(rawValue, type, (r, g, b, a) => Qt.rgba(r, g, b, a));
-  }
-
-  function serializePropertyValue(value, type) {
-    return PropertyHelpers.serializePropertyValue(value, type);
+    return WallpaperUiHelpers.resolutionFilterLabel(value, key => pluginApi?.tr(key));
   }
 
   // Extra property value accessors.
@@ -237,26 +196,6 @@ Item {
     return definition.defaultValue;
   }
 
-  function comboChoicesFor(definition) {
-    return PropertyHelpers.comboChoicesFor(definition);
-  }
-
-  function ensureColorValue(value) {
-    return PropertyHelpers.ensureColorValue(
-      value,
-      (rawValue, type) => parsePropertyValue(rawValue, type),
-      (r, g, b, a) => Qt.rgba(r, g, b, a)
-    );
-  }
-
-  function numberOr(value, fallback) {
-    return PropertyHelpers.numberOr(value, fallback);
-  }
-
-  function formatSliderValue(value, step) {
-    return PropertyHelpers.formatSliderValue(value, step);
-  }
-
   function setPropertyValue(key, value) {
     const current = wallpaperPropertyValues || ({});
     const next = Object.assign({}, current);
@@ -266,134 +205,7 @@ Item {
 
   // Property loading and compatibility scan actions.
   function parseWallpaperPropertiesOutput(rawText) {
-    const lines = String(rawText || "").split(/\r?\n/);
-    const definitions = [];
-    let current = null;
-    let parsingValues = false;
-
-    function commitCurrent() {
-      if (!current) {
-        return;
-      }
-      if (["boolean", "slider", "combo", "textinput", "color", "text"].indexOf(current.type) === -1) {
-        current = null;
-        parsingValues = false;
-        return;
-      }
-      current.label = cleanedPropertyLabel(current.label, current.key);
-      if (current.type === "text") {
-        if (current.label.length === 0 || isNoisePropertyLabel(current.label)) {
-          current = null;
-          parsingValues = false;
-          return;
-        }
-        definitions.push({
-          key: current.key,
-          type: "text",
-          label: current.label,
-          defaultValue: ""
-        });
-        current = null;
-        parsingValues = false;
-        return;
-      }
-      if (isNoisePropertyKey(current.key) || isNoisePropertyLabel(current.label)) {
-        current = null;
-        parsingValues = false;
-        return;
-      }
-      definitions.push(current);
-      current = null;
-      parsingValues = false;
-    }
-
-    for (const rawLine of lines) {
-      const line = String(rawLine || "");
-      const trimmed = line.trim();
-      if (trimmed.length === 0) {
-        commitCurrent();
-        continue;
-      }
-
-      if (trimmed.indexOf("Unknown object type found:") === 0
-          || trimmed.indexOf("ScriptEngine [evaluate]:") === 0
-          || trimmed.indexOf("Text objects are not supported yet") === 0
-          || trimmed.indexOf("Applying override value for ") === 0) {
-        continue;
-      }
-
-      const headerMatch = trimmed.match(/^([^\s].*?)\s+-\s+(slider|boolean|combo|textinput|color|text|scene texture)$/i);
-      if (headerMatch) {
-        commitCurrent();
-        current = {
-          key: headerMatch[1].trim(),
-          type: headerMatch[2].toLowerCase(),
-          label: undefined,
-          min: undefined,
-          max: undefined,
-          step: undefined,
-          defaultValue: "",
-          choices: []
-        };
-        parsingValues = false;
-        continue;
-      }
-
-      if (!current) {
-        continue;
-      }
-
-      if (trimmed.indexOf("Text:") === 0) {
-        current.label = trimmed.substring(5).trim();
-        parsingValues = false;
-        continue;
-      }
-      if (trimmed.indexOf("Min:") === 0) {
-        const parsed = Number(trimmed.substring(4).trim());
-        current.min = isNaN(parsed) ? undefined : parsed;
-        parsingValues = false;
-        continue;
-      }
-      if (trimmed.indexOf("Max:") === 0) {
-        const parsed = Number(trimmed.substring(4).trim());
-        current.max = isNaN(parsed) ? undefined : parsed;
-        parsingValues = false;
-        continue;
-      }
-      if (trimmed.indexOf("Step:") === 0) {
-        const parsed = Number(trimmed.substring(5).trim());
-        current.step = isNaN(parsed) ? undefined : parsed;
-        parsingValues = false;
-        continue;
-      }
-      if (trimmed.indexOf("Value:") === 0) {
-        current.defaultValue = parsePropertyValue(trimmed.substring(6).trim(), current.type);
-        parsingValues = false;
-        continue;
-      }
-      if (trimmed === "Values:") {
-        parsingValues = true;
-        continue;
-      }
-
-      if (parsingValues && current.type === "combo") {
-        const valueMatch = trimmed.match(/^(.*?)\s*=\s*(.*)$/);
-        if (valueMatch) {
-          const choiceKey = valueMatch[1].trim();
-          const choiceName = valueMatch[2].trim();
-          current.choices.push({
-            key: choiceKey,
-            name: choiceName,
-            label: choiceName,
-            value: choiceKey,
-            text: choiceName
-          });
-        }
-      }
-    }
-
-    commitCurrent();
-    return definitions;
+    return PropertyHelpers.parseWallpaperPropertiesOutput(rawText, root.propertyTranslationApi);
   }
 
   function loadWallpaperProperties(path) {
@@ -403,7 +215,31 @@ Item {
     wallpaperPropertyError = "";
     wallpaperPropertyRequestPath = wallpaperPath;
 
-    if (!extraPropertiesEditorEnabled || wallpaperPath.length === 0 || !(mainInstance?.engineAvailable ?? false)) {
+    if (!extraPropertiesEditorEnabled || wallpaperPath.length === 0) {
+      loadingWallpaperProperties = false;
+      return;
+    }
+
+    if (!(mainInstance?.engineAvailable ?? false)) {
+      const savedProperties = mainInstance?.getWallpaperProperties(wallpaperPath) || ({});
+      const savedKeys = Object.keys(savedProperties).filter(k => String(k || "").trim().length > 0);
+      if (savedKeys.length > 0) {
+        const fallbackDefinitions = savedKeys.map(key => ({
+          key: key,
+          type: "textinput",
+          label: key,
+          defaultValue: "",
+          choices: []
+        }));
+        wallpaperPropertyDefinitions = fallbackDefinitions;
+        const nextValues = {};
+        for (const key of savedKeys) {
+          nextValues[key] = String(savedProperties[key] ?? "");
+        }
+        wallpaperPropertyValues = nextValues;
+        wallpaperPropertyError = "";
+        setWallpaperPropertyLoadFailed(wallpaperPath, false);
+      }
       loadingWallpaperProperties = false;
       return;
     }
@@ -414,31 +250,88 @@ Item {
   }
 
   function setWallpaperPropertyLoadFailed(path, failed) {
+    const currentState = propertyCompatibilityStateForPath(path);
+    if (failed) {
+      setWallpaperPropertyCompatibilityState(path, "failed");
+      return;
+    }
+    if (currentState === "failed" || currentState.length === 0) {
+      setWallpaperPropertyCompatibilityState(path, "");
+    }
+  }
+
+  function setWallpaperPropertyCompatibilityState(path, state) {
     const wallpaperPath = String(path || "").trim();
     if (wallpaperPath.length === 0) {
       return;
     }
 
+    const normalizedState = String(state || "").trim();
     const nextState = Object.assign({}, wallpaperPropertyLoadFailedByPath);
-    if (failed) {
-      nextState[wallpaperPath] = true;
+    if (normalizedState.length > 0) {
+      nextState[wallpaperPath] = normalizedState;
     } else {
       delete nextState[wallpaperPath];
     }
     wallpaperPropertyLoadFailedByPath = nextState;
   }
 
+  function propertyCompatibilityStateForPath(path) {
+    const key = String(path || "").trim();
+    const raw = wallpaperPropertyLoadFailedByPath || ({});
+    const value = raw[key];
+    if (value === true) {
+      return "failed";
+    }
+    return String(value || "").trim();
+  }
+
+  function propertyCompatibilityBadgeIconForPath(path) {
+    const state = propertyCompatibilityStateForPath(path);
+    if (state === "limited") {
+      return "alert-circle";
+    }
+    if (state === "failed") {
+      return "alert-triangle";
+    }
+    return "";
+  }
+
+  function propertyCompatibilityBadgeTextForPath(path) {
+    const state = propertyCompatibilityStateForPath(path);
+    if (state === "limited") {
+      return pluginApi?.tr("panel.propertiesLimitedBadge");
+    }
+    if (state === "failed") {
+      return pluginApi?.tr("panel.propertiesFailedBadge");
+    }
+    return "";
+  }
+
+  function propertyCompatibilityBadgeColorForPath(path) {
+    const state = propertyCompatibilityStateForPath(path);
+    if (state === "limited") {
+      return Color.mSecondary;
+    }
+    if (state === "failed") {
+      return Color.mError;
+    }
+    return Color.mOnSurfaceVariant;
+  }
+
+  function propertyCompatibilityBadgeBackgroundForPath(path) {
+    return Qt.alpha(propertyCompatibilityBadgeColorForPath(path), 0.16);
+  }
+
   function startCompatibilityScan() {
     const folderPath = String(resolvedWallpapersFolder || "").trim();
     if (folderPath.length === 0 || !(mainInstance?.engineAvailable ?? false)) {
-      pendingCompatibilityScan = false;
       return;
     }
 
     const pluginDir = pluginApi?.pluginDir || "";
     const scriptPath = pluginDir + "/scripts/scan-properties-compatibility.sh";
 
-    pendingCompatibilityScan = false;
     scanningCompatibility = true;
     compatibilityScanProcess.command = ["bash", scriptPath, folderPath];
     compatibilityScanProcess.running = true;
@@ -457,29 +350,40 @@ Item {
 
       const parts = line.split("\t");
       const path = String(parts[0] || "").trim();
-      const failed = String(parts[1] || "0").trim() === "1";
+      const statusCode = String(parts[1] || "0").trim();
       if (path.length === 0) {
         continue;
       }
 
       totalCount += 1;
 
-      if (failed) {
-        nextState[path] = true;
+      if (statusCode === "1") {
+        nextState[path] = "failed";
+      } else if (statusCode === "2") {
+        nextState[path] = "limited";
       }
     }
 
     wallpaperPropertyLoadFailedByPath = nextState;
+    let limitedCount = 0;
+    let failedCount = 0;
+    for (const value of Object.values(nextState)) {
+      if (value === "limited") {
+        limitedCount += 1;
+      } else if (value === "failed") {
+        failedCount += 1;
+      }
+    }
     return {
       totalCount: totalCount,
-      failedCount: Object.keys(nextState).length
+      failedCount: failedCount,
+      limitedCount: limitedCount
     };
   }
 
   // Dropdown state helpers.
   function closeDropdowns() {
     filterDropdownOpen = false;
-    resolutionDropdownOpen = false;
     sortDropdownOpen = false;
   }
 
@@ -487,7 +391,6 @@ Item {
     filterDropdownX = x;
     filterDropdownY = y;
     filterDropdownWidth = width;
-    resolutionDropdownOpen = false;
     sortDropdownOpen = false;
     filterDropdownOpen = true;
   }
@@ -497,28 +400,13 @@ Item {
     sortDropdownY = y;
     sortDropdownWidth = width;
     filterDropdownOpen = false;
-    resolutionDropdownOpen = false;
     sortDropdownOpen = true;
-  }
-
-  function openResolutionDropdown(x, y, width) {
-    resolutionDropdownX = x;
-    resolutionDropdownY = y;
-    resolutionDropdownWidth = width;
-    filterDropdownOpen = false;
-    sortDropdownOpen = false;
-    resolutionDropdownOpen = true;
   }
 
   function applyFilterAction(action) {
     if (String(action).indexOf("type:") === 0) {
       selectedType = String(action).substring(5);
-    }
-    closeDropdowns();
-  }
-
-  function applyResolutionFilterAction(action) {
-    if (String(action).indexOf("res:") === 0) {
+    } else if (String(action).indexOf("res:") === 0) {
       selectedResolution = String(action).substring(4);
     }
     closeDropdowns();
@@ -540,25 +428,23 @@ Item {
     }
 
     const remembered = String(pluginApi?.pluginSettings?.panelLastSelectedPath || "").trim();
+    root.lastPersistedPath = remembered;
     if (remembered.length > 0) {
       pendingPath = remembered;
     }
   }
 
   function persistPanelMemory(flushToDisk = false) {
-    if (!pluginApi) {
-      return;
-    }
-
-    const current = String(pluginApi?.pluginSettings?.panelLastSelectedPath || "");
     const next = String(pendingPath || "");
-    if (current === next) {
+    if (root.lastPersistedPath === next) {
       return;
     }
-
-    pluginApi.pluginSettings.panelLastSelectedPath = next;
-    if (flushToDisk) {
-      pluginApi.saveSettings();
+    root.lastPersistedPath = next;
+    if (pluginApi) {
+      pluginApi.pluginSettings.panelLastSelectedPath = next;
+      if (flushToDisk) {
+        pluginApi.saveSettings();
+      }
     }
   }
 
@@ -577,8 +463,6 @@ Item {
   }
 
   function syncSelectionOptionsFromScreen() {
-    syncGlobalRuntimeOptions();
-
     const fallbackScreenName = root.singleScreenMode ? (Quickshell.screens[0]?.name || selectedScreenName) : selectedScreenName;
     if (root.singleScreenMode && selectedScreenName.length === 0 && fallbackScreenName.length > 0) {
       selectedScreenName = fallbackScreenName;
@@ -591,6 +475,11 @@ Item {
     }
 
     selectedScaling = String(screenCfg.scaling || defaults.defaultScaling || "fill");
+  }
+
+  function resetSelectionOptionsFromCurrentConfig() {
+    syncGlobalRuntimeOptions();
+    syncSelectionOptionsFromScreen();
   }
 
   // Wallpaper application and list state refresh.
@@ -606,7 +495,8 @@ Item {
       : (root.singleScreenMode ? (Quickshell.screens[0]?.name || "") : (selectedScreenName || Quickshell.screens[0]?.name || ""));
     const colorApplyOptions = {
       "screenName": colorApplyScreen,
-      "scaling": selectedScaling
+      "scaling": selectedScaling,
+      "notify": true
     };
 
     const options = { "scaling": selectedScaling, "clamp": selectedClamp };
@@ -619,10 +509,10 @@ Item {
     const customProperties = {};
     for (const definition of wallpaperPropertyDefinitions) {
       const propertyKey = String(definition?.key || "");
-      if (propertyKey.length === 0) {
+      if (propertyKey.length === 0 || !PropertyHelpers.isWritablePropertyType(definition?.type)) {
         continue;
       }
-      customProperties[propertyKey] = serializePropertyValue(propertyValueFor(definition), definition.type);
+      customProperties[propertyKey] = propertyEditorApi.serializePropertyValue(propertyEditorApi.propertyValueFor(definition), definition.type);
     }
     options.customProperties = customProperties;
     selectedPath = path;
@@ -653,53 +543,26 @@ Item {
 
   function refreshVisibleWallpapers() {
     const query = String(searchText || "").trim().toLowerCase();
-    let items = wallpaperItems.slice();
-
-    if (selectedType !== "all") {
-      items = items.filter(item => String(item.type || "unknown").toLowerCase() === selectedType);
-    }
-
-    if (selectedResolution !== "all") {
-      items = items.filter(item => resolutionFilterKey(item.resolution) === selectedResolution);
-    }
-
-    if (query.length > 0) {
-      items = items.filter(item => {
-        return String(item.name || "").toLowerCase().indexOf(query) >= 0
-          || String(item.id || "").toLowerCase().indexOf(query) >= 0;
-      });
-    }
-
-    if (sortMode === "date") {
-      items.sort((a, b) => Number(a.mtime || 0) - Number(b.mtime || 0));
-    } else if (sortMode === "size") {
-      items.sort((a, b) => Number(a.bytes || 0) - Number(b.bytes || 0));
-    } else if (sortMode === "recent") {
-      items.sort((a, b) => Number(b.mtime || 0) - Number(a.mtime || 0));
-    } else {
-      items.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
-    }
-
-    if (!sortAscending) {
-      items.reverse();
-    }
-
-    visibleWallpapers = items;
+    visibleWallpapers = WallpaperFilterHelpers.filteredAndSortedWallpapers(wallpaperItems, {
+      query: query,
+      selectedType: selectedType,
+      selectedResolution: selectedResolution,
+      sortMode: sortMode,
+      sortAscending: sortAscending,
+      resolutionFilterKey: resolutionFilterKey
+    });
     Logger.d("LWEController", "Visible wallpapers refreshed", "count=", visibleWallpapers.length, "type=", selectedType, "resolution=", selectedResolution, "sort=", sortMode, "ascending=", sortAscending, "query=", query);
   }
 
   function refreshPagedWallpapers() {
-    const safePageSize = Math.max(1, Number(pageSize) || 1);
-    const totalPages = Math.max(1, Math.ceil(visibleWallpapers.length / safePageSize));
-    const nextPage = Math.max(0, Math.min(currentPage, totalPages - 1));
+    const pageState = WallpaperFilterHelpers.pagedWallpapers(visibleWallpapers, currentPage, pageSize);
 
-    if (nextPage !== currentPage) {
-      currentPage = nextPage;
+    if (pageState.page !== currentPage) {
+      currentPage = pageState.page;
       return;
     }
 
-    const startIndex = nextPage * safePageSize;
-    pagedWallpapers = visibleWallpapers.slice(startIndex, startIndex + safePageSize);
+    pagedWallpapers = pageState.items;
   }
 
   function resetPagination() {
@@ -765,10 +628,12 @@ Item {
       return;
     }
     pendingPath = path;
+    sidebarVisible = true;
   }
 
   // Reactive state updates.
   onWallpaperItemsChanged: {
+    rebuildWallpaperByPath();
     refreshVisibleWallpapers();
     reconcilePendingSelection();
   }
@@ -776,8 +641,7 @@ Item {
   onCurrentPageChanged: refreshPagedWallpapers()
   onPageSizeChanged: refreshPagedWallpapers()
   onSearchTextChanged: {
-    refreshVisibleWallpapers();
-    resetPagination();
+    searchDebounceTimer.restart();
   }
   onSelectedTypeChanged: {
     refreshVisibleWallpapers();
@@ -795,13 +659,12 @@ Item {
     refreshVisibleWallpapers();
     resetPagination();
   }
-  onSelectedScreenNameChanged: syncSelectionOptionsFromScreen()
   onPendingPathChanged: {
     persistPanelMemory();
-    loadWallpaperProperties(pendingPath);
+    propertiesLoadTimer.restart();
   }
   onWallpapersFolderChanged: {
-    if (!root.pluginApi) {
+    if (!root.pluginApi || !root.panelInitialized) {
       return;
     }
     mainInstance?.refreshWallpaperCache(true, false);
@@ -811,26 +674,24 @@ Item {
     Logger.i("LWEController", "Panel opened", "screen=", selectedScreenName);
     rebuildScreenModel();
     loadPanelMemory();
-    syncSelectionOptionsFromScreen();
+    resetSelectionOptionsFromCurrentConfig();
     mainInstance?.refreshWallpaperCache(false, false);
-    loadWallpaperProperties(pendingPath);
+    panelInitialized = true;
+    propertiesLoadTimer.restart();
   }
 
   Component.onDestruction: {
     persistPanelMemory(true);
+    if (pluginApi) {
+      pluginApi.pluginSettings.applyWallpaperColorsOnApply = root.applyWallpaperColorsOnApply;
+      pluginApi.saveSettings();
+    }
   }
 
   // Keep dropdowns aligned with panel width changes.
   onWidthChanged: {
-    if (filterDropdownOpen) {
-      openFilterDropdown(filterDropdownX, filterDropdownY, filterDropdownWidth);
-    }
-    if (resolutionDropdownOpen) {
-      openResolutionDropdown(resolutionDropdownX, resolutionDropdownY, resolutionDropdownWidth);
-    }
-    if (sortDropdownOpen) {
-      openSortDropdown(sortDropdownX, sortDropdownY, sortDropdownWidth);
-    }
+    if (filterDropdownOpen) openFilterDropdown(filterDropdownX, filterDropdownY, filterDropdownWidth);
+    if (sortDropdownOpen) openSortDropdown(sortDropdownX, sortDropdownY, sortDropdownWidth);
   }
 
   // Main instance state hooks.
@@ -859,11 +720,7 @@ Item {
         pluginApi: root.pluginApi
         mainInstance: root.mainInstance
         positionTarget: root
-        engineStatusBadgeText: root.engineStatusBadgeText
-        engineStatusBadgeFg: root.engineStatusBadgeFg
-        engineStatusBadgeBg: root.engineStatusBadgeBg
         scanningCompatibility: root.scanningCompatibility
-        pendingCompatibilityScan: root.pendingCompatibilityScan
         searchText: root.searchText
         selectedType: root.selectedType
         selectedResolution: root.selectedResolution
@@ -872,8 +729,7 @@ Item {
         typeLabel: root.typeLabel
         resolutionFilterLabel: root.resolutionFilterLabel
         sortLabel: root.sortLabel
-        resolutionButtonWidth: 172 * Style.uiScaleRatio
-        filterButtonWidth: 172 * Style.uiScaleRatio
+        filterButtonWidth: 180 * Style.uiScaleRatio
         sortButtonWidth: 172 * Style.uiScaleRatio
         onCompatibilityQuickCheckRequested: root.startCompatibilityScan()
         onReloadRequested: {
@@ -893,22 +749,8 @@ Item {
             pluginApi.togglePanel(screen);
           }
         }
-        onCloseRequested: {
-          const screen = pluginApi?.panelOpenScreen;
-          if (pluginApi) {
-            pluginApi.togglePanel(screen);
-          }
-        }
-        onPendingCompatibilityScanRequested: value => root.pendingCompatibilityScan = value
         onSearchTextUpdateRequested: text => root.searchText = text
         onClearSearchRequested: root.searchText = ""
-        onResolutionDropdownToggleRequested: (x, y, width) => {
-          if (resolutionDropdownOpen) {
-            root.closeDropdowns();
-          } else {
-            root.openResolutionDropdown(x, y, width);
-          }
-        }
         onFilterDropdownToggleRequested: (x, y, width) => {
           if (filterDropdownOpen) {
             root.closeDropdowns();
@@ -954,10 +796,9 @@ Item {
           RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.topMargin: Style.marginXS
             spacing: Style.marginM
 
-            WallpaperGridSection {
+            GridSection {
               pluginApi: root.pluginApi
               mainInstance: root.mainInstance
               wallpapers: root.pagedWallpapers
@@ -966,7 +807,10 @@ Item {
               scanningWallpapers: root.scanningWallpapers
               wallpaperItemsCount: root.wallpaperItems.length
               visibleWallpaperCount: root.visibleWallpapers.length
-              propertyLoadFailedByPath: root.wallpaperPropertyLoadFailedByPath
+              propertyCompatibilityBadgeIconForPath: root.propertyCompatibilityBadgeIconForPath
+              propertyCompatibilityBadgeTextForPath: root.propertyCompatibilityBadgeTextForPath
+              propertyCompatibilityBadgeColorForPath: root.propertyCompatibilityBadgeColorForPath
+              propertyCompatibilityBadgeBackgroundForPath: root.propertyCompatibilityBadgeBackgroundForPath
               currentPage: root.currentPage
               pageCount: root.pageCount
               currentPageDisplay: root.currentPageDisplay
@@ -976,17 +820,23 @@ Item {
               resolutionBadgeIcon: root.resolutionBadgeIcon
               resolutionBadgeLabel: root.resolutionBadgeLabel
               typeLabel: root.typeLabel
+              typeBadgeIcon: root.typeBadgeIcon
+              dynamicBadgeIcon: root.dynamicBadgeIcon
+              badgeOrder: root.visibleBadgeOrder
               isVideoMotion: root.isVideoMotion
               onWallpaperActivated: path => root.applyPath(path)
               onPreviousPageRequested: root.goToPreviousPage()
               onNextPageRequested: root.goToNextPage()
             }
 
-            WallpaperSidebar {
+            Sidebar {
               pluginApi: root.pluginApi
               mainInstance: root.mainInstance
-              selectedWallpaperData: root.selectedWallpaperData
-              propertyLoadFailedByPath: root.wallpaperPropertyLoadFailedByPath
+              selectedWallpaperData: root.getSelectedWallpaperData()
+              propertyCompatibilityBadgeIconForPath: root.propertyCompatibilityBadgeIconForPath
+              propertyCompatibilityBadgeTextForPath: root.propertyCompatibilityBadgeTextForPath
+              propertyCompatibilityBadgeColorForPath: root.propertyCompatibilityBadgeColorForPath
+              propertyCompatibilityBadgeBackgroundForPath: root.propertyCompatibilityBadgeBackgroundForPath
               singleScreenMode: root.singleScreenMode
               applyAllDisplays: root.applyAllDisplays
               applyTargetExpanded: root.applyTargetExpanded
@@ -1008,16 +858,13 @@ Item {
               resolutionBadgeIcon: root.resolutionBadgeIcon
               resolutionBadgeLabel: root.resolutionBadgeLabel
               typeLabel: root.typeLabel
+              typeBadgeIcon: root.typeBadgeIcon
+              dynamicBadgeIcon: root.dynamicBadgeIcon
+              badgeOrder: root.visibleBadgeOrder
+              showDescription: root.showSidebarDescription
               isVideoMotion: root.isVideoMotion
               formatBytes: root.formatBytes
-              workshopUrlForWallpaper: root.workshopUrlForWallpaper
-              propertyValueFor: root.propertyValueFor
-              numberOr: root.numberOr
-              formatSliderValue: root.formatSliderValue
-              comboChoicesFor: root.comboChoicesFor
-              ensureColorValue: root.ensureColorValue
-              serializePropertyValue: root.serializePropertyValue
-              setPropertyValue: root.setPropertyValue
+              propertyEditorApi: root.propertyEditorApi
               onApplyRequested: root.applyPendingSelection()
               onApplyAllDisplaysRequested: value => root._applyAllDisplays = value
               onApplyTargetExpandedRequested: value => root.applyTargetExpanded = value
@@ -1031,22 +878,9 @@ Item {
               onSelectedDisableParallaxRequested: value => root.selectedDisableParallax = value
               onApplyWallpaperColorsOnApplyRequested: value => {
                 root.applyWallpaperColorsOnApply = value;
-                if (pluginApi) {
-                  pluginApi.pluginSettings.applyWallpaperColorsOnApply = value;
-                  pluginApi.saveSettings();
-                }
               }
-              onWorkshopLinkRequested: workshopUrl => {
-                if (workshopUrl.length === 0) {
-                  return;
-                }
-
-                const screen = pluginApi?.panelOpenScreen;
-                if (pluginApi) {
-                  pluginApi.togglePanel(screen);
-                }
-                Qt.openUrlExternally(workshopUrl);
-              }
+              sidebarVisible: root.sidebarVisible
+              onSidebarVisibleRequested: value => root.sidebarVisible = value
             }
           }
 
@@ -1071,23 +905,17 @@ Item {
           }
         }
       }
-
     }
-
   }
 
   PanelDropdowns {
     pluginApi: root.pluginApi
-    resolutionDropdownOpen: root.resolutionDropdownOpen
     filterDropdownOpen: root.filterDropdownOpen
     sortDropdownOpen: root.sortDropdownOpen
     selectedResolution: root.selectedResolution
     selectedType: root.selectedType
     sortMode: root.sortMode
     sortAscending: root.sortAscending
-    resolutionDropdownX: root.resolutionDropdownX
-    resolutionDropdownY: root.resolutionDropdownY
-    resolutionDropdownWidth: root.resolutionDropdownWidth
     filterDropdownX: root.filterDropdownX
     filterDropdownY: root.filterDropdownY
     filterDropdownWidth: root.filterDropdownWidth
@@ -1095,7 +923,6 @@ Item {
     sortDropdownY: root.sortDropdownY
     sortDropdownWidth: root.sortDropdownWidth
     onCloseRequested: root.closeDropdowns()
-    onResolutionActionTriggered: action => root.applyResolutionFilterAction(action)
     onFilterActionTriggered: action => root.applyFilterAction(action)
     onSortActionTriggered: action => root.applySortAction(action)
   }
@@ -1126,11 +953,32 @@ Item {
       }
 
       if (exitCode !== 0) {
-        root.wallpaperPropertyDefinitions = [];
-        root.wallpaperPropertyValues = ({});
-        root.setWallpaperPropertyLoadFailed(requestPath, true);
-        root.wallpaperPropertyError = pluginApi?.tr("panel.propertiesLoadFailed");
-        Logger.w("LWEController", "Wallpaper properties load failed", "path=", requestPath, "exitCode=", exitCode, "stderr=", wallpaperPropertyStderr.text);
+        const savedProperties = mainInstance?.getWallpaperProperties(requestPath) || ({});
+        const savedKeys = Object.keys(savedProperties).filter(k => String(k || "").trim().length > 0);
+        if (savedKeys.length > 0) {
+          const fallbackDefinitions = savedKeys.map(key => ({
+            key: key,
+            type: "textinput",
+            label: key,
+            defaultValue: "",
+            choices: []
+          }));
+          root.wallpaperPropertyDefinitions = fallbackDefinitions;
+          const nextValues = {};
+          for (const key of savedKeys) {
+            nextValues[key] = String(savedProperties[key] ?? "");
+          }
+          root.wallpaperPropertyValues = nextValues;
+          root.setWallpaperPropertyLoadFailed(requestPath, false);
+          root.wallpaperPropertyError = "";
+          Logger.w("LWEController", "Wallpaper properties load failed, restored saved properties as fallback", "path=", requestPath, "exitCode=", exitCode, "count=", savedKeys.length);
+        } else {
+          root.wallpaperPropertyDefinitions = [];
+          root.wallpaperPropertyValues = ({});
+          root.setWallpaperPropertyLoadFailed(requestPath, true);
+          root.wallpaperPropertyError = pluginApi?.tr("panel.propertiesLoadFailed");
+          Logger.w("LWEController", "Wallpaper properties load failed", "path=", requestPath, "exitCode=", exitCode);
+        }
         return;
       }
 
@@ -1139,7 +987,7 @@ Item {
       root.wallpaperPropertyDefinitions = definitions;
       for (const definition of definitions) {
         if (definition.type === "combo") {
-          Logger.d("LWEController", "Combo property parsed", "key=", definition.key, "choices=", JSON.stringify(root.comboChoicesFor(definition)));
+          Logger.d("LWEController", "Combo property parsed", "key=", definition.key, "choices=", JSON.stringify(root.propertyEditorApi.comboChoicesFor(definition)));
         }
       }
 
@@ -1148,7 +996,7 @@ Item {
       for (const definition of definitions) {
         const propertyKey = String(definition.key || "");
         if (savedProperties[propertyKey] !== undefined) {
-          nextValues[propertyKey] = root.parsePropertyValue(savedProperties[propertyKey], definition.type);
+          nextValues[propertyKey] = PropertyHelpers.parsePropertyValue(savedProperties[propertyKey], definition.type, root.propertyTranslationApi.createColor);
         } else {
           nextValues[propertyKey] = definition.defaultValue;
         }
@@ -1177,11 +1025,10 @@ Item {
       const stderrText = String(compatibilityScanStderr.text || "").trim();
 
       if (exitCode !== 0) {
-        if (stderrText.length > 0) {
-          Logger.w("LWEController", "Compatibility scan failed", "exitCode=", exitCode, "stderr=", stderrText);
-        } else {
-          Logger.w("LWEController", "Compatibility scan failed", "exitCode=", exitCode);
-        }
+        const msg = stderrText.length > 0
+          ? "Compatibility scan failed" + ", stderr=" + stderrText
+          : "Compatibility scan failed";
+        Logger.w("LWEController", msg, "exitCode=", exitCode);
         return;
       }
 
@@ -1191,10 +1038,28 @@ Item {
         pluginApi?.tr("panel.title"),
         pluginApi?.tr("panel.compatibilityQuickCheckFinished", {
           total: result.totalCount,
-          failed: result.failedCount
+          failed: result.failedCount,
+          limited: result.limitedCount
         }),
-        result.failedCount > 0 ? "alert-triangle" : "check"
+        result.failedCount > 0 ? "alert-triangle" : (result.limitedCount > 0 ? "alert-circle" : "check")
       );
+    }
+  }
+
+  Timer {
+    id: searchDebounceTimer
+    interval: root.searchDebounceDelay
+    onTriggered: {
+      refreshVisibleWallpapers();
+      resetPagination();
+    }
+  }
+
+  Timer {
+    id: propertiesLoadTimer
+    interval: root.propertyLoadDelay
+    onTriggered: {
+      loadWallpaperProperties(pendingPath);
     }
   }
 

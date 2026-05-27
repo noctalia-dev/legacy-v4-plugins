@@ -9,9 +9,10 @@
         "settings": "Настройки"
     },
     "panel": {
-    	"context": {
-            "open": "Открыть",
+        "context": {
             "copy": "Скопировать",
+            "open": "Открыть",
+            "repo": "репозиторий",
             "homepage": "сайт"
         },
         "title": "Arch Updater",

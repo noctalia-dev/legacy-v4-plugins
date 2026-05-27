@@ -1,0 +1,47 @@
+{
+  "command": {
+    "description": "Search gnu pass password entries"
+  },
+  "result": {
+    "goBack": "Go back",
+    "folder": "Folder",
+    "password": "Password",
+    "loading": "Loading password entries..."
+  },
+  "action": {
+    "copyPassword": "Copy Password",
+    "copyPasswordDesc": "Copy password to clipboard",
+    "typePassword": "Type Password",
+    "typePasswordDesc": "Type password using wtype",
+    "copyField": "Copy {key}",
+    "typeField": "Type {key}",
+    "copyOtp": "Copy OTP",
+    "typeOtp": "Type OTP",
+    "otpDesc": "Copy/type current OTP code"
+  },
+  "settings": {
+    "tab": {
+      "general": "General",
+      "advanced": "Advanced"
+    },
+    "storePath": {
+      "label": "Password Store Path",
+      "desc": "Custom path to the password store (default: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Launcher Close Delay",
+      "desc": "Delay before typing starts in milliseconds (default: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Wtype Keystroke Delay",
+      "desc": "Delay between keystrokes in ms for wtype (default: 12)"
+    },
+    "clipTimeout": {
+      "label": "Clipboard Timeout",
+      "desc": "Seconds before clipboard is cleared (default PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Copied to clipboard"
+  }
+}

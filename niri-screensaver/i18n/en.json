@@ -1,0 +1,74 @@
+{
+  "settings": {
+    "title": "Niri Screensaver",
+    "description": "TerminalTextEffects screensaver wired into Noctalia's IdleService. Settings here write to ~/.config/niri-screensaver/config and update the idle hook automatically.",
+
+    "cli-missing": {
+      "title": "niri-screensaver CLI not found on PATH",
+      "desc": "Install the bash side from https://github.com/jfreed-dev/niri-screensaver (run ./install.sh) and reload the plugin. Without it, the launch / kill commands below have nothing to drive."
+    },
+
+    "idle-section": "Idle behavior",
+    "enabled": "Enabled",
+    "enabled-desc": "Register this screensaver in Noctalia's idle hook list.",
+    "idle-seconds": "Idle threshold (seconds)",
+    "idle-seconds-desc": "Idle time before the screensaver activates.",
+
+    "power-section": "Power",
+    "battery-min-percent": "Skip on battery below (%)",
+    "battery-min-percent-desc": "When on battery and the charge is below this percentage, skip auto-launch to save power. 0 disables the check. Plugged in or no battery present never skips; a manual Trigger now is also gated by this.",
+
+    "effects-section": "Effects",
+    "include-effects": "Include effects",
+    "include-effects-desc": "Restrict to this comma-separated list of TerminalTextEffects names. Empty = all available.",
+    "exclude-effects": "Exclude effects",
+    "exclude-effects-desc": "Skip these effects. Ignored when Include is non-empty.",
+    "fade-in": "Fade-in effect",
+    "fade-in-desc": "Optional one-shot effect played when the screensaver appears.",
+    "fade-out": "Fade-out effect",
+    "fade-out-desc": "Optional one-shot effect played when the screensaver dismisses.",
+    "effect-none": "(none)",
+
+    "logo-section": "Logo",
+    "random-logo": "Random logo per cycle",
+    "random-logo-desc": "Pick a different logo from the Logo directory before each effect cycle.",
+    "logo-dir": "Logo directory",
+    "logo-dir-desc": "Override the bundled logo directory. Leave empty to use the installed share/logos/.",
+    "logo-dir-browse": "Browse for a directory",
+    "logo-dir-picker-title": "Pick a logo directory",
+    "logo-path": "Logo file",
+    "logo-path-desc": "Pick a specific logo to display. \"Default\" lets the driver seed the bundled default. Disabled when Random is on.",
+    "logo-path-default": "Default (use seeded logo)",
+
+    "clock-section": "Clock",
+    "show-clock": "Show clock between effects",
+    "show-clock-desc": "Display the current time briefly between effect cycles.",
+    "clock-format": "Clock format",
+    "clock-format-desc": "strftime format string. Examples: %H:%M, %I:%M %p, %a %d.",
+
+    "now-playing-section": "Now playing",
+    "show-now-playing": "Show now-playing track between effects",
+    "show-now-playing-desc": "When a playerctl-compatible player is Playing, display the current track briefly between effect cycles. Silently skips when playerctl is missing or nothing is playing.",
+    "now-playing-duration": "Now-playing duration (seconds)",
+    "now-playing-duration-desc": "How long to display the track name before the next effect.",
+
+    "trigger-now": "Trigger now",
+    "stop": "Stop",
+
+    "placeholder": {
+      "include-effects": "blackhole,matrix,rain",
+      "exclude-effects": "dev_worm",
+      "fade-in": "expand | slide | middleout",
+      "fade-out": "burn | crumble | scattered",
+      "logo-dir": "~/.local/share/niri-screensaver/logos"
+    }
+  },
+
+  "barwidget": {
+    "tooltip": "Niri Screensaver",
+    "trigger": "Trigger now",
+    "stop": "Stop",
+    "toggle": "Toggle enabled",
+    "settings": "Open settings"
+  }
+}

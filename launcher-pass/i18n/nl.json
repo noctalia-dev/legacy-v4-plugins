@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Zoek gnu pass wachtwoordvermeldingen"
+  },
+  "result": {
+    "goBack": "Terug",
+    "folder": "Map",
+    "password": "Wachtwoord",
+    "passwordEntry": "Wachtwoordentry",
+    "loading": "Wachtwoordvermeldingen laden..."
+  },
+  "action": {
+    "copyPassword": "Wachtwoord kopiëren",
+    "copyPasswordDesc": "Wachtwoord naar klembord kopiëren",
+    "typePassword": "Wachtwoord typen",
+    "typePasswordDesc": "Wachtwoord typen met wtype",
+    "copyField": "{key} kopiëren",
+    "typeField": "{key} typen",
+    "copyOtp": "OTP kopiëren",
+    "typeOtp": "OTP typen",
+    "otpDesc": "Huidige OTP-code kopiëren/typen"
+  },
+  "settings": {
+    "tab": {
+      "general": "Algemeen",
+      "advanced": "Geavanceerd"
+    },
+    "storePath": {
+      "label": "Wachtwoordopslagpad",
+      "desc": "Aangepast pad naar de wachtwoordopslag (standaard: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Launcher sluit vertraging",
+      "desc": "Vertraging voordat typen begint in milliseconden (standaard: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Wtype toetsvertraging",
+      "desc": "Vertraging tussen toetsaanslagen in ms voor wtype (standaard: 12)"
+    },
+    "clipTimeout": {
+      "label": "Klembord timeout",
+      "desc": "Seconden voordat het klembord wordt gewist (standaard PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Gekopiëerd naar klembord"
+  }
+}

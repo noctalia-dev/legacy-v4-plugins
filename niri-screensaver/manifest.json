@@ -1,0 +1,44 @@
+{
+  "id": "niri-screensaver",
+  "name": "Niri Screensaver",
+  "version": "0.5.9",
+  "minNoctaliaVersion": "4.7.0",
+  "author": "jfreed-dev",
+  "license": "GPL-3.0-only",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Idle-aware terminal screensaver for niri, driven by TerminalTextEffects.",
+  "tags": ["Bar", "Utility", "Niri"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "enabled": true,
+      "idleSeconds": 300,
+      "batteryMinPercent": 0,
+      "frameRate": 60,
+      "includeEffects": "",
+      "excludeEffects": "dev_worm",
+      "fadeInEffect": "",
+      "fadeOutEffect": "",
+      "showClock": false,
+      "clockDuration": 3,
+      "clockFormat": "%H:%M",
+      "clockFont": "",
+      "showNowPlaying": false,
+      "nowPlayingDuration": 3,
+      "logoPath": "",
+      "cursorHide": true,
+      "dismissOnKey": true,
+      "randomLogo": false,
+      "logoDir": "",
+      "launcherCommand": "niri-screensaver-launch launch",
+      "killCommand": "niri-screensaver-launch kill"
+    }
+  }
+}

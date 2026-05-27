@@ -1,0 +1,52 @@
+{
+  "menu": {
+    "settings": "Paramètres du widget"
+  },
+  "panel": {
+    "auth-error": "Veuillez vous authentifier pour utiliser ce plugin via {bin} auth login",
+    "issues": "Issues",
+    "issues-count": "Issues ({count})",
+    "mr": "Merge Requests",
+    "mr-count": "Merge Requests ({count})",
+    "open-settings": "Ouvrir les paramètres du plugin",
+    "pr": "Pull Requests",
+    "pr-count": "Pull Requests ({count})",
+    "bin-not-installed": "{bin} n'est pas installé. Veuillez l'installer pour utiliser ce plugin.",
+    "refresh": "Actualiser",
+    "no-scope": "Définissez un Groupe ou un Dépôt dans les paramètres pour afficher les éléments qui vous sont assignés.",
+    "no-prs": "Aucune pull request ouverte",
+    "no-mrs": "Aucune merge request ouverte",
+    "no-issues": "Aucune issue ouverte",
+    "no-bio": "Aucune bio",
+    "loading": "Chargement…",
+    "title": "Git Companion"
+  },
+  "settings": {
+    "platform": {
+      "desc": "Choisissez votre plateforme git (Gitlab ou Github).",
+      "label": "Plateforme"
+    },
+    "refreshInterval": {
+      "desc": "Fréquence d'actualisation des données, en secondes.",
+      "label": "Intervalle d'actualisation (s)"
+    },
+    "repo": {
+      "label": "Dépôt",
+      "desc": "Restreindre à un dépôt spécifique (ex. owner/repo). Laisser vide pour utiliser le Groupe."
+    },
+    "group": {
+      "label": "Groupe",
+      "desc": "Slug du groupe GitLab. Prend le pas sur le dépôt s'il est défini."
+    },
+    "org": {
+      "label": "Organisation",
+      "desc": "Organisation GitHub. Laisser vide pour rechercher globalement dans tous vos dépôts."
+    }
+  },
+  "widget": {
+    "tooltip": "{issues} Issues - {requestCount} {requestLabel}"
+  },
+  "desktop": {
+    "text": "{issues} Issues - {requestCount} {requestLabel}"
+  }
+}

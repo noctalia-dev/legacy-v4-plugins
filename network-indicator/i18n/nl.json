@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "Widget-instellingen"
+    "widget-settings": "Widget-instellingen",
+    "toggle-panel": "Monitor in-/uitschakelen"
+  },
+  "panel": {
+    "title": "Netwerkactiviteit",
+    "close": "Sluiten",
+    "download": "Download",
+    "upload": "Upload"
   },
   "settings": {
+    "layout": {
+      "label": "Lay-out",
+      "desc": "Cellen in een rij (horizontaal) of in een 2×2-raster (verticaal) rangschikken.",
+      "horizontal": "Horizontaal",
+      "vertical": "Verticaal"
+    },
+    "slots": {
+      "label": "Celtoewijzing",
+      "desc": "Kies wat elke cel weergeeft. Geen duplicaten mogelijk. Gebruik bijv. lege cellen om alleen pictogrammen te tonen."
+    },
+    "slot": {
+      "txIcon": "TX-pictogram",
+      "rxIcon": "RX-pictogram",
+      "txSpeed": "TX-snelheid",
+      "rxSpeed": "RX-snelheid",
+      "none": "Leeg"
+    },
+    "iconType": {
+      "desc": "Kies de pictogramstijl die gebruikt wordt voor de TX/RX-indicatoren.",
+      "label": "Icoontype"
+    },
     "byteThresholdActive": {
-      "desc": "Stel de activiteitsdrempel in bytes per seconde (B/s) in.",
-      "label": "Actieve drempel weergeven"
+      "desc": "Verkeer onder deze waarde (B/s) wordt als inactief weergegeven.",
+      "label": "Activiteitsdrempel"
     },
-    "colorRx": {
-      "desc": "Stel de kleur van het download (RX) pictogram in wanneer deze boven de drempelwaarde ligt.",
-      "label": "RX Actief"
+    "fontSizeModifier": {
+      "desc": "Schaal de tekstgrootte ten opzichte van de standaard.",
+      "label": "Lettergrootte"
     },
-    "colorSilent": {
-      "desc": "Stel de pictogramkleur in wanneer het verkeer onder de drempelwaarde is.",
-      "label": "RX/TX Inactief"
+    "iconSizeModifier": {
+      "desc": "Schaal de pictogramgrootte ten opzichte van de standaard.",
+      "label": "Icoongrootte"
     },
-    "colorText": {
-      "desc": "Stel de tekstkleur in die gebruikt wordt voor zowel RX- als TX-waarden.",
-      "label": "Tekst"
-    },
-    "colorTx": {
-      "desc": "Stel de kleur van het upload (TX) icoon in wanneer boven de drempelwaarde.",
-      "label": "TX Actief"
-    },
-    "contentMargin": {
-      "desc": "Horizontale padding aan beide zijden van de widget-inhoud.",
-      "label": "Inhoudmarge"
-    },
-    "customFontBold": {
-      "desc": "Geef snelheidswaarden vetgedrukt weer.",
-      "label": "Vet"
+    "useCustomFont": {
+      "desc": "Overschrijf het standaard lettertype voor snelheidswaarden.",
+      "label": "Aangepast lettertype"
     },
     "customFontFamily": {
       "desc": "Kies een lettertype voor de snelheidswaarden.",
@@ -37,41 +53,49 @@
       "placeholder": "Selecteer lettertype",
       "searchPlaceholder": "Lettertypen zoeken…"
     },
+    "customFontBold": {
+      "desc": "Geef snelheidswaarden vetgedrukt weer.",
+      "label": "Vet"
+    },
     "customFontItalic": {
       "desc": "Geef snelheidswaarden scheefgedrukt weer.",
       "label": "Schuin"
-    },
-    "fontSizeModifier": {
-      "desc": "Schaal de tekstgrootte ten opzichte van de standaard.",
-      "label": "Lettergrootte aanpassing"
-    },
-    "horizontalLayout": {
-      "desc": "Plaats TX en RX waarden naast elkaar in plaats van gestapeld.",
-      "label": "Horizontale lay-out"
-    },
-    "iconSizeModifier": {
-      "desc": "Schaal de pictogramgrootte ten opzichte van de standaard.",
-      "label": "Icoongrootte aanpassing"
-    },
-    "iconType": {
-      "desc": "Kies de pictogramstijl die gebruikt wordt voor de TX/RX-indicatoren.",
-      "label": "Icoontype"
-    },
-    "showNumbers": {
-      "desc": "Toon de huidige RX/TX snelheden als getallen.",
-      "label": "Waarden weergeven"
-    },
-    "spacingInbetween": {
-      "desc": "Pas de afstand tussen de RX/TX-elementen aan.",
-      "label": "Verticale afstand"
     },
     "useCustomColors": {
       "desc": "Schakel aangepaste kleuren in in plaats van de standaard themakleuren.",
       "label": "Aangepaste kleuren"
     },
-    "useCustomFont": {
-      "desc": "Overschrijf het standaard lettertype voor snelheidswaarden.",
-      "label": "Aangepast lettertype"
+    "colorTx": {
+      "desc": "Kleur van het upload (TX) pictogram wanneer boven de drempelwaarde.",
+      "label": "TX Actief"
+    },
+    "colorRx": {
+      "desc": "Kleur van het download (RX) pictogram wanneer boven de drempelwaarde.",
+      "label": "RX Actief"
+    },
+    "colorSilent": {
+      "desc": "Pictogramkleur wanneer het verkeer onder de drempelwaarde is.",
+      "label": "Inactief"
+    },
+    "colorText": {
+      "desc": "Tekstkleur voor snelheidswaarden.",
+      "label": "Tekst"
+    },
+    "paddingLeft": {
+      "label": "Padding links",
+      "desc": "Padding van de inhoud aan de linkerkant."
+    },
+    "paddingRight": {
+      "label": "Padding rechts",
+      "desc": "Padding van de inhoud aan de rechterkant."
+    },
+    "columnSpacing": {
+      "label": "Kolomafstand",
+      "desc": "Afstand tussen kolommen in rasterlay-out."
+    },
+    "rowSpacing": {
+      "label": "Rijafstand",
+      "desc": "Afstand tussen rijen in rasterlay-out (heeft geen effect in horizontale lay-out)."
     }
   }
 }

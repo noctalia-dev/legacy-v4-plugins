@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "Widget-Einstellungen"
+    "widget-settings": "Widget-Einstellungen",
+    "toggle-panel": "Monitor umschalten"
+  },
+  "panel": {
+    "title": "Netzwerkaktivität",
+    "close": "Schließen",
+    "download": "Download",
+    "upload": "Upload"
   },
   "settings": {
+    "layout": {
+      "label": "Layout",
+      "desc": "Zellen in einer Reihe (horizontal) oder in einem 2×2-Raster (vertikal) anordnen.",
+      "horizontal": "Horizontal",
+      "vertical": "Vertikal"
+    },
+    "slots": {
+      "label": "Zellenbelegung",
+      "desc": "Wähle, was jede Zelle anzeigt. Keine Duplikate möglich. Z.\u00a0B. leere Zellen verwenden, um nur Symbole anzuzeigen."
+    },
+    "slot": {
+      "txIcon": "TX-Symbol",
+      "rxIcon": "RX-Symbol",
+      "txSpeed": "TX-Geschwindigkeit",
+      "rxSpeed": "RX-Geschwindigkeit",
+      "none": "Leer"
+    },
+    "iconType": {
+      "desc": "Symbolstil für die TX/RX-Anzeigen auswählen.",
+      "label": "Symboltyp"
+    },
     "byteThresholdActive": {
-      "desc": "Aktivitätsschwellwert in Byte pro Sekunde (B/s) festlegen.",
-      "label": "Aktivitätsschwellwert anzeigen"
+      "desc": "Datenverkehr unter diesem Wert (B/s) wird als inaktiv angezeigt.",
+      "label": "Aktivitätsschwellwert"
     },
-    "colorRx": {
-      "desc": "Symbolfarbe für Download (RX), wenn der Schwellwert überschritten ist.",
-      "label": "RX aktiv"
+    "fontSizeModifier": {
+      "desc": "Schriftgröße relativ zum Standard skalieren.",
+      "label": "Schriftgröße"
     },
-    "colorSilent": {
-      "desc": "Symbolfarbe, wenn der Datenverkehr unter dem Schwellwert liegt.",
-      "label": "RX/TX inaktiv"
+    "iconSizeModifier": {
+      "desc": "Symbolgröße relativ zum Standard skalieren.",
+      "label": "Symbolgröße"
     },
-    "colorText": {
-      "desc": "Textfarbe für RX- und TX-Werte festlegen.",
-      "label": "Text"
-    },
-    "colorTx": {
-      "desc": "Symbolfarbe für Upload (TX), wenn der Schwellwert überschritten ist.",
-      "label": "TX aktiv"
-    },
-    "contentMargin": {
-      "desc": "Horizontaler Abstand auf beiden Seiten des Widget-Inhalts.",
-      "label": "Inhaltsrand"
-    },
-    "customFontBold": {
-      "desc": "Geschwindigkeitswerte fett darstellen.",
-      "label": "Fett"
+    "useCustomFont": {
+      "desc": "Standardschriftart für Geschwindigkeitswerte überschreiben.",
+      "label": "Eigene Schriftart"
     },
     "customFontFamily": {
       "desc": "Schriftart für die Geschwindigkeitswerte wählen.",
@@ -37,41 +53,49 @@
       "placeholder": "Schriftart auswählen",
       "searchPlaceholder": "Schriften suchen…"
     },
+    "customFontBold": {
+      "desc": "Geschwindigkeitswerte fett darstellen.",
+      "label": "Fett"
+    },
     "customFontItalic": {
       "desc": "Geschwindigkeitswerte kursiv darstellen.",
       "label": "Kursiv"
-    },
-    "fontSizeModifier": {
-      "desc": "Schriftgröße relativ zum Standard skalieren.",
-      "label": "Schriftgrößen-Faktor"
-    },
-    "horizontalLayout": {
-      "desc": "TX- und RX-Werte nebeneinander statt übereinander anzeigen.",
-      "label": "Horizontales Layout"
-    },
-    "iconSizeModifier": {
-      "desc": "Symbolgröße relativ zum Standard skalieren.",
-      "label": "Symbolgrößen-Faktor"
-    },
-    "iconType": {
-      "desc": "Symbolstil für die TX/RX-Anzeigen auswählen.",
-      "label": "Symboltyp"
-    },
-    "showNumbers": {
-      "desc": "Aktuelle RX/TX-Geschwindigkeiten als Zahlen anzeigen.",
-      "label": "Werte anzeigen"
-    },
-    "spacingInbetween": {
-      "desc": "Den Abstand zwischen den RX/TX-Elementen anpassen.",
-      "label": "Vertikaler Abstand"
     },
     "useCustomColors": {
       "desc": "Eigene Farben statt der Standard-Themefarben verwenden.",
       "label": "Eigene Farben"
     },
-    "useCustomFont": {
-      "desc": "Standardschriftart für Geschwindigkeitswerte überschreiben.",
-      "label": "Eigene Schriftart"
+    "colorTx": {
+      "desc": "Symbolfarbe für Upload (TX), wenn der Schwellwert überschritten ist.",
+      "label": "TX aktiv"
+    },
+    "colorRx": {
+      "desc": "Symbolfarbe für Download (RX), wenn der Schwellwert überschritten ist.",
+      "label": "RX aktiv"
+    },
+    "colorSilent": {
+      "desc": "Symbolfarbe, wenn der Datenverkehr unter dem Schwellwert liegt.",
+      "label": "Inaktiv"
+    },
+    "colorText": {
+      "desc": "Textfarbe für Geschwindigkeitswerte.",
+      "label": "Text"
+    },
+    "paddingLeft": {
+      "label": "Abstand links",
+      "desc": "Innenabstand des Inhalts auf der linken Seite."
+    },
+    "paddingRight": {
+      "label": "Abstand rechts",
+      "desc": "Innenabstand des Inhalts auf der rechten Seite."
+    },
+    "columnSpacing": {
+      "label": "Spaltenabstand",
+      "desc": "Abstand zwischen Spalten im Rasterlayout."
+    },
+    "rowSpacing": {
+      "label": "Zeilenabstand",
+      "desc": "Abstand zwischen Zeilen im Rasterlayout (hat keine Wirkung im horizontalen Layout)."
     }
   }
 }

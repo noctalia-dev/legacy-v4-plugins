@@ -1,0 +1,38 @@
+{
+	"id": "mullvad",
+	"name": "Mullvad VPN",
+	"version": "0.1.0",
+	"minNoctaliaVersion": "4.0.0",
+	"author": "OCSPG",
+	"license": "MIT",
+	"repository": "https://github.com/noctalia-dev/noctalia-plugins",
+	"description": "Control Mullvad VPN from the bar: connect/disconnect, pick relays, toggle lockdown mode, multihop and more.",
+	"tags": [
+		"Bar",
+		"Network",
+		"Panel"
+	],
+	"entryPoints": {
+		"main": "Main.qml",
+		"barWidget": "BarWidget.qml",
+		"panel": "Panel.qml",
+		"settings": "Settings.qml"
+	},
+	"dependencies": {
+		"plugins": []
+	},
+	"metadata": {
+		"defaultSettings": {
+			"refreshInterval": 3000,
+			"showCountryFlag": true,
+			"showCityName": false,
+			"showIp": false,
+			"compactMode": false,
+			"clickAction": "panel",
+			"relayClickConnects": true,
+			"confirmDisconnectInLockdown": true,
+			"favoriteCountries": [],
+			"expiryWarningDays": 7
+		}
+	}
+}

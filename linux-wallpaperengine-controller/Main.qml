@@ -2,15 +2,15 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-import "helpers/ColorCacheHelpers.js" as ColorCacheHelpers
+import "helpers/runtime/EngineHelpers.js" as EngineHelpers
 
 import qs.Commons
 import qs.Services.UI
-import qs.Services.Theming
 
 Item {
   id: root
 
+  // Shared plugin API and runtime state.
   property var pluginApi: null
 
   property bool checkingEngine: true
@@ -19,41 +19,66 @@ Item {
   property bool wallpaperScanShowToast: false
   property bool stopRequested: false
   property bool recoveryInProgress: false
-  property bool applyingWallpaperColors: false
   property string lastError: ""
   property string lastErrorDetails: ""
-  property string statusMessage: ""
+  property string lastRuntimeErrorKey: ""
   readonly property bool engineRunning: engineProcess.running || isApplying || pendingCommand.length > 0
   property string lastScreenSetSignature: ""
   property bool scanningWallpapers: false
   property bool wallpapersFolderAccessible: true
   property var cachedWallpaperItems: []
   property double lastWallpaperScanAt: 0
-  property var pendingWallpaperColorRequest: null
-  property string pendingCachedWallpaperColorPath: ""
-  property string pendingCachedWallpaperColorScreenName: ""
-  property var pendingWallpaperColorReuseRequest: null
-  property string wallpaperColorScreenName: ""
-  property string wallpaperColorScaling: "fill"
-  property string wallpaperColorRequestPath: ""
-  property string wallpaperColorScreenshotPath: ""
-  readonly property string activeColorMonitor: String(Settings.data.colorSchemes.monitorForColors || Quickshell.screens[0]?.name || "")
-  readonly property bool wallpaperColorsEnabled: !!Settings.data.colorSchemes.useWallpaperColors
-  readonly property bool wallpaperColorDarkMode: !!Settings.data.colorSchemes.darkMode
-  readonly property string wallpaperColorGenerationMethod: String(Settings.data.colorSchemes.generationMethod || "")
 
   property var pendingCommand: []
 
   readonly property var cfg: pluginApi?.pluginSettings || ({})
   readonly property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
 
-  // Initialization and persistence helpers.
-  Component.onCompleted: {
-    Logger.i("LWEController", "Main initialized");
-    lastScreenSetSignature = currentScreenSetSignature();
-    scheduleCachedWallpaperColorsForMonitor("startup");
+  // Named timer intervals.
+  readonly property int stableRunDelay: 2500
+  readonly property int screenTopologyDebounceDelay: 800
+
+  // Convenience aliases for external consumers.
+  readonly property bool applyingWallpaperColors: colorManager.applyingWallpaperColors
+
+  // Pass-through for Panel.qml to reach the color manager.
+  function scheduleWallpaperColorsFromPath(path, options) {
+    colorManager.scheduleWallpaperColorsFromPath(path, options);
   }
 
+  function applyWallpaperColorsFromPath(path, options) {
+    colorManager.applyWallpaperColorsFromPath(path, options);
+  }
+
+  // Wallpaper color extraction subsystem.
+  WallpaperColorManager {
+    id: colorManager
+    pluginApi: root.pluginApi
+    cfg: root.cfg
+    defaults: root.defaults
+    engineAvailable: root.engineAvailable
+    defaultFps: root.defaultFps
+    defaultClamp: root.defaultClamp
+    defaultScaling: root.defaultScaling
+    normalizedPathFn: root.normalizedPath
+    wallpaperIdFromPathFn: root.wallpaperIdFromPath
+    getWallpaperPropertiesFn: root.getWallpaperProperties
+    getScreenConfigFn: root.getScreenConfig
+  }
+
+  // Initialization.
+  Component.onCompleted: {
+    Logger.i("LWEController", "Main initialized");
+    ensureSettingsRoot();
+
+    // Clean up leftover processes from previous sessions.
+    startupCleanupProcess.running = true;
+
+    lastScreenSetSignature = currentScreenSetSignature();
+    colorManager.scheduleStartupResync();
+  }
+
+  // Settings persistence and recovery snapshots.
   function ensureSettingsRoot() {
     if (!pluginApi) {
       return;
@@ -84,6 +109,10 @@ Item {
     return JSON.parse(JSON.stringify(value || ({})));
   }
 
+  function currentWallpaperPathForScreen(screenName) {
+    return normalizedPath(getScreenConfig(screenName).path || "");
+  }
+
   function hasAnyScreenPathFrom(sourceScreens) {
     const screens = sourceScreens || ({});
     const keys = Object.keys(screens);
@@ -102,7 +131,6 @@ Item {
       return;
     }
 
-    ensureSettingsRoot();
     const nextValue = !!value;
     if (pluginApi.pluginSettings.runtimeRecoveryPending === nextValue) {
       return;
@@ -119,8 +147,6 @@ Item {
       return false;
     }
 
-    ensureSettingsRoot();
-
     const currentScreens = cloneValue(pluginApi.pluginSettings.screens || ({}));
     if (!hasAnyScreenPathFrom(currentScreens)) {
       Logger.d("LWEController", "Skip last-known-good snapshot: no configured paths", "reason=", reason);
@@ -131,7 +157,7 @@ Item {
     pluginApi.pluginSettings.runtimeRecoveryPending = false;
     pluginApi.saveSettings();
 
-    Logger.i("LWEController", "Saved last-known-good layout", "reason=", reason);
+    Logger.d("LWEController", "Saved last-known-good layout", "reason=", reason);
     return true;
   }
 
@@ -139,8 +165,6 @@ Item {
     if (!pluginApi) {
       return false;
     }
-
-    ensureSettingsRoot();
 
     const snapshot = pluginApi.pluginSettings.lastKnownGoodScreens || ({});
     if (!hasAnyScreenPathFrom(snapshot)) {
@@ -152,7 +176,7 @@ Item {
     pluginApi.pluginSettings.runtimeRecoveryPending = false;
     pluginApi.saveSettings();
 
-    Logger.i("LWEController", "Restored last-known-good layout", "reason=", reason);
+    Logger.d("LWEController", "Restored last-known-good layout", "reason=", reason);
     return true;
   }
 
@@ -180,7 +204,6 @@ Item {
       return false;
     }
 
-    ensureSettingsRoot();
     const pending = !!pluginApi.pluginSettings.runtimeRecoveryPending;
     if (!pending) {
       return false;
@@ -217,16 +240,17 @@ Item {
   readonly property bool defaultNoFullscreenPause: cfg.defaultNoFullscreenPause ?? defaults.defaultNoFullscreenPause ?? false
   readonly property bool defaultFullscreenPauseOnlyActive: cfg.defaultFullscreenPauseOnlyActive ?? defaults.defaultFullscreenPauseOnlyActive ?? false
   readonly property bool defaultAutoApply: cfg.autoApplyOnStartup ?? defaults.autoApplyOnStartup ?? true
-  readonly property string assetsDir: cfg.assetsDir ?? defaults.assetsDir ?? ""
+  
   readonly property int wallpaperScanCacheMinutes: {
-    const value = Number(cfg.wallpaperScanCacheMinutes ?? defaults.wallpaperScanCacheMinutes ?? 5);
+    const value = Number(cfg.wallpaperScanCacheMinutes ?? defaults.wallpaperScanCacheMinutes ?? 10);
     if (isNaN(value)) {
-      return 5;
+      return 10;
     }
     return Math.max(0, Math.floor(value));
   }
 
-  // Screen and wallpaper configuration accessors.
+
+  // Screen topology, path normalization, and persisted wallpaper accessors.
   function normalizedPath(path) {
     return Settings.preprocessPath(String(path || ""));
   }
@@ -239,10 +263,6 @@ Item {
   }
 
   function wallpaperScanCacheValid() {
-    if (scanningWallpapers) {
-      return true;
-    }
-
     if (wallpaperScanCacheMinutes <= 0) {
       return false;
     }
@@ -303,6 +323,7 @@ Item {
     return parts.length > 0 ? String(parts[parts.length - 1] || "") : "";
   }
 
+  // Wallpaper property storage helpers.
   function cloneWallpaperProperties(source) {
     const cloned = {};
     const raw = source || ({});
@@ -320,7 +341,6 @@ Item {
       return;
     }
 
-    ensureSettingsRoot();
     const wallpaperId = wallpaperIdFromPath(path);
     if (wallpaperId.length === 0) {
       return;
@@ -364,207 +384,14 @@ Item {
     }
   }
 
-  function currentWallpaperColorMode() {
-    return Settings.data.colorSchemes.darkMode ? "dark" : "light";
-  }
-
-  function syncWallpaperColorSource(screenName, screenshotPath) {
-    const normalizedScreenName = String(screenName || "").trim();
-    const normalizedScreenshotPath = String(screenshotPath || "").trim();
-    if (normalizedScreenName.length === 0 || normalizedScreenshotPath.length === 0) {
-      return;
-    }
-
-    WallpaperService.changeWallpaper(normalizedScreenshotPath, normalizedScreenName, "dark");
-    WallpaperService.changeWallpaper(normalizedScreenshotPath, normalizedScreenName, "light");
-  }
-
-  function applyWallpaperColorsFromScreenshot(screenName, screenshotPath) {
-    if (String(screenshotPath || "").trim().length === 0) {
-      return;
-    }
-
-    syncWallpaperColorSource(screenName, screenshotPath);
-    TemplateProcessor.processWallpaperColors(screenshotPath, currentWallpaperColorMode());
-  }
-
-  function screenshotPathForWallpaper(path, screenName = "") {
-    return ColorCacheHelpers.screenshotPathForWallpaper(
-      Settings.cacheDir,
-      pluginApi?.manifest?.id || pluginApi?.pluginId || "linux-wallpaperengine-controller",
-      wallpaperIdFromPath(path),
-      screenName
-    );
-  }
-
-  function wallpaperColorScreenshotEntry(screenName) {
-    ensureSettingsRoot();
-    return ColorCacheHelpers.cachedScreenshotEntry(pluginApi?.pluginSettings?.wallpaperColorScreenshots, screenName);
-  }
-
-  function canReuseWallpaperColorScreenshot(screenName, wallpaperPath, scaling) {
-    return ColorCacheHelpers.canReuseScreenshot(
-      pluginApi?.pluginSettings?.wallpaperColorScreenshots,
-      screenName,
-      wallpaperPath,
-      scaling,
-      normalizedPath,
-      defaultScaling
-    );
-  }
-
-  function startWallpaperColorCapture(wallpaperPath, targetScreenName, targetScaling) {
-    const screenshotPath = screenshotPathForWallpaper(wallpaperPath, targetScreenName);
-    const pluginDir = pluginApi?.pluginDir || "";
-    const scriptPath = pluginDir + "/scripts/capture-wallpaper-colors.sh";
-    const command = [
-      "bash",
-      scriptPath,
-      screenshotPath,
-      "linux-wallpaperengine"
-    ];
-    const maybeAssetsDir = normalizedPath(assetsDir);
-    const wallpaperProperties = getWallpaperProperties(wallpaperPath);
-
-    if (maybeAssetsDir.length > 0) {
-      command.push("--assets-dir");
-      command.push(maybeAssetsDir);
-    }
-
-    command.push("--fps");
-    command.push(String(defaultFps));
-    command.push("--clamp");
-    command.push(String(defaultClamp || "clamp"));
-    command.push("--screen-root");
-    command.push(targetScreenName);
-    command.push("--bg");
-    command.push(wallpaperPath);
-    command.push("--scaling");
-    command.push(targetScaling.length > 0 ? targetScaling : "fill");
-    command.push("--screenshot");
-    command.push(screenshotPath);
-
-    for (const propertyKey of Object.keys(wallpaperProperties)) {
-      const propertyValue = wallpaperProperties[propertyKey];
-      if (propertyValue === undefined || propertyValue === null || String(propertyKey || "").trim().length === 0) {
-        continue;
-      }
-      command.push("--set-property");
-      command.push(String(propertyKey) + "=" + String(propertyValue));
-    }
-
-    applyingWallpaperColors = true;
-    wallpaperColorRequestPath = wallpaperPath;
-    wallpaperColorScreenshotPath = screenshotPath;
-    wallpaperColorScreenName = targetScreenName;
-    wallpaperColorScaling = targetScaling.length > 0 ? targetScaling : "fill";
-    wallpaperColorProcess.command = command;
-    wallpaperColorProcess.running = true;
-
-    Logger.i("LWEController", "Generating screenshot for wallpaper color extraction", "path=", wallpaperPath, "screen=", targetScreenName, "scaling=", wallpaperColorScaling, "output=", screenshotPath);
-    ToastService.showNotice(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsGenerating"), "palette");
-  }
-
-  function saveWallpaperColorScreenshot(screenName, screenshotPath, wallpaperPath, scaling) {
-    if (!pluginApi || screenName.length === 0 || screenshotPath.length === 0) {
-      return;
-    }
-
-    ensureSettingsRoot();
-    pluginApi.pluginSettings.wallpaperColorScreenshots[screenName] = {
-      "path": screenshotPath,
-      "wallpaperPath": wallpaperPath,
-      "scaling": scaling,
-      "updatedAt": Date.now()
-    };
-    pluginApi.saveSettings();
-  }
-
-  function scheduleCachedWallpaperColorsForMonitor(reason = "") {
-    if (!wallpaperColorsEnabled) {
-      return;
-    }
-
-    const screenName = activeColorMonitor;
-    if (screenName.length === 0) {
-      return;
-    }
-
-    const entry = wallpaperColorScreenshotEntry(screenName);
-    const screenshotPath = normalizedPath(entry?.path || "");
-    if (screenshotPath.length === 0) {
-      Logger.d("LWEController", "No cached wallpaper color screenshot for active monitor", "screen=", screenName, "reason=", reason);
-      return;
-    }
-
-    pendingCachedWallpaperColorPath = screenshotPath;
-    pendingCachedWallpaperColorScreenName = screenName;
-    const pluginDir = pluginApi?.pluginDir || "";
-    const scriptPath = pluginDir + "/scripts/check-file-exists.sh";
-    cachedWallpaperColorSyncCheckProcess.command = ["bash", scriptPath, screenshotPath];
-    cachedWallpaperColorSyncCheckProcess.running = true;
-    Logger.d("LWEController", "Scheduled cached wallpaper color sync", "screen=", screenName, "path=", screenshotPath, "reason=", reason);
-  }
-
-  function applyWallpaperColorsFromPath(path, options = null) {
-    const wallpaperPath = normalizedPath(path);
-    const requestOptions = options || ({});
-    const targetScreenName = String(requestOptions.screenName || Quickshell.screens[0]?.name || "").trim();
-    const targetScaling = String(requestOptions.scaling || defaultScaling || "fill").trim();
-    if (!engineAvailable) {
-      ToastService.showWarning(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsEngineUnavailable"), "alert-circle");
-      return;
-    }
-
-    if (wallpaperPath.length === 0) {
-      ToastService.showWarning(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsNoSelection"), "alert-circle");
-      return;
-    }
-
-    if (targetScreenName.length === 0) {
-      ToastService.showError(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsFailed"), "alert-circle");
-      return;
-    }
-
-    if (applyingWallpaperColors) {
-      return;
-    }
-
-    if (canReuseWallpaperColorScreenshot(targetScreenName, wallpaperPath, targetScaling)) {
-      const entry = wallpaperColorScreenshotEntry(targetScreenName);
-      const cachedPath = normalizedPath(entry?.path || "");
-      const pluginDir = pluginApi?.pluginDir || "";
-      const scriptPath = pluginDir + "/scripts/check-file-exists.sh";
-      pendingWallpaperColorReuseRequest = {
-        "wallpaperPath": wallpaperPath,
-        "screenName": targetScreenName,
-        "scaling": targetScaling,
-        "screenshotPath": cachedPath
-      };
-      reusedWallpaperColorCheckProcess.command = ["bash", scriptPath, cachedPath];
-      reusedWallpaperColorCheckProcess.running = true;
-      return;
-    }
-    startWallpaperColorCapture(wallpaperPath, targetScreenName, targetScaling);
-  }
-
-  function scheduleWallpaperColorsFromPath(path, options = null) {
-    const wallpaperPath = normalizedPath(path);
-    if (wallpaperPath.length === 0) {
-      return;
-    }
-
-    pendingWallpaperColorRequest = {
-      "path": wallpaperPath,
-      "screenName": String(options?.screenName || Quickshell.screens[0]?.name || ""),
-      "scaling": String(options?.scaling || defaultScaling || "fill")
-    };
-    wallpaperColorStartTimer.restart();
-    Logger.d("LWEController", "Scheduled wallpaper color extraction", "path=", wallpaperPath, "screen=", pendingWallpaperColorRequest.screenName, "scaling=", pendingWallpaperColorRequest.scaling);
-  }
-
+  // Wallpaper source scanning and cache refresh.
   function refreshWallpaperCache(force = false, showToast = false) {
     const folderPath = Settings.preprocessPath(String(cfg.wallpapersFolder ?? defaults.wallpapersFolder ?? "")).trim();
+
+    if (scanningWallpapers && !wallpaperScanProcess.running) {
+      Logger.w("LWEController", "Reset stale wallpaper scanning state before refresh");
+      scanningWallpapers = false;
+    }
 
     if (folderPath.length === 0) {
       cachedWallpaperItems = [];
@@ -578,7 +405,14 @@ Item {
       return;
     }
 
+    if (wallpaperScanProcess.running) {
+      Logger.d("LWEController", "Wallpaper scan already in progress");
+      return;
+    }
+
     if (!force && wallpaperScanCacheValid()) {
+      scanningWallpapers = false;
+      wallpaperScanShowToast = false;
       Logger.d("LWEController", "Wallpaper cache reused", "count=", cachedWallpaperItems.length, "ageMs=", Date.now() - lastWallpaperScanAt);
       return;
     }
@@ -589,22 +423,18 @@ Item {
     Logger.i("LWEController", force ? "Refreshing wallpaper cache" : "Scanning wallpapers for cache", folderPath);
     scanningWallpapers = true;
     wallpaperScanShowToast = showToast;
+    // Mode is no longer passed as argument since we eliminated multi-mode.
     wallpaperScanProcess.command = ["bash", scriptPath, folderPath];
     wallpaperScanProcess.running = true;
-    if (showToast) {
-      ToastService.showNotice(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.refreshingWallpapers"), "refresh");
-    }
   }
 
-  // Wallpaper application and persistence.
+  // Wallpaper application and persisted runtime option updates.
   function setScreenWallpaperWithOptions(screenName, path, options) {
     if (!pluginApi) {
       return;
     }
 
     Logger.i("LWEController", "Set wallpaper requested", screenName, path, JSON.stringify(options || ({})));
-
-    ensureSettingsRoot();
 
     if (pluginApi.pluginSettings.screens[screenName] === undefined) {
       pluginApi.pluginSettings.screens[screenName] = {};
@@ -618,7 +448,7 @@ Item {
       pluginApi.pluginSettings.screens[screenName].scaling = resolvedScaling;
     }
     if (resolvedClamp.length > 0) {
-      pluginApi.pluginSettings.defaultClamp = resolvedClamp;
+      pluginApi.pluginSettings.screens[screenName].clamp = resolvedClamp;
     }
 
     if (options?.volume !== undefined) {
@@ -656,7 +486,7 @@ Item {
 
     pluginApi.saveSettings();
 
-    restartEngine();
+    restartEngine(resolveRuntimeOverrides(options));
   }
 
   function clearScreenWallpaper(screenName) {
@@ -665,8 +495,6 @@ Item {
     }
 
     Logger.i("LWEController", "Clear wallpaper requested", screenName);
-
-    ensureSettingsRoot();
 
     if (pluginApi.pluginSettings.screens[screenName] === undefined) {
       pluginApi.pluginSettings.screens[screenName] = {};
@@ -689,8 +517,6 @@ Item {
 
     Logger.i("LWEController", "Set wallpaper for all screens", path, JSON.stringify(options || ({})));
 
-    ensureSettingsRoot();
-
     const resolvedScaling = (options?.scaling || "").trim();
     const resolvedClamp = (options?.clamp || "").trim();
     const resolvedVolumeRaw = Number(options?.volume);
@@ -711,13 +537,12 @@ Item {
       if (resolvedScaling.length > 0) {
         pluginApi.pluginSettings.screens[screen.name].scaling = resolvedScaling;
       }
+      if (resolvedClamp.length > 0) {
+        pluginApi.pluginSettings.screens[screen.name].clamp = resolvedClamp;
+      }
       if (options?.customProperties !== undefined) {
         setWallpaperProperties(path, options.customProperties);
       }
-    }
-
-    if (resolvedClamp.length > 0) {
-      pluginApi.pluginSettings.defaultClamp = resolvedClamp;
     }
 
     if (hasResolvedVolume) {
@@ -742,53 +567,16 @@ Item {
     clearLegacyRuntimeOptionsForAllScreens();
 
     pluginApi.saveSettings();
-    restartEngine();
+    restartEngine(resolveRuntimeOverrides(options));
   }
 
-  // Runtime error handling.
+  // Runtime error capture and recovery hints.
   function extractRuntimeError(stderrText) {
-    const text = (stderrText || "").trim();
-    if (text.length === 0) {
-      return "";
-    }
-
-    const lower = text.toLowerCase();
-
-    if (lower.indexOf("cannot find a valid assets folder") !== -1) {
-      return pluginApi?.tr("main.error.assetsMissing");
-    }
-
-    if (lower.indexOf("at least one background id must be specified") !== -1) {
-      return pluginApi?.tr("main.error.noBackground");
-    }
-
-    if (lower.indexOf("opengl") !== -1 || lower.indexOf("glfw") !== -1) {
-      return pluginApi?.tr("main.error.opengl");
-    }
-
-    const lines = text.split(/\r?\n/)
-      .map(line => (line || "").trim())
-      .filter(line => line.length > 0);
-
-    if (lines.length === 0) {
-      return "";
-    }
-
-    let summary = lines[0];
-    for (const line of lines) {
-      const normalized = line.toLowerCase();
-      if (normalized.indexOf("error") !== -1 || normalized.indexOf("failed") !== -1) {
-        summary = line;
-        break;
-      }
-    }
-
-    const maxLength = 220;
-    if (summary.length > maxLength) {
-      summary = summary.substring(0, maxLength) + "...";
-    }
-
-    return summary;
+    return EngineHelpers.extractRuntimeError(stderrText, {
+      assetsMissing: pluginApi?.tr("main.error.assetsMissing"),
+      noBackground: pluginApi?.tr("main.error.noBackground"),
+      opengl: pluginApi?.tr("main.error.opengl")
+    });
   }
 
   function setRuntimeErrorFromStderr(stderrText) {
@@ -804,6 +592,36 @@ Item {
 
     lastError = summary;
     lastErrorDetails = raw;
+    return true;
+  }
+
+  function clearRuntimeErrorState() {
+    lastError = "";
+    lastErrorDetails = "";
+    lastRuntimeErrorKey = "";
+  }
+
+  function logCapturedRuntimeError(stage, exitCode = null, exitStatus = null) {
+    const summary = String(lastError || "").trim();
+    const details = String(lastErrorDetails || "").trim();
+    if (summary.length === 0 && details.length === 0) {
+      return false;
+    }
+
+    const logKey = stage + "|" + summary + "|" + details;
+    if (logKey === lastRuntimeErrorKey) {
+      return true;
+    }
+
+    lastRuntimeErrorKey = logKey;
+    Logger.e(
+      "LWEController",
+      "runtime-error",
+      "stage=", stage,
+      "exitCode=", exitCode === null ? "-" : exitCode,
+      "exitStatus=", exitStatus === null ? "-" : exitStatus,
+      "summary=", summary
+    );
     return true;
   }
 
@@ -826,101 +644,41 @@ Item {
     lastError = current + " (" + hint + ")";
   }
 
-  // Command construction and engine lifecycle.
-  function buildCommand() {
-    const command = ["linux-wallpaperengine"];
-    let firstPath = "";
-    const appendedWallpaperIds = {};
-    let runtimeOptions = {
-      volume: defaultVolume,
-      muted: defaultMuted,
-      audioReactiveEffects: defaultAudioReactiveEffects,
-      noAutomute: defaultNoAutomute,
-      disableMouse: defaultDisableMouse,
-      disableParallax: defaultDisableParallax
+  // Engine command construction and lifecycle orchestration.
+  function buildCommand(runtimeOverrides = null) {
+    const overrides = runtimeOverrides || ({});
+    return EngineHelpers.buildEngineCommand({
+      defaultFps: defaultFps,
+      defaultClamp: overrides.defaultClamp ?? defaultClamp,
+      defaultVolume: overrides.defaultVolume ?? defaultVolume,
+      defaultMuted: overrides.defaultMuted ?? defaultMuted,
+      defaultAudioReactiveEffects: overrides.defaultAudioReactiveEffects ?? defaultAudioReactiveEffects,
+      defaultNoAutomute: overrides.defaultNoAutomute ?? defaultNoAutomute,
+      defaultDisableMouse: overrides.defaultDisableMouse ?? defaultDisableMouse,
+      defaultDisableParallax: overrides.defaultDisableParallax ?? defaultDisableParallax,
+      defaultNoFullscreenPause: defaultNoFullscreenPause,
+      defaultFullscreenPauseOnlyActive: defaultFullscreenPauseOnlyActive,
+      defaultScaling: defaultScaling,
+      screens: Quickshell.screens,
+      getScreenConfig: getScreenConfig,
+      normalizePath: normalizedPath,
+      wallpaperIdFromPath: wallpaperIdFromPath,
+      getWallpaperProperties: getWallpaperProperties
+    });
+  }
+
+  function resolveRuntimeOverrides(options = null) {
+    const opts = options || ({});
+    const resolvedVolumeRaw = Number(opts.volume);
+    return {
+      defaultClamp: String(opts.clamp || defaultClamp),
+      defaultVolume: isNaN(resolvedVolumeRaw) ? defaultVolume : Math.max(0, Math.min(100, Math.floor(resolvedVolumeRaw))),
+      defaultMuted: opts.muted === undefined ? defaultMuted : !!opts.muted,
+      defaultAudioReactiveEffects: opts.audioReactiveEffects === undefined ? defaultAudioReactiveEffects : !!opts.audioReactiveEffects,
+      defaultNoAutomute: opts.noAutomute === undefined ? defaultNoAutomute : !!opts.noAutomute,
+      defaultDisableMouse: opts.disableMouse === undefined ? defaultDisableMouse : !!opts.disableMouse,
+      defaultDisableParallax: opts.disableParallax === undefined ? defaultDisableParallax : !!opts.disableParallax
     };
-
-    command.push("--fps");
-    command.push(String(defaultFps));
-
-    const runtimeClamp = String(defaultClamp || "clamp").trim();
-    if (runtimeClamp.length > 0) {
-      command.push("--clamp");
-      command.push(runtimeClamp);
-    }
-
-    if (runtimeOptions.muted) {
-      command.push("--silent");
-    } else {
-      command.push("--volume");
-      command.push(String(runtimeOptions.volume));
-    }
-
-    if (!runtimeOptions.audioReactiveEffects) {
-      command.push("--no-audio-processing");
-    }
-
-    if (runtimeOptions.noAutomute) {
-      command.push("--noautomute");
-    }
-
-    if (runtimeOptions.disableMouse) {
-      command.push("--disable-mouse");
-    }
-
-    if (runtimeOptions.disableParallax) {
-      command.push("--disable-parallax");
-    }
-
-    if (defaultNoFullscreenPause) {
-      command.push("--no-fullscreen-pause");
-    }
-
-    if (defaultFullscreenPauseOnlyActive) {
-      command.push("--fullscreen-pause-only-active");
-    }
-
-    const maybeAssetsDir = normalizedPath(assetsDir);
-    if (maybeAssetsDir.length > 0) {
-      command.push("--assets-dir");
-      command.push(maybeAssetsDir);
-    }
-
-    for (const screen of Quickshell.screens) {
-      const screenCfg = getScreenConfig(screen.name);
-      const path = normalizedPath(screenCfg.path);
-      if (!path || path.length === 0) {
-        continue;
-      }
-
-      if (firstPath.length === 0) {
-        firstPath = path;
-      }
-
-      command.push("--screen-root");
-      command.push(screen.name);
-      command.push("--bg");
-      command.push(path);
-
-      command.push("--scaling");
-      command.push(String(screenCfg.scaling));
-
-      const wallpaperId = wallpaperIdFromPath(path);
-      if (wallpaperId.length > 0 && !appendedWallpaperIds[wallpaperId]) {
-        const customProperties = getWallpaperProperties(path);
-        for (const propertyKey of Object.keys(customProperties)) {
-          const propertyValue = customProperties[propertyKey];
-          if (propertyValue === undefined || propertyValue === null || String(propertyKey || "").trim().length === 0) {
-            continue;
-          }
-          command.push("--set-property");
-          command.push(String(propertyKey) + "=" + String(propertyValue));
-        }
-        appendedWallpaperIds[wallpaperId] = true;
-      }
-    }
-
-    return command;
   }
 
   function stopAll(showToast = false) {
@@ -940,7 +698,6 @@ Item {
     }
 
     isApplying = false;
-    statusMessage = pluginApi?.tr("main.status.stopped");
     if (showToast) {
       ToastService.showNotice(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.stopped"), "player-stop");
     }
@@ -948,12 +705,12 @@ Item {
 
   function startEngineWithCommand(command) {
     if (!engineAvailable) {
-      Logger.w("LWEController", "Skip start: engine unavailable");
+      Logger.d("LWEController", "Skip start: engine unavailable");
       return;
     }
 
     if (!command || command.length <= 1) {
-      Logger.w("LWEController", "Skip start: empty command");
+      Logger.d("LWEController", "Skip start: empty command");
       stopAll();
       return;
     }
@@ -961,10 +718,8 @@ Item {
     Logger.d("LWEController", "Starting engine command", JSON.stringify(command));
 
     if (!recoveryInProgress) {
-      lastError = "";
-      lastErrorDetails = "";
+      clearRuntimeErrorState();
     }
-    statusMessage = pluginApi?.tr("main.status.starting");
     isApplying = true;
 
     engineProcess.command = command;
@@ -972,21 +727,21 @@ Item {
     stableRunTimer.restart();
   }
 
-  function restartEngine() {
+  function restartEngine(runtimeOverrides = null) {
     if (!engineAvailable) {
-      Logger.w("LWEController", "Skip restart: engine unavailable");
+      Logger.d("LWEController", "Skip restart: engine unavailable");
       return;
     }
 
     if (!hasAnyConfiguredWallpaper()) {
-      Logger.i("LWEController", "Skip restart: no configured wallpaper; stopping engine");
+      Logger.d("LWEController", "Skip restart: no configured wallpaper; stopping engine");
       stopAll();
       return;
     }
 
-    const command = buildCommand();
+    const command = buildCommand(runtimeOverrides);
     if (!command || command.length <= 1) {
-      Logger.w("LWEController", "Restart resolved to empty command; stopping engine");
+      Logger.d("LWEController", "Restart resolved to empty command; stopping engine");
       stopAll();
       return;
     }
@@ -1009,10 +764,8 @@ Item {
 
   function reload(showToast = false) {
     if (!hasAnyConfiguredWallpaper()) {
-      lastError = "";
-      lastErrorDetails = "";
-      statusMessage = pluginApi?.tr("main.status.ready");
-      Logger.i("LWEController", "Reload skipped: no configured wallpaper paths");
+      clearRuntimeErrorState();
+      Logger.d("LWEController", "Reload skipped: no configured wallpaper paths");
       if (showToast) {
         ToastService.showWarning(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.reloadSkippedNoWallpaper"), "alert-circle");
       }
@@ -1025,7 +778,7 @@ Item {
     }
   }
 
-  // External command and IPC integration.
+  // External processes.
   Process {
     id: wallpaperScanProcess
 
@@ -1051,10 +804,14 @@ Item {
         const id = parts.length > 5 ? parts[5] : String(path || "").split("/").pop();
         const type = parts.length > 6 ? parts[6] : "unknown";
         const resolution = parts.length > 7 ? parts[7] : "unknown";
-        const sizeMtime = parts.length > 8 ? parts[8] : "0:0";
+        const hasEmbeddedAudio = parts.length > 8 ? parts[8] === "1" : false;
+        const hasAudioReactive = parts.length > 9 ? parts[9] === "1" : false;
+        const sizeMtime = parts.length > 10 ? parts[10] : "0:0";
         const sizeParts = String(sizeMtime).split(":");
         const bytes = sizeParts.length > 0 ? Number(sizeParts[0]) : 0;
         const mtime = sizeParts.length > 1 ? Number(sizeParts[1]) : 0;
+        const approved = parts.length > 11 ? parts[11] === "1" : false;
+        const description = parts.length > 12 ? String(parts[12] || "") : "";
 
         if (path.length > 0) {
           parsed.push({
@@ -1063,11 +820,15 @@ Item {
             thumb: thumb,
             motionPreview: motionPreview,
             dynamic: dynamic,
+            hasEmbeddedAudio: hasEmbeddedAudio,
+            hasAudioReactive: hasAudioReactive,
             id: id,
             type: type,
             resolution: resolution,
             bytes: bytes,
-            mtime: mtime
+            mtime: mtime,
+            approved: approved,
+            description: description
           });
         }
       }
@@ -1086,11 +847,8 @@ Item {
       root.wallpaperScanShowToast = false;
 
       if (!root.wallpapersFolderAccessible) {
-        if (stderrText.length > 0) {
-          Logger.e("LWEController", "Wallpaper scan failed", "folder=", Settings.preprocessPath(String(cfg.wallpapersFolder ?? defaults.wallpapersFolder ?? "")), "exitCode=", exitCode, "stderr=", stderrText);
-        } else {
-          Logger.e("LWEController", "Wallpaper scan failed", "exitCode=", exitCode);
-        }
+        const msg = stderrText.length > 0 ? "Wallpaper scan failed, stderr=" + stderrText : "Wallpaper scan failed";
+        Logger.e("LWEController", msg, "exitCode=", exitCode);
       }
 
       Logger.i("LWEController", "Wallpaper cache updated", "count=", parsed.length, "exitCode=", exitCode);
@@ -1114,12 +872,10 @@ Item {
       if (!root.engineAvailable) {
         root.lastError = root.pluginApi?.tr("main.error.notInstalled");
         root.lastErrorDetails = "";
-        root.statusMessage = root.pluginApi?.tr("main.status.unavailable");
+        root.lastRuntimeErrorKey = "";
         Logger.e("LWEController", "linux-wallpaperengine binary not found in PATH");
         return;
       }
-
-      root.statusMessage = root.pluginApi?.tr("main.status.ready");
 
       root.refreshWallpaperCache(false, false);
 
@@ -1156,19 +912,16 @@ Item {
           return;
         }
 
-        root.statusMessage = root.pluginApi?.tr("main.status.stopped");
         return;
       }
 
       if (exitCode !== 0 || exitStatus !== Process.NormalExit) {
         if (root.setRuntimeErrorFromStderr(stderr.text)) {
-          Logger.e("LWEController", "Engine runtime error", root.lastError);
+          root.logCapturedRuntimeError("engine-exit", exitCode, exitStatus);
         }
         root.tryAutoRecoverFromRuntimeError("runtime-crash");
-        root.statusMessage = root.pluginApi?.tr("main.status.crashed");
       } else {
         root.recoveryInProgress = false;
-        root.statusMessage = root.pluginApi?.tr("main.status.stopped");
       }
     }
 
@@ -1180,9 +933,7 @@ Item {
           return;
         }
 
-        if (root.setRuntimeErrorFromStderr(text)) {
-          Logger.w("LWEController", "Engine stderr", root.lastError);
-        }
+        root.setRuntimeErrorFromStderr(text);
       }
     }
   }
@@ -1204,129 +955,26 @@ Item {
     stderr: StdioCollector {}
   }
 
+  // Startup cleanup: kill any orphaned wallpaper engine processes from previous sessions.
   Process {
-    id: wallpaperColorProcess
+    id: startupCleanupProcess
     running: false
 
-    stdout: StdioCollector {}
-    stderr: StdioCollector {}
-
-    onExited: function (exitCode) {
-      const requestPath = root.wallpaperColorRequestPath;
-      const screenshotPath = root.wallpaperColorScreenshotPath;
-      const screenName = root.wallpaperColorScreenName;
-      const stderrText = String(stderr.text || "").trim();
-
-      root.applyingWallpaperColors = false;
-      root.wallpaperColorRequestPath = "";
-      root.wallpaperColorScreenshotPath = "";
-      root.wallpaperColorScreenName = "";
-      root.wallpaperColorScaling = "fill";
-
-      if (exitCode !== 0) {
-        Logger.w("LWEController", "Wallpaper screenshot generation failed", "path=", requestPath, "screen=", screenName, "exitCode=", exitCode, "stderr=", stderrText);
-        ToastService.showError(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsFailed"), "alert-circle");
-        return;
-      }
-
-      saveWallpaperColorScreenshot(screenName, screenshotPath, requestPath, root.wallpaperColorScaling);
-
-      if (wallpaperColorsEnabled && screenName === activeColorMonitor) {
-        root.applyWallpaperColorsFromScreenshot(screenName, screenshotPath);
-        Logger.i("LWEController", "Wallpaper screenshot generated and applied for active color monitor", "path=", requestPath, "screen=", screenName, "screenshot=", screenshotPath);
-        ToastService.showNotice(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsApplied"), "palette");
-        return;
-      }
-
-      Logger.i("LWEController", "Wallpaper screenshot cached for color extraction", "path=", requestPath, "screen=", screenName, "screenshot=", screenshotPath);
-      ToastService.showNotice(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsCached"), "palette");
+    command: {
+      const pluginDir = root.pluginApi?.pluginDir || "";
+      const scriptPath = pluginDir + "/scripts/force-stop-engine.sh";
+      return ["bash", scriptPath];
     }
-  }
-
-  Process {
-    id: reusedWallpaperColorCheckProcess
-    running: false
 
     onExited: function (exitCode) {
-      const request = root.pendingWallpaperColorReuseRequest;
-      root.pendingWallpaperColorReuseRequest = null;
-      if (!request) {
-        return;
-      }
-
-      if (exitCode === 0) {
-        Logger.i("LWEController", "Reusing cached wallpaper color screenshot", "path=", request.wallpaperPath, "screen=", request.screenName, "scaling=", request.scaling, "screenshot=", request.screenshotPath);
-
-        if (root.wallpaperColorsEnabled && request.screenName === root.activeColorMonitor) {
-          root.applyWallpaperColorsFromScreenshot(request.screenName, request.screenshotPath);
-          ToastService.showNotice(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsApplied"), "palette");
-        } else {
-          ToastService.showNotice(pluginApi?.tr("panel.title"), pluginApi?.tr("toast.wallpaperColorsCached"), "palette");
-        }
-        return;
-      }
-
-      Logger.w("LWEController", "Cached wallpaper color screenshot missing; regenerating", "path=", request.wallpaperPath, "screen=", request.screenName, "scaling=", request.scaling, "screenshot=", request.screenshotPath);
-      root.startWallpaperColorCapture(request.wallpaperPath, request.screenName, request.scaling);
+      Logger.d("LWEController", "Startup cleanup finished", "exitCode=", exitCode);
     }
 
     stdout: StdioCollector {}
     stderr: StdioCollector {}
   }
 
-  Process {
-    id: cachedWallpaperColorSyncCheckProcess
-    running: false
-
-    onExited: function (exitCode) {
-      const screenshotPath = root.pendingCachedWallpaperColorPath;
-      const screenName = root.pendingCachedWallpaperColorScreenName;
-
-      if (exitCode !== 0 || screenshotPath.length === 0) {
-        Logger.w("LWEController", "Cached wallpaper color screenshot missing for active monitor", "screen=", screenName, "path=", screenshotPath, "exitCode=", exitCode);
-        root.pendingCachedWallpaperColorPath = "";
-        root.pendingCachedWallpaperColorScreenName = "";
-        return;
-      }
-
-      cachedWallpaperColorSyncTimer.restart();
-    }
-
-    stdout: StdioCollector {}
-    stderr: StdioCollector {}
-  }
-
-  Timer {
-    id: wallpaperColorStartTimer
-    interval: 1500
-
-    onTriggered: {
-      const request = root.pendingWallpaperColorRequest;
-      root.pendingWallpaperColorRequest = null;
-      if (!request || String(request.path || "").length === 0) {
-        return;
-      }
-      root.applyWallpaperColorsFromPath(request.path, request);
-    }
-  }
-
-  Timer {
-    id: cachedWallpaperColorSyncTimer
-    interval: 250
-
-    onTriggered: {
-      const screenshotPath = root.pendingCachedWallpaperColorPath;
-      const screenName = root.pendingCachedWallpaperColorScreenName;
-      root.pendingCachedWallpaperColorPath = "";
-      root.pendingCachedWallpaperColorScreenName = "";
-      if (screenshotPath.length === 0 || !root.wallpaperColorsEnabled) {
-        return;
-      }
-      Logger.i("LWEController", "Applying cached wallpaper colors for active monitor", "screen=", screenName || root.activeColorMonitor, "path=", screenshotPath);
-      root.applyWallpaperColorsFromScreenshot(screenName || root.activeColorMonitor, screenshotPath);
-    }
-  }
-
+  // IPC entrypoints.
   IpcHandler {
     target: "plugin:linux-wallpaperengine-controller"
 
@@ -1340,11 +988,11 @@ Item {
 
     function apply(screenName: string, bgPath: string) {
       if (!screenName || !bgPath) {
-        Logger.w("LWEController", "IPC apply ignored due to invalid args", screenName, bgPath);
+        Logger.w("LWEController", "IPC apply ignored due to invalid args", "screenName=", screenName, "bgPath=", bgPath);
         return;
       }
 
-      Logger.i("LWEController", "IPC apply", screenName, bgPath);
+      Logger.i("LWEController", "IPC apply", "screenName=", screenName, "bgPath=", bgPath);
 
       root.setScreenWallpaper(screenName, bgPath);
     }
@@ -1370,6 +1018,7 @@ Item {
     }
   }
 
+  // Shell event connections.
   Connections {
     target: Quickshell
 
@@ -1378,14 +1027,20 @@ Item {
     }
   }
 
-  onActiveColorMonitorChanged: scheduleCachedWallpaperColorsForMonitor("monitor-changed")
-  onWallpaperColorsEnabledChanged: scheduleCachedWallpaperColorsForMonitor("wallpaper-colors-toggled")
-  onWallpaperColorDarkModeChanged: scheduleCachedWallpaperColorsForMonitor("dark-mode-changed")
-  onWallpaperColorGenerationMethodChanged: scheduleCachedWallpaperColorsForMonitor("generation-method-changed")
+  Connections {
+    target: root
 
+    function onPluginApiChanged() {
+      if (root.pluginApi) {
+        root.ensureSettingsRoot();
+      }
+    }
+  }
+
+  // Stability and topology debounce timers.
   Timer {
     id: stableRunTimer
-    interval: 2500
+    interval: root.stableRunDelay
     repeat: false
 
     onTriggered: {
@@ -1401,7 +1056,7 @@ Item {
 
   Timer {
     id: screenTopologyRestartDebounce
-    interval: 800
+    interval: root.screenTopologyDebounceDelay
     repeat: false
 
     onTriggered: {
@@ -1416,5 +1071,30 @@ Item {
       Logger.i("LWEController", "Reapplying wallpapers after screen topology change");
       root.restartEngine();
     }
+  }
+
+  // Cleanup on shell shutdown.
+  Component.onDestruction: {
+    Logger.i("LWEController", "Shell shutting down, cleaning up wallpaper engine processes");
+
+    pendingCommand = [];
+    stopRequested = true;
+
+    if (engineProcess.running)
+      engineProcess.running = false;
+
+    if (wallpaperScanProcess.running)
+      wallpaperScanProcess.running = false;
+
+    if (!forceStopProcess.running)
+      forceStopProcess.running = true;
+
+    stableRunTimer.stop();
+    screenTopologyRestartDebounce.stop();
+
+    isApplying = false;
+    scanningWallpapers = false;
+
+    Logger.i("LWEController", "Cleanup complete");
   }
 }

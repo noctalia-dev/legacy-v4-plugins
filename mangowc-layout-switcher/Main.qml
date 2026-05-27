@@ -23,144 +23,124 @@ Item {
     }
   }
 
-  Component.onCompleted: {
-    if (!CompositorService.isMango) return
-    refresh()
-  }
+  readonly property var availableLayouts: [
+    { code: "T",  name: "Tile" },
+    { code: "S",  name: "Scroller" },
+    { code: "G",  name: "Grid" },
+    { code: "M",  name: "Monocle" },
+    { code: "K",  name: "Deck" },
+    { code: "CT", name: "Center Tile" },
+    { code: "RT", name: "Right Tile" },
+    { code: "VS", name: "Vertical Scroller" },
+    { code: "VT", name: "Vertical Tile" },
+    { code: "VG", name: "Vertical Grid" },
+    { code: "VK", name: "Vertical Deck" },
+    { code: "DW", name: "Dwindle" },
+    { code: "F",  name: "Fair" },
+    { code: "VF", name: "Vertical Fair" },
+  ]
+
+  readonly property var layoutDispatchMap: ({
+    "T": "tile", "S": "scroller", "G": "grid", "M": "monocle",
+    "K": "deck", "CT": "center_tile", "RT": "right_tile",
+    "VS": "vertical_scroller", "VT": "vertical_tile",
+    "VG": "vertical_grid", "VK": "vertical_deck",
+    "DW": "dwindle", "F": "fair", "VF": "vertical_fair",
+  })
 
   // ===== PUBLIC DATA =====
   property var monitorLayouts: ({})
-  property var availableLayouts: []
   property var availableMonitors: []
 
-  // ===== CONSTANTS =====
-
-  // Layout Name Mapping
-  // Codes based on 'mmsg -L' output
-  readonly property var layoutNames: ({
-    "S": "Scroller",
-    "T": "Tile",
-    "G": "Grid",
-    "M": "Monocle",
-    "K": "Deck",
-    "CT": "Center Tile",
-    "RT": "Right Tile",
-    "VS": "Vertical Scroller",
-    "VT": "Vertical Tile",
-    "VG": "Vertical Grid",
-    "VK": "Vertical Deck",
-    "TG": "Tgmix"
-  })
-
-  // ===== HELPER FUNCTIONS =====
-
+  // ===== UTILITY =====
   function getLayoutName(code) {
-    if (root.layoutNames[code]) return root.layoutNames[code]
-    
-    // Fallback formatter for unknown codes (snake_case -> Title Case)
-    return code.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+    for (var i = 0; i < root.availableLayouts.length; i++)
+      if (root.availableLayouts[i].code === code) return root.availableLayouts[i].name
+    return code
   }
 
-  // ===== INTERNAL LOGIC =====
-
+  // ===== INTERNAL =====
   QtObject {
     id: internal
     function updateLayout(monitor, layout) {
-      if (layout && monitor) {
-        var cleanLayout = layout.trim()
-        if (root.monitorLayouts[monitor] !== cleanLayout) {
-          root.monitorLayouts[monitor] = cleanLayout
-          // Emitting the built-in signal directly is cheaper than cloning the whole object
-          root.monitorLayoutsChanged() 
-        }
+      if (layout && monitor && root.monitorLayouts[monitor] !== layout) {
+        root.monitorLayouts[monitor] = layout
+        root.monitorLayoutsChanged()
       }
     }
   }
 
   // ===== PROCESSES =====
 
-  // 1. Event Watcher (mmsg -w) - Realtime Updates
   Process {
     id: eventWatcher
-    command: ["mmsg", "-w"]
-    running: true 
-    
+    command: ["mmsg", "watch", "all-monitors"]
+    running: true
+
     stdout: SplitParser {
       onRead: line => {
-        // Only parse layout-related outputs to save regex cycles
-        if (line.includes(" layout ")) {
-          var match = line.match(/^(\S+)\s+layout\s+(\S+)$/)
-          if (match) {
-            internal.updateLayout(match[1], match[2])
+        try {
+          var json = JSON.parse(line)
+          if (json.monitors) {
+            for (var i = 0; i < json.monitors.length; i++) {
+              var m = json.monitors[i]
+              internal.updateLayout(m.name, m.layout_symbol)
+            }
           }
+        } catch (e) {
+          Logger.w("mangowc-layout-switcher: parse error: " + e)
         }
       }
     }
   }
 
-  // 2. Load Available Layouts (mmsg -L) - Runs once
-  Process {
-    id: layoutsQuery
-    command: ["mmsg", "-L"]
-    running: false
-    property var tempArray: []
-    
-    stdout: SplitParser {
-      onRead: line => {
-        const code = line.trim()
-        if (code && !layoutsQuery.tempArray.some(l => l.code === code)) {
-           layoutsQuery.tempArray.push({ code: code, name: root.getLayoutName(code) })
-        }
-      }
-    }
-    
-    onExited: exitCode => { 
-      if (exitCode === 0) root.availableLayouts = layoutsQuery.tempArray
-      layoutsQuery.tempArray = [] 
-    }
-  }
-
-  // 3. Load Monitors (mmsg -O) - Runs once
   Process {
     id: monitorsQuery
-    command: ["mmsg", "-O"]
+    command: ["mmsg", "get", "all-monitors"]
     running: false
     property var tempArray: []
-    
+
     stdout: SplitParser {
       onRead: line => {
-        const m = line.trim()
-        if (m && !monitorsQuery.tempArray.includes(m)) {
-          monitorsQuery.tempArray.push(m)
-        }
+        try {
+          var json = JSON.parse(line)
+          if (json.monitors)
+            monitorsQuery.tempArray = json.monitors.map(m => m.name)
+        } catch (e) {}
       }
     }
-    
+
     onExited: exitCode => {
       if (exitCode === 0) root.availableMonitors = monitorsQuery.tempArray
-      monitorsQuery.tempArray = [] 
+      monitorsQuery.tempArray = []
     }
+  }
+
+  Component.onCompleted: {
+    monitorsQuery.running = true
   }
 
   // ===== PUBLIC API =====
 
   function refresh() {
-    layoutsQuery.running = true
     monitorsQuery.running = true
-    // Restart watcher if it died
-    if (!eventWatcher.running) eventWatcher.running = true 
+    if (!eventWatcher.running) eventWatcher.running = true
   }
 
   function setLayout(monitorName, layoutCode) {
     if (!monitorName || !layoutCode) return
-    // Execute: mmsg -o <monitor> -s -l <code >
-    Quickshell.execDetached(["mmsg", "-o", monitorName, "-s", "-l", layoutCode])
-    // Optimistic Update
+    var dispatchName = root.layoutDispatchMap[layoutCode] || layoutCode
+    Quickshell.execDetached(["mmsg", "dispatch", "focusmon," + monitorName])
+    Quickshell.execDetached(["mmsg", "dispatch", "setlayout," + dispatchName])
     internal.updateLayout(monitorName, layoutCode)
   }
 
   function setLayoutGlobally(layoutCode) {
-    root.availableMonitors.forEach(m => setLayout(m, layoutCode))
+    var dispatchName = root.layoutDispatchMap[layoutCode] || layoutCode
+    root.availableMonitors.forEach(m => {
+      Quickshell.execDetached(["mmsg", "dispatch", "focusmon," + m])
+      Quickshell.execDetached(["mmsg", "dispatch", "setlayout," + dispatchName])
+    })
     ToastService.showNotice("Global layout set: " + layoutCode)
   }
 }

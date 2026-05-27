@@ -5,7 +5,7 @@
 #   1: cache directory path
 #   2..n: screenshot file paths to keep
 
-set -u
+set -eu
 
 if [ "$#" -lt 1 ]; then
   exit 20
