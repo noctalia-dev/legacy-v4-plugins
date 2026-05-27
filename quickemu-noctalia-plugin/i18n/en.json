@@ -8,6 +8,7 @@
 		"existing-vms": "Existing VMs",
 		"create-vm": "Create New VM",
 		"start": "Start",
+		"start-spice": "Spice",
 		"edit": "Edit",
 		"delete": "Delete",
 		"no-vms": "No VMs found.",

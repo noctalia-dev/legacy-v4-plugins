@@ -203,13 +203,18 @@ Item {
         listProcess.running = true;
     }
 
-    function startVm(name) {
+    function startVm(name, useSpice) {
         clearError();
         var confPath = root.resolvedVmDirectory + name + ".conf";
-        startProcess.command = ["quickemu", "--vm", confPath];
+        var cmd = ["quickemu", "--vm", confPath];
+        if (useSpice) {
+            cmd.push("--display");
+            cmd.push("spice");
+        }
+        startProcess.command = cmd;
         startProcess.running = false;
         startProcess.running = true;
-        Logger.i("Quickemu", "Starting VM: " + name);
+        Logger.i("Quickemu", "Starting VM: " + name + (useSpice ? " (Spice)" : ""));
     }
 
     function editVm(name) {

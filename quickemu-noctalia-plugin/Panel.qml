@@ -162,6 +162,13 @@ Item {
                                 }
                             }
                             NButton {
+                                text: pluginApi?.tr("panel.start-spice")
+                                icon: "monitor"
+                                onClicked: {
+                                    if (mainInstance) mainInstance.startVm(model.vmName, true);
+                                }
+                            }
+                            NButton {
                                 text: pluginApi?.tr("panel.edit")
                                 icon: "edit-2"
                                 onClicked: {
