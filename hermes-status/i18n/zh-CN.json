@@ -1,0 +1,46 @@
+{
+  "menu": {
+    "refresh": "刷新",
+    "clear-attention": "清除提醒"
+  },
+  "status": {
+    "offline": "离线",
+    "idle": "在线",
+    "busy": "工作中",
+    "attention": "需要你",
+    "degraded": "降级",
+    "error": "错误",
+    "unknown": "未知"
+  },
+  "event": {
+    "thinking": "思考中",
+    "processing": "处理中",
+    "tool_call": "调用工具",
+    "tool_done": "工具完成",
+    "awaiting_approval": "等待审批",
+    "started": "已开始",
+    "ended": "已结束"
+  },
+  "panel": {
+    "hermes": "Hermes",
+    "gateway": "网关",
+    "session": "会话",
+    "tokens": "Token",
+    "cost": "费用",
+    "stopped": "已停止",
+    "active": "活跃",
+    "none": "无",
+    "online": "在线",
+    "offline": "离线",
+    "unknown": "未知",
+    "actual": "实际",
+    "estimated": "预估"
+  },
+  "settings": {
+    "statusScript": "状态检查脚本",
+    "pollInterval": "轮询间隔（秒）",
+    "signalFile": "信号文件",
+    "hideWhenIdle": "空闲时隐藏",
+    "hideWhenIdleDesc": "仅在网关离线、工作中或需要关注时显示"
+  }
+}

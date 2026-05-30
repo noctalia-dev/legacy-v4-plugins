@@ -15,8 +15,8 @@ Item {
   property ShellScreen screen
   property string widgetId: ""
   property string section: ""
-  property int sectionWidgetIndex: 0
-  property int sectionWidgetsCount: 1
+  property int sectionWidgetIndex: -1
+  property int sectionWidgetsCount: 0
 
   property var cfg: pluginApi?.pluginSettings || ({})
   property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
@@ -121,12 +121,12 @@ Item {
 
     model: [
       {
-        "label": pluginApi?.tr("menu.refresh") ?? "Refresh",
+        "label": pluginApi?.tr("menu.refresh"),
         "action": "refresh",
         "icon": "refresh"
       },
       {
-        "label": pluginApi?.tr("menu.clear-attention") ?? "Clear Attention",
+        "label": pluginApi?.tr("menu.clear-attention"),
         "action": "clear-attention",
         "icon": "bell-off"
       }

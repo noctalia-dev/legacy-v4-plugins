@@ -25,13 +25,13 @@ Item {
 
   readonly property string statusText: {
     switch (status) {
-      case "offline":    return "Offline";
-      case "idle":       return "Online";
-      case "busy":       return "Working";
-      case "attention":  return "Needs You";
-      case "degraded":   return "Degraded";
-      case "error":      return "Error";
-      default:           return "Unknown";
+      case "offline":    return pluginApi?.tr("status.offline");
+      case "idle":       return pluginApi?.tr("status.idle");
+      case "busy":       return pluginApi?.tr("status.busy");
+      case "attention":  return pluginApi?.tr("status.attention");
+      case "degraded":   return pluginApi?.tr("status.degraded");
+      case "error":      return pluginApi?.tr("status.error");
+      default:           return pluginApi?.tr("status.unknown");
     }
   }
 
@@ -61,13 +61,13 @@ Item {
 
   readonly property string eventText: {
     var map = {
-      "pre_llm_call": "Thinking",
-      "post_llm_call": "Processing",
-      "pre_tool_call": "Tool call",
-      "post_tool_call": "Tool done",
-      "pre_approval_request": "Awaiting approval",
-      "on_session_start": "Started",
-      "on_session_end": "Ended"
+      "pre_llm_call": pluginApi?.tr("event.thinking"),
+      "post_llm_call": pluginApi?.tr("event.processing"),
+      "pre_tool_call": pluginApi?.tr("event.tool_call"),
+      "post_tool_call": pluginApi?.tr("event.tool_done"),
+      "pre_approval_request": pluginApi?.tr("event.awaiting_approval"),
+      "on_session_start": pluginApi?.tr("event.started"),
+      "on_session_end": pluginApi?.tr("event.ended")
     };
     return map[signalEvent] || "";
   }
@@ -80,16 +80,16 @@ Item {
   }
 
   function formatCost(value) {
-    if (value === undefined || value === null) return "unknown";
+    if (value === undefined || value === null) return "";
     var n = Number(value);
-    if (!isFinite(n) || n <= 0) return "unknown";
+    if (!isFinite(n) || n <= 0) return "";
     if (n < 0.0001) return "$" + n.toFixed(6);
     if (n < 0.01) return "$" + n.toFixed(4);
     return "$" + n.toFixed(2);
   }
 
   readonly property string tokensText: {
-    if (!usage || !usage.available) return "None";
+    if (!usage || !usage.available) return pluginApi?.tr("panel.none");
     return formatTokens(usage.total_tokens)
       + "  in " + formatTokens(usage.input_tokens)
       + " / out " + formatTokens(usage.output_tokens)
@@ -97,13 +97,15 @@ Item {
   }
 
   readonly property string costText: {
-    if (!usage || !usage.available) return "unknown";
+    if (!usage || !usage.available) return pluginApi?.tr("panel.unknown");
     var actual = formatCost(usage.actual_cost_usd);
-    if (actual !== "unknown") return actual + " actual";
+    if (actual !== "") return actual + " " + pluginApi?.tr("panel.actual");
     var estimated = formatCost(usage.estimated_cost_usd);
-    if (estimated !== "unknown") return estimated + " estimated";
-    return "unknown";
+    if (estimated !== "") return estimated + " " + pluginApi?.tr("panel.estimated");
+    return pluginApi?.tr("panel.unknown");
   }
+
+  readonly property bool costIsUnknown: !usage || !usage.available || (!formatCost(usage.actual_cost_usd) && !formatCost(usage.estimated_cost_usd))
 
   Rectangle {
     id: panelContainer
@@ -117,7 +119,7 @@ Item {
       ColumnLayout {
         anchors.fill: parent
         anchors.margins: Style.marginM
-        spacing: 4
+        spacing: Style.marginXS
 
         // Row 1: icon + name + status
         RowLayout {
@@ -130,7 +132,7 @@ Item {
           }
 
           NText {
-            text: "Hermes"
+            text: pluginApi?.tr("panel.hermes")
             font.weight: Font.Bold
             pointSize: Style.fontSizeS
             color: Color.mOnSurface
@@ -166,7 +168,7 @@ Item {
           spacing: Style.marginS
 
           NText {
-            text: "Gateway"
+            text: pluginApi?.tr("panel.gateway")
             pointSize: Style.fontSizeS
             color: Color.mOnSurface
             opacity: 0.5
@@ -174,7 +176,7 @@ Item {
           }
 
           NText {
-            text: gatewayPid ? "PID " + gatewayPid : "Stopped"
+            text: gatewayPid ? "PID " + gatewayPid : pluginApi?.tr("panel.stopped")
             pointSize: Style.fontSizeS
             color: gatewayPid ? Color.mOnSurface : Color.mError
           }
@@ -185,7 +187,7 @@ Item {
           spacing: Style.marginS
 
           NText {
-            text: "Session"
+            text: pluginApi?.tr("panel.session")
             pointSize: Style.fontSizeS
             color: Color.mOnSurface
             opacity: 0.5
@@ -193,7 +195,7 @@ Item {
           }
 
           NText {
-            text: cliActive ? "Active" : "None"
+            text: cliActive ? pluginApi?.tr("panel.active") : pluginApi?.tr("panel.none")
             pointSize: Style.fontSizeS
             opacity: cliActive ? 1.0 : 0.4
           }
@@ -205,7 +207,7 @@ Item {
           spacing: Style.marginS
 
           NText {
-            text: "Tokens"
+            text: pluginApi?.tr("panel.tokens")
             pointSize: Style.fontSizeS
             color: Color.mOnSurface
             opacity: 0.5
@@ -226,7 +228,7 @@ Item {
           spacing: Style.marginS
 
           NText {
-            text: "Cost"
+            text: pluginApi?.tr("panel.cost")
             pointSize: Style.fontSizeS
             color: Color.mOnSurface
             opacity: 0.5
@@ -236,8 +238,8 @@ Item {
           NText {
             text: root.costText
             pointSize: Style.fontSizeS
-            color: root.costText === "unknown" ? Color.mOnSurface : Color.mPrimary
-            opacity: root.costText === "unknown" ? 0.45 : 1.0
+            color: root.costIsUnknown ? Color.mOnSurface : Color.mPrimary
+            opacity: root.costIsUnknown ? 0.45 : 1.0
           }
         }
 
@@ -266,7 +268,7 @@ Item {
             }
 
             NText {
-              text: modelData.ok ? "Online" : "Offline"
+              text: modelData.ok ? pluginApi?.tr("panel.online") : pluginApi?.tr("panel.offline")
               pointSize: Style.fontSizeS
               color: modelData.ok ? Color.mPrimary : Color.mError
             }

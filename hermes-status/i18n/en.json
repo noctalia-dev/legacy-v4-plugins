@@ -1,0 +1,46 @@
+{
+  "menu": {
+    "refresh": "Refresh",
+    "clear-attention": "Clear Attention"
+  },
+  "status": {
+    "offline": "Offline",
+    "idle": "Online",
+    "busy": "Working",
+    "attention": "Needs You",
+    "degraded": "Degraded",
+    "error": "Error",
+    "unknown": "Unknown"
+  },
+  "event": {
+    "thinking": "Thinking",
+    "processing": "Processing",
+    "tool_call": "Tool call",
+    "tool_done": "Tool done",
+    "awaiting_approval": "Awaiting approval",
+    "started": "Started",
+    "ended": "Ended"
+  },
+  "panel": {
+    "hermes": "Hermes",
+    "gateway": "Gateway",
+    "session": "Session",
+    "tokens": "Tokens",
+    "cost": "Cost",
+    "stopped": "Stopped",
+    "active": "Active",
+    "none": "None",
+    "online": "Online",
+    "offline": "Offline",
+    "unknown": "unknown",
+    "actual": "actual",
+    "estimated": "estimated"
+  },
+  "settings": {
+    "statusScript": "Status check script",
+    "pollInterval": "Poll interval (seconds)",
+    "signalFile": "Signal file",
+    "hideWhenIdle": "Hide when idle",
+    "hideWhenIdleDesc": "Only show when gateway is offline, busy, or needs attention"
+  }
+}
