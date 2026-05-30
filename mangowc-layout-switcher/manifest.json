@@ -21,6 +21,9 @@
     "plugins": []
   },
   "metadata": {
+    "requires": {
+      "mangoVersion": ">=0.14.0"
+    },
     "defaultSettings": {
       "monitorOrder": []
     }
