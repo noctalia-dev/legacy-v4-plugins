@@ -16,6 +16,7 @@ QtObject {
   property list<var> pendingDevices: []
   property bool deviceRefreshInProgress: false
   property int deviceRefreshGeneration: 0
+  property double deviceLastRefreshAtMs: 0
   property var pairedStateGraceTimestamps: ({})
   readonly property int pairedStateGraceMs: 45000
 
@@ -41,6 +42,7 @@ QtObject {
   property string adbDevicesStdout: ""
   property string adbDevicesStderr: ""
   property int adbDevicesExitCode: 0
+  property double adbDevicesLastRefreshAtMs: 0
   property var adbDeviceStates: ({})
   property var adbConnectedSerials: []
   property bool adbHasUsbTransport: false
@@ -99,7 +101,7 @@ QtObject {
   signal adbScreenBrightnessRead(string serial, string mode, string value, bool success)
 
   onDevicesChanged: {
-    setMainDevice(root.mainDeviceId)
+    updateMainDevice(true)
   }
 
   Component.onCompleted: {
@@ -129,6 +131,11 @@ QtObject {
 
   function setMainDevice(deviceId: string): void {
     root.mainDeviceId = deviceId;
+    updateMainDevice(true);
+  }
+
+  function setMainDeviceExact(deviceId: string): void {
+    root.mainDeviceId = deviceId;
     updateMainDevice(false);
   }
 
@@ -149,6 +156,9 @@ QtObject {
     if (root.mainDevice !== newMain) {
       root.mainDevice = newMain;
     }
+
+    if (newMain !== null && newMain !== undefined)
+      root.mainDeviceId = newMain.id;
 
     anyDevicesConnected = devices.find((device) => device.reachable) !== undefined;
   }
@@ -398,6 +408,33 @@ QtObject {
 
     scrcpyStopRequested = true;
     scrcpySessionProc.signal(15);
+  }
+
+  function launchDetachedScrcpy(deviceSerial: string, commandString: string): bool {
+    const trimmedSerial = String(deviceSerial || "").trim();
+    if (trimmedSerial === "") {
+      Logger.w("KDEConnect", "Cannot launch detached scrcpy: no device serial");
+      return false;
+    }
+
+    const normalizedCmd = normalizeShellCommand(commandString);
+    if (normalizedCmd === "") {
+      Logger.w("KDEConnect", "Cannot launch detached scrcpy: empty command");
+      return false;
+    }
+
+    const parsedArgs = parseCommandArgs(normalizedCmd);
+    if (parsedArgs.error) {
+      Logger.w("KDEConnect", "Cannot launch detached scrcpy:", parsedArgs.error);
+      return false;
+    }
+
+    const commandArgs = ["scrcpy", "-s", trimmedSerial].concat(parsedArgs.args.slice(1));
+    detachedScrcpyProc.command = commandArgs;
+    detachedScrcpyProc.running = true;
+
+    Logger.i("KDEConnect", "Launching detached scrcpy:", trimmedSerial);
+    return true;
   }
 
   function forceStopScrcpyProcesses(feedDevicePath: string): void {
@@ -748,6 +785,69 @@ QtObject {
     ]);
   }
 
+  function autoConnectWirelessAdb(host: string, timeoutSeconds: int): bool {
+    const trimmedHost = (host || "").trim();
+    const timeout = Math.max(5, Math.min(60, Math.round(timeoutSeconds || 15)));
+
+    if (trimmedHost === "") {
+      wirelessAdbFinished(false, "missing_connect_host");
+      return false;
+    }
+
+    const script = [
+      "wanted_host=\"$1\"",
+      "timeout_secs=\"$2\"",
+      "discover_service_endpoint() {",
+      "service_type=\"$1\"",
+      "host=\"$2\"",
+      "endpoint=\"\"",
+      "if command -v avahi-browse >/dev/null 2>&1; then",
+      "avahi_output=$(avahi-browse -rtkp \"$service_type\" 2>/dev/null || true)",
+      "endpoint=$(printf '%s\\n' \"$avahi_output\" | awk -F';' -v type=\"$service_type\" -v host=\"$host\" '($1 == \"=\" || $1 == \"+\") && $5 == type { svc_addr=$8; svc_port=$9; if (host != \"\" && svc_addr != host) next; if (svc_addr != \"\" && svc_port != \"\") { print svc_addr \":\" svc_port; exit } }')",
+      "fi",
+      "if [ -n \"$endpoint\" ]; then",
+      "printf '%s\\n' \"$endpoint\"",
+      "return 0",
+      "fi",
+      "mdns_output=$(ADB_MDNS_OPENSCREEN=1 adb mdns services 2>&1 || true)",
+      "if printf '%s\\n' \"$mdns_output\" | grep -q \"unknown host service 'mdns:\"; then",
+      "return 1",
+      "fi",
+      "endpoint=$(printf '%s\\n' \"$mdns_output\" | awk -v type=\"$service_type\" -v host=\"$host\" '{ if (index($0, type) == 0) next; n=split($0, a, /[[:space:]]+/); svc_endpoint=\"\"; for (i=1; i<=n; ++i) { if (a[i] ~ /^[0-9.]+:[0-9]+$/) svc_endpoint=a[i]; } if (host != \"\" && index(svc_endpoint, host \":\") != 1) next; if (svc_endpoint != \"\") { print svc_endpoint; exit } }')",
+      "[ -n \"$endpoint\" ] && printf '%s\\n' \"$endpoint\"",
+      "}",
+      "ADB_MDNS_OPENSCREEN=1 adb start-server >/dev/null 2>&1 || true",
+      "deadline=$(( $(date +%s) + timeout_secs ))",
+      "while [ \"$(date +%s)\" -lt \"$deadline\" ]; do",
+      "connect_endpoint=$(discover_service_endpoint \"_adb-tls-connect._tcp\" \"$wanted_host\")",
+      "if [ -n \"$connect_endpoint\" ]; then",
+      "connect_host=${connect_endpoint%:*}",
+      "connect_port=${connect_endpoint##*:}",
+      "connect_output=$(adb connect \"$connect_host:$connect_port\" 2>&1)",
+      "connect_status=$?",
+      "if [ \"$connect_status\" -ne 0 ]; then",
+      "printf '%s\\n' \"$connect_output\" >&2",
+      "exit \"$connect_status\"",
+      "fi",
+      "printf 'AUTO_CONNECT_OK host=%s connect_port=%s\\n' \"$connect_host\" \"$connect_port\"",
+      "exit 0",
+      "fi",
+      "sleep 1",
+      "done",
+      "echo 'Timed out waiting for the selected phone Wireless ADB connect service.' >&2",
+      "exit 124"
+    ].join("\n");
+
+    return runWirelessAdbCommandArgs([
+      "bash",
+      "-c",
+      script,
+      "--",
+      trimmedHost,
+      String(timeout)
+    ]);
+  }
+
   function adbCommand(serial: string, args): var {
     return ["adb"]
       .concat(adbSelectorArgsForSerial(serial))
@@ -867,12 +967,18 @@ QtObject {
   }
 
   function queueAdbTask(kind: string, serial: string, args): bool {
+    const trimmedSerial = String(serial || "").trim();
+    if (trimmedSerial === "") {
+      Logger.w("KDEConnect", "Skipping ADB task without a selected device serial:", String(kind || "").trim());
+      return false;
+    }
+
     const normalizedArgs = args.map(arg => String(arg));
     const queuedTasks = (adbCommandQueue || []).slice(0);
 
     queuedTasks.push({
       kind: String(kind || "").trim(),
-      serial: String(serial || "").trim(),
+      serial: trimmedSerial,
       args: normalizedArgs
     });
     adbCommandQueue = queuedTasks;
@@ -1305,6 +1411,7 @@ QtObject {
         if (normalizedDeviceIds.length === 0) {
           root.deviceRefreshInProgress = false;
           root.devices = [];
+          root.deviceLastRefreshAtMs = Date.now();
           root.updateMainDevice(true);
           return;
         }
@@ -1340,6 +1447,8 @@ QtObject {
         paired: false,
         pairRequested: false,
         verificationKey: "",
+        activeProviderNames: [],
+        reachableAddresses: [],
         charging: false,
         battery: -1,
         cellularNetworkType: "",
@@ -1368,6 +1477,30 @@ QtObject {
         stdout: StdioCollector {
           onStreamFinished: {
             loader.deviceData.reachable = busctlData(text);
+
+            activeProviderNamesProc.running = true;
+          }
+        }
+      }
+
+      property Process activeProviderNamesProc: Process {
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device", "activeProviderNames")
+        stdout: StdioCollector {
+          onStreamFinished: {
+            const providerNames = busctlData(text);
+            loader.deviceData.activeProviderNames = Array.isArray(providerNames) ? providerNames : [];
+
+            reachableAddressesProc.running = true;
+          }
+        }
+      }
+
+      property Process reachableAddressesProc: Process {
+        command: busctlGet("/modules/kdeconnect/devices/" + loader.deviceId, "org.kde.kdeconnect.device", "reachableAddresses")
+        stdout: StdioCollector {
+          onStreamFinished: {
+            const addresses = busctlData(text);
+            loader.deviceData.reachableAddresses = Array.isArray(addresses) ? addresses : [];
 
             pairingRequestedProc.running = true;
           }
@@ -1500,6 +1633,16 @@ QtObject {
           loader.deviceData.cellularNetworkType = previousDevice.cellularNetworkType;
         }
 
+        if (loader.deviceData.activeProviderNames.length === 0
+            && Array.isArray(previousDevice.activeProviderNames)) {
+          loader.deviceData.activeProviderNames = previousDevice.activeProviderNames.slice(0);
+        }
+
+        if (loader.deviceData.reachableAddresses.length === 0
+            && Array.isArray(previousDevice.reachableAddresses)) {
+          loader.deviceData.reachableAddresses = previousDevice.reachableAddresses.slice(0);
+        }
+
         if (Number(loader.deviceData.cellularNetworkStrength) < 0
             && Number(previousDevice.cellularNetworkStrength) >= 0) {
           loader.deviceData.cellularNetworkStrength = previousDevice.cellularNetworkStrength;
@@ -1540,6 +1683,7 @@ QtObject {
           root.devices = newDevices
           root.pendingDevices = []
           root.deviceRefreshInProgress = false;
+          root.deviceLastRefreshAtMs = Date.now();
           updateMainDevice(deviceNotReachableAnymore);
         }
 
@@ -2138,6 +2282,27 @@ QtObject {
     }
   }
 
+  property Process detachedScrcpyProc: Process {
+    id: detachedScrcpyProc
+    running: false
+    command: ["scrcpy"]
+
+    stdout: StdioCollector {}
+
+    stderr: StdioCollector {
+      onStreamFinished: {
+        const stderrText = text.trim();
+        if (stderrText !== "")
+          Logger.w("KDEConnect", "detached scrcpy stderr:", stderrText);
+      }
+    }
+
+    onExited: (exitCode, exitStatus) => {
+      if (exitCode !== 0)
+        Logger.i("KDEConnect", "detached scrcpy exited with code:", exitCode);
+    }
+  }
+
   property Process wirelessAdbProc: Process {
     id: wirelessAdbProc
     running: false
@@ -2220,6 +2385,7 @@ QtObject {
       }
 
       root.adbDevicesExitCode = exitCode;
+      root.adbDevicesLastRefreshAtMs = Date.now();
       root.adbDeviceStates = deviceStates;
       root.adbConnectedSerials = connectedSerials;
       root.adbHasUsbTransport = hasUsbTransport;

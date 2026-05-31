@@ -1,7 +1,7 @@
 {
   "id": "androidconnect",
   "name": "AndroidConnect",
-  "version": "1.4.0",
+  "version": "1.5.1",
   "minNoctaliaVersion": "4.4.0",
   "author": "demencia89",
   "license": "GPLv2",
@@ -34,7 +34,8 @@
       "wirelessAdbPairHost": "",
       "wirelessAdbPairPort": "",
       "wirelessAdbConnectHost": "",
-      "wirelessAdbConnectPort": ""
+      "wirelessAdbConnectPort": "",
+      "wirelessAdbDevices": {}
     }
   }
 }

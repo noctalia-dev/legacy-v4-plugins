@@ -34,7 +34,7 @@ Item {
   readonly property color shellButtonFgColor: Color.mPrimary
   readonly property color shellButtonBgHoverColor: Color.mHover
   readonly property color shellButtonFgHoverColor: Color.mOnHover
-  readonly property color shellButtonBorderColor: Style.boxBorderColor
+  readonly property color shellButtonBorderColor: Color.mOutline
   readonly property color shellButtonBorderHoverColor: Color.mOutline
   readonly property color shellButtonActiveBgColor: Color.mPrimary
   readonly property color shellButtonActiveFgColor: Color.mOnPrimary
@@ -56,6 +56,7 @@ Item {
   readonly property url xiaomiBrandBadgeSource: Qt.resolvedUrl("./Assets/brand-badges/xiaomi.svg")
   readonly property bool blurEnabled: true
   readonly property string embeddedMirrorCommand: "scrcpy --no-audio --capture-orientation=@0 --max-size=960 --max-fps=60 --video-bit-rate=12M --video-codec=h264 --v4l2-buffer=0"
+  readonly property string detachedMirrorCommand: "scrcpy --no-audio --max-size=1920 --max-fps=60 --video-bit-rate=12M --video-codec=h264"
   readonly property bool reduceBackgroundRefreshWhileMirroring: true
   readonly property string embeddedVideoDevice: "/dev/video10"
   property string wirelessAdbPairHost: cfg.wirelessAdbPairHost ?? defaults.wirelessAdbPairHost ?? ""
@@ -63,12 +64,17 @@ Item {
   property string wirelessAdbPairingCode: ""
   property string wirelessAdbConnectHost: cfg.wirelessAdbConnectHost ?? defaults.wirelessAdbConnectHost ?? ""
   property string wirelessAdbConnectPort: cfg.wirelessAdbConnectPort ?? defaults.wirelessAdbConnectPort ?? ""
+  property var wirelessAdbDeviceProfiles: initialWirelessAdbDeviceProfiles()
   property string wirelessAdbStatusMessage: ""
   property string wirelessAdbQrInstanceName: ""
   property string wirelessAdbQrSecret: ""
   property bool wirelessAdbQrPendingLaunch: false
   property int wirelessAdbQrImageVersion: 0
   property bool wirelessAdbSessionPreferred: false
+  property bool silentWirelessAdbAutoConnectPending: false
+  property bool silentWirelessAdbAutoConnectRefreshPending: false
+  property string silentWirelessAdbAutoConnectKey: ""
+  property var silentWirelessAdbAutoConnectAttempts: ({})
   property bool lastKnownUsbTransport: false
   property var cachedDeviceTelemetry: initialCachedDeviceTelemetry()
   readonly property string tempInstanceToken: makeTempInstanceToken()
@@ -132,6 +138,15 @@ Item {
     repeat: false
     onTriggered: {
       root.attemptEmbeddedMirrorAutoStart();
+    }
+  }
+
+  Timer {
+    id: silentWirelessAdbAutoConnectTimer
+    interval: 180
+    repeat: false
+    onTriggered: {
+      root.attemptSilentWirelessAdbAutoConnect();
     }
   }
 
@@ -296,6 +311,14 @@ Item {
         KDEConnect.stopScrcpySession();
       }
 
+      if (root.embeddedMirrorModeEnabled()
+          && (KDEConnect.scrcpyRunning || KDEConnect.scrcpyLaunching)
+          && (!root.mirrorSessionMatchesMainDevice()
+              || !root.adbSerialMatchesSelectedDevice(KDEConnect.scrcpyActiveSerial))) {
+        Logger.w("KDEConnect", "ADB transport no longer matches selected KDE Connect device, stopping embedded feed session");
+        KDEConnect.stopScrcpySession();
+      }
+
       if (root.embeddedMirrorModeEnabled() && KDEConnect.scrcpyRunning) {
         root.scheduleTouchMappingRefresh();
       }
@@ -303,8 +326,15 @@ Item {
       if (root.visible && root.panelOpenUnlockPending && KDEConnect.scrcpyRunning)
         root.refreshPanelOpenUnlockState();
 
+      if (root.silentWirelessAdbAutoConnectRefreshPending
+          && !KDEConnect.wirelessAdbBusy) {
+        root.clearSilentWirelessAdbAutoConnectState();
+      }
+
       if (!KDEConnect.scrcpyRunning && !KDEConnect.scrcpyLaunching)
         root.scheduleEmbeddedMirrorAutoStart();
+
+      root.scheduleSilentWirelessAdbAutoConnect();
     }
 
     function onDevicesChanged() {
@@ -313,13 +343,35 @@ Item {
         root.updateCachedTelemetryForDevice(devices[i]);
 
       root.scheduleEmbeddedMirrorAutoStart();
+      root.scheduleSilentWirelessAdbAutoConnect();
     }
 
     function onMainDeviceChanged() {
-      if (KDEConnect.mainDevice)
+      if (KDEConnect.mainDevice) {
         root.updateCachedTelemetryForDevice(KDEConnect.mainDevice);
 
+        const mainDeviceId = String(KDEConnect.mainDevice.id || "").trim();
+        if (pluginApi
+            && Boolean(KDEConnect.mainDevice.reachable)
+            && mainDeviceId !== ""
+            && String(pluginApi.pluginSettings.mainDeviceId || "").trim() !== mainDeviceId) {
+          pluginApi.pluginSettings.mainDeviceId = mainDeviceId;
+          pluginApi.saveSettings();
+        }
+      }
+
+      if (root.embeddedMirrorModeEnabled()
+          && (KDEConnect.scrcpyRunning || KDEConnect.scrcpyLaunching)
+          && !root.mirrorSessionMatchesMainDevice()) {
+        Logger.i("KDEConnect", "Selected KDE Connect device changed, stopping embedded feed session");
+        KDEConnect.stopScrcpySession();
+      }
+
+      if (wirelessAdbPopup.opened)
+        root.loadWirelessAdbProfileForSelectedDevice(true);
+
       root.scheduleEmbeddedMirrorAutoStart();
+      root.scheduleSilentWirelessAdbAutoConnect();
     }
 
     function onScrcpyLaunchErrorChanged() {
@@ -347,18 +399,29 @@ Item {
     }
 
     function onWirelessAdbFinished(success, message) {
+      const silentAutoConnect = root.silentWirelessAdbAutoConnectPending;
+      const silentAutoConnectStillSelected = !silentAutoConnect
+        || root.silentWirelessAdbAutoConnectKey === root.selectedWirelessAdbAutoConnectKey();
       if (success) {
-        const usedQrFlow = root.applyWirelessAdbQrSuccess(message);
-        root.wirelessAdbSessionPreferred = true;
+        const usedQrFlow = silentAutoConnectStillSelected ? root.applyWirelessAdbQrSuccess(message) : false;
+        const usedAutoConnectFlow = silentAutoConnectStillSelected ? root.applyWirelessAdbAutoConnectSuccess(message) : false;
+        if (silentAutoConnectStillSelected)
+          root.wirelessAdbSessionPreferred = true;
         KDEConnect.refreshAdbDevices();
         const body = usedQrFlow
           ? root.trSafe("panel.wireless-adb.qr-success-description", "Wireless ADB paired and connected from the QR code.")
-          : (message && message !== "ok"
-              ? message
-              : root.trSafe("panel.wireless-adb.success-description", "ADB over TCP/IP enabled"));
-        root.wirelessAdbStatusMessage = body;
-        KDEConnect.showNoticeWithHistory(root.trSafe("panel.wireless-adb.success-title", "Wireless ADB"), body, "wifi");
+          : usedAutoConnectFlow
+            ? root.trSafe("panel.wireless-adb.auto-connect-success-description", "Wireless ADB connected using the detected current port.")
+            : (message && message !== "ok"
+                ? message
+                : root.trSafe("panel.wireless-adb.success-description", "ADB over TCP/IP enabled"));
+        if (!silentAutoConnect) {
+          root.wirelessAdbStatusMessage = body;
+          KDEConnect.showNoticeWithHistory(root.trSafe("panel.wireless-adb.success-title", "Wireless ADB"), body, "wifi");
+        }
         root.scheduleTouchMappingRefresh();
+        if (silentAutoConnectStillSelected && wirelessAdbPopup.opened)
+          wirelessAdbPopup.close();
       } else {
         const body = message === "missing_command"
           ? root.trSafe("panel.wireless-adb.missing-command-description", "Wireless ADB could not start the built-in adb tcpip helper.")
@@ -366,11 +429,24 @@ Item {
             ? root.trSafe("panel.wireless-adb.missing-pair-parameters-description", "Enter the phone IP, pairing port, and pairing code")
             : message === "missing_connect_parameters"
               ? root.trSafe("panel.wireless-adb.missing-connect-parameters-description", "Enter the phone IP and connect port")
+              : message === "missing_connect_host"
+                ? root.trSafe("panel.wireless-adb.missing-connect-host-description", "Select a reachable KDE Connect phone first so the plugin knows which host to scan.")
               : message === "missing_qr_parameters"
                 ? root.trSafe("panel.wireless-adb.missing-qr-parameters-description", "Generate a fresh Wireless ADB QR code and try again.")
               : message;
-        root.wirelessAdbStatusMessage = body;
-        KDEConnect.showWarningWithHistory(root.trSafe("panel.wireless-adb.error-title", "Wireless ADB"), body, 5000);
+        if (!silentAutoConnect || wirelessAdbPopup.opened) {
+          root.wirelessAdbStatusMessage = body;
+          KDEConnect.showWarningWithHistory(root.trSafe("panel.wireless-adb.error-title", "Wireless ADB"), body, 5000);
+        }
+      }
+
+      if (silentAutoConnect) {
+        if (success && silentAutoConnectStillSelected) {
+          root.silentWirelessAdbAutoConnectRefreshPending = true;
+          root.scheduleEmbeddedMirrorAutoStart();
+        } else {
+          root.clearSilentWirelessAdbAutoConnectState();
+        }
       }
     }
 
@@ -423,6 +499,7 @@ Item {
     root.restoreKeepScreenOnState();
     KDEConnect.reduceBackgroundRefresh = false;
     embeddedMirrorAutoStartTimer.stop();
+    silentWirelessAdbAutoConnectTimer.stop();
     embeddedMirrorWarmStopTimer.stop();
     panelOpenUnlockTimer.stop();
     root.clearPanelOpenUnlockState();
@@ -448,6 +525,7 @@ Item {
       if (KDEConnect.scrcpyRunning)
         embeddedMirrorFormatLockTimer.restart();
       root.scheduleEmbeddedMirrorAutoStart();
+      root.scheduleSilentWirelessAdbAutoConnect();
     }
     if (!visible) {
       root.restoreDimScreenState();
@@ -455,6 +533,7 @@ Item {
       root.panelVisibleSinceMs = 0;
       root.panelStatusGraceElapsed = true;
       embeddedMirrorAutoStartTimer.stop();
+      silentWirelessAdbAutoConnectTimer.stop();
       embeddedMirrorFormatLockTimer.stop();
       panelStatusGraceTimer.stop();
       panelOpenUnlockTimer.stop();
@@ -478,6 +557,183 @@ Item {
 
     return Boolean(KDEConnect.mainDevice.pairRequested)
       || String(KDEConnect.mainDevice.verificationKey || "").trim() !== "";
+  }
+
+  function deviceIsSelected(device) {
+    return String(device?.id || "").trim() !== ""
+      && String(device?.id || "").trim() === String(KDEConnect.mainDevice?.id || "").trim();
+  }
+
+  function deviceStatusTitle(device) {
+    if (device === null || device === undefined)
+      return root.trSafe("panel.device-status.unknown", "Unknown");
+
+    if (Boolean(device.paired) && Boolean(device.reachable))
+      return root.trSafe("panel.device-status.ready", "Paired and reachable");
+
+    if (Boolean(device.pairRequested))
+      return root.trSafe("panel.device-status.pair-requested", "Pairing requested");
+
+    if (Boolean(device.paired))
+      return root.trSafe("panel.device-status.unreachable", "Paired, not reachable");
+
+    return root.trSafe("panel.device-status.not-paired", "Not paired");
+  }
+
+  function deviceStatusDetail(device) {
+    if (root.deviceIsSelected(device))
+      return root.trSafe("panel.device-status.selected", "Panel controls target this phone");
+
+    if (Boolean(device?.paired) && Boolean(device?.reachable))
+      return root.trSafe("panel.device-status.select-ready", "Switch panel controls to this phone");
+
+    if (Boolean(device?.paired))
+      return root.trSafe("panel.device-status.open-phone", "Open KDE Connect on the phone or keep both devices on the same network");
+
+    return root.trSafe("panel.device-status.pair-first", "Pair this device before mirror and file actions are available");
+  }
+
+  function deviceStatusIcon(device) {
+    if (Boolean(device?.paired) && Boolean(device?.reachable))
+      return "circle-check";
+
+    if (Boolean(device?.pairRequested))
+      return "key";
+
+    if (Boolean(device?.paired))
+      return "wifi-off";
+
+    return "device-mobile-off";
+  }
+
+  function diagnosticSeverityColor(severity) {
+    const value = String(severity || "").trim();
+    if (value === "ok")
+      return Color.mPrimary;
+    if (value === "waiting")
+      return Color.mTertiary;
+    if (value === "error")
+      return Color.mError;
+    return root.shellSecondaryTextColor;
+  }
+
+  function setupDiagnosticEntries() {
+    const entries = [];
+    const device = KDEConnect.mainDevice;
+    const deviceName = String(device?.name || root.trSafe("panel.setup-required.phone-name", "Android Phone")).trim();
+    const kdeReady = device !== null && Boolean(device.paired) && Boolean(device.reachable);
+    const adbIssueTitle = root.adbSetupIssueTitle();
+    const adbIssueSubtitle = root.adbSetupIssueSubtitle();
+
+    if (device === null) {
+      entries.push({
+        icon: "device-mobile-search",
+        title: root.trSafe("panel.diagnostics.kde-discovery-title", "KDE Connect discovery"),
+        body: root.trSafe("panel.setup-required.step-1-discovery", "Open KDE Connect on the phone and keep it on the same network so the desktop can discover it."),
+        severity: "waiting"
+      });
+    } else if (!Boolean(device.paired)) {
+      entries.push({
+        icon: "key",
+        title: root.trSafe("panel.diagnostics.kde-pair-title", "KDE Connect pairing"),
+        body: Boolean(device.pairRequested)
+          ? root.trSafe("panel.pair-requested", "Confirm the pairing request on the phone. The mirror and device actions will come back automatically after approval.")
+          : root.trSafe("panel.pair-description", "This device is temporarily reported as unpaired. Retry pairing here if KDE Connect did not recover on its own after reconnecting."),
+        severity: Boolean(device.pairRequested) ? "waiting" : "error"
+      });
+    } else if (!Boolean(device.reachable)) {
+      entries.push({
+        icon: "wifi-off",
+        title: root.trSafe("panel.diagnostics.kde-reachable-title", "KDE Connect reachability"),
+        body: deviceName + " " + root.trSafe("panel.diagnostics.kde-reachable-body", "is paired but unreachable. Select another reachable device or keep the phone awake on the same network."),
+        severity: "error"
+      });
+    } else {
+      entries.push({
+        icon: "circle-check",
+        title: root.trSafe("panel.diagnostics.kde-ready-title", "KDE Connect ready"),
+        body: deviceName + " " + root.trSafe("panel.diagnostics.kde-ready-body", "is paired and reachable."),
+        severity: "ok"
+      });
+    }
+
+    if (!kdeReady) {
+      entries.push({
+        icon: "device-mobile",
+        title: root.trSafe("panel.diagnostics.adb-title", "ADB input and mirroring"),
+        body: root.trSafe("panel.diagnostics.adb-waiting-body", "Waiting for KDE Connect reachability before checking ADB controls."),
+        severity: "waiting"
+      });
+    } else if (root.silentWirelessAdbAutoConnectSuppressed()) {
+      entries.push({
+        icon: "wifi",
+        title: root.trSafe("panel.diagnostics.adb-title", "ADB input and mirroring"),
+        body: root.trSafe("panel.wireless-adb.auto-connect-running-description", "Scanning for the selected phone's current Wireless ADB port..."),
+        severity: "waiting"
+      });
+    } else if ((adbIssueTitle || "").trim() !== "") {
+      entries.push({
+        icon: "device-mobile-off",
+        title: adbIssueTitle,
+        body: adbIssueSubtitle,
+        severity: "error"
+      });
+    } else {
+      entries.push({
+        icon: "circle-check",
+        title: root.trSafe("panel.diagnostics.adb-ready-title", "ADB ready"),
+        body: root.trSafe("panel.diagnostics.adb-ready-body", "An authorized ADB transport is available for the selected phone."),
+        severity: "ok"
+      });
+    }
+
+    if (!root.embeddedVideoDeviceCheckKnown) {
+      entries.push({
+        icon: "video",
+        title: root.trSafe("panel.diagnostics.v4l2-checking-title", "V4L2 loopback"),
+        body: root.trSafe("panel.embedded-mirror.required-device-checking", "Checking required V4L2 device: ") + root.embeddedVideoDevice,
+        severity: "waiting"
+      });
+    } else if (root.embeddedVideoDeviceAccessible) {
+      entries.push({
+        icon: "circle-check",
+        title: root.trSafe("panel.diagnostics.v4l2-ready-title", "V4L2 loopback ready"),
+        body: root.embeddedVideoDevice + " " + root.trSafe("panel.diagnostics.v4l2-ready-body", "is present and writable for the embedded video feed."),
+        severity: "ok"
+      });
+    } else {
+      entries.push({
+        icon: "video",
+        title: root.trSafe("panel.diagnostics.v4l2-missing-title", "V4L2 loopback unavailable"),
+        body: root.embeddedVideoDevice + " " + root.trSafe("panel.diagnostics.v4l2-missing-body", "is missing or not writable. Copy the loopback setup command below if you want the embedded feed."),
+        severity: "error"
+      });
+    }
+
+    if ((root.embeddedMirrorCommand || "").trim() === "") {
+      entries.push({
+        icon: "exclamation-circle",
+        title: root.trSafe("panel.scrcpy.not-configured-title", "scrcpy Not Configured"),
+        body: root.trSafe("panel.scrcpy.not-configured-description", "Set a scrcpy command in the plugin settings"),
+        severity: "error"
+      });
+    } else if (String(KDEConnect.scrcpyLaunchError || "").trim() !== "") {
+      entries.push({
+        icon: "exclamation-circle",
+        title: root.trSafe("panel.embedded-mirror.error-title", "Mirror Error"),
+        body: String(KDEConnect.scrcpyLaunchError || "").trim(),
+        severity: "error"
+      });
+    } else {
+      entries.push({
+        icon: "circle-check",
+        title: root.trSafe("panel.diagnostics.scrcpy-ready-title", "scrcpy command ready"),
+        body: root.trSafe("panel.diagnostics.scrcpy-ready-body", "The embedded mirror command is configured and will launch after the required transports are ready."),
+        severity: "ok"
+      });
+    }
+
+    return entries;
   }
 
   function handlePhoneClick(preview) {
@@ -559,6 +815,9 @@ Item {
       );
     }
 
+    if (root.silentWirelessAdbAutoConnectSuppressed())
+      return "2. " + root.trSafe("panel.wireless-adb.auto-connect-running-description", "Scanning for the selected phone's current Wireless ADB port...");
+
     const adbIssueSubtitle = root.adbSetupIssueSubtitle();
     if ((adbIssueSubtitle || "").trim() !== "")
       return "2. " + adbIssueSubtitle;
@@ -634,6 +893,99 @@ Item {
     }
 
     embeddedMirrorAutoStartTimer.restart();
+  }
+
+  function selectedWirelessAdbAutoConnectKey() {
+    const deviceId = selectedDeviceId();
+    const host = selectedDevicePrimaryHost();
+    if (deviceId === "" || host === "")
+      return "";
+
+    return deviceId + "|" + host;
+  }
+
+  function silentWirelessAdbAutoConnectInFlight() {
+    return silentWirelessAdbAutoConnectPending
+      || (KDEConnect.wirelessAdbBusy && silentWirelessAdbAutoConnectKey !== "");
+  }
+
+  function clearSilentWirelessAdbAutoConnectState() {
+    silentWirelessAdbAutoConnectPending = false;
+    silentWirelessAdbAutoConnectRefreshPending = false;
+    silentWirelessAdbAutoConnectKey = "";
+  }
+
+  function selectedDeviceMissingAdb() {
+    return root.mainDeviceSetupComplete()
+      && KDEConnect.adbDevicesExitCode === 0
+      && adbSerialsInStateForSelectedDevice("unauthorized").length === 0
+      && adbSerialsInStateForSelectedDevice("offline").length === 0
+      && resolvedAdbSerial() === "";
+  }
+
+  function silentWirelessAdbAutoConnectSuppressed() {
+    const key = selectedWirelessAdbAutoConnectKey();
+    const activeSilentMatchesSelection = silentWirelessAdbAutoConnectKey === ""
+      || silentWirelessAdbAutoConnectKey === key;
+
+    return selectedDeviceMissingAdb()
+      && key !== ""
+      && (shouldSilentWirelessAdbAutoConnect()
+          || (activeSilentMatchesSelection
+              && (silentWirelessAdbAutoConnectTimer.running
+                  || silentWirelessAdbAutoConnectInFlight())));
+  }
+
+  function shouldSilentWirelessAdbAutoConnect() {
+    const key = selectedWirelessAdbAutoConnectKey();
+    if (key === "")
+      return false;
+
+    if (!root.visible
+        || !embeddedMirrorModeEnabled()
+        || !root.mainDeviceSetupComplete()
+        || KDEConnect.adbDevicesExitCode !== 0
+        || KDEConnect.scrcpyRunning
+        || KDEConnect.scrcpyLaunching
+        || KDEConnect.wirelessAdbBusy
+        || wirelessAdbPopup.opened
+        || resolvedAdbSerial() !== "")
+      return false;
+
+    return !Boolean((silentWirelessAdbAutoConnectAttempts || ({}))[key]);
+  }
+
+  function scheduleSilentWirelessAdbAutoConnect() {
+    if (!shouldSilentWirelessAdbAutoConnect())
+      return;
+
+    silentWirelessAdbAutoConnectTimer.restart();
+  }
+
+  function attemptSilentWirelessAdbAutoConnect() {
+    if (!shouldSilentWirelessAdbAutoConnect())
+      return;
+
+    const key = selectedWirelessAdbAutoConnectKey();
+    const host = selectedDevicePrimaryHost();
+    const attempts = Object.assign({}, silentWirelessAdbAutoConnectAttempts || ({}));
+    attempts[key] = Date.now();
+    silentWirelessAdbAutoConnectAttempts = attempts;
+    silentWirelessAdbAutoConnectKey = key;
+    silentWirelessAdbAutoConnectPending = true;
+    wirelessAdbSessionPreferred = true;
+    wirelessAdbPairHost = host;
+    wirelessAdbConnectHost = host;
+    wirelessAdbConnectPort = "";
+    saveWirelessAdbDeviceProfile({ host: host });
+    Logger.i("KDEConnect", "Trying silent Wireless ADB auto-detect for selected device:", host);
+    const started = KDEConnect.autoConnectWirelessAdb(host, 12);
+    if (!started) {
+      const resetAttempts = Object.assign({}, silentWirelessAdbAutoConnectAttempts || ({}));
+      delete resetAttempts[key];
+      silentWirelessAdbAutoConnectAttempts = resetAttempts;
+      clearSilentWirelessAdbAutoConnectState();
+    }
   }
 
   function attemptEmbeddedMirrorAutoStart() {
@@ -796,33 +1148,129 @@ Item {
       .map(entry => entry.serial);
   }
 
-  function connectedWirelessAdbSerial() {
-    const configuredSerial = configuredWirelessAdbSerial();
-    if (configuredSerial !== "" && KDEConnect.adbDeviceSerialConnected(configuredSerial))
-      return configuredSerial;
-
-    return KDEConnect.adbConnectedSerialForHost((wirelessAdbConnectHost || "").trim());
+  function normalizedStringArray(value) {
+    const source = Array.isArray(value) ? value : [value];
+    const result = [];
+    for (let i = 0; i < source.length; ++i) {
+      const text = String(source[i] || "").trim();
+      if (text !== "" && result.indexOf(text) === -1)
+        result.push(text);
+    }
+    return result;
   }
 
-  function adbSetupIssueTitle() {
-    if (KDEConnect.scrcpyRunning
-        || KDEConnect.scrcpyLaunching
-        || !root.mainDeviceSetupComplete())
+  function adbSerialHost(serial) {
+    const trimmedSerial = String(serial || "").trim();
+    if (trimmedSerial === "" || KDEConnect.isUsbSelectionSerial(trimmedSerial))
+      return "";
+
+    if (trimmedSerial.charAt(0) === "[") {
+      const closeBracket = trimmedSerial.indexOf("]");
+      if (closeBracket > 1 && trimmedSerial.charAt(closeBracket + 1) === ":")
+        return trimmedSerial.slice(1, closeBracket);
+    }
+
+    const portSeparator = trimmedSerial.lastIndexOf(":");
+    if (portSeparator <= 0)
+      return "";
+
+    return trimmedSerial.slice(0, portSeparator);
+  }
+
+  function selectedDeviceHosts() {
+    return normalizedStringArray(KDEConnect.mainDevice?.reachableAddresses || []);
+  }
+
+  function selectedDevicePrimaryHost() {
+    const hosts = selectedDeviceHosts();
+    return hosts.length > 0 ? hosts[0] : "";
+  }
+
+  function hostBelongsToSelectedDevice(host) {
+    const trimmedHost = String(host || "").trim();
+    if (trimmedHost === "")
+      return false;
+
+    const hosts = selectedDeviceHosts();
+    return hosts.length === 0 || hosts.indexOf(trimmedHost) !== -1;
+  }
+
+  function selectedDeviceUsbAdbAllowed() {
+    if (!KDEConnect.adbHasUsbTransport)
+      return false;
+
+    const selectedHosts = selectedDeviceHosts();
+    const reachableDevices = (KDEConnect.devices || [])
+      .filter(device => Boolean(device?.paired) && Boolean(device?.reachable));
+
+    return selectedHosts.length === 0 || reachableDevices.length <= 1;
+  }
+
+  function adbSerialMatchesSelectedDevice(serial) {
+    const trimmedSerial = String(serial || "").trim();
+    if (trimmedSerial === "")
+      return false;
+
+    if (KDEConnect.isUsbSelectionSerial(trimmedSerial) || adbSerialHost(trimmedSerial) === "")
+      return selectedDeviceUsbAdbAllowed();
+
+    return hostBelongsToSelectedDevice(adbSerialHost(trimmedSerial));
+  }
+
+  function adbSerialsInStateForSelectedDevice(targetState) {
+    return adbSerialsInState(targetState).filter(serial => adbSerialMatchesSelectedDevice(serial));
+  }
+
+  function selectedDeviceWirelessAdbSerial() {
+    const hosts = selectedDeviceHosts();
+    for (let i = 0; i < hosts.length; ++i) {
+      const serial = KDEConnect.adbConnectedSerialForHost(hosts[i]);
+      if (serial !== "")
+        return serial;
+    }
+
+    const configuredSerial = configuredWirelessAdbSerial();
+    if (configuredSerial !== ""
+        && KDEConnect.adbDeviceSerialConnected(configuredSerial)
+        && adbSerialMatchesSelectedDevice(configuredSerial))
+      return configuredSerial;
+
+    return "";
+  }
+
+  function connectedWirelessAdbSerial() {
+    return selectedDeviceWirelessAdbSerial();
+  }
+
+  function adbBlockingIssueTitle() {
+    if (!root.mainDeviceSetupComplete())
+      return "";
+
+    if ((KDEConnect.scrcpyRunning || KDEConnect.scrcpyLaunching)
+        && root.mirrorSessionMatchesMainDevice()
+        && root.adbSerialMatchesSelectedDevice(KDEConnect.scrcpyActiveSerial))
       return "";
 
     if (KDEConnect.adbDevicesExitCode !== 0)
       return trSafe("panel.scrcpy.adb-missing-title", "adb Not Available");
 
-    if (adbSerialsInState("unauthorized").length > 0)
+    if (adbSerialsInStateForSelectedDevice("unauthorized").length > 0)
       return trSafe("panel.scrcpy.adb-authorize-title", "Authorize USB Debugging");
 
-    if (adbSerialsInState("offline").length > 0)
+    if (adbSerialsInStateForSelectedDevice("offline").length > 0)
       return trSafe("panel.scrcpy.adb-offline-title", "Reconnect ADB");
 
-    if (!KDEConnect.adbHasUsbTransport && connectedWirelessAdbSerial() === "")
+    if (resolvedAdbSerial() === "")
       return trSafe("panel.scrcpy.adb-setup-title", "Connect ADB First");
 
     return "";
+  }
+
+  function adbSetupIssueTitle() {
+    if (root.silentWirelessAdbAutoConnectSuppressed())
+      return "";
+
+    return adbBlockingIssueTitle();
   }
 
   function adbSetupIssueSubtitle() {
@@ -837,20 +1285,20 @@ Item {
         : trSafe("panel.scrcpy.adb-missing-description", "Install Android platform-tools so the plugin can use adb for mirroring and input.");
     }
 
-    if (adbSerialsInState("unauthorized").length > 0)
+    if (adbSerialsInStateForSelectedDevice("unauthorized").length > 0)
       return trSafe("panel.scrcpy.adb-authorize-description", "Enable Developer options and USB debugging on the phone, connect it over USB, unlock it, and accept the USB debugging prompt for this computer.");
 
-    if (adbSerialsInState("offline").length > 0)
+    if (adbSerialsInStateForSelectedDevice("offline").length > 0)
       return trSafe("panel.scrcpy.adb-offline-description", "adb can see the phone, but it is not ready yet. Reconnect the cable, unlock the phone, and accept the USB debugging prompt again.");
 
-    if (!KDEConnect.adbHasUsbTransport && connectedWirelessAdbSerial() === "")
-      return trSafe("panel.scrcpy.adb-setup-wireless-description", "Enable Developer options and USB debugging on the phone, connect it over USB once and accept the debugging prompt, or pair Wireless ADB from the Wi-Fi button.");
+    if (resolvedAdbSerial() === "")
+      return trSafe("panel.scrcpy.adb-setup-wireless-description", "Connect ADB for the selected phone. The panel will not reuse another phone's ADB session.");
 
     return "";
   }
 
   function scrcpyLaunchPrerequisitesReady() {
-    if ((adbSetupIssueTitle() || "").trim() !== "")
+    if ((adbBlockingIssueTitle() || "").trim() !== "")
       return false;
 
     if (embeddedMirrorModeEnabled()) {
@@ -1000,6 +1448,119 @@ Item {
       + randomTokenFromAlphabet(8, "abcdefghijklmnopqrstuvwxyz0123456789");
   }
 
+  function initialWirelessAdbDeviceProfiles() {
+    const rawValue = cfg.wirelessAdbDevices ?? defaults.wirelessAdbDevices ?? ({});
+    const profiles = ({});
+    if (!rawValue || typeof rawValue !== "object" || Array.isArray(rawValue))
+      return profiles;
+
+    for (const deviceId in rawValue) {
+      if (!Object.prototype.hasOwnProperty.call(rawValue, deviceId))
+        continue;
+
+      const normalizedDeviceId = String(deviceId || "").trim();
+      if (normalizedDeviceId === "")
+        continue;
+
+      const profile = normalizedWirelessAdbProfile(rawValue[deviceId]);
+      if (profile !== null)
+        profiles[normalizedDeviceId] = profile;
+    }
+
+    return profiles;
+  }
+
+  function normalizedWirelessAdbProfile(rawProfile) {
+    if (!rawProfile || typeof rawProfile !== "object" || Array.isArray(rawProfile))
+      return null;
+
+    const profile = ({});
+    const host = String(rawProfile.host || "").trim();
+    const lastPairPort = String(rawProfile.lastPairPort || "").trim();
+    const lastConnectPort = String(rawProfile.lastConnectPort || "").trim();
+    const lastSerial = String(rawProfile.lastSerial || "").trim();
+    const updatedAt = Number(rawProfile.updatedAt || 0);
+
+    if (host !== "")
+      profile.host = host;
+    if (lastPairPort !== "")
+      profile.lastPairPort = lastPairPort;
+    if (lastConnectPort !== "")
+      profile.lastConnectPort = lastConnectPort;
+    if (lastSerial !== "")
+      profile.lastSerial = lastSerial;
+    if (isFinite(updatedAt) && updatedAt > 0)
+      profile.updatedAt = updatedAt;
+
+    return Object.keys(profile).length > 0 ? profile : null;
+  }
+
+  function selectedDeviceId() {
+    return String(KDEConnect.mainDevice?.id || "").trim();
+  }
+
+  function selectedWirelessAdbProfile() {
+    const deviceId = selectedDeviceId();
+    if (deviceId === "")
+      return ({});
+
+    const profile = (wirelessAdbDeviceProfiles || ({}))[deviceId];
+    return profile && typeof profile === "object" && !Array.isArray(profile)
+      ? profile
+      : ({});
+  }
+
+  function saveWirelessAdbDeviceProfile(patch) {
+    if (!pluginApi)
+      return;
+
+    const deviceId = selectedDeviceId();
+    if (deviceId === "")
+      return;
+
+    const cleanPatch = normalizedWirelessAdbProfile(patch);
+    if (cleanPatch === null)
+      return;
+
+    const profiles = Object.assign({}, wirelessAdbDeviceProfiles || ({}));
+    const currentProfile = profiles[deviceId] && typeof profiles[deviceId] === "object"
+      ? profiles[deviceId]
+      : ({});
+    profiles[deviceId] = Object.assign({}, currentProfile, cleanPatch, {
+      updatedAt: Date.now()
+    });
+    wirelessAdbDeviceProfiles = profiles;
+    pluginApi.pluginSettings.wirelessAdbDevices = profiles;
+  }
+
+  function currentWirelessAdbProfilePatch(includePorts) {
+    const host = (wirelessAdbConnectHost || "").trim() !== ""
+      ? (wirelessAdbConnectHost || "").trim()
+      : (wirelessAdbPairHost || "").trim();
+    const patch = ({});
+
+    if (host !== "")
+      patch.host = host;
+
+    if (includePorts) {
+      const pairPort = (wirelessAdbPairPort || "").trim();
+      const connectPort = (wirelessAdbConnectPort || "").trim();
+      if (pairPort !== "")
+        patch.lastPairPort = pairPort;
+      if (connectPort !== "") {
+        patch.lastConnectPort = connectPort;
+        if (host !== "")
+          patch.lastSerial = host + ":" + connectPort;
+      }
+    }
+
+    const connectedSerial = KDEConnect.adbConnectedSerialForHost(host);
+    if (connectedSerial !== "")
+      patch.lastSerial = connectedSerial;
+
+    return patch;
+  }
+
   function escapeWirelessAdbQrValue(value) {
     return String(value || "").replace(/([\\;,:])/g, "\\$1");
   }
@@ -1026,6 +1587,7 @@ Item {
     if (!pluginApi)
       return;
 
+    saveWirelessAdbDeviceProfile(currentWirelessAdbProfilePatch(true));
     pluginApi.pluginSettings.wirelessAdbPairHost = (wirelessAdbPairHost || "").trim();
     pluginApi.pluginSettings.wirelessAdbPairPort = (wirelessAdbPairPort || "").trim();
     pluginApi.pluginSettings.wirelessAdbConnectHost = (wirelessAdbConnectHost || "").trim();
@@ -1033,7 +1595,55 @@ Item {
     pluginApi.saveSettings();
   }
 
+  function loadWirelessAdbProfileForSelectedDevice(clearVolatilePorts) {
+    const deviceId = selectedDeviceId();
+    const selectedHost = selectedDevicePrimaryHost();
+    const profile = selectedWirelessAdbProfile();
+    const profileHost = String(profile.host || "").trim();
+    const legacyHost = (wirelessAdbConnectHost || "").trim() !== ""
+      ? (wirelessAdbConnectHost || "").trim()
+      : (wirelessAdbPairHost || "").trim();
+    const host = selectedHost !== ""
+      ? selectedHost
+      : (profileHost !== "" ? profileHost : (deviceId === "" ? legacyHost : ""));
+
+    if (host !== "") {
+      wirelessAdbPairHost = host;
+      wirelessAdbConnectHost = host;
+    } else if (deviceId !== "") {
+      wirelessAdbPairHost = "";
+      wirelessAdbConnectHost = "";
+    }
+
+    if (clearVolatilePorts) {
+      wirelessAdbPairPort = "";
+      wirelessAdbConnectPort = "";
+    }
+
+    if (selectedHost !== "")
+      saveWirelessAdbDeviceProfile({ host: selectedHost });
+  }
+
+  function wirelessAdbDeviceContextText() {
+    const deviceName = String(KDEConnect.mainDevice?.name || "").trim();
+    const host = (wirelessAdbConnectHost || "").trim() !== ""
+      ? (wirelessAdbConnectHost || "").trim()
+      : (wirelessAdbPairHost || "").trim();
+
+    if (deviceName === "" && host === "")
+      return "";
+
+    const prefix = deviceName !== ""
+      ? deviceName
+      : root.trSafe("panel.setup-required.phone-name", "Android Phone");
+    const hostText = host !== "" ? (" - " + host) : "";
+    return prefix + hostText + ". "
+      + root.trSafe("panel.wireless-adb.random-port-note", "Wireless debugging ports can change each time. Enter the current port shown on the phone.");
+  }
+
   function openWirelessAdbDialog() {
+    loadWirelessAdbProfileForSelectedDevice(true);
+
     if ((wirelessAdbConnectHost || "").trim() === "" && (wirelessAdbPairHost || "").trim() !== "")
       wirelessAdbConnectHost = (wirelessAdbPairHost || "").trim();
     if ((wirelessAdbPairHost || "").trim() === "" && (wirelessAdbConnectHost || "").trim() !== "")
@@ -1083,6 +1693,29 @@ Item {
     KDEConnect.connectWirelessAdb(host, port);
   }
 
+  function startWirelessAdbAutoConnect() {
+    const host = (wirelessAdbConnectHost || "").trim() !== ""
+      ? (wirelessAdbConnectHost || "").trim()
+      : ((wirelessAdbPairHost || "").trim() !== ""
+          ? (wirelessAdbPairHost || "").trim()
+          : selectedDevicePrimaryHost());
+
+    if (host === "") {
+      const body = trSafe("panel.wireless-adb.missing-connect-host-description", "Select a reachable KDE Connect phone first so the plugin knows which host to scan.");
+      wirelessAdbStatusMessage = body;
+      KDEConnect.showWarningWithHistory(trSafe("panel.wireless-adb.error-title", "Wireless ADB"), body, 5000);
+      return;
+    }
+
+    wirelessAdbPairHost = host;
+    wirelessAdbConnectHost = host;
+    wirelessAdbConnectPort = "";
+    wirelessAdbStatusMessage = trSafe("panel.wireless-adb.auto-connect-running-description", "Scanning for the selected phone's current Wireless ADB port...");
+    wirelessAdbSessionPreferred = true;
+    persistWirelessAdbSettings();
+    KDEConnect.autoConnectWirelessAdb(host, 18);
+  }
+
   function beginWirelessAdbQrPairing() {
     if (KDEConnect.wirelessAdbBusy || wirelessAdbQrEncodeProc.running)
       return;
@@ -1110,6 +1743,18 @@ Item {
     return true;
   }
 
+  function applyWirelessAdbAutoConnectSuccess(message) {
+    const match = String(message || "").match(/^AUTO_CONNECT_OK\s+host=(\S+)\s+connect_port=(\d+)/);
+    if (!match)
+      return false;
+
+    wirelessAdbPairHost = match[1];
+    wirelessAdbConnectHost = match[1];
+    wirelessAdbConnectPort = match[2];
+    persistWirelessAdbSettings();
+    return true;
+  }
+
   function configuredWirelessAdbSerial() {
     const host = (wirelessAdbConnectHost || "").trim();
     const port = (wirelessAdbConnectPort || "").trim();
@@ -1119,33 +1764,47 @@ Item {
     return host + ":" + port;
   }
 
+  function mirrorSessionMatchesMainDevice() {
+    const sessionDeviceId = String(KDEConnect.scrcpyDeviceId || "").trim();
+    const mainDeviceId = String(KDEConnect.mainDevice?.id || "").trim();
+    return sessionDeviceId !== "" && mainDeviceId !== "" && sessionDeviceId === mainDeviceId;
+  }
+
   function currentMirrorAdbSerial() {
     const activeSerial = String(KDEConnect.scrcpyActiveSerial || "").trim();
-    if (KDEConnect.scrcpyRunning && activeSerial !== "")
+    if (KDEConnect.scrcpyRunning
+        && activeSerial !== ""
+        && mirrorSessionMatchesMainDevice()
+        && adbSerialMatchesSelectedDevice(activeSerial))
       return activeSerial;
 
     return resolvedAdbSerial();
   }
 
   function resolvedAdbSerial() {
-    const usbTransportAvailable = KDEConnect.adbHasUsbTransport;
-    if (usbTransportAvailable && !wirelessAdbSessionPreferred)
-      return KDEConnect.usbSelectionSentinel;
+    const selectedWirelessSerial = selectedDeviceWirelessAdbSerial();
+    if (selectedWirelessSerial !== "")
+      return selectedWirelessSerial;
 
-    const activeWirelessSerial = KDEConnect.adbConnectedSerialForHost((wirelessAdbConnectHost || "").trim());
-    if (activeWirelessSerial !== "")
-      return activeWirelessSerial;
+    if (KDEConnect.adbHasUsbTransport
+        && !wirelessAdbSessionPreferred
+        && selectedDeviceUsbAdbAllowed())
+      return KDEConnect.usbSelectionSentinel;
 
     const wirelessSerial = configuredWirelessAdbSerial();
     if (wirelessSerial !== "") {
-      if (wirelessAdbSessionPreferred)
+      if (wirelessAdbSessionPreferred
+          && KDEConnect.adbDeviceSerialConnected(wirelessSerial)
+          && adbSerialMatchesSelectedDevice(wirelessSerial))
         return wirelessSerial;
 
-      if (!usbTransportAvailable && KDEConnect.adbDeviceSerialConnected(wirelessSerial))
+      if (!KDEConnect.adbHasUsbTransport
+          && KDEConnect.adbDeviceSerialConnected(wirelessSerial)
+          && adbSerialMatchesSelectedDevice(wirelessSerial))
         return wirelessSerial;
     }
 
-    return KDEConnect.usbSelectionSentinel;
+    return "";
   }
 
   function syncBackgroundRefreshPolicy() {
@@ -1229,7 +1888,12 @@ Item {
     if (!embeddedMirrorModeEnabled() || KDEConnect.mainDevice === null)
       return;
 
+    if (!scrcpyLaunchPrerequisitesReady())
+      return;
+
     const serial = resolvedAdbSerial();
+    if (serial === "")
+      return;
 
     if (embeddedMirrorFeedConfigured() && !embeddedVideoDeviceCheckKnown && !embeddedVideoDeviceCheckProc.running) {
       refreshEmbeddedVideoDeviceAccess();
@@ -1258,6 +1922,18 @@ Item {
     }
   }
 
+  function ensureDetachedMirrorSession() {
+    if (!scrcpyLaunchPrerequisitesReady())
+      return;
+
+    const serial = resolvedAdbSerial();
+    if (serial === "")
+      return;
+
+    Logger.i("KDEConnect", "Launching detached scrcpy window");
+    KDEConnect.launchDetachedScrcpy(serial, detachedMirrorCommand);
+  }
+
   function embeddedMirrorViewActive(preview) {
     return KDEConnect.scrcpyRunning
       && Boolean(preview?.mirrorDisplayVisible);
@@ -1279,7 +1955,9 @@ Item {
 
   function embeddedMirrorInputActive() {
     return embeddedMirrorModeEnabled()
-      && KDEConnect.scrcpyRunning;
+      && KDEConnect.scrcpyRunning
+      && mirrorSessionMatchesMainDevice()
+      && currentMirrorAdbSerial() !== "";
   }
 
   function embeddedMirrorNavRowVisible() {
@@ -1292,6 +1970,9 @@ Item {
       return;
 
     const serial = currentMirrorAdbSerial();
+    if (serial === "")
+      return;
+
     const hasValidMapping = KDEConnect.adbScreenWidth > 0
       && KDEConnect.adbScreenHeight > 0
       && KDEConnect.adbScreenError === ""
@@ -1919,6 +2600,53 @@ Item {
     colorBorderHover: active ? root.shellButtonActiveBorderColor : root.shellButtonBorderHoverColor
   }
 
+  component PanelActionIconButtonAnimated: NIconButton {
+    id: panelActionIconButtonAnimated
+
+    property bool active: false
+    property bool animatePulse: false
+
+    baseSize: Style.baseWidgetSize * 0.8
+    colorBg: active ? root.shellButtonActiveBgColor : root.shellButtonBgColor
+    colorFg: active ? root.shellButtonActiveFgColor : root.shellButtonFgColor
+    colorBgHover: active ? root.shellButtonActiveBgColor : root.shellButtonBgHoverColor
+    colorFgHover: active ? root.shellButtonActiveFgColor : root.shellButtonFgHoverColor
+    colorBorder: active ? root.shellButtonActiveBorderColor : root.shellButtonBorderColor
+    colorBorderHover: active ? root.shellButtonActiveBorderColor : root.shellButtonBorderHoverColor
+
+    SequentialAnimation on scale {
+      loops: Animation.Infinite
+      running: animatePulse && !active
+      PauseAnimation { duration: 1000 }
+      NumberAnimation {
+        from: 0.92; to: 1.08
+        duration: 350
+        easing.type: Easing.InOutQuad
+      }
+      NumberAnimation {
+        from: 1.08; to: 0.92
+        duration: 350
+        easing.type: Easing.InOutQuad
+      }
+    }
+
+    SequentialAnimation on opacity {
+      loops: Animation.Infinite
+      running: animatePulse && !active
+      PauseAnimation { duration: 1000 }
+      NumberAnimation {
+        from: 0.75; to: 1.0
+        duration: 350
+        easing.type: Easing.InOutQuad
+      }
+      NumberAnimation {
+        from: 1.0; to: 0.75
+        duration: 350
+        easing.type: Easing.InOutQuad
+      }
+    }
+  }
+
   component UtilityActionCard: NBox {
     id: utilityCard
 
@@ -2177,15 +2905,30 @@ Item {
                           Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                           spacing: Style.marginXS
 
-                          PanelActionIconButton {
-                            readonly property bool multipleDevices: KDEConnect.devices.length > 1
-                            icon: "swipe"
+	                          PanelActionIconButton {
+	                            readonly property bool multipleDevices: KDEConnect.devices.length > 1
+	                            icon: "swipe"
                             tooltipText: multipleDevices ? pluginApi?.tr("panel.other-devices") : ""
                             onClicked: {
                               deviceSwitcherOpen = !deviceSwitcherOpen
                             }
                             enabled: KDEConnect.daemonAvailable && multipleDevices
-                            opacity: multipleDevices ? 1.0 : 0.0
+	                            opacity: multipleDevices ? 1.0 : 0.0
+	                          }
+
+	                          PanelActionIconButton {
+	                            icon: "info"
+	                            tooltipText: root.trSafe("panel.diagnostics.tooltip", "Open diagnostics")
+	                            onClicked: diagnosticsPopup.open()
+	                          }
+
+	                          PanelActionIconButton {
+	                            icon: "maximize"
+                            tooltipText: root.trSafe("panel.detached-mirror.tooltip", "Open in window")
+                            onClicked: {
+                              root.ensureDetachedMirrorSession();
+                              pluginApi?.closePanel(screen, root);
+                            }
                           }
 
                           PanelActionIconButton {
@@ -2205,8 +2948,9 @@ Item {
                             onClicked: root.toggleEmbeddedMirrorAudioMode()
                           }
 
-                          PanelActionIconButton {
+                          PanelActionIconButtonAnimated {
                             icon: "wifi"
+                            animatePulse: !KDEConnect.adbHasUsbTransport && root.connectedWirelessAdbSerial() === ""
                             tooltipText: KDEConnect.wirelessAdbBusy
                               ? root.trSafe("panel.wireless-adb.busy-tooltip", "Wireless ADB command is running")
                               : root.trSafe("panel.wireless-adb.tooltip", "Open Wireless ADB tools")
@@ -2275,6 +3019,7 @@ Item {
                           id: phonePreview
                           anchors.fill: parent
                           mirrorFeedEnabled: KDEConnect.scrcpyRunning
+                          showHomeIndicator: !KDEConnect.scrcpyRunning
                           scrcpyStartedAtMs: KDEConnect.scrcpyLaunchStartedAtMs
                           mirrorDeviceIdMatch: root.embeddedVideoDevice
                           mirrorDeviceDescriptionMatch: "scrcpy-panel"
@@ -2908,28 +3653,74 @@ Item {
                   }
                 }
 
-                NText {
-                  Layout.fillWidth: true
-                  text: root.setupRequiredPairingStepText()
-                  color: root.shellSecondaryTextColor
-                  horizontalAlignment: Text.AlignHCenter
-                  wrapMode: Text.WordWrap
+                Repeater {
+                  model: root.setupDiagnosticEntries()
+
+                  Rectangle {
+                    required property var modelData
+
+                    Layout.fillWidth: true
+                    color: root.shellNestedCardColor
+                    radius: Style.radiusM
+                    border.width: Style.borderS
+                    border.color: Qt.alpha(root.diagnosticSeverityColor(modelData.severity), 0.44)
+                    implicitHeight: diagnosticRow.implicitHeight + (Style.marginM * 1.15)
+
+                    RowLayout {
+                      id: diagnosticRow
+                      anchors.fill: parent
+                      anchors.margins: Style.marginM * 0.82
+                      spacing: Style.marginM
+
+                      Rectangle {
+                        width: 34 * Style.uiScaleRatio
+                        height: width
+                        radius: width / 2
+                        color: Qt.alpha(root.diagnosticSeverityColor(modelData.severity), 0.14)
+                        border.width: Style.borderS
+                        border.color: Qt.alpha(root.diagnosticSeverityColor(modelData.severity), 0.36)
+
+                        NIcon {
+                          anchors.centerIn: parent
+                          icon: modelData.icon
+                          pointSize: Style.fontSizeM
+                          color: root.diagnosticSeverityColor(modelData.severity)
+                        }
+                      }
+
+                      ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: Style.marginXXS
+
+                        NText {
+                          Layout.fillWidth: true
+                          text: modelData.title
+                          pointSize: Style.fontSizeS
+                          font.weight: Style.fontWeightBold
+                          color: root.shellPrimaryTextColor
+                          elide: Text.ElideRight
+                        }
+
+                        NText {
+                          Layout.fillWidth: true
+                          text: modelData.body
+                          pointSize: Style.fontSizeXS
+                          color: root.shellSecondaryTextColor
+                          wrapMode: Text.WordWrap
+                          maximumLineCount: 3
+                          elide: Text.ElideRight
+                        }
+                      }
+                    }
+                  }
                 }
 
-                NText {
-                  Layout.fillWidth: true
-                  text: root.setupRequiredAdbStepText()
-                  color: root.shellSecondaryTextColor
-                  horizontalAlignment: Text.AlignHCenter
-                  wrapMode: Text.WordWrap
-                }
-
-                NText {
-                  Layout.fillWidth: true
-                  text: root.setupRequiredLoopbackStepText()
-                  color: root.shellSecondaryTextColor
-                  horizontalAlignment: Text.AlignHCenter
-                  wrapMode: Text.WordWrap
+                NButton {
+                  Layout.alignment: Qt.AlignHCenter
+                  Layout.minimumWidth: 190 * Style.uiScaleRatio
+                  text: root.trSafe("panel.diagnostics.open-button", "Open Diagnostics")
+                  icon: "info"
+                  onClicked: diagnosticsPopup.open()
                 }
 
                 NButton {
@@ -3227,31 +4018,155 @@ Item {
             reserveScrollbarSpace: false
             gradientColor: Color.mSurface
 
-            ColumnLayout {
-              id: emptyState
-              anchors.fill: parent
-              anchors.margins: Style.marginM
-              spacing: Style.marginM
+	            ColumnLayout {
+	              id: emptyState
+	              anchors.fill: parent
+	              anchors.margins: Style.marginM
+	              spacing: Style.marginM
 
-              Repeater {
-                model: KDEConnect.devices
-                Layout.fillWidth: true
+	              RowLayout {
+	                Layout.fillWidth: true
+	                spacing: Style.marginM
 
-                NButton {
-                  required property var modelData
-                  text: modelData.name
-                  Layout.fillWidth: true
-                  backgroundColor: modelData.id === KDEConnect.mainDevice.id ? Color.mSecondary : Color.mPrimary
+	                NText {
+	                  Layout.fillWidth: true
+	                  text: root.trSafe("panel.device-switcher.title", "Connected Devices")
+	                  pointSize: Style.fontSizeL
+	                  font.weight: Style.fontWeightBold
+	                  color: root.shellPrimaryTextColor
+	                  elide: Text.ElideRight
+	                }
 
-                  onClicked: {
-                    KDEConnect.setMainDevice(modelData.id);
-                    deviceSwitcherOpen = false;
+	                NButton {
+	                  text: root.trSafe("panel.device-switcher.refresh", "Refresh")
+	                  icon: "refresh"
+	                  onClicked: KDEConnect.refreshDevices()
+	                }
+	              }
 
-                    pluginApi.pluginSettings.mainDeviceId = modelData.id;
-                    pluginApi.saveSettings();
-                  }
-                }
-              }
+	              Repeater {
+	                model: KDEConnect.devices
+
+	                Rectangle {
+	                  required property var modelData
+	                  readonly property bool selected: root.deviceIsSelected(modelData)
+
+	                  Layout.fillWidth: true
+	                  color: selected
+	                    ? Qt.alpha(root.shellPrimaryIconColor, 0.10)
+	                    : root.shellNestedCardColor
+	                  radius: Style.radiusM
+	                  border.width: Style.borderS
+	                  border.color: selected
+	                    ? Qt.alpha(root.shellPrimaryIconColor, 0.46)
+	                    : root.shellNestedCardBorderColor
+	                  implicitHeight: deviceSwitcherRow.implicitHeight + (Style.marginM * 1.12)
+
+	                  RowLayout {
+	                    id: deviceSwitcherRow
+	                    anchors.fill: parent
+	                    anchors.leftMargin: Style.marginM * 0.82
+	                    anchors.rightMargin: Style.marginM * 0.82
+	                    anchors.topMargin: Style.marginM * 0.82
+	                    anchors.bottomMargin: Style.marginM * 0.82
+	                    spacing: Style.marginM
+
+	                    Rectangle {
+	                      readonly property var brandBadge: root.deviceBrandBadge(modelData.name || "")
+	                      readonly property bool brandBadgeFrameless: brandBadge.source !== ""
+
+	                      width: 42 * Style.uiScaleRatio
+	                      height: width
+	                      radius: width / 2
+	                      color: brandBadgeFrameless ? "transparent" : root.shellIconChipColor
+	                      border.width: brandBadgeFrameless ? 0 : Style.borderS
+	                      border.color: brandBadgeFrameless ? "transparent" : root.shellIconChipBorderColor
+
+	                      Image {
+	                        visible: parent.brandBadge.source !== ""
+	                        source: parent.brandBadge.source
+	                        width: parent.brandBadgeFrameless ? parent.width : parent.width * 0.72
+	                        height: parent.brandBadgeFrameless ? parent.height : parent.height * 0.72
+	                        anchors.centerIn: parent
+	                        fillMode: Image.PreserveAspectFit
+	                        smooth: true
+	                      }
+
+	                      NIcon {
+	                        visible: parent.brandBadge.source === ""
+	                        anchors.centerIn: parent
+	                        icon: parent.brandBadge.fallbackIcon
+	                        pointSize: Style.fontSizeL
+	                        color: root.shellIconChipFgColor
+	                      }
+	                    }
+
+	                    ColumnLayout {
+	                      Layout.fillWidth: true
+	                      spacing: Style.marginXXS
+
+	                      RowLayout {
+	                        Layout.fillWidth: true
+	                        spacing: Style.marginS
+
+	                        NText {
+	                          Layout.fillWidth: true
+	                          text: modelData.name || root.trSafe("panel.setup-required.phone-name", "Android Phone")
+	                          pointSize: Style.fontSizeM
+	                          font.weight: Style.fontWeightBold
+	                          color: root.shellPrimaryTextColor
+	                          elide: Text.ElideRight
+	                        }
+
+	                      }
+
+	                      RowLayout {
+	                        Layout.fillWidth: true
+	                        spacing: Style.marginS
+
+	                        NIcon {
+	                          icon: root.deviceStatusIcon(modelData)
+	                          pointSize: Style.fontSizeS
+	                          color: root.diagnosticSeverityColor(Boolean(modelData.paired) && Boolean(modelData.reachable) ? "ok" : (Boolean(modelData.pairRequested) ? "waiting" : "error"))
+	                        }
+
+	                        NText {
+	                          Layout.fillWidth: true
+	                          text: root.deviceStatusTitle(modelData)
+	                          pointSize: Style.fontSizeXS
+	                          font.weight: Style.fontWeightMedium
+	                          color: root.shellSecondaryTextColor
+	                          elide: Text.ElideRight
+	                        }
+	                      }
+
+	                      NText {
+	                        Layout.fillWidth: true
+	                        text: root.deviceStatusDetail(modelData)
+	                        pointSize: Style.fontSizeXXS
+	                        color: root.shellSecondaryTextColor
+	                        wrapMode: Text.WordWrap
+	                        maximumLineCount: 2
+	                        elide: Text.ElideRight
+	                      }
+	                    }
+	                  }
+
+	                  MouseArea {
+	                    anchors.fill: parent
+	                    hoverEnabled: true
+	                    cursorShape: Qt.PointingHandCursor
+
+	                    onClicked: {
+	                      KDEConnect.setMainDeviceExact(modelData.id);
+	                      deviceSwitcherOpen = false;
+
+	                      pluginApi.pluginSettings.mainDeviceId = modelData.id;
+	                      pluginApi.saveSettings();
+	                    }
+	                  }
+	                }
+	              }
 
               Item {
                 Layout.fillHeight: true
@@ -3261,11 +4176,16 @@ Item {
         }
       }
     }
-  }
+	  }
 
-  Popup {
-    id: wirelessAdbPopup
-    parent: root
+	  AndroidConnectDiagnosticsPopup {
+	    id: diagnosticsPopup
+	    panelRoot: root
+	  }
+
+	  Popup {
+	    id: wirelessAdbPopup
+	    parent: root
     modal: true
     dim: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
@@ -3320,15 +4240,24 @@ Item {
           NIconButton {
             icon: "close"
             tooltipText: I18n.tr("common.close")
+            colorBorder: Color.mOutline
             onClicked: wirelessAdbPopup.close()
           }
         }
 
         NText {
-          text: root.trSafe("panel.wireless-adb.dialog-description", "Pair once from Android's Wireless debugging screen, then connect with the adb port shown on the phone.")
+          text: root.trSafe("panel.wireless-adb.dialog-description", "Pair from Android's Wireless debugging screen, then connect with the current adb port shown on the phone.")
           color: Color.mOnSurfaceVariant
           wrapMode: Text.WordWrap
           Layout.fillWidth: true
+        }
+
+        NText {
+          Layout.fillWidth: true
+          text: root.wirelessAdbDeviceContextText()
+          visible: text !== ""
+          color: root.shellSecondaryTextColor
+          wrapMode: Text.WordWrap
         }
 
         Rectangle {
@@ -3396,7 +4325,7 @@ Item {
                 spacing: Style.marginS
 
                 NText {
-                  text: root.trSafe("panel.wireless-adb.qr-helper-description", "The plugin will wait for the scan, pair automatically, then connect ADB and save the resolved host and port.")
+                  text: root.trSafe("panel.wireless-adb.qr-helper-description", "The plugin will wait for the scan, pair automatically, then connect ADB for the selected phone.")
                   color: Color.mOnSurfaceVariant
                   wrapMode: Text.WordWrap
                   Layout.fillWidth: true
@@ -3529,7 +4458,7 @@ Item {
             }
 
             NText {
-              text: root.trSafe("panel.wireless-adb.connect-section-description", "After pairing, use the adb port shown on the phone. The same phone IP above will be reused.")
+              text: root.trSafe("panel.wireless-adb.connect-section-description", "Use the current adb port shown on the phone. Android may change this port after reconnecting Wireless debugging.")
               color: Color.mOnSurfaceVariant
               wrapMode: Text.WordWrap
               Layout.fillWidth: true
@@ -3555,6 +4484,14 @@ Item {
                 Layout.fillWidth: true
                 visible: text !== ""
                 elide: Text.ElideRight
+              }
+
+              NButton {
+                text: root.trSafe("panel.wireless-adb.auto-connect-button", "Auto-detect")
+                icon: "wifi"
+                enabled: !KDEConnect.wirelessAdbBusy
+                  && (((root.wirelessAdbConnectHost || "").trim() !== "") || ((root.wirelessAdbPairHost || "").trim() !== ""))
+                onClicked: root.startWirelessAdbAutoConnect()
               }
 
               NButton {

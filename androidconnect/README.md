@@ -30,7 +30,9 @@ Project repository:
 
 ## Current Status
 
-Current plugin version: `1.4.0`
+Current plugin version: `1.5.1`
+
+See `CHANGELOG.md` for release notes.
 
 The embedded mirror uses a single live feed path:
 
@@ -40,8 +42,10 @@ The embedded mirror uses a single live feed path:
 
 Current behavior:
 - Embedded mirror launches automatically when the panel is ready, typically within about one second of `scrcpy` starting
+- The embedded mirror is tied to the selected KDE Connect device and will not reuse another phone's ADB session
 - Audio can be toggled from the panel header
 - Android nav buttons stay visible below the phone preview
+- The decorative phone home indicator is hidden while the live `scrcpy` feed is connected
 - Screenshot and screen recording actions are available from the right-side utility row
 - Keep-screen-awake is available from the utility row while the panel is open
 - Status and error messages stay hidden during the initial grace period, then appear only if the feed or input path is still not ready
@@ -59,6 +63,7 @@ Current behavior:
 - ADB tap, swipe, text, key, and Android navigation input
 - In-panel utility actions for screenshot, screen recording, and keep-screen-awake
 - Wireless ADB pairing and reconnect helpers
+- Wireless ADB auto-detect for the selected phone's current random connect port when mDNS is available
 - Existing plugin toasts are mirrored into notification history
 - Screenshot and screen recording save notifications include a link to the output folder
 
@@ -207,12 +212,15 @@ Wireless ADB is optional, but it improves embedded input when USB is not availab
    - `Pair with QR code`
    - `Pair with code`
 3. Open the Wi-Fi button in the panel header.
-4. After pairing, connect using the ADB port shown on the phone.
+4. After pairing, either:
+   - click `Auto-detect` to discover the selected phone's current Wireless ADB connect port over mDNS
+   - manually enter the ADB port shown on the phone and click `Connect`
 
-The plugin remembers the last successful host and port for later reconnects.
+The plugin stores Wireless ADB state per KDE Connect device. Android may rotate the Wireless debugging connect port whenever Wireless debugging reconnects, so saved ports are treated as history only. A saved `host:port` is used for mirroring only after `adb devices` reports that exact serial as connected.
 
 Notes:
 - Wireless ADB is optional. USB ADB is still the simplest and most reliable first setup path.
+- `avahi-browse` is recommended for auto-detect. Some `adb mdns services` builds do not expose mDNS discovery reliably.
 
 ## Browse Files Notes
 

@@ -15,6 +15,7 @@ Rectangle {
     property string statusSubtitle: ""
     property bool busy: false
     property bool mirrorFeedEnabled: false
+    property bool showHomeIndicator: true
     property bool interactiveScreen: false
     property string mirrorDeviceIdMatch: ""
     property string mirrorDeviceDescriptionMatch: ""
@@ -1113,7 +1114,7 @@ Rectangle {
             radius: height / 2
             color: phoneRoot.homeIndicatorColor
             opacity: 0.66
-            visible: true
+            visible: phoneRoot.showHomeIndicator
 
             anchors {
                 horizontalCenter: parent.horizontalCenter
