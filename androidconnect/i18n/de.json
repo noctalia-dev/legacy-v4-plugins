@@ -48,6 +48,9 @@
       "open-phone": "Open KDE Connect on the phone or keep both devices on the same network",
       "pair-first": "Pair this device before mirror and file actions are available"
     },
+    "adb-only": {
+      "device-name": "ADB device"
+    },
     "diagnostics": {
       "tooltip": "Open diagnostics",
       "open-button": "Open Diagnostics",
@@ -111,6 +114,8 @@
       "kde-reachable-body": "is paired but unreachable. Select another reachable device or keep the phone awake on the same network.",
       "kde-ready-title": "KDE Connect ready",
       "kde-ready-body": "is paired and reachable.",
+      "adb-only-title": "ADB-only mode",
+      "adb-only-body": "KDE Connect is not paired, but an authorized ADB device is available for mirroring and input.",
       "adb-title": "ADB input and mirroring",
       "adb-waiting-body": "Waiting for KDE Connect reachability before checking ADB controls.",
       "adb-ready-title": "ADB ready",
@@ -122,6 +127,9 @@
       "v4l2-missing-body": "is missing or not writable. Copy the loopback setup command below if you want the embedded feed.",
       "scrcpy-ready-title": "scrcpy command ready",
       "scrcpy-ready-body": "The embedded mirror command is configured and will launch after the required transports are ready."
+    },
+    "scrcpy": {
+      "adb-setup-description": "Connect one authorized ADB phone over USB or Wireless ADB to use mirroring and input."
     }
   },
   "bar": {

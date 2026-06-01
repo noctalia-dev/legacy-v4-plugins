@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.6.1
+
+- Allow embedded mirroring and input with a single safe ADB target even when KDE Connect is not paired yet.
+- Rebuild the embedded preview path only after the V4L2 loopback format matches the expected `scrcpy` output, fixing distorted colors and stretched frames when switching between phone aspect ratios.
+- Keep the phone frame visible while the live feed reloads during device switches.
+- Use long-edge display scaling for embedded full-frame output so common tall phone aspect ratios stay aligned without device-specific patches.
+- Shorten the preview attach and retry delays without changing the mirror readiness checks.
+
 ## v1.6.0
 
 - Improve embedded mirror compatibility across phone display sizes by probing Android display geometry before launching `scrcpy`.

@@ -30,7 +30,7 @@ Project repository:
 
 ## Current Status
 
-Current plugin version: `1.6.0`
+Current plugin version: `1.6.1`
 
 See `CHANGELOG.md` for release notes.
 
@@ -43,6 +43,7 @@ The embedded mirror uses a single live feed path:
 Current behavior:
 - Embedded mirror launches automatically when the panel is ready, typically within about one second of `scrcpy` starting
 - The embedded mirror is tied to the selected KDE Connect device and will not reuse another phone's ADB session
+- If KDE Connect is not paired yet, a single safe ADB target can still be mirrored and controlled
 - Audio can be toggled from the panel header
 - Android nav buttons stay visible below the phone preview
 - The decorative phone home indicator is hidden while the live `scrcpy` feed is connected
@@ -52,6 +53,7 @@ Current behavior:
 - Opening the panel while `scrcpy` is already connected sends unlock-only, not Home
 - Embedded mirror launch probes Android display geometry, chooses a full-frame size for the phone's aspect ratio, and avoids cropping unless a fallback path is needed
 - The V4L2 loopback format is checked against the expected `scrcpy` output before the feed is locked for Qt Multimedia
+- Switching between different phone aspect ratios rebuilds the live preview path only after the loopback feed reports the expected format
 - Header brand badges use logo assets where available, including Google, Xiaomi-family, and Motorola-family names, and fall back to icons otherwise
 - First-run cold-start reliability is fixed in `1.4.0`: the root cause was `v4l2loopback` advertising the scrcpy device as `V4L2_CAP_VIDEO_OUTPUT` at process start when created with `exclusive_caps=1`, which caused Qt Multimedia to filter it out and never re-enumerate. Using `exclusive_caps=0` on the scrcpy loopback resolves it
 
@@ -62,6 +64,7 @@ Current behavior:
 - Embedded in-panel Android mirror
 - Live V4L2 feed for the embedded mirror
 - Display-size probing for broader phone aspect-ratio compatibility
+- ADB-only mirroring and input when a single safe ADB target can be selected
 - Optional embedded audio toggle, off by default
 - ADB tap, swipe, text, key, and Android navigation input
 - In-panel utility actions for screenshot, screen recording, and keep-screen-awake

@@ -63,6 +63,9 @@
       "session-badge": "Session active",
       "ready-badge": "Remote ready"
     },
+    "adb-only": {
+      "device-name": "ADB device"
+    },
     "wireless-adb": {
       "tooltip": "Open Wireless ADB tools",
       "busy-tooltip": "Wireless ADB command is running",
@@ -137,6 +140,7 @@
       "adb-offline-title": "Reconnect ADB",
       "adb-offline-description": "adb can see the phone, but it is not ready yet. Reconnect the cable, unlock the phone, and accept the USB debugging prompt again.",
       "adb-setup-title": "Connect ADB First",
+      "adb-setup-description": "Connect one authorized ADB phone over USB or Wireless ADB to use mirroring and input.",
       "adb-setup-wireless-description": "Connect ADB for the selected phone. The panel will not reuse another phone's ADB session.",
       "not-configured-title": "scrcpy Not Configured",
       "not-configured-description": "Set a scrcpy command in the plugin settings",
@@ -214,6 +218,8 @@
       "kde-reachable-body": "is paired but unreachable. Select another reachable device or keep the phone awake on the same network.",
       "kde-ready-title": "KDE Connect ready",
       "kde-ready-body": "is paired and reachable.",
+      "adb-only-title": "ADB-only mode",
+      "adb-only-body": "KDE Connect is not paired, but an authorized ADB device is available for mirroring and input.",
       "adb-title": "ADB input and mirroring",
       "adb-waiting-body": "Waiting for KDE Connect reachability before checking ADB controls.",
       "adb-ready-title": "ADB ready",

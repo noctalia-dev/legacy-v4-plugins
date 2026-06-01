@@ -120,6 +120,7 @@ Item {
   property int embeddedMirrorFormatLockRetryCount: 0
   property int embeddedMirrorExpectedOutputWidth: 0
   property int embeddedMirrorExpectedOutputHeight: 0
+  property bool embeddedMirrorFormatReady: false
   property int embeddedMirrorFormatMismatchRetryCount: 0
   property string embeddedMirrorFormatMismatchSerial: ""
   property bool embeddedMirrorCodecFallbackActive: false
@@ -167,7 +168,7 @@ Item {
 
   Timer {
     id: embeddedMirrorFormatLockTimer
-    interval: 100
+    interval: 60
     repeat: false
     onTriggered: {
       if (!root.visible
@@ -183,15 +184,13 @@ Item {
 
   Timer {
     id: embeddedMirrorFormatLockRetryTimer
-    interval: 260
+    interval: 220
     repeat: false
     onTriggered: {
       if (!root.visible
           || !root.embeddedMirrorFeedConfigured()
           || !KDEConnect.scrcpyRunning
-          || embeddedMirrorFormatLockProc.running
-          || !root.activePhonePreview
-          || !root.activePhonePreview.mirrorFeedEnabled) {
+          || embeddedMirrorFormatLockProc.running) {
         return;
       }
 
@@ -295,6 +294,9 @@ Item {
 
     function onScrcpyRunningChanged() {
       root.syncBackgroundRefreshPolicy();
+      if (!KDEConnect.scrcpyRunning)
+        root.embeddedMirrorFormatReady = false;
+
       if (root.visible && root.panelOpenUnlockPending && KDEConnect.scrcpyRunning)
         panelOpenUnlockTimer.restart();
 
@@ -331,7 +333,7 @@ Item {
           && (KDEConnect.scrcpyRunning || KDEConnect.scrcpyLaunching)
           && (!root.mirrorSessionMatchesMainDevice()
               || !root.adbSerialMatchesSelectedDevice(KDEConnect.scrcpyActiveSerial))) {
-        Logger.w("KDEConnect", "ADB transport no longer matches selected KDE Connect device, stopping embedded feed session");
+        Logger.w("KDEConnect", "ADB transport no longer matches selected mirror target, stopping embedded feed session");
         KDEConnect.stopScrcpySession();
       }
 
@@ -581,6 +583,54 @@ Item {
       && Boolean(KDEConnect.mainDevice.reachable);
   }
 
+  function adbOnlyResolvedSerial() {
+    if (root.mainDeviceSetupComplete())
+      return "";
+
+    const connectedSerials = adbSerialsInState("device");
+    const usbSerials = connectedSerials.filter(serial => String(serial || "").trim().indexOf(":") === -1);
+    if (usbSerials.length === 1)
+      return KDEConnect.usbSelectionSentinel;
+
+    if (connectedSerials.length !== 1)
+      return "";
+
+    const serial = String(connectedSerials[0] || "").trim();
+    if (serial === "")
+      return "";
+
+    return serial.indexOf(":") === -1 ? KDEConnect.usbSelectionSentinel : serial;
+  }
+
+  function adbOnlyTargetReady() {
+    return adbOnlyResolvedSerial() !== "";
+  }
+
+  function selectedMirrorTargetReady() {
+    return root.mainDeviceSetupComplete() || root.adbOnlyTargetReady();
+  }
+
+  function selectedMirrorDeviceId() {
+    const mainDeviceId = String(KDEConnect.mainDevice?.id || "").trim();
+    if (root.mainDeviceSetupComplete() && mainDeviceId !== "")
+      return mainDeviceId;
+
+    const adbSerial = adbOnlyResolvedSerial();
+    return adbSerial !== "" ? ("adb-only:" + adbSerial) : "";
+  }
+
+  function selectedMirrorTargetName() {
+    const mainDeviceName = String(KDEConnect.mainDevice?.name || "").trim();
+    if (root.mainDeviceSetupComplete() && mainDeviceName !== "")
+      return mainDeviceName;
+
+    const adbSerial = adbOnlyResolvedSerial();
+    if (adbSerial !== "")
+      return root.trSafe("panel.adb-only.device-name", "ADB device");
+
+    return root.trSafe("panel.setup-required.phone-name", "Android Phone");
+  }
+
   function mainDevicePairingInProgress() {
     if (KDEConnect.mainDevice === null || KDEConnect.mainDevice.paired)
       return false;
@@ -652,10 +702,18 @@ Item {
     const device = KDEConnect.mainDevice;
     const deviceName = String(device?.name || root.trSafe("panel.setup-required.phone-name", "Android Phone")).trim();
     const kdeReady = device !== null && Boolean(device.paired) && Boolean(device.reachable);
+    const adbOnlyReady = root.adbOnlyTargetReady();
     const adbIssueTitle = root.adbSetupIssueTitle();
     const adbIssueSubtitle = root.adbSetupIssueSubtitle();
 
-    if (device === null) {
+    if (!kdeReady && adbOnlyReady) {
+      entries.push({
+        icon: "usb",
+        title: root.trSafe("panel.diagnostics.adb-only-title", "ADB-only mode"),
+        body: root.trSafe("panel.diagnostics.adb-only-body", "KDE Connect is not paired, but an authorized ADB device is available for mirroring and input."),
+        severity: "ok"
+      });
+    } else if (device === null) {
       entries.push({
         icon: "device-mobile-search",
         title: root.trSafe("panel.diagnostics.kde-discovery-title", "KDE Connect discovery"),
@@ -687,7 +745,7 @@ Item {
       });
     }
 
-    if (!kdeReady) {
+    if (!kdeReady && !adbOnlyReady) {
       entries.push({
         icon: "device-mobile",
         title: root.trSafe("panel.diagnostics.adb-title", "ADB input and mirroring"),
@@ -767,7 +825,7 @@ Item {
   }
 
   function handlePhoneClick(preview) {
-    if (KDEConnect.mainDevice === null || !root.mainDeviceSetupComplete())
+    if (!root.selectedMirrorTargetReady())
       return;
 
     if (!KDEConnect.scrcpyRunning
@@ -917,7 +975,7 @@ Item {
   function scheduleEmbeddedMirrorAutoStart() {
     if (!root.visible
         || !embeddedMirrorModeEnabled()
-        || !root.mainDeviceSetupComplete()
+        || !root.selectedMirrorTargetReady()
         || !root.scrcpyLaunchPrerequisitesReady()) {
       return;
     }
@@ -1021,7 +1079,7 @@ Item {
   function attemptEmbeddedMirrorAutoStart() {
     if (!root.visible
         || !embeddedMirrorModeEnabled()
-        || !root.mainDeviceSetupComplete()
+        || !root.selectedMirrorTargetReady()
         || !root.activePhonePreview
         || !root.scrcpyLaunchPrerequisitesReady()) {
       return;
@@ -1238,6 +1296,9 @@ Item {
   }
 
   function selectedDeviceUsbAdbAllowed() {
+    if (!root.mainDeviceSetupComplete())
+      return adbOnlyResolvedSerial() === KDEConnect.usbSelectionSentinel;
+
     if (!KDEConnect.adbHasUsbTransport)
       return false;
 
@@ -1252,6 +1313,17 @@ Item {
     const trimmedSerial = String(serial || "").trim();
     if (trimmedSerial === "")
       return false;
+
+    if (!root.mainDeviceSetupComplete()) {
+      const adbOnlySerial = adbOnlyResolvedSerial();
+      if (adbOnlySerial === "")
+        return false;
+
+      if (KDEConnect.isUsbSelectionSerial(adbOnlySerial))
+        return KDEConnect.isUsbSelectionSerial(trimmedSerial) || adbSerialHost(trimmedSerial) === "";
+
+      return trimmedSerial === adbOnlySerial;
+    }
 
     if (KDEConnect.isUsbSelectionSerial(trimmedSerial) || adbSerialHost(trimmedSerial) === "")
       return selectedDeviceUsbAdbAllowed();
@@ -1285,9 +1357,6 @@ Item {
   }
 
   function adbBlockingIssueTitle() {
-    if (!root.mainDeviceSetupComplete())
-      return "";
-
     if ((KDEConnect.scrcpyRunning || KDEConnect.scrcpyLaunching)
         && root.mirrorSessionMatchesMainDevice()
         && root.adbSerialMatchesSelectedDevice(KDEConnect.scrcpyActiveSerial))
@@ -1296,10 +1365,17 @@ Item {
     if (KDEConnect.adbDevicesExitCode !== 0)
       return trSafe("panel.scrcpy.adb-missing-title", "adb Not Available");
 
-    if (adbSerialsInStateForSelectedDevice("unauthorized").length > 0)
+    const adbOnlyReady = !root.mainDeviceSetupComplete() && root.adbOnlyTargetReady();
+    const unauthorizedSerials = root.mainDeviceSetupComplete()
+      ? adbSerialsInStateForSelectedDevice("unauthorized")
+      : (adbOnlyReady ? [] : adbSerialsInState("unauthorized"));
+    if (unauthorizedSerials.length > 0)
       return trSafe("panel.scrcpy.adb-authorize-title", "Authorize USB Debugging");
 
-    if (adbSerialsInStateForSelectedDevice("offline").length > 0)
+    const offlineSerials = root.mainDeviceSetupComplete()
+      ? adbSerialsInStateForSelectedDevice("offline")
+      : (adbOnlyReady ? [] : adbSerialsInState("offline"));
+    if (offlineSerials.length > 0)
       return trSafe("panel.scrcpy.adb-offline-title", "Reconnect ADB");
 
     if (resolvedAdbSerial() === "")
@@ -1327,14 +1403,23 @@ Item {
         : trSafe("panel.scrcpy.adb-missing-description", "Install Android platform-tools so the plugin can use adb for mirroring and input.");
     }
 
-    if (adbSerialsInStateForSelectedDevice("unauthorized").length > 0)
+    const adbOnlyReady = !root.mainDeviceSetupComplete() && root.adbOnlyTargetReady();
+    const unauthorizedSerials = root.mainDeviceSetupComplete()
+      ? adbSerialsInStateForSelectedDevice("unauthorized")
+      : (adbOnlyReady ? [] : adbSerialsInState("unauthorized"));
+    if (unauthorizedSerials.length > 0)
       return trSafe("panel.scrcpy.adb-authorize-description", "Enable Developer options and USB debugging on the phone, connect it over USB, unlock it, and accept the USB debugging prompt for this computer.");
 
-    if (adbSerialsInStateForSelectedDevice("offline").length > 0)
+    const offlineSerials = root.mainDeviceSetupComplete()
+      ? adbSerialsInStateForSelectedDevice("offline")
+      : (adbOnlyReady ? [] : adbSerialsInState("offline"));
+    if (offlineSerials.length > 0)
       return trSafe("panel.scrcpy.adb-offline-description", "adb can see the phone, but it is not ready yet. Reconnect the cable, unlock the phone, and accept the USB debugging prompt again.");
 
     if (resolvedAdbSerial() === "")
-      return trSafe("panel.scrcpy.adb-setup-wireless-description", "Connect ADB for the selected phone. The panel will not reuse another phone's ADB session.");
+      return root.mainDeviceSetupComplete()
+        ? trSafe("panel.scrcpy.adb-setup-wireless-description", "Connect ADB for the selected phone. The panel will not reuse another phone's ADB session.")
+        : trSafe("panel.scrcpy.adb-setup-description", "Connect one authorized ADB phone over USB or Wireless ADB to use mirroring and input.");
 
     return "";
   }
@@ -1808,8 +1893,8 @@ Item {
 
   function mirrorSessionMatchesMainDevice() {
     const sessionDeviceId = String(KDEConnect.scrcpyDeviceId || "").trim();
-    const mainDeviceId = String(KDEConnect.mainDevice?.id || "").trim();
-    return sessionDeviceId !== "" && mainDeviceId !== "" && sessionDeviceId === mainDeviceId;
+    const selectedDeviceId = selectedMirrorDeviceId();
+    return sessionDeviceId !== "" && selectedDeviceId !== "" && sessionDeviceId === selectedDeviceId;
   }
 
   function currentMirrorAdbSerial() {
@@ -1824,6 +1909,10 @@ Item {
   }
 
   function resolvedAdbSerial() {
+    const adbOnlySerial = adbOnlyResolvedSerial();
+    if (adbOnlySerial !== "")
+      return adbOnlySerial;
+
     const selectedWirelessSerial = selectedDeviceWirelessAdbSerial();
     if (selectedWirelessSerial !== "")
       return selectedWirelessSerial;
@@ -1990,7 +2079,9 @@ Item {
     if (sourceWidth < 16 || sourceHeight < 16 || maxWidth < 16 || maxHeight < 16)
       return ({ enabled: false, option: "", width: 0, height: 0 });
 
-    const scale = Math.min(maxWidth / sourceWidth, maxHeight / sourceHeight, 1);
+    const targetLongEdge = Math.max(maxWidth, maxHeight);
+    const sourceLongEdge = Math.max(sourceWidth, sourceHeight);
+    const scale = Math.min(targetLongEdge / sourceLongEdge, 1);
     const outputWidth = evenFloor(sourceWidth * scale);
     const outputHeight = evenFloor(sourceHeight * scale);
     if (outputWidth < 16 || outputHeight < 16)
@@ -2254,6 +2345,7 @@ Item {
 
     applyEmbeddedMirrorInputCrop(crop);
     applyEmbeddedMirrorExpectedOutput(shape.outputWidth || 0, shape.outputHeight || 0);
+    embeddedMirrorFormatReady = false;
     Logger.i("KDEConnect", "Launching embedded scrcpy in feed mode",
       "mode=" + String(shape.mode || "default"),
       "orientation=" + String(shape.orientation || "unknown"),
@@ -2346,7 +2438,7 @@ Item {
   }
 
   function ensureEmbeddedMirrorSession(preview) {
-    if (!embeddedMirrorModeEnabled() || KDEConnect.mainDevice === null)
+    if (!embeddedMirrorModeEnabled() || !root.selectedMirrorTargetReady())
       return;
 
     if (!scrcpyLaunchPrerequisitesReady())
@@ -2378,7 +2470,7 @@ Item {
       queryEmbeddedMirrorShapeAndLaunch(
         tunedEmbeddedCommand,
         serial,
-        KDEConnect.mainDevice.id
+        root.selectedMirrorDeviceId()
       );
       return;
     }
@@ -2413,6 +2505,7 @@ Item {
   function embeddedMirrorTouchActive() {
     return embeddedMirrorModeEnabled()
       && KDEConnect.scrcpyRunning
+      && embeddedMirrorFormatReady
       && KDEConnect.adbDisplayInfoSerial === ""
       && KDEConnect.adbScreenError === ""
       && KDEConnect.adbScreenWidth > 0
@@ -2622,8 +2715,7 @@ Item {
 
       if (!root.visible
           || !root.embeddedMirrorModeEnabled()
-          || KDEConnect.mainDevice === null
-          || String(KDEConnect.mainDevice.id || "").trim() !== pendingDeviceId
+          || root.selectedMirrorDeviceId() !== pendingDeviceId
           || root.resolvedAdbSerial() !== pendingSerial
           || KDEConnect.scrcpyRunning
           || KDEConnect.scrcpyLaunching) {
@@ -2783,9 +2875,10 @@ Item {
       Logger.i("KDEConnect", "Embedded format lock exited:", exitCode);
       if (root.activePhonePreview)
         root.activePhonePreview.debugLog("formatLock exitCode=" + exitCode);
-      if (exitCode === 0 && root.activePhonePreview) {
+      if (exitCode === 0) {
         root.embeddedMirrorFormatLockRetryCount = 0;
         root.embeddedMirrorFormatMismatchRetryCount = 0;
+        root.embeddedMirrorFormatReady = true;
         Qt.callLater(function() {
           if (root.activePhonePreview)
             root.activePhonePreview.probeNativeLoopback();
@@ -2794,19 +2887,25 @@ Item {
           && KDEConnect.scrcpyRunning
           && root.embeddedMirrorFormatMismatchRetryCount < 1) {
         root.embeddedMirrorFormatMismatchRetryCount += 1;
+        root.embeddedMirrorFormatReady = false;
         Logger.w("KDEConnect", "Embedded format did not match expected size; restarting feed once");
         if (root.activePhonePreview)
           root.activePhonePreview.debugLog("formatLock mismatch restart=" + root.embeddedMirrorFormatMismatchRetryCount);
         KDEConnect.stopScrcpySession();
       } else if (exitCode === 5
-          && root.activePhonePreview
-          && root.activePhonePreview.mirrorFeedEnabled
+          && KDEConnect.scrcpyRunning
           && root.embeddedMirrorFormatLockRetryCount < 3) {
         root.embeddedMirrorFormatLockRetryCount += 1;
-        root.activePhonePreview.debugLog("formatLock retry attempt=" + root.embeddedMirrorFormatLockRetryCount);
+        if (root.activePhonePreview)
+          root.activePhonePreview.debugLog("formatLock retry attempt=" + root.embeddedMirrorFormatLockRetryCount);
         embeddedMirrorFormatLockRetryTimer.restart();
       } else {
         root.embeddedMirrorFormatLockRetryCount = 0;
+        root.embeddedMirrorFormatReady = false;
+        if (KDEConnect.scrcpyRunning) {
+          Logger.w("KDEConnect", "Embedded format lock failed; stopping feed session");
+          KDEConnect.stopScrcpySession();
+        }
       }
     }
   }
@@ -3375,13 +3474,15 @@ Item {
 
       Loader {
         Layout.fillWidth: true
-        Layout.fillHeight: !root.mainDeviceSetupComplete()
+        Layout.fillHeight: !root.selectedMirrorTargetReady()
         Layout.alignment: Qt.AlignTop
         active: true
-        sourceComponent:  (KDEConnect.busctlCmd === null || KDEConnect.busctlCmd === "")       ? busctlNotFoundCard               :
-                          (!KDEConnect.daemonAvailable)                                        ? kdeConnectDaemonNotRunningCard   :
+        sourceComponent:  ((KDEConnect.busctlCmd === null || KDEConnect.busctlCmd === "")
+                              && !root.adbOnlyTargetReady())                                  ? busctlNotFoundCard               :
+                          (!KDEConnect.daemonAvailable
+                              && !root.adbOnlyTargetReady())                                  ? kdeConnectDaemonNotRunningCard   :
                           (deviceSwitcherOpen)                                                 ? deviceSwitcherCard               :
-                          (root.mainDeviceSetupComplete())                                     ? deviceConnectedCard              :
+                          (root.selectedMirrorTargetReady())                                   ? deviceConnectedCard              :
                           (root.mainDevicePairingInProgress())                                 ? noDevicePairedCard               :
                           (KDEConnect.mainDevice !== null || KDEConnect.devices.length > 0)    ? setupRequiredCard                :
                           (KDEConnect.devices.length === 0)                                    ? noDevicesAvailableCard           :
@@ -3412,7 +3513,7 @@ Item {
               initialPath: Quickshell.env("HOME")
               nameFilters: ["*"]
               onAccepted: paths => {
-                if (paths.length > 0) {
+                if (paths.length > 0 && KDEConnect.mainDevice !== null) {
                   for (const path of paths) {
                     KDEConnect.shareFile(KDEConnect.mainDevice.id, path)
                   }
@@ -3423,7 +3524,7 @@ Item {
             Loader {
               Layout.fillWidth: true
               Layout.fillHeight: true
-              active: KDEConnect.mainDevice !== null
+              active: root.selectedMirrorTargetReady()
               sourceComponent: deviceStatsWithPhone
             }
 
@@ -3470,7 +3571,7 @@ Item {
                         Layout.fillWidth: true
 
                         Rectangle {
-                          readonly property var brandBadge: root.deviceBrandBadge(KDEConnect.mainDevice?.name || "")
+                          readonly property var brandBadge: root.deviceBrandBadge(root.selectedMirrorTargetName())
                           readonly property bool brandBadgeFrameless: brandBadge.source !== ""
                           readonly property bool resizeControlVisible: brandBadgeMouse.containsMouse
                           readonly property string resizeTooltipText: root.trSafe("panel.phone-size.tooltip", "Phone size: ")
@@ -3542,7 +3643,7 @@ Item {
                         }
 
                         NText {
-                          text: KDEConnect.mainDevice.name
+                          text: root.selectedMirrorTargetName()
                           pointSize: Style.fontSizeL * 1.55
                           font.weight: Style.fontWeightBold
                           color: root.shellPrimaryTextColor
@@ -3600,18 +3701,21 @@ Item {
                           }
 
                           PanelActionIconButton {
+                            visible: root.mainDeviceSetupComplete()
                             icon: "device-mobile-search"
                             tooltipText: pluginApi?.tr("panel.browse-device")
                             onClicked: KDEConnect.browseFiles(KDEConnect.mainDevice.id)
                           }
 
                           PanelActionIconButton {
+                            visible: root.mainDeviceSetupComplete()
                             icon: "device-mobile-share"
                             tooltipText: pluginApi?.tr("panel.send-file")
                             onClicked: shareFilePicker.open()
                           }
 
                           PanelActionIconButton {
+                            visible: root.mainDeviceSetupComplete()
                             icon: "radar"
                             tooltipText: pluginApi?.tr("panel.find-device")
                             onClicked: KDEConnect.triggerFindMyPhone(KDEConnect.mainDevice.id)
@@ -3633,6 +3737,8 @@ Item {
 
                       Item {
                         id: phonePreviewContainer
+                        readonly property var phonePreviewItem: phonePreviewLoader.item
+
                         Layout.alignment: Qt.AlignHCenter
                         Layout.preferredWidth: root.phoneBaseWidth * root.phoneSizeFactor
                         Layout.preferredHeight: root.phoneBaseHeight * root.phoneSizeFactor
@@ -3658,42 +3764,82 @@ Item {
                         }
 
                         PhoneDisplay {
-                          id: phonePreview
                           anchors.fill: parent
-                          mirrorFeedEnabled: KDEConnect.scrcpyRunning
+                          enabled: false
+                          visible: phonePreviewLoader.status !== Loader.Ready
+                          debugLoggingEnabled: false
+                          mirrorFeedEnabled: false
                           showHomeIndicator: !KDEConnect.scrcpyRunning
-                          scrcpyStartedAtMs: KDEConnect.scrcpyLaunchStartedAtMs
-                          mirrorDeviceIdMatch: root.embeddedVideoDevice
-                          mirrorDeviceDescriptionMatch: "scrcpy-panel"
-                          mirrorContentWidth: KDEConnect.adbScreenWidth
-                          mirrorContentHeight: KDEConnect.adbScreenHeight
-                          interactiveScreen: root.embeddedMirrorTouchActive()
-                          showStatusOverlay: root.embeddedMirrorPhoneOverlayVisible()
-                          statusTitle: root.embeddedMirrorPhoneStatusTitle(phonePreview)
-                          statusSubtitle: root.embeddedMirrorPhoneStatusSubtitle(phonePreview)
-                          busy: KDEConnect.scrcpyLaunching
-                            || (KDEConnect.scrcpyRunning
-                                && (!phonePreview.mirrorFeedAvailable
-                                    || KDEConnect.adbDisplayInfoSerial !== ""))
+                          mirrorContentWidth: root.embeddedMirrorExpectedOutputWidth > 0
+                            ? root.embeddedMirrorExpectedOutputWidth
+                            : KDEConnect.adbScreenWidth
+                          mirrorContentHeight: root.embeddedMirrorExpectedOutputHeight > 0
+                            ? root.embeddedMirrorExpectedOutputHeight
+                            : KDEConnect.adbScreenHeight
+                          interactiveScreen: false
+                          showStatusOverlay: false
+                          busy: false
+                        }
 
-                          Component.onCompleted: {
-                            root.activePhonePreview = phonePreview;
-                            root.scheduleEmbeddedMirrorAutoStart();
+                        Loader {
+                          id: phonePreviewLoader
+                          anchors.fill: parent
+                          active: !KDEConnect.scrcpyRunning || root.embeddedMirrorFormatReady
+                          sourceComponent: phonePreviewComponent
+                        }
+
+                        Component {
+                          id: phonePreviewComponent
+
+                          PhoneDisplay {
+                            id: phonePreview
+                            anchors.fill: parent
+                            mirrorFeedEnabled: KDEConnect.scrcpyRunning && root.embeddedMirrorFormatReady
+                            showHomeIndicator: !KDEConnect.scrcpyRunning
+                            scrcpyStartedAtMs: KDEConnect.scrcpyLaunchStartedAtMs
+                            mirrorDeviceIdMatch: root.embeddedVideoDevice
+                            mirrorDeviceDescriptionMatch: "scrcpy-panel"
+                            mirrorContentWidth: root.embeddedMirrorExpectedOutputWidth > 0
+                              ? root.embeddedMirrorExpectedOutputWidth
+                              : KDEConnect.adbScreenWidth
+                            mirrorContentHeight: root.embeddedMirrorExpectedOutputHeight > 0
+                              ? root.embeddedMirrorExpectedOutputHeight
+                              : KDEConnect.adbScreenHeight
+                            interactiveScreen: root.embeddedMirrorTouchActive()
+                            showStatusOverlay: root.embeddedMirrorPhoneOverlayVisible()
+                            statusTitle: root.embeddedMirrorPhoneStatusTitle(phonePreview)
+                            statusSubtitle: root.embeddedMirrorPhoneStatusSubtitle(phonePreview)
+                            busy: KDEConnect.scrcpyLaunching
+                              || (KDEConnect.scrcpyRunning
+                                  && (!root.embeddedMirrorFormatReady
+                                      || !phonePreview.mirrorFeedAvailable
+                                      || KDEConnect.adbDisplayInfoSerial !== ""))
+
+                            Component.onCompleted: {
+                              root.activePhonePreview = phonePreview;
+                              root.scheduleEmbeddedMirrorAutoStart();
+                              if (phonePreview.mirrorFeedEnabled) {
+                                Qt.callLater(function() {
+                                  if (root.activePhonePreview === phonePreview)
+                                    phonePreview.probeNativeLoopback();
+                                });
+                              }
+                            }
+
+                            Component.onDestruction: {
+                              if (root.activePhonePreview === phonePreview)
+                                root.activePhonePreview = null;
+                            }
+
+                            onClicked: root.handlePhoneClick(phonePreview)
+                            onTapRequested: (x, y) => root.handleMirrorTap(x, y)
+                            onSwipeRequested: (x1, y1, x2, y2, durationMs) => root.handleMirrorSwipe(x1, y1, x2, y2, durationMs)
+                            onScrollRequested: (x, y, deltaX, deltaY) => root.handleMirrorScroll(x, y, deltaX, deltaY)
+                            onTextRequested: text => root.sendKeyboardText(text)
+                            onKeyRequested: keyCode => root.sendKeyboardKey(keyCode)
+                            onHomeRequested: root.sendAndroidHomeOrUnlock()
+                            onRecentsRequested: root.sendAndroidNavKey(187)
                           }
-
-                          Component.onDestruction: {
-                            if (root.activePhonePreview === phonePreview)
-                              root.activePhonePreview = null;
-                          }
-
-                          onClicked: root.handlePhoneClick(phonePreview)
-                          onTapRequested: (x, y) => root.handleMirrorTap(x, y)
-                          onSwipeRequested: (x1, y1, x2, y2, durationMs) => root.handleMirrorSwipe(x1, y1, x2, y2, durationMs)
-                          onScrollRequested: (x, y, deltaX, deltaY) => root.handleMirrorScroll(x, y, deltaX, deltaY)
-                          onTextRequested: text => root.sendKeyboardText(text)
-                          onKeyRequested: keyCode => root.sendKeyboardKey(keyCode)
-                          onHomeRequested: root.sendAndroidHomeOrUnlock()
-                          onRecentsRequested: root.sendAndroidNavKey(187)
                         }
 
                       }
@@ -3918,8 +4064,8 @@ Item {
                           )
                         )
                         Layout.maximumHeight: Layout.preferredHeight
-                        Layout.topMargin: root.embeddedMirrorDrawerStatusVisible(phonePreview) ? Style.marginS : 0
-                        visible: root.embeddedMirrorDrawerStatusVisible(phonePreview)
+                        Layout.topMargin: root.embeddedMirrorDrawerStatusVisible(phonePreviewContainer.phonePreviewItem) ? Style.marginS : 0
+                        visible: root.embeddedMirrorDrawerStatusVisible(phonePreviewContainer.phonePreviewItem)
                         implicitHeight: Math.max(
                           drawerStatusContent.implicitHeight + (Style.marginM * 1.8),
                           root.phoneSizeValue(104, 118, 132) * Style.uiScaleRatio
@@ -3938,7 +4084,7 @@ Item {
 
                           NText {
                             Layout.fillWidth: true
-                            text: root.embeddedMirrorDrawerStatusTitle(phonePreview)
+                            text: root.embeddedMirrorDrawerStatusTitle(phonePreviewContainer.phonePreviewItem)
                             pointSize: Style.fontSizeS * root.phoneSizeValue(1.02, 1.1, 1.1)
                             font.weight: Style.fontWeightBold
                             color: root.shellPrimaryTextColor
@@ -3950,7 +4096,7 @@ Item {
 
                           NText {
                             Layout.fillWidth: true
-                            text: root.embeddedMirrorDrawerStatusSubtitle(phonePreview)
+                            text: root.embeddedMirrorDrawerStatusSubtitle(phonePreviewContainer.phonePreviewItem)
                             pointSize: Style.fontSizeXS * root.phoneSizeValue(1.0, 1.06, 1.06)
                             color: root.shellSecondaryTextColor
                             visible: text !== ""
@@ -4024,7 +4170,7 @@ Item {
                       Item {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        visible: !root.embeddedMirrorDrawerStatusVisible(phonePreview)
+                        visible: !root.embeddedMirrorDrawerStatusVisible(phonePreviewContainer.phonePreviewItem)
                       }
                     }
                   }

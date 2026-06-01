@@ -21,6 +21,7 @@ Rectangle {
     property string mirrorDeviceDescriptionMatch: ""
     property int mirrorContentWidth: 0
     property int mirrorContentHeight: 0
+    property bool debugLoggingEnabled: true
     property string mirrorFeedError: ""
     property bool mediaDevicesReloadPending: false
     property int mediaDevicesReloadDelayMs: 80
@@ -28,6 +29,7 @@ Rectangle {
     property bool nativeProbeReady: false
     property bool nativeProbePending: false
     property bool nativeCameraRebindPending: false
+    property bool nativeCaptureGraphReloadPending: false
     property bool nativeZeroRectObserved: false
     property bool nativeZeroRectRecoveryScheduled: false
     property int nativeProbeRetryCount: 0
@@ -100,8 +102,10 @@ Rectangle {
     }
     readonly property string selectedVideoInputSummary: videoInputSummary(selectedVideoInput)
     readonly property bool mirrorFeedAvailable: hasVideoInput(selectedVideoInput)
+    readonly property bool nativeCaptureGraphEnabled: mirrorFeedEnabled && !nativeCaptureGraphReloadPending
     readonly property bool shouldActivateMirrorCamera: mirrorFeedEnabled
         && mirrorFeedAvailable
+        && nativeCaptureGraphEnabled
         && nativeProbeReady
         && !nativeCameraRebindPending
         && !mirrorFeedAttachDelayActive
@@ -223,6 +227,9 @@ Rectangle {
     }
 
     function debugLog(message) {
+        if (!debugLoggingEnabled)
+            return;
+
         const timestamp = new Date().toISOString();
         const line = timestamp + " " + String(message || "");
         Logger.i("AndroidConnectPreview", line);
@@ -294,6 +301,17 @@ Rectangle {
         nativeCameraRebindTimer.restart();
     }
 
+    function reloadNativeCaptureGraph(reason, delayMs) {
+        if (nativeCaptureGraphReloadPending)
+            return;
+
+        nativeCaptureGraphReloadPending = true;
+        resetMirrorState();
+        debugLog("capture reload reason=" + String(reason || "unspecified") + timingSuffix());
+        nativeCaptureGraphReloadTimer.interval = Math.max(60, Math.round(Number(delayMs || 0)) || 60);
+        nativeCaptureGraphReloadTimer.restart();
+    }
+
     function resetMirrorState() {
         mirrorFeedError = "";
         mirrorFeedLastFrameAtMs = 0;
@@ -307,7 +325,7 @@ Rectangle {
         if (mediaDevicesReloadPending)
             return;
 
-        mediaDevicesReloadDelayMs = Math.max(80, Math.round(Number(delayMs || 0)) || 80);
+        mediaDevicesReloadDelayMs = Math.max(60, Math.round(Number(delayMs || 0)) || 60);
         mediaDevicesReloadPending = true;
         mediaDevicesLoader.active = false;
         mediaDevicesReloadCommitTimer.interval = mediaDevicesReloadDelayMs;
@@ -323,8 +341,9 @@ Rectangle {
         nativeAttachRecoveryAttempts = 0;
         nativeAttachStartedAtMs = 0;
         resetMirrorState();
-        reloadMediaDevices(80);
-        nativeProbeRetryTimer.interval = 120;
+        reloadNativeCaptureGraph("loopback-probe", 80);
+        reloadMediaDevices(60);
+        nativeProbeRetryTimer.interval = 90;
         nativeProbeRetryTimer.restart();
     }
 
@@ -337,7 +356,8 @@ Rectangle {
     clip: false
 
     Component.onCompleted: {
-        debugResetProc.running = true;
+        if (debugLoggingEnabled)
+            debugResetProc.running = true;
     }
 
     onMirrorFeedEnabledChanged: {
@@ -347,6 +367,8 @@ Rectangle {
         nativeProbeReady = false;
         nativeProbePending = false;
         nativeCameraRebindPending = false;
+        nativeCaptureGraphReloadPending = false;
+        nativeCaptureGraphReloadTimer.stop();
         nativeZeroRectObserved = false;
         nativeZeroRectRecoveryScheduled = false;
         nativeProbeRetryCount = 0;
@@ -429,7 +451,7 @@ Rectangle {
     Timer {
         id: mediaDevicesReloadCommitTimer
 
-        interval: 80
+        interval: 60
         repeat: false
         onTriggered: {
             mediaDevicesLoader.active = true;
@@ -440,7 +462,7 @@ Rectangle {
     Timer {
         id: mirrorFeedAttachDelayTimer
 
-        interval: 100
+        interval: 80
         repeat: false
         onTriggered: {
             phoneRoot.mirrorFeedAttachDelayActive = false;
@@ -506,7 +528,7 @@ Rectangle {
                     || phoneRoot.mediaDevicesReloadPending)
                 return;
 
-            phoneRoot.reloadMediaDevices(phoneRoot.nativeProbeRetryCount <= 2 ? 100 : 180);
+            phoneRoot.reloadMediaDevices(phoneRoot.nativeProbeRetryCount <= 2 ? 80 : 140);
         }
     }
 
@@ -565,51 +587,78 @@ Rectangle {
         }
     }
 
-    CaptureSession {
-        id: mirrorCaptureSession
+    Timer {
+        id: nativeCaptureGraphReloadTimer
 
-        camera: phoneRoot.shouldActivateMirrorCamera ? mirrorCamera : null
-        videoOutput: phoneRoot.shouldActivateMirrorCamera ? mirrorVideoOutput.videoSink : null
+        interval: 80
+        repeat: false
+        onTriggered: {
+            phoneRoot.nativeCaptureGraphReloadPending = false;
+            if (!phoneRoot.mirrorFeedEnabled)
+                return;
+
+            phoneRoot.beginNativeAttachWindow("capture-graph-reload");
+        }
     }
 
-    Camera {
-        id: mirrorCamera
+    Loader {
+        id: mirrorCaptureLoader
 
-        active: phoneRoot.shouldActivateMirrorCamera
-        onActiveChanged: {
-            phoneRoot.debugLog("camera active=" + active + phoneRoot.timingSuffix());
-            if (active) {
-                phoneRoot.resetMirrorState();
-            } else {
-                phoneRoot.mirrorFeedFrameLive = false;
+        active: phoneRoot.nativeCaptureGraphEnabled
+        sourceComponent: mirrorCaptureComponent
+    }
+
+    Component {
+        id: mirrorCaptureComponent
+
+        Item {
+            CaptureSession {
+                id: mirrorCaptureSession
+
+                camera: phoneRoot.shouldActivateMirrorCamera ? mirrorCamera : null
+                videoOutput: phoneRoot.shouldActivateMirrorCamera ? mirrorVideoOutput.videoSink : null
+            }
+
+            Camera {
+                id: mirrorCamera
+
+                active: phoneRoot.shouldActivateMirrorCamera
+                onActiveChanged: {
+                    phoneRoot.debugLog("camera active=" + active + phoneRoot.timingSuffix());
+                    if (active) {
+                        phoneRoot.resetMirrorState();
+                    } else {
+                        phoneRoot.mirrorFeedFrameLive = false;
+                    }
+                }
+                onCameraDeviceChanged: {
+                    phoneRoot.resetMirrorState();
+                }
+                onErrorOccurred: (error, errorString) => {
+                    phoneRoot.mirrorFeedFrameLive = false;
+                    phoneRoot.mirrorFeedError = phoneRoot.normalizeMirrorError(errorString !== "" ? errorString : ("camera error " + error));
+                    phoneRoot.debugLog("camera error code=" + error
+                        + " string=" + String(errorString || "")
+                        + " normalized=" + phoneRoot.mirrorFeedError
+                        + phoneRoot.timingSuffix());
+                }
+            }
+
+            Binding {
+                target: mirrorCamera
+                property: "cameraDevice"
+                when: phoneRoot.shouldActivateMirrorCamera
+                    && phoneRoot.hasVideoInput(phoneRoot.selectedVideoInput)
+                value: phoneRoot.selectedVideoInput
+            }
+
+            Binding {
+                target: mirrorCamera
+                property: "cameraDevice"
+                when: !phoneRoot.shouldActivateMirrorCamera
+                value: null
             }
         }
-        onCameraDeviceChanged: {
-            phoneRoot.resetMirrorState();
-        }
-        onErrorOccurred: (error, errorString) => {
-            phoneRoot.mirrorFeedFrameLive = false;
-            phoneRoot.mirrorFeedError = phoneRoot.normalizeMirrorError(errorString !== "" ? errorString : ("camera error " + error));
-            phoneRoot.debugLog("camera error code=" + error
-                + " string=" + String(errorString || "")
-                + " normalized=" + phoneRoot.mirrorFeedError
-                + phoneRoot.timingSuffix());
-        }
-    }
-
-    Binding {
-        target: mirrorCamera
-        property: "cameraDevice"
-        when: phoneRoot.shouldActivateMirrorCamera
-            && phoneRoot.hasVideoInput(phoneRoot.selectedVideoInput)
-        value: phoneRoot.selectedVideoInput
-    }
-
-    Binding {
-        target: mirrorCamera
-        property: "cameraDevice"
-        when: !phoneRoot.shouldActivateMirrorCamera
-        value: null
     }
 
     Process {
