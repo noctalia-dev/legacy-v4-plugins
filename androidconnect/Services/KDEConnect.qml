@@ -577,6 +577,8 @@ QtObject {
       .replace(/(^|\s)--no-window\b/g, " ")
       .replace(/(^|\s)--no-video-playback\b/g, " ")
       .replace(/(^|\s)--no-control\b/g, " ")
+      .replace(/(^|\s)--max-size(?:=\S+|\s+\S+)/g, " ")
+      .replace(/(^|\s)--crop(?:=\S+|\s+\S+)/g, " ")
       .replace(/(^|\s)--v4l2-sink(?:=\S+|\s+\S+)/g, " ")
       .replace(/(^|\s)-s(?:=\S+|\s+\S+)/g, " ")
       .replace(/(^|\s)--serial(?:=\S+|\s+\S+)/g, " ")
@@ -929,6 +931,9 @@ QtObject {
     ].join("; ");
     const script = [
       "device=" + shellQuote(device),
+      "if [ -n \"$device\" ] && command -v v4l2-ctl >/dev/null 2>&1; then",
+      "  v4l2-ctl -d \"$device\" -c keep_format=0 >/dev/null 2>&1 || true",
+      "fi",
       "for pid in $(pgrep -x scrcpy || true); do",
       "  cmd=$(tr '\\0' '\\n' </proc/$pid/cmdline 2>/dev/null || true)",
       "  if [ -n \"$device\" ] && printf '%s\\n' \"$cmd\" | grep -Fqx -- \"--v4l2-sink=$device\"; then",

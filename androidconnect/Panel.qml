@@ -53,12 +53,16 @@ Item {
   readonly property color shellAccentTextColor: Color.mOnPrimaryContainer
   readonly property url androidBrandBadgeSource: Qt.resolvedUrl("./Assets/brand-badges/android.svg")
   readonly property url googleBrandBadgeSource: Qt.resolvedUrl("./Assets/brand-badges/google.svg")
+  readonly property url motorolaBrandBadgeSource: Qt.resolvedUrl("./Assets/brand-badges/motorola.svg")
   readonly property url xiaomiBrandBadgeSource: Qt.resolvedUrl("./Assets/brand-badges/xiaomi.svg")
   readonly property bool blurEnabled: true
   readonly property string embeddedMirrorCommand: "scrcpy --no-audio --capture-orientation=@0 --max-size=960 --max-fps=60 --video-bit-rate=12M --video-codec=h264 --v4l2-buffer=0"
   readonly property string detachedMirrorCommand: "scrcpy --no-audio --max-size=1920 --max-fps=60 --video-bit-rate=12M --video-codec=h264"
   readonly property bool reduceBackgroundRefreshWhileMirroring: true
   readonly property string embeddedVideoDevice: "/dev/video10"
+  readonly property real embeddedMirrorFallbackAspectRatio: 9 / 20
+  readonly property int embeddedMirrorTargetMaxWidth: 432
+  readonly property int embeddedMirrorTargetMaxHeight: 960
   property string wirelessAdbPairHost: cfg.wirelessAdbPairHost ?? defaults.wirelessAdbPairHost ?? ""
   property string wirelessAdbPairPort: cfg.wirelessAdbPairPort ?? defaults.wirelessAdbPairPort ?? ""
   property string wirelessAdbPairingCode: ""
@@ -96,11 +100,7 @@ Item {
   property bool embeddedVideoDeviceAccessible: false
   property bool embeddedVideoDeviceCheckKnown: false
   property double embeddedVideoDeviceLastCheckAtMs: 0
-  property bool embeddedMirrorAudioEnabled: Boolean(
-    cfg.embeddedMirrorAudioEnabled
-    ?? defaults.embeddedMirrorAudioEnabled
-    ?? false
-  )
+  property bool embeddedMirrorAudioEnabled: false
   property double panelVisibleSinceMs: 0
   property bool panelStatusGraceElapsed: true
   property bool panelOpenUnlockPending: false
@@ -118,6 +118,21 @@ Item {
   property string dimScreenOriginalMode: ""
   readonly property int dimScreenBrightnessValue: 0
   property int embeddedMirrorFormatLockRetryCount: 0
+  property int embeddedMirrorExpectedOutputWidth: 0
+  property int embeddedMirrorExpectedOutputHeight: 0
+  property int embeddedMirrorFormatMismatchRetryCount: 0
+  property string embeddedMirrorFormatMismatchSerial: ""
+  property bool embeddedMirrorCodecFallbackActive: false
+  property string embeddedMirrorCodecFallbackSerial: ""
+  property string embeddedMirrorShapeProbeSerial: ""
+  property string embeddedMirrorShapeProbeDeviceId: ""
+  property string embeddedMirrorShapeProbeBaseCommand: ""
+  property string embeddedMirrorShapeProbeStdout: ""
+  property string embeddedMirrorShapeProbeStderr: ""
+  property int embeddedMirrorInputCropX: 0
+  property int embeddedMirrorInputCropY: 0
+  property int embeddedMirrorInputCropWidth: 0
+  property int embeddedMirrorInputCropHeight: 0
   readonly property int embeddedMirrorWarmStopTimeoutMs: 120000
 
   anchors.fill: parent
@@ -257,6 +272,7 @@ Item {
   }
 
   Component.onCompleted: {
+    embeddedMirrorAudioEnabled = initialEmbeddedMirrorAudioEnabled();
     if (pluginApi) {
       Logger.i("KDEConnect", "Panel initialized");
     }
@@ -387,6 +403,20 @@ Item {
         || errorText.indexOf("Failed to open output") !== -1
         || errorText.indexOf("Failed to write header") !== -1
         || errorText.indexOf("Demuxer") !== -1;
+
+      if (!isFeedFailure
+          && root.embeddedMirrorErrorLooksCodecRelated(errorText)
+          && !root.embeddedMirrorCodecFallbackActive) {
+        const fallbackSerial = root.resolvedAdbSerial();
+        if (fallbackSerial !== "") {
+          root.embeddedMirrorCodecFallbackActive = true;
+          root.embeddedMirrorCodecFallbackSerial = fallbackSerial;
+          KDEConnect.scrcpyLaunchError = "";
+          Logger.w("KDEConnect", "Embedded mirror codec launch failed; retrying once with h265:", errorText);
+          root.scheduleEmbeddedMirrorAutoStart();
+          return;
+        }
+      }
 
       if (!isFeedFailure)
         return;
@@ -1055,6 +1085,10 @@ Item {
     return initialPhoneSizePresetIndex() >= 2 ? -1 : 1;
   }
 
+  function initialEmbeddedMirrorAudioEnabled() {
+    return Boolean(cfg.embeddedMirrorAudioEnabled ?? defaults.embeddedMirrorAudioEnabled ?? false);
+  }
+
   function persistPhoneSizePreset() {
     if (!pluginApi)
       return;
@@ -1089,6 +1123,7 @@ Item {
       || brandName.indexOf("apple") !== -1;
     const isGoogle = brandName.indexOf("pixel") !== -1
       || brandName.indexOf("google") !== -1;
+    const isMotorolaFamily = /\b(motorola|moto)\b/.test(brandName);
     const isXiaomiFamily = brandName.indexOf("xiaomi") !== -1
       || brandName.indexOf("redmi") !== -1
       || brandName.indexOf("poco") !== -1;
@@ -1106,6 +1141,13 @@ Item {
     if (isXiaomiFamily) {
       return {
         source: xiaomiBrandBadgeSource,
+        fallbackIcon: fallbackIcon
+      };
+    }
+
+    if (isMotorolaFamily) {
+      return {
+        source: motorolaBrandBadgeSource,
         fallbackIcon: fallbackIcon
       };
     }
@@ -1821,6 +1863,425 @@ Item {
     return (embeddedVideoDevice || "").trim() !== "";
   }
 
+  function evenFloor(value) {
+    const numericValue = Number(value);
+    if (!isFinite(numericValue))
+      return 0;
+
+    return Math.max(0, Math.floor(numericValue / 2) * 2);
+  }
+
+  function greatestCommonDivisor(a, b) {
+    let left = Math.abs(Math.round(Number(a || 0)));
+    let right = Math.abs(Math.round(Number(b || 0)));
+    while (right !== 0) {
+      const next = left % right;
+      left = right;
+      right = next;
+    }
+
+    return left > 0 ? left : 1;
+  }
+
+  function embeddedMirrorValidScreenDimension(width, height) {
+    const screenWidth = Number(width || 0);
+    const screenHeight = Number(height || 0);
+    return isFinite(screenWidth)
+      && isFinite(screenHeight)
+      && screenWidth >= 16
+      && screenHeight >= 16
+      && screenWidth <= 20000
+      && screenHeight <= 20000;
+  }
+
+  function embeddedMirrorAddScreenCandidate(candidates, width, height, source, priority) {
+    const screenWidth = Math.round(Number(width || 0));
+    const screenHeight = Math.round(Number(height || 0));
+    if (!embeddedMirrorValidScreenDimension(screenWidth, screenHeight))
+      return;
+
+    candidates.push({
+      width: screenWidth,
+      height: screenHeight,
+      source: String(source || "unknown"),
+      priority: Number(priority || 0)
+    });
+  }
+
+  function embeddedMirrorAddScreenMatch(candidates, text, regex, source, priority) {
+    const match = String(text || "").match(regex);
+    if (!match)
+      return;
+
+    embeddedMirrorAddScreenCandidate(candidates, match[1], match[2], source, priority);
+  }
+
+  function parseEmbeddedMirrorScreenSize(output) {
+    const trimmedOutput = String(output || "").replace(/^loopback_format=.*$/gm, "");
+    const candidates = [];
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /Physical size:\s*(\d+)x(\d+)/i, "wm physical size", 100);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /Override size:\s*(\d+)x(\d+)/i, "wm override size", 95);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /mBaseDisplayInfo[^\n]*?real\s+(\d+)\s*x\s*(\d+)/i, "base display real size", 90);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /mBaseDisplayInfo[^\n]*?logical\s+(\d+)\s*x\s*(\d+)/i, "base display logical size", 88);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /DisplayInfo\{[^\n]*?real\s+(\d+)\s*x\s*(\d+)/i, "display real size", 86);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /DisplayInfo\{[^\n]*?app\s+(\d+)\s*x\s*(\d+)/i, "display app size", 80);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /\bapp\s+(\d+)\s*x\s*(\d+)/i, "app size", 70);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /\blogical\s+(\d+)\s*x\s*(\d+)/i, "logical size", 68);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /mCurrentDisplayRect=Rect\(\s*0\s*,\s*0\s*-\s*(\d+)\s*,\s*(\d+)\s*\)/i, "window display rect", 62);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /\bcur=(\d+)x(\d+)/i, "window current size", 58);
+    embeddedMirrorAddScreenMatch(candidates, trimmedOutput, /\b(\d{3,5})\s*x\s*(\d{3,5})\b/i, "generic size", 10);
+
+    if (candidates.length === 0)
+      return ({ width: 0, height: 0, source: "unknown" });
+
+    candidates.sort(function(a, b) {
+      return Number(b.priority || 0) - Number(a.priority || 0);
+    });
+
+    return candidates[0];
+  }
+
+  function embeddedMirrorLoopbackAspectRatio(output) {
+    const formatMatch = String(output || "").match(/^loopback_format=.*?(\d+)x(\d+)/m);
+    if (!formatMatch)
+      return embeddedMirrorFallbackAspectRatio;
+
+    const width = Number(formatMatch[1]);
+    const height = Number(formatMatch[2]);
+    if (width <= 0 || height <= 0)
+      return embeddedMirrorFallbackAspectRatio;
+
+    return width / height;
+  }
+
+  function embeddedMirrorLoopbackSize(output) {
+    const formatMatch = String(output || "").match(/^loopback_format=.*?(\d+)x(\d+)/m);
+    if (!formatMatch)
+      return ({ width: 9, height: 20 });
+
+    const width = Number(formatMatch[1]);
+    const height = Number(formatMatch[2]);
+    if (width <= 0 || height <= 0)
+      return ({ width: 9, height: 20 });
+
+    return ({ width: width, height: height });
+  }
+
+  function embeddedMirrorCropResult(cropWidth, cropHeight, cropX, cropY) {
+    return ({
+      enabled: true,
+      option: "--crop=" + cropWidth + ":" + cropHeight + ":" + cropX + ":" + cropY,
+      x: cropX,
+      y: cropY,
+      width: cropWidth,
+      height: cropHeight
+    });
+  }
+
+  function embeddedMirrorDisabledCrop() {
+    return ({ enabled: false, option: "", x: 0, y: 0, width: 0, height: 0 });
+  }
+
+  function embeddedMirrorFullFrameForSize(width, height, targetWidth, targetHeight) {
+    const sourceWidth = evenFloor(width);
+    const sourceHeight = evenFloor(height);
+    const maxWidth = evenFloor(targetWidth);
+    const maxHeight = evenFloor(targetHeight);
+    if (sourceWidth < 16 || sourceHeight < 16 || maxWidth < 16 || maxHeight < 16)
+      return ({ enabled: false, option: "", width: 0, height: 0 });
+
+    const scale = Math.min(maxWidth / sourceWidth, maxHeight / sourceHeight, 1);
+    const outputWidth = evenFloor(sourceWidth * scale);
+    const outputHeight = evenFloor(sourceHeight * scale);
+    if (outputWidth < 16 || outputHeight < 16)
+      return ({ enabled: false, option: "", width: 0, height: 0 });
+
+    return ({
+      enabled: true,
+      option: "--max-size=" + Math.max(outputWidth, outputHeight),
+      width: outputWidth,
+      height: outputHeight
+    });
+  }
+
+  function embeddedMirrorTargetEnvelopeForSize(width, height) {
+    const portraitWidth = evenFloor(Math.min(embeddedMirrorTargetMaxWidth, embeddedMirrorTargetMaxHeight));
+    const portraitHeight = evenFloor(Math.max(embeddedMirrorTargetMaxWidth, embeddedMirrorTargetMaxHeight));
+    const landscapeWidth = portraitHeight;
+    const landscapeHeight = portraitWidth;
+    const sourceWidth = evenFloor(width);
+    const sourceHeight = evenFloor(height);
+    const portraitEnvelope = ({ width: portraitWidth, height: portraitHeight, orientation: "portrait" });
+    const landscapeEnvelope = ({ width: landscapeWidth, height: landscapeHeight, orientation: "landscape" });
+    if (sourceWidth < 16 || sourceHeight < 16)
+      return portraitEnvelope;
+
+    const sourceAspect = sourceWidth / sourceHeight;
+    const portraitFrame = embeddedMirrorFullFrameForSize(sourceWidth, sourceHeight, portraitWidth, portraitHeight);
+    const landscapeFrame = embeddedMirrorFullFrameForSize(sourceWidth, sourceHeight, landscapeWidth, landscapeHeight);
+    const portraitArea = portraitFrame.enabled ? portraitFrame.width * portraitFrame.height : 0;
+    const landscapeArea = landscapeFrame.enabled ? landscapeFrame.width * landscapeFrame.height : 0;
+    if (portraitArea <= 0 && landscapeArea <= 0)
+      return sourceAspect >= 1 ? landscapeEnvelope : portraitEnvelope;
+
+    const preferredEnvelope = sourceAspect >= 1 ? landscapeEnvelope : portraitEnvelope;
+    const alternateEnvelope = sourceAspect >= 1 ? portraitEnvelope : landscapeEnvelope;
+    const preferredArea = sourceAspect >= 1 ? landscapeArea : portraitArea;
+    const alternateArea = sourceAspect >= 1 ? portraitArea : landscapeArea;
+    if (preferredArea >= alternateArea * 0.98)
+      return preferredEnvelope;
+
+    return alternateEnvelope;
+  }
+
+  function embeddedMirrorAlignedCropForSize(width, height, targetWidth, targetHeight, alignment) {
+    const sourceWidth = evenFloor(width);
+    const sourceHeight = evenFloor(height);
+    const align = Math.max(2, Math.round(Number(alignment || 2)));
+    const divisor = greatestCommonDivisor(targetWidth, targetHeight);
+    const ratioWidth = Math.max(1, Math.round(Number(targetWidth || 0) / divisor));
+    const ratioHeight = Math.max(1, Math.round(Number(targetHeight || 0) / divisor));
+    const maxScale = Math.floor(Math.min(sourceWidth / ratioWidth, sourceHeight / ratioHeight));
+
+    for (let scale = maxScale; scale > 0; --scale) {
+      const cropWidth = ratioWidth * scale;
+      const cropHeight = ratioHeight * scale;
+      if (cropWidth < 16 || cropHeight < 16)
+        break;
+
+      if ((cropWidth % align) !== 0 || (cropHeight % align) !== 0)
+        continue;
+
+      const cropX = Math.max(0, Math.min(sourceWidth - cropWidth, evenFloor((sourceWidth - cropWidth) / 2)));
+      const cropY = Math.max(0, Math.min(sourceHeight - cropHeight, evenFloor((sourceHeight - cropHeight) / 2)));
+      return embeddedMirrorCropResult(cropWidth, cropHeight, cropX, cropY);
+    }
+
+    return embeddedMirrorDisabledCrop();
+  }
+
+  function embeddedMirrorCropForSize(width, height, targetAspectRatio, targetWidth, targetHeight) {
+    const screenWidth = Math.round(Number(width || 0));
+    const screenHeight = Math.round(Number(height || 0));
+    const targetAspect = Number(targetAspectRatio || 0);
+    const sourceWidth = evenFloor(screenWidth);
+    const sourceHeight = evenFloor(screenHeight);
+    if (sourceWidth < 16 || sourceHeight < 16 || targetAspect <= 0)
+      return embeddedMirrorDisabledCrop();
+
+    const sourceAspect = sourceWidth / sourceHeight;
+    let cropX = 0;
+    let cropY = 0;
+    let cropWidth = sourceWidth;
+    let cropHeight = sourceHeight;
+
+    if (Math.abs(sourceAspect - targetAspect) <= 0.0005)
+      return embeddedMirrorDisabledCrop();
+
+    const alignedCrop = embeddedMirrorAlignedCropForSize(
+      sourceWidth,
+      sourceHeight,
+      targetWidth,
+      targetHeight,
+      16
+    );
+    if (alignedCrop.enabled)
+      return alignedCrop;
+
+    if (sourceAspect > targetAspect) {
+      cropWidth = evenFloor(sourceHeight * targetAspect);
+      if (cropWidth < 16 || sourceWidth - cropWidth < 2)
+        return embeddedMirrorDisabledCrop();
+
+      cropX = evenFloor((screenWidth - cropWidth) / 2);
+      cropX = Math.max(0, Math.min(screenWidth - cropWidth, cropX));
+    } else {
+      cropHeight = evenFloor(sourceWidth / targetAspect);
+      if (cropHeight < 16 || sourceHeight - cropHeight < 2)
+        return embeddedMirrorDisabledCrop();
+
+      cropY = evenFloor((screenHeight - cropHeight) / 2);
+      cropY = Math.max(0, Math.min(screenHeight - cropHeight, cropY));
+    }
+
+    return embeddedMirrorCropResult(cropWidth, cropHeight, cropX, cropY);
+  }
+
+  function embeddedMirrorLaunchShapeForSize(width, height) {
+    const envelope = embeddedMirrorTargetEnvelopeForSize(width, height);
+    const fullFrame = embeddedMirrorFullFrameForSize(
+      width,
+      height,
+      envelope.width,
+      envelope.height
+    );
+    if (fullFrame.enabled) {
+      return ({
+        mode: "full-frame",
+        orientation: envelope.orientation,
+        targetWidth: envelope.width,
+        targetHeight: envelope.height,
+        maxSizeOption: fullFrame.option,
+        outputWidth: fullFrame.width,
+        outputHeight: fullFrame.height,
+        crop: embeddedMirrorDisabledCrop()
+      });
+    }
+
+    const targetAspect = envelope.width > 0 && envelope.height > 0
+      ? envelope.width / envelope.height
+      : embeddedMirrorFallbackAspectRatio;
+    const crop = embeddedMirrorCropForSize(
+      width,
+      height,
+      targetAspect,
+      envelope.width,
+      envelope.height
+    );
+
+    return ({
+      mode: crop.enabled ? "crop" : "default",
+      orientation: envelope.orientation,
+      targetWidth: envelope.width,
+      targetHeight: envelope.height,
+      maxSizeOption: "--max-size=" + Math.max(envelope.width, envelope.height),
+      outputWidth: 0,
+      outputHeight: 0,
+      crop: crop
+    });
+  }
+
+  function clearEmbeddedMirrorInputCrop() {
+    embeddedMirrorInputCropX = 0;
+    embeddedMirrorInputCropY = 0;
+    embeddedMirrorInputCropWidth = 0;
+    embeddedMirrorInputCropHeight = 0;
+  }
+
+  function applyEmbeddedMirrorInputCrop(crop) {
+    if (!crop || !crop.enabled) {
+      clearEmbeddedMirrorInputCrop();
+      return;
+    }
+
+    embeddedMirrorInputCropX = Math.max(0, Math.round(Number(crop.x || 0)));
+    embeddedMirrorInputCropY = Math.max(0, Math.round(Number(crop.y || 0)));
+    embeddedMirrorInputCropWidth = Math.max(0, Math.round(Number(crop.width || 0)));
+    embeddedMirrorInputCropHeight = Math.max(0, Math.round(Number(crop.height || 0)));
+  }
+
+  function applyEmbeddedMirrorExpectedOutput(width, height) {
+    embeddedMirrorExpectedOutputWidth = Math.max(0, Math.round(Number(width || 0)));
+    embeddedMirrorExpectedOutputHeight = Math.max(0, Math.round(Number(height || 0)));
+  }
+
+  function embeddedMirrorErrorLooksCodecRelated(errorText) {
+    const text = String(errorText || "");
+    return /codec|encoder|h\.?264|avc|MediaCodec|configure codec|could not open video|video encoder/i.test(text);
+  }
+
+  function embeddedMirrorCommandWithCodecFallback(commandString, serial) {
+    const trimmedSerial = String(serial || "").trim();
+    if (!embeddedMirrorCodecFallbackActive
+        || trimmedSerial === ""
+        || trimmedSerial !== String(embeddedMirrorCodecFallbackSerial || "").trim())
+      return commandString;
+
+    let command = KDEConnect.normalizeShellCommand(commandString);
+    command = command.replace(/(^|\s)--video-codec(?:=\S+|\s+\S+)/g, " ");
+    command = KDEConnect.normalizeShellCommand(command);
+    return KDEConnect.appendScrcpyOption(command, /(^|\s)--video-codec(?:=|\s+)h265\b/, "--video-codec=h265");
+  }
+
+  function embeddedMirrorShapeProbeCommand() {
+    const androidProbeScript = [
+      "printf '__androidconnect_wm_size__\\n'",
+      "wm size 2>&1 || true",
+      "printf '__androidconnect_dumpsys_display__\\n'",
+      "dumpsys display 2>/dev/null | grep -E \"mBaseDisplayInfo|DisplayInfo\\{|real [0-9]+ x [0-9]+|app [0-9]+ x [0-9]+|logical [0-9]+ x [0-9]+\" || true",
+      "printf '__androidconnect_dumpsys_window__\\n'",
+      "dumpsys window 2>/dev/null | grep -E \"mDisplayInfo|mBaseDisplayInfo|mCurrentDisplayRect|mUnrestrictedScreen|cur=[0-9]+x[0-9]+|app=[0-9]+x[0-9]+\" || true"
+    ].join("; ");
+    const adbCommand = KDEConnect.shellJoinArgs(
+      ["adb"]
+        .concat(KDEConnect.adbSelectorArgsForSerial(embeddedMirrorShapeProbeSerial))
+        .concat(["shell", "sh", "-c", androidProbeScript])
+    );
+
+    return ["sh", "-lc",
+      "device=" + KDEConnect.shellQuote(root.embeddedVideoDevice)
+      + "; adb_output=$(" + adbCommand + " 2>&1); adb_status=$?"
+      + "; printf '%s\\n' \"$adb_output\""
+      + "; format_path=/sys/devices/virtual/video4linux/$(basename \"$device\")/format"
+      + "; printf 'loopback_format='"
+      + "; cat \"$format_path\" 2>/dev/null || true"
+      + "; printf '\\n'"
+      + "; exit \"$adb_status\""
+    ];
+  }
+
+  function launchEmbeddedMirrorSession(baseCommand, serial, deviceId, launchShape) {
+    let launchCommand = KDEConnect.buildScrcpyFeedCommand(
+      baseCommand,
+      embeddedVideoDevice,
+      serial
+    );
+    if (launchCommand === "")
+      return;
+
+    const shape = launchShape || ({
+      mode: "default",
+      orientation: "portrait",
+      targetWidth: Math.min(embeddedMirrorTargetMaxWidth, embeddedMirrorTargetMaxHeight),
+      targetHeight: Math.max(embeddedMirrorTargetMaxWidth, embeddedMirrorTargetMaxHeight),
+      maxSizeOption: "--max-size=" + embeddedMirrorTargetMaxHeight,
+      outputWidth: 0,
+      outputHeight: 0,
+      crop: embeddedMirrorDisabledCrop()
+    });
+    const crop = shape.crop || null;
+    const maxSizeOption = String(shape.maxSizeOption || "").trim();
+    if (maxSizeOption !== "")
+      launchCommand = KDEConnect.normalizeShellCommand(launchCommand + " " + maxSizeOption);
+
+    if (crop && crop.enabled && crop.option !== "")
+      launchCommand = KDEConnect.normalizeShellCommand(launchCommand + " " + crop.option);
+
+    if (String(embeddedMirrorFormatMismatchSerial || "").trim() !== String(serial || "").trim()) {
+      embeddedMirrorFormatMismatchSerial = String(serial || "").trim();
+      embeddedMirrorFormatMismatchRetryCount = 0;
+    }
+
+    applyEmbeddedMirrorInputCrop(crop);
+    applyEmbeddedMirrorExpectedOutput(shape.outputWidth || 0, shape.outputHeight || 0);
+    Logger.i("KDEConnect", "Launching embedded scrcpy in feed mode",
+      "mode=" + String(shape.mode || "default"),
+      "orientation=" + String(shape.orientation || "unknown"),
+      "target=" + Number(shape.targetWidth || 0) + "x" + Number(shape.targetHeight || 0),
+      "expected=" + embeddedMirrorExpectedOutputWidth + "x" + embeddedMirrorExpectedOutputHeight,
+      embeddedMirrorCodecFallbackActive && String(embeddedMirrorCodecFallbackSerial || "").trim() === String(serial || "").trim()
+        ? "codecFallback=h265"
+        : "codecFallback=none",
+      maxSizeOption !== "" ? ("size=" + maxSizeOption) : "size=default",
+      crop && crop.enabled ? ("crop=" + crop.option) : "crop=none");
+    KDEConnect.launchScrcpySession(
+      deviceId,
+      launchCommand
+    );
+  }
+
+  function queryEmbeddedMirrorShapeAndLaunch(baseCommand, serial, deviceId) {
+    if (embeddedMirrorShapeProbeProc.running)
+      return;
+
+    embeddedMirrorShapeProbeSerial = serial;
+    embeddedMirrorShapeProbeDeviceId = deviceId;
+    embeddedMirrorShapeProbeBaseCommand = baseCommand;
+    embeddedMirrorShapeProbeStdout = "";
+    embeddedMirrorShapeProbeStderr = "";
+    embeddedMirrorShapeProbeProc.running = true;
+  }
+
   function scheduleTouchMappingRefresh() {
     Qt.callLater(function() {
       root.refreshEmbeddedMirrorTouchMapping();
@@ -1900,19 +2361,24 @@ Item {
     }
 
     if (!KDEConnect.scrcpyRunning && !KDEConnect.scrcpyLaunching) {
-      const tunedEmbeddedCommand = KDEConnect.applyConfiguredMirrorAudioMode(
+      if (embeddedMirrorShapeProbeProc.running)
+        return;
+
+      if (embeddedMirrorCodecFallbackActive
+          && String(embeddedMirrorCodecFallbackSerial || "").trim() !== serial) {
+        embeddedMirrorCodecFallbackActive = false;
+        embeddedMirrorCodecFallbackSerial = "";
+      }
+
+      let tunedEmbeddedCommand = KDEConnect.applyConfiguredMirrorAudioMode(
         embeddedMirrorCommand,
         embeddedMirrorAudioEnabled
       );
-      const launchCommand = KDEConnect.buildScrcpyFeedCommand(
+      tunedEmbeddedCommand = embeddedMirrorCommandWithCodecFallback(tunedEmbeddedCommand, serial);
+      queryEmbeddedMirrorShapeAndLaunch(
         tunedEmbeddedCommand,
-        embeddedVideoDevice,
-        serial
-      );
-      Logger.i("KDEConnect", "Launching embedded scrcpy in feed mode");
-      KDEConnect.launchScrcpySession(
-        KDEConnect.mainDevice.id,
-        launchCommand
+        serial,
+        KDEConnect.mainDevice.id
       );
       return;
     }
@@ -2124,6 +2590,87 @@ Item {
 
     return "";
   }
+
+  Process {
+    id: embeddedMirrorShapeProbeProc
+    running: false
+    command: root.embeddedMirrorShapeProbeCommand()
+
+    stdout: StdioCollector {
+      onStreamFinished: {
+        root.embeddedMirrorShapeProbeStdout = String(text || "").trim();
+      }
+    }
+
+    stderr: StdioCollector {
+      onStreamFinished: {
+        root.embeddedMirrorShapeProbeStderr = String(text || "").trim();
+      }
+    }
+
+    onExited: (exitCode, exitStatus) => {
+      const pendingSerial = root.embeddedMirrorShapeProbeSerial;
+      const pendingDeviceId = root.embeddedMirrorShapeProbeDeviceId;
+      const pendingBaseCommand = root.embeddedMirrorShapeProbeBaseCommand;
+      const output = root.embeddedMirrorShapeProbeStdout;
+      const stderrOutput = root.embeddedMirrorShapeProbeStderr;
+      root.embeddedMirrorShapeProbeSerial = "";
+      root.embeddedMirrorShapeProbeDeviceId = "";
+      root.embeddedMirrorShapeProbeBaseCommand = "";
+      root.embeddedMirrorShapeProbeStdout = "";
+      root.embeddedMirrorShapeProbeStderr = "";
+
+      if (!root.visible
+          || !root.embeddedMirrorModeEnabled()
+          || KDEConnect.mainDevice === null
+          || String(KDEConnect.mainDevice.id || "").trim() !== pendingDeviceId
+          || root.resolvedAdbSerial() !== pendingSerial
+          || KDEConnect.scrcpyRunning
+          || KDEConnect.scrcpyLaunching) {
+        root.scheduleEmbeddedMirrorAutoStart();
+        return;
+      }
+
+      let launchShape = null;
+      if (exitCode === 0) {
+        const screenSize = root.parseEmbeddedMirrorScreenSize(output);
+        const loopbackSize = root.embeddedMirrorLoopbackSize(output);
+        const loopbackAspect = root.embeddedMirrorLoopbackAspectRatio(output);
+        launchShape = root.embeddedMirrorLaunchShapeForSize(
+          screenSize.width,
+          screenSize.height
+        );
+        const targetWidth = Number(launchShape.targetWidth || 0);
+        const targetHeight = Number(launchShape.targetHeight || 0);
+        const targetAspect = targetWidth > 0 && targetHeight > 0
+          ? targetWidth / targetHeight
+          : 0;
+        Logger.i("KDEConnect", "Embedded mirror shape probe:",
+          "screen=" + screenSize.width + "x" + screenSize.height,
+          "screenSource=" + String(screenSize.source || "unknown"),
+          "target=" + targetWidth + "x" + targetHeight,
+          targetAspect > 0 ? ("targetAspect=" + targetAspect.toFixed(5)) : "targetAspect=unknown",
+          "orientation=" + String(launchShape.orientation || "unknown"),
+          "loopback=" + loopbackSize.width + "x" + loopbackSize.height,
+          "loopbackAspect=" + loopbackAspect.toFixed(5),
+          "mode=" + String(launchShape.mode || "default"),
+          "expected=" + Number(launchShape.outputWidth || 0) + "x" + Number(launchShape.outputHeight || 0),
+          String(launchShape.maxSizeOption || "") !== "" ? ("size=" + launchShape.maxSizeOption) : "size=default",
+          launchShape.crop && launchShape.crop.enabled ? ("crop=" + launchShape.crop.option) : "crop=none");
+      } else {
+        Logger.w("KDEConnect", "Embedded mirror shape probe failed, launching with default sizing:",
+          stderrOutput !== "" ? stderrOutput : output);
+      }
+
+      root.launchEmbeddedMirrorSession(
+        pendingBaseCommand,
+        pendingSerial,
+        pendingDeviceId,
+        launchShape
+      );
+    }
+  }
+
   Process {
     id: embeddedVideoDeviceCheckProc
     running: false
@@ -2162,18 +2709,34 @@ Item {
     running: false
     command: ["sh", "-lc",
       "device=" + KDEConnect.shellQuote(root.embeddedVideoDevice)
+      + "; expected_width=" + Math.max(0, Math.round(Number(root.embeddedMirrorExpectedOutputWidth || 0)))
+      + "; expected_height=" + Math.max(0, Math.round(Number(root.embeddedMirrorExpectedOutputHeight || 0)))
+      + "; expected_size=''"
+      + "; if [ \"$expected_width\" -gt 0 ] && [ \"$expected_height\" -gt 0 ]; then expected_size=\"${expected_width}x${expected_height}\"; fi"
+      + "; fmt_size() { printf '%s\\n' \"$1\" | sed -n 's/.*:\\([0-9][0-9]*\\)x\\([0-9][0-9]*\\).*/\\1x\\2/p' | head -n1; }"
       + "; [ -c \"$device\" ] || exit 2"
       + "; base=/sys/devices/virtual/video4linux/$(basename \"$device\")"
-      + "; i=0; fmt=''; prev_fmt=''; stable_fmt=''"
+      + "; i=0; fmt=''; prev_fmt=''; stable_fmt=''; current_size=''"
       + "; while [ $i -lt 40 ]; do"
       + " fmt=$(cat \"$base/format\" 2>/dev/null || true)"
-      + "; if [ -n \"$fmt\" ] && [ \"$fmt\" = \"$prev_fmt\" ]; then stable_fmt=\"$fmt\"; break; fi"
+      + "; current_size=$(fmt_size \"$fmt\")"
+      + "; if [ -n \"$expected_size\" ] && [ \"$current_size\" = \"$expected_size\" ]; then stable_fmt=\"$fmt\"; break; fi"
+      + "; if [ -z \"$expected_size\" ] && [ -n \"$fmt\" ] && [ \"$fmt\" = \"$prev_fmt\" ]; then stable_fmt=\"$fmt\"; break; fi"
       + "; [ -n \"$fmt\" ] && prev_fmt=\"$fmt\""
       + "; i=$((i+1))"
       + "; sleep 0.05"
       + "; done"
       + "; [ -n \"$stable_fmt\" ] && fmt=\"$stable_fmt\" || fmt=\"$prev_fmt\""
       + "; [ -n \"$fmt\" ] || exit 3"
+      + "; observed_size=$(fmt_size \"$fmt\")"
+      + "; printf 'observed_format=%s\\n' \"$fmt\""
+      + "; [ -z \"$observed_size\" ] || printf 'observed_size=%s\\n' \"$observed_size\""
+      + "; [ -z \"$expected_size\" ] || printf 'expected_size=%s\\n' \"$expected_size\""
+      + "; if [ -n \"$expected_size\" ] && [ -n \"$observed_size\" ] && [ \"$observed_size\" != \"$expected_size\" ]; then"
+      + " printf 'format_mismatch=expected:%s observed:%s\\n' \"$expected_size\" \"$observed_size\""
+      + "; v4l2-ctl -d \"$device\" -c keep_format=0 >/dev/null 2>&1 || true"
+      + "; exit 6"
+      + "; fi"
       + "; v4l2-ctl -d \"$device\" -c keep_format=1 >/dev/null 2>&1 || exit 4"
       + "; i=0; ready=0"
       + "; while [ $i -lt 60 ]; do"
@@ -2222,10 +2785,19 @@ Item {
         root.activePhonePreview.debugLog("formatLock exitCode=" + exitCode);
       if (exitCode === 0 && root.activePhonePreview) {
         root.embeddedMirrorFormatLockRetryCount = 0;
+        root.embeddedMirrorFormatMismatchRetryCount = 0;
         Qt.callLater(function() {
           if (root.activePhonePreview)
             root.activePhonePreview.probeNativeLoopback();
         });
+      } else if (exitCode === 6
+          && KDEConnect.scrcpyRunning
+          && root.embeddedMirrorFormatMismatchRetryCount < 1) {
+        root.embeddedMirrorFormatMismatchRetryCount += 1;
+        Logger.w("KDEConnect", "Embedded format did not match expected size; restarting feed once");
+        if (root.activePhonePreview)
+          root.activePhonePreview.debugLog("formatLock mismatch restart=" + root.embeddedMirrorFormatMismatchRetryCount);
+        KDEConnect.stopScrcpySession();
       } else if (exitCode === 5
           && root.activePhonePreview
           && root.activePhonePreview.mirrorFeedEnabled
@@ -2271,11 +2843,47 @@ Item {
     }
   }
 
-  function normalizedToDeviceCoordinate(value, maxValue) {
+  function normalizedToDeviceCoordinate(value, maxValue, cropOffset, cropSize) {
     if (maxValue <= 0)
       return 0;
 
-    return Math.max(0, Math.min(maxValue - 1, Math.round(value * maxValue)));
+    const offset = Math.max(0, Math.min(maxValue - 1, Math.round(Number(cropOffset || 0))));
+    const availableSize = Math.max(1, maxValue - offset);
+    const span = cropSize > 0
+      ? Math.max(1, Math.min(availableSize, Math.round(Number(cropSize || 0))))
+      : maxValue;
+
+    return Math.max(0, Math.min(maxValue - 1, offset + Math.round(value * span)));
+  }
+
+  function mirrorXCoordinate(value) {
+    return normalizedToDeviceCoordinate(
+      value,
+      KDEConnect.adbScreenWidth,
+      embeddedMirrorInputCropX,
+      embeddedMirrorInputCropWidth
+    );
+  }
+
+  function mirrorYCoordinate(value) {
+    return normalizedToDeviceCoordinate(
+      value,
+      KDEConnect.adbScreenHeight,
+      embeddedMirrorInputCropY,
+      embeddedMirrorInputCropHeight
+    );
+  }
+
+  function embeddedMirrorInputWidth() {
+    return embeddedMirrorInputCropWidth > 0
+      ? Math.min(embeddedMirrorInputCropWidth, KDEConnect.adbScreenWidth)
+      : KDEConnect.adbScreenWidth;
+  }
+
+  function embeddedMirrorInputHeight() {
+    return embeddedMirrorInputCropHeight > 0
+      ? Math.min(embeddedMirrorInputCropHeight, KDEConnect.adbScreenHeight)
+      : KDEConnect.adbScreenHeight;
   }
 
   function handleMirrorTap(xNorm, yNorm) {
@@ -2284,8 +2892,8 @@ Item {
 
     KDEConnect.runAdbTap(
       currentMirrorAdbSerial(),
-      normalizedToDeviceCoordinate(xNorm, KDEConnect.adbScreenWidth),
-      normalizedToDeviceCoordinate(yNorm, KDEConnect.adbScreenHeight)
+      mirrorXCoordinate(xNorm),
+      mirrorYCoordinate(yNorm)
     );
   }
 
@@ -2295,10 +2903,10 @@ Item {
 
     KDEConnect.runAdbSwipe(
       currentMirrorAdbSerial(),
-      normalizedToDeviceCoordinate(x1Norm, KDEConnect.adbScreenWidth),
-      normalizedToDeviceCoordinate(y1Norm, KDEConnect.adbScreenHeight),
-      normalizedToDeviceCoordinate(x2Norm, KDEConnect.adbScreenWidth),
-      normalizedToDeviceCoordinate(y2Norm, KDEConnect.adbScreenHeight),
+      mirrorXCoordinate(x1Norm),
+      mirrorYCoordinate(y1Norm),
+      mirrorXCoordinate(x2Norm),
+      mirrorYCoordinate(y2Norm),
       durationMs
     );
   }
@@ -2312,13 +2920,13 @@ Item {
     if (absDeltaX === 0 && absDeltaY === 0)
       return;
 
-    const startX = normalizedToDeviceCoordinate(xNorm, KDEConnect.adbScreenWidth);
-    const startY = normalizedToDeviceCoordinate(yNorm, KDEConnect.adbScreenHeight);
+    const startX = mirrorXCoordinate(xNorm);
+    const startY = mirrorYCoordinate(yNorm);
     const horizontalScroll = absDeltaX > absDeltaY;
     const magnitude = Math.max(0.65, Math.min(2.4, horizontalScroll ? absDeltaX : absDeltaY));
 
     if (horizontalScroll) {
-      const travelX = Math.max(72, Math.round(KDEConnect.adbScreenWidth * 0.075 * magnitude));
+      const travelX = Math.max(72, Math.round(embeddedMirrorInputWidth() * 0.075 * magnitude));
       const halfTravelX = Math.max(24, Math.round(travelX / 2));
       const swipeStartX = Math.max(0, Math.min(KDEConnect.adbScreenWidth - 1, startX + (deltaX > 0 ? halfTravelX : -halfTravelX)));
       const swipeEndX = Math.max(0, Math.min(KDEConnect.adbScreenWidth - 1, startX + (deltaX > 0 ? -halfTravelX : halfTravelX)));
@@ -2333,7 +2941,7 @@ Item {
       return;
     }
 
-    const travelY = Math.max(110, Math.round(KDEConnect.adbScreenHeight * 0.11 * magnitude));
+    const travelY = Math.max(110, Math.round(embeddedMirrorInputHeight() * 0.11 * magnitude));
     const halfTravelY = Math.max(32, Math.round(travelY / 2));
     const swipeStartY = Math.max(0, Math.min(KDEConnect.adbScreenHeight - 1, startY + (deltaY < 0 ? halfTravelY : -halfTravelY)));
     const swipeEndY = Math.max(0, Math.min(KDEConnect.adbScreenHeight - 1, startY + (deltaY < 0 ? -halfTravelY : halfTravelY)));
@@ -2864,17 +3472,22 @@ Item {
                         Rectangle {
                           readonly property var brandBadge: root.deviceBrandBadge(KDEConnect.mainDevice?.name || "")
                           readonly property bool brandBadgeFrameless: brandBadge.source !== ""
+                          readonly property bool resizeControlVisible: brandBadgeMouse.containsMouse
+                          readonly property string resizeTooltipText: root.trSafe("panel.phone-size.tooltip", "Phone size: ")
+                            + root.phoneSizeLabel + " (" + root.phoneSizePercent + "%)"
                           Layout.alignment: Qt.AlignVCenter
                           Layout.preferredWidth: 34 * Style.uiScaleRatio
                           Layout.preferredHeight: 34 * Style.uiScaleRatio
                           radius: width / 2
-                          color: brandBadgeFrameless ? "transparent" : root.shellIconChipColor
-                          border.width: brandBadgeFrameless ? 0 : Style.borderS
-                          border.color: brandBadgeFrameless ? "transparent" : root.shellIconChipBorderColor
+                          color: resizeControlVisible
+                            ? "transparent"
+                            : (brandBadgeFrameless ? "transparent" : root.shellIconChipColor)
+                          border.width: resizeControlVisible || brandBadgeFrameless ? 0 : Style.borderS
+                          border.color: resizeControlVisible || brandBadgeFrameless ? "transparent" : root.shellIconChipBorderColor
 
                           Image {
                             anchors.centerIn: parent
-                            visible: parent.brandBadge.source !== ""
+                            visible: parent.brandBadge.source !== "" && !parent.resizeControlVisible
                             source: parent.brandBadge.source
                             width: parent.brandBadgeFrameless ? parent.width : parent.width * 0.72
                             height: parent.brandBadgeFrameless ? parent.height : parent.height * 0.72
@@ -2885,10 +3498,46 @@ Item {
 
                           NIcon {
                             anchors.centerIn: parent
-                            visible: parent.brandBadge.source === ""
+                            visible: parent.brandBadge.source === "" && !parent.resizeControlVisible
                             icon: parent.brandBadge.fallbackIcon
                             pointSize: Style.fontSizeS
                             color: root.shellPrimaryTextColor
+                          }
+
+                          Rectangle {
+                            anchors.centerIn: parent
+                            visible: parent.resizeControlVisible
+                            width: parent.width
+                            height: parent.height
+                            radius: width / 2
+                            color: root.shellButtonBgHoverColor
+                            border.width: Style.borderS
+                            border.color: root.shellButtonBorderHoverColor
+
+                            NIcon {
+                              anchors.centerIn: parent
+                              icon: "resize"
+                              pointSize: Style.fontSizeS
+                              color: root.shellButtonFgHoverColor
+                            }
+                          }
+
+                          MouseArea {
+                            id: brandBadgeMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            acceptedButtons: Qt.LeftButton
+                            cursorShape: Qt.PointingHandCursor
+                            onEntered: {
+                              TooltipService.show(parent, parent.resizeTooltipText, "top");
+                            }
+                            onExited: {
+                              TooltipService.hide(parent);
+                            }
+                            onClicked: {
+                              TooltipService.hide(parent);
+                              root.cyclePhoneSizePreset();
+                            }
                           }
                         }
 
@@ -2929,13 +3578,6 @@ Item {
                               root.ensureDetachedMirrorSession();
                               pluginApi?.closePanel(screen, root);
                             }
-                          }
-
-                          PanelActionIconButton {
-                            icon: "zoom-in"
-                            tooltipText: root.trSafe("panel.phone-size.tooltip", "Phone size: ")
-                              + root.phoneSizeLabel + " (" + root.phoneSizePercent + "%)"
-                            onClicked: root.cyclePhoneSizePreset()
                           }
 
                           PanelActionIconButton {
@@ -3053,6 +3695,7 @@ Item {
                           onHomeRequested: root.sendAndroidHomeOrUnlock()
                           onRecentsRequested: root.sendAndroidNavKey(187)
                         }
+
                       }
 
                       RowLayout {

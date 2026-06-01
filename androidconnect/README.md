@@ -30,7 +30,7 @@ Project repository:
 
 ## Current Status
 
-Current plugin version: `1.5.1`
+Current plugin version: `1.6.0`
 
 See `CHANGELOG.md` for release notes.
 
@@ -50,7 +50,9 @@ Current behavior:
 - Keep-screen-awake is available from the utility row while the panel is open
 - Status and error messages stay hidden during the initial grace period, then appear only if the feed or input path is still not ready
 - Opening the panel while `scrcpy` is already connected sends unlock-only, not Home
-- Header brand badges use logo assets where available and fall back to icons otherwise
+- Embedded mirror launch probes Android display geometry, chooses a full-frame size for the phone's aspect ratio, and avoids cropping unless a fallback path is needed
+- The V4L2 loopback format is checked against the expected `scrcpy` output before the feed is locked for Qt Multimedia
+- Header brand badges use logo assets where available, including Google, Xiaomi-family, and Motorola-family names, and fall back to icons otherwise
 - First-run cold-start reliability is fixed in `1.4.0`: the root cause was `v4l2loopback` advertising the scrcpy device as `V4L2_CAP_VIDEO_OUTPUT` at process start when created with `exclusive_caps=1`, which caused Qt Multimedia to filter it out and never re-enumerate. Using `exclusive_caps=0` on the scrcpy loopback resolves it
 
 ## Features
@@ -59,6 +61,7 @@ Current behavior:
 - Wake device, browse files, send files, and ring phone from the panel
 - Embedded in-panel Android mirror
 - Live V4L2 feed for the embedded mirror
+- Display-size probing for broader phone aspect-ratio compatibility
 - Optional embedded audio toggle, off by default
 - ADB tap, swipe, text, key, and Android navigation input
 - In-panel utility actions for screenshot, screen recording, and keep-screen-awake
@@ -169,7 +172,7 @@ Notes:
 ### Header Actions
 
 - Device switcher when more than one phone is available
-- Phone size toggle
+- Phone size toggle, shown when hovering the brand badge
 - Embedded audio toggle
 - Wireless ADB tools
 - Browse files
@@ -235,7 +238,7 @@ If it fails:
 
 ## Known Issues
 
-- The embedded screen can occasionally appear glitchy or partially broken after a device mode change. Closing the plugin and opening it again usually fixes it. If not, restart the shell.
+- No persistent embedded mirror corruption issue is currently tracked. If the mirror starts black, check the loopback setup below first.
 
 ### Black Screen In The Embedded Mirror
 
