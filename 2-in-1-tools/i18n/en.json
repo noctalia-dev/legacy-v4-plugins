@@ -1,0 +1,64 @@
+{
+    "settings": {
+        "autoRotateDependency": {
+            "description": "Install iio-sensor-proxy so monitor-sensor and the sensor service are available for tablet-mode rotation.",
+            "label": "Auto-rotate requires iio-sensor-proxy"
+        },
+        "autoRotateInTabletMode": {
+            "description": "Use monitor-sensor while tablet mode is active to rotate the internal display automatically.",
+            "label": "Auto-rotate screen in tablet mode"
+        },
+        "autoRotateOutsideTabletMode": {
+            "description": "Keep sensor-based auto-rotation available even when tablet mode is not active.",
+            "label": "Allow auto-rotate outside tablet mode"
+        },
+        "autoTabletBarDensity": {
+            "description": "When tablet mode is active, switch Noctalia's bar density automatically.",
+            "label": "Auto-switch bar density in tablet mode"
+        },
+        "buttonBehavior": {
+            "description": "Choose whether the main button toggles auto-rotate lock or rotates the display manually.",
+            "label": "Bar and Control Center button behavior",
+            "options": {
+                "manualRotate": "Rotate manually",
+                "toggleAutoRotateLock": "Toggle auto-rotate / lock rotation"
+            }
+        },
+        "exclusiveDockInTabletMode": {
+            "description": "When tablet mode is active, enable the Noctalia dock if needed and switch it to exclusive mode.",
+            "label": "Use exclusive dock in tablet mode"
+        },
+        "flipVerticalSensorOrientation": {
+            "description": "Swap left-up and right-up auto-rotate behavior for laptops whose sensor reports the portrait directions inverted.",
+            "label": "Flip vertical sensor orientation"
+        },
+        "iconName": {
+            "browseLibrary": "Browse Library",
+            "description": "Tabler icon name used for the bar widget.",
+            "label": "Bar icon"
+        },
+        "showSuccessToast": {
+            "description": "Display a toast after a rotation command succeeds.",
+            "label": "Show success toast"
+        },
+        "showTransformInTooltip": {
+            "description": "Include the current rotation state in the bar widget tooltip.",
+            "label": "Show transform in tooltip"
+        },
+        "syncHyprTouchTransform": {
+            "description": "After rotating a display on Hyprland, also rotate mapped touchscreen coordinates for matching touch devices.",
+            "label": "Hyprland: sync touchscreen transform"
+        },
+        "tabletBarDensity": {
+            "description": "Choose the Noctalia bar density to apply while tablet mode is active.",
+            "label": "Tablet mode bar density",
+            "options": {
+                "comfortable": "Comfortable",
+                "compact": "Compact",
+                "default": "Default",
+                "mini": "Mini",
+                "spacious": "Spacious"
+            }
+        }
+    }
+}

@@ -25,15 +25,15 @@ ColumnLayout {
     property string editTabletBarDensity: cfg.tabletBarDensity ?? defaults.tabletBarDensity ?? "default"
     property bool autoRotateDependencyAvailable: true
     readonly property var barDensityModel: [
-        { key: "mini",        name: "Mini" },
-        { key: "compact",     name: "Compact" },
-        { key: "default",     name: "Default" },
-        { key: "comfortable", name: "Comfortable" },
-        { key: "spacious",    name: "Spacious" }
+        { key: "mini",        name: pluginApi?.tr("settings.tabletBarDensity.options.mini") },
+        { key: "compact",     name: pluginApi?.tr("settings.tabletBarDensity.options.compact") },
+        { key: "default",     name: pluginApi?.tr("settings.tabletBarDensity.options.default") },
+        { key: "comfortable", name: pluginApi?.tr("settings.tabletBarDensity.options.comfortable") },
+        { key: "spacious",    name: pluginApi?.tr("settings.tabletBarDensity.options.spacious") }
     ]
     readonly property var buttonBehaviorModel: [
-        { key: "toggle-auto-rotate-lock", name: "Toggle auto-rotate / lock rotation" },
-        { key: "manual-rotate", name: "Rotate manually" }
+        { key: "toggle-auto-rotate-lock", name: pluginApi?.tr("settings.buttonBehavior.options.toggleAutoRotateLock") },
+        { key: "manual-rotate", name: pluginApi?.tr("settings.buttonBehavior.options.manualRotate") }
     ]
 
     spacing: Style.marginL
@@ -44,8 +44,8 @@ ColumnLayout {
 
         NLabel {
             Layout.fillWidth: true
-            label: "Bar icon"
-            description: "Tabler icon name used for the bar widget."
+            label: pluginApi?.tr("settings.iconName.label")
+            description: pluginApi?.tr("settings.iconName.description")
         }
 
         NIcon {
@@ -69,15 +69,15 @@ ColumnLayout {
         }
 
         NButton {
-            text: "Browse Library"
+            text: pluginApi?.tr("settings.iconName.browseLibrary")
             onClicked: iconPicker.open()
         }
     }
 
     NToggle {
         Layout.fillWidth: true
-        label: "Show transform in tooltip"
-        description: "Include the current rotation state in the bar widget tooltip."
+        label: pluginApi?.tr("settings.showTransformInTooltip.label")
+        description: pluginApi?.tr("settings.showTransformInTooltip.description")
         checked: root.editShowTransformInTooltip
         onToggled: checked => {
             root.editShowTransformInTooltip = checked
@@ -87,8 +87,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: "Show success toast"
-        description: "Display a toast after a rotation command succeeds."
+        label: pluginApi?.tr("settings.showSuccessToast.label")
+        description: pluginApi?.tr("settings.showSuccessToast.description")
         checked: root.editShowSuccessToast
         onToggled: checked => {
             root.editShowSuccessToast = checked
@@ -98,8 +98,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: "Auto-switch bar density in tablet mode"
-        description: "When tablet mode is active, switch Noctalia's bar density automatically."
+        label: pluginApi?.tr("settings.autoTabletBarDensity.label")
+        description: pluginApi?.tr("settings.autoTabletBarDensity.description")
         checked: root.editAutoTabletBarDensity
         onToggled: checked => {
             root.editAutoTabletBarDensity = checked
@@ -109,8 +109,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: "Use exclusive dock in tablet mode"
-        description: "When tablet mode is active, enable the Noctalia dock if needed and switch it to exclusive mode."
+        label: pluginApi?.tr("settings.exclusiveDockInTabletMode.label")
+        description: pluginApi?.tr("settings.exclusiveDockInTabletMode.description")
         checked: root.editExclusiveDockInTabletMode
         onToggled: checked => {
             root.editExclusiveDockInTabletMode = checked
@@ -120,8 +120,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: "Auto-rotate screen in tablet mode"
-        description: "Use monitor-sensor while tablet mode is active to rotate the internal display automatically."
+        label: pluginApi?.tr("settings.autoRotateInTabletMode.label")
+        description: pluginApi?.tr("settings.autoRotateInTabletMode.description")
         checked: root.editAutoRotateInTabletMode
         onToggled: checked => {
             root.editAutoRotateInTabletMode = checked
@@ -132,8 +132,8 @@ ColumnLayout {
     NToggle {
         Layout.fillWidth: true
         visible: root.editAutoRotateInTabletMode
-        label: "Allow auto-rotate outside tablet mode"
-        description: "Keep sensor-based auto-rotation available even when tablet mode is not active."
+        label: pluginApi?.tr("settings.autoRotateOutsideTabletMode.label")
+        description: pluginApi?.tr("settings.autoRotateOutsideTabletMode.description")
         checked: root.editAutoRotateOutsideTabletMode
         onToggled: checked => {
             root.editAutoRotateOutsideTabletMode = checked
@@ -143,8 +143,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: "Hyprland: sync touchscreen transform"
-        description: "After rotating a display on Hyprland, also rotate mapped touchscreen coordinates for matching touch devices."
+        label: pluginApi?.tr("settings.syncHyprTouchTransform.label")
+        description: pluginApi?.tr("settings.syncHyprTouchTransform.description")
         checked: root.editSyncHyprTouchTransform
         onToggled: checked => {
             root.editSyncHyprTouchTransform = checked
@@ -154,8 +154,8 @@ ColumnLayout {
 
     NComboBox {
         Layout.fillWidth: true
-        label: "Bar and Control Center button behavior"
-        description: "Choose whether the main button toggles auto-rotate lock or rotates the display manually."
+        label: pluginApi?.tr("settings.buttonBehavior.label")
+        description: pluginApi?.tr("settings.buttonBehavior.description")
         model: root.buttonBehaviorModel
         currentKey: root.editButtonBehavior
         onSelected: key => {
@@ -167,15 +167,15 @@ ColumnLayout {
     NLabel {
         Layout.fillWidth: true
         visible: !root.autoRotateDependencyAvailable
-        label: "Auto-rotate requires iio-sensor-proxy"
-        description: "Install iio-sensor-proxy so monitor-sensor and the sensor service are available for tablet-mode rotation."
+        label: pluginApi?.tr("settings.autoRotateDependency.label")
+        description: pluginApi?.tr("settings.autoRotateDependency.description")
     }
 
     NToggle {
         Layout.fillWidth: true
         visible: root.editAutoRotateInTabletMode
-        label: "Flip vertical sensor orientation"
-        description: "Swap left-up and right-up auto-rotate behavior for laptops whose sensor reports the portrait directions inverted."
+        label: pluginApi?.tr("settings.flipVerticalSensorOrientation.label")
+        description: pluginApi?.tr("settings.flipVerticalSensorOrientation.description")
         checked: root.editFlipVerticalSensorOrientation
         onToggled: checked => {
             root.editFlipVerticalSensorOrientation = checked
@@ -186,8 +186,8 @@ ColumnLayout {
     NComboBox {
         Layout.fillWidth: true
         visible: root.editAutoTabletBarDensity
-        label: "Tablet mode bar density"
-        description: "Choose the Noctalia bar density to apply while tablet mode is active."
+        label: pluginApi?.tr("settings.tabletBarDensity.label")
+        description: pluginApi?.tr("settings.tabletBarDensity.description")
         model: root.barDensityModel
         currentKey: root.editTabletBarDensity
         onSelected: key => {
