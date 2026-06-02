@@ -1,5 +1,5 @@
 {
-  "id": "pass",
+  "id": "password-store",
   "name": "Password Store",
   "version": "1.0.0",
   "minNoctaliaVersion": "3.6.0",
@@ -9,7 +9,7 @@
   "description": "Search pass (password-store) from the launcher. Type 'pass <name>' to copy a password or 'po <name>' to copy a TOTP code to clipboard.",
   "tags": ["Launcher", "Utility"],
   "entryPoints": {
-    "main": "Main.qml"
+    "launcherProvider": "LauncherProvider.qml"
   },
   "dependencies": {
     "plugins": []

@@ -28,18 +28,30 @@ sudo apt install pass pass-extension-otp wl-clipboard
 sudo dnf install pass pass-otp wl-clipboard
 ```
 
-## Installation
+## gopass
 
-### Manual Installation
+If you use [gopass](https://github.com/gopasspw/gopass) instead of pass, you can make this plugin work by symlinking `gopass` as `pass`:
 
 ```bash
-git clone https://github.com/noctalia-dev/noctalia-plugins ~/.config/noctalia/plugins/pass
+ln -s $(which gopass) ~/.local/bin/pass
 ```
 
-Then restart Noctalia:
+The plugin calls `pass -c <entry>` and `pass otp -c <entry>`, which gopass understands. Make sure `~/.local/bin` is on your `$PATH`.
+
+You also need to point the plugin at gopass's store by setting `$PASSWORD_STORE_DIR`:
 
 ```bash
-qs kill -c noctalia-shell && qs -c noctalia-shell -d
+export PASSWORD_STORE_DIR="$HOME/.local/share/gopass/stores/root"
+```
+
+Add this to your shell profile (`.bashrc`, `.zshrc`, etc.) so it persists.
+
+## Installation
+
+Install directly from the Noctalia plugin manager in Settings, or clone manually:
+
+```bash
+git clone https://github.com/noctalia-dev/noctalia-plugins ~/.config/noctalia/plugins/password-store
 ```
 
 ## Usage
@@ -64,10 +76,10 @@ Selecting an entry runs `pass -c <entry>` or `pass otp -c <entry>` respectively.
 ## File Structure
 
 ```
-pass/
-├── manifest.json   # Plugin metadata
-├── Main.qml        # Launcher provider — search and activation logic
-└── README.md       # This file
+password-store/
+├── manifest.json          # Plugin metadata
+├── LauncherProvider.qml   # Launcher provider — search and activation logic
+└── README.md              # This file
 ```
 
 ## Troubleshooting
