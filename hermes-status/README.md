@@ -1,54 +1,52 @@
 # noctalia-hermes
 
-[noctalia-shell](https://github.com/noctalia-dev/noctalia-shell) 插件 — 在状态栏实时显示 [Hermes Agent](https://github.com/nousresearch/hermes-agent) 的运行状态。
+A [noctalia-shell](https://github.com/noctalia-dev/noctalia-shell) plugin that displays real-time [Hermes Agent](https://github.com/nousresearch/hermes-agent) status in the status bar.
 
-通过 hermes shell hooks 记录 Hermes 生命周期事件，noctalia 插件监听状态文件变化并立即刷新；同时保留低频轮询作为兜底。
-Hook 写入通常低于 1 秒；状态栏 UI 会在信号文件变化后快速刷新，默认每 30 秒额外兜底检查一次 Gateway/平台状态。
+Hermes shell hooks record lifecycle events, which the noctalia plugin listens to via a signal file for near-instant UI refresh. A low-frequency polling fallback is also included.
+Hook writes typically complete in under 1 second; the status bar UI refreshes shortly after the signal file changes, with a default 30-second fallback check for Gateway/platform status.
 
-## 效果
-![](README_20260529162507901.png)
+## Preview
+![](preview.png)
 
-![](README_20260529154926688.png)
+The status bar shows a traffic-light icon that changes in real time with Hermes status:
 
-状态栏显示一个交通灯图标，随 hermes 状态实时变化：
+| Icon | Color | Status | Trigger |
+|------|-------|--------|---------|
+| ✓ | Green | Online | Gateway running, idle |
+| ⟳ | Blue | Busy | Thinking, tool call, processing |
+| 🔔 | Amber | Needs You | Awaiting user approval |
+| ⚠ | Orange | Degraded | Platform connection issue (e.g. Telegram disconnected) |
+| ⏻ | Red | Offline | Gateway not running |
 
-| 图标 | 颜色 | 状态 | 触发条件 |
-|------|------|------|----------|
-| ✓ | 绿色 | Online | Gateway 运行中，空闲 |
-| ⟳ | 蓝色 | Busy | 正在思考、执行工具、处理中 |
-| 🔔 | 琥珀色 | Needs You | 等待用户审批命令或回答问题 |
-| ⚠ | 橙色 | Degraded | 平台连接异常（如 Telegram 断线） |
-| ⏻ | 红色 | Offline | Gateway 未运行 |
+Click the icon to open a detail panel showing Gateway PID, session state, and platform connections.
 
-点击图标弹出详情面板，显示 Gateway PID、会话状态、平台连接。
-
-## 架构
+## Architecture
 
 ```
-hermes hooks (事件记录)
+hermes hooks (lifecycle events)
     │
     ▼
-hermes-status-hook    ← 写信号文件 ~/.hermes/status_signal
+hermes-status-hook    ← writes signal file ~/.hermes/status_signal
     │
     ▼
-hermes-status-check   ← 综合检测脚本，输出 JSON
+hermes-status-check   ← combined detection script, outputs JSON
     │
     ▼
-noctalia plugin (QML) ← 监听 status_signal 变化，默认每 30 秒兜底轮询
+noctalia plugin (QML) ← watches status_signal changes, 30s fallback polling
 ```
 
-### 状态检测优先级
+### Status Detection Priority
 
-1. **Hook 信号** — hermes 生命周期事件实时写入（最高优先级）
-2. **进程检测** — 检查 CLI 会话和 Gateway 进程是否存在
-3. **平台状态** — 读取 gateway_state.json 检测连接异常
-4. **Manual Attention 标志** — `hermes-attention` 手动设置的提醒文件
+1. **Hook signals** — real-time hermes lifecycle events (highest priority)
+2. **Process detection** — checks for CLI session and Gateway processes
+3. **Platform status** — reads gateway_state.json to detect connection issues
+4. **Manual Attention flag** — reminder file set by `hermes-attention`
 
-busy 信号超过 30 秒未更新自动回退到 idle，防止 hermes 异常退出后状态卡住。attention 信号会保持到 Hermes 发出 `post_approval_response`，手动 attention 则保持到 `hermes-attention clear`。
+The busy signal persists while the CLI process is active, regardless of time. If the CLI exits abnormally (without triggering `on_session_end`), the busy signal auto-expires after 60 seconds and falls back to process detection to prevent stale state. The attention signal persists until Hermes emits `post_approval_response`; manual attention persists until `hermes-attention clear`.
 
-## 安装
+## Installation
 
-### 方式 A：一键安装
+### Method A: One-click install
 
 ```bash
 git clone https://github.com/Mel-SRK/noctalia-hermes ~/.local/share/noctalia-hermes
@@ -56,50 +54,50 @@ cd ~/.local/share/noctalia-hermes
 ./install.sh
 ```
 
-`install.sh` 会：
+`install.sh` will:
 
-- 把插件链接到 `~/.config/noctalia/plugins/hermes-status`
-- 安装 `hermes-status-check` 到 `~/.config/noctalia/hermes-status-check`
-- 安装 `hermes-status-hook` 和 `hermes-attention` 到 `~/.local/bin`
+- Link the plugin to `~/.config/noctalia/plugins/hermes-status`
+- Install `hermes-status-check` to `~/.cache/noctalia/plugins/hermes-status/hermes-status-check`
+- Install `hermes-status-hook` and `hermes-attention` to `~/.local/bin`
 
-之后仍需按下面的“配置 hermes hooks”步骤修改 `~/.hermes/config.yaml`。
+You still need to configure hermes hooks as described below.
 
-### 方式 B：手动安装
+### Method B: Manual installation
 
-#### 1. 克隆项目
+#### 1. Clone the repository
 
-把项目放到任意你喜欢的位置即可，下面用 `~/.local/share/noctalia-hermes` 作为示例：
+Place the project anywhere you like; the example below uses `~/.local/share/noctalia-hermes`:
 
 ```bash
 git clone https://github.com/Mel-SRK/noctalia-hermes ~/.local/share/noctalia-hermes
 cd ~/.local/share/noctalia-hermes
 ```
 
-如果你使用 fork，请把上面的仓库地址替换成自己的 fork 地址。
+If you're using a fork, replace the repository URL above with your fork URL.
 
-#### 2. 安装插件到 noctalia
+#### 2. Install the plugin to noctalia
 
 ```bash
 mkdir -p ~/.config/noctalia/plugins
 ln -sfn ~/.local/share/noctalia-hermes/hermes-status ~/.config/noctalia/plugins/hermes-status
 ```
 
-#### 3. 安装辅助脚本
+#### 3. Install helper scripts
 
 ```bash
-mkdir -p ~/.config/noctalia ~/.local/bin
+mkdir -p ~/.cache/noctalia/plugins/hermes-status ~/.local/bin
 
-# 状态检测脚本（noctalia 插件调用）
-install -m 755 ~/.local/share/noctalia-hermes/hermes-status-check ~/.config/noctalia/hermes-status-check
+# Status detection script (called by noctalia plugin)
+install -m 755 ~/.local/share/noctalia-hermes/hermes-status-check ~/.cache/noctalia/plugins/hermes-status/hermes-status-check
 
-# Hook 脚本（hermes 调用）
+# Hook scripts (called by hermes)
 install -m 755 ~/.local/share/noctalia-hermes/hermes-status-hook ~/.local/bin/hermes-status-hook
 
-# 可选：手动设置 attention 标志的工具
+# Optional: manual attention flag tool
 install -m 755 ~/.local/share/noctalia-hermes/hermes-attention ~/.local/bin/hermes-attention
 ```
 
-确保 `~/.local/bin` 在 `PATH` 中：
+Make sure `~/.local/bin` is in your `PATH`:
 
 ```bash
 case ":$PATH:" in
@@ -108,9 +106,9 @@ case ":$PATH:" in
 esac
 ```
 
-### 配置 hermes hooks
+### Configure hermes hooks
 
-在 `~/.hermes/config.yaml` 的 `hooks:` 段添加：
+Add the following to the `hooks:` section in `~/.hermes/config.yaml`:
 
 ```yaml
 hooks:
@@ -132,40 +130,42 @@ hooks:
     - command: "~/.local/bin/hermes-status-hook on_session_end"
   on_session_finalize:
     - command: "~/.local/bin/hermes-status-hook on_session_finalize"
+  on_session_reset:
+    - command: "~/.local/bin/hermes-status-hook on_session_reset"
 ```
 
-### 重启服务
+### Restart services
 
 ```bash
-# 重启 noctalia-shell 加载插件
+# Restart noctalia-shell to load the plugin
 pkill -x qs
 qs -c noctalia-shell -d
 
-# 重启 hermes gateway 加载 hooks
+# Restart hermes gateway to load hooks
 hermes gateway restart
 ```
 
-之后新启动的 `hermes chat` 会话会自动加载 hooks。
+New `hermes chat` sessions started after this will automatically load the hooks.
 
-## 文件说明
+## File Structure
 
 ```
 noctalia-hermes/
 ├── README.md
-├── hermes-status/              ← noctalia 插件（放到 plugins/ 目录）
-│   ├── manifest.json           ← 插件元数据和默认配置
-│   ├── Main.qml                ← 后台逻辑（监听信号文件 + 兜底轮询）
-│   ├── BarWidget.qml           ← 状态栏图标（交通灯）
-│   ├── Panel.qml               ← 点击弹出的详情面板
-│   └── Settings.qml            ← 插件设置界面
-├── hermes-status-check         ← 状态检测脚本（单 Python 进程综合判断）
-├── hermes-status-hook          ← Hook 脚本（hermes 事件记录）
-└── hermes-attention            ← 手动设置 attention 标志的工具
+├── hermes-status/              ← noctalia plugin (place in plugins/ directory)
+│   ├── manifest.json           ← plugin metadata and default settings
+│   ├── Main.qml                ← background logic (signal file watcher + fallback polling)
+│   ├── BarWidget.qml           ← status bar icon (traffic light)
+│   ├── Panel.qml               ← click-to-expand detail panel
+│   └── Settings.qml            ← plugin settings UI
+├── hermes-status-check         ← status detection script (single Python process)
+├── hermes-status-hook          ← hook script (hermes event recorder)
+└── hermes-attention            ← manual attention flag tool
 ```
 
 ### hermes-status-check
 
-被 noctalia 插件在信号文件变化时调用，并默认每 30 秒兜底调用一次，输出 JSON 状态：
+Called by the noctalia plugin when the signal file changes and as a 30-second fallback, outputs JSON status:
 
 ```json
 {
@@ -184,45 +184,46 @@ noctalia-hermes/
 
 ### hermes-status-hook
 
-被 hermes hooks 系统调用，根据事件类型写入信号文件：
+Called by the hermes hooks system, writes signal file based on event type:
 
-| Hook 事件 | 信号状态 | 含义 |
+| Hook Event | Signal State | Meaning |
 |-----------|----------|------|
-| `pre_llm_call` | busy | 开始调用 LLM |
-| `post_llm_call` | busy | LLM 返回结果 |
-| `pre_tool_call` | busy | 即将执行工具 |
-| `post_tool_call` | busy | 工具执行完成 |
-| `on_session_start` | busy | 会话开始 |
-| `pre_approval_request` | attention | 等待用户审批 |
-| `post_approval_response` | idle | 用户已响应 |
-| `on_session_end` | idle | 会话结束 |
-| `on_session_finalize` | idle | 会话清理完成 |
+| `pre_llm_call` | busy | LLM call started |
+| `post_llm_call` | busy | LLM returned result |
+| `pre_tool_call` | busy | About to execute tool |
+| `post_tool_call` | busy | Tool execution complete |
+| `on_session_start` | busy | Session started |
+| `pre_approval_request` | attention | Awaiting user approval |
+| `post_approval_response` | idle | User has responded |
+| `on_session_end` | idle | Session ended |
+| `on_session_finalize` | idle | Session cleanup complete |
+| `on_session_reset` | idle | Session reset |
 
 ### hermes-attention
 
-手动管理 attention 标志的工具：
+Manual attention flag management tool:
 
 ```bash
-hermes-attention set     # 设置黄色铃铛
-hermes-attention clear   # 清除
-hermes-attention status  # 查看状态
+hermes-attention set     # Set amber bell
+hermes-attention clear   # Clear
+hermes-attention status  # Check status
 ```
 
-## 配置
+## Configuration
 
-在 noctalia Settings → Plugins → Hermes Agent 中可调整：
+In noctalia Settings → Plugins → Hermes Agent, you can adjust:
 
-| 选项 | 默认值 | 说明 |
-|------|--------|------|
-| Status check script | `~/.config/noctalia/hermes-status-check` | 检测脚本路径 |
-| Poll interval | 30s | 兜底轮询间隔；hook 状态变化会通过文件监听立即刷新 |
-| Signal file | `~/.hermes/status_signal` | Hermes hook 写入的状态信号文件 |
-| Hide when idle | false | 正常运行时隐藏图标 |
+| Option | Default | Description |
+|--------|---------|-------------|
+| Status check script | `~/.cache/noctalia/plugins/hermes-status/hermes-status-check` | Detection script path |
+| Poll interval | 30s | Fallback polling interval; hook status changes refresh immediately via file watching |
+| Signal file | `~/.hermes/status_signal` | Hermes hook status signal file |
+| Hide when idle | false | Hide icon when running normally |
 
-## 依赖
+## Dependencies
 
-- [noctalia-shell](https://github.com/noctalia-dev/noctalia-shell) — Wayland 桌面 shell
-- [Hermes Agent](https://github.com/nousresearch/hermes-agent) — AI 助手
+- [noctalia-shell](https://github.com/noctalia-dev/noctalia-shell) — Wayland desktop shell
+- [Hermes Agent](https://github.com/nousresearch/hermes-agent) — AI assistant
 - python3
 
 ## License

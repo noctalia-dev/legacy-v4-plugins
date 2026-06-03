@@ -18,7 +18,7 @@ ColumnLayout {
     spacing: Style.marginXS
 
     NText {
-      text: pluginApi?.tr("settings.statusScript")
+      text: pluginApi?.tr("settings.statusScript") ?? "Status check script"
       font.pixelSize: Style.fontSizeS
       font.weight: Font.DemiBold
       color: Color.mOnSurface
@@ -27,7 +27,7 @@ ColumnLayout {
     NTextInput {
       Layout.fillWidth: true
       text: cfg.statusScript ?? pluginApi?.manifest?.metadata?.defaultSettings?.statusScript ?? ""
-      placeholderText: "~/.config/noctalia/hermes-status-check"
+      placeholderText: "~/.cache/noctalia/plugins/hermes-status/hermes-status-check"
       onEditingFinished: {
         pluginApi.setPluginSetting("statusScript", text);
       }
@@ -40,7 +40,7 @@ ColumnLayout {
     spacing: Style.marginXS
 
     NText {
-      text: pluginApi?.tr("settings.pollInterval")
+      text: pluginApi?.tr("settings.pollInterval") ?? "Poll interval (seconds)"
       font.pixelSize: Style.fontSizeS
       font.weight: Font.DemiBold
       color: Color.mOnSurface
@@ -63,7 +63,7 @@ ColumnLayout {
     spacing: Style.marginXS
 
     NText {
-      text: pluginApi?.tr("settings.signalFile")
+      text: pluginApi?.tr("settings.signalFile") ?? "Signal file"
       font.pixelSize: Style.fontSizeS
       font.weight: Font.DemiBold
       color: Color.mOnSurface
@@ -82,8 +82,8 @@ ColumnLayout {
   // hideWhenIdle
   NToggle {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.hideWhenIdle")
-    description: pluginApi?.tr("settings.hideWhenIdleDesc")
+    label: pluginApi?.tr("settings.hideWhenIdle") ?? "Hide when idle"
+    description: pluginApi?.tr("settings.hideWhenIdleDesc") ?? "Only show when gateway is offline, busy, or needs attention"
     checked: cfg.hideWhenIdle ?? pluginApi?.manifest?.metadata?.defaultSettings?.hideWhenIdle ?? false
     onToggled: checked => {
       pluginApi.setPluginSetting("hideWhenIdle", checked);

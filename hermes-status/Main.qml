@@ -15,7 +15,7 @@ Item {
   readonly property string scriptPath: {
     var cfg = pluginApi?.pluginSettings || {};
     var defaults = pluginApi?.manifest?.metadata?.defaultSettings || {};
-    return cfg.statusScript ?? defaults.statusScript ?? "~/.config/noctalia/hermes-status-check";
+    return cfg.statusScript ?? defaults.statusScript ?? "~/.cache/noctalia/plugins/hermes-status/hermes-status-check";
   }
 
   QtObject {
@@ -41,6 +41,9 @@ Item {
     }
 
     function refresh() {
+      // Avoid spawning overlapping status-check processes when Hermes hooks
+      // update status_signal rapidly during active CLI/tool calls.
+      if (fetchState === "loading" || statusProcess.running) return;
       fetchState = "loading";
       // sh -c expands ~ to home directory
       statusProcess.command = ["sh", "-c", root.scriptPath];

@@ -1,19 +1,14 @@
 {
   "id": "hermes-status",
-  "name": "Hermes Agent",
+  "name": "Hermes Agent Status",
   "version": "1.4.0",
   "minNoctaliaVersion": "4.1.2",
   "author": "srk",
+  "official": false,
   "license": "MIT",
-  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "repository": "https://github.com/Mel-SRK/noctalia-hermes",
   "description": "Traffic-light status indicator for Hermes Agent (CLI + Gateway). Shows online/busy/attention/degraded/offline states in the status bar with real-time hook-based updates.",
-  "tags": [
-    "Bar",
-    "Panel",
-    "AI",
-    "Indicator",
-    "Niri"
-  ],
+  "tags": ["Bar", "Panel", "AI", "Indicator"],
   "entryPoints": {
     "main": "Main.qml",
     "barWidget": "BarWidget.qml",
@@ -25,7 +20,7 @@
   },
   "metadata": {
     "defaultSettings": {
-      "statusScript": "~/.config/noctalia/hermes-status-check",
+      "statusScript": "~/.cache/noctalia/plugins/hermes-status/hermes-status-check",
       "pollInterval": 30,
       "signalFile": "~/.hermes/status_signal",
       "hideWhenIdle": false
