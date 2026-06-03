@@ -18,7 +18,7 @@ ColumnLayout {
     spacing: Style.marginXS
 
     NText {
-      text: pluginApi?.tr("settings.statusScript") ?? "Status check script"
+      text: pluginApi?.tr("settings.statusScript")
       font.pixelSize: Style.fontSizeS
       font.weight: Font.DemiBold
       color: Color.mOnSurface
@@ -40,7 +40,7 @@ ColumnLayout {
     spacing: Style.marginXS
 
     NText {
-      text: pluginApi?.tr("settings.pollInterval") ?? "Poll interval (seconds)"
+      text: pluginApi?.tr("settings.pollInterval")
       font.pixelSize: Style.fontSizeS
       font.weight: Font.DemiBold
       color: Color.mOnSurface
@@ -63,7 +63,7 @@ ColumnLayout {
     spacing: Style.marginXS
 
     NText {
-      text: pluginApi?.tr("settings.signalFile") ?? "Signal file"
+      text: pluginApi?.tr("settings.signalFile")
       font.pixelSize: Style.fontSizeS
       font.weight: Font.DemiBold
       color: Color.mOnSurface
@@ -82,8 +82,8 @@ ColumnLayout {
   // hideWhenIdle
   NToggle {
     Layout.fillWidth: true
-    label: pluginApi?.tr("settings.hideWhenIdle") ?? "Hide when idle"
-    description: pluginApi?.tr("settings.hideWhenIdleDesc") ?? "Only show when gateway is offline, busy, or needs attention"
+    label: pluginApi?.tr("settings.hideWhenIdle")
+    description: pluginApi?.tr("settings.hideWhenIdleDesc")
     checked: cfg.hideWhenIdle ?? pluginApi?.manifest?.metadata?.defaultSettings?.hideWhenIdle ?? false
     onToggled: checked => {
       pluginApi.setPluginSetting("hideWhenIdle", checked);
