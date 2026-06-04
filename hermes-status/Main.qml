@@ -13,11 +13,12 @@ Item {
   // Expose process model for Panel/BarWidget
   property alias processModel: processListModel
 
-  // Path to the status check script (~ is expanded by sh)
+  // Path to the status check script (~ expanded to home directory)
   readonly property string scriptPath: {
     var cfg = pluginApi?.pluginSettings || {};
     var defaults = pluginApi?.manifest?.metadata?.defaultSettings || {};
-    return cfg.statusScript ?? defaults.statusScript ?? "~/.cache/noctalia/plugins/hermes-status/hermes-status-check";
+    var raw = cfg.statusScript ?? defaults.statusScript ?? "~/.cache/noctalia/plugins/hermes-status/hermes-status-check";
+    return expandHome(raw);
   }
 
   // Shared ListModel for process list (lives at Item level, not inside QtObject)
@@ -53,16 +54,25 @@ Item {
       return false;
     }
 
-    function refresh() {
+    function refresh(force) {
       // If a fetch is already in-flight, mark pending so onExited will re-trigger.
+      // force=true bypasses the stuck guard (used by IPC manual refresh).
       if (fetchState === "loading" || statusProcess.running) {
-        pendingRefresh = true;
-        return;
+        if (force) {
+          // Force-reset stuck state: kill the old process and start fresh.
+          statusProcess.running = false;
+          fetchState = "idle";
+          pendingRefresh = false;
+        } else {
+          pendingRefresh = true;
+          return;
+        }
       }
       fetchState = "loading";
       // sh -c allows shell features in custom statusScript settings (env vars, wrappers, args)
       statusProcess.command = ["sh", "-c", root.scriptPath];
       statusProcess.running = true;
+      fetchWatchdog.restart();
     }
 
     function clearAttention() {
@@ -116,6 +126,7 @@ Item {
     stdout: StdioCollector {}
 
     onExited: function(exitCode) {
+      fetchWatchdog.stop();
       if (exitCode !== 0) {
         hermesService.fetchState = "error";
         hermesService.status = "error";
@@ -197,6 +208,21 @@ Item {
     }
   }
 
+  // Watchdog: if fetchState stays "loading" for >15s, force-reset.
+  // Handles cases where onExited doesn't fire (process crash, QML bug).
+  Timer {
+    id: fetchWatchdog
+    interval: 15000
+    repeat: false
+    onTriggered: {
+      if (hermesService.fetchState === "loading") {
+        statusProcess.running = false;
+        hermesService.fetchState = "idle";
+        hermesService.pendingRefresh = false;
+      }
+    }
+  }
+
   // Poll timer
   Timer {
     id: pollTimer
@@ -215,7 +241,7 @@ Item {
   IpcHandler {
     target: "plugin:hermes-status"
     function refresh() {
-      hermesService.refresh();
+      hermesService.refresh(true);  // force: bypass stuck guard
     }
     function toggle() {
       if (pluginApi) {
