@@ -45,6 +45,11 @@ ColumnLayout {
         { key: "battery", name: "Battery" }
     ]
 
+    // Notifiable mirror of the global "show percentage" setting. NToggle emits
+    // toggled(checked) but never updates its own `checked`, so we drive it from
+    // this property (same reason the per-device toggle uses enabledLocal).
+    property bool showPercentageEdit: (pluginApi && pluginApi.pluginSettings && pluginApi.pluginSettings.showPercentage === true)
+
     // Guards against committing during initial population.
     property bool initialized: false
 
@@ -200,7 +205,7 @@ ColumnLayout {
         for (var j = 0; j < root.deviceList.length; j++)
             order.push(root.deviceList[j].id)
         pluginApi.pluginSettings.refreshInterval = intervalSpin.value
-        pluginApi.pluginSettings.showPercentage = showPctToggle.checked
+        pluginApi.pluginSettings.showPercentage = root.showPercentageEdit
         pluginApi.pluginSettings.devices = devices
         pluginApi.pluginSettings.deviceOrder = order
         pluginApi.saveSettings()
@@ -223,8 +228,11 @@ ColumnLayout {
         Layout.fillWidth: true
         label: "Show percentage"
         description: "Display the battery percentage next to each icon."
-        checked: (pluginApi && pluginApi.pluginSettings && pluginApi.pluginSettings.showPercentage === true)
-        onToggled: root.scheduleCommit()
+        checked: root.showPercentageEdit
+        onToggled: checked => {
+            root.showPercentageEdit = checked
+            root.scheduleCommit()
+        }
     }
 
     NSpinBox {
