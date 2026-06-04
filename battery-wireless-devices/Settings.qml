@@ -49,6 +49,7 @@ ColumnLayout {
     // toggled(checked) but never updates its own `checked`, so we drive it from
     // this property (same reason the per-device toggle uses enabledLocal).
     property bool showPercentageEdit: (pluginApi && pluginApi.pluginSettings && pluginApi.pluginSettings.showPercentage === true)
+    property bool showChargingEdit: (pluginApi && pluginApi.pluginSettings && pluginApi.pluginSettings.showCharging === true)
 
     // Guards against committing during initial population.
     property bool initialized: false
@@ -206,6 +207,7 @@ ColumnLayout {
             order.push(root.deviceList[j].id)
         pluginApi.pluginSettings.refreshInterval = intervalSpin.value
         pluginApi.pluginSettings.showPercentage = root.showPercentageEdit
+        pluginApi.pluginSettings.showCharging = root.showChargingEdit
         pluginApi.pluginSettings.devices = devices
         pluginApi.pluginSettings.deviceOrder = order
         pluginApi.saveSettings()
@@ -231,6 +233,18 @@ ColumnLayout {
         checked: root.showPercentageEdit
         onToggled: checked => {
             root.showPercentageEdit = checked
+            root.scheduleCommit()
+        }
+    }
+
+    NToggle {
+        id: showChargingToggle
+        Layout.fillWidth: true
+        label: "Show charging indicator"
+        description: "Add a lightning icon next to devices that are charging."
+        checked: root.showChargingEdit
+        onToggled: checked => {
+            root.showChargingEdit = checked
             root.scheduleCommit()
         }
     }

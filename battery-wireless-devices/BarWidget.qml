@@ -54,6 +54,9 @@ Item {
     readonly property bool showPercentage: pluginApi && pluginApi.pluginSettings
                                            && pluginApi.pluginSettings.showPercentage === true
 
+    readonly property bool showCharging: pluginApi && pluginApi.pluginSettings
+                                         && pluginApi.pluginSettings.showCharging === true
+
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
     visible: shownDevices.length > 0
@@ -214,6 +217,15 @@ Item {
                             applyUiScale: false // ring.size already accounts for UI scale
                             pointSize: Math.round(ring.size * 0.5)
                         }
+                    }
+
+                    NIcon {
+                        visible: root.showCharging && modelData.charging
+                        icon: "bolt"
+                        color: Color.mTertiary
+                        applyUiScale: false
+                        pointSize: Math.round(root.capsuleHeight * 0.4)
+                        Layout.alignment: Qt.AlignVCenter
                     }
 
                     NText {

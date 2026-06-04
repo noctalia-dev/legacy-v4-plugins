@@ -19,6 +19,7 @@
     "defaultSettings": {
       "refreshInterval": 60,
       "showPercentage": false,
+      "showCharging": false,
       "devices": {},
       "deviceOrder": []
     }
