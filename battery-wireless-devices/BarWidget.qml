@@ -24,6 +24,9 @@ Item {
     readonly property string screenName: screen ? screen.name : ""
     readonly property string barPosition: Settings.getBarPositionForScreen(screenName)
     readonly property bool isBarVertical: barPosition === "left" || barPosition === "right"
+    // Pills are sized to the capsule height (smaller than the full bar height)
+    // so the bar centers them, matching the core widgets.
+    readonly property real capsuleHeight: Style.getCapsuleHeightForScreen(screenName)
 
     // Live data from Main.qml.
     readonly property var liveDevices: (pluginApi && pluginApi.mainInstance) ? (pluginApi.mainInstance.devices || []) : []
@@ -130,7 +133,7 @@ Item {
                                                        + (modelData.charging ? " ⚡" : "")
 
                 implicitWidth: pillRow.implicitWidth + Style.marginM * 2
-                implicitHeight: Style.barHeight
+                implicitHeight: root.capsuleHeight
                 radius: Style.radiusM
                 color: pillMouse.containsMouse ? Color.mHover : Style.capsuleColor
 
@@ -150,7 +153,7 @@ Item {
                     // Circular battery ring with the device icon in the centre.
                     Item {
                         id: ring
-                        readonly property real size: Math.round(Style.barHeight * 0.62)
+                        readonly property real size: Math.round(root.capsuleHeight * 0.82)
                         implicitWidth: size
                         implicitHeight: size
                         Layout.alignment: Qt.AlignVCenter
@@ -201,7 +204,8 @@ Item {
                             anchors.centerIn: parent
                             icon: pill.iconName
                             color: pill.iconColor
-                            pointSize: Style.fontSizeXS
+                            applyUiScale: false // ring.size already accounts for UI scale
+                            pointSize: Math.round(ring.size * 0.5)
                         }
                     }
 
