@@ -19,7 +19,8 @@
     "defaultSettings": {
       "refreshInterval": 60,
       "showPercentage": false,
-      "devices": {}
+      "devices": {},
+      "deviceOrder": []
     }
   }
 }

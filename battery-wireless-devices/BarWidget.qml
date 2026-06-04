@@ -41,6 +41,13 @@ Item {
             if (cfg && cfg.enabled === true)
                 out.push(d)
         }
+        // Order to match the settings list (top = left-most / top-most).
+        var order = (settings && settings.deviceOrder) ? settings.deviceOrder : []
+        out.sort(function (a, b) {
+            var ia = order.indexOf(a.id)
+            var ib = order.indexOf(b.id)
+            return (ia < 0 ? 9999 : ia) - (ib < 0 ? 9999 : ib)
+        })
         return out
     }
 

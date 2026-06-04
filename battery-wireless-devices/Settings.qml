@@ -21,9 +21,16 @@ ColumnLayout {
     // the Repeater never rebuilds and loses edits.
     property var editDevices: ({})
 
-    // Devices shown in the list: union of currently-detected devices and any
-    // previously-configured ones (so unplugged devices keep their settings).
+    // Devices shown in the list, in bar order: union of currently-detected
+    // devices and any previously-configured ones (so unplugged devices keep
+    // their settings). Reorderable by drag; persisted as deviceOrder.
     property var deviceList: []
+
+    // Geometry for the drag-reorderable, absolutely-positioned card list.
+    // All cards are the same height, captured from a realized delegate.
+    property real cardSpacing: Style.marginS
+    property real cardHeight: 0
+    readonly property real cardStride: cardHeight + cardSpacing
 
     readonly property var liveDevices: (pluginApi && pluginApi.mainInstance) ? (pluginApi.mainInstance.devices || []) : []
 
@@ -100,16 +107,31 @@ ColumnLayout {
 
         root.editDevices = merged
 
-        // Ordered list for display: live devices first, then offline configured.
+        // Build the display list honouring the saved order, appending any
+        // newly-detected (online first) then offline devices not yet ordered.
+        var order = (pluginApi && pluginApi.pluginSettings && pluginApi.pluginSettings.deviceOrder) ? pluginApi.pluginSettings.deviceOrder : []
+        var seen = ({})
         var list = []
-        for (var j = 0; j < live.length; j++) {
-            var ld = live[j]
-            list.push({ id: ld.id, name: ld.name, type: ld.type, battery: ld.battery, charging: ld.charging, online: true })
+        var addId = function (id) {
+            if (seen[id] || !merged[id])
+                return
+            seen[id] = true
+            var on = byId[id]
+            list.push({
+                "id": id,
+                "name": on ? on.name : (merged[id].name || id),
+                "type": on ? on.type : (merged[id].type || "device"),
+                "battery": on ? on.battery : -1,
+                "charging": on ? on.charging : false,
+                "online": !!on
+            })
         }
-        for (var sid in merged) {
-            if (!byId[sid])
-                list.push({ id: sid, name: merged[sid].name || sid, type: merged[sid].type || "device", battery: -1, charging: false, online: false })
-        }
+        for (var oi = 0; oi < order.length; oi++)
+            addId(order[oi])
+        for (var j = 0; j < live.length; j++)
+            addId(live[j].id)
+        for (var sid in merged)
+            addId(sid)
         root.deviceList = list
 
         // Persist the dedup so it doesn't reappear.
@@ -127,6 +149,21 @@ ColumnLayout {
             if (root.deviceList[i].id !== id)
                 nl.push(root.deviceList[i])
         }
+        root.deviceList = nl
+        commit()
+    }
+
+    // Reorder the device list (drag-and-drop). Top = left-most in the bar.
+    function moveDevice(fromIndex, toIndex) {
+        if (fromIndex === toIndex)
+            return
+        if (fromIndex < 0 || fromIndex >= root.deviceList.length)
+            return
+        if (toIndex < 0 || toIndex >= root.deviceList.length)
+            return
+        var nl = root.deviceList.slice()
+        var item = nl.splice(fromIndex, 1)[0]
+        nl.splice(toIndex, 0, item)
         root.deviceList = nl
         commit()
     }
@@ -159,9 +196,13 @@ ColumnLayout {
         var devices = ({})
         for (var id in root.editDevices)
             devices[id] = Object.assign({}, root.editDevices[id])
+        var order = []
+        for (var j = 0; j < root.deviceList.length; j++)
+            order.push(root.deviceList[j].id)
         pluginApi.pluginSettings.refreshInterval = intervalSpin.value
         pluginApi.pluginSettings.showPercentage = showPctToggle.checked
         pluginApi.pluginSettings.devices = devices
+        pluginApi.pluginSettings.deviceOrder = order
         pluginApi.saveSettings()
     }
 
@@ -233,25 +274,76 @@ ColumnLayout {
         Layout.fillWidth: true
     }
 
-    // ---- Per-device cards --------------------------------------------------
+    // ---- Per-device cards (drag the handle to reorder) ---------------------
 
-    Repeater {
-        model: root.deviceList
+    Item {
+        id: cardsContainer
+        Layout.fillWidth: true
+        implicitHeight: root.deviceList.length > 0 ? root.deviceList.length * root.cardStride - root.cardSpacing : 0
 
-        delegate: Rectangle {
-            id: card
-            required property var modelData
-            readonly property var cfg: root.editDevices[modelData.id] || root._defaultCfg()
-            // Notifiable mirror of cfg.enabled so the toggle updates live
-            // (editDevices is mutated in place and doesn't emit change signals).
-            property bool enabledLocal: cfg.enabled === true
+        Repeater {
+            id: cardsRepeater
+            model: root.deviceList
 
-            Layout.fillWidth: true
-            implicitHeight: cardCol.implicitHeight + Style.marginM * 2
-            radius: Style.radiusM
-            color: Color.mSurfaceVariant
-            border.width: 1
-            border.color: Color.mOutline
+            delegate: Rectangle {
+                id: card
+                required property int index
+                required property var modelData
+                readonly property var cfg: root.editDevices[modelData.id] || root._defaultCfg()
+                // Notifiable mirror of cfg.enabled so the toggle updates live
+                // (editDevices is mutated in place and doesn't emit change signals).
+                property bool enabledLocal: cfg.enabled === true
+
+                // Drag state
+                property bool dragging: false
+                property int dragStartIndex: -1
+                property int dragTargetIndex: -1
+
+                width: cardsContainer.width
+                height: cardCol.implicitHeight + Style.marginM * 2
+                onHeightChanged: if (root.cardHeight !== height) root.cardHeight = height
+
+                radius: Style.radiusM
+                color: Color.mSurfaceVariant
+                border.width: 1
+                border.color: dragging ? Color.mPrimary : Color.mOutline
+                z: dragging ? 10 : 0
+
+                // Resting position, with neighbours shifting to make room while
+                // another card is dragged over them.
+                y: {
+                    if (card.dragging)
+                        return card.y
+                    var draggedIndex = -1
+                    var targetIndex = -1
+                    for (var i = 0; i < cardsRepeater.count; i++) {
+                        var it = cardsRepeater.itemAt(i)
+                        if (it && it.dragging) {
+                            draggedIndex = it.dragStartIndex
+                            targetIndex = it.dragTargetIndex
+                            break
+                        }
+                    }
+                    var stride = card.height + root.cardSpacing
+                    if (draggedIndex !== -1 && targetIndex !== -1 && draggedIndex !== targetIndex) {
+                        if (draggedIndex < targetIndex) {
+                            if (card.index > draggedIndex && card.index <= targetIndex)
+                                return (card.index - 1) * stride
+                        } else {
+                            if (card.index >= targetIndex && card.index < draggedIndex)
+                                return (card.index + 1) * stride
+                        }
+                    }
+                    return card.index * stride
+                }
+
+                Behavior on y {
+                    enabled: !card.dragging
+                    NumberAnimation {
+                        duration: Style.animationNormal
+                        easing.type: Easing.OutQuad
+                    }
+                }
 
             ColumnLayout {
                 id: cardCol
@@ -262,6 +354,71 @@ ColumnLayout {
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: Style.marginS
+
+                    // Drag handle
+                    Rectangle {
+                        id: dragHandle
+                        Layout.preferredWidth: Style.baseWidgetSize * 0.7
+                        Layout.preferredHeight: Style.baseWidgetSize * 0.7
+                        Layout.alignment: Qt.AlignVCenter
+                        radius: Style.iRadiusXS
+                        color: dragMouse.containsMouse ? Color.mSurface : "transparent"
+
+                        ColumnLayout {
+                            anchors.centerIn: parent
+                            spacing: 3
+                            Repeater {
+                                model: 3
+                                Rectangle {
+                                    Layout.preferredWidth: Style.baseWidgetSize * 0.45
+                                    Layout.preferredHeight: 2
+                                    radius: 1
+                                    color: Color.mOutline
+                                }
+                            }
+                        }
+
+                        MouseArea {
+                            id: dragMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            preventStealing: true
+                            cursorShape: Qt.SizeVerCursor
+                            z: 1000
+                            onPressed: mouse => {
+                                card.dragStartIndex = card.index
+                                card.dragTargetIndex = card.index
+                                card.dragging = true
+                            }
+                            onPositionChanged: mouse => {
+                                if (!card.dragging)
+                                    return
+                                var dy = mouse.y - dragHandle.height / 2
+                                var newY = Math.max(0, Math.min(card.y + dy, cardsContainer.height - card.height))
+                                card.y = newY
+                                var stride = card.height + root.cardSpacing
+                                var t = Math.floor((newY + card.height / 2) / stride)
+                                card.dragTargetIndex = Math.max(0, Math.min(t, cardsRepeater.count - 1))
+                            }
+                            onReleased: {
+                                var from = card.dragStartIndex
+                                var to = card.dragTargetIndex
+                                card.dragging = false
+                                card.dragStartIndex = -1
+                                card.dragTargetIndex = -1
+                                if (from !== -1 && to !== -1 && from !== to)
+                                    root.moveDevice(from, to)
+                                else
+                                    root.deviceList = root.deviceList.slice() // rebuild to snap back
+                            }
+                            onCanceled: {
+                                card.dragging = false
+                                card.dragStartIndex = -1
+                                card.dragTargetIndex = -1
+                                root.deviceList = root.deviceList.slice()
+                            }
+                        }
+                    }
 
                     NText {
                         text: card.modelData.name
@@ -328,6 +485,7 @@ ColumnLayout {
                     placeholderText: "e.g. polychromatic-controller / solaar"
                     onTextChanged: root.set(card.modelData.id, "launchCmd", text)
                 }
+            }
             }
         }
     }
