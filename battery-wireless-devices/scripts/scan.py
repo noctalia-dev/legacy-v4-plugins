@@ -60,7 +60,13 @@ def scan_openrazer():
         try:
             if not dev.has("battery"):
                 continue
-            serial = dev.serial or dev.name
+            # The daemon occasionally hands back a placeholder serial like
+            # "UNKNOWN_153200B7_0000" (vendor/product + counter) instead of the
+            # real one. Those aren't stable, so skip this scan rather than mint
+            # an unstable id — the device reappears once the serial is readable.
+            serial = dev.serial
+            if not serial or str(serial).startswith("UNKNOWN"):
+                continue
             devices.append({
                 "id": "openrazer:" + str(serial),
                 "name": dev.name,

@@ -50,6 +50,11 @@ ColumnLayout {
         return { enabled: false, icon: "", iconColor: "none", ringColor: "none", launchCmd: "", name: "", type: "device" }
     }
 
+    function _source(id) {
+        var i = id.indexOf(":")
+        return i >= 0 ? id.substring(0, i) : id
+    }
+
     // Build editDevices + deviceList from saved settings and live detection.
     function populateList() {
         var saved = (pluginApi && pluginApi.pluginSettings && pluginApi.pluginSettings.devices) ? pluginApi.pluginSettings.devices : {}
@@ -70,6 +75,29 @@ ColumnLayout {
             merged[d.id].name = d.name
             merged[d.id].type = d.type
         }
+
+        // Heal stale duplicates: a saved offline entry that refers to the same
+        // physical device as a detected one (same source + name, different id —
+        // e.g. an old name-based id from when the serial was unreadable). Fold
+        // its config into the detected id, then drop the stale entry.
+        var changed = false
+        for (var k = 0; k < live.length; k++) {
+            var dd = live[k]
+            for (var mid in merged) {
+                if (mid === dd.id || byId[mid])
+                    continue
+                if (root._source(mid) !== dd.source || merged[mid].name !== dd.name)
+                    continue
+                if (!saved.hasOwnProperty(dd.id)) {
+                    merged[mid].name = dd.name
+                    merged[mid].type = dd.type
+                    merged[dd.id] = merged[mid]
+                }
+                delete merged[mid]
+                changed = true
+            }
+        }
+
         root.editDevices = merged
 
         // Ordered list for display: live devices first, then offline configured.
@@ -83,6 +111,24 @@ ColumnLayout {
                 list.push({ id: sid, name: merged[sid].name || sid, type: merged[sid].type || "device", battery: -1, charging: false, online: false })
         }
         root.deviceList = list
+
+        // Persist the dedup so it doesn't reappear.
+        if (changed && pluginApi)
+            commit()
+    }
+
+    // Remove a device entry entirely (e.g. stale offline cruft). A still-present
+    // device will be re-detected with default config on the next scan.
+    function removeDevice(id) {
+        if (root.editDevices[id])
+            delete root.editDevices[id]
+        var nl = []
+        for (var i = 0; i < root.deviceList.length; i++) {
+            if (root.deviceList[i].id !== id)
+                nl.push(root.deviceList[i])
+        }
+        root.deviceList = nl
+        commit()
     }
 
     function set(id, key, value) {
@@ -230,6 +276,14 @@ ColumnLayout {
                                 + (card.modelData.charging ? " ⚡" : "")
                               : "offline"
                         color: card.modelData.online ? Color.mPrimary : Color.mOnSurfaceVariant
+                    }
+
+                    NIconButton {
+                        icon: "trash"
+                        baseSize: Style.baseWidgetSize * 0.8
+                        tooltipText: "Remove this device"
+                        colorFg: Color.mError
+                        onClicked: root.removeDevice(card.modelData.id)
                     }
                 }
 
