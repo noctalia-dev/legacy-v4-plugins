@@ -3,7 +3,7 @@
   "name": "Device Battery Indicators",
   "version": "1.0.0",
   "minNoctaliaVersion": "3.6.0",
-  "author": "Aslauw",
+  "author": "aslauw",
   "license": "MIT",
   "repository": "https://github.com/aslauw/device_battery_indicator",
   "description": "Battery indicators bar icons for devices (mouse, keyboard, headphones, etc)",

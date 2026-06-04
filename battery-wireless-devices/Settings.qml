@@ -226,7 +226,6 @@ ColumnLayout {
     }
 
     NToggle {
-        id: showPctToggle
         Layout.fillWidth: true
         label: "Show percentage"
         description: "Display the battery percentage next to each icon."
@@ -238,7 +237,6 @@ ColumnLayout {
     }
 
     NToggle {
-        id: showChargingToggle
         Layout.fillWidth: true
         label: "Show charging indicator"
         description: "Add a lightning icon next to devices that are charging."
@@ -367,147 +365,147 @@ ColumnLayout {
                     }
                 }
 
-            ColumnLayout {
-                id: cardCol
-                anchors.fill: parent
-                anchors.margins: Style.marginM
-                spacing: Style.marginS
-
-                RowLayout {
-                    Layout.fillWidth: true
+                ColumnLayout {
+                    id: cardCol
+                    anchors.fill: parent
+                    anchors.margins: Style.marginM
                     spacing: Style.marginS
 
-                    // Drag handle
-                    Rectangle {
-                        id: dragHandle
-                        Layout.preferredWidth: Style.baseWidgetSize * 0.7
-                        Layout.preferredHeight: Style.baseWidgetSize * 0.7
-                        Layout.alignment: Qt.AlignVCenter
-                        radius: Style.iRadiusXS
-                        color: dragMouse.containsMouse ? Color.mSurface : "transparent"
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: Style.marginS
 
-                        ColumnLayout {
-                            anchors.centerIn: parent
-                            spacing: 3
-                            Repeater {
-                                model: 3
-                                Rectangle {
-                                    Layout.preferredWidth: Style.baseWidgetSize * 0.45
-                                    Layout.preferredHeight: 2
-                                    radius: 1
-                                    color: Color.mOutline
+                        // Drag handle
+                        Rectangle {
+                            id: dragHandle
+                            Layout.preferredWidth: Style.baseWidgetSize * 0.7
+                            Layout.preferredHeight: Style.baseWidgetSize * 0.7
+                            Layout.alignment: Qt.AlignVCenter
+                            radius: Style.iRadiusXS
+                            color: dragMouse.containsMouse ? Color.mSurface : "transparent"
+
+                            ColumnLayout {
+                                anchors.centerIn: parent
+                                spacing: 3
+                                Repeater {
+                                    model: 3
+                                    Rectangle {
+                                        Layout.preferredWidth: Style.baseWidgetSize * 0.45
+                                        Layout.preferredHeight: 2
+                                        radius: 1
+                                        color: Color.mOutline
+                                    }
+                                }
+                            }
+
+                            MouseArea {
+                                id: dragMouse
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                preventStealing: true
+                                cursorShape: Qt.SizeVerCursor
+                                z: 1000
+                                onPressed: mouse => {
+                                    card.dragStartIndex = card.index
+                                    card.dragTargetIndex = card.index
+                                    card.dragging = true
+                                }
+                                onPositionChanged: mouse => {
+                                    if (!card.dragging)
+                                        return
+                                    var dy = mouse.y - dragHandle.height / 2
+                                    var newY = Math.max(0, Math.min(card.y + dy, cardsContainer.height - card.height))
+                                    card.y = newY
+                                    var stride = card.height + root.cardSpacing
+                                    var t = Math.floor((newY + card.height / 2) / stride)
+                                    card.dragTargetIndex = Math.max(0, Math.min(t, cardsRepeater.count - 1))
+                                }
+                                onReleased: {
+                                    var from = card.dragStartIndex
+                                    var to = card.dragTargetIndex
+                                    card.dragging = false
+                                    card.dragStartIndex = -1
+                                    card.dragTargetIndex = -1
+                                    if (from !== -1 && to !== -1 && from !== to)
+                                        root.moveDevice(from, to)
+                                    else
+                                        root.deviceList = root.deviceList.slice() // rebuild to snap back
+                                }
+                                onCanceled: {
+                                    card.dragging = false
+                                    card.dragStartIndex = -1
+                                    card.dragTargetIndex = -1
+                                    root.deviceList = root.deviceList.slice()
                                 }
                             }
                         }
 
-                        MouseArea {
-                            id: dragMouse
-                            anchors.fill: parent
-                            hoverEnabled: true
-                            preventStealing: true
-                            cursorShape: Qt.SizeVerCursor
-                            z: 1000
-                            onPressed: mouse => {
-                                card.dragStartIndex = card.index
-                                card.dragTargetIndex = card.index
-                                card.dragging = true
-                            }
-                            onPositionChanged: mouse => {
-                                if (!card.dragging)
-                                    return
-                                var dy = mouse.y - dragHandle.height / 2
-                                var newY = Math.max(0, Math.min(card.y + dy, cardsContainer.height - card.height))
-                                card.y = newY
-                                var stride = card.height + root.cardSpacing
-                                var t = Math.floor((newY + card.height / 2) / stride)
-                                card.dragTargetIndex = Math.max(0, Math.min(t, cardsRepeater.count - 1))
-                            }
-                            onReleased: {
-                                var from = card.dragStartIndex
-                                var to = card.dragTargetIndex
-                                card.dragging = false
-                                card.dragStartIndex = -1
-                                card.dragTargetIndex = -1
-                                if (from !== -1 && to !== -1 && from !== to)
-                                    root.moveDevice(from, to)
-                                else
-                                    root.deviceList = root.deviceList.slice() // rebuild to snap back
-                            }
-                            onCanceled: {
-                                card.dragging = false
-                                card.dragStartIndex = -1
-                                card.dragTargetIndex = -1
-                                root.deviceList = root.deviceList.slice()
-                            }
+                        NText {
+                            text: card.modelData.name
+                            font.weight: Style.fontWeightBold
+                            color: Color.mOnSurface
+                            Layout.fillWidth: true
+                            elide: Text.ElideRight
+                        }
+                        NText {
+                            text: card.modelData.online
+                                  ? (card.modelData.battery >= 0 ? card.modelData.battery + "%" : "—")
+                                    + (card.modelData.charging ? " ⚡" : "")
+                                  : "offline"
+                            color: card.modelData.online ? Color.mPrimary : Color.mOnSurfaceVariant
+                        }
+
+                        NIconButton {
+                            icon: "trash"
+                            baseSize: Style.baseWidgetSize * 0.8
+                            tooltipText: "Remove this device"
+                            colorFg: Color.mError
+                            onClicked: root.removeDevice(card.modelData.id)
                         }
                     }
 
-                    NText {
-                        text: card.modelData.name
-                        font.weight: Style.fontWeightBold
-                        color: Color.mOnSurface
+                    NToggle {
                         Layout.fillWidth: true
-                        elide: Text.ElideRight
-                    }
-                    NText {
-                        text: card.modelData.online
-                              ? (card.modelData.battery >= 0 ? card.modelData.battery + "%" : "—")
-                                + (card.modelData.charging ? " ⚡" : "")
-                              : "offline"
-                        color: card.modelData.online ? Color.mPrimary : Color.mOnSurfaceVariant
+                        label: "Show in bar"
+                        checked: card.enabledLocal
+                        onToggled: checked => {
+                            card.enabledLocal = checked
+                            root.set(card.modelData.id, "enabled", checked)
+                        }
                     }
 
-                    NIconButton {
-                        icon: "trash"
-                        baseSize: Style.baseWidgetSize * 0.8
-                        tooltipText: "Remove this device"
-                        colorFg: Color.mError
-                        onClicked: root.removeDevice(card.modelData.id)
+                    NComboBox {
+                        Layout.fillWidth: true
+                        label: "Icon"
+                        model: root.iconOptions
+                        currentKey: card.cfg.icon || ""
+                        onSelected: key => root.set(card.modelData.id, "icon", key)
+                    }
+
+                    NColorChoice {
+                        Layout.fillWidth: true
+                        label: "Icon color"
+                        description: "None uses the theme foreground."
+                        currentKey: card.cfg.iconColor || "none"
+                        onSelected: key => root.set(card.modelData.id, "iconColor", key)
+                    }
+
+                    NColorChoice {
+                        Layout.fillWidth: true
+                        label: "Battery ring color"
+                        description: "None colours by battery level."
+                        currentKey: card.cfg.ringColor || "none"
+                        onSelected: key => root.set(card.modelData.id, "ringColor", key)
+                    }
+
+                    NTextInput {
+                        Layout.fillWidth: true
+                        label: "Command on click"
+                        text: card.cfg.launchCmd || ""
+                        placeholderText: "e.g. polychromatic-controller / solaar"
+                        onTextChanged: root.set(card.modelData.id, "launchCmd", text)
                     }
                 }
-
-                NToggle {
-                    Layout.fillWidth: true
-                    label: "Show in bar"
-                    checked: card.enabledLocal
-                    onToggled: checked => {
-                        card.enabledLocal = checked
-                        root.set(card.modelData.id, "enabled", checked)
-                    }
-                }
-
-                NComboBox {
-                    Layout.fillWidth: true
-                    label: "Icon"
-                    model: root.iconOptions
-                    currentKey: card.cfg.icon || ""
-                    onSelected: key => root.set(card.modelData.id, "icon", key)
-                }
-
-                NColorChoice {
-                    Layout.fillWidth: true
-                    label: "Icon color"
-                    description: "None uses the theme foreground."
-                    currentKey: card.cfg.iconColor || "none"
-                    onSelected: key => root.set(card.modelData.id, "iconColor", key)
-                }
-
-                NColorChoice {
-                    Layout.fillWidth: true
-                    label: "Battery ring color"
-                    description: "None colours by battery level."
-                    currentKey: card.cfg.ringColor || "none"
-                    onSelected: key => root.set(card.modelData.id, "ringColor", key)
-                }
-
-                NTextInput {
-                    Layout.fillWidth: true
-                    label: "Command on click"
-                    text: card.cfg.launchCmd || ""
-                    placeholderText: "e.g. polychromatic-controller / solaar"
-                    onTextChanged: root.set(card.modelData.id, "launchCmd", text)
-                }
-            }
             }
         }
     }

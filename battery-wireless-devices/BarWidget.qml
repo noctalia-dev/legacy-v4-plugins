@@ -57,6 +57,8 @@ Item {
     readonly property bool showCharging: pluginApi && pluginApi.pluginSettings
                                          && pluginApi.pluginSettings.showCharging === true
 
+    readonly property real barFontSize: Style.fontSizeXS
+
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
     visible: shownDevices.length > 0
@@ -273,6 +275,4 @@ Item {
             }
         }
     }
-
-    readonly property real barFontSize: Style.fontSizeXS
 }

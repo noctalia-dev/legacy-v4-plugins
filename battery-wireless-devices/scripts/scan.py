@@ -8,7 +8,7 @@ Output schema (one object per detected device that reports a battery level):
       "id":       "<source>:<stable-key>",   # stable across runs
       "name":     "Human readable name",
       "type":     "mouse|keyboard|headset|...",  # used to pick a default icon
-      "battery":  0-100 | null,
+      "battery":  0-100,
       "charging": true|false,
       "source":   "openrazer|solaar"
     }

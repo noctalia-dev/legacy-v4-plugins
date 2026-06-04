@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A plugin for **Noctalia** (a Quickshell-based desktop shell, `noctalia-shell`). It is pure QML loaded at runtime by the running shell — there is **no build step, no compiler, and no test framework** in this repo. The plugin's purpose is a bar widget that shows battery indicators for connected devices (mouse, keyboard, headphones, and other Bluetooth devices).
+A plugin for **Noctalia** (a Quickshell-based desktop shell, `noctalia-shell`). It is pure QML loaded at runtime by the running shell — there is **no build step, no compiler, and no test framework** in this repo. The plugin's purpose is a bar widget that shows battery indicators for connected peripherals (e.g. mouse, keyboard, headphones). Device data does **not** come from any Noctalia service — it is gathered by `scripts/scan.py` (see below).
 
 Requires `minNoctaliaVersion: 3.6.0`.
 
@@ -34,13 +34,12 @@ The shell itself runs as `qs -c noctalia-shell`. The Noctalia source (read-only,
 ## Imports available to plugin QML
 
 ```qml
-import qs.Commons   // singletons: Style, Color, Settings, I18n, Logger, Icons, Time, ShellState
-import qs.Widgets   // N-prefixed components: NIcon, NText, NButton, NBattery, NBox, NComboBox, ...
-import qs.Services.Networking   // BluetoothService, etc.
-import qs.Services.SystemInfo   // BatteryService, etc.  (path varies by service category)
+import qs.Commons      // singletons: Style, Color, Settings, I18n, Logger, Icons, Time, ShellState
+import qs.Widgets      // N-prefixed components: NIcon, NText, NButton, NComboBox, NColorChoice, NToggle, ...
+import qs.Services.UI  // TooltipService, PanelService, BarService (used by BarWidget.qml)
 ```
 
-Service singletons are organized into subfolders under `Services/` (Networking, Control, Noctalia, UI, ...). Grep the shell source to find the right import path for a given service.
+Service singletons live in subfolders under `Services/` (UI, Networking, Control, Noctalia, SystemInfo, ...). This plugin only uses `qs.Services.UI`; it does **not** read battery data from any service (that comes from `scan.py`). Grep the shell source to find the right import path for any other service.
 
 ## Key conventions (follow these — don't reinvent)
 
@@ -57,11 +56,9 @@ Service singletons are organized into subfolders under `Services/` (Networking, 
 - i18n: `tr(key, interpolations)`, `trp(key, count, interpolations)`, `hasTranslation(key)`; depend on `translationVersion` to react to language changes.
 - Instance references once loaded: `mainInstance`, `barWidget`, `panel`, etc.
 
-## Bluetooth device battery (this plugin's domain)
+## Where device battery data comes from
 
-`BluetoothService` (in `Services/Networking/`) is the source of device data:
-- `connectedDevices` — list of currently connected devices.
-- `getBatteryPercent(device)`, `getSignalPercent(device)`, `getDeviceIcon(device)`, `getSignalIcon(device)`.
+**`scripts/scan.py` only** — not `BluetoothService`, `BatteryService`, or any other Noctalia service. The script probes each supported source (`scan_openrazer()` via the openrazer Python client, `scan_solaar()` by parsing `solaar show`) and prints the normalized JSON array consumed by `Main.qml`. The devices here (Razer dongle, Logitech receiver) aren't Bluetooth, so the shell's Bluetooth/UPower services don't see them — that's the whole reason the plugin shells out to vendor tools.
 
 ## Developing & verifying changes
 
