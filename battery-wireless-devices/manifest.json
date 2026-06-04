@@ -1,0 +1,25 @@
+{
+  "id": "device_battery_indicators",
+  "name": "Device Battery Indicators",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Aslauw",
+  "license": "MIT",
+  "repository": "https://github.com/aslauw/device_battery_indicator",
+  "description": "Battery indicators bar icons for devices (mouse, keyboard, headphones, etc)",
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "refreshInterval": 60,
+      "showPercentage": false,
+      "devices": {}
+    }
+  }
+}
