@@ -19,7 +19,9 @@
     "tool_done": "Tool done",
     "awaiting_approval": "Awaiting approval",
     "started": "Started",
-    "ended": "Ended"
+    "ended": "Ended",
+    "finalizing": "Finalizing",
+    "reset": "Reset"
   },
   "panel": {
     "hermes": "Hermes",
@@ -34,7 +36,11 @@
     "offline": "Offline",
     "unknown": "unknown",
     "actual": "actual",
-    "estimated": "estimated"
+    "estimated": "estimated",
+    "gw": "GW",
+    "cli": "CLI",
+    "cron": "Cron",
+    "dead": "dead"
   },
   "settings": {
     "statusScript": "Status check script",

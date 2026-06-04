@@ -12,16 +12,18 @@ Item {
 
   property ShellScreen screen
   readonly property var geometryPlaceholder: panelContainer
-  property real contentPreferredWidth: 240 * Style.uiScaleRatio
-  property real contentPreferredHeight: 150 * Style.uiScaleRatio
+  property real contentPreferredWidth: 280 * Style.uiScaleRatio
+  property real contentPreferredHeight: 200 * Style.uiScaleRatio
   readonly property bool allowAttach: true
 
   readonly property string status: hermesService?.status ?? "unknown"
   readonly property bool cliActive: hermesService?.cliActive ?? false
+  readonly property int activeCliCount: hermesService?.activeCliCount ?? 0
   readonly property string gatewayPid: hermesService?.gatewayPid ?? ""
   readonly property string signalEvent: hermesService?.signalEvent ?? ""
   readonly property var platforms: hermesService?.platforms ?? ({})
   readonly property var usage: hermesService?.usage ?? ({})
+  readonly property var processModel: hermesService?.processModel ?? null
 
   readonly property string statusText: {
     switch (status) {
@@ -67,7 +69,9 @@ Item {
       "post_tool_call": pluginApi?.tr("event.tool_done"),
       "pre_approval_request": pluginApi?.tr("event.awaiting_approval"),
       "on_session_start": pluginApi?.tr("event.started"),
-      "on_session_end": pluginApi?.tr("event.ended")
+      "on_session_end": pluginApi?.tr("event.ended"),
+      "on_session_finalize": pluginApi?.tr("event.finalizing"),
+      "on_session_reset": pluginApi?.tr("event.reset")
     };
     return map[signalEvent] || "";
   }
@@ -106,6 +110,45 @@ Item {
   }
 
   readonly property bool costIsUnknown: !usage || !usage.available || (!formatCost(usage.actual_cost_usd) && !formatCost(usage.estimated_cost_usd))
+
+  // Process state → icon helper
+  function processStateIcon(state) {
+    switch (state) {
+      case "busy":       return "loader";
+      case "attention":  return "bell-ringing";
+      case "idle":       return "circle-check";
+      case "error":      return "alert-triangle";
+      default:           return "help-circle";
+    }
+  }
+
+  // Process state → color helper
+  function processStateColor(state) {
+    switch (state) {
+      case "busy":       return Color.mPrimary;
+      case "attention":  return "#f59e0b";
+      case "idle":       return Color.mPrimary;
+      case "error":      return Color.mError;
+      default:           return Color.mOnSurface;
+    }
+  }
+
+  // Source label (i18n)
+  function sourceLabel(source) {
+    switch (source) {
+      case "gateway":    return pluginApi?.tr("panel.gw");
+      case "cli":        return pluginApi?.tr("panel.cli");
+      case "cron":       return pluginApi?.tr("panel.cron");
+      default:           return "?";
+    }
+  }
+
+  // Format short session id (first 8 chars)
+  function shortSessionId(sid) {
+    if (!sid) return "";
+    if (sid.length <= 8) return sid;
+    return sid.substring(0, 8) + "\u2026";
+  }
 
   Rectangle {
     id: panelContainer
@@ -163,7 +206,7 @@ Item {
           opacity: 0.2
         }
 
-        // Row 2: Gateway
+        // Gateway row (always shown)
         RowLayout {
           spacing: Style.marginS
 
@@ -182,68 +225,63 @@ Item {
           }
         }
 
-        // Row 3: Session
-        RowLayout {
-          spacing: Style.marginS
-
-          NText {
-            text: pluginApi?.tr("panel.session")
-            pointSize: Style.fontSizeS
-            color: Color.mOnSurface
-            opacity: 0.5
-            Layout.preferredWidth: 60
+        // Process list (non-gateway processes)
+        Repeater {
+          model: {
+            if (!root.processModel) return [];
+            var items = [];
+            for (var i = 0; i < root.processModel.count; i++) {
+              var p = root.processModel.get(i);
+              if (p.source !== "gateway") {
+                items.push(p);
+              }
+            }
+            return items;
           }
 
-          NText {
-            text: cliActive ? pluginApi?.tr("panel.active") : pluginApi?.tr("panel.none")
-            pointSize: Style.fontSizeS
-            opacity: cliActive ? 1.0 : 0.4
-          }
-        }
+          delegate: RowLayout {
+            spacing: Style.marginS
 
+            NIcon {
+              icon: processStateIcon(modelData.state)
+              color: processStateColor(modelData.state)
+              pointSize: Style.fontSizeXS
+            }
 
-        // Row 4: Tokens
-        RowLayout {
-          spacing: Style.marginS
+            NText {
+              text: sourceLabel(modelData.source)
+              pointSize: Style.fontSizeS
+              color: Color.mOnSurface
+              opacity: 0.5
+              Layout.preferredWidth: 24
+            }
 
-          NText {
-            text: pluginApi?.tr("panel.tokens")
-            pointSize: Style.fontSizeS
-            color: Color.mOnSurface
-            opacity: 0.5
-            Layout.preferredWidth: 60
-          }
+            NText {
+              text: shortSessionId(modelData.sessionId) || ("PID " + modelData.pid)
+              pointSize: Style.fontSizeS
+              color: Color.mOnSurface
+              Layout.fillWidth: true
+              elide: Text.ElideRight
+            }
 
-          NText {
-            text: root.tokensText
-            pointSize: Style.fontSizeS
-            color: Color.mOnSurface
-            Layout.fillWidth: true
-            elide: Text.ElideRight
-          }
-        }
-
-        // Row 5: Cost
-        RowLayout {
-          spacing: Style.marginS
-
-          NText {
-            text: pluginApi?.tr("panel.cost")
-            pointSize: Style.fontSizeS
-            color: Color.mOnSurface
-            opacity: 0.5
-            Layout.preferredWidth: 60
-          }
-
-          NText {
-            text: root.costText
-            pointSize: Style.fontSizeS
-            color: root.costIsUnknown ? Color.mOnSurface : Color.mPrimary
-            opacity: root.costIsUnknown ? 0.45 : 1.0
+            NText {
+              text: modelData.alive ? "" : pluginApi?.tr("panel.dead")
+              pointSize: Style.fontSizeS
+              color: Color.mError
+              opacity: 0.6
+            }
           }
         }
 
-        // Row 6+: Platforms
+        // Separator before platforms
+        Rectangle {
+          Layout.fillWidth: true
+          Layout.preferredHeight: 1
+          color: Color.mOutline
+          opacity: 0.2
+        }
+
+        // Platforms
         Repeater {
           model: {
             var items = [];
@@ -272,6 +310,48 @@ Item {
               pointSize: Style.fontSizeS
               color: modelData.ok ? Color.mPrimary : Color.mError
             }
+          }
+        }
+
+        // Token usage (always visible below platforms)
+        RowLayout {
+          spacing: Style.marginS
+
+          NText {
+            text: pluginApi?.tr("panel.tokens")
+            pointSize: Style.fontSizeS
+            color: Color.mOnSurface
+            opacity: 0.5
+            Layout.preferredWidth: 60
+          }
+
+          NText {
+            text: root.tokensText
+            pointSize: Style.fontSizeS
+            color: Color.mPrimary
+            opacity: 0.8
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+          }
+        }
+
+        // Cost
+        RowLayout {
+          spacing: Style.marginS
+
+          NText {
+            text: pluginApi?.tr("panel.cost")
+            pointSize: Style.fontSizeS
+            color: Color.mOnSurface
+            opacity: 0.5
+            Layout.preferredWidth: 60
+          }
+
+          NText {
+            text: root.costText
+            pointSize: Style.fontSizeS
+            color: root.costIsUnknown ? Color.mOnSurface : Color.mPrimary
+            opacity: root.costIsUnknown ? 0.45 : 1.0
           }
         }
       }

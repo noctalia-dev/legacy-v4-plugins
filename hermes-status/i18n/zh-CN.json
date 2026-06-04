@@ -19,7 +19,9 @@
     "tool_done": "工具完成",
     "awaiting_approval": "等待审批",
     "started": "已开始",
-    "ended": "已结束"
+    "ended": "已结束",
+    "finalizing": "清理中",
+    "reset": "重置"
   },
   "panel": {
     "hermes": "Hermes",
@@ -34,7 +36,11 @@
     "offline": "离线",
     "unknown": "未知",
     "actual": "实际",
-    "estimated": "预估"
+    "estimated": "预估",
+    "gw": "GW",
+    "cli": "CLI",
+    "cron": "Cron",
+    "dead": "已断开"
   },
   "settings": {
     "statusScript": "状态检查脚本",
