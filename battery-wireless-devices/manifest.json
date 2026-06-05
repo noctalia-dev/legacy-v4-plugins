@@ -6,7 +6,7 @@
   "author": "aslauw",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-  "description": "Battery indicators bar icons for devices (mouse, keyboard, headphones, etc)",
+  "description": "Bar widget showing battery levels for wireless peripherals (mouse, keyboard, headset, etc.) via OpenRazer and Solaar.",
   "tags": ["Bar", "Indicator", "System"],
   "entryPoints": {
     "main": "Main.qml",

@@ -141,11 +141,15 @@ Detected entries whose `id` drifts are auto-merged in the settings UI by
 
 ## Contributing
 
-Issues and pull requests are welcome — especially new `scan_<source>()`
-functions for other vendors. There's no build step or test framework: it's pure
-QML loaded at runtime by Noctalia, plus the standalone Python scanner. See
-[`CLAUDE.md`](CLAUDE.md) for an overview of the architecture and the Noctalia
-plugin conventions.
+This plugin lives in the
+[noctalia-plugins](https://github.com/noctalia-dev/noctalia-plugins) registry —
+please open issues and pull requests there. New `scan_<source>()` functions for
+other vendors are especially welcome.
+
+There's no build step or test framework: it's pure QML loaded at runtime by
+Noctalia, plus the standalone Python scanner. See [`CLAUDE.md`](CLAUDE.md) for an
+overview of the architecture, and the repository-root
+[`AGENTS.md`](../AGENTS.md) for plugin conventions and the PR process.
 
 ## License
 
