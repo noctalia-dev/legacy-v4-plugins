@@ -154,7 +154,7 @@ Item {
           Layout.bottomMargin: Style.marginM
           Layout.leftMargin: Style.marginM
           Layout.rightMargin: Style.marginM
-          spacing: 4
+          spacing: Style.marginXS
 
           NText {
             text: root.songTitle !== "" ? root.songTitle : "Loading..."

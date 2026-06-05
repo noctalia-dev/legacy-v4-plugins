@@ -5,7 +5,7 @@
   "minNoctaliaVersion": "3.6.0",
   "author": "aglairdev",
   "license": "MIT",
-  "repository": "https://github.com/aglairdev/noctalia-plugins/tree/mpv/mpv",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "MPV plugin for Noctalia. Based on noctalia-mpd by Ido Perlmuter.",
   "tags": [
     "Bar",
