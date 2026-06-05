@@ -50,7 +50,7 @@ Item {
     }
   }
 
-  readonly property real contentWidth: content.implicitWidth + Style.marginM * 2
+  readonly property real contentWidth: content.implicitWidth + Style.marginM * 0.5
   readonly property real contentHeight: capsuleHeight
 
   implicitWidth: contentWidth
