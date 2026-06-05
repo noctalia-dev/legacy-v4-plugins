@@ -35,14 +35,14 @@ ColumnLayout {
     readonly property var liveDevices: (pluginApi && pluginApi.mainInstance) ? (pluginApi.mainInstance.devices || []) : []
 
     readonly property var iconOptions: [
-        { key: "", name: "Auto (by type)" },
-        { key: "mouse", name: "Mouse" },
-        { key: "keyboard", name: "Keyboard" },
-        { key: "headphones", name: "Headphones" },
-        { key: "device-gamepad", name: "Gamepad" },
-        { key: "bluetooth", name: "Bluetooth" },
-        { key: "device-desktop", name: "Desktop" },
-        { key: "battery", name: "Battery" }
+        { key: "", name: pluginApi?.tr("settings.icon.auto") },
+        { key: "mouse", name: pluginApi?.tr("settings.icon.mouse") },
+        { key: "keyboard", name: pluginApi?.tr("settings.icon.keyboard") },
+        { key: "headphones", name: pluginApi?.tr("settings.icon.headphones") },
+        { key: "device-gamepad", name: pluginApi?.tr("settings.icon.gamepad") },
+        { key: "bluetooth", name: pluginApi?.tr("settings.icon.bluetooth") },
+        { key: "device-desktop", name: pluginApi?.tr("settings.icon.desktop") },
+        { key: "battery", name: pluginApi?.tr("settings.icon.battery") }
     ]
 
     // Notifiable mirror of the global "show percentage" setting. NToggle emits
@@ -221,14 +221,14 @@ ColumnLayout {
     // ---- Global options ----------------------------------------------------
 
     NLabel {
-        label: "Device Battery Indicators"
-        description: "Select which devices appear in the bar and how each looks."
+        label: pluginApi?.tr("settings.header.label")
+        description: pluginApi?.tr("settings.header.desc")
     }
 
     NToggle {
         Layout.fillWidth: true
-        label: "Show percentage"
-        description: "Display the battery percentage next to each icon."
+        label: pluginApi?.tr("settings.showPercentage.label")
+        description: pluginApi?.tr("settings.showPercentage.desc")
         checked: root.showPercentageEdit
         onToggled: checked => {
             root.showPercentageEdit = checked
@@ -238,8 +238,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: "Show charging indicator"
-        description: "Add a lightning icon next to devices that are charging."
+        label: pluginApi?.tr("settings.showCharging.label")
+        description: pluginApi?.tr("settings.showCharging.desc")
         checked: root.showChargingEdit
         onToggled: checked => {
             root.showChargingEdit = checked
@@ -250,8 +250,8 @@ ColumnLayout {
     NSpinBox {
         id: intervalSpin
         Layout.fillWidth: true
-        label: "Refresh interval"
-        description: "How often to re-scan devices, in seconds."
+        label: pluginApi?.tr("settings.refreshInterval.label")
+        description: pluginApi?.tr("settings.refreshInterval.desc")
         from: 10
         to: 900
         stepSize: 10
@@ -266,7 +266,7 @@ ColumnLayout {
     RowLayout {
         Layout.fillWidth: true
         NButton {
-            text: "Rescan devices"
+            text: pluginApi?.tr("settings.rescan")
             icon: "refresh"
             onClicked: {
                 if (pluginApi && pluginApi.mainInstance)
@@ -288,7 +288,7 @@ ColumnLayout {
 
     NText {
         visible: root.deviceList.length === 0
-        text: "No devices detected. Make sure the device is on, then press \"Rescan devices\"."
+        text: pluginApi?.tr("settings.noDevices")
         color: Color.mOnSurfaceVariant
         wrapMode: Text.WordWrap
         Layout.fillWidth: true
@@ -451,14 +451,14 @@ ColumnLayout {
                             text: card.modelData.online
                                   ? (card.modelData.battery >= 0 ? card.modelData.battery + "%" : "—")
                                     + (card.modelData.charging ? " ⚡" : "")
-                                  : "offline"
+                                  : pluginApi?.tr("settings.offline")
                             color: card.modelData.online ? Color.mPrimary : Color.mOnSurfaceVariant
                         }
 
                         NIconButton {
                             icon: "trash"
                             baseSize: Style.baseWidgetSize * 0.8
-                            tooltipText: "Remove this device"
+                            tooltipText: pluginApi?.tr("settings.removeDevice")
                             colorFg: Color.mError
                             onClicked: root.removeDevice(card.modelData.id)
                         }
@@ -466,7 +466,7 @@ ColumnLayout {
 
                     NToggle {
                         Layout.fillWidth: true
-                        label: "Show in bar"
+                        label: pluginApi?.tr("settings.showInBar")
                         checked: card.enabledLocal
                         onToggled: checked => {
                             card.enabledLocal = checked
@@ -476,7 +476,7 @@ ColumnLayout {
 
                     NComboBox {
                         Layout.fillWidth: true
-                        label: "Icon"
+                        label: pluginApi?.tr("settings.icon.label")
                         model: root.iconOptions
                         currentKey: card.cfg.icon || ""
                         onSelected: key => root.set(card.modelData.id, "icon", key)
@@ -484,25 +484,25 @@ ColumnLayout {
 
                     NColorChoice {
                         Layout.fillWidth: true
-                        label: "Icon color"
-                        description: "None uses the theme foreground."
+                        label: pluginApi?.tr("settings.iconColor.label")
+                        description: pluginApi?.tr("settings.iconColor.desc")
                         currentKey: card.cfg.iconColor || "none"
                         onSelected: key => root.set(card.modelData.id, "iconColor", key)
                     }
 
                     NColorChoice {
                         Layout.fillWidth: true
-                        label: "Battery ring color"
-                        description: "None colours by battery level."
+                        label: pluginApi?.tr("settings.ringColor.label")
+                        description: pluginApi?.tr("settings.ringColor.desc")
                         currentKey: card.cfg.ringColor || "none"
                         onSelected: key => root.set(card.modelData.id, "ringColor", key)
                     }
 
                     NTextInput {
                         Layout.fillWidth: true
-                        label: "Command on click"
+                        label: pluginApi?.tr("settings.launchCmd.label")
                         text: card.cfg.launchCmd || ""
-                        placeholderText: "e.g. polychromatic-controller / solaar"
+                        placeholderText: pluginApi?.tr("settings.launchCmd.placeholder")
                         onTextChanged: root.set(card.modelData.id, "launchCmd", text)
                     }
                 }

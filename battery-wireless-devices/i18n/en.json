@@ -1,0 +1,52 @@
+{
+  "menu": {
+    "settings": "Settings",
+    "refresh": "Refresh now"
+  },
+  "settings": {
+    "header": {
+      "label": "Battery for Wireless Devices",
+      "desc": "Select which devices appear in the bar and how each looks."
+    },
+    "showPercentage": {
+      "label": "Show percentage",
+      "desc": "Display the battery percentage next to each icon."
+    },
+    "showCharging": {
+      "label": "Show charging indicator",
+      "desc": "Add a lightning icon next to devices that are charging."
+    },
+    "refreshInterval": {
+      "label": "Refresh interval",
+      "desc": "How often to re-scan devices, in seconds."
+    },
+    "rescan": "Rescan devices",
+    "noDevices": "No devices detected. Make sure the device is on, then press \"Rescan devices\".",
+    "offline": "offline",
+    "removeDevice": "Remove this device",
+    "showInBar": "Show in bar",
+    "icon": {
+      "label": "Icon",
+      "auto": "Auto (by type)",
+      "mouse": "Mouse",
+      "keyboard": "Keyboard",
+      "headphones": "Headphones",
+      "gamepad": "Gamepad",
+      "bluetooth": "Bluetooth",
+      "desktop": "Desktop",
+      "battery": "Battery"
+    },
+    "iconColor": {
+      "label": "Icon color",
+      "desc": "None uses the theme foreground."
+    },
+    "ringColor": {
+      "label": "Battery ring color",
+      "desc": "None colours by battery level."
+    },
+    "launchCmd": {
+      "label": "Command on click",
+      "placeholder": "e.g. polychromatic-controller / solaar"
+    }
+  }
+}

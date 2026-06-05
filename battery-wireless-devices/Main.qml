@@ -3,7 +3,7 @@ import Quickshell
 import Quickshell.Io
 import qs.Commons
 
-// Background logic for the Device Battery Indicators plugin.
+// Background logic for the Battery for Wireless Devices plugin.
 //
 // Polls scripts/scan.py on a timer, parses its normalized JSON, and exposes the
 // live device list. The bar widget and settings UI both read `devices` from
@@ -74,9 +74,9 @@ Item {
         onTriggered: root.refresh()
     }
 
-    // `qs -c noctalia-shell ipc call plugin:device_battery_indicators refresh`
+    // `qs -c noctalia-shell ipc call plugin:battery-wireless-devices refresh`
     IpcHandler {
-        target: "plugin:device_battery_indicators"
+        target: "plugin:battery-wireless-devices"
 
         function refresh(): string {
             root.refresh()

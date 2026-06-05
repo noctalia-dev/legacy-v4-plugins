@@ -6,14 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A plugin for **Noctalia** (a Quickshell-based desktop shell, `noctalia-shell`). It is pure QML loaded at runtime by the running shell — there is **no build step, no compiler, and no test framework** in this repo. The plugin's purpose is a bar widget that shows battery indicators for connected peripherals (e.g. mouse, keyboard, headphones). Device data does **not** come from any Noctalia service — it is gathered by `scripts/scan.py` (see below).
 
-Requires `minNoctaliaVersion: 3.6.0`.
+Requires `minNoctaliaVersion: 4.6.6`.
 
 ## This implementation's architecture
 
 The plugin is split across three entry points plus one helper script:
 
 - **`scripts/scan.py`** — the data layer and the only place that knows how to talk to devices. It probes every supported source and prints a **normalized JSON array** on stdout: `[{ id, name, type, battery, charging, source }]`. `id` is `"<source>:<stable-key>"`. Each source is a `scan_<source>()` function that swallows its own errors (missing tool → `[]`). Current sources: `scan_openrazer()` (via the `openrazer` Python client / running `openrazer-daemon`) and `scan_solaar()` (parses `solaar show`). **To add a new device source, add a `scan_*()` and append it to `SOURCES` — nothing in the QML changes.**
-- **`Main.qml`** (`main` entry point) — runs `scan.py` on a `Timer` (interval = `pluginSettings.refreshInterval`, default 60s), parses the JSON, and exposes the live list as `property var devices`. Also exposes `refresh()` and an `IpcHandler` (`plugin:device_battery_indicators` → `refresh`).
+- **`Main.qml`** (`main` entry point) — runs `scan.py` on a `Timer` (interval = `pluginSettings.refreshInterval`, default 60s), parses the JSON, and exposes the live list as `property var devices`. Also exposes `refresh()` and an `IpcHandler` (`plugin:battery-wireless-devices` → `refresh`).
 - **`BarWidget.qml`** — reads live data from `pluginApi.mainInstance.devices` and per-device config from `pluginApi.pluginSettings.devices`. Renders one pill per device the user has **enabled**, each a device icon inside a circular battery ring (a `Canvas`). Ring colour is auto-by-level unless overridden; click runs the device's `launchCmd` via `Quickshell.execDetached`.
 - **`Settings.qml`** (`settings` entry point) — lists detected + previously-configured devices (drag the handle to reorder; top = left-most / top-most in the bar) and lets the user set per device: `enabled`, `icon`, `iconColor`, `ringColor`, `launchCmd`. Settings shape: `pluginSettings.devices` is a map keyed by device `id`, `pluginSettings.deviceOrder` is an ordered array of ids; globals are `refreshInterval` and `showPercentage`. Edits apply **live** (debounced `commit()` rebuilds `devices` with fresh object identities so the bar's bindings re-fire); the popup's Apply button is redundant. `populateList()` also auto-heals stale duplicate entries (same source + name, different id).
 
@@ -23,7 +23,7 @@ Data flow: `scan.py` → `Main.qml.devices` → (`pluginApi.mainInstance`) → `
 
 - `manifest.json` — the contract. `id` must be unique; `entryPoints` maps roles to QML files. Each role is optional; this plugin currently only defines `barWidget`. Other available roles (see the `arch-updater` reference plugin): `main` (background singleton/logic, instantiated once), `panel`, `settings`, `controlCenterWidget`, `desktopWidget`, `launcherProvider`.
 - `metadata.defaultSettings` in the manifest defines the plugin's persisted settings schema and defaults. User overrides are merged on top at load.
-- Entry-point `.qml` files live at the repo root. Optional `i18n/<lang>.json` files provide translations (`en.json` is the fallback).
+- Entry-point `.qml` files live at the repo root. `i18n/<lang>.json` files provide translations (`en.json` is the fallback); this plugin ships `i18n/en.json` and routes every user-facing string through `pluginApi.tr("dot.path.key")` — no inline literals or post-`tr()` fallbacks (a Noctalia plugin convention; see the repo-root `AGENTS.md`).
 
 ## Installation / runtime model
 
@@ -66,4 +66,4 @@ There are no unit tests. To see changes: enable Noctalia **debug mode** (`Settin
 
 **Manifest changes require a full shell restart, not hot reload.** `PluginRegistry.getPluginManifest()` returns an in-memory cache (`installedPlugins`) populated by a disk scan at startup. Hot reload re-instantiates QML against that *cached* manifest, so adding/removing `entryPoints` (or changing `metadata.defaultSettings`) is invisible until the shell restarts. Symptom: a newly-added `main` entry point's `IpcHandler` returns "Target not found". Editing existing `.qml` files hot-reloads fine.
 
-Smoke test that `Main.qml` loaded: `qs -c noctalia-shell ipc call plugin:device_battery_indicators refresh` (returns a success string). Verify `scan.py` independently with `python3 scripts/scan.py`. The bar widget renders nothing until the user adds the widget to a bar section **and** enables at least one device in the plugin settings.
+Smoke test that `Main.qml` loaded: `qs -c noctalia-shell ipc call plugin:battery-wireless-devices refresh` (returns a success string). Verify `scan.py` independently with `python3 scripts/scan.py`. The bar widget renders nothing until the user adds the widget to a bar section **and** enables at least one device in the plugin settings.

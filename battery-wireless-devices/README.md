@@ -1,4 +1,4 @@
-# Device Battery Indicators
+# Battery for Wireless Devices
 
 A [Noctalia](https://noctalia.dev) bar widget that shows battery levels for your
 connected peripherals — mouse, keyboard, headset, etc. — each as a device icon
@@ -27,7 +27,7 @@ can't see (wireless dongles, USB receivers, ...).
 
 ## Requirements
 
-- **Noctalia** ≥ 3.6.0
+- **Noctalia** ≥ 4.6.6
 - **python3**
 - Per device source (install only what you need):
   - **Razer** — [OpenRazer](https://openrazer.github.io/): the running
@@ -40,19 +40,27 @@ reports no devices.
 
 ## Installation
 
-Clone (or symlink) this repo into Noctalia's plugin directory, using the plugin
-id as the folder name:
+**From the Noctalia plugin browser (recommended)**
+
+Open Noctalia's settings → Plugins, find **Battery for Wireless Devices**, and
+install it.
+
+**Manual / development**
+
+Clone this repository and symlink the plugin folder into Noctalia's plugin
+directory (so edits stay live):
 
 ```sh
-git clone https://github.com/aslauw/device_battery_indicator \
-  ~/.config/noctalia/plugins/device_battery_indicators
+git clone https://github.com/noctalia-dev/noctalia-plugins
+ln -s "$PWD/noctalia-plugins/battery-wireless-devices" \
+  ~/.config/noctalia/plugins/battery-wireless-devices
 ```
 
-Then:
+Then, however you installed it:
 
-1. Enable **Device Battery Indicators** in Noctalia's plugin settings.
+1. Enable **Battery for Wireless Devices** in Noctalia's plugin settings.
 2. Restart the shell (`qs -c noctalia-shell`) so the new plugin is registered.
-3. Add the **Device Battery Indicators** widget to a bar section
+3. Add the **Battery for Wireless Devices** widget to a bar section
    (Noctalia Settings → Bar).
 4. Open the plugin's settings (see below) and enable the devices you want.
 
@@ -91,7 +99,7 @@ Changes apply live; the popup's **Apply** button is redundant.
 You can also trigger a refresh over IPC:
 
 ```sh
-qs -c noctalia-shell ipc call plugin:device_battery_indicators refresh
+qs -c noctalia-shell ipc call plugin:battery-wireless-devices refresh
 ```
 
 ## Adding a new device source
