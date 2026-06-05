@@ -125,10 +125,11 @@ Verify it independently:
 python3 scripts/scan.py | python3 -m json.tool
 ```
 
-Pick a **stable** `id`: prefer a real hardware serial; avoid values that change
-between reboots (the script already skips OpenRazer's placeholder `UNKNOWN_*`
-serials for this reason). Detected entries whose `id` drifts are auto-merged in
-the settings UI by `source` + `name`, but a stable id is always better.
+Pick a **stable** `id` — one that survives reboots and reconnects. Avoid values
+that drift: the OpenRazer source keys on USB `vid:pid` rather than the daemon's
+serial, which is often an unstable placeholder (e.g. `UNKNOWN_153200B7_0000`).
+Detected entries whose `id` drifts are auto-merged in the settings UI by
+`source` + `name`, but a stable id is always better.
 
 ## Contributing
 

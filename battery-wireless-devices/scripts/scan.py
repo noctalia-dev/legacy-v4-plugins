@@ -60,15 +60,20 @@ def scan_openrazer():
         try:
             if not dev.has("battery"):
                 continue
-            # The daemon occasionally hands back a placeholder serial like
-            # "UNKNOWN_153200B7_0000" (vendor/product + counter) instead of the
-            # real one. Those aren't stable, so skip this scan rather than mint
-            # an unstable id — the device reappears once the serial is readable.
-            serial = dev.serial
-            if not serial or str(serial).startswith("UNKNOWN"):
-                continue
+            # Identify by USB vendor:product id. The daemon's serial is
+            # unreliable — it frequently reports a placeholder like
+            # "UNKNOWN_153200B7_0000" (notably when started via the systemd
+            # user service), which would otherwise mint an unstable id. vid:pid
+            # is stable regardless and only collides between two identical
+            # devices.
+            vid = getattr(dev, "_vid", None)
+            pid = getattr(dev, "_pid", None)
+            if vid is not None and pid is not None:
+                key = "%04x:%04x" % (int(vid), int(pid))
+            else:
+                key = str(dev.serial)
             devices.append({
-                "id": "openrazer:" + str(serial),
+                "id": "openrazer:" + key,
                 "name": dev.name,
                 "type": _norm_type(getattr(dev, "type", "")),
                 "battery": int(round(dev.battery_level)),
