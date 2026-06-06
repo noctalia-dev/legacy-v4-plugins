@@ -30,6 +30,9 @@
     "turbo-off": "Turbo: always off",
     "turbo-auto": "Turbo: auto"
   },
+  "widget": {
+    "turbo-label": "turbo: {state}"
+  },
   "actions": {
     "widget-settings": "Widget settings"
   },

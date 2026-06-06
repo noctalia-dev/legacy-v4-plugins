@@ -52,10 +52,10 @@ Item {
                     }
 
                     ColumnLayout {
-                        spacing: 2
+                        spacing: Style.marginXXS
                         Layout.fillWidth: true
                         NText {
-                            text: "auto-cpufreq"
+                            text: pluginApi?.tr("panel.title")
                             pointSize: Style.fontSizeM
                             font.weight: Font.Bold
                             color: Color.mOnSurface
@@ -157,7 +157,7 @@ Item {
                     }
 
                     ColumnLayout {
-                        spacing: 2
+                        spacing: Style.marginXXS
                         Layout.fillWidth: true
 
                         NText {
@@ -305,7 +305,7 @@ Item {
                         color: Color.mSurface
                         radius: Style.radiusS
                         border.color: Color.mOutline
-                        border.width: 1
+                        border.width: Style.borderS
                         clip: true
 
                         Row {
@@ -367,7 +367,7 @@ Item {
                         color: Color.mSurface
                         radius: Style.radiusS
                         border.color: Color.mOutline
-                        border.width: 1
+                        border.width: Style.borderS
                         clip: true
 
                         Row {
@@ -408,7 +408,7 @@ Item {
         property string label: ""
         property string value: "—"
         property color  valueColor: Color.mOnSurface
-        spacing: 2
+        spacing: Style.marginXXS
         Layout.fillWidth: true
         NIcon {
             icon: statCell.icon; pointSize: Style.fontSizeM
@@ -434,19 +434,19 @@ Item {
         signal clicked()
 
         Rectangle {
-            anchors { fill: parent; margins: 3 }
+            anchors { fill: parent; margins: Style.marginXXS }
             radius: Style.radiusS
             color: segItem.active ? Color.mPrimary : "transparent"
         }
         Rectangle {
             anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter
-            width: 1; height: parent.height * 0.5
+            width: Style.borderS; height: parent.height * 0.5
             color: Color.mOutline; opacity: 0.5
             visible: segItem.showDivider
         }
         ColumnLayout {
             anchors.centerIn: parent
-            spacing: 1
+            spacing: Style.marginXXXS
             NIcon {
                 icon: segItem.icon; pointSize: Style.fontSizeS
                 color: segItem.active ? Color.mOnPrimary : Color.mOnSurfaceVariant

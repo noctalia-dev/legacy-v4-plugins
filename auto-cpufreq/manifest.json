@@ -5,7 +5,7 @@
   "minNoctaliaVersion": "4.4.1",
   "author": "4rmcyt",
   "license": "MIT",
-  "repository": "",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "description": "Monitor and control auto-cpufreq daemon: governor, turbo boost, CPU stats, and force-override.",
   "tags": [
     "Bar",

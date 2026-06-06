@@ -247,7 +247,7 @@ Item {
 
             ColumnLayout {
                 visible: !root.compact
-                spacing: 1
+                spacing: Style.marginXXXS
                 Layout.rightMargin: Style.marginS
 
                 NText {
@@ -260,7 +260,7 @@ Item {
 
                 NText {
                     visible: root.turboState !== "—"
-                    text: "turbo: " + root.turboState
+                    text: pluginApi?.tr("widget.turbo-label", { state: root.turboState })
                     pointSize: root.barFontSize * 0.85
                     color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurfaceVariant
                 }
