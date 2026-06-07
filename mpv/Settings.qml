@@ -24,27 +24,26 @@ ColumnLayout {
     pluginApi.pluginSettings.middleButton = root.editMiddleButton
     pluginApi.saveSettings()
   }
-  // Mouse button actions
   ColumnLayout {
     spacing: Style.marginM
     Layout.fillWidth: true
     NComboBox {
-      label: pluginApi?.tr("settings.left-click") ?? "Left click"
-      description: pluginApi?.tr("settings.left-click-desc") ?? "Action when left-clicking the widget"
+      label: pluginApi?.tr("settings.left-click")
+      description: pluginApi?.tr("settings.left-click-desc")
       model: root.actionModel
       currentKey: root.editLeftButton
       onSelected: key => root.editLeftButton = key
     }
     NComboBox {
-      label: pluginApi?.tr("settings.right-click") ?? "Right click"
-      description: pluginApi?.tr("settings.right-click-desc") ?? "Action when right-clicking the widget"
+      label: pluginApi?.tr("settings.right-click")
+      description: pluginApi?.tr("settings.right-click-desc")
       model: root.actionModel
       currentKey: root.editRightButton
       onSelected: key => root.editRightButton = key
     }
     NComboBox {
-      label: pluginApi?.tr("settings.middle-click") ?? "Middle click"
-      description: pluginApi?.tr("settings.middle-click-desc") ?? "Action when middle-clicking the widget"
+      label: pluginApi?.tr("settings.middle-click")
+      description: pluginApi?.tr("settings.middle-click-desc")
       model: root.actionModel
       currentKey: root.editMiddleButton
       onSelected: key => root.editMiddleButton = key
