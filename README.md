@@ -1,4 +1,4 @@
-# Noctalia Main Plugins Registry
+# Noctalia Legacy V4 Plugins Registry
 
 Main plugin registry for [Noctalia Shell](https://github.com/noctalia-dev/noctalia-shell).
 
