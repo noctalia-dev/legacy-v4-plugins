@@ -1,0 +1,86 @@
+rules:
+  - id: require-plugin-api
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: 'property\s+var\s+pluginApi'
+    message: "Missing required property `pluginApi`. Add: property var pluginApi: null"
+    severity: ERROR
+    paths:
+      include:
+        - "**/BarWidget.qml"
+        - "**/DesktopWidget.qml"
+        - "**/DesktopWidgetSettings.qml"
+        - "**/ControlCenterWidget.qml"
+        - "**/LauncherProvider.qml"
+        - "**/Main.qml"
+        - "**/Panel.qml"
+        - "**/Settings.qml"
+
+  - id: require-bar-widget-properties
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-either:
+          - patterns:
+              - pattern-not-regex: 'property\s+ShellScreen\s+screen'
+          - patterns:
+              - pattern-not-regex: 'property\s+string\s+widgetId'
+          - patterns:
+              - pattern-not-regex: 'property\s+string\s+section'
+          - patterns:
+              - pattern-not-regex: 'property\s+int\s+sectionWidgetIndex'
+          - patterns:
+              - pattern-not-regex: 'property\s+int\s+sectionWidgetsCount'
+    message: "BarWidget is missing one or more required properties: screen, widgetId, section, sectionWidgetIndex, or sectionWidgetsCount."
+    severity: ERROR
+    paths:
+      include: ["**/BarWidget.qml"]
+
+  - id: require-desktop-settings-properties
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: 'property\s+var\s+widgetSettings'
+    message: "DesktopWidgetSettings is missing required property `widgetSettings`."
+    severity: ERROR
+    paths:
+      include: ["**/DesktopWidgetSettings.qml"]
+
+  - id: require-control-center-properties
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-not-regex: 'property\s+ShellScreen\s+screen'
+    message: "ControlCenterWidget is missing required property `screen`."
+    severity: ERROR
+    paths:
+      include: ["**/ControlCenterWidget.qml"]
+
+  - id: require-launcher-provider-properties
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-either:
+          - patterns:
+              - pattern-not-regex: 'property\s+var\s+launcher'
+          - patterns:
+              - pattern-not-regex: 'property\s+string\s+name'
+    message: "LauncherProvider is missing required properties: launcher and/or name."
+    severity: ERROR
+    paths:
+      include: ["**/LauncherProvider.qml"]
+
+  - id: require-panel-properties
+    languages: [generic]
+    patterns:
+      - pattern-regex: '(?s)\A.*'
+      - pattern-either:
+          - patterns:
+              - pattern-not-regex: 'property\s+var\s+geometryPlaceholder'
+          - patterns:
+              - pattern-not-regex: 'property\s+bool\s+allowAttach'
+    message: "Panel is missing required properties: geometryPlaceholder and/or allowAttach."
+    severity: ERROR
+    paths:
+      include: ["**/Panel.qml"]
