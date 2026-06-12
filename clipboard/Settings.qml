@@ -44,6 +44,7 @@ ColumnLayout {
     property bool valueShowImagePreviews: cfg.showImagePreviews ?? defaults.showImagePreviews ?? true
     property bool valueClearHistoryOnStartup: cfg.clearHistoryOnStartup ?? defaults.clearHistoryOnStartup ?? false
     property bool valueAutoPasteOnSelect: cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false
+    property int valueAutoPasteDelayMs: cfg.autoPasteDelayMs ?? defaults.autoPasteDelayMs ?? 500
     property string valueDensity: cfg.density ?? defaults.density ?? "comfortable"
 
     // --- Controls -----------------------------------------------------------
@@ -89,6 +90,18 @@ ColumnLayout {
         onToggled: checked => { root.valueAutoPasteOnSelect = checked; }
     }
 
+    NSpinBox {
+        Layout.fillWidth: true
+        visible: root.valueAutoPasteOnSelect
+        label: pluginApi?.tr("settings.auto-paste-delay")
+        description: pluginApi?.tr("settings.auto-paste-delay-description")
+        from: 200
+        to: 5000
+        stepSize: 100
+        value: root.valueAutoPasteDelayMs
+        onValueChanged: root.valueAutoPasteDelayMs = value
+    }
+
     // density — enum of "compact" / "comfortable" / "spacious". The
     // NComboBox model uses { key, name } entries; we bind selection through
     // currentKey so the stored value is the enum string itself (matching
@@ -124,6 +137,7 @@ ColumnLayout {
         pluginApi.pluginSettings.showImagePreviews = root.valueShowImagePreviews;
         pluginApi.pluginSettings.clearHistoryOnStartup = root.valueClearHistoryOnStartup;
         pluginApi.pluginSettings.autoPasteOnSelect = root.valueAutoPasteOnSelect;
+        pluginApi.pluginSettings.autoPasteDelayMs = root.valueAutoPasteDelayMs;
         pluginApi.pluginSettings.density = root.valueDensity;
         pluginApi.saveSettings();
     }

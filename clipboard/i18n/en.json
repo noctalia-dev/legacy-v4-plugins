@@ -34,6 +34,8 @@
     "clear-history-on-startup-description": "Clear regular history whenever Noctalia Shell starts or restarts. Pinned items are preserved.",
     "auto-paste-on-select": "Paste automatically on selection",
     "auto-paste-on-select-description": "Close the panel and send Ctrl+V to the previous window after selecting an entry.",
+    "auto-paste-delay": "Automatic paste delay",
+    "auto-paste-delay-description": "Milliseconds to wait for focus to return before sending Ctrl+V (minimum 200 ms).",
     "density": "Density",
     "density-description": "Spacing of clipboard entries in the panel.",
     "density-compact": "Compact",

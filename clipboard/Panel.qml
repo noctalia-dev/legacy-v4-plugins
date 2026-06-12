@@ -91,6 +91,11 @@ Item {
 
     // Cached settings for reactive use inside bindings.
     readonly property bool showImagePreviews: pluginApi?.pluginSettings?.showImagePreviews ?? true
+    readonly property bool autoPasteOnSelect: {
+        const cfg = pluginApi?.pluginSettings || ({});
+        const defaults = pluginApi?.manifest?.metadata?.defaultSettings || ({});
+        return cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
+    }
     readonly property real densitySpacing: {
         const d = pluginApi?.pluginSettings?.density ?? "comfortable";
         if (d === "compact") return Style.marginXS;
@@ -117,6 +122,11 @@ Item {
     // focus stays on the row that slid up into the deleted position.
     property int selectedIndex: -1
     property bool pasteAfterClose: false
+
+    function closeAfterCopy() {
+        root.pasteAfterClose = root.autoPasteOnSelect;
+        closePanelTimer.restart();
+    }
 
     // Sentinel index to restore AFTER a delete-triggered refresh. -1
     // means "no pending clamp" (normal reset semantics apply). Any
@@ -277,9 +287,6 @@ Item {
         } else {
             root.pluginApi?.mainInstance?.copy(entry.id);
         }
-        const cfg = root.pluginApi?.pluginSettings || ({});
-        const defaults = root.pluginApi?.manifest?.metadata?.defaultSettings || ({});
-        root.pasteAfterClose = cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
         const typeSlug = entry.type === "file" ? "file"
                        : entry.type === "image" ? "image"
                        : "text";
@@ -287,7 +294,7 @@ Item {
             root.pluginApi?.tr("toast.item-copied-" + typeSlug + "-title"),
             root.pluginApi?.tr("toast.item-copied-" + typeSlug + "-body")
         );
-        closePanelTimer.restart();
+        root.closeAfterCopy();
     }
 
     // Pin / unpin the selected row. Toggles based on the entry's
@@ -1165,10 +1172,7 @@ Item {
                     // reference through the deferred-close timer — see the
                     // closePanelTimer commentary above.
                     onCopied: {
-                        const cfg = root.pluginApi?.pluginSettings || ({});
-                        const defaults = root.pluginApi?.manifest?.metadata?.defaultSettings || ({});
-                        root.pasteAfterClose = cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
-                        closePanelTimer.restart();
+                        root.closeAfterCopy();
                     }
                 }
 
@@ -1221,10 +1225,7 @@ Item {
                         // consistently on the Images tab.
                         selected: index === root.selectedIndex
                         onCopied: {
-                            const cfg = root.pluginApi?.pluginSettings || ({});
-                            const defaults = root.pluginApi?.manifest?.metadata?.defaultSettings || ({});
-                            root.pasteAfterClose = cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
-                            closePanelTimer.restart();
+                            root.closeAfterCopy();
                         }
                     }
                 }

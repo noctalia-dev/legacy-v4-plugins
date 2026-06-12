@@ -102,11 +102,15 @@ Item {
     function pasteIntoPreviousWindow() {
         if (pasteProc.running)
             return;
+        const cfg = pluginApi?.pluginSettings || ({});
+        const defaults = pluginApi?.manifest?.metadata?.defaultSettings || ({});
+        const configuredDelay = Number(cfg.autoPasteDelayMs ?? defaults.autoPasteDelayMs ?? 500);
+        const delayMs = Math.max(200, Math.min(5000, isNaN(configuredDelay) ? 500 : configuredDelay));
         const runtimeDir = Quickshell.env("XDG_RUNTIME_DIR") || "";
         const waylandDisplay = Quickshell.env("WAYLAND_DISPLAY") || "";
         pasteProc.command = ["bash", "-c",
-            'sleep 0.5; XDG_RUNTIME_DIR="$1" WAYLAND_DISPLAY="$2" wtype -M ctrl -P v -p v -m ctrl',
-            "--", runtimeDir, waylandDisplay];
+            'sleep "$1"; XDG_RUNTIME_DIR="$2" WAYLAND_DISPLAY="$3" wtype -M ctrl -P v -p v -m ctrl',
+            "--", String(delayMs / 1000), runtimeDir, waylandDisplay];
         pasteProc.running = true;
     }
 

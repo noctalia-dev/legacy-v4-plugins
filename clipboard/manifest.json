@@ -27,6 +27,7 @@
       "showImagePreviews": true,
       "clearHistoryOnStartup": false,
       "autoPasteOnSelect": false,
+      "autoPasteDelayMs": 500,
       "density": "comfortable"
     }
   }
