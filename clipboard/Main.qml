@@ -96,6 +96,20 @@ Item {
     // Id of the decode currently in flight ("" when idle).
     property string decodingId: ""
 
+    // Sends Ctrl+V after the panel has closed and focus has returned to the
+    // previously active window. The explicit Wayland environment keeps wtype
+    // working when Noctalia is launched as a user service.
+    function pasteIntoPreviousWindow() {
+        if (pasteProc.running)
+            return;
+        const runtimeDir = Quickshell.env("XDG_RUNTIME_DIR") || "";
+        const waylandDisplay = Quickshell.env("WAYLAND_DISPLAY") || "";
+        pasteProc.command = ["bash", "-c",
+            'sleep 0.5; XDG_RUNTIME_DIR="$1" WAYLAND_DISPLAY="$2" wtype -M ctrl -P v -p v -m ctrl',
+            "--", runtimeDir, waylandDisplay];
+        pasteProc.running = true;
+    }
+
     // Pending ids waiting for decodeProc to become free. FIFO — delegates
     // are rendered top-to-bottom so the first enqueued id is the most
     // visible one.
@@ -406,6 +420,21 @@ Item {
 
         stdout: StdioCollector {}
         stderr: StdioCollector {}
+    }
+
+    // Sends the paste shortcut to the window focused after the panel closes.
+    Process {
+        id: pasteProc
+
+        stdout: StdioCollector {}
+        stderr: StdioCollector {}
+
+        onExited: exitCode => {
+            if (exitCode !== 0) {
+                Logger.w("Clipboard Plugin", "automatic paste failed:",
+                    String(pasteProc.stderr.text).trim() || "exit " + exitCode);
+            }
+        }
     }
 
     // Deletes a specific entry, then refreshes the list on success.
@@ -1139,8 +1168,8 @@ Item {
 
     // --- Lifecycle -----------------------------------------------------------
 
-    // Seed the list once the shell has injected pluginApi so maxHistorySize
-    // resolves to the user's actual setting (not the fallback 100).
+    // Seed or clear the list once the shell has injected pluginApi so startup
+    // behavior resolves to the user's actual settings.
     //
     // Also ensure the pinned-file parent directory exists. FileView.setText
     // does not create missing parent directories, so a fresh install with
@@ -1150,7 +1179,13 @@ Item {
     // copied-at.json have a parent to write into.
     onPluginApiChanged: {
         if (pluginApi) {
-            root.refresh();
+            const cfg = pluginApi?.pluginSettings || ({});
+            const defaults = pluginApi?.manifest?.metadata?.defaultSettings || ({});
+            if (cfg.clearHistoryOnStartup ?? defaults.clearHistoryOnStartup ?? false) {
+                root.wipe();
+            } else {
+                root.refresh();
+            }
             if (root.dataDir) {
                 pinnedDirProc.command = ["mkdir", "-p", root.dataDir];
                 pinnedDirProc.running = true;
@@ -1165,6 +1200,8 @@ Item {
             listProc.running = false;
         if (copyProc.running)
             copyProc.running = false;
+        if (pasteProc.running)
+            pasteProc.running = false;
         if (removeProc.running)
             removeProc.running = false;
         if (wipeProc.running)

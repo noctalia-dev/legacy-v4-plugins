@@ -13,7 +13,7 @@ import qs.Widgets
 //   - docs/specs/plugin-qml-idioms.md (two-phase save pattern,
 //     null-guarding, widget library, i18n via pluginApi?.tr)
 //
-// Three controls stacked vertically map to the keys in
+// Controls stacked vertically map to the keys in
 // manifest.json metadata.defaultSettings:
 //   maxHistorySize     — NSpinBox, 20–500, default 100
 //   showImagePreviews  — NToggle, default true
@@ -29,6 +29,8 @@ ColumnLayout {
     // Injected by the shell after instantiation. Always null-guard every
     // access with optional chaining (?.) — per docs/specs/plugin-qml-idioms.md.
     property var pluginApi: null
+    property var cfg: pluginApi?.pluginSettings || ({})
+    property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
 
     // --- Pending state ------------------------------------------------------
     //
@@ -38,9 +40,11 @@ ColumnLayout {
     // exactly — drift between the two is a real bug (a plugin instance that
     // predates a defaults change falls back to the QML literal here, not
     // the manifest value).
-    property int valueMaxHistorySize: pluginApi?.pluginSettings?.maxHistorySize ?? 100
-    property bool valueShowImagePreviews: pluginApi?.pluginSettings?.showImagePreviews ?? true
-    property string valueDensity: pluginApi?.pluginSettings?.density ?? "comfortable"
+    property int valueMaxHistorySize: cfg.maxHistorySize ?? defaults.maxHistorySize ?? 100
+    property bool valueShowImagePreviews: cfg.showImagePreviews ?? defaults.showImagePreviews ?? true
+    property bool valueClearHistoryOnStartup: cfg.clearHistoryOnStartup ?? defaults.clearHistoryOnStartup ?? false
+    property bool valueAutoPasteOnSelect: cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false
+    property string valueDensity: cfg.density ?? defaults.density ?? "comfortable"
 
     // --- Controls -----------------------------------------------------------
 
@@ -67,6 +71,22 @@ ColumnLayout {
         description: pluginApi?.tr("settings.show-image-previews-description")
         checked: root.valueShowImagePreviews
         onToggled: checked => { root.valueShowImagePreviews = checked; }
+    }
+
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.clear-history-on-startup")
+        description: pluginApi?.tr("settings.clear-history-on-startup-description")
+        checked: root.valueClearHistoryOnStartup
+        onToggled: checked => { root.valueClearHistoryOnStartup = checked; }
+    }
+
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.auto-paste-on-select")
+        description: pluginApi?.tr("settings.auto-paste-on-select-description")
+        checked: root.valueAutoPasteOnSelect
+        onToggled: checked => { root.valueAutoPasteOnSelect = checked; }
     }
 
     // density — enum of "compact" / "comfortable" / "spacious". The
@@ -102,6 +122,8 @@ ColumnLayout {
         }
         pluginApi.pluginSettings.maxHistorySize = root.valueMaxHistorySize;
         pluginApi.pluginSettings.showImagePreviews = root.valueShowImagePreviews;
+        pluginApi.pluginSettings.clearHistoryOnStartup = root.valueClearHistoryOnStartup;
+        pluginApi.pluginSettings.autoPasteOnSelect = root.valueAutoPasteOnSelect;
         pluginApi.pluginSettings.density = root.valueDensity;
         pluginApi.saveSettings();
     }

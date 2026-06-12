@@ -1,7 +1,7 @@
 {
   "id": "clipboard",
   "name": "Clipboard",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "minNoctaliaVersion": "4.1.2",
   "author": "yanekyuk",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
@@ -25,6 +25,8 @@
     "defaultSettings": {
       "maxHistorySize": 100,
       "showImagePreviews": true,
+      "clearHistoryOnStartup": false,
+      "autoPasteOnSelect": false,
       "density": "comfortable"
     }
   }

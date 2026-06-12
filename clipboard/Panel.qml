@@ -116,6 +116,7 @@ Item {
     // which clamps to [0, length-1] instead of resetting so the user's
     // focus stays on the row that slid up into the deleted position.
     property int selectedIndex: -1
+    property bool pasteAfterClose: false
 
     // Sentinel index to restore AFTER a delete-triggered refresh. -1
     // means "no pending clamp" (normal reset semantics apply). Any
@@ -271,7 +272,14 @@ Item {
             Logger.w("Clipboard Plugin", "activateSelection: no entry at index", idx);
             return;
         }
-        root.pluginApi?.mainInstance?.copy(entry.id);
+        if (entry.pinned && entry.pinnedIndex >= 0) {
+            root.pluginApi?.mainInstance?.copyPinned(entry.pinnedIndex);
+        } else {
+            root.pluginApi?.mainInstance?.copy(entry.id);
+        }
+        const cfg = root.pluginApi?.pluginSettings || ({});
+        const defaults = root.pluginApi?.manifest?.metadata?.defaultSettings || ({});
+        root.pasteAfterClose = cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
         const typeSlug = entry.type === "file" ? "file"
                        : entry.type === "image" ? "image"
                        : "text";
@@ -650,6 +658,10 @@ Item {
                 // the Quickshell log without flooding on repeat attempts.
                 Logger.w("Clipboard Plugin", "closePanel returned false — screen:", targetScreen?.name ?? "null");
             }
+            if (ok && root.pasteAfterClose) {
+                root.pluginApi?.mainInstance?.pasteIntoPreviousWindow();
+            }
+            root.pasteAfterClose = false;
         }
     }
 
@@ -1152,7 +1164,12 @@ Item {
                     // (reuseItems: true) cannot carry a stale screen
                     // reference through the deferred-close timer — see the
                     // closePanelTimer commentary above.
-                    onCopied: closePanelTimer.restart()
+                    onCopied: {
+                        const cfg = root.pluginApi?.pluginSettings || ({});
+                        const defaults = root.pluginApi?.manifest?.metadata?.defaultSettings || ({});
+                        root.pasteAfterClose = cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
+                        closePanelTimer.restart();
+                    }
                 }
 
                 // A subtle scrollbar keeps the user oriented in a long list.
@@ -1203,7 +1220,12 @@ Item {
                         // background Rectangle) — so grid cells highlight
                         // consistently on the Images tab.
                         selected: index === root.selectedIndex
-                        onCopied: closePanelTimer.restart()
+                        onCopied: {
+                            const cfg = root.pluginApi?.pluginSettings || ({});
+                            const defaults = root.pluginApi?.manifest?.metadata?.defaultSettings || ({});
+                            root.pasteAfterClose = cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
+                            closePanelTimer.restart();
+                        }
                     }
                 }
 

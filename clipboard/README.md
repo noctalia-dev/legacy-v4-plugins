@@ -20,6 +20,7 @@ A clipboard history panel for the [Noctalia](https://github.com/noctalia-dev/noc
 - Noctalia `4.1.2`+
 - [cliphist](https://github.com/sentriz/cliphist)
 - `wl-clipboard`
+- `wtype` (optional, required for automatic paste after selection)
 
 ## Installation
 
@@ -42,6 +43,8 @@ Settings are stored in `~/.config/noctalia/plugins/clipboard/settings.json` (cre
 |---|---|---|
 | `maxHistorySize` | `100` | Maximum number of entries retained in history. |
 | `showImagePreviews` | `true` | Show image thumbnails inline in the history panel. |
+| `clearHistoryOnStartup` | `false` | Clear regular history whenever the shell starts; pinned items remain. |
+| `autoPasteOnSelect` | `false` | Paste the selected entry into the previously focused window. Requires `wtype`. |
 | `density` | `"comfortable"` | Visual density of the list. `"comfortable"` or `"compact"`. |
 
 ## IPC
