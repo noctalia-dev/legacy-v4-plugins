@@ -9,10 +9,11 @@ import "." as Local
 Item {
   id: root
 
-  property var pluginApi
+  property var pluginApi: null
+  readonly property var geometryPlaceholder: panelContainer
+  readonly property bool allowAttach: true
   property real contentPreferredWidth: Math.round(Math.max(720, Math.min(1800, Number(cfg.panelWidth ?? defaults.panelWidth ?? 1200))) * Style.uiScaleRatio)
   property real contentPreferredHeight: Math.round(Math.max(560, Number(cfg.panelHeight ?? defaults.panelHeight ?? 760)) * Style.uiScaleRatio)
-  property bool allowAttach: true
 
   property var cfg: pluginApi?.pluginSettings || ({})
   property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
@@ -54,6 +55,7 @@ Item {
   }
 
   ColumnLayout {
+    id: panelContainer
     anchors.fill: parent
     anchors.margins: Style.marginL
     spacing: Style.marginM
