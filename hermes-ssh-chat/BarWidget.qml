@@ -11,7 +11,7 @@ Item {
   id: root
 
   property ShellScreen screen
-  property var pluginApi
+  property var pluginApi: null
   property string widgetId: ""
   property string section: ""
   property int sectionWidgetIndex: -1
