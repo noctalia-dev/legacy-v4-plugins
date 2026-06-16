@@ -45,7 +45,7 @@ Settings are stored in `~/.config/noctalia/plugins/clipboard/settings.json` (cre
 | `showImagePreviews` | `true` | Show image thumbnails inline in the history panel. |
 | `clearHistoryOnStartup` | `false` | Clear regular history whenever the shell starts; pinned items remain. |
 | `autoPasteOnSelect` | `false` | Paste the selected entry into the previously focused window. Requires `wtype`. |
-| `autoPasteDelayMs` | `500` | Delay before automatic paste (minimum 200 ms), allowing focus to return to the previous window. |
+| `autoPasteDelayMs` | `500` | Delay before automatic paste (100-2000 ms), allowing focus to return to the previous window. |
 | `density` | `"comfortable"` | Visual density of the list. `"comfortable"` or `"compact"`. |
 
 ## IPC

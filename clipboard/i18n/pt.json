@@ -1,22 +1,22 @@
 {
   "bar": {
-    "tooltip": "Historico da area de transferencia"
+    "tooltip": "Histórico da área de transferência"
   },
   "context": {
-    "toggle": "Alternar historico da area de transferencia",
-    "settings": "Abrir configuracoes"
+    "toggle": "Alternar histórico da área de transferência",
+    "settings": "Abrir configurações"
   },
   "panel": {
-    "title": "Historico da area de transferencia",
-    "empty": "Nenhum historico de area de transferencia ainda",
-    "no-matches": "Sem correspondencias",
+    "title": "Histórico da área de transferência",
+    "empty": "Nenhum histórico da área de transferência ainda",
+    "no-matches": "Sem correspondências",
     "search-placeholder": "Pesquisar...",
     "delete": "Excluir entrada",
     "pin": "Fixar entrada",
     "unpin": "Desfixar entrada",
-    "wipe": "Limpar historico",
+    "wipe": "Limpar histórico",
     "close": "Fechar",
-    "settings": "Configuracoes",
+    "settings": "Configurações",
     "filter-text": "Texto",
     "filter-images": "Imagens",
     "filter-files": "Arquivos",
@@ -26,37 +26,37 @@
   },
   "settings": {
     "tab-general": "Geral",
-    "max-history-size": "Tamanho maximo do historico",
-    "max-history-size-description": "Numero de entradas da area de transferencia no historico. Entra em vigor na proxima atualizacao.",
-    "show-image-previews": "Mostrar pre-visualizacoes de imagens",
-    "show-image-previews-description": "Decodificar e exibir miniaturas para entradas de imagem. Desativar em sistemas com pouca memoria.",
+    "max-history-size": "Tamanho máximo do histórico",
+    "max-history-size-description": "Número de entradas da área de transferência no histórico. Entra em vigor na próxima atualização.",
+    "show-image-previews": "Mostrar pré-visualizações de imagens",
+    "show-image-previews-description": "Decodificar e exibir miniaturas para entradas de imagem. Desativar em sistemas com pouca memória.",
     "clear-history-on-startup": "Limpar histórico ao iniciar",
     "clear-history-on-startup-description": "Limpar o histórico comum sempre que o Noctalia Shell iniciar ou reiniciar. Itens fixados são preservados.",
     "auto-paste-on-select": "Colar automaticamente ao selecionar",
     "auto-paste-on-select-description": "Fechar o painel e enviar Ctrl+V para a janela anterior depois de selecionar uma entrada.",
     "auto-paste-delay": "Atraso da colagem automática",
-    "auto-paste-delay-description": "Milissegundos de espera para o foco retornar antes de enviar Ctrl+V (mínimo de 200 ms).",
+    "auto-paste-delay-description": "Milissegundos de espera para o foco retornar antes de enviar Ctrl+V (100-2000 ms).",
     "density": "Densidade",
-    "density-description": "Espacamento das entradas da area de transferencia no painel.",
+    "density-description": "Espaçamento das entradas da área de transferência no painel.",
     "density-compact": "Compacto",
-    "density-comfortable": "Confortavel",
-    "density-spacious": "Espacoso"
+    "density-comfortable": "Confortável",
+    "density-spacious": "Espaçoso"
   },
   "toast": {
     "item-copied-text-title": "Texto copiado",
-    "item-copied-text-body": "Voce pode colar o texto da area de transferencia.",
+    "item-copied-text-body": "Você pode colar o texto da área de transferência.",
     "item-copied-image-title": "Imagem copiada",
-    "item-copied-image-body": "Voce pode colar a imagem da area de transferencia.",
+    "item-copied-image-body": "Você pode colar a imagem da área de transferência.",
     "item-copied-file-title": "Arquivo copiado",
-    "item-copied-file-body": "Voce pode colar o arquivo da area de transferencia.",
+    "item-copied-file-body": "Você pode colar o arquivo da área de transferência.",
     "item-pinned": "Entrada fixada",
     "item-unpinned": "Entrada desfixada",
-    "history-cleared": "Historico da area de transferencia limpo"
+    "history-cleared": "Histórico da área de transferência limpo"
   },
   "time": {
     "just-now": "agora mesmo",
-    "minutes-ago": "ha {minutes}m",
-    "hours-ago": "ha {hours}h",
+    "minutes-ago": "há {minutes}m",
+    "hours-ago": "há {hours}h",
     "yesterday": "ontem"
   }
 }

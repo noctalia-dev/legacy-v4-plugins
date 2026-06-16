@@ -91,7 +91,7 @@ Item {
 
     // Cached settings for reactive use inside bindings.
     readonly property bool showImagePreviews: pluginApi?.pluginSettings?.showImagePreviews ?? true
-    readonly property bool autoPasteOnSelect: {
+    function shouldAutoPasteOnSelect() {
         const cfg = pluginApi?.pluginSettings || ({});
         const defaults = pluginApi?.manifest?.metadata?.defaultSettings || ({});
         return cfg.autoPasteOnSelect ?? defaults.autoPasteOnSelect ?? false;
@@ -124,7 +124,7 @@ Item {
     property bool pasteAfterClose: false
 
     function closeAfterCopy() {
-        root.pasteAfterClose = root.autoPasteOnSelect;
+        root.pasteAfterClose = root.shouldAutoPasteOnSelect();
         closePanelTimer.restart();
     }
 

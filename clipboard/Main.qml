@@ -96,16 +96,26 @@ Item {
     // Id of the decode currently in flight ("" when idle).
     property string decodingId: ""
 
+    readonly property int minAutoPasteDelayMs: 100
+    readonly property int maxAutoPasteDelayMs: 2000
+    readonly property int fallbackAutoPasteDelayMs: 500
+
+    function configuredAutoPasteDelayMs() {
+        const cfg = pluginApi?.pluginSettings || ({});
+        const defaults = pluginApi?.manifest?.metadata?.defaultSettings || ({});
+        const configuredDelay = Number(cfg.autoPasteDelayMs ?? defaults.autoPasteDelayMs ?? root.fallbackAutoPasteDelayMs);
+        if (isNaN(configuredDelay))
+            return root.fallbackAutoPasteDelayMs;
+        return Math.max(root.minAutoPasteDelayMs, Math.min(root.maxAutoPasteDelayMs, configuredDelay));
+    }
+
     // Sends Ctrl+V after the panel has closed and focus has returned to the
     // previously active window. The explicit Wayland environment keeps wtype
     // working when Noctalia is launched as a user service.
     function pasteIntoPreviousWindow() {
         if (pasteProc.running)
             return;
-        const cfg = pluginApi?.pluginSettings || ({});
-        const defaults = pluginApi?.manifest?.metadata?.defaultSettings || ({});
-        const configuredDelay = Number(cfg.autoPasteDelayMs ?? defaults.autoPasteDelayMs ?? 500);
-        const delayMs = Math.max(200, Math.min(5000, isNaN(configuredDelay) ? 500 : configuredDelay));
+        const delayMs = root.configuredAutoPasteDelayMs();
         const runtimeDir = Quickshell.env("XDG_RUNTIME_DIR") || "";
         const waylandDisplay = Quickshell.env("WAYLAND_DISPLAY") || "";
         pasteProc.command = ["bash", "-c",

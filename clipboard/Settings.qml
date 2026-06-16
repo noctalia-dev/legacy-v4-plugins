@@ -95,8 +95,8 @@ ColumnLayout {
         visible: root.valueAutoPasteOnSelect
         label: pluginApi?.tr("settings.auto-paste-delay")
         description: pluginApi?.tr("settings.auto-paste-delay-description")
-        from: 200
-        to: 5000
+        from: 100
+        to: 2000
         stepSize: 100
         value: root.valueAutoPasteDelayMs
         onValueChanged: root.valueAutoPasteDelayMs = value
