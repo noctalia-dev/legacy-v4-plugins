@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Cerca voci password di gnu pass"
+  },
+  "result": {
+    "goBack": "Torna indietro",
+    "folder": "Cartella",
+    "password": "Password",
+    "passwordEntry": "Voce password",
+    "loading": "Caricamento voci password..."
+  },
+  "action": {
+    "copyPassword": "Copia password",
+    "copyPasswordDesc": "Copia password negli appunti",
+    "typePassword": "Digita password",
+    "typePasswordDesc": "Digita password con wtype",
+    "copyField": "Copia {key}",
+    "typeField": "Digita {key}",
+    "copyOtp": "Copia OTP",
+    "typeOtp": "Digita OTP",
+    "otpDesc": "Copia/digita codice OTP attuale"
+  },
+  "settings": {
+    "tab": {
+      "general": "Generale",
+      "advanced": "Avanzate"
+    },
+    "storePath": {
+      "label": "Percorso dell'archivio password",
+      "desc": "Percorso personalizzato all'archivio password (predefinito: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Ritardo chiusura launcher",
+      "desc": "Ritardo prima dell'inizio della digitazione in millisecondi (predefinito: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Ritardo battitura wtype",
+      "desc": "Ritardo tra le battiture in ms per wtype (predefinito: 12)"
+    },
+    "clipTimeout": {
+      "label": "Timeout degli appunti",
+      "desc": "Secondi prima di cancellare gli appunti (predefinito PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Copiato negli appunti"
+  }
+}

@@ -12,6 +12,19 @@ Item {
   property bool stopRequested: false
   property bool suppressNextStderr: false
 
+  IpcHandler {
+    target: "plugin:mirror-mirror"
+
+    function toggle() {
+      if (!root.pluginApi)
+        return;
+
+      root.pluginApi.withCurrentScreen(screen => {
+        root.pluginApi.togglePanel(screen);
+      });
+    }
+  }
+
   function isIgnorableWlMirrorLine(line) {
     const normalized = String(line || "").trim().toLowerCase();
     if (normalized.length === 0) {

@@ -74,7 +74,9 @@
       "message": "请在插件设置中设置终端命令"
     },
     "login-browser-opened": "身份验证页面已在浏览器中打开",
-    "login-failed": "登录失败"
+    "login-failed": "登录失败",
+    "account-switched": "已切换 Tailscale 账户",
+    "account-switch-failed": "无法切换 Tailscale 账户"
   },
   "panel": {
     "title": "Tailscale网络",

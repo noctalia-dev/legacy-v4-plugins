@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Paramètres du widget"
+  },
   "settings": {
+    "active_color_description": "Couleur de l'indicateur de statut lorsqu'il est actif (en cours d'exécution)",
+    "active_color_label": "Couleur de l'indicateur actif",
     "current_value": "Sélectionné: {value} ms",
     "default_network_description": "Réseau par défaut à utiliser lors de l'exécution d'images",
     "default_network_label": "Réseau par Défaut",
     "general": "Général",
+    "icon_color_description": "Modifier la couleur de l'icône du widget de la barre",
+    "icon_color_label": "Couleur de l'icône",
+    "inactive_color_description": "Couleur de l'indicateur de statut lorsqu'il est inactif (arrêté)",
+    "inactive_color_label": "Couleur de l'indicateur inactif",
     "refresh_interval_description": "À quelle fréquence le plugin vérifie l'état des conteneurs",
-    "refresh_interval_label": "Intervalle de rafraîchissement",
+    "refresh_interval_label": "Intervalre de rafraîchissement",
+    "status_state_always": "Toujours afficher",
+    "status_state_description": "Choisir comment afficher le point indicateur de statut",
+    "status_state_hidden": "Masquer complètement",
+    "status_state_label": "État du statut",
+    "status_state_running_only": "Afficher lors de l'exécution",
     "title": "Paramètres du Gestionnaire de Conteneurs"
   },
   "tooltip": {

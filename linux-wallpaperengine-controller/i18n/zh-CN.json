@@ -1,238 +1,235 @@
 {
-  "widget": {
-    "tooltip": {
-      "checking": "正在检查 linux-wallpaperengine",
-      "unavailable": "未安装 linux-wallpaperengine",
-      "running": "壁纸引擎正在应用配置",
-      "ready": "打开壁纸引擎面板"
+  "main": {
+    "error": {
+      "assetsMissing": "未找到 Wallpaper Engine 资源，请在设置中配置资源目录。",
+      "autoRecovered": "已自动恢复到上次可用布局",
+      "noBackground": "未配置任何壁纸路径。",
+      "notInstalled": "在 PATH 中未找到 linux-wallpaperengine，请先检查是否正确安装。",
+      "opengl": "OpenGL 初始化失败，请检查驱动与合成器兼容性。"
     }
   },
   "menu": {
     "refreshWallpapers": "刷新壁纸列表",
+    "settings": "插件设置",
     "start": "启动壁纸引擎",
-    "stop": "停止壁纸引擎",
-    "settings": "插件设置"
-  },
-  "toast": {
-    "reloaded": "壁纸引擎已重新加载",
-    "stopped": "壁纸引擎已停止",
-    "reloadSkippedNoWallpaper": "当前未配置壁纸，因此无需重新加载",
-    "refreshingWallpapers": "正在刷新壁纸列表...",
-    "refreshedWallpapers": "壁纸列表已刷新：共 {count} 个壁纸",
-    "refreshSkippedNoFolder": "壁纸源目录为空，因此无法刷新壁纸列表",
-    "wallpaperColorsGenerating": "正在生成用于取色的壁纸截图...",
-    "wallpaperColorsApplied": "已将壁纸颜色应用到 Noctalia",
-    "wallpaperColorsCached": "已为此显示器缓存壁纸颜色",
-    "wallpaperColorsFailed": "无法从所选壁纸中提取颜色",
-    "wallpaperColorsNoSelection": "请先选择壁纸，再应用壁纸颜色",
-    "wallpaperColorsEngineUnavailable": "需要可用的 linux-wallpaperengine 才能生成壁纸颜色"
-  },
-  "main": {
-    "status": {
-      "unavailable": "引擎不可用",
-      "ready": "就绪",
-      "starting": "正在启动引擎",
-      "stopped": "已停止",
-      "crashed": "引擎异常退出"
-    },
-    "error": {
-      "notInstalled": "在 PATH 中未找到 linux-wallpaperengine，请先检查是否正确安装。",
-      "assetsMissing": "未找到 Wallpaper Engine 资源，请在设置中配置资源目录。",
-      "noBackground": "未配置任何壁纸路径。",
-      "opengl": "OpenGL 初始化失败，请检查驱动与合成器兼容性。",
-      "autoRecovered": "已自动恢复到上次可用布局"
-    }
+    "stop": "停止壁纸引擎"
   },
   "panel": {
-    "title": "Wallpaper-Engine 壁纸选择器",
-    "statusChecking": "检查中",
-    "statusUnavailable": "不可用",
-    "statusRunning": "运行中",
-    "statusReady": "已配置",
-    "statusStopped": "已停止",
-    "sectionAudio": "显示与音频",
-    "sectionFeatures": "功能",
-    "installHint": "安装示例：yay -S linux-wallpaperengine-git",
-    "errorBannerTitle": "检测到运行时错误",
-    "errorShowDetails": "查看详情",
-    "errorHideDetails": "收起详情",
-    "errorDismiss": "关闭提示",
-    "refreshWallpapers": "刷新壁纸",
-    "start": "启动",
-    "stop": "停止",
-    "confirm": "确认",
-    "cancel": "取消",
-    "compatibilityQuickCheck": "兼容性快速检查",
-    "compatibilityQuickCheckRunning": "正在检查壁纸兼容性...",
-    "compatibilityQuickCheckConfirm": "是否扫描全部壁纸的额外属性兼容性？这可能需要一些时间。",
-    "compatibilityQuickCheckFinished": "共扫描 {total} 个壁纸，其中 {failed} 个可能异常",
-    "folderInvalid": "壁纸源目录无效或不可访问。",
-    "scanning": "正在扫描壁纸...",
-    "searchPlaceholder": "搜索壁纸，可使用名称和 ID 搜索",
-    "searchClear": "清空搜索",
-    "filterButtonSummary": "筛选 · {type}",
-    "sortButtonSummary": "排序 · {direction}{sort}",
     "applyAllDisplays": "应用到全部显示器",
-    "closePanel": "关闭面板",
-    "confirmApply": "应用壁纸",
-    "syncWallpaperColors": "同步壁纸颜色",
-    "wallpaperScaling": "缩放",
-    "wallpaperClamp": "边界模式",
-    "wallpaperVolume": "音量",
-    "wallpaperMuted": "静音",
-    "wallpaperAudioReactive": "音频响应效果",
-    "wallpaperDisableMouse": "禁用鼠标交互",
-    "wallpaperDisableParallax": "禁用视差效果",
-    "sectionProperties": "额外属性",
-    "loadingProperties": "正在读取壁纸属性...",
-    "propertiesLoadFailed": "读取壁纸属性失败，可能是该壁纸的属性格式暂未支持，或该壁纸本身无法被正确加载和运行",
-    "propertiesFailedBadge": "可能异常",
-    "noEditableProperties": "此壁纸暂时没有可编辑的额外属性",
-    "propertiesNotice": "这里只显示当前插件可直接编辑的属性",
-    "infoType": "类型",
-    "infoId": "ID",
-    "infoResolution": "分辨率",
-    "infoSize": "大小",
-    "scalingFill": "填充",
-    "scalingFit": "适应",
-    "scalingStretch": "拉伸",
-    "scalingDefault": "默认",
-    "clampClamp": "钳制",
-    "clampBorder": "边框",
-    "clampRepeat": "重复",
-    "propertyLabelThemeColor": "主题色",
-    "targetAllDisplays": "目标：全部显示器",
-    "targetSingleDisplay": "目标：{screen}",
     "applySingleDisplay": "应用到 {screen}",
-    "applyTarget": "选择应用目标",
+    "approvedBadge": "推荐",
+    "clampBorder": "边框",
+    "clampClamp": "钳制",
+    "clampRepeat": "重复",
+    "closeSidebar": "关闭侧栏",
+    "compatibilityQuickCheck": "兼容性快速检查",
+    "compatibilityQuickCheckFinished": "共扫描 {total} 个壁纸，其中 {failed} 个可能异常，{limited} 个支持受限",
+    "dynamicBadge": "动态",
+    "emptyAll": "源目录中未找到任何壁纸",
+    "emptyFiltered": "源目录中未找到符合条件的壁纸",
+    "errorBannerTitle": "检测到运行时错误",
+    "errorCopied": "已复制错误详情",
+    "errorCopy": "复制错误",
+    "errorDismiss": "关闭提示",
+    "errorHideDetails": "收起详情",
+    "errorShowDetails": "查看详情",
     "filterAll": "全部",
+    "filterButtonSummary": "筛选：{type}",
+    "filterRes4k": "分辨率：4K+",
+    "filterResAll": "分辨率：全部",
+    "filterResUnknown": "分辨率：未知",
     "filterTypeAll": "全部",
+    "filterTypeApplication": "应用",
     "filterTypeScene": "场景",
     "filterTypeVideo": "视频",
     "filterTypeWeb": "网页",
-    "filterTypeApplication": "应用",
-    "filterResAll": "分辨率：全部",
-    "filterRes4k": "分辨率：4K",
-    "filterRes8k": "分辨率：8K",
-    "filterResUnknown": "分辨率：未知",
-    "filterStatic": "静态",
-    "filterDynamic": "动态",
-    "sortName": "名称",
+    "folderInvalid": "壁纸源目录无效或不可访问。",
+    "infoId": "ID",
+    "infoDescription": "简介",
+    "infoResolution": "分辨率",
+    "infoSize": "大小",
+    "infoType": "类型",
+    "installHint": "安装示例：yay -S linux-wallpaperengine-git",
+    "loadingProperties": "正在读取壁纸属性...",
+    "musicBadge": "音乐",
+    "nextPage": "下一页",
+    "noEditableProperties": "此壁纸暂时没有可编辑的额外属性",
+    "pageRange": "{start}-{end} / 共 {total} 项",
+    "pageSummary": "第 {current} / {total} 页",
+    "prevPage": "上一页",
+    "propertiesFailedBadge": "可能异常",
+    "propertiesLimitedBadge": "受限",
+    "propertiesLoadFailed": "读取壁纸属性失败，可能是该壁纸的属性格式暂未支持，或该壁纸本身无法被正确加载和运行",
+    "propertiesNotice": "这里只显示当前插件可直接编辑的属性",
+    "propertyLabelThemeColor": "主题色",
+    "reactiveBadge": "音频响应",
+    "refreshWallpapers": "刷新壁纸",
+    "resolutionUnknown": "未知",
+    "scalingDefault": "默认",
+    "scalingFill": "填充",
+    "scalingFit": "适应",
+    "scalingStretch": "拉伸",
+    "scanning": "正在扫描壁纸...",
+    "searchClear": "清空搜索",
+    "searchPlaceholder": "搜索壁纸，可使用名称和 ID 搜索",
+    "showMore": "展开更多",
+    "showLess": "收起",
+    "sectionAudio": "显示与音频",
+    "sectionFeatures": "功能",
+    "sectionProperties": "额外属性",
+    "sortAscendingToggleWithDirection": "{direction} 切换升/降序",
+    "sortButtonSummary": "排序 · {direction}{sort}",
     "sortDateAdded": "添加时间",
+    "sortName": "名称",
     "sortSize": "大小",
     "sortRecent": "最近",
-    "sortAscendingToggle": "切换升/降序",
-    "sortAscendingToggleWithDirection": "{direction} 切换升/降序",
-    "sortId": "ID",
+    "start": "启动",
+    "staticBadge": "静态",
+    "stop": "停止",
+    "syncWallpaperColors": "同步壁纸颜色",
+    "targetAllDisplays": "目标：全部显示器",
+    "targetSingleDisplay": "目标：{screen}",
+    "title": "Wallpaper-Engine 壁纸选择器",
+    "typeApplication": "应用",
     "typeScene": "场景",
     "typeVideo": "视频",
     "typeWeb": "网页",
-    "typeApplication": "应用",
-    "resolutionUnknown": "未知",
-    "dynamicBadge": "动态",
-    "staticBadge": "静态",
-    "prevPage": "上一页",
-    "nextPage": "下一页",
-    "pageSummary": "第 {current} / {total} 页",
-    "pageRange": "{start}-{end} / 共 {total} 项",
-    "count": "壁纸数量：{count}",
-    "emptyAll": "源目录中未找到任何壁纸",
-    "emptyFiltered": "源目录中未找到符合条件的壁纸"
+    "wallpaperAudioReactive": "音频响应效果",
+    "wallpaperClamp": "边界模式",
+    "wallpaperDisableMouse": "禁用鼠标交互",
+    "wallpaperDisableParallax": "禁用视差效果",
+    "wallpaperMuted": "静音",
+    "wallpaperScaling": "缩放",
+    "wallpaperVolume": "音量"
   },
   "settings": {
-    "category": {
-      "interfaceTitle": "界面",
-      "performanceTitle": "性能",
-      "compatibilityTitle": "资源",
-      "audioTitle": "音频",
-      "displayTitle": "显示"
+    "autoApplyOnStartup": {
+      "description": "若至少一个屏幕已配置壁纸，启动时自动运行引擎",
+      "label": "启动时自动应用"
+    },
+"cache": {
+      "clear": "清除颜色截图缓存",
+      "currentSize": "当前颜色截图缓存大小：{size}",
+      "refresh": "刷新缓存大小",
+      "sizeUnknown": "未知"
     },
     "defaults": {
-      "title": "默认应用选项",
-      "description": "当你应用壁纸且未覆盖其单独设置时，这些选项会作为默认值使用。"
+      "title": "默认值",
+      "description": "以下设置仅作为新建壁纸时的默认值，不影响已配置的壁纸"
     },
-    "iconColor": {
-      "label": "图标颜色",
-      "description": "用于栏组件图标的颜色"
+    "category": {
+      "audioTitle": "音频",
+      "compatibilityTitle": "资源",
+      "displayTitle": "显示",
+      "interfaceTitle": "界面",
+      "performanceTitle": "性能"
+    },
+    "resourcesIntro": "管理壁纸源扫描，以及用于取色的缓存图片。",
+    "defaultAudioReactiveEffects": {
+      "description": "支持该功能的壁纸默认保持音频处理启用状态",
+      "label": "音频响应效果"
+    },
+    "defaultClamp": {
+      "description": "渲染壁纸时默认使用的边界处理方式",
+      "label": "默认边界模式"
+    },
+    "defaultDisableMouse": {
+      "description": "默认以禁用鼠标输入的状态启动壁纸",
+      "label": "禁用鼠标交互"
+    },
+    "defaultDisableParallax": {
+      "description": "默认以禁用视差效果的状态启动壁纸",
+      "label": "禁用视差效果"
+    },
+    "defaultFps": {
+      "description": "壁纸默认使用的帧率上限",
+      "label": "默认 FPS"
+    },
+    "defaultFullscreenPauseOnlyActive": {
+      "description": "（仅限 Wayland）仅在全屏窗口激活时暂停",
+      "label": "仅激活全屏时暂停"
+    },
+    "defaultMuted": {
+      "description": "默认以静音模式启动壁纸",
+      "label": "默认静音壁纸"
+    },
+    "defaultNoAutomute": {
+      "description": "开启后，其他应用输出声音时壁纸也会继续播放音频",
+      "label": "其他应用播放音频时不静音"
+    },
+    "defaultNoFullscreenPause": {
+      "description": "防止在全屏应用运行时暂停",
+      "label": "防止全屏时暂停"
+    },
+    "defaultScaling": {
+      "description": "未设置自定义值时的默认缩放模式",
+      "label": "默认缩放模式"
+    },
+    "defaultVolume": {
+      "description": "壁纸启动时（未启用静音时）使用的音量",
+      "label": "默认壁纸音量"
     },
     "enableExtraPropertiesEditor": {
-      "label": "启用额外属性编辑器",
-      "description": "在可用时于面板侧栏显示壁纸专属的额外属性"
+      "description": "在可用时于面板侧栏显示壁纸专属的额外属性",
+      "label": "启用额外属性编辑器"
     },
-    "cache": {
-      "currentSize": "当前配色图片缓存大小：{size}",
-      "refresh": "刷新配色缓存大小",
-      "clear": "清除配色图片缓存",
-      "sizeUnknown": "未知"
+    "showSidebarDescription": {
+      "description": "在侧栏预览卡片中显示壁纸简介",
+      "label": "显示侧栏简介"
+    },
+    "badges": {
+      "title": "壁纸卡片 Badge 显示顺序",
+      "description": "可拖拽或用箭头调整顺序，并单独开关每个 Badge。",
+      "moveUp": "上移",
+      "moveDown": "下移",
+      "items": {
+        "type": "类型",
+        "dynamic": "动态/静态",
+        "music": "音乐",
+        "reactive": "音频响应",
+        "approved": "推荐",
+        "resolution": "分辨率",
+        "compatibility": "兼容性"
+      }
+    },
+    "iconColor": {
+      "description": "用于栏组件图标的颜色",
+      "label": "图标颜色"
     },
     "units": {
       "fps": " FPS",
-      "percent": " %",
-      "minutes": " 分钟"
-    },
-    "wallpapersFolder": {
-      "label": "壁纸源目录",
-      "description": "包含壁纸项目文件夹的目录",
-      "placeholder": "~/.local/share/Steam/steamapps/workshop/content/431960",
-      "scan": "自动检测 Steam 创意工坊目录"
-    },
-    "assetsDir": {
-      "label": "Wallpaper Engine 资源目录",
-      "description": "可选：linux-wallpaperengine 使用的 assets 路径",
-      "placeholder": "~/.local/share/wallpaperengine/assets"
+      "minutes": " 分钟",
+      "percent": " %"
     },
     "wallpaperScanCacheMinutes": {
-      "label": "壁纸扫描缓存时长",
-      "description": "打开面板时，若未超过该分钟数则复用缓存的壁纸列表而不重新扫描"
+      "description": "打开面板时，若未超过该分钟数则复用缓存的壁纸列表而不重新扫描",
+      "label": "壁纸扫描缓存时长"
     },
-    "defaultScaling": {
-      "label": "缩放模式",
-      "description": "未设置自定义值时的默认缩放模式"
-    },
-    "defaultClamp": {
-      "label": "边界模式",
-      "description": "渲染壁纸时默认使用的边界处理方式"
-    },
-    "defaultFps": {
-      "label": "FPS 限制",
-      "description": "壁纸默认使用的帧率上限",
-      "placeholder": "30"
-    },
-    "defaultNoFullscreenPause": {
-      "label": "防止全屏时暂停",
-      "description": "防止在全屏应用运行时暂停"
-    },
-    "defaultFullscreenPauseOnlyActive": {
-      "label": "仅激活全屏时暂停",
-      "description": "（仅限 Wayland）仅在全屏窗口激活时暂停"
-    },
-    "defaultVolume": {
-      "label": "音量",
-      "description": "壁纸在未启用静音时使用的播放音量"
-    },
-    "defaultMuted": {
-      "label": "启动时静音",
-      "description": "默认以静音模式启动壁纸"
-    },
-    "defaultAudioReactiveEffects": {
-      "label": "音频响应效果",
-      "description": "在壁纸支持时，默认保持启用音频处理效果"
-    },
-    "defaultNoAutomute": {
-      "label": "其他应用播放音频时不静音",
-      "description": "开启后，其他应用输出声音时壁纸也会继续播放音频"
-    },
-    "defaultDisableMouse": {
-      "label": "禁用鼠标交互",
-      "description": "默认以禁用鼠标输入的方式启动壁纸"
-    },
-    "defaultDisableParallax": {
-      "label": "禁用视差效果",
-      "description": "默认以关闭视差效果的方式启动壁纸"
-    },
-    "autoApplyOnStartup": {
-      "label": "启动时自动应用",
-      "description": "若至少一个屏幕已配置壁纸，启动时自动运行引擎"
+    "wallpapersFolder": {
+      "description": "包含壁纸项目文件夹的目录",
+      "label": "壁纸源目录",
+      "placeholder": "~/.local/share/Steam/steamapps/workshop/content/431960",
+      "scan": "自动检测 Steam 创意工坊目录"
+    }
+  },
+  "toast": {
+    "refreshSkippedNoFolder": "壁纸源目录为空，因此无法刷新壁纸列表",
+    "refreshedWallpapers": "壁纸列表已刷新：共 {count} 个壁纸",
+    "reloadSkippedNoWallpaper": "当前未配置壁纸，因此无需重新加载",
+    "reloaded": "壁纸引擎已重新加载",
+    "stopped": "壁纸引擎已停止",
+    "wallpaperColorsApplied": "已将壁纸颜色应用到 Noctalia",
+    "wallpaperColorsCached": "已为此显示器缓存壁纸颜色",
+    "wallpaperColorsEngineUnavailable": "需要可用的 linux-wallpaperengine 才能生成壁纸颜色",
+    "wallpaperColorsFailed": "无法从所选壁纸中提取颜色",
+    "wallpaperColorsNoSelection": "请先选择壁纸，再应用壁纸颜色"
+  },
+  "widget": {
+    "tooltip": {
+      "checking": "正在检查 linux-wallpaperengine",
+      "ready": "打开壁纸引擎面板",
+      "running": "壁纸引擎正在应用配置",
+      "unavailable": "未安装 linux-wallpaperengine"
     }
   }
 }

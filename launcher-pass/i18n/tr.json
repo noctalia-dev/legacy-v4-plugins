@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Gnu pass parola girdilerini ara"
+  },
+  "result": {
+    "goBack": "Geri dön",
+    "folder": "Klasör",
+    "password": "Parola",
+    "passwordEntry": "Parola girişi",
+    "loading": "Parola girdileri yükleniyor..."
+  },
+  "action": {
+    "copyPassword": "Parolayı kopyala",
+    "copyPasswordDesc": "Parolayı panoya kopyala",
+    "typePassword": "Parolayı yaz",
+    "typePasswordDesc": "Parolayı wtype ile yaz",
+    "copyField": "{key} kopyala",
+    "typeField": "{key} yaz",
+    "copyOtp": "OTP kopyala",
+    "typeOtp": "OTP yaz",
+    "otpDesc": "Mevcut OTP kodunu kopyala/yaz"
+  },
+  "settings": {
+    "tab": {
+      "general": "Genel",
+      "advanced": "Gelişmiş"
+    },
+    "storePath": {
+      "label": "Parola Deposu Yolu",
+      "desc": "Parola deposuna özel yol (varsayılan: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Launcher Kapatma Gecikmesi",
+      "desc": "Yazmaya başlamadan önce gecikme milisaniye cinsinden (varsayılan: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Wtype Tuş Gecikmesi",
+      "desc": "wtype için tuşlar arası gecikme ms cinsinden (varsayılan: 12)"
+    },
+    "clipTimeout": {
+      "label": "Pano zaman aşımı",
+      "desc": "Panonun temizlenmesi için saniye (varsayılan PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Panoya kopyalandı"
+  }
+}

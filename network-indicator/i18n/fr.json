@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "Paramètres du widget"
+    "widget-settings": "Paramètres du widget",
+    "toggle-panel": "Basculer le moniteur"
+  },
+  "panel": {
+    "title": "Activité réseau",
+    "close": "Fermer",
+    "download": "Téléchargement",
+    "upload": "Téléversement"
   },
   "settings": {
+    "layout": {
+      "label": "Disposition",
+      "desc": "Disposer les cellules en ligne (horizontal) ou en grille 2×2 (vertical).",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "slots": {
+      "label": "Affectation des cellules",
+      "desc": "Choisir ce que chaque cellule affiche. Pas de doublons possibles. Ex. : utiliser des cellules vides pour n'afficher que les icônes."
+    },
+    "slot": {
+      "txIcon": "Icône TX",
+      "rxIcon": "Icône RX",
+      "txSpeed": "Vitesse TX",
+      "rxSpeed": "Vitesse RX",
+      "none": "Vide"
+    },
+    "iconType": {
+      "desc": "Choisissez le style d'icône utilisé pour les indicateurs TX/RX.",
+      "label": "Type d'icône"
+    },
     "byteThresholdActive": {
-      "desc": "Définir le seuil d'activité en octets par seconde (o/s).",
-      "label": "Afficher le seuil actif"
+      "desc": "Le trafic en dessous de cette valeur (o/s) est affiché comme inactif.",
+      "label": "Seuil d'activité"
     },
-    "colorRx": {
-      "desc": "Définir la couleur de l'icône de téléchargement (RX) lorsque la valeur est supérieure au seuil.",
-      "label": "RX Active"
+    "fontSizeModifier": {
+      "desc": "Mettre à l'échelle la taille du texte par rapport à la taille par défaut.",
+      "label": "Taille de police"
     },
-    "colorSilent": {
-      "desc": "Définir la couleur de l'icône lorsque le trafic est inférieur au seuil.",
-      "label": "RX/TX Inactif"
+    "iconSizeModifier": {
+      "desc": "Ajuster la taille de l'icône par rapport à la taille par défaut.",
+      "label": "Taille d'icône"
     },
-    "colorText": {
-      "desc": "Définir la couleur du texte utilisée pour les valeurs RX et TX.",
-      "label": "Texte"
-    },
-    "colorTx": {
-      "desc": "Définir la couleur de l'icône de téléversement (TX) lorsque le seuil est dépassé.",
-      "label": "TX Active"
-    },
-    "contentMargin": {
-      "desc": "Marge horizontale des deux côtés du contenu du widget.",
-      "label": "Marge du contenu"
-    },
-    "customFontBold": {
-      "desc": "Afficher les valeurs de vitesse en gras.",
-      "label": "Gras"
+    "useCustomFont": {
+      "desc": "Remplacer la police par défaut pour les valeurs de vitesse.",
+      "label": "Police personnalisée"
     },
     "customFontFamily": {
       "desc": "Choisir une police pour les valeurs de vitesse.",
@@ -37,41 +53,49 @@
       "placeholder": "Sélectionner une police",
       "searchPlaceholder": "Rechercher des polices…"
     },
+    "customFontBold": {
+      "desc": "Afficher les valeurs de vitesse en gras.",
+      "label": "Gras"
+    },
     "customFontItalic": {
       "desc": "Afficher les valeurs de vitesse en italique.",
       "label": "Italique"
-    },
-    "fontSizeModifier": {
-      "desc": "Mettre à l'échelle la taille du texte par rapport à la taille par défaut.",
-      "label": "Modificateur de taille de police"
-    },
-    "horizontalLayout": {
-      "desc": "Afficher les valeurs TX et RX côte à côte au lieu de les empiler.",
-      "label": "Disposition horizontale"
-    },
-    "iconSizeModifier": {
-      "desc": "Ajuster la taille de l'icône par rapport à la taille par défaut.",
-      "label": "Modificateur de taille d'icône"
-    },
-    "iconType": {
-      "desc": "Choisissez le style d'icône utilisé pour les indicateurs TX/RX.",
-      "label": "Type d'icône"
-    },
-    "showNumbers": {
-      "desc": "Afficher les vitesses RX/TX actuelles sous forme de nombres.",
-      "label": "Afficher les valeurs"
-    },
-    "spacingInbetween": {
-      "desc": "Ajuster l'espacement entre les éléments RX/TX.",
-      "label": "Espacement vertical"
     },
     "useCustomColors": {
       "desc": "Activer les couleurs personnalisées au lieu des couleurs par défaut du thème.",
       "label": "Couleurs personnalisées"
     },
-    "useCustomFont": {
-      "desc": "Remplacer la police par défaut pour les valeurs de vitesse.",
-      "label": "Police personnalisée"
+    "colorTx": {
+      "desc": "Couleur de l'icône de téléversement (TX) lorsque le seuil est dépassé.",
+      "label": "TX Active"
+    },
+    "colorRx": {
+      "desc": "Couleur de l'icône de téléchargement (RX) lorsque la valeur est supérieure au seuil.",
+      "label": "RX Active"
+    },
+    "colorSilent": {
+      "desc": "Couleur de l'icône lorsque le trafic est inférieur au seuil.",
+      "label": "Inactif"
+    },
+    "colorText": {
+      "desc": "Couleur du texte pour les valeurs de vitesse.",
+      "label": "Texte"
+    },
+    "paddingLeft": {
+      "label": "Marge intérieure gauche",
+      "desc": "Marge intérieure du contenu à gauche."
+    },
+    "paddingRight": {
+      "label": "Marge intérieure droite",
+      "desc": "Marge intérieure du contenu à droite."
+    },
+    "columnSpacing": {
+      "label": "Espacement des colonnes",
+      "desc": "Espacement entre les colonnes dans la disposition en grille."
+    },
+    "rowSpacing": {
+      "label": "Espacement des lignes",
+      "desc": "Espacement entre les lignes dans la disposition en grille (sans effet en disposition horizontale)."
     }
   }
 }

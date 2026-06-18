@@ -50,7 +50,7 @@
   },
   "tools": {
     "colorpicker": "Color",
-    "annotate": "Annotate",
+    "annotate": "Markup",
     "ocr": "OCR",
     "pin": "Pin",
     "palette": "Palette",
@@ -188,6 +188,9 @@
     "shareSkipPopover":     "Copy Link Directly",
     "shareSkipPopoverDesc": "Skip the share popover and copy the link straight to clipboard. A toast notification will confirm.",
     "gifMaxSecondsDesc": "Maximum duration in seconds for GIF recordings.",
+    "ocrSection": "OCR",
+    "searchEngineUrl": "Search Engine URL",
+    "searchEngineUrlDesc": "URL used when searching OCR text. Leave empty to use Google. Examples: https://duckduckgo.com/?q= or https://search.brave.com/search?q=",
     "filenameTokens": {
       "year": "Year",
       "month": "Month",
@@ -296,6 +299,7 @@
     "remove": "Remove"
   }
 }
+
 
 
 

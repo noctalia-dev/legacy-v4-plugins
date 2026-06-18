@@ -1,0 +1,24 @@
+{
+  "battery": {
+    "status-not-charging": "Non in carica",
+    "status-charging": "In carica",
+    "status-discharging": "In scarica",
+    "status-full": "Carica",
+    "status-unknown": "Sconosciuto",
+    "time-to-full": "Tempo al completamento: {time}",
+    "remaining": "Rimanente: {time}"
+  },
+  "settings": {
+    "dynamic-coloring": "Colorazione dinamica",
+    "dynamic-coloring-desc": "Cambia il colore della capsula nella barra a seconda del profilo prescelto",
+    "show-profile": "Visualizzazione del profilo",
+    "show-profile-desc": "Visualizza l'icona del profilo impostato nella capsula",
+    "widget-settings": "Impostazioni del widget",
+    "show-balanced": "Mostra profilo bilanciato",
+    "show-balanced-desc": "Visualizza l'icona del profilo anche quando è impostato su bilanciato (valido solo se la visualizzazione dei profili è attiva)",
+    "color-powersaver": "Colore profilo Risparmio energetico",
+    "color-powersaver-desc": "Scegli il colore di sfondo della capsula quando il profilo è impostato su Risparmio energetico",
+    "color-performance": "Colore profilo Prestazioni",
+    "color-performance-desc": "Scegli il colore di sfondo della capsula quando il profilo è impostato su Prestazioni"
+  }
+}

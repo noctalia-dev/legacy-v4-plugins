@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Widget beállítások"
+  },
   "settings": {
+    "active_color_description": "Az állapotjelző színe, ha aktív (fut)",
+    "active_color_label": "Aktív állapotjelző színe",
     "current_value": "Kiválasztva: {value} ms",
     "default_network_description": "Alapértelmezett hálózat a képek futtatásához",
     "default_network_label": "Alapértelmezett hálózat",
     "general": "Általános",
+    "icon_color_description": "A sáv widget ikonjának színének módosítása",
+    "icon_color_label": "Ikon színe",
+    "inactive_color_description": "Az állapotjelző színe, ha inaktív (leállítva)",
+    "inactive_color_label": "Inaktív állapotjelző színe",
     "refresh_interval_description": "Milyen gyakran ellenőrzi a bővítmény a konténer állapotváltozásait",
     "refresh_interval_label": "Frissítési időköz",
+    "status_state_always": "Mindig mutassa",
+    "status_state_description": "Válassza ki az állapotjelző pont megjelenítési módját",
+    "status_state_hidden": "Elrejtés teljesen",
+    "status_state_label": "Állapot kijelzése",
+    "status_state_running_only": "Megjelenítés futás közben",
     "title": "Konténerkezelő beállításai"
   },
   "tooltip": {

@@ -74,7 +74,9 @@
       "message": "Ange ett terminalkommando i plugin-inställningarna"
     },
     "login-browser-opened": "Autentiseringssida öppnad i webbläsaren",
-    "login-failed": "Inloggning misslyckades"
+    "login-failed": "Inloggning misslyckades",
+    "account-switched": "Bytte Tailscale-konto",
+    "account-switch-failed": "Kunde inte byta Tailscale-konto"
   },
   "panel": {
     "title": "Tailscale-nätverk",

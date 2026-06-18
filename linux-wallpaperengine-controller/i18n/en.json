@@ -17,10 +17,8 @@
     "reloaded": "Wallpaper engine reloaded",
     "stopped": "Wallpaper engine stopped",
     "reloadSkippedNoWallpaper": "No wallpaper is configured, so there was nothing to reload",
-    "refreshingWallpapers": "Refreshing wallpaper list...",
     "refreshedWallpapers": "Wallpaper list refreshed: {count} wallpapers",
     "refreshSkippedNoFolder": "Wallpaper source directory is empty, so the wallpaper list could not be refreshed",
-    "wallpaperColorsGenerating": "Generating wallpaper screenshot for color extraction...",
     "wallpaperColorsApplied": "Wallpaper colors applied to Noctalia",
     "wallpaperColorsCached": "Wallpaper colors cached for this display",
     "wallpaperColorsFailed": "Failed to extract colors from the selected wallpaper",
@@ -28,13 +26,6 @@
     "wallpaperColorsEngineUnavailable": "linux-wallpaperengine must be available to generate wallpaper colors"
   },
   "main": {
-    "status": {
-      "unavailable": "Engine unavailable",
-      "ready": "Ready",
-      "starting": "Starting engine",
-      "stopped": "Stopped",
-      "crashed": "Engine exited unexpectedly"
-    },
     "error": {
       "notInstalled": "linux-wallpaperengine was not found in PATH. Please check whether it is installed correctly.",
       "assetsMissing": "Wallpaper Engine assets were not found. Configure the assets directory in settings.",
@@ -45,36 +36,30 @@
   },
   "panel": {
     "title": "Wallpaper-Engine Wallpaper Selector",
-    "statusChecking": "Checking",
-    "statusUnavailable": "Unavailable",
-    "statusRunning": "Running",
-    "statusReady": "Configured",
-    "statusStopped": "Stopped",
     "sectionAudio": "Display & Audio",
     "sectionFeatures": "Features",
     "installHint": "Install example: yay -S linux-wallpaperengine-git",
     "errorBannerTitle": "Runtime error detected",
     "errorShowDetails": "View details",
     "errorHideDetails": "Hide details",
+    "errorCopy": "Copy error",
+    "errorCopied": "Error details copied",
     "errorDismiss": "Dismiss",
     "refreshWallpapers": "Refresh wallpapers",
     "start": "Start",
     "stop": "Stop",
-    "confirm": "Confirm",
-    "cancel": "Cancel",
     "compatibilityQuickCheck": "Compatibility quick check",
-    "compatibilityQuickCheckRunning": "Checking wallpaper compatibility...",
-    "compatibilityQuickCheckConfirm": "Scan all wallpapers for extra property compatibility? This may take some time.",
-    "compatibilityQuickCheckFinished": "Scanned {total} wallpapers, {failed} may fail",
+    "compatibilityQuickCheckFinished": "Scanned {total} wallpapers, {failed} may fail, {limited} limited",
     "folderInvalid": "Wallpaper source directory is invalid or inaccessible.",
     "scanning": "Scanning wallpapers...",
     "searchPlaceholder": "Search wallpapers by name or ID",
     "searchClear": "Clear search",
-    "filterButtonSummary": "Filter · {type}",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "filterButtonSummary": "Filter: {type}",
     "sortButtonSummary": "Sort · {direction} {sort}",
     "applyAllDisplays": "Apply to all displays",
-    "closePanel": "Close panel",
-    "confirmApply": "Apply wallpaper",
+    "closeSidebar": "Close sidebar",
     "syncWallpaperColors": "Sync wallpaper colors",
     "wallpaperScaling": "Scaling",
     "wallpaperClamp": "Clamp mode",
@@ -87,10 +72,12 @@
     "loadingProperties": "Loading wallpaper properties...",
     "propertiesLoadFailed": "Failed to load wallpaper properties. This wallpaper format may not be supported yet, or this wallpaper may not run correctly",
     "propertiesFailedBadge": "May fail",
+    "propertiesLimitedBadge": "Limited",
     "noEditableProperties": "This wallpaper has no editable extra properties yet",
     "propertiesNotice": "Only directly editable properties supported by this plugin are shown here",
     "infoType": "Type",
     "infoId": "ID",
+    "infoDescription": "Description",
     "infoResolution": "Resolution",
     "infoSize": "Size",
     "scalingFill": "Fill",
@@ -104,7 +91,6 @@
     "targetAllDisplays": "Target: All displays",
     "targetSingleDisplay": "Target: {screen}",
     "applySingleDisplay": "Apply to {screen}",
-    "applyTarget": "Choose apply target",
     "filterAll": "All",
     "filterTypeAll": "All",
     "filterTypeScene": "Scene",
@@ -112,18 +98,13 @@
     "filterTypeWeb": "Web",
     "filterTypeApplication": "Application",
     "filterResAll": "Resolution: All",
-    "filterRes4k": "Resolution: 4K",
-    "filterRes8k": "Resolution: 8K",
+    "filterRes4k": "Resolution: 4K+",
     "filterResUnknown": "Resolution: Unknown",
-    "filterStatic": "Static",
-    "filterDynamic": "Dynamic",
     "sortName": "Name",
     "sortDateAdded": "Added time",
     "sortSize": "Size",
     "sortRecent": "Recent",
-    "sortAscendingToggle": "Toggle Asc/Desc",
     "sortAscendingToggleWithDirection": "{direction} Toggle Asc/Desc",
-    "sortId": "ID",
     "typeScene": "Scene",
     "typeVideo": "Video",
     "typeWeb": "Web",
@@ -131,13 +112,15 @@
     "resolutionUnknown": "Unknown",
     "dynamicBadge": "Dynamic",
     "staticBadge": "Static",
+    "musicBadge": "Music",
+    "reactiveBadge": "Reactive",
     "prevPage": "Previous",
     "nextPage": "Next",
     "pageSummary": "Page {current} / {total}",
     "pageRange": "{start}-{end} / {total}",
-    "count": "Wallpaper count: {count}",
     "emptyAll": "No wallpapers found in the source directory",
-    "emptyFiltered": "No wallpapers match the current filters"
+    "emptyFiltered": "No wallpapers match the current filters",
+    "approvedBadge": "Recommended"
   },
   "settings": {
     "category": {
@@ -147,6 +130,7 @@
       "audioTitle": "Audio",
       "displayTitle": "Display"
     },
+    "resourcesIntro": "Manage wallpaper source scanning and the cached images used for color extraction.",
     "defaults": {
       "title": "Default application options",
       "description": "These options are used as defaults when you apply a wallpaper without overriding its per-wallpaper settings."
@@ -158,6 +142,25 @@
     "enableExtraPropertiesEditor": {
       "label": "Enable extra property editor",
       "description": "Show wallpaper-specific extra properties in the panel sidebar when available"
+    },
+    "showSidebarDescription": {
+      "label": "Show sidebar description",
+      "description": "Display wallpaper descriptions in the sidebar preview card"
+    },
+    "badges": {
+      "title": "Wallpaper card badge order",
+      "description": "Drag or use arrows to reorder badges, then toggle each one on or off.",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "items": {
+        "type": "Type",
+        "dynamic": "Dynamic/Static",
+        "music": "Music",
+        "reactive": "Reactive",
+        "approved": "Recommended",
+        "resolution": "Resolution",
+        "compatibility": "Compatibility"
+      }
     },
     "cache": {
       "currentSize": "Current color image cache size: {size}",
@@ -176,11 +179,6 @@
       "placeholder": "~/.local/share/Steam/steamapps/workshop/content/431960",
       "scan": "Auto-detect Steam workshop directory"
     },
-    "assetsDir": {
-      "label": "Wallpaper Engine assets directory",
-      "description": "Optional: assets path used by linux-wallpaperengine",
-      "placeholder": "~/.local/share/wallpaperengine/assets"
-    },
     "wallpaperScanCacheMinutes": {
       "label": "Wallpaper scan cache duration",
       "description": "Reuse the cached wallpaper list for this many minutes before scanning again when opening the panel"
@@ -195,8 +193,7 @@
     },
     "defaultFps": {
       "label": "FPS limit",
-      "description": "Default frame rate limit for wallpapers",
-      "placeholder": "30"
+      "description": "Default frame rate limit for wallpapers"
     },
     "defaultNoFullscreenPause": {
       "label": "Prevent fullscreen pause",

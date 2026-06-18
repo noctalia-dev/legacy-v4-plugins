@@ -1,0 +1,140 @@
+{
+  "menu": {
+    "openPanel": "Open panel",
+    "refresh": "Refresh",
+    "openSettings": "Open settings",
+    "openHabitica": "Open Habitica"
+  },
+  "settings": {
+    "account": {
+      "label": "Habitica Account",
+      "description": "Create or copy credentials from Habitica Settings > API."
+    },
+    "userId": {
+      "label": "User ID",
+      "description": "Habitica x-api-user header."
+    },
+    "apiToken": {
+      "label": "API Token",
+      "description": "Habitica x-api-key header. The token is saved in Noctalia plugin settings."
+    },
+    "basicUi": {
+      "label": "Basic UI",
+      "description": "The default panel stays focused on today's dailies and open todos."
+    },
+    "refreshInterval": {
+      "label": "Refresh Interval",
+      "descriptionPrefix": "Sync every ",
+      "descriptionSuffix": " minute(s)."
+    },
+    "dailies": {
+      "label": "Dailies",
+      "descriptionPrefix": "Show up to "
+    },
+    "todos": {
+      "label": "Todos",
+      "descriptionPrefix": "Show up to "
+    },
+    "notificationBadge": {
+      "label": "Show notification badge",
+      "description": "Badge shows pending due dailies plus open todos."
+    },
+    "advancedUi": {
+      "label": "Advanced UI",
+      "description": "Optional features are disabled by default to keep the panel minimal."
+    },
+    "showHabits": {
+      "label": "Show habits",
+      "description": "Adds a Habits section with up/down scoring."
+    },
+    "habits": {
+      "label": "Habits",
+      "descriptionPrefix": "Show up to "
+    },
+    "checklist": {
+      "label": "Show checklist items",
+      "description": "Shows daily/todo checklists and lets you toggle checklist progress."
+    },
+    "tagFilter": {
+      "label": "Enable tag filtering",
+      "description": "Fetch tags and filter tasks by a selected tag ID."
+    },
+    "selectedTag": {
+      "label": "Selected Tag ID",
+      "description": "Paste a Habitica tag UUID. Leave empty to show all tasks."
+    },
+    "colors": {
+      "label": "Colors"
+    },
+    "colorization": {
+      "label": "Enable colorization",
+      "description": "Apply theme colors to the bar icon and badge."
+    },
+    "iconColor": {
+      "label": "Icon Color"
+    },
+    "badgeColor": {
+      "label": "Badge Color"
+    },
+    "badgeTextColor": {
+      "label": "Badge Text Color"
+    },
+    "ipc": {
+      "title": "IPC",
+      "refresh": "Refresh: qs -c noctalia-shell ipc call plugin:habitica refresh"
+    },
+    "saved": "Habitica settings saved"
+  },
+  "panel": {
+    "health": "Health",
+    "experience": "Experience",
+    "mana": "Mana",
+    "refreshTooltip": "Refresh Habitica",
+    "closeTooltip": "Close",
+    "credentialsRequired": "Credentials required",
+    "credentialsDescription": "Add your Habitica User ID and API Token in this plugin's settings.",
+    "loadingTitle": "Loading Habitica",
+    "loadingDescription": "Fetching profile and active tasks.",
+    "today": "Today",
+    "noDailies": "No due dailies.",
+    "todos": "Todos",
+    "noTodos": "No open todos.",
+    "habits": "Habits",
+    "noHabits": "No habits to show.",
+    "complete": "Complete",
+    "scoreUp": "Score up",
+    "scoreUpDisabled": "Score up disabled",
+    "scoreDown": "Score down",
+    "scoreDownDisabled": "Score down disabled",
+    "toggleChecklist": "Toggle checklist item",
+    "untitledTask": "Untitled task"
+  },
+  "toast": {
+    "refreshing": "Refreshing Habitica",
+    "configure": "Configure Habitica credentials in plugin settings",
+    "taskScored": "Habitica task scored"
+  },
+  "tooltip": {
+    "configure": "Habitica\nConfigure User ID and API Token",
+    "error": "Habitica\nError: ",
+    "unknownError": "Unknown error",
+    "loading": "Habitica\nLoading...",
+    "player": "Player",
+    "levelFallback": "Level --",
+    "hpFallback": "-- HP",
+    "xpFallback": "-- XP",
+    "goldFallback": "-- gold",
+    "dailies": " dailies - ",
+    "todos": " todos",
+    "updatedNow": "Updated just now",
+    "updatedMinutesPrefix": "Updated ",
+    "updatedMinutesSuffix": "m ago",
+    "updatedHoursSuffix": "h ago",
+    "actionsHint": "Right-click for actions"
+  },
+  "error": {
+    "configure": "Configure your Habitica User ID and API Token in settings.",
+    "network": "Habitica request failed. Check your network connection.",
+    "request": "Habitica request failed."
+  }
+}

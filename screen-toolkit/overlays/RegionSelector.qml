@@ -135,7 +135,7 @@ Item {
             property var pendingCapture: null
             Timer {
                 id: captureDelay
-                interval: 80; repeat: false
+                interval: 160; repeat: false
                 onTriggered: {
                     if (win.pendingCapture) {
                         var p = win.pendingCapture

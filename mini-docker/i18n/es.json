@@ -1,16 +1,30 @@
 {
+  "menu": {
+    "settings": "Configuración del widget"
+  },
   "settings": {
+    "active_color_description": "Color del indicador de estado cuando está activo (en ejecución)",
+    "active_color_label": "Color del indicador activo",
     "current_value": "Seleccionado: {value} ms",
-    "default_network_description": "Default network to use when running images",
-    "default_network_label": "Default Network",
+    "default_network_description": "Red predeterminada a utilizar al ejecutar imágenes",
+    "default_network_label": "Red predeterminada",
     "general": "General",
+    "icon_color_description": "Cambiar el color del icono del widget de la barra",
+    "icon_color_label": "Color del icono",
+    "inactive_color_description": "Color del indicador de estado cuando está inactivo (detenido)",
+    "inactive_color_label": "Color del indicador inactivo",
     "refresh_interval_description": "Con qué frecuencia el plugin verifica el estado de los contenedores",
     "refresh_interval_label": "Intervalo de actualización",
+    "status_state_always": "Mostrar siempre",
+    "status_state_description": "Elige cómo mostrar el punto indicador de estado",
+    "status_state_hidden": "Ocultar por completo",
+    "status_state_label": "Estado del indicador",
+    "status_state_running_only": "Mostrar al ejecutar",
     "title": "Configuración del Administrador de Contenedores"
   },
   "tooltip": {
     "docker_not_available": "Docker no disponible",
-    "image_already_running": "Image already running in a container",
+    "image_already_running": "La imagen ya se está ejecutando en un contenedor",
     "running_containers": "Contenedores en ejecución: %1"
   }
 }

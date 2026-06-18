@@ -1,7 +1,7 @@
 {
   "id": "noctalia-calculator",
   "name": "Calculator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "minNoctaliaVersion": "4.4.0",
   "author": "pir0c0pter0",
   "license": "MIT",

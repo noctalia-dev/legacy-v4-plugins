@@ -74,7 +74,9 @@
       "message": "Veuillez définir une commande de terminal dans les paramètres du plugin"
     },
     "login-browser-opened": "Page d'authentification ouverte dans le navigateur",
-    "login-failed": "Échec de la connexion"
+    "login-failed": "Échec de la connexion",
+    "account-switched": "Compte Tailscale changé",
+    "account-switch-failed": "Échec du changement de compte Tailscale"
   },
   "panel": {
     "title": "Réseau Tailscale",

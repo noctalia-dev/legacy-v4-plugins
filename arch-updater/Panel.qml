@@ -29,6 +29,7 @@ Item {
         property string source: ""
         property string name: ""
         property string text: ""
+        
         model: [ // Spaces are added here instead of in i18n
             {
                 "label": pluginApi.tr("panel.context.copy") + ' "' + text + '"',
@@ -36,7 +37,7 @@ Item {
                 "icon": "copy"
             },
             {
-                "label": pluginApi.tr("panel.context.open") + " " + packageID,
+                "label": pluginApi.tr("panel.context.open") + " " + packageID + " " + pluginApi.tr("panel.context.repo"),
                 "action": "open",
                 "icon": "external-link"
             },

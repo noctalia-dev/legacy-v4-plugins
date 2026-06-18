@@ -74,7 +74,9 @@
       "message": "Vui lòng thiết lập lệnh terminal trong cài đặt plugin"
     },
     "login-browser-opened": "Trang xác thực đã mở trong trình duyệt",
-    "login-failed": "Đăng nhập thất bại"
+    "login-failed": "Đăng nhập thất bại",
+    "account-switched": "Đã chuyển tài khoản Tailscale",
+    "account-switch-failed": "Không thể chuyển tài khoản Tailscale"
   },
   "panel": {
     "title": "Mạng Tailscale",

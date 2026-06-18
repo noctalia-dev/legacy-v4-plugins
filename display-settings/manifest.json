@@ -1,0 +1,26 @@
+{
+  "id": "display-settings",
+  "name": "Display Settings",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "fstanis",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "View live display settings from wlr-randr and permanent niri KDL output configuration",
+  "tags": ["Bar", "Panel", "System", "Utility"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "niriConfigPath": "~/.config/niri/config.kdl",
+      "iconColor": "none"
+    }
+  }
+}

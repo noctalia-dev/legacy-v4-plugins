@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "搜索 gnu pass 密码条目"
+  },
+  "result": {
+    "goBack": "返回",
+    "folder": "文件夹",
+    "password": "密码",
+    "passwordEntry": "密码条目",
+    "loading": "正在加载密码条目..."
+  },
+  "action": {
+    "copyPassword": "复制密码",
+    "copyPasswordDesc": "复制密码到剪贴板",
+    "typePassword": "输入密码",
+    "typePasswordDesc": "使用 wtype 输入密码",
+    "copyField": "复制{key}",
+    "typeField": "输入{key}",
+    "copyOtp": "复制 OTP",
+    "typeOtp": "输入 OTP",
+    "otpDesc": "复制/输入当前 OTP 码"
+  },
+  "settings": {
+    "tab": {
+      "general": "通用",
+      "advanced": "高级"
+    },
+    "storePath": {
+      "label": "密码库路径",
+      "desc": "密码库的自定义路径（默认：~/.password-store）"
+    },
+    "typeDelay": {
+      "label": "启动器关闭延迟",
+      "desc": "开始输入前的延迟毫秒数（默认：500）"
+    },
+    "wtypeDelay": {
+      "label": "Wtype按键延迟",
+      "desc": "wtype按键之间延迟毫秒数（默认：12）"
+    },
+    "clipTimeout": {
+      "label": "剪贴板超时",
+      "desc": "剪贴板清除前的秒数（默认 PASSWORD_STORE_CLIP_TIME: {value}）"
+    }
+  },
+  "notification": {
+    "copied": "已复制到剪贴板"
+  }
+}

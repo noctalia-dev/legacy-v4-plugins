@@ -9,10 +9,14 @@
   },
   "panel": {
     "title": "Rechner",
-    "subtitle": "Schnellrechnung in der Leiste"
+    "subtitle": "Schnellrechnung in der Leiste",
+    "copy-result-tooltip": "Ergebnis kopieren"
+  },
+  "toast": {
+    "copied": "Kopiert: {value}"
   },
   "settings": {
-    "about": "Ueber",
+    "about": "Über",
     "show-bar": "Wert in der Leiste anzeigen",
     "show-bar-desc": "Zeigt den aktuellen Wert neben dem Rechner-Symbol an",
     "precision": "Dezimalgenauigkeit: {value}",

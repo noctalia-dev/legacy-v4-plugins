@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: ${{ github.repository == 'noctalia-dev/noctalia-plugins' }}
+    if: ${{ github.repository == 'noctalia-dev/legacy-v4-plugins' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "Impostazioni widget"
+    "widget-settings": "Impostazioni widget",
+    "toggle-panel": "Mostra/nascondi Monitor"
+  },
+  "panel": {
+    "title": "Attività di rete",
+    "close": "Chiudi",
+    "download": "Download",
+    "upload": "Upload"
   },
   "settings": {
+    "layout": {
+      "label": "Layout",
+      "desc": "Disporre le celle in una riga (orizzontale) o in una griglia 2×2 (verticale).",
+      "horizontal": "Orizzontale",
+      "vertical": "Verticale"
+    },
+    "slots": {
+      "label": "Assegnazione celle",
+      "desc": "Scegli cosa mostra ogni cella. Non sono possibili duplicati. Es.: usa celle vuote per mostrare solo le icone."
+    },
+    "slot": {
+      "txIcon": "Icona TX",
+      "rxIcon": "Icona RX",
+      "txSpeed": "Velocità TX",
+      "rxSpeed": "Velocità RX",
+      "none": "Vuoto"
+    },
+    "iconType": {
+      "desc": "Scegli lo stile dell'icona usata per gli indicatori TX/RX.",
+      "label": "Tipo icona"
+    },
     "byteThresholdActive": {
-      "desc": "Imposta la soglia di attività in byte al secondo (B/s).",
-      "label": "Mostra soglia attiva"
+      "desc": "Il traffico sotto questo valore (B/s) viene mostrato come inattivo.",
+      "label": "Soglia di attività"
     },
-    "colorRx": {
-      "desc": "Imposta il colore dell'icona di download (RX) quando sopra la soglia.",
-      "label": "RX Attivo"
+    "fontSizeModifier": {
+      "desc": "Scala la dimensione del testo rispetto al valore predefinito.",
+      "label": "Dimensione font"
     },
-    "colorSilent": {
-      "desc": "Imposta il colore dell'icona quando il traffico è sotto la soglia.",
-      "label": "RX/TX Inattivo"
+    "iconSizeModifier": {
+      "desc": "Scala la dimensione dell'icona rispetto al valore predefinito.",
+      "label": "Dimensione icona"
     },
-    "colorText": {
-      "desc": "Imposta il colore del testo utilizzato per i valori RX e TX.",
-      "label": "Testo"
-    },
-    "colorTx": {
-      "desc": "Imposta il colore dell'icona di upload (TX) quando sopra la soglia.",
-      "label": "TX Attivo"
-    },
-    "contentMargin": {
-      "desc": "Padding orizzontale su entrambi i lati del contenuto del widget.",
-      "label": "Margine contenuto"
-    },
-    "customFontBold": {
-      "desc": "Visualizza i valori di velocità in grassetto.",
-      "label": "Grassetto"
+    "useCustomFont": {
+      "desc": "Sovrascrivi il font predefinito per i valori di velocità.",
+      "label": "Font personalizzato"
     },
     "customFontFamily": {
       "desc": "Scegli un font per i valori di velocità.",
@@ -37,41 +53,49 @@
       "placeholder": "Seleziona un font",
       "searchPlaceholder": "Cerca font…"
     },
+    "customFontBold": {
+      "desc": "Visualizza i valori di velocità in grassetto.",
+      "label": "Grassetto"
+    },
     "customFontItalic": {
       "desc": "Visualizza i valori di velocità in corsivo.",
       "label": "Corsivo"
-    },
-    "fontSizeModifier": {
-      "desc": "Scala la dimensione del testo rispetto al valore predefinito.",
-      "label": "Modificatore dimensione font"
-    },
-    "horizontalLayout": {
-      "desc": "Posiziona i valori TX e RX fianco a fianco invece che impilati.",
-      "label": "Layout orizzontale"
-    },
-    "iconSizeModifier": {
-      "desc": "Scala la dimensione dell'icona rispetto al valore predefinito.",
-      "label": "Modificatore dimensione icona"
-    },
-    "iconType": {
-      "desc": "Scegli lo stile dell'icona usata per gli indicatori TX/RX.",
-      "label": "Tipo icona"
-    },
-    "showNumbers": {
-      "desc": "Visualizza le velocità RX/TX attuali come numeri.",
-      "label": "Mostra valori"
-    },
-    "spacingInbetween": {
-      "desc": "Regola lo spazio tra gli elementi RX/TX.",
-      "label": "Spaziatura verticale"
     },
     "useCustomColors": {
       "desc": "Attiva i colori personalizzati invece dei colori predefiniti del tema.",
       "label": "Colori personalizzati"
     },
-    "useCustomFont": {
-      "desc": "Sovrascrivi il font predefinito per i valori di velocità.",
-      "label": "Font personalizzato"
+    "colorTx": {
+      "desc": "Colore dell'icona di upload (TX) quando sopra la soglia.",
+      "label": "TX Attivo"
+    },
+    "colorRx": {
+      "desc": "Colore dell'icona di download (RX) quando sopra la soglia.",
+      "label": "RX Attivo"
+    },
+    "colorSilent": {
+      "desc": "Colore dell'icona quando il traffico è sotto la soglia.",
+      "label": "Inattivo"
+    },
+    "colorText": {
+      "desc": "Colore del testo per i valori di velocità.",
+      "label": "Testo"
+    },
+    "paddingLeft": {
+      "label": "Padding sinistro",
+      "desc": "Padding del contenuto a sinistra."
+    },
+    "paddingRight": {
+      "label": "Padding destro",
+      "desc": "Padding del contenuto a destra."
+    },
+    "columnSpacing": {
+      "label": "Spaziatura colonne",
+      "desc": "Spaziatura tra le colonne nel layout a griglia."
+    },
+    "rowSpacing": {
+      "label": "Spaziatura righe",
+      "desc": "Spaziatura tra le righe nel layout a griglia (senza effetto nel layout orizzontale)."
     }
   }
 }

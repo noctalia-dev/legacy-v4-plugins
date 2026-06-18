@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import "providers"
+import "providers" as Providers
 
 Item {
     id: root
@@ -9,37 +9,43 @@ Item {
     property var pluginApi: null
     property var pluginSettings: pluginApi?.pluginSettings ?? ({})
 
-    Claude {
+    Providers.Claude {
         id: claudeProvider
         enabled: root.providerEnabled("claude")
         providerSettings: root.pluginSettings?.providers?.claude ?? ({})
     }
 
-    Codex {
+    Providers.Codex {
         id: codexProvider
         enabled: root.providerEnabled("codex")
         providerSettings: root.pluginSettings?.providers?.codex ?? ({})
     }
 
-    OpenRouter {
+    Providers.OpenRouter {
         id: openRouterProvider
         enabled: root.providerEnabled("openrouter")
         providerSettings: root.pluginSettings?.providers?.openrouter ?? ({})
     }
 
-    Copilot {
+    Providers.Copilot {
         id: copilotProvider
         enabled: root.providerEnabled("copilot")
         providerSettings: root.pluginSettings?.providers?.copilot ?? ({})
     }
 
-    Zen {
+    Providers.Gemini {
+        id: geminiProvider
+        enabled: root.providerEnabled("gemini")
+        providerSettings: root.pluginSettings?.providers?.gemini ?? ({})
+    }
+
+    Providers.Zen {
         id: zenProvider
         enabled: root.providerEnabled("zen")
         providerSettings: root.pluginSettings?.providers?.zen ?? ({})
     }
 
-    property var providers: [claudeProvider, codexProvider, copilotProvider, openRouterProvider, zenProvider]
+    property var providers: [claudeProvider, codexProvider, copilotProvider, geminiProvider, openRouterProvider, zenProvider]
 
     property var enabledProviders: {
         const result = [];
@@ -49,6 +55,8 @@ Item {
             result.push(codexProvider);
         if (copilotProvider.enabled)
             result.push(copilotProvider);
+        if (geminiProvider.enabled)
+            result.push(geminiProvider);
         if (openRouterProvider.enabled)
             result.push(openRouterProvider);
         if (zenProvider.enabled)

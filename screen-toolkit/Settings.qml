@@ -17,6 +17,7 @@ ColumnLayout {
     property bool   recordSkipConfirmation: false
     property bool   recordCopyToClipboard:  false
     property int    gifMaxSeconds:          30
+    property string searchEngineUrl:        ""
     property bool   _loaded: false
     property string _previewNow: ""
 
@@ -38,6 +39,7 @@ ColumnLayout {
         recordSkipConfirmation = pluginApi.pluginSettings.recordSkipConfirmation ?? false
         recordCopyToClipboard  = pluginApi.pluginSettings.recordCopyToClipboard  ?? false
         gifMaxSeconds          = pluginApi.pluginSettings.gifMaxSeconds          ?? 30
+        searchEngineUrl        = pluginApi.pluginSettings.searchEngineUrl        || ""
         _loaded = true
     }
 
@@ -55,6 +57,7 @@ ColumnLayout {
         pluginApi.pluginSettings.recordSkipConfirmation = root.recordSkipConfirmation
         pluginApi.pluginSettings.recordCopyToClipboard  = root.recordCopyToClipboard
         pluginApi.pluginSettings.gifMaxSeconds          = root.gifMaxSeconds
+        pluginApi.pluginSettings.searchEngineUrl        = root.searchEngineUrl
         pluginApi.saveSettings()
     }
 
@@ -331,4 +334,28 @@ ColumnLayout {
             }
         }
     }
+
+    NDivider { Layout.fillWidth: true; Layout.topMargin: Style.marginM; Layout.bottomMargin: Style.marginM }
+
+    // ── OCR ───────────────────────────────────────────────────────────────────
+    ColumnLayout {
+        Layout.fillWidth: true
+        spacing: Style.marginM
+
+        RowLayout {
+            spacing: Style.marginS
+            NIcon  { icon: "scan"; color: Color.mPrimary }
+            NLabel { label: pluginApi?.tr("settings.ocrSection") }
+        }
+
+        NTextInput {
+            Layout.fillWidth: true
+            label:           pluginApi?.tr("settings.searchEngineUrl")
+            description:     pluginApi?.tr("settings.searchEngineUrlDesc")
+            placeholderText: "https://www.google.com/search?q="
+            text:            root.searchEngineUrl
+            onTextChanged:   { root.searchEngineUrl = text; saveSettings() }
+        }
+    }
 }
+

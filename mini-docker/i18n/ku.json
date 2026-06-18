@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Mîhengên widgetan"
+  },
   "settings": {
+    "active_color_description": "Rengê nîşana rewşê dema ku çalak e (dimeşe)",
+    "active_color_label": "Rengê Nîşana Çalak",
     "current_value": "Hilbijartî: {value} ms",
     "default_network_description": "Tora şebekeya ku dema wêneyan dimeşîne were bikar anîn",
     "default_network_label": "Tora Şebekeyî",
     "general": "Giştî",
+    "icon_color_description": "Rengê îkona widgeta Barê biguherîne",
+    "icon_color_label": "Rengê Îkonê",
+    "inactive_color_description": "Rengê nîşana rewşê dema ku neçalak e (rawestiyaye)",
+    "inactive_color_label": "Rengê Nîşana Neçalak",
     "refresh_interval_description": "Plugin çiqas caran guherînên rewşa konteynerê kontrol dike",
     "refresh_interval_label": "Demê Nûkirinê",
+    "status_state_always": "Her dem nîşan bide",
+    "status_state_description": "Hilbijêrin ka xala nîşana rewşê çawa were nîşandan",
+    "status_state_hidden": "Bi tevahî veşêre",
+    "status_state_label": "Rewşa Rewşê",
+    "status_state_running_only": "Dema dimeşe nîşan bide",
     "title": "Mîhengên Birêvebirê Konteyner"
   },
   "tooltip": {

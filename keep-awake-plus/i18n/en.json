@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "title": "Keep Awake",
+    "unlimited": "∞",
+    "off": "Off",
+    "extend": "+{minutes}m",
+    "remaining-display-on": "{time} remaining · display on",
+    "remaining-display-may-sleep": "{time} remaining · display may sleep",
+    "turn-on": "Turn on",
+    "turn-off": "Turn off",
+    "keep-display": {
+      "label": "Keep display awake",
+      "desc": "When off, monitor may dim/sleep while system stays awake"
+    }
+  },
+  "toast": {
+    "enabled-title": "Keep Awake on",
+    "enabled-desc-full": "{scope} · {label} · display on",
+    "enabled-desc-partial": "{scope} · {label} · display may sleep",
+    "disabled-title": "Keep Awake off",
+    "extended-title": "Keep Awake extended",
+    "extended-desc": "+{minutes}m"
+  },
+  "tooltip": {
+    "off": "Keep Awake · off",
+    "active": "Keep Awake · {scope} · {remaining} left · thermal guard: {tg}",
+    "thermal-guard-on": "active",
+    "thermal-guard-off": "off"
+  },
+  "settings": {
+    "default-scope": {
+      "label": "Default scope",
+      "desc": "partial = system awake, monitor may sleep; full = everything blocked"
+    },
+    "show-remaining": {
+      "label": "Show remaining time beside icon"
+    },
+    "activate-on-left-click": {
+      "label": "Left click re-activates last combo",
+      "desc": "Right click opens panel instead"
+    },
+    "quick-extend": {
+      "label": "Quick-extend (minutes)"
+    },
+    "durations": {
+      "label": "Duration choices (minutes, comma-separated)"
+    },
+    "include-unlimited": {
+      "label": "Show ∞ (unlimited) option"
+    },
+    "scope-partial": "partial",
+    "scope-full": "full"
+  }
+}

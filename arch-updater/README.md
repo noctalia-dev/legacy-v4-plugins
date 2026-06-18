@@ -14,7 +14,7 @@ With optional Flatpak support, highlight for Noctalia updates, refresh timer, hi
 **Panel**
 - Table of updates
 - Copy names and versions by clicking on them
-- Context menu to copy text or open in browser
+- Context menu to copy text, open package repo or visit homepage
 - Refresh/Update buttons
 
 **Desktop Widget**

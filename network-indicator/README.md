@@ -1,18 +1,14 @@
 # NetworkIndicator Plugin for Noctalia
 
-A compact Noctalia bar widget that displays current network upload (TX) and download (RX) activity, with optional live throughput values and a hover-activated graph panel.
+A Noctalia bar widget that displays current network upload (TX) and download (RX) activity. Includes optional live throughput values and a hover-activated graph panel.
 
 ## Features
 
-- **TX/RX Activity Indicators**: Separate icons for upload (TX) and download (RX).
-- **Active/Idle Coloring**: Icons switch between "active" and "silent" colors based on a configurable traffic threshold.
-- **Optional Throughput Values**: Displays formatted TX/RX speeds as text (shown only when the bar is spacious and horizontal).
-- **Vertical and Horizontal Layouts**: Stack TX/RX values on the left of the arrows, or place them side by side with arrows centered in between.
-- **Unit Formatting**: Automatically switches between KB/s and MB/s, or can be configured to always display MB/s.
+- **TX/RX Activity Indicators**: Icons for TX and RX with active/idle coloring based on a configurable traffic threshold.
+- **Vertical and Horizontal Layouts**: Configurable cell grid: arrange up to four cells (TX icon, RX icon, TX speed, RX speed) in a horizontal row or a 2×2 grid. Cells can be left empty to show only icons or only values.
+- **Network Graph Panel**: Click on the widget to open a live graph panel showing recent RX and TX history.
 - **Custom Font**: Override the default font for speed values, with optional bold and italic styles.
-- **Network Graph Panel**: Hover over the widget to open a live graph showing RX and TX history from the system monitor.
-- **Theme Support**: Uses Noctalia theme colors by default, with optional custom colors.
-- **Configurable Settings**: Provides a comprehensive set of user-adjustable options.
+- **Theme Support**: Uses theme colors by default; all colors can be overridden individually.
 
 ## Installation
 
@@ -20,25 +16,21 @@ This plugin is part of the `noctalia-plugins` repository.
 
 ## Configuration
 
-Access the plugin settings in Noctalia to configure the following options:
+Access settings through the widget's context menu.
 
-- **Icon Type**: Select the icon style used for TX/RX: `arrow`, `arrow-bar`, `arrow-big`, `arrow-narrow`, `caret`, `chevron`, `chevron-compact`, `fold`.
-- **Show Values**: Display formatted TX/RX speeds as numbers. Automatically hidden on vertical bars and when using "mini" density.
-- **Force Megabytes**: Always display values in MB/s instead of switching to KB/s at low traffic levels.
-- **Horizontal Layout**: Place TX and RX values side by side instead of stacked.
-- **Minimum Width**: Set a minimum width for the widget to prevent resizing when values change.
-- **Content Margin**: Horizontal padding on both sides of the widget content.
-- **Show Active Threshold**: Set the traffic threshold in bytes per second (B/s) above which TX/RX is considered "active".
-- **Vertical Spacing**: Adjust the spacing between the TX and RX elements.
-- **Font Size Modifier**: Scale the text size.
-- **Icon Size Modifier**: Scale the icon size.
-- **Custom Font**: Override the default font with any installed font, with bold and italic options.
-- **Custom Colors**: When enabled, configure TX Active, RX Active, RX/TX Inactive, Text, Font, and Background colors.
+**Layout**: Choose between horizontal (single row) and vertical (2×2 grid) cell arrangement.
+**Cell Assignment**: Assign what each cell displays. Duplicates are not allowed. Use empty cells to reduce the widget to just icons or just speed values.
+**Icon Type**: Select the icon style for the TX/RX indicators (`arrow`, `arrow-bar`, `arrow-big`, `arrow-narrow`, `caret`, `chevron`, `chevron-compact`, `fold`).
+**Activity Threshold**: Traffic below this value (B/s) is treated as inactive, and icons switch to the idle color.
+**Font & Icon Size**: Scale text and icon sizes relative to the defaults.
+**Custom Font**: Override the default font for speed values, with optional bold and italic.
+**Custom Colors**: Override theme colors for TX active, RX active, inactive, and text individually.
+**Spacing & Padding**: Adjust left/right padding, column spacing, and row spacing.
 
 ## Usage
 
 - Add the widget to your Noctalia bar.
-- Hover over the widget to open the network graph panel.
+- Left-click the widget to open the network graph panel.
 - Right-click the widget to access settings.
 - Configure the plugin settings as required.
 
@@ -50,4 +42,4 @@ Access the plugin settings in Noctalia to configure the following options:
 
 - The widget reads `SystemStatService.txSpeed` and `SystemStatService.rxSpeed`; the polling interval is determined by that service.
 - The graph panel uses `SystemStatService.rxSpeedHistory` and `SystemStatService.txSpeedHistory` with `NGraph` from the Noctalia Shell.
-- The panel opens on hover with a short delay and closes automatically when the cursor leaves the widget.
+- Unfortunately, the update interval `SystemStatService.networkIntervalMs` is currently hardcoded to `3000` by Noctalia.

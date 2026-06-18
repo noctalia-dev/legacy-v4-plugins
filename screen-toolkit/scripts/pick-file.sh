@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # XDG-portal-aware file picker with GUI fallbacks.
 # Portal logic lives in pick-file-portal.py (same directory).
 

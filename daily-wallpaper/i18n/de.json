@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "source": {
+      "label": "Quelle",
+      "options": {
+        "bing": "Bing",
+        "nasa": "NASA"
+      }
+    },
+    "locale": {
+      "label": "Region"
+    }
+  }
+}

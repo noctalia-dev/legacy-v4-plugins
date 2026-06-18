@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # mirror-record.sh — process and save a mirror recording
 # Args: $1=src $2=destDir $3=destFile $4=filters (optional, comma-separated ffmpeg -vf string)
 #       $5=audio 0|1 (optional, default 0)

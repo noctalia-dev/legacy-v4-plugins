@@ -1,0 +1,52 @@
+{
+  "menu": {
+    "settings": "Widget ayarları"
+  },
+  "panel": {
+    "auth-error": "Bu eklentiyi kullanmak için kimlik doğrulaması yapın: {bin} auth login",
+    "issues": "Sorunlar",
+    "issues-count": "Sorunlar ({count})",
+    "mr": "Birleştirme İstekleri",
+    "mr-count": "Birleştirme İstekleri ({count})",
+    "open-settings": "Eklenti ayarlarını aç",
+    "pr": "Pull Request'ler",
+    "pr-count": "Pull Request'ler ({count})",
+    "bin-not-installed": "{bin} yüklü değil. Bu eklentiyi kullanmak için lütfen yükleyin.",
+    "refresh": "Yenile",
+    "no-scope": "Size atanmış öğeleri görüntülemek için Ayarlar'da bir Grup veya Depo belirleyin.",
+    "no-prs": "Açık pull request yok",
+    "no-mrs": "Açık birleştirme isteği yok",
+    "no-issues": "Açık sorun yok",
+    "no-bio": "Biyografi yok",
+    "loading": "Yükleniyor…",
+    "title": "Git Companion"
+  },
+  "settings": {
+    "platform": {
+      "desc": "Git platformunuzu seçin (Gitlab veya Github).",
+      "label": "Platform"
+    },
+    "refreshInterval": {
+      "desc": "Verilerin saniye cinsinden ne sıklıkla yenileneceği.",
+      "label": "Yenileme aralığı (s)"
+    },
+    "repo": {
+      "label": "Depo",
+      "desc": "Belirli bir depoyla sınırlayın (örn. owner/repo). Grubu kullanmak için boş bırakın."
+    },
+    "group": {
+      "label": "Grup",
+      "desc": "GitLab grup slug'ı. Ayarlanırsa Depoya göre önceliklidir."
+    },
+    "org": {
+      "label": "Organizasyon",
+      "desc": "GitHub organizasyonu. Tüm depolarınızda küresel arama için boş bırakın."
+    }
+  },
+  "widget": {
+    "tooltip": "{issues} Sorunlar - {requestCount} {requestLabel}"
+  },
+  "desktop": {
+    "text": "{issues} Sorunlar - {requestCount} {requestLabel}"
+  }
+}

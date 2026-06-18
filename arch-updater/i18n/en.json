@@ -12,7 +12,8 @@
         "context": {
             "copy": "Copy",
             "open": "Open",
-            "homepage": "Hompage"
+            "repo": "Repository",
+            "homepage": "Homepage"
         },
         "title": "Arch Updater",
         "name": "Name",

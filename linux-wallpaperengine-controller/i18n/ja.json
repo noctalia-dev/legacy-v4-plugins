@@ -1,238 +1,235 @@
 {
-  "widget": {
-    "tooltip": {
-      "checking": "linux-wallpaperengine を確認中",
-      "unavailable": "linux-wallpaperengine がインストールされていません",
-      "running": "壁紙エンジンが設定を適用中です",
-      "ready": "壁紙エンジンパネルを開く"
+  "main": {
+    "error": {
+      "assetsMissing": "Wallpaper Engine の assets が見つかりません。設定で assets ディレクトリを指定してください。",
+      "autoRecovered": "前回利用可能だったレイアウトに自動復旧しました",
+      "noBackground": "壁紙パスが設定されていません。",
+      "notInstalled": "PATH に linux-wallpaperengine が見つかりません。正しくインストールされているか確認してください。",
+      "opengl": "OpenGL の初期化に失敗しました。ドライバーとコンポジタの互換性を確認してください。"
     }
   },
   "menu": {
     "refreshWallpapers": "壁紙一覧を更新",
+    "settings": "プラグイン設定",
     "start": "壁紙エンジンを開始",
-    "stop": "壁紙エンジンを停止",
-    "settings": "プラグイン設定"
-  },
-  "toast": {
-    "reloaded": "壁紙エンジンを再読み込みしました",
-    "stopped": "壁紙エンジンを停止しました",
-    "reloadSkippedNoWallpaper": "壁紙が設定されていないため、再読み込みする内容がありません",
-    "refreshingWallpapers": "壁紙一覧を更新中...",
-    "refreshedWallpapers": "壁紙一覧を更新しました：{count} 件",
-    "refreshSkippedNoFolder": "壁紙ソースディレクトリが空のため、壁紙一覧を更新できません",
-    "wallpaperColorsGenerating": "色抽出用の壁紙スクリーンショットを生成中...",
-    "wallpaperColorsApplied": "壁紙の色を Noctalia に適用しました",
-    "wallpaperColorsCached": "このディスプレイ用の壁紙カラーを保存しました",
-    "wallpaperColorsFailed": "選択した壁紙から色を抽出できませんでした",
-    "wallpaperColorsNoSelection": "壁紙の色を適用する前に壁紙を選択してください",
-    "wallpaperColorsEngineUnavailable": "壁紙の色を生成するには linux-wallpaperengine が利用可能である必要があります"
-  },
-  "main": {
-    "status": {
-      "unavailable": "エンジンは利用できません",
-      "ready": "準備完了",
-      "starting": "エンジンを起動中",
-      "stopped": "停止しました",
-      "crashed": "エンジンが異常終了しました"
-    },
-    "error": {
-      "notInstalled": "PATH に linux-wallpaperengine が見つかりません。正しくインストールされているか確認してください。",
-      "assetsMissing": "Wallpaper Engine の assets が見つかりません。設定で assets ディレクトリを指定してください。",
-      "noBackground": "壁紙パスが設定されていません。",
-      "opengl": "OpenGL の初期化に失敗しました。ドライバーとコンポジタの互換性を確認してください。",
-      "autoRecovered": "前回利用可能だったレイアウトに自動復旧しました"
-    }
+    "stop": "壁紙エンジンを停止"
   },
   "panel": {
-    "title": "Wallpaper-Engine 壁紙セレクター",
-    "statusChecking": "確認中",
-    "statusUnavailable": "利用不可",
-    "statusRunning": "実行中",
-    "statusReady": "設定済み",
-    "statusStopped": "停止",
-    "sectionAudio": "ディスプレイとオーディオ",
-    "sectionFeatures": "機能",
-    "installHint": "インストール例: yay -S linux-wallpaperengine-git",
-    "errorBannerTitle": "ランタイムエラーを検出",
-    "errorShowDetails": "詳細を表示",
-    "errorHideDetails": "詳細を隠す",
-    "errorDismiss": "閉じる",
-    "refreshWallpapers": "壁紙を更新",
-    "start": "開始",
-    "stop": "停止",
-    "confirm": "確認",
-    "cancel": "キャンセル",
-    "compatibilityQuickCheck": "互換性クイックチェック",
-    "compatibilityQuickCheckRunning": "壁紙の互換性を確認中...",
-    "compatibilityQuickCheckConfirm": "すべての壁紙の追加プロパティ互換性をスキャンしますか？ 少し時間がかかる場合があります。",
-    "compatibilityQuickCheckFinished": "{total} 件の壁紙をスキャンし、{failed} 件が要注意です",
-    "folderInvalid": "壁紙ソースディレクトリが無効、またはアクセスできません。",
-    "scanning": "壁紙をスキャン中...",
-    "searchPlaceholder": "名前または ID で壁紙を検索",
-    "searchClear": "検索をクリア",
-    "filterButtonSummary": "フィルター · {type}",
-    "sortButtonSummary": "並び替え · {direction}{sort}",
     "applyAllDisplays": "すべてのディスプレイに適用",
-    "closePanel": "パネルを閉じる",
-    "confirmApply": "壁紙を適用",
-    "syncWallpaperColors": "壁紙の色を同期",
-    "wallpaperScaling": "拡大縮小",
-    "wallpaperClamp": "クランプモード",
-    "wallpaperVolume": "音量",
-    "wallpaperMuted": "ミュート",
-    "wallpaperAudioReactive": "オーディオ反応効果",
-    "wallpaperDisableMouse": "マウス操作を無効化",
-    "wallpaperDisableParallax": "パララックス効果を無効化",
-    "sectionProperties": "追加プロパティ",
-    "loadingProperties": "壁紙プロパティを読み込み中...",
-    "propertiesLoadFailed": "壁紙プロパティの読み込みに失敗しました。この壁紙のプロパティ形式はまだサポートされていない可能性があるか、この壁紙自体が正しく読み込めず実行できない可能性があります",
-    "propertiesFailedBadge": "要注意",
-    "noEditableProperties": "この壁紙には、今のところ編集可能な追加プロパティがありません",
-    "propertiesNotice": "ここには、このプラグインで直接編集できるプロパティのみ表示されます",
-    "infoType": "タイプ",
-    "infoId": "ID",
-    "infoResolution": "解像度",
-    "infoSize": "サイズ",
-    "scalingFill": "フィル",
-    "scalingFit": "フィット",
-    "scalingStretch": "ストレッチ",
-    "scalingDefault": "既定",
-    "clampClamp": "クランプ",
-    "clampBorder": "境界",
-    "clampRepeat": "繰り返し",
-    "propertyLabelThemeColor": "テーマカラー",
-    "targetAllDisplays": "対象: すべてのディスプレイ",
-    "targetSingleDisplay": "対象: {screen}",
     "applySingleDisplay": "{screen} に適用",
-    "applyTarget": "適用先を選択",
+    "approvedBadge": "おすすめ",
+    "clampBorder": "境界",
+    "clampClamp": "クランプ",
+    "clampRepeat": "繰り返し",
+    "closeSidebar": "サイドバーを閉じる",
+    "compatibilityQuickCheck": "互換性クイックチェック",
+    "compatibilityQuickCheckFinished": "{total} 件の壁紙をスキャンし、{failed} 件が要注意、{limited} 件が制限付きです",
+    "dynamicBadge": "動的",
+    "emptyAll": "ソースディレクトリに壁紙が見つかりません",
+    "emptyFiltered": "条件に一致する壁紙が見つかりません",
+    "errorBannerTitle": "ランタイムエラーを検出",
+    "errorCopied": "エラー詳細をコピーしました",
+    "errorCopy": "エラーをコピー",
+    "errorDismiss": "閉じる",
+    "errorHideDetails": "詳細を隠す",
+    "errorShowDetails": "詳細を表示",
     "filterAll": "すべて",
+    "filterButtonSummary": "フィルター：{type}",
+    "filterRes4k": "解像度: 4K+",
+    "filterResAll": "解像度: すべて",
+    "filterResUnknown": "解像度: 不明",
     "filterTypeAll": "すべて",
+    "filterTypeApplication": "アプリケーション",
     "filterTypeScene": "シーン",
     "filterTypeVideo": "動画",
     "filterTypeWeb": "ウェブ",
-    "filterTypeApplication": "アプリケーション",
-    "filterResAll": "解像度: すべて",
-    "filterRes4k": "解像度: 4K",
-    "filterRes8k": "解像度: 8K",
-    "filterResUnknown": "解像度: 不明",
-    "filterStatic": "静的",
-    "filterDynamic": "動的",
-    "sortName": "名前",
+    "folderInvalid": "壁紙ソースディレクトリが無効、またはアクセスできません。",
+    "infoId": "ID",
+    "infoDescription": "説明",
+    "infoResolution": "解像度",
+    "infoSize": "サイズ",
+    "infoType": "タイプ",
+    "installHint": "インストール例: yay -S linux-wallpaperengine-git",
+    "loadingProperties": "壁紙プロパティを読み込み中...",
+    "musicBadge": "音楽",
+    "nextPage": "次へ",
+    "noEditableProperties": "この壁紙には、今のところ編集可能な追加プロパティがありません",
+    "pageRange": "{start}-{end} / {total}",
+    "pageSummary": "{current} / {total} ページ",
+    "prevPage": "前へ",
+    "propertiesFailedBadge": "要注意",
+    "propertiesLimitedBadge": "制限あり",
+    "propertiesLoadFailed": "壁紙プロパティの読み込みに失敗しました。この壁紙のプロパティ形式はまだサポートされていない可能性があるか、この壁紙自体が正しく読み込めず実行できない可能性があります",
+    "propertiesNotice": "ここには、このプラグインで直接編集できるプロパティのみ表示されます",
+    "propertyLabelThemeColor": "テーマカラー",
+    "reactiveBadge": "オーディオ反応",
+    "refreshWallpapers": "壁紙を更新",
+    "resolutionUnknown": "不明",
+    "scalingDefault": "既定",
+    "scalingFill": "フィル",
+    "scalingFit": "フィット",
+    "scalingStretch": "ストレッチ",
+    "scanning": "壁紙をスキャン中...",
+    "searchClear": "検索をクリア",
+    "searchPlaceholder": "名前または ID で壁紙を検索",
+    "showMore": "もっと見る",
+    "showLess": "折りたたむ",
+    "sectionAudio": "ディスプレイとオーディオ",
+    "sectionFeatures": "機能",
+    "sectionProperties": "追加プロパティ",
+    "sortAscendingToggleWithDirection": "{direction} 昇順/降順を切替",
+    "sortButtonSummary": "並び替え · {direction}{sort}",
     "sortDateAdded": "追加時間",
+    "sortName": "名前",
     "sortSize": "サイズ",
     "sortRecent": "最近",
-    "sortAscendingToggle": "昇順/降順を切替",
-    "sortAscendingToggleWithDirection": "{direction} 昇順/降順を切替",
-    "sortId": "ID",
+    "start": "開始",
+    "staticBadge": "静的",
+    "stop": "停止",
+    "syncWallpaperColors": "壁紙の色を同期",
+    "targetAllDisplays": "対象: すべてのディスプレイ",
+    "targetSingleDisplay": "対象: {screen}",
+    "title": "Wallpaper-Engine 壁紙セレクター",
+    "typeApplication": "アプリケーション",
     "typeScene": "シーン",
     "typeVideo": "動画",
     "typeWeb": "ウェブ",
-    "typeApplication": "アプリケーション",
-    "resolutionUnknown": "不明",
-    "dynamicBadge": "動的",
-    "staticBadge": "静的",
-    "prevPage": "前へ",
-    "nextPage": "次へ",
-    "pageSummary": "{current} / {total} ページ",
-    "pageRange": "{start}-{end} / {total}",
-    "count": "壁紙数: {count}",
-    "emptyAll": "ソースディレクトリに壁紙が見つかりません",
-    "emptyFiltered": "条件に一致する壁紙が見つかりません"
+    "wallpaperAudioReactive": "オーディオ反応効果",
+    "wallpaperClamp": "クランプモード",
+    "wallpaperDisableMouse": "マウス操作を無効化",
+    "wallpaperDisableParallax": "パララックス効果を無効化",
+    "wallpaperMuted": "ミュート",
+    "wallpaperScaling": "拡大縮小",
+    "wallpaperVolume": "音量"
   },
   "settings": {
-    "category": {
-      "interfaceTitle": "インターフェース",
-      "performanceTitle": "パフォーマンス",
-      "compatibilityTitle": "リソース",
-      "audioTitle": "音声",
-      "displayTitle": "表示"
-    },
-    "defaults": {
-      "title": "既定の適用オプション",
-      "description": "壁紙ごとの設定を上書きしない場合、壁紙の適用時にこれらの項目が既定値として使用されます。"
-    },
-    "iconColor": {
-      "label": "アイコンの色",
-      "description": "バーウィジェットのアイコンに使う色"
-    },
-    "enableExtraPropertiesEditor": {
-      "label": "追加プロパティ編集を有効化",
-      "description": "利用可能な場合、壁紙ごとの追加プロパティをパネルのサイドバーに表示します"
+    "autoApplyOnStartup": {
+      "description": "少なくとも 1 つのスクリーンに壁紙が設定されている場合、起動時にエンジンを自動実行",
+      "label": "起動時に自動適用"
     },
     "cache": {
+      "clear": "配色画像キャッシュを削除",
       "currentSize": "現在の配色画像キャッシュサイズ: {size}",
       "refresh": "配色キャッシュサイズを更新",
-      "clear": "配色画像キャッシュを削除",
       "sizeUnknown": "不明"
+    },
+    "defaults": {
+      "title": "デフォルト値",
+      "description": "以下の設定は新しい壁紙のデフォルト値のみです。既に設定されている wallpaperには影響しません"
+    },
+    "category": {
+      "audioTitle": "音声",
+      "compatibilityTitle": "リソース",
+      "displayTitle": "表示",
+      "interfaceTitle": "インターフェース",
+      "performanceTitle": "パフォーマンス"
+    },
+    "resourcesIntro": "壁紙ソースのスキャンと、色抽出に使うキャッシュ画像を管理します。",
+    "defaultAudioReactiveEffects": {
+      "description": "該機能をサポートする壁紙の既定でオーディオ処理を有効にしたままにします",
+      "label": "オーディオ反応効果"
+    },
+    "defaultClamp": {
+      "description": "壁紙を描画するときに使う既定の境界処理モード",
+      "label": "既定のクランプモード"
+    },
+    "defaultDisableMouse": {
+      "description": "既定でマウス入力を無効化した状態で壁紙を開始",
+      "label": "マウス操作を無効化"
+    },
+    "defaultDisableParallax": {
+      "description": "既定でパララックス効果を無効化した状態で壁紙を開始",
+      "label": "パララックス効果を無効化"
+    },
+    "defaultFps": {
+      "description": "壁紙で使う既定のフレームレート上限",
+      "label": "既定 FPS"
+    },
+    "defaultFullscreenPauseOnlyActive": {
+      "description": "（Wayland のみ）フルスクリーンウィンドウがアクティブなときのみ一時停止",
+      "label": "アクティブなフルスクリーン時のみ一時停止"
+    },
+    "defaultMuted": {
+      "description": "壁紙を既定でミュート状態で起動します",
+      "label": "壁紙を既定でミュート"
+    },
+    "defaultNoAutomute": {
+      "description": "有効にすると、他のアプリが音を出していても壁紙音声を再生し続けます",
+      "label": "他のアプリが音声再生中でもミュートしない"
+    },
+    "defaultNoFullscreenPause": {
+      "description": "フルスクリーンアプリ実行中に一時停止しない",
+      "label": "フルスクリーン時の一時停止を防止"
+    },
+    "defaultScaling": {
+      "description": "カスタム値が未設定のときに使う既定モード",
+      "label": "既定の拡大縮小モード"
+    },
+    "defaultVolume": {
+      "description": "ミュートでない場合に、壁紙起動時に使用される音量",
+      "label": "壁紙の既定音量"
+    },
+    "enableExtraPropertiesEditor": {
+      "description": "利用可能な場合、壁紙ごとの追加プロパティをパネルのサイドバーに表示します",
+      "label": "追加プロパティ編集を有効化"
+    },
+    "showSidebarDescription": {
+      "description": "サイドバーのプレビューカードに壁紙の説明を表示します",
+      "label": "サイドバーに説明を表示"
+    },
+    "badges": {
+      "title": "壁紙カード Badge 表示順",
+      "description": "ドラッグまたは矢印で順序を変え、各 Badge を個別に切り替えます。",
+      "moveUp": "上へ",
+      "moveDown": "下へ",
+      "items": {
+        "type": "タイプ",
+        "dynamic": "動的/静的",
+        "music": "音楽",
+        "reactive": "オーディオ反応",
+        "approved": "おすすめ",
+        "resolution": "解像度",
+        "compatibility": "互換性"
+      }
+    },
+    "iconColor": {
+      "description": "バーウィジェットのアイコンに使う色",
+      "label": "アイコンの色"
     },
     "units": {
       "fps": " FPS",
-      "percent": " %",
-      "minutes": " 分"
-    },
-    "wallpapersFolder": {
-      "label": "壁紙ソースディレクトリ",
-      "description": "壁紙プロジェクトフォルダーを含むディレクトリ",
-      "placeholder": "~/.local/share/Steam/steamapps/workshop/content/431960",
-      "scan": "Steam ワークショップディレクトリを自動検出"
-    },
-    "assetsDir": {
-      "label": "Wallpaper Engine 資産ディレクトリ",
-      "description": "任意: linux-wallpaperengine が使用する assets パス",
-      "placeholder": "~/.local/share/wallpaperengine/assets"
+      "minutes": " 分",
+      "percent": " %"
     },
     "wallpaperScanCacheMinutes": {
-      "label": "壁紙スキャンキャッシュ時間",
-      "description": "パネルを開くとき、この分数を超えていなければキャッシュ済みの壁紙一覧を再利用します"
+      "description": "パネルを開くとき、この分数を超えていなければキャッシュ済みの壁紙一覧を再利用します",
+      "label": "壁紙スキャンキャッシュ時間"
     },
-    "defaultScaling": {
-      "label": "拡大縮小モード",
-      "description": "カスタム値が未設定のときに使う既定モード"
-    },
-    "defaultClamp": {
-      "label": "クランプモード",
-      "description": "壁紙を描画するときに使う既定の境界処理モード"
-    },
-    "defaultFps": {
-      "label": "FPS 制限",
-      "description": "壁紙で使う既定のフレームレート上限",
-      "placeholder": "30"
-    },
-    "defaultNoFullscreenPause": {
-      "label": "フルスクリーン時の一時停止を防止",
-      "description": "フルスクリーンアプリ実行中に一時停止しない"
-    },
-    "defaultFullscreenPauseOnlyActive": {
-      "label": "アクティブなフルスクリーン時のみ一時停止",
-      "description": "（Wayland のみ）フルスクリーンウィンドウがアクティブなときのみ一時停止"
-    },
-    "defaultVolume": {
-      "label": "音量",
-      "description": "壁紙をミュートせずに起動したときに使う音量です"
-    },
-    "defaultMuted": {
-      "label": "ミュートで起動",
-      "description": "壁紙を既定でミュート状態で起動します"
-    },
-    "defaultAudioReactiveEffects": {
-      "label": "オーディオ反応効果",
-      "description": "壁紙が対応している場合、音声処理を既定で有効のままにします"
-    },
-    "defaultNoAutomute": {
-      "label": "他のアプリが音声再生中でもミュートしない",
-      "description": "有効にすると、他のアプリが音を出していても壁紙音声を再生し続けます"
-    },
-    "defaultDisableMouse": {
-      "label": "マウス操作を無効化",
-      "description": "壁紙を既定でマウス入力無効の状態で起動します"
-    },
-    "defaultDisableParallax": {
-      "label": "パララックス効果を無効化",
-      "description": "壁紙を既定でパララックス無効の状態で起動します"
-    },
-    "autoApplyOnStartup": {
-      "label": "起動時に自動適用",
-      "description": "少なくとも 1 つのスクリーンに壁紙が設定されている場合、起動時にエンジンを自動実行"
+    "wallpapersFolder": {
+      "description": "壁纸プロジェクトフォルダーを含むディレクトリ",
+      "label": "壁纸ソースディレクトリ",
+      "placeholder": "~/.local/share/Steam/steamapps/workshop/content/431960",
+      "scan": "Steam ワークショップディレクトリを自動検出"
+    }
+  },
+  "toast": {
+    "refreshSkippedNoFolder": "壁紙ソースディレクトリが空のため、壁紙一覧を更新できません",
+    "refreshedWallpapers": "壁紙一覧を更新しました：{count} 件",
+    "reloadSkippedNoWallpaper": "壁紙が設定されていないため、再読み込みする内容がありません",
+    "reloaded": "壁紙エンジンを再読み込みしました",
+    "stopped": "壁紙エンジンを停止しました",
+    "wallpaperColorsApplied": "壁紙の色を Noctalia に適用しました",
+    "wallpaperColorsCached": "このディスプレイ用の壁紙カラーを保存しました",
+    "wallpaperColorsEngineUnavailable": "壁紙の色を生成するには linux-wallpaperengine が利用可能である必要があります",
+    "wallpaperColorsFailed": "選択した壁紙から色を抽出できませんでした",
+    "wallpaperColorsNoSelection": "壁紙の色を適用する前に壁紙を選択してください"
+  },
+  "widget": {
+    "tooltip": {
+      "checking": "linux-wallpaperengine を確認中",
+      "ready": "壁紙エンジンパネルを開く",
+      "running": "壁紙エンジンが設定を適用中です",
+      "unavailable": "linux-wallpaperengine がインストールされていません"
     }
   }
 }

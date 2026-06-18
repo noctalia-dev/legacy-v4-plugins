@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # color-picker.sh <output-png>
 # Picks a color from screen, outputs "R G B" to stdout.
 # Uses hyprpicker (preferred) or falls back to slurp+grim.
@@ -6,17 +6,26 @@ FILE="$1"
 [ -z "$FILE" ] && exit 1
 # ── hyprpicker ────────────────────────────────────────────────────────────────
 if command -v hyprpicker >/dev/null 2>&1; then
-    PRE_POS=$(hyprctl cursorpos 2>/dev/null)
-    HEX=$(hyprpicker --no-fancy --format=hex --radius=65 2>/dev/null) || exit 1
+    HYPRCTL=$(command -v hyprctl 2>/dev/null || true)
+    if [ -n "$HYPRCTL" ]; then
+        PRE_POS=$(hyprctl cursorpos 2>/dev/null)
+    fi
+    if hyprpicker --help 2>&1 | grep -q '\-\-radius'; then
+        HEX=$(hyprpicker --no-fancy --format=hex --radius=65 2>/dev/null) || exit 1
+    else
+        HEX=$(hyprpicker --no-fancy --format=hex 2>/dev/null) || exit 1
+    fi
     HEX="${HEX#\#}"
     [ ${#HEX} -eq 6 ] || exit 1
     R=$((16#${HEX:0:2}))
     G=$((16#${HEX:2:2}))
     B=$((16#${HEX:4:2}))
-    sleep 0.08
-    POST_POS=$(hyprctl cursorpos 2>/dev/null)
+    if [ -n "$HYPRCTL" ]; then
+        sleep 0.08
+        POST_POS=$(hyprctl cursorpos 2>/dev/null)
+    fi
     CAPTURED=0
-    if command -v grim >/dev/null 2>&1; then
+    if [ -n "$HYPRCTL" ] && command -v grim >/dev/null 2>&1; then
         # If cursor moved, we have the real pick position
         # If it didn't move, hyprland restored it — coordinates are useless, skip capture
         if [ "$PRE_POS" != "$POST_POS" ] && [ -n "$POST_POS" ]; then

@@ -4,6 +4,8 @@
 # Output:
 #   First matching workshop directory path, or empty output if not found
 
+set -eu
+
 for common in "$HOME/.steam/steam/steamapps/common" \
               "$HOME/.local/share/Steam/steamapps/common" \
               "$HOME/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common" \

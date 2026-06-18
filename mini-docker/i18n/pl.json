@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Ustawienia widgetu"
+  },
   "settings": {
+    "active_color_description": "Kolor wskaźnika stanu, gdy jest aktywny (uruchomiony)",
+    "active_color_label": "Kolor aktywnego wskaźnika",
     "current_value": "Wybrano: {value} ms",
     "default_network_description": "Domyślna sieć do użycia podczas uruchamiania obrazów",
     "default_network_label": "Domyślna Sieć",
     "general": "Ogólne",
+    "icon_color_description": "Zmień kolor ikony widgetu na pasku",
+    "icon_color_label": "Kolor ikony",
+    "inactive_color_description": "Kolor wskaźnika stanu, gdy jest nieaktywny (zatrzymany)",
+    "inactive_color_label": "Kolor nieaktywnego wskaźnika",
     "refresh_interval_description": "Jak często wtyczka sprawdza zmiany stanu kontenera",
     "refresh_interval_label": "Interwał odświeżania",
+    "status_state_always": "Zawsze pokazuj",
+    "status_state_description": "Wybierz sposób wyświetlania kropki wskaźnika stanu",
+    "status_state_hidden": "Ukryj całkowicie",
+    "status_state_label": "Stan wskaźnika",
+    "status_state_running_only": "Pokaż gdy uruchomiony",
     "title": "Ustawienia Menedżera Kontenerów"
   },
   "tooltip": {

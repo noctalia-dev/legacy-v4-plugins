@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # measure.sh — capture a measurement overlay
 # Args: sx sy rx ry rw rh lx1 ly1 lx2 ly2 lw lh color scale dest_dir full_path
 set -euo pipefail

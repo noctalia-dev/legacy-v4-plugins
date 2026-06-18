@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Args: $1=gx $2=gy $3=gw $4=gh $5=lang $6=upscale_flag $7=psm
 
 GX="$1"; GY="$2"; GW="$3"; GH="$4"

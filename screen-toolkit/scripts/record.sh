@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # record.sh <action> [args...]
 #
 # Actions:

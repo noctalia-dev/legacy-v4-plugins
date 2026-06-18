@@ -1,77 +1,101 @@
 {
   "actions": {
-    "widget-settings": "Widget settings"
+    "widget-settings": "Widget settings",
+    "toggle-panel": "Toggle Monitor"
+  },
+  "panel": {
+    "title": "Network Activity",
+    "close": "Close",
+    "download": "Download",
+    "upload": "Upload"
   },
   "settings": {
+    "layout": {
+      "label": "Layout",
+      "desc": "Arrange cells in a row (horizontal) or a 2×2 grid (vertical).",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "slots": {
+      "label": "Cell Assignment",
+      "desc": "Choose what each cell displays. No duplicates possible. E.g., use empty slots to only show icons."
+    },
+    "slot": {
+      "txIcon": "TX Icon",
+      "rxIcon": "RX Icon",
+      "txSpeed": "TX Speed",
+      "rxSpeed": "RX Speed",
+      "none": "Empty"
+    },
+    "iconType": {
+      "label": "Icon Type",
+      "desc": "Choose the icon style used for the TX/RX indicators."
+    },
     "byteThresholdActive": {
-      "desc": "Set the activity threshold in bytes per second (B/s).",
-      "label": "Show Active Threshold"
+      "label": "Activity Threshold",
+      "desc": "Traffic below this value (B/s) is shown as inactive."
     },
-    "colorRx": {
-      "desc": "Set the download (RX) icon color when above the threshold.",
-      "label": "RX Active"
+    "fontSizeModifier": {
+      "label": "Font Size",
+      "desc": "Scale the text size relative to the default."
     },
-    "colorSilent": {
-      "desc": "Set the icon color when traffic is below the threshold.",
-      "label": "RX/TX Inactive"
+    "iconSizeModifier": {
+      "label": "Icon Size",
+      "desc": "Scale the icon size relative to the default."
     },
-    "colorText": {
-      "desc": "Set the text color used for both RX and TX values.",
-      "label": "Text"
-    },
-    "colorTx": {
-      "desc": "Set the upload (TX) icon color when above the threshold.",
-      "label": "TX Active"
-    },
-    "contentMargin": {
-      "desc": "Horizontal padding on both sides of the widget content.",
-      "label": "Content Margin"
-    },
-    "customFontBold": {
-      "desc": "Render speed values in bold.",
-      "label": "Bold"
+    "useCustomFont": {
+      "label": "Custom Font",
+      "desc": "Override the default font for speed values."
     },
     "customFontFamily": {
-      "desc": "Choose a font for the speed values.",
       "label": "Font",
+      "desc": "Choose a font for the speed values.",
       "placeholder": "Select a font",
       "searchPlaceholder": "Search fonts…"
     },
+    "customFontBold": {
+      "label": "Bold",
+      "desc": "Render speed values in bold."
+    },
     "customFontItalic": {
-      "desc": "Render speed values in italic.",
-      "label": "Italic"
-    },
-    "fontSizeModifier": {
-      "desc": "Scale the text size relative to the default.",
-      "label": "Font Size Modifier"
-    },
-    "horizontalLayout": {
-      "desc": "Place TX and RX values side by side instead of stacked.",
-      "label": "Horizontal Layout"
-    },
-    "iconSizeModifier": {
-      "desc": "Scale the icon size relative to the default.",
-      "label": "Icon Size Modifier"
-    },
-    "iconType": {
-      "desc": "Choose the icon style used for the TX/RX indicators.",
-      "label": "Icon Type"
-    },
-    "showNumbers": {
-      "desc": "Display the current RX/TX speeds as numbers.",
-      "label": "Show Values"
-    },
-    "spacingInbetween": {
-      "desc": "Adjust the spacing between RX/TX elements.",
-      "label": "Vertical Spacing"
+      "label": "Italic",
+      "desc": "Render speed values in italic."
     },
     "useCustomColors": {
-      "desc": "Enable custom colors instead of theme defaults.",
-      "label": "Custom Colors"
+      "label": "Custom Colors",
+      "desc": "Enable custom colors instead of theme defaults."
     },
-    "useCustomFont": {
-      "desc": "Override the default font for speed values.",
-      "label": "Custom Font"
+    "colorTx": {
+      "label": "TX Active",
+      "desc": "Upload icon color when above the threshold."
+    },
+    "colorRx": {
+      "label": "RX Active",
+      "desc": "Download icon color when above the threshold."
+    },
+    "colorSilent": {
+      "label": "Inactive",
+      "desc": "Icon color when traffic is below the threshold."
+    },
+    "colorText": {
+      "label": "Text",
+      "desc": "Text color for speed values."
+    },
+    "paddingLeft": {
+      "label": "Padding Left",
+      "desc": "Padding of the content on the left."
+    },
+    "paddingRight": {
+      "label": "Padding Right",
+      "desc": "Padding of the content on the right."
+    },
+    "columnSpacing": {
+      "label": "Column Spacing",
+      "desc": "Spacing between columns in grid layout."
+    },
+    "rowSpacing": {
+      "label": "Row Spacing",
+      "desc": "Spacing between rows in grid layout (has no effect in horizontal layout)."
     }
   }
 }

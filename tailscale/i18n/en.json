@@ -74,7 +74,9 @@
       "message": "Please set a terminal command in plugin settings"
     },
     "login-browser-opened": "Authentication page opened in browser",
-    "login-failed": "Login failed"
+    "login-failed": "Login failed",
+    "account-switched": "Switched Tailscale account",
+    "account-switch-failed": "Failed to switch Tailscale account"
   },
   "panel": {
     "title": "Tailscale Network",

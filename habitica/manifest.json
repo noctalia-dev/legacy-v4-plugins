@@ -1,0 +1,45 @@
+{
+  "id": "habitica",
+  "name": "Habitica for Noctalia",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.7.1",
+  "author": "vasqs",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Habitica dashboard and task scorer for Noctalia Shell with official avatar sprite rendering.",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Productivity",
+    "Network"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "habiticaUserId": "",
+      "habiticaApiToken": "",
+      "refreshInterval": 300,
+      "maxDailies": 8,
+      "maxTodos": 8,
+      "maxHabits": 8,
+      "showHabits": false,
+      "showChecklistItems": false,
+      "enableTagFilter": false,
+      "selectedTagId": "",
+      "showNotificationBadge": true,
+      "colorizationEnabled": false,
+      "colorizationIcon": "Primary",
+      "colorizationBadge": "Error",
+      "colorizationBadgeText": "Primary",
+      "_habiticaCache": ""
+    }
+  }
+}

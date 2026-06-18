@@ -279,6 +279,33 @@ ColumnLayout {
                 }
             }
 
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: Style.marginM
+                NToggle {
+                    checked: editSettings?.providers?.gemini?.enabled ?? false
+                    onToggled: value => {
+                        if (!editSettings.providers)
+                            editSettings.providers = {};
+                        if (!editSettings.providers.gemini)
+                            editSettings.providers.gemini = {};
+                        editSettings.providers.gemini.enabled = value;
+                        editSettingsChanged();
+                    }
+                }
+                NText {
+                    text: pluginApi?.tr("settings.providers.gemini.name")
+                    pointSize: Style.fontSizeM
+                    color: Color.mOnSurface
+                    Layout.fillWidth: true
+                }
+                NText {
+                    text: pluginApi?.tr("settings.providers.gemini.source")
+                    pointSize: Style.fontSizeXS
+                    color: Color.mOnSurfaceVariant
+                }
+            }
+
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: Style.marginXS

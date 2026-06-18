@@ -74,7 +74,9 @@
       "message": "Bitte leg einen Terminalbefehl in den Plugin Einstellungen fest"
     },
     "login-browser-opened": "Authentifizierungsseite im Browser geöffnet",
-    "login-failed": "Anmeldung fehlgeschlagen"
+    "login-failed": "Anmeldung fehlgeschlagen",
+    "account-switched": "Tailscale-Konto gewechselt",
+    "account-switch-failed": "Konnte Tailscale-Konto nicht wechseln"
   },
   "panel": {
     "title": "Tailscale Netzwerk",

@@ -49,6 +49,12 @@ Item {
             out.push({ key: transLangs[i].code, name: transLangs[i].name })
         return out
     }
+    // Reads from plugin settings — user can set a custom engine (DDG, Brave, etc.)
+    // Falls back to Google if left empty.
+    readonly property string searchEngineUrl: {
+        var custom = pluginApi?.pluginSettings?.searchEngineUrl ?? ""
+        return custom.trim() !== "" ? custom : "https://www.google.com/search?q="
+    }
     Process { id: clipProc }
     function _copy(text) {
         if (!text || text === "") return
@@ -141,7 +147,7 @@ Item {
                     }
                     MouseArea {
                         id: _ocrSearchMA; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
-                        onClicked: Qt.openUrlExternally("https://www.google.com/search?q=" + encodeURIComponent(root.ocrResult.trim()))
+                        onClicked: Qt.openUrlExternally(root.searchEngineUrl + encodeURIComponent(root.ocrResult.trim()))
                     }
                 }
                 Rectangle {
@@ -256,3 +262,4 @@ Item {
         }
     }
 }
+

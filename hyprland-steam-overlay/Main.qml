@@ -26,6 +26,18 @@ Item {
   readonly property real mainWidthPercent: cfg.mainWidthPercent ?? defaults.mainWidthPercent ?? 60
   readonly property real chatWidthPercent: cfg.chatWidthPercent ?? defaults.chatWidthPercent ?? 25
 
+  // When true, the plugin does NOT float/resize/position windows itself.
+  // Instead it relies on a Hyprland custom Lua layout (lua:steam) assigned
+  // to the special:steam workspace. See steam-layout.lua + README.
+  readonly property bool useCustomLayout: cfg.useCustomLayout ?? defaults.useCustomLayout ?? false
+
+  // Hyprland >= 0.55 deprecated hyprlang (.conf) in favour of Lua (.lua).
+  // Under a Lua config, `hyprctl dispatch <name> <args>` is parsed AS LUA
+  // (hl.dispatch(<text>)), so the classic syntax errors out. We probe once
+  // at startup and emit the correct syntax for whichever config is active.
+  property bool luaMode: false
+  property bool luaModeProbed: false
+
   // Calculate pixel values from percentages (updates automatically when screen size changes)
   readonly property int topMargin: Math.round(screenHeight * (topMarginPercent / 100))
   readonly property int windowHeight: Math.round(screenHeight * (windowHeightPercent / 100))
@@ -47,6 +59,7 @@ Item {
     if (pluginApi) {
       checkSteam.running = true;
     }
+    detectConfigMode.running = true;
     detectResolution.running = true;
     monitorTimer.start();
   }
@@ -67,6 +80,28 @@ Item {
     id: launchSteam
     command: ["steam", "steam://open/main"]
     running: false
+  }
+
+  // Probe whether Hyprland runs a Lua config (hyprctl dispatch parsed as Lua).
+  // On Lua config `hl.dsp.no_op()` returns "ok"; on hyprlang it errors.
+  Process {
+    id: detectConfigMode
+    command: ["hyprctl", "dispatch", "hl.dsp.no_op()"]
+    running: false
+
+    property string out: ""
+
+    stdout: SplitParser {
+      onRead: data => {
+        detectConfigMode.out += data;
+      }
+    }
+
+    onExited: (exitCode, exitStatus) => {
+      root.luaMode = (exitCode === 0 && detectConfigMode.out.trim() === "ok");
+      root.luaModeProbed = true;
+      detectConfigMode.out = "";
+    }
   }
 
   // Detect screen resolution
@@ -138,7 +173,7 @@ Item {
 
     onExited: (exitCode, exitStatus) => {
       if (exitCode === 0) {
-        showWorkspace.running = true;
+        root.doShowWorkspace();
       }
     }
   }
@@ -146,15 +181,17 @@ Item {
   // Show special workspace (only when opening overlay)
   Process {
     id: showWorkspace
-    command: ["hyprctl", "dispatch", "togglespecialworkspace", "steam"]
+    command: ["bash", "-c", ""]
     running: false
 
     onExited: (exitCode, exitStatus) => {
       if (exitCode === 0) {
         overlayActive = true;
-        Qt.callLater(() => {
-          focusAdditionalWindows.running = true;
-        });
+        if (!root.useCustomLayout) {
+          Qt.callLater(() => {
+            focusAdditionalWindows.running = true;
+          });
+        }
       }
     }
   }
@@ -162,7 +199,7 @@ Item {
   // Hide special workspace (only when closing overlay)
   Process {
     id: hideWorkspace
-    command: ["hyprctl", "dispatch", "togglespecialworkspace", "steam"]
+    command: ["bash", "-c", ""]
     running: false
 
     onExited: (exitCode, exitStatus) => {
@@ -206,7 +243,7 @@ Item {
 
           // Bring additional windows to top (without focusing/moving cursor)
           if (!isMain) {
-            focusCommands.push("hyprctl dispatch alterzorder top,address:" + addr);
+            focusCommands.push(root.hdAlterTop(addr));
           }
         }
 
@@ -292,9 +329,11 @@ Item {
           var commands = [];
           for (var j = 0; j < windowsToMove.length; j++) {
             var addr = windowsToMove[j];
-            commands.push("hyprctl dispatch movetoworkspacesilent special:steam,address:" + addr);
-            commands.push("hyprctl dispatch setfloating address:" + addr);
-            commands.push("hyprctl dispatch alterzorder top,address:" + addr);
+            commands.push(root.hdMoveToSpecial(addr));
+            if (!root.useCustomLayout) {
+              commands.push(root.hdSetFloating(addr));
+              commands.push(root.hdAlterTop(addr));
+            }
           }
           moveNewWindows.command = ["bash", "-c", commands.join(" && ")];
           if (!moveNewWindows.running) {
@@ -345,9 +384,12 @@ Item {
             continue;
           }
 
-          // Move all Steam windows to overlay and set as floating
-          commands.push("hyprctl dispatch movetoworkspacesilent special:steam,address:" + addr);
-          commands.push("hyprctl dispatch setfloating address:" + addr);
+          // Move all Steam windows to the overlay workspace. With the custom
+          // Lua layout active the layout tiles them, so we must NOT float.
+          commands.push(root.hdMoveToSpecial(addr));
+          if (!root.useCustomLayout) {
+            commands.push(root.hdSetFloating(addr));
+          }
         }
 
         if (commands.length > 0) {
@@ -368,7 +410,10 @@ Item {
     onExited: (exitCode, exitStatus) => {
       if (exitCode === 0) {
         Qt.callLater(() => {
-          if (steamWindows.length > 0) {
+          if (root.useCustomLayout) {
+            // Hyprland's lua:steam layout arranges the windows; just reveal.
+            root.doShowWorkspace();
+          } else if (steamWindows.length > 0) {
             moveWindowsToOverlay();
           }
         });
@@ -377,6 +422,55 @@ Item {
   }
 
 
+  // ---- Dual-mode hyprctl dispatch builders -------------------------------
+  // Each returns a full `hyprctl dispatch ...` shell fragment, using Lua
+  // (hl.dsp.*) syntax under a Lua config or classic syntax under hyprlang.
+  function hdToggleSpecial() {
+    return root.luaMode
+      ? "hyprctl dispatch 'hl.dsp.workspace.toggle_special(\"steam\")'"
+      : "hyprctl dispatch togglespecialworkspace steam";
+  }
+
+  function hdMoveToSpecial(addr) {
+    return root.luaMode
+      ? "hyprctl dispatch 'hl.dsp.window.move({ workspace = \"special:steam\", follow = false, window = \"address:" + addr + "\" })'"
+      : "hyprctl dispatch movetoworkspacesilent special:steam,address:" + addr;
+  }
+
+  function hdSetFloating(addr) {
+    return root.luaMode
+      ? "hyprctl dispatch 'hl.dsp.window.float({ action = \"enable\", window = \"address:" + addr + "\" })'"
+      : "hyprctl dispatch setfloating address:" + addr;
+  }
+
+  function hdAlterTop(addr) {
+    return root.luaMode
+      ? "hyprctl dispatch 'hl.dsp.window.alter_zorder({ mode = \"top\", window = \"address:" + addr + "\" })'"
+      : "hyprctl dispatch alterzorder top,address:" + addr;
+  }
+
+  function hdResize(w, h, addr) {
+    return root.luaMode
+      ? "hyprctl dispatch 'hl.dsp.window.resize({ x = " + w + ", y = " + h + ", exact = true, window = \"address:" + addr + "\" })'"
+      : "hyprctl dispatch resizewindowpixel exact " + w + " " + h + ",address:" + addr;
+  }
+
+  function hdMovePixel(x, y, addr) {
+    return root.luaMode
+      ? "hyprctl dispatch 'hl.dsp.window.move({ x = " + x + ", y = " + y + ", window = \"address:" + addr + "\" })'"
+      : "hyprctl dispatch movewindowpixel exact " + x + " " + y + ",address:" + addr;
+  }
+
+  function doShowWorkspace() {
+    showWorkspace.command = ["bash", "-c", hdToggleSpecial()];
+    showWorkspace.running = true;
+  }
+
+  function doHideWorkspace() {
+    hideWorkspace.command = ["bash", "-c", hdToggleSpecial()];
+    hideWorkspace.running = true;
+  }
+
   function toggleOverlay() {
     if (!steamRunning) {
       launchSteam.running = true;
@@ -384,7 +478,7 @@ Item {
     }
 
     if (overlayActive) {
-      hideWorkspace.running = true;
+      root.doHideWorkspace();
     } else {
 
       // Show overlay - detect main windows first, then all windows
@@ -426,8 +520,8 @@ Item {
       }
 
       // Position and size the 3 main windows (they are already floating and in overlay)
-      commands.push("hyprctl dispatch resizewindowpixel exact " + w + " " + h + ",address:" + addr);
-      commands.push("hyprctl dispatch movewindowpixel exact " + x + " " + y + ",address:" + addr);
+      commands.push(root.hdResize(w, h, addr));
+      commands.push(root.hdMovePixel(x, y, addr));
     }
 
     if (commands.length > 0) {

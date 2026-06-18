@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # annotate.sh
 # Usage:
 #   annotate.sh save-overlay-auto <base> <overlay> <filename> <ss_dir> <pic_dir>

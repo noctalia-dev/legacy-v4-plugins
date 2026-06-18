@@ -16,6 +16,7 @@ A Tailscale status plugin for Noctalia that shows your Tailscale connection stat
 - **Node Search**: Optionally filter the panel node list by hostname, DNS name, Tailscale name, IP address, or OS
 - **Taildrop Receive**: Toggle file receiving from the panel
 - **Exit Node Management**: Activate/deactivate exit nodes from the panel
+- **Account Switching**: When multiple Tailscale accounts are logged in locally, a dropdown appears in the panel to switch between them via `tailscale switch`
 - **Context Menu**: Right-click for additional options (connect, disconnect, refresh, settings)
 - **Configurable Refresh**: Customize how often the plugin checks Tailscale status
 - **Compact Mode**: Option to show only the icon for a minimal display
@@ -94,6 +95,7 @@ qs -c noctalia-shell ipc call plugin:tailscale <command>
 | `status` | Get current Tailscale status | `qs -c noctalia-shell ipc call plugin:tailscale status` |
 | `refresh` | Force refresh Tailscale status | `qs -c noctalia-shell ipc call plugin:tailscale refresh` |
 | `login` | Trigger Tailscale login (opens browser) | `qs -c noctalia-shell ipc call plugin:tailscale login` |
+| `switchAccount` | Switch to a Tailscale account by id (see `tailscale switch --list`) | `qs -c noctalia-shell ipc call plugin:tailscale switchAccount a585` |
 | `receive` | Fetch any pending Taildrop files | `qs -c noctalia-shell ipc call plugin:tailscale receive` |
 
 ## Usage

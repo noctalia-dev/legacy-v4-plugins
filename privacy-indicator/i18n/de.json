@@ -30,6 +30,10 @@
     "micFilterRegex": {
       "desc": "Regex Muster zum Herausfiltern von Mikrofon-Apps. Entsprechende Apps werden vollständig von der Erkennung ausgeschlossen.",
       "label": "Regex für Mikrofonfilter"
+    },
+    "camFilterRegex": {
+      "desc": "Regex-Muster zum Herausfiltern von Kamera-Apps. Entsprechende Apps werden vollständig von der Erkennung ausgeschlossen.",
+      "label": "Regex für Kamerafilter"
     }
   },
   "tooltip": {

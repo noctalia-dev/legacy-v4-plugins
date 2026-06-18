@@ -7,7 +7,15 @@ ColumnLayout {
     id: root
 
     property var pluginApi: null
-    property int valueRefreshInterval: (pluginApi && pluginApi.pluginSettings) ? pluginApi.pluginSettings.refreshInterval : 5000
+
+    property var cfg: pluginApi?.pluginSettings || ({})
+    property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+
+    property int valueRefreshInterval: cfg.refreshInterval ?? defaults.refreshInterval ?? 5000
+    property string iconColor: cfg.iconColor ?? defaults.iconColor ?? "none"
+    property string statusState: cfg.statusState ?? defaults.statusState ?? "all"
+    property string activeColor: cfg.activeColor ?? defaults.activeColor ?? "success"
+    property string inactiveColor: cfg.inactiveColor ?? defaults.inactiveColor ?? "error"
 
     function saveSettings() {
         if (!pluginApi) {
@@ -15,6 +23,10 @@ ColumnLayout {
             return ;
         }
         pluginApi.pluginSettings.refreshInterval = root.valueRefreshInterval;
+        pluginApi.pluginSettings.iconColor = root.iconColor;
+        pluginApi.pluginSettings.statusState = root.statusState;
+        pluginApi.pluginSettings.activeColor = root.activeColor;
+        pluginApi.pluginSettings.inactiveColor = root.inactiveColor;
         pluginApi.saveSettings();
         Logger.i("MiniDocker", "Settings saved successfully");
     }
@@ -73,6 +85,52 @@ ColumnLayout {
             font.pointSize: Style.fontSizeS
         }
 
+    }
+
+    NColorChoice {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.icon_color_label")
+        description: pluginApi?.tr("settings.icon_color_description")
+        currentKey: root.iconColor
+        onSelected: key => root.iconColor = key
+    }
+
+    NColorChoice {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.active_color_label")
+        description: pluginApi?.tr("settings.active_color_description")
+        currentKey: root.activeColor
+        onSelected: key => root.activeColor = key
+    }
+
+    NColorChoice {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.inactive_color_label")
+        description: pluginApi?.tr("settings.inactive_color_description")
+        currentKey: root.inactiveColor
+        onSelected: key => root.inactiveColor = key
+    }
+
+    NComboBox {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.status_state_label")
+        description: pluginApi?.tr("settings.status_state_description")
+        model: [
+            {
+                "key": "all",
+                "name": pluginApi?.tr("settings.status_state_always")
+            },
+            {
+                "key": "running-only",
+                "name": pluginApi?.tr("settings.status_state_running_only")
+            },
+            {
+                "key": "hidden",
+                "name": pluginApi?.tr("settings.status_state_hidden")
+            }
+        ]
+        currentKey: root.statusState
+        onSelected: key => root.statusState = key
     }
 
 }

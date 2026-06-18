@@ -413,7 +413,7 @@ Item {
             pointSize: Style.fontSizeS
             color: mainIpMouseArea.containsMouse ? Color.mPrimary : Color.mOnSurfaceVariant
             font.family: Settings.data.ui.fontFixed
-            
+
             MouseArea {
               id: mainIpMouseArea
               anchors.fill: parent
@@ -430,6 +430,21 @@ Item {
                 }
               }
             }
+          }
+
+          NComboBox {
+            Layout.fillWidth: true
+            visible: (mainInstance?.accounts?.length ?? 0) >= 2
+            model: (mainInstance?.accounts || []).map(function (a) {
+              return { key: a.id, name: a.tailnet || a.account || a.nickname || a.id }
+            })
+            currentKey: mainInstance?.currentAccountId || ""
+            onSelected: function (key) {
+              if (mainInstance) {
+                mainInstance.switchAccount(key)
+              }
+            }
+            Component.onCompleted: comboBox.Layout.fillWidth = true
           }
 
           // Exit node status
@@ -559,6 +574,12 @@ Item {
             interactive: contentHeight > height
             boundsBehavior: Flickable.StopAtBounds
             pressDelay: 0
+            enabled: !(mainInstance?.accountSwitchInProgress ?? false)
+            opacity: enabled ? 1.0 : 0.4
+
+            Behavior on opacity {
+              NumberAnimation { duration: Style.animationFast }
+            }
 
               ColumnLayout {
               id: peerListColumn
