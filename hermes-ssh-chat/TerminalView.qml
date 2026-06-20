@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Quickshell
 import qs.Commons
 import "." as Local
 
@@ -535,6 +536,12 @@ Item {
         Keys.onPressed: event => {
           if (!root.sessionActive) return;
           if (event.modifiers & Qt.ControlModifier) {
+            if (event.key === Qt.Key_V) {
+              const clip = String(Quickshell.clipboardText || "");
+              if (clip.length > 0) root.input(clip);
+              event.accepted = true;
+              return;
+            }
             if (event.key === Qt.Key_C) { root.input("\x03"); event.accepted = true; }
             else if (event.key === Qt.Key_D) { root.input("\x04"); event.accepted = true; }
             else if (event.key === Qt.Key_L) { root.input("\x0c"); event.accepted = true; }
