@@ -38,7 +38,7 @@ Item {
   GlobalShortcut {
     appid: "noctalia"
     name: root.shortcutName
-    description: "Toggle the Hermes SSH terminal panel"
+    description: pluginApi?.tr("shortcut.description") ?? "Toggle the Hermes SSH terminal panel"
     onPressed: root.togglePanel()
   }
 }

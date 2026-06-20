@@ -79,5 +79,8 @@
   "widget": {
     "label": "Hermes",
     "connecting": "SSH"
+  },
+  "shortcut": {
+    "description": "Toggle the Hermes SSH terminal panel"
   }
 }
