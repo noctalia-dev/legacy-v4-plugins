@@ -63,6 +63,10 @@
     },
     "showBarText": {
       "label": "Show text in bar"
+    },
+    "toggleShortcut": {
+      "label": "Toggle shortcut name (Hyprland)",
+      "desc": "Hyprland global shortcut id. Bind it in your config: bind = SUPER, H, global, noctalia:{name}. Other compositors: use the IPC command (see README)."
     }
   },
   "status": {

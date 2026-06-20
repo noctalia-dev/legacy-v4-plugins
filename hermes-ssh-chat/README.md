@@ -28,6 +28,53 @@ Install from Noctalia's plugin browser when available, then:
 2. Add the bar widget in Settings -> Bar.
 3. Open the widget and configure the SSH host, port, and user.
 
+## Keyboard shortcut
+
+You bind a physical key in your compositor; the plugin handles the toggle. The
+chosen key opens and closes the panel, and an active SSH session is focused on
+open so you can type immediately.
+
+### IPC bind (works on every compositor — recommended)
+
+The plugin exposes IPC commands (`toggle`, `open`, `close`). Bind a key to call:
+
+```bash
+qs -c noctalia-shell ipc call plugin:hermes-ssh-chat toggle
+```
+
+**Niri** (`config.kdl`) — add inside your `binds { ... }` block:
+
+```kdl
+binds {
+    Mod+H { spawn "qs" "-c" "noctalia-shell" "ipc" "call" "plugin:hermes-ssh-chat" "toggle"; }
+}
+```
+
+**Hyprland** (`hyprland.conf`):
+
+```ini
+bind = SUPER, H, exec, qs -c noctalia-shell ipc call plugin:hermes-ssh-chat toggle
+```
+
+**Mango**:
+
+```bash
+bind=SUPER,H,spawn_shell,noctalia-shell ipc call plugin:hermes-ssh-chat toggle
+```
+
+### Hyprland global shortcut (optional — uses the settings field)
+
+Only on Hyprland (needs `hyprland_global_shortcuts_v1`). The plugin registers a
+global shortcut named in **Settings -> Plugins -> Hermes SSH Terminal -> Toggle
+shortcut name** (default `hermes-toggle`). Bind a key to it:
+
+```ini
+bind = SUPER, H, global, noctalia:hermes-toggle
+```
+
+Use the same name on both sides. On Niri/Mango this method is inert — use the
+IPC bind above.
+
 ## Settings
 
 | Setting | Description |
@@ -41,6 +88,7 @@ Install from Noctalia's plugin browser when available, then:
 | Connect on startup | Starts the SSH session when Noctalia loads the plugin. |
 | Remember last target | Saves the last host, port, and user after connecting. |
 | Show text in bar | Shows the Hermes label next to the bar icon. |
+| Toggle shortcut name | Hyprland global shortcut id used to open/close the panel (default `hermes-toggle`). |
 
 ## Troubleshooting
 

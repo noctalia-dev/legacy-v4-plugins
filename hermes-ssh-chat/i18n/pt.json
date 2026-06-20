@@ -63,6 +63,10 @@
     },
     "showBarText": {
       "label": "Mostrar texto na barra"
+    },
+    "toggleShortcut": {
+      "label": "Nome do atalho de abrir/fechar (Hyprland)",
+      "desc": "Id do atalho global do Hyprland. Vincule no seu config: bind = SUPER, H, global, noctalia:{name}. Outros compositores: use o comando IPC (veja o README)."
     }
   },
   "status": {

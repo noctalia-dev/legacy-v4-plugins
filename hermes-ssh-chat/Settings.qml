@@ -21,6 +21,7 @@ ColumnLayout {
   property int valueTerminalRows: cfg.terminalRows ?? defaults.terminalRows ?? 32
   property int valueTerminalFontSize: cfg.terminalFontSize ?? defaults.terminalFontSize ?? 11
   property bool valueShowBarText: cfg.showBarText ?? defaults.showBarText ?? true
+  property string valueToggleShortcutName: cfg.toggleShortcutName ?? defaults.toggleShortcutName ?? "hermes-toggle"
 
   function saveSettings() {
     if (!pluginApi)
@@ -37,6 +38,7 @@ ColumnLayout {
     pluginApi.pluginSettings.terminalRows = root.valueTerminalRows;
     pluginApi.pluginSettings.terminalFontSize = root.valueTerminalFontSize;
     pluginApi.pluginSettings.showBarText = root.valueShowBarText;
+    pluginApi.pluginSettings.toggleShortcutName = root.valueToggleShortcutName;
     pluginApi.saveSettings();
   }
 
@@ -131,5 +133,14 @@ ColumnLayout {
     label: pluginApi?.tr("settings.showBarText.label")
     checked: root.valueShowBarText
     onToggled: checked => root.valueShowBarText = checked
+  }
+
+  NTextInput {
+    Layout.fillWidth: true
+    label: pluginApi?.tr("settings.toggleShortcut.label")
+    description: pluginApi?.tr("settings.toggleShortcut.desc", { name: root.valueToggleShortcutName })
+    placeholderText: "hermes-toggle"
+    text: root.valueToggleShortcutName
+    onTextChanged: root.valueToggleShortcutName = text
   }
 }
