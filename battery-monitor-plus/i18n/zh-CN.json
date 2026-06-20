@@ -1,0 +1,48 @@
+{
+  "common": {
+    "close": "关闭",
+    "unavailable": "-"
+  },
+  "menu": {
+    "settings": "Battery Monitor Plus 设置"
+  },
+  "panel": {
+    "batteryHealth": "电池健康度",
+    "batteryLevel": "电量",
+    "chargingPower": "充电功率",
+    "currentPower": "当前功耗",
+    "powerProfile": "当前 power profile",
+    "remainingTime": "剩余时间",
+    "status": "状态",
+    "timeUntilFull": "充满时间",
+    "title": "Battery Monitor Plus"
+  },
+  "profile": {
+    "balanced": "balanced",
+    "performance": "performance",
+    "powerSaver": "power-saver",
+    "unavailable": "不可用",
+    "unknown": "未知"
+  },
+  "settings": {
+    "refreshInterval": {
+      "desc": "bar 和 panel 刷新电池功率与时间文本的频率。",
+      "label": "刷新间隔"
+    },
+    "showPowerInBar": {
+      "desc": "在 bar 的原电池样式旁显示当前充电或放电功率。",
+      "label": "bar 显示功耗"
+    },
+    "showTimeInBar": {
+      "desc": "在 bar 的原电池样式旁显示预计充满或耗尽的剩余时间。",
+      "label": "bar 显示剩余时间"
+    }
+  },
+  "status": {
+    "charging": "Charging",
+    "discharging": "Discharging",
+    "fullyCharged": "Fully charged",
+    "noBattery": "未检测到电池",
+    "pluggedIn": "Plugged in"
+  }
+}

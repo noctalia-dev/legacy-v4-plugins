@@ -4,7 +4,10 @@
     "tails": "Zahl"
   },
   "settings": {
-
+    "delay":{
+      "label": "Animationsverzögerung",
+      "description": "Verzögerung zwischen den Bildern"
+    }
   },
   "widget": {
     "tooltip": "Münzwurf"

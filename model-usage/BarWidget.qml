@@ -31,13 +31,18 @@ Item {
             return "\u2014";
         if (barMetric === "usage") {
             const rl = activeProvider.rateLimitPercent ?? -1;
+            const rl2 = activeProvider.secondaryRateLimitPercent ?? -1;
             if (!(rl >= 0)) {
                 const status = String(activeProvider.usageStatusText ?? "");
                 if (status !== "")
                     return status;
                 return "\u2014";
             }
-            return Math.round(rl * 100) + "%";
+            let text = Math.round(rl * 100) + "%";
+            if (rl2 >= 0) {
+                text += "·" + Math.round(rl2 * 100) + "%";
+            }
+            return text;
         }
         if (barMetric === "tokens")
             return mainInstance?.formatTokenCount(activeProvider.todayTotalTokens) ?? "0";
@@ -52,11 +57,18 @@ Item {
         const sess = activeProvider.todaySessions;
         const tokens = mainInstance?.formatTokenCount(activeProvider.todayTotalTokens) ?? "0";
         let tip = name + " \u2014 Today: " + prompts + " prompts, " + sess + " sessions, " + tokens + " tokens";
+        
         const rl = activeProvider.rateLimitPercent;
-        if (rl >= 0)
+        const rl2 = activeProvider.secondaryRateLimitPercent;
+        
+        if (rl >= 0) {
             tip += " \u00b7 " + activeProvider.rateLimitLabel + ": " + Math.round(rl * 100) + "%";
-        else if ((activeProvider.usageStatusText ?? "") !== "")
+            if (rl2 >= 0) {
+                tip += " \u00b7 " + activeProvider.secondaryRateLimitLabel + ": " + Math.round(rl2 * 100) + "%";
+            }
+        } else if ((activeProvider.usageStatusText ?? "") !== "") {
             tip += " \u00b7 " + activeProvider.usageStatusText;
+        }
         return tip;
     }
 

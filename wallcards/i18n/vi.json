@@ -16,12 +16,6 @@
       "label": "Màu biểu tượng",
       "description": "Màu của biểu tượng widget thanh"
     },
-    "wallpaper-directory": {
-      "label": "Thư mục hình nền",
-      "description": "Thư mục chứa hình nền của bạn",
-      "tooltip": "Chọn thư mục hình nền",
-      "placeholder": "~/Ảnh/HìnhNền"
-    },
     "live-preview": {
       "label": "Xem trước trực tiếp",
       "description": "Áp dụng hình nền khi duyệt thẻ"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Chiều cao thanh trên",
       "description": "Chiều cao của thanh công cụ"
-    },
-    "folder-picker-title": "Chọn thư mục hình nền"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "在面板中仅显示在线对等设备",
     "hide-mullvad-exit-nodes": "隐藏Mullvad出口节点",
     "hide-mullvad-exit-nodes-desc": "从对等设备列表中隐藏Mullvad VPN出口节点",
+    "show-search-bar": "显示搜索栏",
+    "show-search-bar-desc": "在面板节点列表上方显示搜索字段",
     "terminal": "终端配置",
     "terminal-command": "终端命令",
     "terminal-command-desc": "启动终端以进行SSH/ping的命令（例如，'ghostty'、'alacritty'、'kitty'）",
@@ -72,7 +74,9 @@
       "message": "请在插件设置中设置终端命令"
     },
     "login-browser-opened": "身份验证页面已在浏览器中打开",
-    "login-failed": "登录失败"
+    "login-failed": "登录失败",
+    "account-switched": "已切换 Tailscale 账户",
+    "account-switch-failed": "无法切换 Tailscale 账户"
   },
   "panel": {
     "title": "Tailscale网络",
@@ -80,6 +84,8 @@
     "not-connected": "未连接",
     "not-authenticated": "未认证",
     "no-peers": "没有连接的对等设备",
+    "search-placeholder": "搜索节点...",
+    "no-search-results": "没有节点匹配您的搜索",
     "admin-console": "管理控制台",
     "terminal-warning": {
       "title": "终端未配置",

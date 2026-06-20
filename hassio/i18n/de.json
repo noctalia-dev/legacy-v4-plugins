@@ -1,0 +1,34 @@
+{
+  "widget": {
+    "status_connected": "Verbunden",
+    "status_disconnected": "getrennt",
+    "status_connecting": "Verbinden",
+    "status_auth_failed": "Authentifizierung fehlgeschlagen",
+    "status_unconfigured": "Nicht eingerichtet",
+    "tooltip": "Status: {status}"
+  },
+  "panel": {
+    "title": "Home Assistant",
+    "title_add": "Entitäten hinzufügen",
+    "error_connection_failed": "Verbindung fehlgeschlagen",
+    "btn_reconnect": "Versuche, die Verbindung neu herzustellen",
+    "error_auth_failed": "Die Authentifizierung ist fehlgeschlagen",
+    "error_token_missing": "Token fehlt",
+    "btn_retry_auth": "Authentifizierung wiederholen",
+    "empty_no_entities": "Keine Entitäten angepinnt",
+    "btn_add_entities": "Entitäten hinzufügen",
+    "state_updating": "Wird aktualisiert...",
+    "state_on_brightness": "bei · {percent}%"
+  },
+  "browser": {
+    "search_label": "Suchen",
+    "search_placeholder": "Nach Name oder Entitäts-ID filtern...",
+    "loading": "Lade Entitäten..."
+  },
+  "settings": {
+    "url_label": "Home Assistant URL",
+    "url_placeholder": "http://homeassistant.local:8123",
+    "token_label": "Langlebiges Zugriffstoken",
+    "token_placeholder": "Gib deinen Token hier ein"
+  }
+}

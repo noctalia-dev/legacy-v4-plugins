@@ -94,7 +94,7 @@ Item {
                     text:        root.pluginApi?.tr("panel.tool_row.refresh.text")
                     tooltipText: root.pluginApi?.tr("panel.tool_row.refresh.tooltip")
 
-                    onClicked: { 
+                    onClicked: {
                         if(root.pluginApi.mainInstance == null) {
                             Logger.e("video-wallpaper", "Main instance is null, so can't call thumbRegenerate");
                         }
@@ -164,7 +164,7 @@ Item {
     FolderModel {
         id: folderModel
         folder: root.wallpapersFolder
-        filters: ["*.mp4", "*.avi", "*.mov"]
+        filters: ["*.mp4", "*.avi", "*.mov", "*.webm", "*.gif"]
     }
 
     NFilePicker {

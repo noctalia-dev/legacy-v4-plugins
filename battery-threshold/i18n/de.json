@@ -6,5 +6,11 @@
   },
   "actions": {
     "widget-settings": "Widget-Einstellungen"
+  },
+  "panel": {
+    "title": "Ladegrenze",
+    "not-available": "Auf diesem System nicht verfügbar",
+    "adjust-limit": "Zieh den Schieberegler, um den Grenzwert anzupassen",
+    "read-only": "Nur-Lese-Zugriff: udev-Regel für Schreibzugriff installieren"
   }
 }

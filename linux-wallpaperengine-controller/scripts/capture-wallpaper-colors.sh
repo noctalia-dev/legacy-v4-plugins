@@ -5,7 +5,7 @@
 #   1: output screenshot path
 #   2..n: linux-wallpaperengine command and arguments
 
-set -u
+set -eu
 
 output_file="$1"
 shift

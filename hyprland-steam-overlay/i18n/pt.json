@@ -10,5 +10,9 @@
     "steam_launched": "Steam iniciado",
     "no_windows_found": "Nenhuma janela do Steam encontrada",
     "ipc_received": "Alternância IPC recebida"
+  },
+  "settings": {
+    "custom-layout-label": "Use custom Hyprland layout (Lua)",
+    "custom-layout-description": "Let a Hyprland custom Lua layout tile the windows instead of floating+positioning them. Requires Hyprland 0.55+ Lua config and steam-layout.lua (see README). When enabled, the width sliders below are handled by the Lua layout."
   }
 }

@@ -16,12 +16,6 @@
       "label": "Colore icona",
       "description": "Colore dell'icona del widget della barra"
     },
-    "wallpaper-directory": {
-      "label": "Cartella sfondi",
-      "description": "Cartella contenente i tuoi sfondi",
-      "tooltip": "Seleziona cartella sfondi",
-      "placeholder": "~/Immagini/Sfondi"
-    },
     "live-preview": {
       "label": "Anteprima dal vivo",
       "description": "Applica lo sfondo durante la navigazione delle schede"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Altezza barra superiore",
       "description": "Altezza della barra degli strumenti"
-    },
-    "folder-picker-title": "Seleziona cartella sfondi"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

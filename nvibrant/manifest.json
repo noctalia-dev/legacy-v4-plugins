@@ -1,0 +1,26 @@
+{
+  "id": "nvibrant",
+  "name": "NVibrant",
+  "version": "1.0.1",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "NoFilterA1",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Toggle NVIDIA digital vibrance (color saturation) via nvibrant.",
+  "tags": ["Bar", "System", "Gaming"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "vibranceValue": 512,
+      "displayIndex": 1,
+      "enabled": false
+    }
+  }
+}

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import qs.Commons
 import qs.Widgets
+import qs.Services.UI
 
 FocusScope {
     id: root
@@ -184,14 +185,46 @@ FocusScope {
                                 horizontalAlignment: Text.AlignRight
                             }
 
-                            NText {
+                            RowLayout {
                                 Layout.fillWidth: true
-                                text: mainInst?.displayText ?? "0"
-                                pointSize: Math.round(Style.fontSizeL * 1.85)
-                                font.bold: true
-                                color: (mainInst?.errorState ?? false) ? Color.mError : Color.mOnSurface
-                                elide: Text.ElideLeft
-                                horizontalAlignment: Text.AlignRight
+                                spacing: Style.marginS
+
+                                NText {
+                                    Layout.fillWidth: true
+                                    text: mainInst?.displayText ?? "0"
+                                    pointSize: Math.round(Style.fontSizeL * 1.85)
+                                    font.bold: true
+                                    color: (mainInst?.errorState ?? false) ? Color.mError : Color.mOnSurface
+                                    elide: Text.ElideLeft
+                                    horizontalAlignment: Text.AlignRight
+                                }
+
+                                Item {
+                                    Layout.preferredWidth: copyIcon.implicitWidth + Style.marginS
+                                    Layout.preferredHeight: copyIcon.implicitHeight
+                                    Layout.alignment: Qt.AlignVCenter
+                                    visible: mainInst?.hasCopyableResult ?? false
+
+                                    NIcon {
+                                        id: copyIcon
+                                        anchors.centerIn: parent
+                                        icon: "copy"
+                                        pointSize: Style.fontSizeM
+                                        color: copyMouse.containsMouse ? Color.mPrimary : Qt.alpha(Color.mOnSurface, 0.55)
+
+                                        Behavior on color { ColorAnimation { duration: Style.animationFast } }
+                                    }
+
+                                    MouseArea {
+                                        id: copyMouse
+                                        anchors.fill: parent
+                                        hoverEnabled: true
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: mainInst?.copyResult()
+                                        onEntered: TooltipService.show(parent, pluginApi?.tr("panel.copy-result-tooltip"))
+                                        onExited: TooltipService.hide()
+                                    }
+                                }
                             }
                         }
                     }

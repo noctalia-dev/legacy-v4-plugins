@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "Configurações do widget"
+    "widget-settings": "Configurações do widget",
+    "toggle-panel": "Alternar Monitor"
+  },
+  "panel": {
+    "title": "Atividade de Rede",
+    "close": "Fechar",
+    "download": "Download",
+    "upload": "Upload"
   },
   "settings": {
+    "layout": {
+      "label": "Layout",
+      "desc": "Organizar células em linha (horizontal) ou em grelha 2×2 (vertical).",
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "slots": {
+      "label": "Atribuição de células",
+      "desc": "Escolha o que cada célula exibe. Não são possíveis duplicados. Ex.: use células vazias para mostrar apenas ícones."
+    },
+    "slot": {
+      "txIcon": "Ícone TX",
+      "rxIcon": "Ícone RX",
+      "txSpeed": "Velocidade TX",
+      "rxSpeed": "Velocidade RX",
+      "none": "Vazio"
+    },
+    "iconType": {
+      "desc": "Escolha o estilo do ícone usado para os indicadores TX/RX.",
+      "label": "Tipo de Ícone"
+    },
     "byteThresholdActive": {
-      "desc": "Defina o limite de atividade em bytes por segundo (B/s).",
-      "label": "Mostrar Limiar Ativo"
+      "desc": "Tráfego abaixo deste valor (B/s) é mostrado como inativo.",
+      "label": "Limiar de atividade"
     },
-    "colorRx": {
-      "desc": "Defina a cor do ícone de download (RX) quando acima do limite.",
-      "label": "RX Ativo"
+    "fontSizeModifier": {
+      "desc": "Ajustar o tamanho do texto em relação ao padrão.",
+      "label": "Tamanho da fonte"
     },
-    "colorSilent": {
-      "desc": "Definir a cor do ícone quando o tráfego estiver abaixo do limite.",
-      "label": "RX/TX Inativo"
+    "iconSizeModifier": {
+      "desc": "Dimensionar o tamanho do ícone em relação ao padrão.",
+      "label": "Tamanho do ícone"
     },
-    "colorText": {
-      "desc": "Definir a cor do texto usada para os valores de RX e TX.",
-      "label": "Texto"
-    },
-    "colorTx": {
-      "desc": "Definir a cor do ícone de upload (TX) quando acima do limite.",
-      "label": "TX Ativo"
-    },
-    "contentMargin": {
-      "desc": "Padding horizontal em ambos os lados do conteúdo do widget.",
-      "label": "Margem do conteúdo"
-    },
-    "customFontBold": {
-      "desc": "Renderizar valores de velocidade em negrito.",
-      "label": "Negrito"
+    "useCustomFont": {
+      "desc": "Substituir a fonte padrão para valores de velocidade.",
+      "label": "Fonte Personalizada"
     },
     "customFontFamily": {
       "desc": "Escolha uma fonte para os valores de velocidade.",
@@ -37,41 +53,49 @@
       "placeholder": "Selecionar fonte",
       "searchPlaceholder": "Pesquisar fontes…"
     },
+    "customFontBold": {
+      "desc": "Renderizar valores de velocidade em negrito.",
+      "label": "Negrito"
+    },
     "customFontItalic": {
       "desc": "Renderizar valores de velocidade em itálico.",
       "label": "Itálico"
-    },
-    "fontSizeModifier": {
-      "desc": "Ajustar o tamanho do texto em relação ao padrão.",
-      "label": "Modificador de Tamanho da Fonte"
-    },
-    "horizontalLayout": {
-      "desc": "Colocar valores TX e RX lado a lado em vez de empilhados.",
-      "label": "Layout Horizontal"
-    },
-    "iconSizeModifier": {
-      "desc": "Dimensionar o tamanho do ícone em relação ao padrão.",
-      "label": "Modificador de Tamanho do Ícone"
-    },
-    "iconType": {
-      "desc": "Escolha o estilo do ícone usado para os indicadores TX/RX.",
-      "label": "Tipo de Ícone"
-    },
-    "showNumbers": {
-      "desc": "Exibir as velocidades atuais de RX/TX como números.",
-      "label": "Mostrar Valores"
-    },
-    "spacingInbetween": {
-      "desc": "Ajustar o espaçamento entre os elementos RX/TX.",
-      "label": "Espaçamento vertical"
     },
     "useCustomColors": {
       "desc": "Ativar cores personalizadas em vez das cores padrão do tema.",
       "label": "Cores Personalizadas"
     },
-    "useCustomFont": {
-      "desc": "Substituir a fonte padrão para valores de velocidade.",
-      "label": "Fonte Personalizada"
+    "colorTx": {
+      "desc": "Cor do ícone de upload (TX) quando acima do limite.",
+      "label": "TX Ativo"
+    },
+    "colorRx": {
+      "desc": "Cor do ícone de download (RX) quando acima do limite.",
+      "label": "RX Ativo"
+    },
+    "colorSilent": {
+      "desc": "Cor do ícone quando o tráfego estiver abaixo do limite.",
+      "label": "Inativo"
+    },
+    "colorText": {
+      "desc": "Cor do texto para valores de velocidade.",
+      "label": "Texto"
+    },
+    "paddingLeft": {
+      "label": "Padding esquerdo",
+      "desc": "Padding do conteúdo à esquerda."
+    },
+    "paddingRight": {
+      "label": "Padding direito",
+      "desc": "Padding do conteúdo à direita."
+    },
+    "columnSpacing": {
+      "label": "Espaçamento de colunas",
+      "desc": "Espaçamento entre colunas no layout de grelha."
+    },
+    "rowSpacing": {
+      "label": "Espaçamento de linhas",
+      "desc": "Espaçamento entre linhas no layout de grelha (sem efeito no layout horizontal)."
     }
   }
 }

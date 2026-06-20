@@ -223,7 +223,7 @@ Item {
     FolderModel {
         id: rootFolderModel
         folder: root.wallpapersFolder
-        filters: ["*.mp4", "*.avi", "*.mov"]
+        filters: ["*.mp4", "*.avi", "*.mov", "*.webm", "*.gif"]
     }
 
     FolderModel {

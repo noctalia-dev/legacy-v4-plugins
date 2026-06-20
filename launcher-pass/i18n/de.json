@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Gnu Pass Passworteinträge durchsuchen"
+  },
+  "result": {
+    "goBack": "Zurück",
+    "folder": "Ordner",
+    "password": "Passwort",
+    "passwordEntry": "Passworteintrag",
+    "loading": "Lade Passworteinträge..."
+  },
+  "action": {
+    "copyPassword": "Passwort kopieren",
+    "copyPasswordDesc": "Passwort in Zwischenablage kopieren",
+    "typePassword": "Passwort eingeben",
+    "typePasswordDesc": "Passwort mit wtype eingeben",
+    "copyField": "{key} kopieren",
+    "typeField": "{key} eingeben",
+    "copyOtp": "OTP kopieren",
+    "typeOtp": "OTP eingeben",
+    "otpDesc": "Aktuellen OTP-Code kopieren/eingeben"
+  },
+  "settings": {
+    "tab": {
+      "general": "Allgemein",
+      "advanced": "Erweitert"
+    },
+    "storePath": {
+      "label": "Passwort-Speicherpfad",
+      "desc": "Benutzerdefinierter Pfad zum Passwort-Speicher (Standard: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Launcher-Schließen-Verzögerung",
+      "desc": "Verzögerung vor Eingabestart in Millisekunden (Standard: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Wtype-Tastenverzögerung",
+      "desc": "Verzögerung zwischen Tastenanschlägen in ms für wtype (Standard: 12)"
+    },
+    "clipTimeout": {
+      "label": "Zwischenablage-Timeout",
+      "desc": "Sekunden bis die Zwischenablage gelöscht wird (Standard PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "In Zwischenablage kopiert"
+  }
+}

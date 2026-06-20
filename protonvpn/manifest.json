@@ -1,0 +1,27 @@
+{
+  "id": "protonvpn",
+  "name": "ProtonVPN Status",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "blessonmathewsam",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Shows ProtonVPN connection status in the bar with a panel for connect/disconnect, kill switch toggle, and quick connect options. Requires the ProtonVPN CLI (protonvpn-cli) installed and authenticated.",
+  "tags": ["Bar", "Network", "Privacy"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "displayMode": "alwaysShow",
+      "connectedColor": "primary",
+      "disconnectedColor": "none",
+      "pollInterval": 5000
+    }
+  }
+}

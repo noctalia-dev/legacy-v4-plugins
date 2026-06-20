@@ -13,7 +13,7 @@
             "description": "Yazarken gerçek zamanlı önerileri çek"
         },
         "maxResults": {
-            "label": "Maksimim Sonuç",
+            "label": "Maksimum Sonuç",
             "description": "Gösterilecek öneri sınırı"
         }
     },
@@ -26,7 +26,7 @@
         "openUrlDescription": "URLi direkt tarayıcıda aç",
         "suggestion": "{engine} tarafından öneri",
         "command": {
-            "description": "İnterntten bir şeyler ara"
+            "description": "İnternetten bir şeyler ara"
         }
     }
 }

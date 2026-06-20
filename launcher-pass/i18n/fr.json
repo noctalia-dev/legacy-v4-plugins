@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Rechercher des entrées de mot de passe gnu pass"
+  },
+  "result": {
+    "goBack": "Revenir",
+    "folder": "Dossier",
+    "password": "Mot de passe",
+    "passwordEntry": "Entrée de mot de passe",
+    "loading": "Chargement des entrées de mot de passe..."
+  },
+  "action": {
+    "copyPassword": "Copier le mot de passe",
+    "copyPasswordDesc": "Copier le mot de passe dans le presse-papiers",
+    "typePassword": "Saisir le mot de passe",
+    "typePasswordDesc": "Saisir le mot de passe avec wtype",
+    "copyField": "Copier {key}",
+    "typeField": "Saisir {key}",
+    "copyOtp": "Copier OTP",
+    "typeOtp": "Saisir OTP",
+    "otpDesc": "Copier/saisir le code OTP actuel"
+  },
+  "settings": {
+    "tab": {
+      "general": "Général",
+      "advanced": "Avancé"
+    },
+    "storePath": {
+      "label": "Chemin du gestionnaire de mots de passe",
+      "desc": "Chemin personnalisé vers le gestionnaire de mots de passe (par défaut: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Délai de fermeture du lanceur",
+      "desc": "Délai avant le début de la saisie en millisecondes (par défaut: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Délai de frappe wtype",
+      "desc": "Délai entre les frappes en ms pour wtype (par défaut: 12)"
+    },
+    "clipTimeout": {
+      "label": "Délai d'expiration du presse-papiers",
+      "desc": "Secondes avant l'effacement du presse-papiers (défaut PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Copié dans le presse-papiers"
+  }
+}

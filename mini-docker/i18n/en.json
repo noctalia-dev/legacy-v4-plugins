@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Widget settings"
+  },
   "settings": {
+    "active_color_description": "Color of the status indicator when active (running)",
+    "active_color_label": "Active Indicator Color",
     "current_value": "Selected: {value} ms",
     "default_network_description": "Default network to use when running images",
     "default_network_label": "Default Network",
     "general": "General",
+    "icon_color_description": "Change the color of the Bar widget icon",
+    "icon_color_label": "Icon Color",
+    "inactive_color_description": "Color of the status indicator when inactive (stopped)",
+    "inactive_color_label": "Inactive Indicator Color",
     "refresh_interval_description": "How often the plugin checks for container status changes",
     "refresh_interval_label": "Refresh Interval",
+    "status_state_always": "Always show",
+    "status_state_description": "Choose how to display the status indicator dot",
+    "status_state_hidden": "Hide completely",
+    "status_state_label": "Status State",
+    "status_state_running_only": "Show when running",
     "title": "Container Manager Settings"
   },
   "tooltip": {

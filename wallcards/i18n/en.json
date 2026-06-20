@@ -16,12 +16,6 @@
       "label": "Icon Color",
       "description": "Color of the bar widget icon"
     },
-    "wallpaper-directory": {
-      "label": "Wallpaper Directory",
-      "description": "Folder containing your wallpapers",
-      "tooltip": "Select wallpaper folder",
-      "placeholder": "~/Pictures/Wallpapers"
-    },
     "live-preview": {
       "label": "Live Preview",
       "description": "Apply wallpaper while browsing cards"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Top Bar Height",
       "description": "Height of the toolbar"
-    },
-    "folder-picker-title": "Select wallpaper folder"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

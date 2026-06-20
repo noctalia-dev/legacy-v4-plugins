@@ -22,16 +22,26 @@ Item {
     property var window: null
 
     function openWindow() {
+        if (agent.flow === null) {
+            Logger.w("polkit-agent: Cannot open window, agent.flow is null");
+            return;
+        }
         if (window === null) {
-            window = Qt.createComponent("PolkitWindow.qml").createObject(root, {
-                flow: agent.flow,
-                pluginApi: Qt.binding(function() { return root.pluginApi })
-            });
-            window.visible = true;
+            var component = Qt.createComponent("PolkitWindow.qml");
+            if (component.status === Component.Ready) {
+                window = component.createObject(root, {
+                    flow: agent.flow,
+                    pluginApi: root.pluginApi
+                });
+                if (window !== null) {
+                    window.visible = true;
+                }
+            }
+            component.destroy();
         } else {
-            window.flow = agent.flow
-            window.pluginApi = root.pluginApi
-            window.visible = true
+            window.flow = agent.flow;
+            window.pluginApi = root.pluginApi;
+            window.visible = true;
         }
     }
 

@@ -4,6 +4,8 @@
 # Args:
 #   1: cache directory path
 
+set -eu
+
 cache_dir="$1"
 
 if [ -d "$cache_dir" ]; then

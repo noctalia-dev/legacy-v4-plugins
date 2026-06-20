@@ -16,12 +16,6 @@
       "label": "Ikon színe",
       "description": "A sáv widget ikonjának színe"
     },
-    "wallpaper-directory": {
-      "label": "Háttérképek mappa",
-      "description": "A háttérképeket tartalmazó mappa",
-      "tooltip": "Háttérképek mappa kiválasztása",
-      "placeholder": "~/Képek/Háttérképek"
-    },
     "live-preview": {
       "label": "Élő előnézet",
       "description": "Háttérkép alkalmazása böngészés közben"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Felső sáv magassága",
       "description": "Az eszköztár magassága"
-    },
-    "folder-picker-title": "Háttérképek mappa kiválasztása"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "ウィジェット設定"
+    "widget-settings": "ウィジェット設定",
+    "toggle-panel": "モニターの切替"
+  },
+  "panel": {
+    "title": "ネットワークアクティビティ",
+    "close": "閉じる",
+    "download": "ダウンロード",
+    "upload": "アップロード"
   },
   "settings": {
+    "layout": {
+      "label": "レイアウト",
+      "desc": "セルを一列（水平）または2×2グリッド（垂直）に配置します。",
+      "horizontal": "水平",
+      "vertical": "垂直"
+    },
+    "slots": {
+      "label": "セルの割り当て",
+      "desc": "各セルの表示内容を選択します。重複は不可。例：空のセルを使ってアイコンのみ表示。"
+    },
+    "slot": {
+      "txIcon": "TXアイコン",
+      "rxIcon": "RXアイコン",
+      "txSpeed": "TX速度",
+      "rxSpeed": "RX速度",
+      "none": "空"
+    },
+    "iconType": {
+      "desc": "TX/RXインジケーターに使用するアイコンのスタイルを選択してください。",
+      "label": "アイコンの種類"
+    },
     "byteThresholdActive": {
-      "desc": "アクティビティの閾値をバイト毎秒 (B/s) で設定します。",
-      "label": "アクティブ閾値を表示"
+      "desc": "この値（B/s）未満のトラフィックは非アクティブとして表示されます。",
+      "label": "アクティビティ閾値"
     },
-    "colorRx": {
-      "desc": "閾値を超えた場合のダウンロード (RX) アイコンの色を設定します。",
-      "label": "RX アクティブ"
+    "fontSizeModifier": {
+      "desc": "テキストのサイズをデフォルトを基準に調整します。",
+      "label": "フォントサイズ"
     },
-    "colorSilent": {
-      "desc": "トラフィックが閾値を下回った場合に、アイコンの色を設定します。",
-      "label": "RX/TX 非アクティブ"
+    "iconSizeModifier": {
+      "desc": "デフォルトに対するアイコンのサイズを調整します。",
+      "label": "アイコンサイズ"
     },
-    "colorText": {
-      "desc": "RX と TX の両方の値に使用するテキストの色を設定します。",
-      "label": "テキスト"
-    },
-    "colorTx": {
-      "desc": "閾値を超えた場合のアップロード (TX) アイコンの色を設定します。",
-      "label": "TX アクティブ"
-    },
-    "contentMargin": {
-      "desc": "ウィジェットコンテンツの両サイドの水平パディング。",
-      "label": "コンテンツマージン"
-    },
-    "customFontBold": {
-      "desc": "速度値を太字で表示。",
-      "label": "太字"
+    "useCustomFont": {
+      "desc": "速度値のデフォルトフォントを上書き。",
+      "label": "カスタムフォント"
     },
     "customFontFamily": {
       "desc": "速度値に使用するフォントを選択してください。",
@@ -37,41 +53,49 @@
       "placeholder": "フォントを選択",
       "searchPlaceholder": "フォントを検索…"
     },
+    "customFontBold": {
+      "desc": "速度値を太字で表示。",
+      "label": "太字"
+    },
     "customFontItalic": {
       "desc": "速度値を斜体で表示。",
       "label": "斜体"
-    },
-    "fontSizeModifier": {
-      "desc": "テキストのサイズをデフォルトを基準に調整します。",
-      "label": "フォントサイズ変更"
-    },
-    "horizontalLayout": {
-      "desc": "TXとRXの値を縦並びではなく横並びで表示。",
-      "label": "水平レイアウト"
-    },
-    "iconSizeModifier": {
-      "desc": "デフォルトに対するアイコンのサイズを調整します。",
-      "label": "アイコンサイズ変更"
-    },
-    "iconType": {
-      "desc": "TX/RXインジケーターに使用するアイコンのスタイルを選択してください。",
-      "label": "アイコンの種類"
-    },
-    "showNumbers": {
-      "desc": "現在のRX/TX速度を数値で表示。",
-      "label": "値を表示"
-    },
-    "spacingInbetween": {
-      "desc": "RX/TX要素間の間隔を調整してください。",
-      "label": "垂直間隔"
     },
     "useCustomColors": {
       "desc": "テーマのデフォルトの代わりにカスタムカラーを有効にする。",
       "label": "カスタムカラー"
     },
-    "useCustomFont": {
-      "desc": "速度値のデフォルトフォントを上書き。",
-      "label": "カスタムフォント"
+    "colorTx": {
+      "desc": "閾値を超えた場合のアップロード (TX) アイコンの色。",
+      "label": "TX アクティブ"
+    },
+    "colorRx": {
+      "desc": "閾値を超えた場合のダウンロード (RX) アイコンの色。",
+      "label": "RX アクティブ"
+    },
+    "colorSilent": {
+      "desc": "トラフィックが閾値を下回った場合のアイコンの色。",
+      "label": "非アクティブ"
+    },
+    "colorText": {
+      "desc": "速度値のテキスト色。",
+      "label": "テキスト"
+    },
+    "paddingLeft": {
+      "label": "左パディング",
+      "desc": "コンテンツの左側のパディング。"
+    },
+    "paddingRight": {
+      "label": "右パディング",
+      "desc": "コンテンツの右側のパディング。"
+    },
+    "columnSpacing": {
+      "label": "列間隔",
+      "desc": "グリッドレイアウトでの列間の間隔。"
+    },
+    "rowSpacing": {
+      "label": "行間隔",
+      "desc": "グリッドレイアウトでの行間の間隔（水平レイアウトでは効果なし）。"
     }
   }
 }

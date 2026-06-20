@@ -1,0 +1,92 @@
+{
+	"widget": {
+		"tooltip": "Hava Kalitesi"
+	},
+	"scale": {
+		"us": "ABD AQI",
+		"eu": "AB AQI"
+	},
+	"location": {
+		"custom": "Özel"
+	},
+	"unit": {
+		"ugm3": "µg/m³"
+	},
+	"levels": {
+		"good": "İyi",
+		"moderate": "Ilımlı",
+		"unhealthySensitive": "Hassas Gruplar için Sağlıksız",
+		"unhealthy": "Sağlıksız",
+		"veryUnhealthy": "Çok Sağlıksız",
+		"hazardous": "Tehlikeli",
+		"fair": "İdare Eder",
+		"poor": "Kötü",
+		"veryPoor": "Çok Kötü",
+		"extremelyPoor": "Aşırı Kötü",
+		"unknown": "Bilinmiyor"
+	},
+	"pollutants": {
+		"pm25": "PM2.5",
+		"pm10": "PM10",
+		"ozone": "O\u2083",
+		"no2": "NO\u2082",
+		"co": "CO",
+		"so2": "SO\u2082",
+		"pm25Value": "PM2.5: {value} µg/m³",
+		"pm10Value": "PM10: {value} µg/m³",
+		"ozoneValue": "O\u2083: {value} µg/m³",
+		"no2Value": "NO\u2082: {value} µg/m³",
+		"coValue": "CO: {value} µg/m³",
+		"so2Value": "SO\u2082: {value} µg/m³",
+		"pm25Short": "PM2.5: {value}",
+		"pm10Short": "PM10: {value}"
+	},
+	"errors": {
+		"weatherDisabled": "Noctalia ayarlarından hava durumunu etkinleştirin veya özel konum girin",
+		"locationUnavailable": "Konum henüz mevcut değil, tekrar deneniyor...",
+		"aqicnTokenMissing": "AQICN seçildi ama API Tokeni ayarlanmadı",
+		"aqicnApiFailed": "AQICN API hatası"
+	},
+	"panel": {
+		"title": "Hava Kalitesi",
+		"lastUpdate": "Son güncelleme",
+		"pollutants": "Kirleticiler",
+		"refresh": "Yenile",
+		"settings": "Ayarlar",
+		"noData": "Kullanılabilir veri yok",
+		"loading": "Yükleniyor..."
+	},
+	"settings": {
+		"aqiScale": "AQI Ölçeği",
+		"aqiScaleDesc": "Hava kalitesi indeks ölçeğini seçin",
+		"aqiScaleUs": "ABD AQI (EPA)",
+		"aqiScaleEu": "Avrupa AQI",
+		"location": "Konum",
+		"useNoctaliaLocation": "Noctalia konumunu kullan",
+		"useNoctaliaLocationDesc": "Noctalia ayarlarındaki konumu kullan",
+		"customLatitude": "Enlem",
+		"customLongitude": "Boylam",
+		"customLocationDesc": "Koordinatları elle girin",
+		"refreshInterval": "Yenileme sıklığı",
+		"refreshIntervalDesc": "Güncellemeler arasındaki dakika: ",
+		"boldText": "Kalın metin",
+		"boldTextDesc": "AQI numarasını kalın metinle göster",
+		"dataSource": "Veri kaynağı",
+		"dataSourceDesc": "Hava kalitesi verisinin nereden geleceğini seçin",
+		"dataSourceOpenMeteo": "Open-Meteo (anahtara gerek yok)",
+		"dataSourceAqicn": "AQICN (gerçek istasyon verisi)",
+		"aqicnToken": "AQICN API Tokeni",
+		"aqicnTokenDesc": "aqicn.org/data-platform/token adresinden ücretsiz tokeninizi alın",
+		"aqicnTokenPlaceholder": "Tokeninizi buraya yapıştırın"
+	},
+	"desktop": {
+		"noData": "Veri yok",
+		"tipLeft": "Sol tık: Paneli aç",
+		"tipMiddle": "Orta tık: Yenile",
+		"tipRight": "Sağ tık: Ayarlar"
+	},
+	"context": {
+		"refresh": "Yenile",
+		"settings": "Ayarlar"
+	}
+}

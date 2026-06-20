@@ -16,12 +16,6 @@
       "label": "Цвет значка",
       "description": "Цвет значка виджета панели"
     },
-    "wallpaper-directory": {
-      "label": "Папка обоев",
-      "description": "Папка с вашими обоями",
-      "tooltip": "Выбрать папку обоев",
-      "placeholder": "~/Изображения/Обои"
-    },
     "live-preview": {
       "label": "Предпросмотр",
       "description": "Применять обои при просмотре карточек"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Высота верхней панели",
       "description": "Высота панели инструментов"
-    },
-    "folder-picker-title": "Выбрать папку обоев"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

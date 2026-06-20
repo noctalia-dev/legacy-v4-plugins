@@ -1,0 +1,34 @@
+{
+  "id": "git-companion",
+  "name": "Git Companion",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "Thomas Philippo",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Monitor your git repositories from the Noctalia bar. See open issues and pull requests at a glance, without leaving your desktop.",
+  "tags": [
+    "Development",
+    "Bar",
+    "Panel",
+    "Productivity"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "desktopWidget": "DesktopWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "platform": "github",
+      "repo": "",
+      "group": "",
+      "refreshInterval": 60
+    }
+  }
+}

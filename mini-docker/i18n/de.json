@@ -1,16 +1,30 @@
 {
+  "menu": {
+    "settings": "Widget-Einstellungen"
+  },
   "settings": {
+    "active_color_description": "Farbe der Statusanzeige bei Aktivität (laufend)",
+    "active_color_label": "Farbe für aktiv",
     "current_value": "Ausgewählt: {value} ms",
-    "default_network_description": "Default network to use when running images",
-    "default_network_label": "Default Network",
+    "default_network_description": "Standardnetzwerk für die Ausführung von Images",
+    "default_network_label": "Standardnetzwerk",
     "general": "Allgemein",
+    "icon_color_description": "Farbe des Bar-Widget-Symbols ändern",
+    "icon_color_label": "Symbolfarbe",
+    "inactive_color_description": "Farbe der Statusanzeige bei Inaktivität (gestoppt)",
+    "inactive_color_label": "Farbe für inaktiv",
     "refresh_interval_description": "Wie oft das Plugin den Containerstatus überprüft",
     "refresh_interval_label": "Aktualisierungsintervall",
+    "status_state_always": "Immer anzeigen",
+    "status_state_description": "Anzeigeart des Statusindikators auswählen",
+    "status_state_hidden": "Vollständig ausblenden",
+    "status_state_label": "Statusanzeige",
+    "status_state_running_only": "Bei Aktivität anzeigen",
     "title": "Container Manager Einstellungen"
   },
   "tooltip": {
     "docker_not_available": "Docker nicht verfügbar",
-    "image_already_running": "Image already running in a container",
+    "image_already_running": "Image läuft bereits in einem Container",
     "running_containers": "Laufende Container: %1"
   }
 }

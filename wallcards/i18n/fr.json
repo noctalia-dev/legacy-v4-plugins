@@ -16,12 +16,6 @@
       "label": "Couleur de l'icône",
       "description": "Couleur de l'icône du widget de barre"
     },
-    "wallpaper-directory": {
-      "label": "Dossier de fonds d'écran",
-      "description": "Dossier contenant vos fonds d'écran",
-      "tooltip": "Sélectionner le dossier de fonds d'écran",
-      "placeholder": "~/Images/Fonds"
-    },
     "live-preview": {
       "label": "Aperçu en direct",
       "description": "Appliquer le fond d'écran en parcourant les cartes"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Hauteur de la barre supérieure",
       "description": "Hauteur de la barre d'outils"
-    },
-    "folder-picker-title": "Sélectionner le dossier de fonds d'écran"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

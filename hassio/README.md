@@ -182,3 +182,7 @@ MIT
 ## Author
 
 **Pozzoo** - [github.com/Pozzoo](https://github.com/Pozzoo)
+
+## Contributors
+
+**johnstef99** - [github.com/johnstef99](https://github.com/johnstef99)

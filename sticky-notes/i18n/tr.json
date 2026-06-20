@@ -1,0 +1,61 @@
+{
+  "widget": {
+    "tooltip": "Yapışkan Notlar"
+  },
+  "menu": {
+    "settings": "Widget ayarları"
+  },
+  "time": {
+    "just-now": "Şimdi",
+    "minutes-ago": "{n}d önce",
+    "hours-ago": "{n}s önce",
+    "days-ago": "{n}g önce"
+  },
+  "notes": {
+    "new": "Yeni Not",
+    "empty": "Henüz not yok",
+    "create-first": "İlk notunuzu oluşturmak için +'ya basın",
+    "hint-unselect": "Seçimi kaldırmak için ESC",
+    "hint-click-select": "Seçmek için tıklayın",
+    "delete-confirm": "Bu not silinsin mi?",
+    "cancel": "İptal et",
+    "close": "Kapat",
+    "window-title": "Yapışkan Not",
+    "mode-preview": "Önizle",
+    "mode-edit": "Düzenleniyor",
+    "switch-preview": "Önizle",
+    "switch-edit": "Düzenle"
+  },
+  "editor": {
+    "back": "Listeye dön",
+    "save": "Kaydet",
+    "delete": "Sil",
+    "placeholder": "Markdown ile yazmaya başla...",
+    "hint": "Kaydetmek için Ctrl+S",
+    "hint-esc-save": "İptal etmek için ESC"
+  },
+  "settings": {
+    "saved": "Yapışkan Notlar ayarları kaydedildi",
+    "syncNow": "Şimdi eşitle",
+    "syncEnabled": {
+      "label": "GitHub Gist eşitlemeyi etkinleştir",
+      "desc": "Değişikliklerden sonra otomatik olarak özel bir giste kaydet."
+    },
+    "githubToken": {
+      "label": "GitHub Tokeni",
+      "desc": "Gist yetkileri oluşan kişisel erişim tokeni.",
+      "placeholder": "ghp_xxx",
+      "help": "Eklenti `noctalia-sticky-notes` adında özel bir gist oluşturur veya tekrar kullanır. Her not, dosya adı not kimliği olan tek bir dosya olarak kaydedilir."
+    }
+  },
+  "sync": {
+    "syncing": "Notlar GitHub Gist'e kaydediliyor...",
+    "success": {
+      "created": "Gist oluşturuldu notlar eşitlendi.",
+      "updated": "Notlar Github Gist'e kaydedildi."
+    },
+    "errors": {
+      "missing-token": "Eşitlemeden önce Github tokeni gereklidir."
+    }
+  }
+}

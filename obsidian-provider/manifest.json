@@ -1,0 +1,26 @@
+{
+  "id": "obsidian-provider",
+  "name": "Obsidian Provider",
+  "version": "1.0.0",
+  "description": "Switch between Obsidian vaults from the launcher.",
+  "tags": ["Launcher", "Productivity"],
+  "minNoctaliaVersion": "4.5.0",
+  "author": "0b10headedcalf",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "entryPoints": {
+    "main": "Main.qml",
+    "launcherProvider": "LauncherProvider.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "commandPrefix": "obs",
+    "defaultSettings": {
+      "obsidianConfigPath": "~/.config/obsidian/obsidian.json",
+      "includeInSearch": true
+    }
+  }
+}

@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Налаштування віджета"
+  },
   "settings": {
+    "active_color_description": "Колір індикатора стану при активності (запущений)",
+    "active_color_label": "Колір активного індикатора",
     "current_value": "Обрано: {value} мс",
     "default_network_description": "Мережа за замовчуванням для використання під час запуску образів",
     "default_network_label": "Мережа за замовчуванням",
     "general": "Загальні",
+    "icon_color_description": "Змінити колір іконки віджета на панелі",
+    "icon_color_label": "Колір іконки",
+    "inactive_color_description": "Колір індикатора стану при неактивності (зупинений)",
+    "inactive_color_label": "Колір неактивного індикатора",
     "refresh_interval_description": "Як часто плагін перевіряє статус контейнерів",
     "refresh_interval_label": "Інтервал оновлення",
+    "status_state_always": "Показувати завжди",
+    "status_state_description": "Виберіть спосіб відображення точки індикатора стану",
+    "status_state_hidden": "Приховати повністю",
+    "status_state_label": "Режим індикатора",
+    "status_state_running_only": "Показувати при запуску",
     "title": "Налаштування Менеджера Контейнерів"
   },
   "tooltip": {

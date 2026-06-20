@@ -1,7 +1,7 @@
 {
   "id": "tailscale",
   "name": "Tailscale",
-  "version": "1.4.1",
+  "version": "1.5.2",
   "minNoctaliaVersion": "4.0.0",
   "author": "nineluj",
   "license": "MIT",
@@ -29,6 +29,7 @@
       "showPeerCount": true,
       "hideDisconnected": false,
       "hideMullvadExitNodes": true,
+      "showSearchBar": false,
       "terminalCommand": "",
       "sshUsername": "",
       "pingCount": 5,

@@ -1,0 +1,29 @@
+{
+  "id": "agent-session-status",
+  "name": "Agent Session Status",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "nzlov",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Runs a local MCP HTTP service for agents to report session status and shows active sessions in the bar.",
+  "tags": ["Bar", "Panel", "Development", "Indicator", "AI"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "bindAddress": "127.0.0.1",
+      "port": 55854,
+      "token": "",
+      "pollIntervalSec": 2,
+      "hideWhenEmpty": false
+    }
+  }
+}

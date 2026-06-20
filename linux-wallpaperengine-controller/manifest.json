@@ -1,7 +1,7 @@
 {
   "id": "linux-wallpaperengine-controller",
   "name": "Linux WallpaperEngine Controller",
-  "version": "1.2.1",
+  "version": "1.3.1",
   "minNoctaliaVersion": "4.6.6",
   "author": "PaloMiku",
   "license": "MIT",
@@ -24,7 +24,6 @@
   "metadata": {
     "defaultSettings": {
       "wallpapersFolder": "~/.local/share/Steam/steamapps/workshop/content/431960",
-      "assetsDir": "",
       "iconColor": "none",
       "enableExtraPropertiesEditor": true,
       "defaultScaling": "fill",
@@ -40,8 +39,28 @@
       "wallpaperColorScreenshots": {},
       "defaultNoFullscreenPause": false,
       "defaultFullscreenPauseOnlyActive": false,
+      "showSidebarDescription": false,
+      "badgeOrder": [
+        "type",
+        "dynamic",
+        "music",
+        "reactive",
+        "approved",
+        "resolution",
+        "compatibility"
+      ],
+      "badgeEnabled": {
+        "type": true,
+        "dynamic": true,
+        "music": true,
+        "reactive": true,
+        "approved": true,
+        "resolution": true,
+        "compatibility": true
+      },
       "autoApplyOnStartup": true,
-      "wallpaperScanCacheMinutes": 5,
+      "panelPageSize": 24,
+      "wallpaperScanCacheMinutes": 10,
       "panelLastSelectedPath": "",
       "screens": {},
       "wallpaperProperties": {},

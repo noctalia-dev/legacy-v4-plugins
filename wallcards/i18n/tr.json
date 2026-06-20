@@ -16,12 +16,6 @@
       "label": "Simge rengi",
       "description": "Çubuk widget simgesinin rengi"
     },
-    "wallpaper-directory": {
-      "label": "Duvar kağıdı klasörü",
-      "description": "Duvar kağıtlarınızı içeren klasör",
-      "tooltip": "Duvar kağıdı klasörü seç",
-      "placeholder": "~/Resimler/DuvarKagitlari"
-    },
     "live-preview": {
       "label": "Canlı önizleme",
       "description": "Kartlara göz atarken duvar kağıdını uygula"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Üst çubuk yüksekliği",
       "description": "Araç çubuğunun yüksekliği"
-    },
-    "folder-picker-title": "Duvar kağıdı klasörü seç"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

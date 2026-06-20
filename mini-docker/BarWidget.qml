@@ -25,12 +25,20 @@ Item {
     property bool enabled: true
     property bool allowClickWhenDisabled: false
     property bool hovering: false
-    property color colorBg: Color.mSurfaceVariant
-    property color colorFg: Color.mPrimary
+    property color colorBg: Style.capsuleColor
+    property var cfg: pluginApi?.pluginSettings || ({})
+    property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+    readonly property string iconColorKey: cfg.iconColor ?? defaults.iconColor ?? "none"
+    readonly property string statusStateKey: cfg.statusState ?? defaults.statusState ?? "all"
+    property color colorFg: Color.resolveColorKey(iconColorKey)
+    readonly property string activeColorKey: cfg.activeColor ?? defaults.activeColor ?? "success"
+    readonly property string inactiveColorKey: cfg.inactiveColor ?? defaults.inactiveColor ?? "error"
+    readonly property color activeColor: Color.resolveColorKey(activeColorKey)
+    readonly property color inactiveColor: Color.resolveColorKey(inactiveColorKey)
     property color colorBgHover: Color.mHover
     property color colorFgHover: Color.mOnHover
-    property color colorBorder: Color.mOutline
-    property color colorBorderHover: Color.mOutline
+    property color colorBorder: Style.capsuleBorderColor
+    property color colorBorderHover: Style.capsuleBorderColor
     property real customRadius: Style.radiusL
     property bool dockerAvailable: false
     property int runningCount: 0
@@ -95,7 +103,7 @@ Item {
         color: hovering ? colorBgHover : colorBg
         radius: Math.min((customRadius >= 0 ? customRadius : Style.iRadiusL), width / 2)
         border.color: hovering ? colorBorderHover : colorBorder
-        border.width: Style.borderS
+        border.width: Style.capsuleBorderWidth
 
         Behavior on color {
             ColorAnimation {
@@ -126,16 +134,35 @@ Item {
             width: 6
             height: 6
             radius: 3
-            color: runningCount > 0 ? "#4caf50" : "#f44336"
-            visible: dockerAvailable
+            color: runningCount > 0 ? activeColor : inactiveColor
+            visible: dockerAvailable && statusStateKey !== "hidden" && (statusStateKey !== "running-only" || runningCount > 0)
             border.width: 1
             border.color: visualCapsule.color
+        }
+    }
+
+    NPopupContextMenu {
+        id: contextMenu
+        model: [
+            {
+                "label": pluginApi?.tr("menu.settings"),
+                "action": "settings",
+                "icon": "settings"
+            }
+        ]
+        onTriggered: action => {
+            contextMenu.close();
+            PanelService.closeContextMenu(root.screen);
+            if (action === "settings") {
+                BarService.openPluginSettings(root.screen, pluginApi.manifest);
+            }
         }
     }
 
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         cursorShape: Qt.PointingHandCursor
         onEntered: {
             root.hovering = true;
@@ -145,11 +172,21 @@ Item {
             root.hovering = false;
             root.exited();
         }
-        onClicked: {
-            if (pluginApi && dockerAvailable)
-                pluginApi.openPanel(root.screen);
+        onClicked: (mouse) => {
+            if (mouse.button === Qt.LeftButton) {
+                if (pluginApi && dockerAvailable)
+                    pluginApi.openPanel(root.screen);
+            } else if (mouse.button === Qt.RightButton) {
+                PanelService.showContextMenu(contextMenu, root, root.screen);
+            }
         }
-        onPressAndHold: root.rightClicked()
+        onPressAndHold: (mouse) => {
+            if (mouse.button === Qt.RightButton) {
+                PanelService.showContextMenu(contextMenu, root, root.screen);
+            } else {
+                root.rightClicked();
+            }
+        }
         onWheel: (wheel) => {
             return root.wheel(wheel.angleDelta.y);
         }

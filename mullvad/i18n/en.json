@@ -1,0 +1,95 @@
+{
+	"toast": {
+		"title": "Mullvad",
+		"connected": "Connected",
+		"disconnected": "Disconnected",
+		"connect-failed": "Connection failed",
+		"lockdown-on": "Lockdown mode enabled",
+		"lockdown-off": "Lockdown mode disabled"
+	},
+	"state": {
+		"connected": "Connected",
+		"connecting": "Connecting",
+		"disconnected": "Disconnected",
+		"disconnecting": "Disconnecting",
+		"blocked": "Traffic blocked",
+		"error": "Daemon unavailable",
+		"not-installed": "Mullvad CLI not found"
+	},
+	"action": {
+		"connect": "Connect",
+		"disconnect": "Disconnect",
+		"reconnect": "Reconnect",
+		"cancel": "Cancel",
+		"copy-ip": "Copy IP",
+		"refresh-relays": "Refresh relay list",
+		"auto-select": "Auto-select"
+	},
+	"toggles": {
+		"lockdown": "Lockdown mode",
+		"lockdown-tooltip": "Block all internet traffic when VPN is disconnected",
+		"auto-connect": "Auto-connect",
+		"auto-connect-tooltip": "Connect to VPN automatically when daemon starts",
+		"lan": "LAN sharing",
+		"lan-tooltip": "Allow access to local network devices while connected"
+	},
+	"relay": {
+		"search-placeholder": "Search country, city or hostname...",
+		"favorites": "Favorites",
+		"no-results": "No relays match your search",
+		"loading": "Loading relays..."
+	},
+	"badges": {
+		"multihop": "Multihop",
+		"multihop-via": "Multihop via {country}",
+		"ip-version": "IP{version}",
+		"lockdown": "Lockdown",
+		"auto-connect": "Auto-connect",
+		"lan-blocked": "LAN blocked"
+	},
+	"advanced": {
+		"title": "Advanced",
+		"multihop": "Multihop",
+		"multihop-tooltip": "Route through two relays for extra obfuscation",
+		"multihop-entry": "Entry country",
+		"ip-version": "IP version",
+		"dns": "DNS"
+	},
+	"context": {
+		"connect": "Connect",
+		"disconnect": "Disconnect",
+		"open-panel": "Open Mullvad panel"
+	},
+	"actions": {
+		"widget-settings": "Widget settings"
+	},
+	"account": {
+		"expires-in": "Account expires in {days} days",
+		"expired": "Account expired"
+	},
+	"confirm": {
+		"disconnect-lockdown": {
+			"title": "Disconnect with lockdown on?",
+			"body": "All traffic will be blocked until you connect again."
+		}
+	},
+	"daemon": {
+		"not-running": "mullvad-daemon is not running",
+		"start-hint": "Start it with: systemctl start mullvad-daemon"
+	},
+	"settings": {
+		"title": "Mullvad VPN Settings",
+		"refresh-interval": "Refresh interval (ms)",
+		"show-flag": "Show country flag in bar",
+		"show-city": "Show city name in bar",
+		"show-ip": "Show IP in bar",
+		"compact-mode": "Compact mode (icon only)",
+		"click-action": "Left-click action",
+		"click-toggle": "Toggle connect/disconnect",
+		"click-panel": "Open panel",
+		"relay-click-connects": "Connect immediately when picking a relay",
+		"confirm-disconnect-lockdown": "Confirm disconnect when lockdown is on",
+		"expiry-warning-days": "Account expiry warning (days)",
+		"favorite-countries": "Favorite countries (comma-separated codes, e.g. se,de,nl)"
+	}
+}

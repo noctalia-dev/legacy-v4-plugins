@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Only show online peers in the panel",
     "hide-mullvad-exit-nodes": "Hide Mullvad Exit Nodes",
     "hide-mullvad-exit-nodes-desc": "Hide Mullvad VPN exit nodes from the peer list",
+    "show-search-bar": "Show Search Bar",
+    "show-search-bar-desc": "Display a search field above the panel node list",
     "terminal": "Terminal Configuration",
     "terminal-command": "Terminal Command",
     "ssh-username": "SSH Username",
@@ -72,7 +74,9 @@
       "message": "Please set a terminal command in plugin settings"
     },
     "login-browser-opened": "Authentication page opened in browser",
-    "login-failed": "Login failed"
+    "login-failed": "Login failed",
+    "account-switched": "Switched Tailscale account",
+    "account-switch-failed": "Failed to switch Tailscale account"
   },
   "panel": {
     "title": "Tailscale Network",
@@ -80,6 +84,8 @@
     "not-connected": "Not connected",
     "not-authenticated": "Not authenticated",
     "no-peers": "No connected peers",
+    "search-placeholder": "Search nodes...",
+    "no-search-results": "No nodes match your search",
     "admin-console": "Admin Console",
     "terminal-warning": {
       "title": "Terminal Not Configured",

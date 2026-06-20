@@ -1,0 +1,40 @@
+{
+  "panel": {
+    "emptyTitle": "VPN не найден",
+    "emptyDescription": "Используйте Менеджер Подключений для добавления VPN"
+  },
+  "toast": {
+    "connectedTo": "Подключиться к {name}",
+    "disconnectedFrom": "Отключиться от {name}",
+    "connectionError": "Ошибка подключения к {name}",
+    "disconnectionError": "Ошибка отключения от {name}",
+    "vpnRemoved": "VPN \"{name}\" удалён",
+    "vpnRemoveError": "Ошибка удаления VPN \"{name}\""
+  },
+  "settings": {
+    "pluginSettings": "Настройка плагина",
+    "connectedColor": "Цвет активного подключения",
+    "connectedColorDescription": "Выберите цвет значка и текста при активном подключении",
+    "disconnectedColor": "Цвет отсутствия подключения",
+    "disconnectedColorDescription": "Выберите цвет значка и текста при отсутствии подключения",
+    "vpnConnections": "VPN-соединения",
+    "noVpnConnections": "VPN-подключения не настроены.",
+    "addVpn": "Добавить VPN",
+    "addWireguard": "Добавить WireGuard",
+    "disableToastNotifications": "Отключить уведомления",
+    "disableToastNotificationsDescription": "Не показывать уведомления о статусе VPN-соединения"
+  },
+  "common": {
+    "vpn": "VPN",
+    "refresh": "Обновить",
+    "connected": "Подключено",
+    "disconnected": "Отключено",
+    "connect": "Подключить",
+    "disconnect": "Отключить",
+    "close": "Закрыть",
+    "settings": "Настройки",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "cancel": "Отмена"
+  }
+}

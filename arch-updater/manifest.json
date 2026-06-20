@@ -1,7 +1,7 @@
 {
   "id": "arch-updater",
   "name": "Arch Updater",
-  "version": "2.1.1",
+  "version": "2.1.10",
   "minNoctaliaVersion": "3.6.0",
   "author": "Ast",
   "license": "MIT",
@@ -25,6 +25,7 @@
       "systemCmd": "checkupdates 2>/dev/null",
       "aurCmd": "paru -Qua 2>/dev/null",
       "updateCmd": "ghostty -e bash -c 'echo \"Updating System...\";paru; flatpak update; read -n 1 -p \"Press any key to exit...\"'",
+      "aurHomepageCmd": "LC_ALL=C paru -Si {id} 2>/dev/null | awk '/^URL/ {print $3}'",
       "flatpak": true,
       "noctalia": true,
       "toast": true,
@@ -41,6 +42,9 @@
       "boldVer": true,
       "tooltip": true,
       "closeButton": true,
+      "closeOnSettings": false,
+      "panelTooltip": true,
+      "panelContext": true,
       "boldVerPanel": true,
       "boldVerDesktop": true,
       "hoverTip": true

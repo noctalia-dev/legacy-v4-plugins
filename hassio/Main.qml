@@ -175,8 +175,11 @@ QtObject {
                 domain: state.entity_id.split(".")[0],
                 brightness: state.attributes.brightness ?? -1,
                 color_temp: state.attributes.color_temp_kelvin ? Math.round(1000000 / state.attributes.color_temp_kelvin) : (state.attributes.color_temp ?? -1),
+                hue: state.attributes.hs_color ? state.attributes.hs_color[0] : 0,
+                current_color: state.attributes.rgb_color ? Qt.rgba(state.attributes.rgb_color[0]/255, state.attributes.rgb_color[1]/255, state.attributes.rgb_color[2]/255, 1).toString() : "transparent",
                 supports_brightness: _supportsColorMode(state.attributes.supported_color_modes, ["brightness", "color_temp", "hs", "xy", "rgb", "rgbw", "rgbww"]),
-                supports_color_temp: _supportsColorMode(state.attributes.supported_color_modes, ["color_temp"])
+                supports_color_temp: _supportsColorMode(state.attributes.supported_color_modes, ["color_temp"]),
+                supports_rgb: _supportsColorMode(state.attributes.supported_color_modes, ["hs", "xy", "rgb", "rgbw", "rgbww"])
             });
             root._entityIndex[state.entity_id] = idx;
         }
@@ -198,6 +201,8 @@ QtObject {
         root.entities.setProperty(i, "unit", newState.attributes.unit_of_measurement ?? "");
         root.entities.setProperty(i, "brightness", newState.attributes.brightness ?? -1);
         root.entities.setProperty(i, "color_temp", newState.attributes.color_temp_kelvin ? Math.round(1000000 / newState.attributes.color_temp_kelvin) : (newState.attributes.color_temp ?? -1));
+        root.entities.setProperty(i, "hue", newState.attributes.hs_color ? newState.attributes.hs_color[0] : 0);
+        root.entities.setProperty(i, "current_color", newState.attributes.rgb_color ? Qt.rgba(newState.attributes.rgb_color[0]/255, newState.attributes.rgb_color[1]/255, newState.attributes.rgb_color[2]/255, 1).toString() : "transparent");
         root.entityUpdated(entity_id);
     }
 
@@ -276,6 +281,38 @@ QtObject {
             // Convert mireds to Kelvin: K = 1,000,000 / mireds
             serviceData.color_temp_kelvin = Math.round(1000000 / color_temp);
         }
+
+        _socket.sendTextMessage(JSON.stringify({
+            id: id,
+            type: "call_service",
+            domain: "light",
+            service: "turn_on",
+            service_data: serviceData
+        }));
+    }
+
+    function callLightRgbService(entity_id, r, g, b) {
+        const id = _nextId();
+        const serviceData = {
+            entity_id: entity_id,
+            rgb_color: [r, g, b]
+        };
+
+        _socket.sendTextMessage(JSON.stringify({
+            id: id,
+            type: "call_service",
+            domain: "light",
+            service: "turn_on",
+            service_data: serviceData
+        }));
+    }
+
+    function callLightHsService(entity_id, h, s) {
+        const id = _nextId();
+        const serviceData = {
+            entity_id: entity_id,
+            hs_color: [h, s]
+        };
 
         _socket.sendTextMessage(JSON.stringify({
             id: id,

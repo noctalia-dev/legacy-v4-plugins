@@ -1,16 +1,30 @@
 {
+  "menu": {
+    "settings": "Impostazioni widget"
+  },
   "settings": {
-    "current_value": "Zgjodhur: {value} ms",
-    "default_network_description": "Netzwerkstandard für die Ausführung von Images",
-    "default_network_label": "Netzstandard",
-    "general": "Ġeneralo",
-    "refresh_interval_description": "Sa unsang kasubsub ang plugin nagsusi sa mga kausaban sa kahimtang sa sudlanan",
-    "refresh_interval_label": "Interval rifreskoje",
-    "title": "Mga Setting ng Tagapamahala ng Lalagyan"
+    "active_color_description": "Colore dell'indicatore di stato quando attivo (in esecuzione)",
+    "active_color_label": "Colore indicatore attivo",
+    "current_value": "Selezionato: {value} ms",
+    "default_network_description": "Rete predefinita da utilizzare durante l'esecuzione delle immagini",
+    "default_network_label": "Rete predefinita",
+    "general": "Generale",
+    "icon_color_description": "Modifica il colore dell'icona del widget della barra",
+    "icon_color_label": "Colore icona",
+    "inactive_color_description": "Colore dell'indicatore di stato quando inattivo (arrestato)",
+    "inactive_color_label": "Colore indicatore inattivo",
+    "refresh_interval_description": "Frequenza con cui il plugin controlla lo stato dei container",
+    "refresh_interval_label": "Intervallo di aggiornamento",
+    "status_state_always": "Mostra sempre",
+    "status_state_description": "Scegli come visualizzare il punto indicatore di stato",
+    "status_state_hidden": "Nascondi completamente",
+    "status_state_label": "Stato dell'indicatore",
+    "status_state_running_only": "Mostra se in esecuzione",
+    "title": "Impostazioni Container Manager"
   },
   "tooltip": {
-    "docker_not_available": "Docker ekki tiltækt",
-    "image_already_running": "Imaj ki deja ap kouri nan yon veso",
-    "running_containers": "Kontenjerët aktivë: %1"
+    "docker_not_available": "Docker non disponibile",
+    "image_already_running": "L'immagine è già in esecuzione in un container",
+    "running_containers": "Container in esecuzione: %1"
   }
 }

@@ -1,0 +1,46 @@
+{
+  "panel": {
+    "title": "Bağlı Cihazlar",
+    "signal": {
+      "very-weak": "Çok Zayıf",
+      "weak": "Zayıf",
+      "fair": "İdare Eder",
+      "good": "İyi",
+      "excellent": "İnanılmaz",
+      "unknown": "Bilinmiyor"
+    },
+    "card": {
+      "battery": "Batarya",
+      "network": "İnternet",
+      "signal-strength": "Sinyal Gücü",
+      "notifications": "Bildirimler"
+    },
+    "other-devices": "Diğer Cihazlar",
+    "send-file-picker": "Cihaza gönderilecek bir dosya seçin",
+    "send-file": "Dosya Gönder",
+    "browse-device": "Cihaz Dosyalarını Tara",
+    "find-device": "Cihazımı Bul",
+    "pair": "Cihaz ile Eşleştir",
+    "unpair": "Eşleşmeyi Kaldır",
+    "valent-error": {
+      "no-devices": "Cihaz bulunamadı. Telefonunuzun aynı ağda olduğundan ve KDE Connect'in açık olduğundan emin olun.",
+      "unavailable-title": "Valent çalışmıyor",
+      "unavailable-desc": "Valent uygulamasının cihazınızda yüklü olduğundan ve çalıştığından emin olun.",
+      "device-unavailable": "Cihaz şu anda Kullanılamıyor"
+    },
+    "refresh": "Yenile"
+  },
+  "bar": {
+    "tooltip": "Bağlı Cihazlar"
+  },
+  "control_center": {
+    "state-label": "Durum",
+    "state": {
+      "connected": "Bağlandı",
+      "disconnected": "Bağlantı kesildi",
+      "unavailable": "Kullanılamıyor",
+      "no-device": "Cihaz yok",
+      "not-paired": "Eşlenmedi"
+    }
+  }
+}

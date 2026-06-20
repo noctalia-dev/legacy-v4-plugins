@@ -1,0 +1,52 @@
+{
+  "menu": {
+    "settings": "Cài đặt tiện ích"
+  },
+  "panel": {
+    "auth-error": "Vui lòng xác thực để sử dụng plugin này: {bin} auth login",
+    "issues": "Vấn đề",
+    "issues-count": "Vấn đề ({count})",
+    "mr": "Yêu cầu hợp nhất",
+    "mr-count": "Yêu cầu hợp nhất ({count})",
+    "open-settings": "Mở cài đặt plugin",
+    "pr": "Pull Requests",
+    "pr-count": "Pull Requests ({count})",
+    "bin-not-installed": "{bin} chưa được cài đặt. Vui lòng cài đặt để sử dụng plugin này.",
+    "refresh": "Làm mới",
+    "no-scope": "Đặt một Nhóm hoặc Kho lưu trữ trong Cài đặt để xem các mục được giao cho bạn.",
+    "no-prs": "Không có pull request nào đang mở",
+    "no-mrs": "Không có merge request nào đang mở",
+    "no-issues": "Không có vấn đề nào đang mở",
+    "no-bio": "Không có tiểu sử",
+    "loading": "Đang tải…",
+    "title": "Git Companion"
+  },
+  "settings": {
+    "platform": {
+      "desc": "Chọn nền tảng git của bạn (Gitlab hoặc Github).",
+      "label": "Nền tảng"
+    },
+    "refreshInterval": {
+      "desc": "Tần suất làm mới dữ liệu, tính bằng giây.",
+      "label": "Khoảng thời gian làm mới (s)"
+    },
+    "repo": {
+      "label": "Kho lưu trữ",
+      "desc": "Giới hạn trong một kho lưu trữ cụ thể (ví dụ owner/repo). Để trống để sử dụng Nhóm."
+    },
+    "group": {
+      "label": "Nhóm",
+      "desc": "Slug nhóm GitLab. Ưu tiên hơn Kho lưu trữ khi được đặt."
+    },
+    "org": {
+      "label": "Tổ chức",
+      "desc": "Tổ chức GitHub. Để trống để tìm kiếm toàn cầu trên tất cả kho lưu trữ của bạn."
+    }
+  },
+  "widget": {
+    "tooltip": "{issues} Vấn đề - {requestCount} {requestLabel}"
+  },
+  "desktop": {
+    "text": "{issues} Vấn đề - {requestCount} {requestLabel}"
+  }
+}

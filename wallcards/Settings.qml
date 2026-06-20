@@ -25,7 +25,6 @@ ColumnLayout {
   property string editSelectedFilter: pluginApi?.pluginSettings?.selected_filter || pluginApi?.manifest?.metadata?.defaultSettings?.selected_filter
   property real editShearFactor: pluginApi?.pluginSettings?.shear_factor ?? pluginApi?.manifest?.metadata?.defaultSettings?.shear_factor
   property int editTopBarHeight: pluginApi?.pluginSettings?.top_bar_height ?? pluginApi?.manifest?.metadata?.defaultSettings?.top_bar_height
-  property string editWallpaperDir: pluginApi?.pluginSettings?.wallpaper_directory || root.pluginApi?.Settings.data.wallpaper.directory
   property var pluginApi: null
 
   function saveSettings() {
@@ -55,7 +54,6 @@ ColumnLayout {
     pluginApi.pluginSettings.hide_help = root.editHideHelp;
     pluginApi.pluginSettings.hide_top_bar = root.editHideTopBar;
     pluginApi.pluginSettings.animate_window = root.editAnimateWindow;
-    pluginApi.pluginSettings.directory = root.editWallpaperDir;
 
     pluginApi.saveSettings();
     Logger.i("Wallcards", "Settings saved");
@@ -73,22 +71,6 @@ ColumnLayout {
     model: Color.colorKeyModel
 
     onSelected: key => root.editIconColor = key
-  }
-  NDivider {
-    Layout.fillWidth: true
-  }
-
-  // ── Wallpaper Directory ──
-  NTextInputButton {
-    buttonIcon: "folder-open"
-    buttonTooltip: root.pluginApi?.tr("settings.wallpaper-directory.tooltip")
-    description: root.pluginApi?.tr("settings.wallpaper-directory.description")
-    label: root.pluginApi?.tr("settings.wallpaper-directory.label")
-    placeholderText: Quickshell.env("HOME") + "/Pictures/Wallpapers"
-    text: root.editWallpaperDir
-
-    onButtonClicked: folderPicker.openFilePicker()
-    onInputEditingFinished: root.editWallpaperDir = text
   }
   NDivider {
     Layout.fillWidth: true
@@ -374,20 +356,5 @@ ColumnLayout {
   ColumnLayout {
     Layout.fillWidth: true
     spacing: Style.marginXXS
-  }
-
-  // ── Utils ──
-  NFilePicker {
-    id: folderPicker
-
-    initialPath: root.editWallpaperDir || Quickshell.env("HOME") + "/Pictures/Wallpapers"
-    selectionMode: "folders"
-    title: root.pluginApi?.tr("settings.folder-picker-title")
-
-    onAccepted: paths => {
-      if (paths.length > 0) {
-        root.editWallpaperDir = paths[0];
-      }
-    }
   }
 }

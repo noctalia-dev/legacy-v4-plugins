@@ -17,9 +17,28 @@
       "lastUpdated": "2026-02-04T23:08:01-07:00"
     },
     {
+      "id": "agent-session-status",
+      "name": "Agent Session Status",
+      "version": "1.0.0",
+      "official": false,
+      "author": "nzlov",
+      "description": "Runs a local MCP HTTP service for agents to report session status and shows active sessions in the bar.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.6.6",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "Development",
+        "Indicator",
+        "AI"
+      ],
+      "lastUpdated": "2026-05-11T13:17:35+08:00"
+    },
+    {
       "id": "air-quality",
       "name": "Air Quality",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "official": false,
       "author": "adriamartin91",
       "description": "Displays real-time air quality data with EPA color coding. Supports Open-Meteo and AQICN data sources. Shows AQI index and pollutant breakdown.",
@@ -33,12 +52,12 @@
         "System",
         "Utility"
       ],
-      "lastUpdated": "2026-04-13T17:44:48+02:00"
+      "lastUpdated": "2026-05-19T04:42:13+03:00"
     },
     {
       "id": "arch-updater",
       "name": "Arch Updater",
-      "version": "2.1.1",
+      "version": "2.1.10",
       "official": false,
       "author": "Ast",
       "description": "A plugin to manage updates on Arch",
@@ -53,7 +72,7 @@
         "System",
         "Utility"
       ],
-      "lastUpdated": "2026-05-01T20:26:57+01:00"
+      "lastUpdated": "2026-05-14T12:51:01+03:00"
     },
     {
       "id": "assistant-panel",
@@ -106,9 +125,45 @@
       "lastUpdated": "2026-04-25T13:10:34+02:00"
     },
     {
+      "id": "battery-and-power-management",
+      "name": "Battery & Power Management Plugin",
+      "version": "1.1.0",
+      "official": false,
+      "author": "Piero-93",
+      "description": "A lightweight, efficient battery status bar widget and interactive control popup. This plugin displays real-time battery diagnostics (including dynamic power draw in Watts) and provides desktop controls to switch system power profiles or adjust hardware battery charge thresholds safely without needing root privileges.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "GPLv3",
+      "tags": [
+        "Bar",
+        "System",
+        "Indicator",
+        "Utility"
+      ],
+      "lastUpdated": "2026-06-13T21:56:57+02:00"
+    },
+    {
+      "id": "battery-monitor-plus",
+      "name": "Battery Monitor Plus",
+      "version": "1.0.0",
+      "official": false,
+      "author": "krteke",
+      "description": "Extended battery monitor with current power draw, remaining time, battery health, and current power profile.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.6.6",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "Indicator",
+        "System"
+      ],
+      "lastUpdated": "2026-05-09T09:04:16+08:00"
+    },
+    {
       "id": "battery-threshold",
       "name": "Battery Threshold Control",
-      "version": "1.2.3",
+      "version": "1.2.5",
       "official": false,
       "author": "Wilfred Mallawa",
       "description": "Set the battery threshold for laptop batteries to extend battery lifespan",
@@ -120,7 +175,7 @@
         "Panel",
         "System"
       ],
-      "lastUpdated": "2026-04-25T13:16:18+02:00"
+      "lastUpdated": "2026-06-12T22:50:59+02:00"
     },
     {
       "id": "calendar-widget",
@@ -243,7 +298,7 @@
     {
       "id": "coin-flip",
       "name": "Coin Flipper",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "official": false,
       "author": "DanisDeveloper",
       "description": "Simple bar widget with notification about result",
@@ -252,7 +307,7 @@
       "tags": [
         "Bar"
       ],
-      "lastUpdated": "2026-04-13T17:37:28+02:00"
+      "lastUpdated": "2026-06-12T22:45:13+02:00"
     },
     {
       "id": "color-scheme-creator",
@@ -289,7 +344,7 @@
     {
       "id": "currency-exchange",
       "name": "Currency Exchange",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "official": false,
       "author": "balor",
       "description": "Currency conversion utility via launcher and bar widget",
@@ -300,7 +355,7 @@
         "Launcher",
         "Utility"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-05-04T14:10:38+09:00"
     },
     {
       "id": "custom-commands",
@@ -336,7 +391,7 @@
     {
       "id": "daily-wallpaper",
       "name": "Daily Wallpaper",
-      "version": "1.0.1",
+      "version": "1.0.3",
       "official": false,
       "author": "DigitallyRefined",
       "description": "Fetches a new daily wallpaper from Bing or NASA",
@@ -348,7 +403,7 @@
         "Fun",
         "Utility"
       ],
-      "lastUpdated": "2026-04-21T17:31:45+02:00"
+      "lastUpdated": "2026-06-12T23:02:02+02:00"
     },
     {
       "id": "deskvis",
@@ -364,6 +419,24 @@
         "Audio"
       ],
       "lastUpdated": "2026-03-20T22:21:12+01:00"
+    },
+    {
+      "id": "display-settings",
+      "name": "Display Settings",
+      "version": "1.0.0",
+      "official": false,
+      "author": "fstanis",
+      "description": "View live display settings from wlr-randr and permanent niri KDL output configuration",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "3.6.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "System",
+        "Utility"
+      ],
+      "lastUpdated": "2026-05-09T00:32:20+01:00"
     },
     {
       "id": "dmenu",
@@ -452,7 +525,7 @@
     {
       "id": "giphy-search",
       "name": "Giphy Search",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "official": false,
       "author": "Sergio Mendolia",
       "description": "Search for GIFs on Giphy from the Launcher.",
@@ -464,7 +537,25 @@
         "Utility",
         "Fun"
       ],
-      "lastUpdated": "2026-04-02T23:32:45+02:00"
+      "lastUpdated": "2026-06-12T23:11:05+02:00"
+    },
+    {
+      "id": "git-companion",
+      "name": "Git Companion",
+      "version": "1.0.0",
+      "official": false,
+      "author": "Thomas Philippo",
+      "description": "Monitor your git repositories from the Noctalia bar. See open issues and pull requests at a glance, without leaving your desktop.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.6.6",
+      "license": "MIT",
+      "tags": [
+        "Development",
+        "Bar",
+        "Panel",
+        "Productivity"
+      ],
+      "lastUpdated": "2026-05-08T18:40:34+02:00"
     },
     {
       "id": "github-feed",
@@ -485,9 +576,27 @@
       "lastUpdated": "2026-04-28T17:48:46+02:00"
     },
     {
+      "id": "habitica",
+      "name": "Habitica for Noctalia",
+      "version": "1.0.0",
+      "official": false,
+      "author": "vasqs",
+      "description": "Habitica dashboard and task scorer for Noctalia Shell with official avatar sprite rendering.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "3.7.1",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "Productivity",
+        "Network"
+      ],
+      "lastUpdated": "2026-06-03T18:12:31-03:00"
+    },
+    {
       "id": "hassio",
       "name": "Home Assistant",
-      "version": "1.0.1",
+      "version": "1.1.1",
       "official": false,
       "author": "Pozzoo",
       "description": "Monitor and control Home Assistant entities from the bar. Requires qt6-websockets.",
@@ -499,7 +608,7 @@
         "Panel",
         "Utility"
       ],
-      "lastUpdated": "2026-04-23T15:13:24+02:00"
+      "lastUpdated": "2026-06-12T23:19:35+02:00"
     },
     {
       "id": "hello-world",
@@ -535,15 +644,15 @@
     {
       "id": "hyprland-steam-overlay",
       "name": "Steam Overlay (Hyprland)",
-      "version": "2.1.2",
+      "version": "2.2.0",
       "official": false,
       "author": "blacku",
-      "description": "Steam overlay with automatic window management for Hyprland. Automatically moves all Steam windows (except fullscreen games) to overlay workspace as floating windows. Main 3 windows (Friends, Client, Chat) are positioned in a row. Additional windows are brought to top. If new windows don't appear on top, toggle overlay off/on (Super+S twice). Fully responsive with percentage-based layout. Requires Hyprland window manager.",
+      "description": "[DEPRECATED — not maintained from Hyprland 0.55+] Steam overlay with automatic window management for Hyprland. Due to Hyprland 0.55 deprecating hyprlang in favour of Lua (changing hyprctl dispatch parsing and popup/xdg handling), this plugin is no longer actively maintained. The 2.2.0 release adds a best-effort dual-mode dispatch fix and an optional custom Lua layout, but no further updates are planned. Automatically moves all Steam windows (except fullscreen games) to an overlay workspace; main 3 windows (Friends, Client, Chat) positioned in a row, fully responsive percentage-based layout. Requires Hyprland window manager.",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.1.2",
       "license": "MIT",
       "tags": [],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-05-17T18:16:30+02:00"
     },
     {
       "id": "hyprland-visual-editor",
@@ -649,12 +758,29 @@
       "lastUpdated": "2026-03-29T19:05:12-04:00"
     },
     {
+      "id": "keep-awake-plus",
+      "name": "Keep Awake+",
+      "version": "0.3.0",
+      "official": false,
+      "author": "Noam Stolero",
+      "description": "Duration+scope Keep Awake with persistent last-choice and partial/full inhibit modes.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "3.6.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "System"
+      ],
+      "lastUpdated": "2026-05-11T13:11:48+03:00"
+    },
+    {
       "id": "keybind-cheatsheet",
       "name": "Keybind Cheatsheet",
-      "version": "3.4.0",
+      "version": "3.7.3",
       "official": false,
       "author": "blacku",
-      "description": "Universal keyboard shortcuts keymap that automatically detects and displays keybindings for Hyprland or Niri compositors.",
+      "description": "Universal keyboard shortcuts keymap that automatically detects and displays keybindings for Hyprland, Niri, or MangoWC compositors.",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "3.6.0",
       "license": "MIT",
@@ -662,14 +788,17 @@
         "Bar",
         "Panel",
         "System",
-        "Indicator"
+        "Indicator",
+        "Hyprland",
+        "Niri",
+        "MangoWC"
       ],
-      "lastUpdated": "2026-04-07T22:03:44+02:00"
+      "lastUpdated": "2026-05-25T18:50:01+02:00"
     },
     {
       "id": "khal-agenda-widget",
       "name": "Khal Agenda Info",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "official": false,
       "author": "Simon",
       "description": "Shows khal agenda.",
@@ -680,7 +809,7 @@
         "Desktop",
         "System"
       ],
-      "lastUpdated": "2026-04-14T21:58:06+02:00"
+      "lastUpdated": "2026-06-12T23:29:19+02:00"
     },
     {
       "id": "kubectl-ctx",
@@ -718,9 +847,24 @@
       "lastUpdated": "2026-04-23T21:41:29+02:00"
     },
     {
+      "id": "launcher-pass",
+      "name": "Launcher pass",
+      "version": "1.0.0",
+      "official": false,
+      "author": "Marco Melletti",
+      "description": "Noctalia Launcher gnu pass provider",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.7.7",
+      "license": "MIT",
+      "tags": [
+        "Launcher"
+      ],
+      "lastUpdated": "2026-05-22T12:20:30+02:00"
+    },
+    {
       "id": "linux-wallpaperengine-controller",
       "name": "Linux WallpaperEngine Controller",
-      "version": "1.2.1",
+      "version": "1.3.1",
       "official": false,
       "author": "PaloMiku",
       "description": "Control linux-wallpaperengine from Noctalia with per-screen wallpaper selection.",
@@ -732,7 +876,7 @@
         "Panel",
         "Theming"
       ],
-      "lastUpdated": "2026-04-22T19:54:38+08:00"
+      "lastUpdated": "2026-05-20T19:18:19+08:00"
     },
     {
       "id": "lyrics-fetch",
@@ -753,7 +897,7 @@
     {
       "id": "mangowc-layout-switcher",
       "name": "mango layout switcher",
-      "version": "2.0.1",
+      "version": "3.1.0",
       "official": false,
       "author": "atheeq-rhxn",
       "description": "Switch between different mangowc layouts",
@@ -765,7 +909,7 @@
         "Panel",
         "MangoWC"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-06-01T10:45:53+05:30"
     },
     {
       "id": "mawaqit",
@@ -804,7 +948,7 @@
     {
       "id": "mini-docker",
       "name": "Mini Docker",
-      "version": "2.1.3",
+      "version": "2.2.0",
       "official": false,
       "author": "MannuVilasara",
       "description": "Manage Docker containers, images, volumes & networks",
@@ -816,12 +960,12 @@
         "Panel",
         "Development"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-06-10T21:22:14+05:00"
     },
     {
       "id": "mirror-mirror",
       "name": "Mirror Mirror",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "official": false,
       "author": "Mathew-D",
       "description": "Mirror one monitor to another using wl-mirror.",
@@ -834,15 +978,15 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-04-27T17:12:06-04:00"
+      "lastUpdated": "2026-06-06T11:14:18+02:00"
     },
     {
       "id": "model-usage",
       "name": "Model Usage",
-      "version": "0.2.1",
+      "version": "0.3.1",
       "official": false,
       "author": "cmptr",
-      "description": "Shows AI coding assistant usage stats in the bar with detail panel (Claude Code, Codex, Copilot, OpenRouter, Zen)",
+      "description": "Shows AI coding assistant usage stats in the bar with detail panel (Claude Code, Codex, Copilot, Gemini, OpenRouter, Zen)",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "3.6.0",
       "license": "MIT",
@@ -851,7 +995,7 @@
         "Productivity",
         "AI"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-05-27T21:02:20-05:00"
     },
     {
       "id": "monique",
@@ -942,6 +1086,23 @@
       "lastUpdated": "2026-04-18T21:56:28+02:00"
     },
     {
+      "id": "mullvad",
+      "name": "Mullvad VPN",
+      "version": "0.1.0",
+      "official": false,
+      "author": "OCSPG",
+      "description": "Control Mullvad VPN from the bar: connect/disconnect, pick relays, toggle lockdown mode, multihop and more.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Network",
+        "Panel"
+      ],
+      "lastUpdated": "2026-05-11T12:13:59+02:00"
+    },
+    {
       "id": "music-search",
       "name": "Music Search",
       "version": "1.2.2",
@@ -980,7 +1141,7 @@
     {
       "id": "network-indicator",
       "name": "Network Indicator",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "official": false,
       "author": "tonigineer",
       "description": "A `lively` network traffic indicator.",
@@ -992,12 +1153,12 @@
         "Network",
         "Indicator"
       ],
-      "lastUpdated": "2026-04-27T20:19:40+02:00"
+      "lastUpdated": "2026-05-03T21:18:17+02:00"
     },
     {
       "id": "network-manager-vpn",
       "name": "Network Manager VPN",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "official": false,
       "author": "nZO",
       "description": "Connect to VPN via NetworkManager",
@@ -1009,7 +1170,7 @@
         "Panel",
         "Network"
       ],
-      "lastUpdated": "2026-04-06T22:26:45+02:00"
+      "lastUpdated": "2026-05-14T12:18:29-04:00"
     },
     {
       "id": "news",
@@ -1081,6 +1242,40 @@
       "lastUpdated": "2026-02-05T11:41:54-08:00"
     },
     {
+      "id": "niri-screensaver",
+      "name": "Niri Screensaver",
+      "version": "0.6.1",
+      "official": false,
+      "author": "jfreed-dev",
+      "description": "Idle-aware terminal screensaver for niri, driven by TerminalTextEffects.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.7.0",
+      "license": "GPL-3.0-only",
+      "tags": [
+        "Bar",
+        "Utility",
+        "Niri"
+      ],
+      "lastUpdated": "2026-06-03T19:56:49-04:00"
+    },
+    {
+      "id": "niri-urgent-on-notification",
+      "name": "Set Niri Window to Urgent on Notification",
+      "version": "1.0.0",
+      "official": false,
+      "author": "matt-hb",
+      "description": "Sets windows to urgent when they receive a notification and sets them back to normal when their notifications are cleared (Niri only!)",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "3.6.0",
+      "license": "MIT",
+      "tags": [
+        "System",
+        "Utility",
+        "Niri"
+      ],
+      "lastUpdated": "2026-06-02T22:54:32+02:00"
+    },
+    {
       "id": "niri-workspaces",
       "name": "Niri Workspaces",
       "version": "1.0.0",
@@ -1100,7 +1295,7 @@
     {
       "id": "noctalia-calculator",
       "name": "Calculator",
-      "version": "1.0.0",
+      "version": "1.1.1",
       "official": false,
       "author": "pir0c0pter0",
       "description": "Theme-aware calculator plugin for Noctalia on Niri with bar widget, floating panel and keyboard support",
@@ -1112,7 +1307,7 @@
         "Panel",
         "Utility"
       ],
-      "lastUpdated": "2026-03-23T15:27:58-03:00"
+      "lastUpdated": "2026-06-12T22:39:37+02:00"
     },
     {
       "id": "noctalia-supergfxctl",
@@ -1183,6 +1378,23 @@
       "lastUpdated": "2026-04-10T15:49:56+02:00"
     },
     {
+      "id": "nvibrant",
+      "name": "NVibrant",
+      "version": "1.0.1",
+      "official": false,
+      "author": "NoFilterA1",
+      "description": "Toggle NVIDIA digital vibrance (color saturation) via nvibrant.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "System",
+        "Gaming"
+      ],
+      "lastUpdated": "2026-06-03T21:57:59+02:00"
+    },
+    {
       "id": "nvim-session-provider",
       "name": "Neovim Session Provider",
       "version": "1.0.2",
@@ -1217,6 +1429,22 @@
       "lastUpdated": "2026-04-18T22:24:44+02:00"
     },
     {
+      "id": "obsidian-provider",
+      "name": "Obsidian Provider",
+      "version": "1.0.0",
+      "official": false,
+      "author": "0b10headedcalf",
+      "description": "Switch between Obsidian vaults from the launcher.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.5.0",
+      "license": "MIT",
+      "tags": [
+        "Launcher",
+        "Productivity"
+      ],
+      "lastUpdated": "2026-05-01T13:04:05-07:00"
+    },
+    {
       "id": "openhue",
       "name": "Openhue widget",
       "version": "1.0.3",
@@ -1235,7 +1463,7 @@
     {
       "id": "osk-toggle",
       "name": "OSK Toggle",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "official": false,
       "author": "blackteaextract",
       "description": "Toggle an on-screen keyboard (Squeekboard or wvkbd) with live availability detection, hover icons, and configurable settings. Supersedes squeekboard-toggle.",
@@ -1247,7 +1475,7 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-04-27T21:47:50Z"
+      "lastUpdated": "2026-05-19T19:12:21+03:00"
     },
     {
       "id": "parallax-wallpaper",
@@ -1335,7 +1563,7 @@
     {
       "id": "privacy-indicator",
       "name": "Privacy Indicator",
-      "version": "1.2.12",
+      "version": "1.2.13",
       "official": true,
       "author": "Noctalia Team",
       "description": "A privacy indicator widget that shows when microphone, camera or screen sharing is active.",
@@ -1347,7 +1575,24 @@
         "Privacy",
         "Indicator"
       ],
-      "lastUpdated": "2026-04-21T01:35:58+02:00"
+      "lastUpdated": "2026-06-12T22:31:50+02:00"
+    },
+    {
+      "id": "protonvpn",
+      "name": "ProtonVPN Status",
+      "version": "1.0.0",
+      "official": false,
+      "author": "blessonmathewsam",
+      "description": "Shows ProtonVPN connection status in the bar with a panel for connect/disconnect, kill switch toggle, and quick connect options. Requires the ProtonVPN CLI (protonvpn-cli) installed and authenticated.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "3.6.0",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Network",
+        "Privacy"
+      ],
+      "lastUpdated": "2026-05-26T12:18:43-04:00"
     },
     {
       "id": "ramadan-iftar",
@@ -1447,10 +1692,10 @@
     {
       "id": "screen-toolkit",
       "name": "Screen Toolkit",
-      "version": "1.1.4",
+      "version": "1.3.3",
       "official": false,
       "author": "ycf-anon",
-      "description": "A set of screen tools: color picker, annotate, record, pin, OCR, QR scanner, palette, measure, and webcam mirror.",
+      "description": "A set of screen tools: color picker, annotate, record, pin, OCR, QR scanner, palette, measure, and webcam mirror (deps: README).",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.5.0",
       "license": "MIT",
@@ -1460,7 +1705,7 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-04-23T15:15:46+02:00"
+      "lastUpdated": "2026-05-27T20:06:01+01:00"
     },
     {
       "id": "screenshot",
@@ -1615,7 +1860,7 @@
     {
       "id": "sticky-notes",
       "name": "Sticky Notes",
-      "version": "0.0.5",
+      "version": "0.0.6",
       "official": false,
       "author": "sapjax",
       "description": "A local quick notes plugin with Markdown support.",
@@ -1627,7 +1872,7 @@
         "Panel",
         "Productivity"
       ],
-      "lastUpdated": "2026-04-18T19:09:12+02:00"
+      "lastUpdated": "2026-05-05T20:30:14+03:00"
     },
     {
       "id": "syncthing-status",
@@ -1666,7 +1911,7 @@
     {
       "id": "tailscale",
       "name": "Tailscale",
-      "version": "1.4.1",
+      "version": "1.5.2",
       "official": false,
       "author": "nineluj",
       "description": "Show Tailscale status in the menu bar and send/receive files via Taildrop.",
@@ -1678,7 +1923,7 @@
         "Network",
         "Panel"
       ],
-      "lastUpdated": "2026-04-26T10:51:56-07:00"
+      "lastUpdated": "2026-06-01T09:39:19+01:00"
     },
     {
       "id": "tamagotchi",
@@ -1696,6 +1941,24 @@
         "Gaming"
       ],
       "lastUpdated": "2026-04-25T15:46:23+03:00"
+    },
+    {
+      "id": "thinkpad-fan",
+      "name": "ThinkPad - Fan & Thermal Control",
+      "version": "1.0.0",
+      "official": false,
+      "author": "Piero-93",
+      "description": "Monitors system temperatures and provides manual overrides for fan speed profiles via sysfs.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.0.0",
+      "license": "GPLv3",
+      "tags": [
+        "Bar",
+        "Indicator",
+        "System",
+        "Utility"
+      ],
+      "lastUpdated": "2026-05-18T14:23:54+02:00"
     },
     {
       "id": "timer",
@@ -1798,7 +2061,7 @@
     {
       "id": "valent-connect",
       "name": "Valent Connect",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "official": false,
       "author": "Suyash",
       "description": "A plugin integrating your mobile devices into a panel using Valent",
@@ -1811,12 +2074,12 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-05-05T20:13:58+03:00"
     },
     {
       "id": "video-wallpaper",
       "name": "Video Wallpaper",
-      "version": "2.0.7",
+      "version": "2.0.9",
       "official": false,
       "author": "spiros132",
       "description": "A plugin that uses a backend renderer to play videos as your wallpaper.",
@@ -1829,7 +2092,7 @@
         "Fun",
         "System"
       ],
-      "lastUpdated": "2026-04-12T12:59:54+02:00"
+      "lastUpdated": "2026-05-08T14:10:27-04:00"
     },
     {
       "id": "vscode-provider",
@@ -1850,7 +2113,7 @@
     {
       "id": "wallcards",
       "name": "Wallcards",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "official": false,
       "author": "tonigineer",
       "description": "A `lively` wallpaper selector.",
@@ -1861,7 +2124,7 @@
         "Desktop",
         "Theming"
       ],
-      "lastUpdated": "2026-04-26T14:33:36+02:00"
+      "lastUpdated": "2026-05-01T23:37:21+02:00"
     },
     {
       "id": "weather-indicator",
@@ -1881,7 +2144,7 @@
     {
       "id": "web-search",
       "name": "Web Search",
-      "version": "1.1.2",
+      "version": "1.1.3",
       "official": false,
       "author": "Rigelyon",
       "description": "Search the Internet from the Launcher.",
@@ -1892,7 +2155,7 @@
         "Launcher",
         "Utility"
       ],
-      "lastUpdated": "2026-04-25T15:30:40+03:00"
+      "lastUpdated": "2026-05-05T20:15:18+03:00"
     },
     {
       "id": "weekly-calendar",
@@ -1945,7 +2208,7 @@
     {
       "id": "zed-provider",
       "name": "Zed Provider",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "official": false,
       "author": "justKevv",
       "description": "A zed provider for opening project easier using zed code editor",
@@ -1956,7 +2219,7 @@
         "Launcher",
         "Developer"
       ],
-      "lastUpdated": "2026-04-08T22:19:02+02:00"
+      "lastUpdated": "2026-05-05T20:15:18+03:00"
     }
   ]
 }

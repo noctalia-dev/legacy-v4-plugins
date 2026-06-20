@@ -1,35 +1,51 @@
 {
   "actions": {
-    "widget-settings": "小组件设置"
+    "widget-settings": "小组件设置",
+    "toggle-panel": "切换监控面板"
+  },
+  "panel": {
+    "title": "网络活动",
+    "close": "关闭",
+    "download": "下载",
+    "upload": "上传"
   },
   "settings": {
+    "layout": {
+      "label": "布局",
+      "desc": "将单元格排列为一行（水平）或 2×2 网格（垂直）。",
+      "horizontal": "水平",
+      "vertical": "垂直"
+    },
+    "slots": {
+      "label": "单元格分配",
+      "desc": "选择每个单元格显示的内容。不可重复。例如，使用空单元格仅显示图标。"
+    },
+    "slot": {
+      "txIcon": "TX 图标",
+      "rxIcon": "RX 图标",
+      "txSpeed": "TX 速度",
+      "rxSpeed": "RX 速度",
+      "none": "空"
+    },
+    "iconType": {
+      "desc": "选择用于 TX/RX 指示器的图标样式。",
+      "label": "图标类型"
+    },
     "byteThresholdActive": {
-      "desc": "设置活动阈值，单位为字节/秒 (B/s)。",
-      "label": "显示活动阈值"
+      "desc": "低于此值（B/s）的流量显示为非活跃。",
+      "label": "活动阈值"
     },
-    "colorRx": {
-      "desc": "设置高于阈值时的下载（RX）图标颜色。",
-      "label": "RX 活跃"
+    "fontSizeModifier": {
+      "desc": "相对于默认值缩放文本大小。",
+      "label": "字体大小"
     },
-    "colorSilent": {
-      "desc": "当流量低于阈值时，设置图标颜色。",
-      "label": "RX/TX 非活跃"
+    "iconSizeModifier": {
+      "desc": "相对于默认值缩放图标大小。",
+      "label": "图标大小"
     },
-    "colorText": {
-      "desc": "设置用于RX和TX值的文本颜色。",
-      "label": "文本"
-    },
-    "colorTx": {
-      "desc": "设置上传（TX）图标颜色，当高于阈值时。",
-      "label": "TX 活跃"
-    },
-    "contentMargin": {
-      "desc": "小组件内容两侧的水平内边距。",
-      "label": "内容边距"
-    },
-    "customFontBold": {
-      "desc": "以粗体显示速度值。",
-      "label": "粗体"
+    "useCustomFont": {
+      "desc": "覆盖速度值的默认字体。",
+      "label": "自定义字体"
     },
     "customFontFamily": {
       "desc": "为速度值选择字体。",
@@ -37,41 +53,49 @@
       "placeholder": "选择字体",
       "searchPlaceholder": "搜索字体…"
     },
+    "customFontBold": {
+      "desc": "以粗体显示速度值。",
+      "label": "粗体"
+    },
     "customFontItalic": {
       "desc": "以斜体显示速度值。",
       "label": "斜体"
-    },
-    "fontSizeModifier": {
-      "desc": "相对于默认值缩放文本大小。",
-      "label": "字体大小调整"
-    },
-    "horizontalLayout": {
-      "desc": "将TX和RX值并排显示，而不是堆叠。",
-      "label": "水平布局"
-    },
-    "iconSizeModifier": {
-      "desc": "相对于默认值缩放图标大小。",
-      "label": "图标大小调整"
-    },
-    "iconType": {
-      "desc": "选择用于 TX/RX 指示器的图标样式。",
-      "label": "图标类型"
-    },
-    "showNumbers": {
-      "desc": "以数字形式显示当前的 RX/TX 速度。",
-      "label": "显示数值"
-    },
-    "spacingInbetween": {
-      "desc": "调整RX/TX元素之间的间距。",
-      "label": "垂直间距"
     },
     "useCustomColors": {
       "desc": "启用自定义颜色，而非主题默认颜色。",
       "label": "自定义颜色"
     },
-    "useCustomFont": {
-      "desc": "覆盖速度值的默认字体。",
-      "label": "自定义字体"
+    "colorTx": {
+      "desc": "超过阈值时的上传（TX）图标颜色。",
+      "label": "TX 活跃"
+    },
+    "colorRx": {
+      "desc": "超过阈值时的下载（RX）图标颜色。",
+      "label": "RX 活跃"
+    },
+    "colorSilent": {
+      "desc": "当流量低于阈值时的图标颜色。",
+      "label": "非活跃"
+    },
+    "colorText": {
+      "desc": "速度值的文本颜色。",
+      "label": "文本"
+    },
+    "paddingLeft": {
+      "label": "左内边距",
+      "desc": "内容左侧的内边距。"
+    },
+    "paddingRight": {
+      "label": "右内边距",
+      "desc": "内容右侧的内边距。"
+    },
+    "columnSpacing": {
+      "label": "列间距",
+      "desc": "网格布局中列之间的间距。"
+    },
+    "rowSpacing": {
+      "label": "行间距",
+      "desc": "网格布局中行之间的间距（在水平布局中无效）。"
     }
   }
 }

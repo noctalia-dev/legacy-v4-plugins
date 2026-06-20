@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Buscar entradas de contraseñas de gnu pass"
+  },
+  "result": {
+    "goBack": "Volver",
+    "folder": "Carpeta",
+    "password": "Contraseña",
+    "passwordEntry": "Entrada de contraseña",
+    "loading": "Cargando entradas de contraseñas..."
+  },
+  "action": {
+    "copyPassword": "Copiar contraseña",
+    "copyPasswordDesc": "Copiar contraseña al portapapeles",
+    "typePassword": "Escribir contraseña",
+    "typePasswordDesc": "Escribir contraseña con wtype",
+    "copyField": "Copiar {key}",
+    "typeField": "Escribir {key}",
+    "copyOtp": "Copiar OTP",
+    "typeOtp": "Escribir OTP",
+    "otpDesc": "Copiar/escribir código OTP actual"
+  },
+  "settings": {
+    "tab": {
+      "general": "General",
+      "advanced": "Avanzado"
+    },
+    "storePath": {
+      "label": "Ruta del almacén de contraseñas",
+      "desc": "Ruta personalizada al almacén de contraseñas (por defecto: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Retraso al cerrar el lanzador",
+      "desc": "Retraso antes de comenzar a escribir en milisegundos (por defecto: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Retraso de pulsación de wtype",
+      "desc": "Retraso entre pulsaciones en ms para wtype (por defecto: 12)"
+    },
+    "clipTimeout": {
+      "label": "Tiempo de espera del portapapeles",
+      "desc": "Segundos antes de borrar el portapapeles (predeterminado PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Copiado al portapapeles"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "battery-and-power-management",
+  "name": "Battery & Power Management Plugin",
+  "version": "1.1.0",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "Piero-93",
+  "license": "GPLv3",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A lightweight, efficient battery status bar widget and interactive control popup. This plugin displays real-time battery diagnostics (including dynamic power draw in Watts) and provides desktop controls to switch system power profiles or adjust hardware battery charge thresholds safely without needing root privileges.",
+  "tags": [
+    "Bar",
+    "System",
+    "Indicator",
+    "Utility"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "panel": "BatteryPopup.qml",
+    "settings": "SettingsView.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "colorizeByProfile": true,
+      "showProfile": true,
+      "showBalancedIcon": false,
+      "colorPowerSaver": null,
+      "colorPerformance": null
+    }
+  }
+}

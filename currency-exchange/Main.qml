@@ -93,7 +93,7 @@ Item {
   Process {
     id: apiProcess
 
-    command: ["curl", "-sf", "--connect-timeout", "5", "--max-time", "10", "https://api.frankfurter.app/latest?from=USD"]
+    command: ["curl", "-sf", "--connect-timeout", "5", "--max-time", "10", "-L", "https://api.frankfurter.app/latest?from=USD"]
     running: false
 
     stdout: StdioCollector {

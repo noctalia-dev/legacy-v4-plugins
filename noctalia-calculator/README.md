@@ -39,6 +39,12 @@ A theme-aware calculator plugin for Noctalia on Niri, with a bar widget, floatin
 - `Settings.qml`: plugin settings UI
 - `i18n/`: translations (en, pt, es, fr, de, it, ru, zh, ja, ko)
 
+## Copying the result
+
+When the panel is open and a value is showing, a small copy icon appears to the right of the result. Click it to copy the value to the system clipboard. A toast confirms the copy.
+
+Requires `wl-copy` (from `wl-clipboard`) on `PATH`. The icon is hidden in the resting `0` state and while an error is displayed.
+
 ## Author
 
 Pir0c0pter0

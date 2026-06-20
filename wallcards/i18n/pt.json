@@ -16,12 +16,6 @@
       "label": "Cor do ícone",
       "description": "Cor do ícone do widget da barra"
     },
-    "wallpaper-directory": {
-      "label": "Pasta de papéis de parede",
-      "description": "Pasta que contém seus papéis de parede",
-      "tooltip": "Selecionar pasta de papéis de parede",
-      "placeholder": "~/Imagens/PapeisDeParede"
-    },
     "live-preview": {
       "label": "Pré-visualização ao vivo",
       "description": "Aplicar papel de parede enquanto navega pelos cartões"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Altura da barra superior",
       "description": "Altura da barra de ferramentas"
-    },
-    "folder-picker-title": "Selecionar pasta de papéis de parede"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

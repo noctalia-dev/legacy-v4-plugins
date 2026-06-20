@@ -1,7 +1,7 @@
 {
   "id": "valent-connect",
   "name": "Valent Connect",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "minNoctaliaVersion": "4.6.7",
   "author": "Suyash",
   "license": "GPLv2",

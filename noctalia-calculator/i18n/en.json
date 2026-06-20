@@ -9,7 +9,11 @@
   },
   "panel": {
     "title": "Calculator",
-    "subtitle": "Quick math in the bar"
+    "subtitle": "Quick math in the bar",
+    "copy-result-tooltip": "Copy result"
+  },
+  "toast": {
+    "copied": "Copied: {value}"
   },
   "settings": {
     "about": "About",

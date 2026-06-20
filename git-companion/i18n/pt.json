@@ -1,0 +1,52 @@
+{
+  "menu": {
+    "settings": "Configurações do widget"
+  },
+  "panel": {
+    "auth-error": "Autentique-se para usar este plugin: {bin} auth login",
+    "issues": "Issues",
+    "issues-count": "Issues ({count})",
+    "mr": "Merge Requests",
+    "mr-count": "Merge Requests ({count})",
+    "open-settings": "Abrir configurações do plugin",
+    "pr": "Pull Requests",
+    "pr-count": "Pull Requests ({count})",
+    "bin-not-installed": "{bin} não está instalado. Por favor, instale-o para usar este plugin.",
+    "refresh": "Atualizar",
+    "no-scope": "Defina um Grupo ou Repositório nas Configurações para visualizar itens atribuídos a você.",
+    "no-prs": "Nenhum pull request aberto",
+    "no-mrs": "Nenhum merge request aberto",
+    "no-issues": "Nenhuma issue aberta",
+    "no-bio": "Sem biografia",
+    "loading": "Carregando…",
+    "title": "Git Companion"
+  },
+  "settings": {
+    "platform": {
+      "desc": "Escolha sua plataforma git (Gitlab ou Github).",
+      "label": "Plataforma"
+    },
+    "refreshInterval": {
+      "desc": "Com que frequência atualizar os dados, em segundos.",
+      "label": "Intervalo de atualização (s)"
+    },
+    "repo": {
+      "label": "Repositório",
+      "desc": "Restringir a um repositório específico (ex. owner/repo). Deixe em branco para usar o Grupo."
+    },
+    "group": {
+      "label": "Grupo",
+      "desc": "Slug do grupo do GitLab. Tem prioridade sobre o Repositório quando definido."
+    },
+    "org": {
+      "label": "Organização",
+      "desc": "Organização do GitHub. Deixe em branco para pesquisar globalmente em todos os seus repositórios."
+    }
+  },
+  "widget": {
+    "tooltip": "{issues} Issues - {requestCount} {requestLabel}"
+  },
+  "desktop": {
+    "text": "{issues} Issues - {requestCount} {requestLabel}"
+  }
+}

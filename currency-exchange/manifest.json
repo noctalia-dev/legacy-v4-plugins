@@ -1,7 +1,7 @@
 {
   "id": "currency-exchange",
   "name": "Currency Exchange",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Currency conversion utility via launcher and bar widget",
   "tags": [
     "Launcher",

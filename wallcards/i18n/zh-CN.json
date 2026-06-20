@@ -16,12 +16,6 @@
       "label": "图标颜色",
       "description": "栏小部件图标的颜色"
     },
-    "wallpaper-directory": {
-      "label": "壁纸目录",
-      "description": "包含壁纸的文件夹",
-      "tooltip": "选择壁纸文件夹",
-      "placeholder": "~/图片/壁纸"
-    },
     "live-preview": {
       "label": "实时预览",
       "description": "浏览卡片时应用壁纸"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "顶栏高度",
       "description": "工具栏的高度"
-    },
-    "folder-picker-title": "选择壁纸文件夹"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

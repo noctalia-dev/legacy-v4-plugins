@@ -1,0 +1,22 @@
+{
+    "id": "thinkpad-fan",
+    "name": "ThinkPad - Fan & Thermal Control",
+    "version": "1.0.0",
+    "minNoctaliaVersion": "4.0.0",
+    "author": "Piero-93",
+    "license": "GPLv3",
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+    "description": "Monitors system temperatures and provides manual overrides for fan speed profiles via sysfs.",
+    "tags": ["Bar", "Indicator", "System", "Utility"],
+    "entryPoints": {
+        "barWidget": "BarWidget.qml",
+        "panel": "FanPopup.qml",
+        "settings": "SettingsView.qml"
+    },
+    "metadata": {
+        "defaultSettings": {
+        "colorizeByStatus": true,
+        "allowPopupOpening": true
+        }
+    }
+}

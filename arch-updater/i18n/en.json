@@ -10,8 +10,10 @@
     },
     "panel": {
         "context": {
+            "copy": "Copy",
             "open": "Open",
-            "copy": "Copy"
+            "repo": "Repository",
+            "homepage": "Homepage"
         },
         "title": "Arch Updater",
         "name": "Name",
@@ -45,6 +47,10 @@
             "updateCmd": {
                 "text": "Update Command",
                 "desc": "Command to update system"
+            },
+            "aurHomepageCmd": {
+                "text": "AUR Homepage Command",
+                "desc": "Command to get homepage for AUR packages (use {id} as package name placeholder)"
             },
             "flatpak": {
                 "text": "Flatpak",
@@ -109,9 +115,21 @@
                 "text": "Bold New Version",
                 "desc": "Make the new version column bold"
             },
+            "tooltip": {
+                "text": "Tooltip",
+                "desc": "Show a tooltip when hovering over text in the table"
+            },
+            "context": {
+                "text": "Context Menu",
+                "desc": "Show context menu when right clicking in the table"
+            },
             "closeButton": {
                 "text": "Close Button",
                 "desc": "Show close button in the panel"
+            },
+            "closeOnSettings": {
+                "text": "Close On Opening Settings",
+                "desc": "Closes the panel when pressing the settings button<br>(May fix issues with on-screen keyboards)"
             }
         },
         "desktop": {

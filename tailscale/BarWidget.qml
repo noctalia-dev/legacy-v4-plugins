@@ -18,6 +18,8 @@ Item {
   readonly property bool pillDirection: BarService.getPillDirection(root)
 
   readonly property var mainInstance: pluginApi?.mainInstance
+  readonly property bool tailscaleConnected: mainInstance?.tailscaleRunning ?? false
+  readonly property bool tailscaleConnecting: (mainInstance?.isRefreshing ?? false) && !(mainInstance?.tailscaleRunning ?? false)
 
   readonly property bool barIsVertical: Settings.data.bar.position === "left" || Settings.data.bar.position === "right"
 
@@ -50,12 +52,10 @@ Item {
       TailscaleIcon {
         pointSize: Style.fontSizeL
         applyUiScale: false
-        crossed: !(mainInstance?.tailscaleRunning ?? false)
-        color: {
-          if (mainInstance?.tailscaleRunning ?? false) return Color.mOnPrimary
-          return mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
-        }
-        opacity: 1.0
+        connected: root.tailscaleConnected
+        connecting: root.tailscaleConnecting
+        hovered: mouseArea.containsMouse
+        litColor: Color.mPrimary
       }
 
       // Show details when not in compact mode and there's something to show

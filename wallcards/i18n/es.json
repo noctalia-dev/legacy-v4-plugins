@@ -16,12 +16,6 @@
       "label": "Color del icono",
       "description": "Color del icono del widget de barra"
     },
-    "wallpaper-directory": {
-      "label": "Directorio de fondos",
-      "description": "Carpeta que contiene tus fondos de pantalla",
-      "tooltip": "Seleccionar carpeta de fondos",
-      "placeholder": "~/Imágenes/Fondos"
-    },
     "live-preview": {
       "label": "Vista previa en vivo",
       "description": "Aplicar fondo mientras navegas por las tarjetas"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Altura de barra superior",
       "description": "Altura de la barra de herramientas"
-    },
-    "folder-picker-title": "Seleccionar carpeta de fondos"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

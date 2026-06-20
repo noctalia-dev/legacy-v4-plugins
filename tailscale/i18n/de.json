@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Nur Online Peers im Panel anzeigen",
     "hide-mullvad-exit-nodes": "Mullvad-Ausgangsknoten ausblenden",
     "hide-mullvad-exit-nodes-desc": "Mullvad-VPN-Ausgangsknoten aus der Peer-Liste ausblenden",
+    "show-search-bar": "Suchleiste anzeigen",
+    "show-search-bar-desc": "Zeigt ein Suchfeld über der Knotenliste im Panel an",
     "terminal": "Terminal Konfiguration",
     "terminal-command": "Terminal Befehl",
     "terminal-command-desc": "Befehl zum Starten eines Terminals für SSH/Ping (z.B. 'ghostty', 'alacritty', 'kitty')",
@@ -72,7 +74,9 @@
       "message": "Bitte leg einen Terminalbefehl in den Plugin Einstellungen fest"
     },
     "login-browser-opened": "Authentifizierungsseite im Browser geöffnet",
-    "login-failed": "Anmeldung fehlgeschlagen"
+    "login-failed": "Anmeldung fehlgeschlagen",
+    "account-switched": "Tailscale-Konto gewechselt",
+    "account-switch-failed": "Konnte Tailscale-Konto nicht wechseln"
   },
   "panel": {
     "title": "Tailscale Netzwerk",
@@ -80,6 +84,8 @@
     "not-connected": "Nicht verbunden",
     "not-authenticated": "Nicht authentifiziert",
     "no-peers": "Keine verbundenen Peers",
+    "search-placeholder": "Knoten suchen...",
+    "no-search-results": "Keine Knoten entsprechen deiner Suche",
     "admin-console": "Admin Konsole",
     "terminal-warning": {
       "title": "Terminal nicht konfiguriert",

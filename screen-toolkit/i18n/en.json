@@ -24,6 +24,7 @@
     "copy": "Copy",
     "openUrl": "Open URL",
     "composeEmail": "Compose Email",
+    "composeMail": "Compose Email",
     "searchText": "Search text",
     "copyText": "Copy text",
     "translationCopied": "Translation copied",
@@ -32,18 +33,24 @@
     "allFormatsCopied": "All formats copied",
     "copied": "Copied",
     "pinCapture": "Pin Screenshot",
-    "pinFile": "Pin Image",
+    "pinFile": "Pin Image/Video",
     "formatCopied": "{label} copied",
     "colorCopied": "{color} copied",
     "clickToCopy": "Click to copy",
     "noPassword": "No password",
     "passwordCopied": "Password copied",
     "cssVars": "Copy as CSS vars",
-    "hexList": "Copy hex list"
+    "pickAgain": "Pick again",
+    "hexList": "Copy hex list",
+    "loading": "...",
+    "labelHex": "HEX",
+    "labelRgb": "RGB",
+    "labelHsl": "HSL",
+    "labelHsv": "HSV"
   },
   "tools": {
     "colorpicker": "Color",
-    "annotate": "Annotate",
+    "annotate": "Markup",
     "ocr": "OCR",
     "pin": "Pin",
     "palette": "Palette",
@@ -56,7 +63,7 @@
   "tooltips": {
     "colorpicker": "Pick a color from screen",
     "pinRegion": "Pin screen region",
-    "pinImage": "Pin local image",
+    "pinImage": "Pin local image/Video",
     "palette": "Extract dominant colors from a region",
     "ocr": "Extract text from screen",
     "lens": "Search image with Google Lens",
@@ -76,13 +83,30 @@
     "cursor": "Include cursor in recording",
     "composeEmail": "Compose email",
     "openUrl": "Open URL",
-    "clearResult": "Clear result"
+    "clearResult": "Clear result",
+    "recordfs": "Record the entire screen as GIF or MP4"
   },
   "mirror": {
     "title": "Webcam Mirror",
     "hint": "Floating camera preview. Drag to move, resize from corners.",
     "open": "Open Mirror",
-    "close": "Close Mirror"
+    "close": "Close Mirror",
+    "takeScreenshot": "Take screenshot (3s countdown)",
+    "screenshotSaved": "Screenshot saved!",
+    "screenshotFailed": "Screenshot failed",
+    "startRecord": "Record video (3s countdown)",
+    "stopRecord": "Stop recording",
+    "recordSaved": "Recording saved!",
+    "recordFailed": "Recording failed",
+    "saving": "Saving…",
+    "micEnable": "Enable microphone",
+    "micDisable": "Disable microphone",
+    "capturing": "Capturing…",
+    "recordingInProgress": "Recording…",
+    "noCamera": "No camera found",
+    "pinEnable": "Pin screenshot after capture",
+    "pinDisable": "Don't pin screenshots",
+    "pinOnScreenshot": "Pin screenshot after capture"
   },
   "ocr": {
     "title": "OCR",
@@ -93,6 +117,13 @@
     "title": "Palette",
     "cssVars": "Copy as CSS vars",
     "hexList": "Copy hex list"
+  },
+  "lens": {
+    "missingDep":    "Missing dependency: {dep}",
+    "captureFailed": "Capture failed",
+    "uploadFailed":  "Upload failed",
+    "uploading":     "Uploading to Lens…",
+    "unknownError":  "Unknown error (code {dep})"
   },
   "messages": {
     "picker-cancelled": "Color picker cancelled.",
@@ -106,7 +137,27 @@
     "measure-saved": "Saved",
     "measure-failed": "Screenshot failed.",
     "measure-copied": "Measurement copied.",
-    "measure-pinned": "Pinned."
+    "no-file-picker": "No file picker available (install python3-gi, zenity, or kdialog)",
+    "measure-pinned": "Pinned.",
+    "lens-opened":         "Opened in Google Lens",
+    "lens-uploading": "Uploading to Google Lens...",
+    "lens-missing-dep":    "Missing dependency: {dep}",
+    "lens-capture-failed": "Capture failed",
+    "lens-upload-failed":  "Upload failed",
+    "lens-unknown-error":  "Unknown error (code {dep})",
+    "ocr-no-text":        "No text detected",
+    "ocr-missing-dep":    "Missing dependency: {dep}",
+    "ocr-bad-args":       "Invalid capture arguments",
+    "ocr-capture-failed": "Screen capture failed",
+    "ocr-process-failed": "Image processing failed",
+    "ocr-unknown-error":  "Unknown error (code {dep})",
+    "share-bad-args":         "Share failed: no file specified",
+    "share-file-not-found":   "Share failed: file not found",
+    "share-missing-dep":      "Share failed: missing dependency (curl/jq)",
+    "share-request-failed":   "Upload request failed",
+    "share-invalid-response": "Upload failed: unexpected server response",
+    "share-file-too-large":   "File too large for anonymous upload (128 MB max). Add an X02 API key for larger files.",
+    "share-unknown-error":    "Upload failed with unknown error"
   },
   "settings": {
     "ocrLanguages": "OCR Languages",
@@ -118,6 +169,28 @@
     "filenameFormat": "Filename Format",
     "filenameFormatDesc": "Template for generated filenames. Extension is added automatically.",
     "widgetSettings": "Widget Settings",
+    "recordingSection": "Recording",
+    "recordSkipConfirmation": "Skip Save Confirmation",
+    "recordSkipConfirmationDesc": "Automatically save to disk when recording finishes, without showing the save dialog.",
+    "recordCopyToClipboard": "Copy to Clipboard",
+    "recordCopyToClipboardDesc": "Copy the recording to clipboard when done instead of showing the save dialog.",
+    "gifMaxSeconds": "Max GIF Duration",
+    "shareSection":         "Share",
+    "x02ApiKey":            "X02 API Key",
+    "x02ApiKeyDesc":        "Optional. Get a free key at x02.me for permanent links and larger files. Without a key, uploads use uguu.se (anonymous, 3h, 128MB max).",
+    "x02Expiry":            "Link Expiry",
+    "x02ExpiryDesc":        "How long your shared links stay alive. Permanent links never expire. Only applies when using an X02 API key.",
+    "expiry1h":             "1 hour",
+    "expiry1d":             "1 day",
+    "expiry7d":             "7 days",
+    "expiry30d":            "30 days",
+    "expiryPermanent":      "Permanent",
+    "shareSkipPopover":     "Copy Link Directly",
+    "shareSkipPopoverDesc": "Skip the share popover and copy the link straight to clipboard. A toast notification will confirm.",
+    "gifMaxSecondsDesc": "Maximum duration in seconds for GIF recordings.",
+    "ocrSection": "OCR",
+    "searchEngineUrl": "Search Engine URL",
+    "searchEngineUrlDesc": "URL used when searching OCR text. Leave empty to use Google. Examples: https://duckduckgo.com/?q= or https://search.brave.com/search?q=",
     "filenameTokens": {
       "year": "Year",
       "month": "Month",
@@ -142,7 +215,6 @@
     "savedTo": "Saved",
     "saveFileFailed": "Failed to save file",
     "colorSize": "Color & size",
-    "region": "Region",
     "regionTooltip": "Select a region to annotate",
     "window": "Window",
     "windowTooltip": "Annotate the focused window",
@@ -161,8 +233,11 @@
     "zoomOut": "Zoom out",
     "zoomIn": "Zoom in (view only)",
     "undo": "Undo last stroke",
+    "redo": "Redo last stroke",
     "clearAll": "Clear all",
     "close": "Close",
+    "refresh": "Start over",
+    "region": "Region",
     "dragToolbar": "Drag to move toolbar",
     "toolPencil": "Draw freehand",
     "toolHighlighter": "Highlight area",
@@ -171,7 +246,16 @@
     "toolRect": "Draw rectangle",
     "toolCircle": "Draw ellipse",
     "toolText": "Add text",
-    "toolBlur": "Pixelate region"
+    "toolStep": "Add step badge",
+    "toolRuler": "Measure distance",
+    "zoomViewOnly": "× (view only)",
+    "toolBlur": "Pixelate region",
+    "share":           "Share",
+    "sharing":         "Uploading…",
+    "shareTip":        "Upload & copy link",
+    "shareUrl":        "Link copied",
+    "shareFailed":     "Upload failed",
+    "sharePopoverCopy": "Copy link"
   },
   "record": {
     "stop": "Stop",
@@ -182,16 +266,26 @@
     "mp4Ready": "MP4 ready",
     "gifReady": "GIF ready",
     "saved": "Saved",
+    "region": "Region",
+    "savedAndCopied": "Saved and copied to clipboard",
+    "copiedToClipboard": "Copied to clipboard",
     "failed": "Recording failed or cancelled",
     "saveMp4Failed": "Failed to save MP4",
     "saveGifFailed": "GIF conversion failed",
-    "discard": "Discard"
+    "discard": "Discard",
+    "recLabel": "REC"
   },
   "pin": {
     "close": "Close",
     "fillFit": "Fill: Fit",
     "fillCrop": "Fill: Crop",
-    "fillStretch": "Fill: Stretch"
+    "play": "Play",
+    "pause": "Pause",
+    "mute": "Mute audio",
+    "unmute": "Unmute audio",
+    "fillStretch": "Fill: Stretch",
+    "noFile": "No file",
+    "tooMany": "Maximum number of pins reached"
   },
   "measure": {
     "hint": "Click and drag to measure",
@@ -201,6 +295,12 @@
     "pin": "Pin",
     "discard": "Discard",
     "copy": "Copy",
+    "clearAll": "Clear all",
     "remove": "Remove"
   }
 }
+
+
+
+
+

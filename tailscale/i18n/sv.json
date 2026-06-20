@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Visa endast online peers i panelen",
     "hide-mullvad-exit-nodes": "Dölj Mullvad-utgångsnoder",
     "hide-mullvad-exit-nodes-desc": "Dölj Mullvad VPN-utgångsnoder från peer-listan",
+    "show-search-bar": "Visa sökfält",
+    "show-search-bar-desc": "Visa ett sökfält ovanför nodlistan i panelen",
     "terminal": "Terminalkonfiguration",
     "terminal-command": "Terminalkommando",
     "terminal-command-desc": "Kommando för att starta terminal för SSH/ping (t.ex. 'ghostty', 'alacritty', 'kitty')",
@@ -72,7 +74,9 @@
       "message": "Ange ett terminalkommando i plugin-inställningarna"
     },
     "login-browser-opened": "Autentiseringssida öppnad i webbläsaren",
-    "login-failed": "Inloggning misslyckades"
+    "login-failed": "Inloggning misslyckades",
+    "account-switched": "Bytte Tailscale-konto",
+    "account-switch-failed": "Kunde inte byta Tailscale-konto"
   },
   "panel": {
     "title": "Tailscale-nätverk",
@@ -80,6 +84,8 @@
     "not-connected": "Ej ansluten",
     "not-authenticated": "Ej autentiserad",
     "no-peers": "Inga anslutna peers",
+    "search-placeholder": "Sök noder...",
+    "no-search-results": "Inga noder matchar din sökning",
     "admin-console": "Administrationskonsol",
     "terminal-warning": {
       "title": "Terminal ej konfigurerad",

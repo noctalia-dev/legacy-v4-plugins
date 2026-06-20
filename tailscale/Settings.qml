@@ -40,6 +40,11 @@ ColumnLayout {
     pluginApi?.manifest?.metadata?.defaultSettings?.hideMullvadExitNodes ??
     true
 
+  property bool editShowSearchBar:
+    pluginApi?.pluginSettings?.showSearchBar ??
+    pluginApi?.manifest?.metadata?.defaultSettings?.showSearchBar ??
+    false
+
   property string editTerminalCommand:
     pluginApi?.pluginSettings?.terminalCommand ||
     pluginApi?.manifest?.metadata?.defaultSettings?.terminalCommand ||
@@ -173,6 +178,15 @@ ColumnLayout {
       }
     }
   }
+
+  NToggle {
+    Layout.fillWidth: true
+    label: pluginApi?.tr("settings.show-search-bar")
+    description: pluginApi?.tr("settings.show-search-bar-desc")
+    checked: root.editShowSearchBar
+    onToggled: checked => root.editShowSearchBar = checked
+  }
+
 
   NToggle {
     Layout.fillWidth: true
@@ -334,6 +348,7 @@ ColumnLayout {
     pluginApi.pluginSettings.showPeerCount = root.editShowPeerCount
     pluginApi.pluginSettings.hideDisconnected = root.editHideDisconnected
     pluginApi.pluginSettings.hideMullvadExitNodes = root.editHideMullvadExitNodes
+    pluginApi.pluginSettings.showSearchBar = root.editShowSearchBar
     pluginApi.pluginSettings.terminalCommand = root.editTerminalCommand
     pluginApi.pluginSettings.sshUsername = root.editSshUsername
     pluginApi.pluginSettings.pingCount = root.editPingCount

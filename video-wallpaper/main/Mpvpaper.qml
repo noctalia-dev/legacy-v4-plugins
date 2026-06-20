@@ -66,6 +66,8 @@ Item {
     }
 
     function activateMpvpaper() {
+        if (!root.enabled || root.currentWallpaper == "") return;
+
         // Just call this again if we are still checking
         if (mpvCheck.running) {
             Qt.callLater(activateMpvpaper);

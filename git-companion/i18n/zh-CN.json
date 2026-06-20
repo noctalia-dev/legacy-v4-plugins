@@ -1,0 +1,52 @@
+{
+  "menu": {
+    "settings": "小部件设置"
+  },
+  "panel": {
+    "auth-error": "请进行身份验证以使用此插件：{bin} auth login",
+    "issues": "问题",
+    "issues-count": "问题 ({count})",
+    "mr": "合并请求",
+    "mr-count": "合并请求 ({count})",
+    "open-settings": "打开插件设置",
+    "pr": "拉取请求",
+    "pr-count": "拉取请求 ({count})",
+    "bin-not-installed": "{bin} 未安装。请安装它以使用此插件。",
+    "refresh": "刷新",
+    "no-scope": "在设置中设置组或仓库以查看分配给您的项目。",
+    "no-prs": "没有开放的拉取请求",
+    "no-mrs": "没有开放的合并请求",
+    "no-issues": "没有开放的问题",
+    "no-bio": "无简介",
+    "loading": "加载中…",
+    "title": "Git Companion"
+  },
+  "settings": {
+    "platform": {
+      "desc": "选择您的 git 平台（Gitlab 或 Github）。",
+      "label": "平台"
+    },
+    "refreshInterval": {
+      "desc": "数据刷新的频率，单位为秒。",
+      "label": "刷新间隔（秒）"
+    },
+    "repo": {
+      "label": "仓库",
+      "desc": "限定为特定仓库（例如 owner/repo）。留空以使用组。"
+    },
+    "group": {
+      "label": "组",
+      "desc": "GitLab 组 slug。设置后优先于仓库。"
+    },
+    "org": {
+      "label": "组织",
+      "desc": "GitHub 组织。留空以在您的所有仓库中全局搜索。"
+    }
+  },
+  "widget": {
+    "tooltip": "{issues} 问题 - {requestCount} {requestLabel}"
+  },
+  "desktop": {
+    "text": "{issues} 问题 - {requestCount} {requestLabel}"
+  }
+}

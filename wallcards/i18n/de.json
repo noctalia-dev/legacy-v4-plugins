@@ -16,12 +16,6 @@
       "label": "Symbolfarbe",
       "description": "Farbe des Leistensymbols"
     },
-    "wallpaper-directory": {
-      "label": "Hintergrundbilder-Ordner",
-      "description": "Ordner mit deinen Hintergrundbildern",
-      "tooltip": "Hintergrundbilder-Ordner auswählen",
-      "placeholder": "~/Bilder/Hintergrundbilder"
-    },
     "live-preview": {
       "label": "Live-Vorschau",
       "description": "Hintergrundbild beim Durchblättern anwenden"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Kopfleistenhöhe",
       "description": "Höhe der Werkzeugleiste"
-    },
-    "folder-picker-title": "Hintergrundbilder-Ordner auswählen"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

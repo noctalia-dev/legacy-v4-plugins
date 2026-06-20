@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Afficher uniquement les pairs en ligne dans le panneau",
     "hide-mullvad-exit-nodes": "Masquer les nœuds de sortie Mullvad",
     "hide-mullvad-exit-nodes-desc": "Masquer les nœuds de sortie Mullvad VPN de la liste des pairs",
+    "show-search-bar": "Afficher la barre de recherche",
+    "show-search-bar-desc": "Afficher un champ de recherche au-dessus de la liste des nœuds du panneau",
     "terminal": "Configuration du terminal",
     "terminal-command": "Commande du terminal",
     "terminal-command-desc": "Commande pour lancer le terminal pour SSH/ping (ex : 'ghostty', 'alacritty', 'kitty')",
@@ -72,7 +74,9 @@
       "message": "Veuillez définir une commande de terminal dans les paramètres du plugin"
     },
     "login-browser-opened": "Page d'authentification ouverte dans le navigateur",
-    "login-failed": "Échec de la connexion"
+    "login-failed": "Échec de la connexion",
+    "account-switched": "Compte Tailscale changé",
+    "account-switch-failed": "Échec du changement de compte Tailscale"
   },
   "panel": {
     "title": "Réseau Tailscale",
@@ -80,6 +84,8 @@
     "not-connected": "Non connecté",
     "not-authenticated": "Non authentifié",
     "no-peers": "Aucun pair connecté",
+    "search-placeholder": "Rechercher des nœuds...",
+    "no-search-results": "Aucun nœud ne correspond à votre recherche",
     "admin-console": "Console d'administration",
     "terminal-warning": {
       "title": "Terminal non configuré",

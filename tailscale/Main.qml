@@ -63,6 +63,10 @@ Item {
   property var _realPeerList: []
   property var exitNodeStatus: null
 
+  property var accounts: []
+  property string currentAccountId: ""
+  property bool accountSwitchInProgress: false
+
   // Dev/testing: override the peer list with a short mock to reproduce few-device layouts.
   // Toggle via: qs -c noctalia-shell ipc call plugin:tailscale setMockPeers
   property bool useMockData: false
@@ -145,6 +149,7 @@ Item {
       root.tailscaleInstalled = (exitCode === 0);
       root.isRefreshing = false;
       updateTailscaleStatus();
+      loadAccounts();
     }
   }
 
@@ -187,6 +192,9 @@ Item {
             root.tailscaleStatus = "Connected";
             root.authUrl = "";
             // Login flow settled — reset flags so the next attempt starts clean
+            if (root._loginInProgress) {
+              loadAccounts();
+            }
             root._loginInProgress = false;
             root._loginUrlOpened = false;
             root._preLoginAuthUrl = "";
@@ -247,6 +255,7 @@ Item {
         root._realPeerList = [];
         root.authUrl = "";
       }
+      root.accountSwitchInProgress = false;
     }
   }
 
@@ -274,6 +283,54 @@ Item {
   }
 
   property string lastExitNodeAction: ""
+
+  // ─── Account switching ──────────────────────────────────────────────────
+
+  Process {
+    id: accountsListProcess
+    stdout: StdioCollector {}
+    stderr: StdioCollector {}
+
+    onExited: function (exitCode, exitStatus) {
+      // Older tailscale binaries may not support this; treat as no accounts.
+      root.accounts = [];
+      root.currentAccountId = "";
+      if (exitCode !== 0) return;
+      var raw = String(accountsListProcess.stdout.text || "").trim();
+      if (raw.length === 0) return;
+      try {
+        var arr = JSON.parse(raw);
+        if (!Array.isArray(arr)) return;
+        root.accounts = arr;
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].selected) {
+            root.currentAccountId = arr[i].id || "";
+            break;
+          }
+        }
+      } catch (e) {
+        Logger.e("Tailscale", "Failed to parse accounts: " + e);
+      }
+    }
+  }
+
+  Process {
+    id: switchAccountProcess
+    stdout: StdioCollector {}
+    stderr: StdioCollector {}
+
+    onExited: function (exitCode, exitStatus) {
+      if (exitCode === 0) {
+        ToastService.showNotice(pluginApi?.tr("toast.title"), pluginApi?.tr("toast.account-switched"), "user");
+      } else {
+        var stderr = String(switchAccountProcess.stderr.text || "").trim();
+        Logger.e("Tailscale", "Account switch failed (exit " + exitCode + "): " + stderr);
+        ToastService.showError(pluginApi?.tr("toast.title"), pluginApi?.tr("toast.account-switch-failed"), "alert-circle");
+      }
+      loadAccounts();
+      statusDelayTimer.start();
+    }
+  }
 
   // ─── Login flow state ────────────────────────────────────────────────────
   // A login attempt is tracked across two asynchronous sources that may deliver
@@ -564,6 +621,26 @@ Item {
     exitNodeProcess.running = true;
   }
 
+  function loadAccounts() {
+    if (!root.tailscaleInstalled) {
+      root.accounts = [];
+      root.currentAccountId = "";
+      return;
+    }
+    accountsListProcess.command = ["tailscale", "switch", "--list", "--json"];
+    accountsListProcess.running = true;
+  }
+
+  function switchAccount(id) {
+    if (!root.tailscaleInstalled || !id)
+      return;
+    if (id === root.currentAccountId)
+      return;
+    root.accountSwitchInProgress = true;
+    switchAccountProcess.command = ["tailscale", "switch", id];
+    switchAccountProcess.running = true;
+  }
+
   Timer {
     id: statusDelayTimer
     interval: 500
@@ -701,6 +778,10 @@ Item {
 
     function login() {
       loginTailscale();
+    }
+
+    function switchAccount(id: string) {
+      root.switchAccount(id);
     }
 
     // Taildrop IPC: qs ipc call plugin:tailscale receive

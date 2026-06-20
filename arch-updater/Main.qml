@@ -38,27 +38,146 @@ Item {
         refresh()
     }
 
+    // Process to return the repo URL for a package
+    Process {
+        id: checkRepo
+        
+        property string _output: ""
+        property var _callback: null
+
+        stdout: SplitParser {
+            onRead: data => checkRepo._output += data + "\n"
+        }
+
+        onExited: {
+            if (_callback) _callback(_output)
+            _output = ""
+            _callback = null
+        }
+
+        function run(cmd, callback) {
+            _output = ""
+            _callback = callback
+            command = cmd
+            running = true
+        }
+    }
+
+    // Process to return the Homepage for a package
+    // Same as checkRepo but kept seperate incase one ends up needing to be different
+    Process {
+        id: getHomepage
+        
+        property string _output: ""
+        property var _callback: null
+
+        stdout: SplitParser {
+            onRead: data => getHomepage._output += data + "\n"
+        }
+
+        onExited: {
+            if (_callback) _callback(_output)
+            _output = ""
+            _callback = null
+        }
+
+        function run(cmd, callback) {
+            _output = ""
+            _callback = callback
+            command = cmd
+            running = true
+        }
+    }
+
     function openURL(source, id) {
         // Opens the page for the package
+        // AUR and Flatpaks have the same URL for all packages but pacman can have multiple repos from which it sources
+        // So it also checks the repo from which a package originates to open the correct URL
+        var url = ""
         switch (source) {
             case "system":
-                var url = "https://archlinux.org/packages/extra/x86_64/" + id
+                checkRepo.run(["sh", "-c", "LC_ALL=C pacman -Si " + id + " 2>/dev/null | awk '/^Repository/  {print $3; exit}'"], output => {
+                    var repo = output.trim()
+                    switch (repo) {
+                        case "cachyos-znver4":
+                            url = "https://packages.cachyos.org/package/cachyos-znver4/x86_64_v4/" + id
+                            break
+                        case "cachyos-extra-znver4":
+                            url = "https://packages.cachyos.org/package/cachyos-extra-znver4/x86_64_v4/" + id
+                            break
+                        case "cachyos-core-znver4":
+                            url = "https://packages.cachyos.org/package/cachyos-core-znver4/x86_64_v4/" + id
+                            break
+                        case "extra":
+                            url = "https://archlinux.org/packages/extra/x86_64/" + id
+                            break
+                        case "multilib":
+                            url = "https://archlinux.org/packages/multilib/x86_64/" + id
+                            break
+                        case "core":
+                            url = "https://archlinux.org/packages/core/x86_64/" + id
+                            break
+                        default:
+                            Logger.w("Arch Updater", "Failed to match repo: " + repo)
+                            ToastService.showError("Failed to match repo: " + repo)
+                            url = ""
+                            break
+                    }
+                    Logger.i("Arch Updater", "Opening URL: " + url)
+                    Qt.openUrlExternally(url)
+                })
                 break
             case "aur":
-                var url = "https://aur.archlinux.org/packages/" + id
+                url = "https://aur.archlinux.org/packages/" + id
+                Logger.i("Arch Updater", "Opening URL: " + url)
+                Qt.openUrlExternally(url)
                 break
             case "flatpak":
-                var url = "https://flathub.org/en/apps/" + id
+                url = "https://flathub.org/en/apps/" + id
+                Logger.i("Arch Updater", "Opening URL: " + url)
+                Qt.openUrlExternally(url)
                 break
             default:
-                var url = ""
-                ToastService.showNotice("Unkown source: " + source)
+                Logger.w("Arch Updater", "Unkown source: " + source)
+                ToastService.showError("Unable to open URL\nUnkown source: " + source)
                 break
         }
-        Logger.i("Arch Updater", "Opening " + url)
-        Qt.openUrlExternally(url)
     }
-    
+
+    function openHomepage(source, id) {
+        // Opens the homepage for the package
+        var url = ""
+        switch (source) {
+            case "system":
+                getHomepage.run(["sh", "-c", "LC_ALL=C pacman -Si " + id + " 2>/dev/null | awk '/^URL/ {print $3; exit}'"], output => {
+                    url = output.trim()
+                    Logger.i("Arch Updater", "Opening Homepage (System): " + url)
+                    Qt.openUrlExternally(url)
+                })
+                break
+            case "aur":
+                getHomepage.run(["sh", "-c", (pluginApi.pluginSettings.aurHomepageCmd || pluginApi.manifest.metadata.defaultSettings.aurHomepageCmd).replace("{id}", id)], output => {
+                    Logger.i("ASDASD", (pluginApi.pluginSettings.aurHomepageCmd || pluginApi.manifest.metadata.defaultSettings.aurHomepageCmd))
+                    Logger.i("ASDASD", (pluginApi.pluginSettings.aurHomepageCmd || pluginApi.manifest.metadata.defaultSettings.aurHomepageCmd).replace("{id}", id))
+                    url = output.trim()
+                    Logger.i("Arch Updater", "Opening Homepage (AUR): " + url)
+                    Qt.openUrlExternally(url)
+                })
+                break
+            case "flatpak":
+                getHomepage.run(["sh", "-c", "LC_ALL=C appstreamcli get " + id + " 2>/dev/null | awk '/^Homepage/ {print $2}'"], output => {
+                    url = output.trim()
+                    Logger.i("Arch Updater", "Opening Homepage (Flatpak): " + url)
+                    Qt.openUrlExternally(url)
+                })
+                break
+            default:
+                Logger.w("Arch Updater", "Unkown source: " + source)
+                ToastService.showError("Unable to open Homepage<br>Unkown source: " + source)
+                break
+        }
+    }
+
     function copy(text) {
         // Copy the text and send a toast
         Quickshell.execDetached(["sh", "-c", "wl-copy '" + text + "'"])
@@ -191,11 +310,12 @@ Item {
     }
 
     // Single process for all flatpak update data
+    // Refreshes metadata using --no-deploy first so that the new version numbers get fetched
     // Joins remote (new) versions with installed (old) versions by application ID
     // Output format: application\tname\tnewver\toldver
     Process {
         id: getFlatpakUpdates
-        command: ["sh", "-c", "join -t'\t' -j1 <(flatpak remote-ls --updates --columns=application,name,version 2>/dev/null | sort -t'\t' -k1,1) <(flatpak list --columns=application,version 2>/dev/null | sort -t'\t' -k1,1)"]
+        command: ["sh", "-c", "flatpak update --no-deploy --noninteractive >/dev/null 2>&1; join -t'\t' -j1 <(flatpak remote-ls --updates --columns=application,name,version 2>/dev/null | sort -t'\t' -k1,1) <(flatpak list --columns=application,version 2>/dev/null | sort -t'\t' -k1,1)"]
         onExited: (exitCode, exitStatus) => {
             if (exitCode !== 0) {
                 Logger.w("Arch Updater", "Flatpak check exited with code " + exitCode)
@@ -220,7 +340,7 @@ Item {
                     // Expected format: application\tname\tnewver\toldver
                     if (parts.length >= 4) {
                         names.push(parts[1])
-                        rows.push({id: parts[0], name: parts[1], oldVer: parts[2], newVer: parts[3], source: "flatpak" })
+                        rows.push({id: parts[0], name: parts[1], oldVer: parts[3], newVer: parts[2], source: "flatpak" })
                     }
                 }
 

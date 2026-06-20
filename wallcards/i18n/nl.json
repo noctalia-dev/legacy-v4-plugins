@@ -16,12 +16,6 @@
       "label": "Pictogramkleur",
       "description": "Kleur van het balkwidget-pictogram"
     },
-    "wallpaper-directory": {
-      "label": "Achtergrondmap",
-      "description": "Map met je achtergronden",
-      "tooltip": "Achtergrondmap selecteren",
-      "placeholder": "~/Afbeeldingen/Achtergronden"
-    },
     "live-preview": {
       "label": "Live voorbeeld",
       "description": "Achtergrond toepassen tijdens het bladeren"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Hoogte bovenste balk",
       "description": "Hoogte van de werkbalk"
-    },
-    "folder-picker-title": "Achtergrondmap selecteren"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

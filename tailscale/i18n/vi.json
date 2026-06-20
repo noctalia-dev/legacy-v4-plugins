@@ -15,6 +15,8 @@
     "hide-disconnected-desc": "Chỉ hiển thị các thiết bị đang trực tuyến trong bảng",
     "hide-mullvad-exit-nodes": "Ẩn exit node Mullvad",
     "hide-mullvad-exit-nodes-desc": "Ẩn các exit node VPN Mullvad khỏi danh sách thiết bị",
+    "show-search-bar": "Hiển thị thanh tìm kiếm",
+    "show-search-bar-desc": "Hiển thị ô tìm kiếm phía trên danh sách nút trong bảng",
     "terminal": "Cấu hình terminal",
     "terminal-command": "Lệnh terminal",
     "terminal-command-desc": "Lệnh để mở terminal cho SSH/ping (ví dụ: 'ghostty', 'alacritty', 'kitty')",
@@ -72,7 +74,9 @@
       "message": "Vui lòng thiết lập lệnh terminal trong cài đặt plugin"
     },
     "login-browser-opened": "Trang xác thực đã mở trong trình duyệt",
-    "login-failed": "Đăng nhập thất bại"
+    "login-failed": "Đăng nhập thất bại",
+    "account-switched": "Đã chuyển tài khoản Tailscale",
+    "account-switch-failed": "Không thể chuyển tài khoản Tailscale"
   },
   "panel": {
     "title": "Mạng Tailscale",
@@ -80,6 +84,8 @@
     "not-connected": "Chưa kết nối",
     "not-authenticated": "Chưa xác thực",
     "no-peers": "Không có thiết bị nào đang kết nối",
+    "search-placeholder": "Tìm kiếm nút...",
+    "no-search-results": "Không có nút nào khớp với tìm kiếm của bạn",
     "admin-console": "Bảng điều khiển quản trị",
     "terminal-warning": {
       "title": "Chưa cấu hình terminal",

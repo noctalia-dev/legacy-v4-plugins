@@ -1,0 +1,24 @@
+{
+  "battery": {
+    "status-not-charging": "Not charging",
+    "status-charging": "Charging",
+    "status-discharging": "Discharging",
+    "status-full": "Full",
+    "status-unknown": "Unknown",
+    "time-to-full": "Time to full: {time}",
+    "remaining": "Remaining: {time}"
+  },
+  "settings": {
+    "dynamic-coloring": "Dynamic coloring",
+    "dynamic-coloring-desc": "Change the status bar capsule color based on the selected profile",
+    "show-profile": "Show profile",
+    "show-profile-desc": "Display the active profile icon inside the capsule",
+    "widget-settings": "Widget settings",
+    "show-balanced": "Show balanced profile",
+    "show-balanced-desc": "Display the profile icon even when set to balanced (only valid if profile display is enabled)",
+    "color-powersaver": "Power saver color",
+    "color-powersaver-desc": "Choose the capsule background color when the profile is set to Power saver",
+    "color-performance": "Performance color",
+    "color-performance-desc": "Choose the capsule background color when the profile is set to Performance"
+  }
+}

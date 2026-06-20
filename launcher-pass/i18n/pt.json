@@ -1,0 +1,48 @@
+{
+  "command": {
+    "description": "Pesquisar entradas de palavra-passe do gnu pass"
+  },
+  "result": {
+    "goBack": "Voltar",
+    "folder": "Pasta",
+    "password": "Palavra-passe",
+    "passwordEntry": "Entrada de palavra-passe",
+    "loading": "A carregar entradas de palavra-passe..."
+  },
+  "action": {
+    "copyPassword": "Copiar palavra-passe",
+    "copyPasswordDesc": "Copiar palavra-passe para a área de transferência",
+    "typePassword": "Digitar palavra-passe",
+    "typePasswordDesc": "Digitar palavra-passe com wtype",
+    "copyField": "Copiar {key}",
+    "typeField": "Digitar {key}",
+    "copyOtp": "Copiar OTP",
+    "typeOtp": "Digitar OTP",
+    "otpDesc": "Copiar/digitar código OTP atual"
+  },
+  "settings": {
+    "tab": {
+      "general": "Geral",
+      "advanced": "Avançado"
+    },
+    "storePath": {
+      "label": "Caminho do armazenamento de palavras-passe",
+      "desc": "Caminho personalizado para o armazenamento de palavras-passe (predefenido: ~/.password-store)"
+    },
+    "typeDelay": {
+      "label": "Atraso ao fechar o lançador",
+      "desc": "Atraso antes de começar a digitar em milissegundos (predefinido: 500)"
+    },
+    "wtypeDelay": {
+      "label": "Atraso de digitação wtype",
+      "desc": "Atraso entre teclas em ms para wtype (predefinido: 12)"
+    },
+    "clipTimeout": {
+      "label": "Tempo limite da área de transferência",
+      "desc": "Segundos antes de limpar a área de transferência (predefinido PASSWORD_STORE_CLIP_TIME: {value})"
+    }
+  },
+  "notification": {
+    "copied": "Copiado para a área de transferência"
+  }
+}

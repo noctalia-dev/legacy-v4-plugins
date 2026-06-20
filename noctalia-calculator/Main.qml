@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "AdvancedMath.js" as AdvancedMath
+import qs.Services.UI
 
 Item {
     id: root
@@ -28,6 +29,7 @@ Item {
     readonly property string displayText: errorState ? pluginApi?.tr("state.error") : currentInput
     readonly property string expressionText: expressionPreview()
     readonly property string badgeText: !showBarValue ? "" : compactDisplay(displayText, 9)
+    readonly property bool hasCopyableResult: !errorState && displayText !== "" && (justEvaluated || displayText !== "0" || tokens.length > 0)
 
     function _isOperator(token) {
         return token === "+" || token === "-" || token === "*" || token === "/";
@@ -363,6 +365,17 @@ Item {
 
         pressButton(action);
         return true;
+    }
+
+    function copyResult() {
+        if (!hasCopyableResult) return;
+        const value = displayText;
+        const escaped = value.replace(/'/g, "'\\''");
+        Quickshell.execDetached(["sh", "-c", "printf '%s' '" + escaped + "' | wl-copy"]);
+        const shown = value.length > 24 ? value.slice(0, 24) + "…" : value;
+        if (pluginApi) {
+            ToastService.showNotice(pluginApi.tr("toast.copied", { "value": shown }));
+        }
     }
 
     IpcHandler {

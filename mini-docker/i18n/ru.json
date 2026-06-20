@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Настройки виджета"
+  },
   "settings": {
+    "active_color_description": "Цвет индикатора состояния при активности (запущен)",
+    "active_color_label": "Цвет активного индикатора",
     "current_value": "Выбрано: {value} мс",
     "default_network_description": "Сеть по умолчанию для запуска образов",
     "default_network_label": "Стандартная сеть",
     "general": "Общие",
+    "icon_color_description": "Изменить цвет иконки виджета на панели",
+    "icon_color_label": "Цвет иконки",
+    "inactive_color_description": "Цвет индикатора состояния при неактивности (остановлен)",
+    "inactive_color_label": "Цвет неактивного индикатора",
     "refresh_interval_description": "Как часто плагин проверяет статус контейнеров",
     "refresh_interval_label": "Интервал обновления",
+    "status_state_always": "Показывать всегда",
+    "status_state_description": "Выберите способ отображения точки индикатора состояния",
+    "status_state_hidden": "Скрыть полностью",
+    "status_state_label": "Режим индикатора",
+    "status_state_running_only": "Показывать при запуске",
     "title": "Настройки Менеджера Контейнеров"
   },
   "tooltip": {

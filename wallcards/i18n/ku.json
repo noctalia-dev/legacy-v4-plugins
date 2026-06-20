@@ -16,12 +16,6 @@
       "label": "Rengê îkonê",
       "description": "Rengê îkona wîceta barê"
     },
-    "wallpaper-directory": {
-      "label": "Peldanka dîwarê",
-      "description": "Peldanka ku dîwarên te tê de hene",
-      "tooltip": "Peldanka dîwarê hilbijêre",
-      "placeholder": "~/Wêne/Dîwar"
-    },
     "live-preview": {
       "label": "Pêşdîtina zindî",
       "description": "Dîwarê bi kar bîne dema ku kartên digerin"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Bilindahiya barê jorîn",
       "description": "Bilindahiya amûrbarê"
-    },
-    "folder-picker-title": "Peldanka dîwarê hilbijêre"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

@@ -170,18 +170,20 @@ Item {
                     delegate: Rectangle {
                         id: entityDelegate
                         width: ListView.view.width
-                        height: Math.round(64 * Style.uiScaleRatio) + (showBrightness ? Math.round(56 * Style.uiScaleRatio) : 0) + (showColorTemp ? Math.round(56 * Style.uiScaleRatio) : 0)
+                        height: Math.round(64 * Style.uiScaleRatio) + (showBrightness ? Math.round(56 * Style.uiScaleRatio) : 0) + (showColorTemp ? Math.round(56 * Style.uiScaleRatio) : 0) + (showRgb ? Math.round(56 * Style.uiScaleRatio) : 0)
                         color: Color.mSurfaceVariant
                         radius: Style.radiusM
                         clip: true
 
                         property bool isWaiting: false
                         property bool isExpanded: false
+                        property string entityId: model.entity_id
 
-                        readonly property bool canExpand: isLight(model.domain) && (model.supports_brightness || model.supports_color_temp)
+                        readonly property bool canExpand: isLight(model.domain) && (model.supports_brightness || model.supports_color_temp || model.supports_rgb)
 
                         readonly property bool showBrightness: isExpanded && model.supports_brightness
                         readonly property bool showColorTemp: isExpanded && model.supports_color_temp
+                        readonly property bool showRgb: isExpanded && model.supports_rgb
 
                         Behavior on height {
                             NumberAnimation {
@@ -460,6 +462,121 @@ Item {
                                     color: Color.mOnSurfaceVariant
                                     pointSize: Style.fontSizeS
                                     Layout.preferredWidth: Math.round(44 * Style.uiScaleRatio)
+                                }
+                            }
+
+                            // RGB color controls (Hue slider + Swatches)
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                visible: entityDelegate.showRgb
+                                spacing: Style.marginS
+
+                                // Hue slider
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: Style.marginS
+
+                                    NIcon {
+                                        icon: "palette"
+                                        color: Color.mOnSurfaceVariant
+                                    }
+
+                                    NSlider {
+                                        id: hueSlider
+                                        Layout.fillWidth: true
+                                        from: 0
+                                        to: 360
+                                        value: model.hue ?? 0
+                                        stepSize: 1
+
+                                        onPressedChanged: {
+                                            if (!pressed)
+                                                root.main.callLightHsService(entityDelegate.entityId, value, 100);
+                                        }
+
+                                        Rectangle {
+                                            visible: hueSlider.pressed
+                                            width: Math.round(32 * Style.uiScaleRatio)
+                                            height: width
+                                            radius: width / 2
+                                            border.color: Color.mOutline
+                                            border.width: Style.borderS
+                                            z: 10
+
+                                            // HSV to RGB conversion for the preview
+                                            color: {
+                                                const h = hueSlider.value / 360;
+                                                const i = Math.floor(h * 6);
+                                                const f = h * 6 - i;
+                                                const q = 1 - f;
+                                                const t = f;
+                                                let r, g, b;
+                                                switch (i % 6) {
+                                                    case 0: r = 1, g = t, b = 0; break;
+                                                    case 1: r = q, g = 1, b = 0; break;
+                                                    case 2: r = 0, g = 1, b = t; break;
+                                                    case 3: r = 0, g = q, b = 1; break;
+                                                    case 4: r = t, g = 0, b = 1; break;
+                                                    case 5: r = 1, g = 0, b = q; break;
+                                                }
+                                                return Qt.rgba(r, g, b, 1);
+                                            }
+
+                                            x: Math.min(Math.max(0, (hueSlider.value - hueSlider.from) / (hueSlider.to - hueSlider.from) * hueSlider.width - width / 2), hueSlider.width - width)
+                                            y: -height - Style.marginS
+                                        }
+                                    }
+
+                                    // Current color preview
+                                    Rectangle {
+                                        visible: model.current_color !== "transparent"
+                                        width: Math.round(24 * Style.uiScaleRatio)
+                                        height: width
+                                        radius: width / 2
+                                        color: model.current_color
+                                        border.color: Color.mOutline
+                                        border.width: Style.borderS
+                                    }
+                                }
+
+                                // Color swatches
+                                RowLayout {
+                                    Layout.fillWidth: true
+                                    spacing: Style.marginS
+
+                                    Item { width: Math.round(24 * Style.uiScaleRatio) } // Spacer to align with slider
+
+                                    Repeater {
+                                        model: [
+                                            { r: 255, g: 0, b: 0 },       // Red
+                                            { r: 255, g: 165, b: 0 },     // Orange
+                                            { r: 255, g: 255, b: 0 },     // Yellow
+                                            { r: 0, g: 128, b: 0 },       // Green
+                                            { r: 0, g: 255, b: 255 },     // Cyan
+                                            { r: 0, g: 0, b: 255 },       // Blue
+                                            { r: 128, g: 0, b: 128 },     // Purple
+                                            { r: 255, g: 255, b: 255 }    // White
+                                        ]
+
+                                        Rectangle {
+                                            width: Math.round(24 * Style.uiScaleRatio)
+                                            height: width
+                                            radius: width / 2
+                                            color: Qt.rgba(modelData.r / 255, modelData.g / 255, modelData.b / 255, 1)
+                                            border.color: Color.mOutline
+                                            border.width: Style.borderS
+
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                cursorShape: Qt.PointingHandCursor
+                                                onClicked: {
+                                                    root.main.callLightRgbService(entityDelegate.entityId, modelData.r, modelData.g, modelData.b);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Item { Layout.fillWidth: true } // fill remaining space
                                 }
                             }
                         }

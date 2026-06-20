@@ -16,12 +16,6 @@
       "label": "Kolor ikony",
       "description": "Kolor ikony widżetu paska"
     },
-    "wallpaper-directory": {
-      "label": "Folder tapet",
-      "description": "Folder zawierający twoje tapety",
-      "tooltip": "Wybierz folder tapet",
-      "placeholder": "~/Obrazy/Tapety"
-    },
     "live-preview": {
       "label": "Podgląd na żywo",
       "description": "Zastosuj tapetę podczas przeglądania kart"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Wysokość górnego paska",
       "description": "Wysokość paska narzędzi"
-    },
-    "folder-picker-title": "Wybierz folder tapet"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

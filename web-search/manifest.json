@@ -1,7 +1,7 @@
 {
     "id": "web-search",
     "name": "Web Search",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "author": "Rigelyon",
     "license": "MIT",
     "description": "Search the Internet from the Launcher.",

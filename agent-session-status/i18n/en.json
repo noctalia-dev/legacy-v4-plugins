@@ -1,0 +1,53 @@
+{
+  "bar": {
+    "tooltip": "{count} running agent sessions"
+  },
+  "menu": {
+    "refresh": "Refresh",
+    "restart": "Restart service",
+    "settings": "Settings"
+  },
+  "panel": {
+    "title": "Agent Sessions",
+    "subtitle": "{count} running - {url}",
+    "refresh": "Refresh",
+    "restart": "Restart service",
+    "empty": "No sessions reported",
+    "agentRunning": "{count} running",
+    "sessionMeta": "{status} - {id}"
+  },
+  "service": {
+    "missingToken": "Set an auth token before starting the session service.",
+    "exited": "Session service exited with code {code}.",
+    "refreshFailed": "Session service returned HTTP {status}.",
+    "badResponse": "Session service returned invalid JSON.",
+    "unreachable": "Session service is unreachable."
+  },
+  "settings": {
+    "bindAddress": {
+      "label": "Listen address",
+      "desc": "Address for the local MCP HTTP service to bind."
+    },
+    "port": {
+      "label": "Port",
+      "desc": "Port for the MCP endpoint used by agents."
+    },
+    "token": {
+      "label": "Auth token",
+      "desc": "Agents must send Authorization: Bearer <token>."
+    },
+    "pollInterval": {
+      "label": "Poll interval",
+      "desc": "How often the shell refreshes session status."
+    },
+    "hideWhenEmpty": {
+      "label": "Hide when empty",
+      "desc": "Hide the bar widget when no sessions are running."
+    }
+  },
+  "status": {
+    "running": "Running",
+    "completed": "Completed",
+    "blocked": "Blocked"
+  }
+}

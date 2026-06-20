@@ -164,7 +164,7 @@ Item {
             throw new Error("HOME environment variable is not available");
         }
 
-        const wpDir = `${homeDir}/Pictures/Wallpapers`;
+        const wpDir = `${homeDir}/.config/noctalia/plugins/daily-wallpaper/downloads`;
         const wpFile = `${wpDir}/${prefix}-${dateString}.jpg`;
 
         root.wallpaperTask = {

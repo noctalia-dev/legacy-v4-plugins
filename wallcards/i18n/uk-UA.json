@@ -16,12 +16,6 @@
       "label": "Колір значка",
       "description": "Колір значка віджета панелі"
     },
-    "wallpaper-directory": {
-      "label": "Тека шпалер",
-      "description": "Тека з вашими шпалерами",
-      "tooltip": "Обрати теку шпалер",
-      "placeholder": "~/Зображення/Шпалери"
-    },
     "live-preview": {
       "label": "Попередній перегляд",
       "description": "Застосовувати шпалери під час перегляду карток"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "Висота верхньої панелі",
       "description": "Висота панелі інструментів"
-    },
-    "folder-picker-title": "Обрати теку шпалер"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

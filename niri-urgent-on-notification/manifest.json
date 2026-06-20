@@ -1,0 +1,24 @@
+{
+  "id": "niri-urgent-on-notification",
+  "name": "Set Niri Window to Urgent on Notification",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "matt-hb",
+  "tags": [
+    "System",
+    "Utility",
+    "Niri"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Sets windows to urgent when they receive a notification and sets them back to normal when their notifications are cleared (Niri only!)",
+  "entryPoints": {
+    "main": "Main.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}

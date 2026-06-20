@@ -16,12 +16,6 @@
       "label": "アイコンの色",
       "description": "バーウィジェットのアイコンの色"
     },
-    "wallpaper-directory": {
-      "label": "壁紙フォルダ",
-      "description": "壁紙が含まれるフォルダ",
-      "tooltip": "壁紙フォルダを選択",
-      "placeholder": "~/画像/壁紙"
-    },
     "live-preview": {
       "label": "ライブプレビュー",
       "description": "カードを閲覧しながら壁紙を適用"
@@ -85,8 +79,7 @@
     "top-bar-height": {
       "label": "トップバーの高さ",
       "description": "ツールバーの高さ"
-    },
-    "folder-picker-title": "壁紙フォルダを選択"
+    }
   },
   "shortcuts": {
     "key-separator": "/",

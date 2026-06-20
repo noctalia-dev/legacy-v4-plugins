@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "小部件设置"
+  },
   "settings": {
+    "active_color_description": "处于活动状态（运行中）时状态指示灯的颜色",
+    "active_color_label": "活动指示灯颜色",
     "current_value": "已选择: {value} 毫秒",
     "default_network_description": "运行镜像时使用的默认网络",
     "default_network_label": "默认网络",
     "general": "通用",
+    "icon_color_description": "更改栏小部件图标的颜色",
+    "icon_color_label": "图标颜色",
+    "inactive_color_description": "处于非活动状态（已停止）时状态指示灯的颜色",
+    "inactive_color_label": "非活动指示灯颜色",
     "refresh_interval_description": "插件检查容器状态的频率",
     "refresh_interval_label": "刷新间隔",
+    "status_state_always": "总是显示",
+    "status_state_description": "选择如何显示状态指示灯圆点",
+    "status_state_hidden": "完全隐藏",
+    "status_state_label": "状态显示",
+    "status_state_running_only": "运行时显示",
     "title": "容器管理器设置"
   },
   "tooltip": {

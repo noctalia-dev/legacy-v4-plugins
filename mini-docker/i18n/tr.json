@@ -1,11 +1,25 @@
 {
+  "menu": {
+    "settings": "Araç takımı ayarları"
+  },
   "settings": {
+    "active_color_description": "Aktifken (çalışıyorken) durum göstergesinin rengi",
+    "active_color_label": "Aktif Gösterge Rengi",
     "current_value": "Seçildi: {value} ms",
     "default_network_description": "Görüntüleri çalıştırırken kullanılacak varsayılan ağ",
     "default_network_label": "Varsayılan Ağ",
     "general": "Genel",
+    "icon_color_description": "Çubuk araç takımı simgesinin rengini değiştir",
+    "icon_color_label": "Simge Rengi",
+    "inactive_color_description": "Pasifken (durdurulmuşken) durum göstergesinin rengi",
+    "inactive_color_label": "Pasif Gösterge Rengi",
     "refresh_interval_description": "Eklenti konteyner durumunu ne sıklıkta kontrol eder",
     "refresh_interval_label": "Yenileme Aralığı",
+    "status_state_always": "Her zaman göster",
+    "status_state_description": "Durum gösterge noktasının nasıl görüntüleneceğini seçin",
+    "status_state_hidden": "Tamamen gizle",
+    "status_state_label": "Durum Gösterimi",
+    "status_state_running_only": "Çalışırken göster",
     "title": "Konteyner Yöneticisi Ayarları"
   },
   "tooltip": {

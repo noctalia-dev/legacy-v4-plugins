@@ -273,6 +273,26 @@ Item {
                 }
             }
 
+            const rl2 = lastTokenCount.rate_limits?.secondary;
+            if (rl2) {
+                root.secondaryRateLimitPercent = (rl2.used_percent ?? 0) / 100;
+                root.secondaryRateLimitResetAt = "";
+                if (rl2.window_minutes === 10080)
+                    root.secondaryRateLimitLabel = "Weekly (7-day)";
+                else if (rl2.window_minutes)
+                    root.secondaryRateLimitLabel = Math.round(rl2.window_minutes / 60) + "h window";
+                else
+                    root.secondaryRateLimitLabel = "Secondary limit";
+                if (rl2.resets_at) {
+                    const resetDate = new Date(rl2.resets_at * 1000);
+                    root.secondaryRateLimitResetAt = resetDate.toISOString();
+                }
+            } else {
+                root.secondaryRateLimitPercent = -1;
+                root.secondaryRateLimitLabel = "";
+                root.secondaryRateLimitResetAt = "";
+            }
+
             const usage = lastTokenCount.info?.total_token_usage;
             if (usage) {
                 const input = usage.input_tokens ?? 0;

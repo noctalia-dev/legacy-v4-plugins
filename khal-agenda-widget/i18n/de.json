@@ -1,0 +1,8 @@
+{
+  "widget": {
+    "loading": "Wird geladen...",
+    "no_events": "Keine bevorstehenden Veranstaltungen",
+    "heading": "Bevorstehende Veranstaltungen",
+    "button": "calendar-month"
+  }
+}

@@ -53,7 +53,7 @@ Item {
     visible: root.pluginApi.mainInstance.updates.length | !(pluginApi.pluginSettings.hideOnEmpty ?? pluginApi.manifest.metadata.defaultSettings.hideOnEmpty)
 
     // Tooltip Text
-    property string tooltipText: root.pluginApi.mainInstance.systemStr + "\n" + root.pluginApi.mainInstance.aurStr + "\n" + root.pluginApi.mainInstance.flatpakStr
+    property string tooltipText: root.pluginApi.mainInstance.systemStr + (root.pluginApi.mainInstance.aurStr ? "\n" + root.pluginApi.mainInstance.aurStr : "") + (root.pluginApi.mainInstance.flatpakStr ? "\n" + root.pluginApi.mainInstance.flatpakStr : "")
     property string tooltipTextTrimmed: root.tooltipText.split("\n").slice(0, 30).join("\n")
 
     // Visual capsule - centered within the full click area

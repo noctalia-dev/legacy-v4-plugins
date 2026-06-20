@@ -15,6 +15,7 @@ Item {
 
     readonly property string unavailableTooltipKey: "tooltip.noWvkbd"
     readonly property string wvkbdBin: pluginApi?.pluginSettings?.wvkbdBin ?? "wvkbd-mobintl"
+    readonly property list<string> wvkbdBinParts: wvkbdBin.trim().split(/\s+/)
 
     // True when wvkbd should be made visible as soon as it finishes starting up.
     // Used both at startup (restoring a pre-existing visible instance) and after
@@ -37,7 +38,7 @@ Item {
     // --- 1. Availability: check binary exists on PATH ---
     Process {
         id: availabilityChecker
-        command: ["sh", "-c", "command -v " + root.wvkbdBin]
+        command: ["which", root.wvkbdBinParts[0]]
         onExited: (exitCode, exitStatus) => {
             root.wvkbdOk = exitCode === 0
             if (root.wvkbdOk && !wvkbd.running) preemptChecker.running = true
@@ -48,7 +49,7 @@ Item {
     // --- 2. Detect any pre-existing wvkbd instance ---
     Process {
         id: preemptChecker
-        command: ["pgrep", "-x", root.wvkbdBin]
+        command: ["pgrep", "-x", root.wvkbdBinParts[0]]
         onExited: (exitCode, exitStatus) => {
             root._pendingShow = exitCode === 0  // assume visible if already running
             if (exitCode === 0) {
@@ -62,7 +63,7 @@ Item {
     // --- 3. Kill pre-existing instance so we can take ownership ---
     Process {
         id: preemptKill
-        command: ["pkill", "-x", root.wvkbdBin]
+        command: ["pkill", "-x", root.wvkbdBinParts[0]]
         onExited: (exitCode, exitStatus) => {
             wvkbd.running = true
         }
@@ -71,7 +72,7 @@ Item {
     // --- 4. Our owned wvkbd process — always running, starts hidden ---
     Process {
         id: wvkbd
-        command: [root.wvkbdBin, "--hidden"]
+        command: [...wvkbdBinParts, "--hidden"]
         onRunningChanged: {
             if (running && root._pendingShow) {
                 root._pendingShow = false

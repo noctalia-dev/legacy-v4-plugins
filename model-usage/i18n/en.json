@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "providers": {
+      "gemini": {
+        "name": "Gemini",
+        "source": "Local files"
+      }
+    }
+  }
+}
