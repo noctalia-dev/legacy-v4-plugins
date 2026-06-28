@@ -274,49 +274,49 @@ Item {
       anchors.centerIn: parent
       width: Math.min(screen?.width ?? 800, 700)
       height: Math.min(screen?.height ?? 600, 520)
-      radius: Style.radiusL || 16
+      radius: Style.radiusL
       color: Color.mSurface
 
       ColumnLayout {
         anchors.fill: parent
-        anchors.margins: Style.marginL || 16
-        spacing: Style.marginM || 10
+        anchors.margins: Style.marginL
+        spacing: Style.marginM
 
         RowLayout {
-          Layout.fillWidth: true; spacing: 8
+          Layout.fillWidth: true; spacing: Style.marginS
           NText {
-            text: "ClipMask"
+            text: pluginApi?.tr("panel.title")
             font.weight: Font.Bold
-            font.pointSize: Style.fontSizeL || 16
+            font.pointSize: Style.fontSizeL
             color: Color.mOnSurface; Layout.alignment: Qt.AlignVCenter
           }
           NText {
             text: "(" + visibleCount() + "/" + items.length + ")"
-            font.pointSize: Style.fontSizeXS || 10
+            font.pointSize: Style.fontSizeXS
             color: Color.mOnSurfaceVariant; Layout.alignment: Qt.AlignVCenter
           }
           Item { Layout.fillWidth: true }
           Rectangle {
             color: root.masked === false ? Color.mPrimary : (root.masked === "partial" ? Color.mTertiary : Color.mSurfaceVariant)
-            radius: 4; height: 26; Layout.alignment: Qt.AlignVCenter; opacity: 0.9
+            radius: Style.radiusS || 4; height: Style.baseWidgetSize * 0.65; Layout.alignment: Qt.AlignVCenter; opacity: 0.9
             RowLayout {
-              anchors.left: parent.left; anchors.leftMargin: 8
-              anchors.right: parent.right; anchors.rightMargin: 8
-              anchors.verticalCenter: parent.verticalCenter; spacing: 4
+              anchors.left: parent.left; anchors.leftMargin: Style.marginS
+              anchors.right: parent.right; anchors.rightMargin: Style.marginS
+              anchors.verticalCenter: parent.verticalCenter; spacing: Style.marginXS
               NIcon {
                 icon: root.masked === false ? "eye" : "eye-off"
-                pointSize: 11
+                pointSize: Style.fontSizeXS
                 color: root.masked === false ? Color.mOnPrimary : Color.mOnSurface
               }
               NText {
-                text: root.masked === false ? "Revealed" : (root.masked === "partial" ? "Partial" : "Masked")
-                font.pointSize: 10
+                text: root.masked === false ? pluginApi?.tr("panel.revealed") : (root.masked === "partial" ? pluginApi?.tr("panel.partial") : pluginApi?.tr("panel.masked"))
+                font.pointSize: Style.fontSizeXS
                 color: root.masked === false ? Color.mOnPrimary : Color.mOnSurface
               }
             }
           }
           NIconButton {
-            icon: "x"; tooltipText: "Close"
+            icon: "x"; tooltipText: pluginApi?.tr("panel.close")
             colorBg: "transparent"; colorFg: Color.mOnSurface; colorBgHover: Color.mHover
             onClicked: pluginApi?.closePanel(screen)
           }
@@ -326,35 +326,35 @@ Item {
         Rectangle {
           Layout.fillWidth: true
           height: root.searchMode ? 32 : 0
-          radius: Style.radiusS || 6
+          radius: Style.radiusM
           color: Color.mSurface
           NText {
-            anchors.left: parent.left; anchors.leftMargin: 10
+            anchors.left: parent.left; anchors.leftMargin: Style.marginM
             anchors.verticalCenter: parent.verticalCenter
             visible: root.searchMode
-            text: root.searchQuery.length > 0 ? "/" + root.searchQuery : "Type to filter..."
+            text: root.searchQuery.length > 0 ? "/" + root.searchQuery : pluginApi?.tr("panel.search-hint")
             color: root.searchQuery.length > 0 ? Color.mOnSurface : Color.mOnSurfaceVariant
-            font.pointSize: 11
+            font.pointSize: Style.fontSizeS
             opacity: root.searchQuery.length > 0 ? 1 : 0.5
           }
         }
 
         NText {
           text: root.searchMode
-            ? "Enter copy  |  Ctrl+J/K ↑↓ nav  |  Ctrl+A toggle  |  Esc/Ctrl+E exit"
-            : "/ search  |  Ctrl+J/K nav  |  Enter copy  |  Ctrl+A toggle  |  d/Del remove"
-          font.pointSize: Style.fontSizeXS || 9
+            ? pluginApi?.tr("panel.hint-search")
+            : pluginApi?.tr("panel.hint-normal")
+          font.pointSize: Style.fontSizeXS
           color: Color.mOnSurfaceVariant; opacity: 0.7
         }
 
         Rectangle {
           Layout.fillWidth: true; Layout.fillHeight: true
-          radius: Style.radiusM || 10
+          radius: Style.radiusM
           color: Color.mSurfaceVariant; clip: true
 
           ListView {
             id: itemList
-            anchors.fill: parent; anchors.margins: 4
+            anchors.fill: parent; anchors.margins: Style.marginXS
             model: root.items; focus: true; spacing: 0
             keyNavigationWraps: false; highlight: null
 
@@ -377,14 +377,14 @@ Item {
               Component.onCompleted: { if (isImg) root.getImage(modelData.id) }
 
               Rectangle {
-                anchors.fill: parent; radius: 6
+                anchors.fill: parent; radius: Style.radiusM
                 color: isSelected ? Color.mPrimary : (mouseArea.containsMouse ? Color.mHover : Color.mSurface)
                 opacity: isSelected ? 0.15 : (mouseArea.containsMouse ? 0.08 : 0.35)
               }
 
               RowLayout {
                 anchors.fill: parent
-                anchors.leftMargin: 10; anchors.rightMargin: 8; spacing: 10
+                anchors.leftMargin: Style.marginM; anchors.rightMargin: Style.marginS; spacing: Style.marginM
 
                 Item {
                   Layout.preferredWidth: isImg ? 40 : 24
@@ -393,7 +393,7 @@ Item {
 
                   NImageRounded {
                     visible: isImg && root.imageCache[modelData.id]
-                    anchors.fill: parent; radius: 6
+                    anchors.fill: parent; radius: Style.radiusM
                     imagePath: root.imageCache[modelData.id] || ""
                     imageFillMode: Image.PreserveAspectCrop
                   }
@@ -401,52 +401,52 @@ Item {
                     anchors.centerIn: parent
                     visible: !isImg || !root.imageCache[modelData.id]
                     icon: isImg ? "photo" : "align-left"
-                    pointSize: 14; color: Color.mOnSurface
+                    pointSize: Style.fontSizeM; color: Color.mOnSurface
                   }
 
 
                 }
 
                 ColumnLayout {
-                  Layout.fillWidth: true; Layout.alignment: Qt.AlignVCenter; spacing: 1
+                  Layout.fillWidth: true; Layout.alignment: Qt.AlignVCenter; spacing: Style.marginXS
                   NText {
                     Layout.fillWidth: true
                     text: {
-                      if (isImg) return "[Image]"
+                      if (isImg) return pluginApi?.tr("item.image")
                       if (root.masked) return root.maskText(modelData.preview)
                       return root.formatPreview(modelData.preview) || ""
                     }
                     elide: Text.ElideRight; maximumLineCount: 2
                     color: isImg ? Color.mOnSurfaceVariant : Color.mOnSurface
                     font.weight: isSelected ? Font.Bold : Font.Normal
-                    font.pointSize: 11
+                    font.pointSize: Style.fontSizeS
                   }
                   NText {
                     visible: !root.masked && !isImg && modelData.preview && modelData.preview.length > 80
                     Layout.fillWidth: true
                     text: root.formatPreview(modelData.preview.slice(80))
                     elide: Text.ElideRight; maximumLineCount: 1
-                    color: Color.mOnSurfaceVariant; font.pointSize: 9; opacity: 0.65
+                    color: Color.mOnSurfaceVariant; font.pointSize: Style.fontSizeXS; opacity: Style.opacityHeavy
                   }
                 }
 
                 Rectangle {
                   visible: isImg
-                  color: Color.mTertiary; radius: 4; height: 20
+                  color: Color.mTertiary; radius: Style.radiusS || 4; height: Style.baseWidgetSize * 0.5
                   Layout.alignment: Qt.AlignVCenter
                   RowLayout {
-                    anchors.left: parent.left; anchors.leftMargin: 6
-                    anchors.right: parent.right; anchors.rightMargin: 6
-                    anchors.verticalCenter: parent.verticalCenter; spacing: 3
-                    NIcon { icon: "photo"; pointSize: 9; color: Color.mOnTertiary }
-                    NText { text: "IMG"; font.pointSize: 8; font.bold: true; color: Color.mOnTertiary }
+                    anchors.left: parent.left; anchors.leftMargin: Style.marginS
+                    anchors.right: parent.right; anchors.rightMargin: Style.marginS
+                    anchors.verticalCenter: parent.verticalCenter; spacing: Style.marginXS
+                    NIcon { icon: "photo"; pointSize: Style.fontSizeXS; color: Color.mOnTertiary }
+                    NText { text: pluginApi?.tr("item.img-badge"); font.pointSize: Style.fontSizeXS; font.bold: true; color: Color.mOnTertiary }
                   }
                 }
               }
 
               Rectangle {
-                anchors.left: parent.left; anchors.leftMargin: 10
-                anchors.right: parent.right; anchors.rightMargin: 10
+                anchors.left: parent.left; anchors.leftMargin: Style.marginM
+                anchors.right: parent.right; anchors.rightMargin: Style.marginM
                 anchors.bottom: parent.bottom; height: 1
                 color: Color.mOnSurface; opacity: 0.08
               }
@@ -464,24 +464,33 @@ Item {
             NText {
               anchors.centerIn: parent
               visible: root.loading && items.length === 0
-              text: "Loading..."; color: Color.mOnSurfaceVariant
+              text: pluginApi?.tr("panel.loading"); color: Color.mOnSurfaceVariant
             }
             NText {
               anchors.centerIn: parent
               visible: !root.loading && items.length === 0
-              text: "No clipboard history."; color: Color.mOnSurfaceVariant
+              text: pluginApi?.tr("panel.empty"); color: Color.mOnSurfaceVariant
             }
             NText {
               anchors.centerIn: parent
               visible: !root.loading && items.length > 0 && visibleCount() === 0
-              text: "No matching entries."; color: Color.mOnSurfaceVariant
+              text: pluginApi?.tr("panel.no-matches"); color: Color.mOnSurfaceVariant
             }
           }
         }
 
         NText {
-          text: root.loading ? "Refreshing..." : (visibleCount() > 0 ? visibleCount() + " item" + (visibleCount() !== 1 ? "s" : "") : visibleCount() === 0 && items.length > 0 ? "(no matches)" : "")
-          font.pointSize: Style.fontSizeXS || 9
+          text: {
+            if (root.loading) return pluginApi?.tr("panel.refreshing")
+            if (visibleCount() > 0) {
+              var c = visibleCount()
+              var key = c === 1 ? "panel.count-singular" : "panel.count-plural"
+              return pluginApi?.tr(key, { count: c })
+            }
+            if (visibleCount() === 0 && items.length > 0) return pluginApi?.tr("panel.count-no-matches")
+            return ""
+          }
+          font.pointSize: Style.fontSizeXS
           color: Color.mOnSurfaceVariant; opacity: 0.6
         }
       }
