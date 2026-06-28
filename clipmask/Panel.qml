@@ -291,7 +291,7 @@ Item {
             color: Color.mOnSurface; Layout.alignment: Qt.AlignVCenter
           }
           NText {
-            text: "(" + visibleCount() + "/" + items.length + ")"
+            text: pluginApi?.tr("panel.count-filtered", { visible: visibleCount(), total: items.length })
             font.pointSize: Style.fontSizeXS
             color: Color.mOnSurfaceVariant; Layout.alignment: Qt.AlignVCenter
           }
