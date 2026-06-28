@@ -1,0 +1,13 @@
+{
+  "bar.tooltip": "ClipMask — masked clipboard",
+  "panel.title": "ClipMask",
+  "panel.masked": "Masked",
+  "panel.revealed": "Revealed",
+  "panel.hint": "Ctrl+A: toggle reveal  |  ↑↓: navigate  |  Enter: copy  |  Del: remove",
+  "panel.empty": "No clipboard history.",
+  "panel.count": "{count} items",
+  "panel.close": "Close",
+  "item.image": "[Image]",
+  "item.text": "TXT",
+  "toast.copied": "Copied to clipboard!"
+}
