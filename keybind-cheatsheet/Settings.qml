@@ -67,6 +67,17 @@ ColumnLayout {
   property string valueKeyTextMouse:   cfg.keyTextMouse   ?? defaults.keyTextMouse   ?? ""
   property string valueKeyTextDefault: cfg.keyTextDefault ?? defaults.keyTextDefault ?? ""
   property string valueKeyLabelColor:  cfg.keyLabelColor  ?? defaults.keyLabelColor  ?? "#FFFFFF"
+  // Generic X11 mods (Mod2/Mod3/Mod5): background colour, text colour, and a
+  // display-label override (rename e.g. Mod3 -> "Hyper" for caps:hyper).
+  property string valueKeyColorMod2: cfg.keyColorMod2 ?? defaults.keyColorMod2 ?? ""
+  property string valueKeyColorMod3: cfg.keyColorMod3 ?? defaults.keyColorMod3 ?? ""
+  property string valueKeyColorMod5: cfg.keyColorMod5 ?? defaults.keyColorMod5 ?? ""
+  property string valueKeyTextMod2:  cfg.keyTextMod2  ?? defaults.keyTextMod2  ?? ""
+  property string valueKeyTextMod3:  cfg.keyTextMod3  ?? defaults.keyTextMod3  ?? ""
+  property string valueKeyTextMod5:  cfg.keyTextMod5  ?? defaults.keyTextMod5  ?? ""
+  property string valueKeyLabelMod2: cfg.keyLabelMod2 ?? defaults.keyLabelMod2 ?? ""
+  property string valueKeyLabelMod3: cfg.keyLabelMod3 ?? defaults.keyLabelMod3 ?? ""
+  property string valueKeyLabelMod5: cfg.keyLabelMod5 ?? defaults.keyLabelMod5 ?? ""
   property string valueDescriptionTextColor: cfg.descriptionTextColor ?? defaults.descriptionTextColor ?? ""
 
   // Clipboard polling for quick-paste feature.
@@ -998,6 +1009,21 @@ ColumnLayout {
               item.bg = Qt.binding(function() { return root.valueKeyColorDefault });
               item.fg = Qt.binding(function() { return root.valueKeyTextDefault || root.valueKeyLabelColor });
             } }
+            Loader { sourceComponent: previewBadge; onLoaded: {
+              item.label = Qt.binding(function() { return root.valueKeyLabelMod3 || "Mod3" });
+              item.bg = Qt.binding(function() { return root.valueKeyColorMod3 || root.valueKeyColorDefault });
+              item.fg = Qt.binding(function() { return root.valueKeyTextMod3 || root.valueKeyLabelColor });
+            } }
+            Loader { sourceComponent: previewBadge; onLoaded: {
+              item.label = Qt.binding(function() { return root.valueKeyLabelMod2 || "Mod2" });
+              item.bg = Qt.binding(function() { return root.valueKeyColorMod2 || root.valueKeyColorDefault });
+              item.fg = Qt.binding(function() { return root.valueKeyTextMod2 || root.valueKeyLabelColor });
+            } }
+            Loader { sourceComponent: previewBadge; onLoaded: {
+              item.label = Qt.binding(function() { return root.valueKeyLabelMod5 || "Mod5" });
+              item.bg = Qt.binding(function() { return root.valueKeyColorMod5 || root.valueKeyColorDefault });
+              item.fg = Qt.binding(function() { return root.valueKeyTextMod5 || root.valueKeyLabelColor });
+            } }
           }
 
           // Description preview sample
@@ -1134,6 +1160,88 @@ ColumnLayout {
               var d = defaults.keyColorAlt || "#FF6B6B";
               root.valueKeyColorAlt = d; root._applyPreview("keyColorAlt", d);
               root.valueKeyTextAlt  = ""; root._applyPreview("keyTextAlt", "");
+            }
+          }
+
+          // Generic X11 mods (Mod2/Mod3/Mod5): same colour controls as the other
+          // modifiers, plus a rename field (e.g. caps:hyper -> label Mod3 "Hyper").
+          NText {
+            Layout.fillWidth: true
+            text: pluginApi?.tr("settings.mod-label-hint")
+            color: Color.mOnSurfaceVariant
+            pointSize: Style.fontSizeS
+            wrapMode: Text.WordWrap
+          }
+
+          Local.ColorPairRow {
+            pluginApi: root.pluginApi
+            labelText: pluginApi?.tr("settings.color-mod3")
+            letter: root.valueKeyLabelMod3.length > 0 ? root.valueKeyLabelMod3.charAt(0) : "3"
+            showLabel: true
+            labelValue: root.valueKeyLabelMod3
+            labelPlaceholder: "Mod3"
+            bgValue: root.valueKeyColorMod3
+            textValue: root.valueKeyTextMod3
+            bgFallback: defaults.keyColorDefault || "#6C757D"
+            textFallback: root.valueKeyLabelColor
+            clipboardHex: root.clipboardHex
+            onBgPicked: c => { root.valueKeyColorMod3 = c.toString(); root._applyPreview("keyColorMod3", c.toString()); }
+            onTextPicked: c => { root.valueKeyTextMod3 = c.toString(); root._applyPreview("keyTextMod3", c.toString()); }
+            onBgPasted: hex => { root.valueKeyColorMod3 = hex; root._applyPreview("keyColorMod3", hex); }
+            onTextPasted: hex => { root.valueKeyTextMod3 = hex; root._applyPreview("keyTextMod3", hex); }
+            onLabelEdited: t => { root.valueKeyLabelMod3 = t; root._applyPreview("keyLabelMod3", t); }
+            onResetRequested: {
+              root.valueKeyColorMod3 = ""; root._applyPreview("keyColorMod3", "");
+              root.valueKeyTextMod3  = ""; root._applyPreview("keyTextMod3", "");
+              root.valueKeyLabelMod3 = ""; root._applyPreview("keyLabelMod3", "");
+            }
+          }
+
+          Local.ColorPairRow {
+            pluginApi: root.pluginApi
+            labelText: pluginApi?.tr("settings.color-mod2")
+            letter: root.valueKeyLabelMod2.length > 0 ? root.valueKeyLabelMod2.charAt(0) : "2"
+            showLabel: true
+            labelValue: root.valueKeyLabelMod2
+            labelPlaceholder: "Mod2"
+            bgValue: root.valueKeyColorMod2
+            textValue: root.valueKeyTextMod2
+            bgFallback: defaults.keyColorDefault || "#6C757D"
+            textFallback: root.valueKeyLabelColor
+            clipboardHex: root.clipboardHex
+            onBgPicked: c => { root.valueKeyColorMod2 = c.toString(); root._applyPreview("keyColorMod2", c.toString()); }
+            onTextPicked: c => { root.valueKeyTextMod2 = c.toString(); root._applyPreview("keyTextMod2", c.toString()); }
+            onBgPasted: hex => { root.valueKeyColorMod2 = hex; root._applyPreview("keyColorMod2", hex); }
+            onTextPasted: hex => { root.valueKeyTextMod2 = hex; root._applyPreview("keyTextMod2", hex); }
+            onLabelEdited: t => { root.valueKeyLabelMod2 = t; root._applyPreview("keyLabelMod2", t); }
+            onResetRequested: {
+              root.valueKeyColorMod2 = ""; root._applyPreview("keyColorMod2", "");
+              root.valueKeyTextMod2  = ""; root._applyPreview("keyTextMod2", "");
+              root.valueKeyLabelMod2 = ""; root._applyPreview("keyLabelMod2", "");
+            }
+          }
+
+          Local.ColorPairRow {
+            pluginApi: root.pluginApi
+            labelText: pluginApi?.tr("settings.color-mod5")
+            letter: root.valueKeyLabelMod5.length > 0 ? root.valueKeyLabelMod5.charAt(0) : "5"
+            showLabel: true
+            labelValue: root.valueKeyLabelMod5
+            labelPlaceholder: "Mod5"
+            bgValue: root.valueKeyColorMod5
+            textValue: root.valueKeyTextMod5
+            bgFallback: defaults.keyColorDefault || "#6C757D"
+            textFallback: root.valueKeyLabelColor
+            clipboardHex: root.clipboardHex
+            onBgPicked: c => { root.valueKeyColorMod5 = c.toString(); root._applyPreview("keyColorMod5", c.toString()); }
+            onTextPicked: c => { root.valueKeyTextMod5 = c.toString(); root._applyPreview("keyTextMod5", c.toString()); }
+            onBgPasted: hex => { root.valueKeyColorMod5 = hex; root._applyPreview("keyColorMod5", hex); }
+            onTextPasted: hex => { root.valueKeyTextMod5 = hex; root._applyPreview("keyTextMod5", hex); }
+            onLabelEdited: t => { root.valueKeyLabelMod5 = t; root._applyPreview("keyLabelMod5", t); }
+            onResetRequested: {
+              root.valueKeyColorMod5 = ""; root._applyPreview("keyColorMod5", "");
+              root.valueKeyTextMod5  = ""; root._applyPreview("keyTextMod5", "");
+              root.valueKeyLabelMod5 = ""; root._applyPreview("keyLabelMod5", "");
             }
           }
 
@@ -1303,6 +1411,10 @@ ColumnLayout {
               root.valueKeyTextMouse = "";
               root.valueKeyTextDefault = "";
 
+              root.valueKeyColorMod2 = ""; root.valueKeyColorMod3 = ""; root.valueKeyColorMod5 = "";
+              root.valueKeyTextMod2  = ""; root.valueKeyTextMod3  = ""; root.valueKeyTextMod5  = "";
+              root.valueKeyLabelMod2 = ""; root.valueKeyLabelMod3 = ""; root.valueKeyLabelMod5 = "";
+
               if (pluginApi) {
                 pluginApi.pluginSettings = Object.assign({}, pluginApi.pluginSettings, {
                   keyColorSuper: "",
@@ -1324,7 +1436,10 @@ ColumnLayout {
                   keyTextPrint: "",
                   keyTextNumeric: "",
                   keyTextMouse: "",
-                  keyTextDefault: ""
+                  keyTextDefault: "",
+                  keyColorMod2: "", keyColorMod3: "", keyColorMod5: "",
+                  keyTextMod2: "", keyTextMod3: "", keyTextMod5: "",
+                  keyLabelMod2: "", keyLabelMod3: "", keyLabelMod5: ""
                 });
               }
             }
@@ -1380,6 +1495,16 @@ ColumnLayout {
     pluginApi.pluginSettings.keyTextNumeric = root.valueKeyTextNumeric;
     pluginApi.pluginSettings.keyTextMouse   = root.valueKeyTextMouse;
     pluginApi.pluginSettings.keyTextDefault = root.valueKeyTextDefault;
+
+    pluginApi.pluginSettings.keyColorMod2 = root.valueKeyColorMod2;
+    pluginApi.pluginSettings.keyColorMod3 = root.valueKeyColorMod3;
+    pluginApi.pluginSettings.keyColorMod5 = root.valueKeyColorMod5;
+    pluginApi.pluginSettings.keyTextMod2  = root.valueKeyTextMod2;
+    pluginApi.pluginSettings.keyTextMod3  = root.valueKeyTextMod3;
+    pluginApi.pluginSettings.keyTextMod5  = root.valueKeyTextMod5;
+    pluginApi.pluginSettings.keyLabelMod2 = root.valueKeyLabelMod2;
+    pluginApi.pluginSettings.keyLabelMod3 = root.valueKeyLabelMod3;
+    pluginApi.pluginSettings.keyLabelMod5 = root.valueKeyLabelMod5;
 
     _applied = true;
     pluginApi.saveSettings();

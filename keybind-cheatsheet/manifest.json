@@ -62,6 +62,15 @@
       "keyTextNumeric": "",
       "keyTextMouse": "",
       "keyTextDefault": "",
+      "keyColorMod2": "",
+      "keyColorMod3": "",
+      "keyColorMod5": "",
+      "keyTextMod2": "",
+      "keyTextMod3": "",
+      "keyTextMod5": "",
+      "keyLabelMod2": "",
+      "keyLabelMod3": "",
+      "keyLabelMod5": "",
       "descriptionTextColor": "",
       "bindOverrides": {}
     }

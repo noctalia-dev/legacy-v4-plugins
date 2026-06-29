@@ -5,8 +5,10 @@ import qs.Commons
 import qs.Widgets
 import "." as Local
 
-// Label + background pill + text pill + reset. Used by Settings.qml for per-category
-// color customization. Empty bgValue/textValue means "use fallback".
+// Label + background pill + text pill + optional rename field + reset. Used by
+// Settings.qml for per-category color customization. Empty bgValue/textValue
+// means "use fallback". When showLabel is set, an extra text field lets the user
+// rename the key's display label (used for the generic Mod2/Mod3/Mod5 keys).
 RowLayout {
   id: row
 
@@ -21,11 +23,16 @@ RowLayout {
   property string clipboardHex: ""
   property bool showBg: true
   property bool showText: true
+  // Optional display-label override (e.g. rename "Mod3" -> "Hyper")
+  property bool showLabel: false
+  property string labelValue: ""
+  property string labelPlaceholder: ""
 
   signal bgPicked(color value)
   signal textPicked(color value)
   signal bgPasted(string hex)
   signal textPasted(string hex)
+  signal labelEdited(string value)
   signal resetRequested()
 
   Layout.fillWidth: true
@@ -65,6 +72,15 @@ RowLayout {
     placeholderText: row.textValue.length === 0 ? row.pluginApi?.tr("settings.color-auto") : ""
     onColorPicked: c => row.textPicked(c)
     onPasteRequested: hex => row.textPasted(hex)
+  }
+
+  NTextInput {
+    Layout.preferredWidth: 160 * Style.uiScaleRatio
+    Layout.preferredHeight: Style.baseWidgetSize
+    visible: row.showLabel
+    text: row.labelValue
+    placeholderText: row.labelPlaceholder
+    onTextChanged: row.labelEdited(text)
   }
 
   Item { Layout.fillWidth: true }

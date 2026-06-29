@@ -156,6 +156,20 @@ Item {
   readonly property string keyTextMouseOverride:   cfg.keyTextMouse   ?? defaults.keyTextMouse   ?? ""
   readonly property string keyTextDefaultOverride: cfg.keyTextDefault ?? defaults.keyTextDefault ?? ""
 
+  // The generic X11 mods (Mod2/Mod3/Mod5) are first-class, customizable keys:
+  // background colour, text colour, and a display-label override that renames
+  // them to something meaningful (e.g. Mod3 -> "Hyper" for caps:hyper). Empty
+  // colour = fall back to the default key colour; empty label = raw mod name.
+  readonly property string keyColorMod2Override: cfg.keyColorMod2 ?? defaults.keyColorMod2 ?? ""
+  readonly property string keyColorMod3Override: cfg.keyColorMod3 ?? defaults.keyColorMod3 ?? ""
+  readonly property string keyColorMod5Override: cfg.keyColorMod5 ?? defaults.keyColorMod5 ?? ""
+  readonly property string keyTextMod2Override:  cfg.keyTextMod2  ?? defaults.keyTextMod2  ?? ""
+  readonly property string keyTextMod3Override:  cfg.keyTextMod3  ?? defaults.keyTextMod3  ?? ""
+  readonly property string keyTextMod5Override:  cfg.keyTextMod5  ?? defaults.keyTextMod5  ?? ""
+  readonly property string keyLabelMod2Override: cfg.keyLabelMod2 ?? defaults.keyLabelMod2 ?? ""
+  readonly property string keyLabelMod3Override: cfg.keyLabelMod3 ?? defaults.keyLabelMod3 ?? ""
+  readonly property string keyLabelMod5Override: cfg.keyLabelMod5 ?? defaults.keyLabelMod5 ?? ""
+
   // Workspace category split tuning
   readonly property bool splitWorkspaces: cfg.splitLargeWorkspaceCategory ?? defaults.splitLargeWorkspaceCategory ?? true
   readonly property int workspaceSplitThreshold: cfg.workspaceSplitThreshold ?? defaults.workspaceSplitThreshold ?? 12
@@ -391,8 +405,8 @@ Item {
             NText {
               id: keyText
               anchors.centerIn: parent
-              text: modelData
-              font.pointSize: modelData.length > 12 ? 7 : 8
+              text: getKeyLabel(modelData)
+              font.pointSize: text.length > 12 ? 7 : 8
               font.weight: Font.Bold
               color: getKeyTextColor(modelData)
             }
@@ -483,6 +497,9 @@ Item {
     if (keyName === "PRINT" || keyName === "Print") return root.keyColorPrint;
     if (keyName.match(/^[0-9]$/)) return root.keyColorNumeric;
     if (keyName.includes("MOUSE") || keyName.includes("Wheel")) return root.keyColorMouse;
+    if (keyName === "Mod2") return root.keyColorMod2Override || root.keyColorDefault;
+    if (keyName === "Mod3") return root.keyColorMod3Override || root.keyColorDefault;
+    if (keyName === "Mod5") return root.keyColorMod5Override || root.keyColorDefault;
     return root.keyColorDefault;
   }
 
@@ -495,7 +512,20 @@ Item {
     if (keyName === "PRINT" || keyName === "Print") return root.keyTextPrintOverride || root.keyLabelColor;
     if (keyName.match(/^[0-9]$/)) return root.keyTextNumericOverride || root.keyLabelColor;
     if (keyName.includes("MOUSE") || keyName.includes("Wheel")) return root.keyTextMouseOverride || root.keyLabelColor;
+    if (keyName === "Mod2") return root.keyTextMod2Override || root.keyLabelColor;
+    if (keyName === "Mod3") return root.keyTextMod3Override || root.keyLabelColor;
+    if (keyName === "Mod5") return root.keyTextMod5Override || root.keyLabelColor;
     return root.keyTextDefaultOverride || root.keyLabelColor;
+  }
+
+  // Display label for a key token. Lets users rename the generic X11 modifier
+  // names (e.g. Mod3 -> "Hyper"); everything else renders as-is. Purely visual —
+  // colour lookup and the cached bind still use the original token.
+  function getKeyLabel(keyName) {
+    if (keyName === "Mod2" && root.keyLabelMod2Override) return root.keyLabelMod2Override;
+    if (keyName === "Mod3" && root.keyLabelMod3Override) return root.keyLabelMod3Override;
+    if (keyName === "Mod5" && root.keyLabelMod5Override) return root.keyLabelMod5Override;
+    return keyName;
   }
 
   // ===== Bind override helpers (shared keyed map in plugin settings) =====
