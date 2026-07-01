@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# gpu-stat — emit JSON describing the NVIDIA dGPU power state + current graphics mode.
+# Consumed by the noctalia nvidia-optimus plugin (BarWidget + Panel).
+#
+# Default (background) mode is SYSFS-ONLY and never runs nvidia-smi or lspci, so it
+# can be polled every couple of seconds without ever waking — or holding awake — a
+# sleeping dGPU. Pass "full" (only while the panel is open) to add nvidia-smi
+# power/temp/util/VRAM and the list of processes holding a context (this DOES wake
+# the GPU, so the plugin only requests it when the GPU is already awake).
+set -uo pipefail
+
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=gpu-detect.sh
+. "$SELF_DIR/gpu-detect.sh"
+
+MODE_ARG="${1:-}"
+detect_gpus
+ENVFILE="$(env_file)"
+
+# No NVIDIA dGPU present — emit a sentinel so the UI can hide/disable itself.
+if [ -z "${DGPU_PCI:-}" ]; then
+  echo '{"runtime":"absent","mode":"battery","pending":"battery","external":"none","externalName":"","gpuName":"no dGPU","powerW":0,"tempC":0,"util":0,"vramUsed":0,"vramTotal":0,"heldBy":""}'
+  exit 0
+fi
+
+DCARD=$(card_for "$DGPU_PCI")
+ICARD=$(card_for "${IGPU_PCI:-}")
+DREND=$(basename "$(readlink -f "/dev/dri/by-path/pci-$DGPU_PCI-render" 2>/dev/null)" 2>/dev/null)
+
+# dGPU runtime power state — reading this sysfs file does NOT wake the GPU.
+runtime=$(cat "/sys/bus/pci/devices/$DGPU_PCI/power/runtime_status" 2>/dev/null || echo unknown)
+
+# Marketing name — resolved wake-free from sysfs + pci.ids (see gpu_name), and
+# cached so even that lookup only runs once per session.
+NAMECACHE="${XDG_RUNTIME_DIR:-/tmp}/nvidia-optimus.name"
+if [ -s "$NAMECACHE" ]; then
+  gpuName=$(cat "$NAMECACHE")
+else
+  gpuName=$(gpu_name)
+  printf '%s' "$gpuName" >"$NAMECACHE" 2>/dev/null || true
+fi
+
+# External display: first connected non-eDP connector, and which GPU drives it.
+external="none"; externalName=""
+for st in /sys/class/drm/card*-*/status; do
+  conn=$(basename "$(dirname "$st")")
+  name=${conn#*-}
+  case "$name" in eDP*) continue;; esac
+  cardn=${conn%%-*}
+  # Reading a connector's status can force a probe that RESUMES the GPU. Skip the
+  # dGPU's own connectors while it is asleep, so monitoring never wakes it. (In HDMI
+  # mode the dGPU is already awake, so its connectors are read normally.)
+  [ "$cardn" = "${DCARD:-}" ] && [ "$runtime" != active ] && continue
+  [ "$(cat "$st" 2>/dev/null)" = connected ] || continue
+  pci=$(basename "$(readlink -f "/sys/class/drm/$cardn/device" 2>/dev/null)")
+  case "$pci" in
+    "$DGPU_PCI") external=NVIDIA ;;
+    "${IGPU_PCI:-none}") external=iGPU ;;
+    *) external="?" ;;
+  esac
+  externalName=$name
+  break
+done
+
+# Live mode: is the compositor currently holding the dGPU render node? (lsof is safe.)
+mode=battery
+if [ -n "${DREND:-}" ] && lsof -t "/dev/dri/$DREND" 2>/dev/null \
+    | while read -r pid; do ps -o comm= -p "$pid" 2>/dev/null; done \
+    | grep -qiE '^(Hyprland|hyprpaper|quickshell)$'; then
+  mode=hdmi
+fi
+
+# Pending mode: what env.conf will apply on the next Hyprland start.
+pending=battery
+grep -qE '^env = AQ_DRM_DEVICES,.*:' "$ENVFILE" 2>/dev/null && pending=hdmi
+
+# --- detail (nvidia-smi) — ONLY in full mode and ONLY when the GPU is awake ---
+powerW=0; tempC=0; util=0; vramUsed=0; vramTotal=0; heldBy=""
+if [ "$MODE_ARG" = full ] && [ "$runtime" = active ] && command -v nvidia-smi >/dev/null 2>&1; then
+  read -r pw tp ut vu vt < <(nvidia-smi \
+    --query-gpu=power.draw,temperature.gpu,utilization.gpu,memory.used,memory.total \
+    --format=csv,noheader,nounits 2>/dev/null | head -1 | tr -d ',')
+  powerW=${pw:-0}; tempC=${tp:-0}; util=${ut:-0}
+  vramUsed=$(awk "BEGIN{printf \"%.2f\", ${vu:-0}/1024}")
+  vramTotal=$(awk "BEGIN{printf \"%.2f\", ${vt:-0}/1024}")
+  # Every process with a context on the GPU — compute (C) AND graphics (G),
+  # including container/root procs that user-level lsof can't see.
+  heldBy=$(nvidia-smi 2>/dev/null | awk '
+    /Processes:/ { p = 1 }
+    p && $5 ~ /^[0-9]+$/ && ($6 == "C" || $6 == "G") {
+      name = $7; for (i = 8; i <= NF - 2; i++) name = name " " $i; sub(/.*\//, "", name);
+      printf "%s%s:%s %s(%s)", (c++ ? ", " : ""), name, $5, $6, $(NF - 1);
+    }')
+fi
+
+python3 - "$runtime" "$mode" "$pending" "$external" "$externalName" "$gpuName" \
+  "$powerW" "$tempC" "$util" "$vramUsed" "$vramTotal" "$heldBy" <<'PY'
+import json, sys
+keys = ["runtime","mode","pending","external","externalName","gpuName",
+        "powerW","tempC","util","vramUsed","vramTotal","heldBy"]
+d = dict(zip(keys, sys.argv[1:]))
+for k in ("powerW","tempC","util","vramUsed","vramTotal"):
+    try:
+        d[k] = float(d[k])
+    except Exception:
+        d[k] = 0
+print(json.dumps(d))
+PY

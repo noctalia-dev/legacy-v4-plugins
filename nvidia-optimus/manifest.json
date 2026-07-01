@@ -1,0 +1,26 @@
+{
+  "id": "nvidia-optimus",
+  "name": "NVIDIA Optimus",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "joniler",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Monitor and control an NVIDIA Optimus dGPU on Hyprland — toggle Battery (dGPU sleeps) vs HDMI-Ready, see live power/VRAM, and list what is holding the GPU awake.",
+  "tags": ["Bar", "Panel", "System", "GPU", "Hyprland", "NVIDIA"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "panel": {
+      "defaultPosition": "right"
+    },
+    "defaultSettings": {}
+  }
+}

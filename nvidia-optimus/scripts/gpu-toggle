@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# gpu-toggle — switch Hyprland's graphics between:
+#   battery    iGPU only  → the NVIDIA dGPU runtime-suspends (best battery, no HDMI)
+#   hdmi       iGPU+dGPU  → external outputs on the dGPU work; dGPU stays awake
+#
+# Battery mode also forces the session onto mesa-only EGL, because excluding the dGPU
+# from AQ_DRM_DEVICES is not enough on Hyprland: the compositor + hyprpaper otherwise
+# still open the nvidia nodes via EGL, keeping the dGPU out of RTD3 suspend.
+#
+# Card nodes are resolved from PCI addresses each run, so this is immune to
+# /dev/dri/cardN renumbering. Changes apply on the next Hyprland start (log out/in).
+# Usage: gpu-toggle [toggle|battery|hdmi|status|apply|info]
+set -uo pipefail
+
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=gpu-detect.sh
+. "$SELF_DIR/gpu-detect.sh"
+
+detect_gpus
+ENVFILE="$(env_file)"
+ICON="$SELF_DIR/../Assets/nvidia-eye.svg"
+
+notify() { notify-send -a "NVIDIA Optimus" -i "$ICON" "$@" 2>/dev/null || true; }
+
+ICARD=$(card_for "${IGPU_PCI:-}")
+DCARD=$(card_for "${DGPU_PCI:-}")
+
+current() { grep -qE '^env = AQ_DRM_DEVICES,.*:' "$ENVFILE" 2>/dev/null && echo hdmi || echo battery; }
+
+set_mode() { # $1 = battery|hdmi
+  [ -f "$ENVFILE" ] || { notify -u critical "NVIDIA Optimus" "Hyprland env file not found: $ENVFILE"; exit 1; }
+  [ -n "${ICARD:-}" ] || { notify -u critical "NVIDIA Optimus" "Could not resolve the iGPU card node."; exit 1; }
+  local val
+  if [ "$1" = hdmi ]; then
+    [ -n "${DCARD:-}" ] || { notify -u critical "NVIDIA Optimus" "Could not resolve the NVIDIA dGPU card node."; exit 1; }
+    val="/dev/dri/$ICARD:/dev/dri/$DCARD"
+  else
+    val="/dev/dri/$ICARD"
+  fi
+
+  cp -f "$ENVFILE" "$ENVFILE.nvidia-optimus.bak"
+  if grep -qE '^env = AQ_DRM_DEVICES,' "$ENVFILE"; then
+    sed -i -E "s|^env = AQ_DRM_DEVICES,.*|env = AQ_DRM_DEVICES,$val|" "$ENVFILE"
+  else
+    printf 'env = AQ_DRM_DEVICES,%s\n' "$val" >>"$ENVFILE"
+  fi
+
+  # Manage the mesa-only EGL restriction (Battery mode only).
+  local egl="env = __EGL_VENDOR_LIBRARY_FILENAMES,$(mesa_egl_json)"
+  sed -i -E '/^env = __EGL_VENDOR_LIBRARY_FILENAMES,/d' "$ENVFILE"
+  if [ "$1" = battery ]; then
+    sed -i "/^env = AQ_DRM_DEVICES,/a $egl" "$ENVFILE"
+  fi
+}
+
+banner() { # $1 = battery|hdmi
+  if [ "$1" = hdmi ]; then
+    notify "NVIDIA Optimus → HDMI-Ready" "dGPU will drive external displays. Log out & back in to apply."
+  else
+    notify "NVIDIA Optimus → Battery" "dGPU will sleep when idle (no HDMI). Log out & back in to apply."
+  fi
+}
+
+case "${1:-toggle}" in
+  battery)   set_mode battery; banner battery ;;
+  hdmi)      set_mode hdmi;    banner hdmi ;;
+  toggle|"") if [ "$(current)" = hdmi ]; then set_mode battery; banner battery; else set_mode hdmi; banner hdmi; fi ;;
+  status)    current ;;
+  apply)     notify "NVIDIA Optimus" "Restarting the session to apply…"; hyprctl dispatch exit ;;
+  info)      notify "NVIDIA Optimus — pending: $(current)" "dGPU=${DCARD:-?}  iGPU=${ICARD:-?}" ;;
+  *)         echo "usage: gpu-toggle [toggle|battery|hdmi|status|apply|info]" >&2; exit 1 ;;
+esac
