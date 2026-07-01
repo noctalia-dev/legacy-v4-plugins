@@ -63,31 +63,37 @@ Item {
   }
 
   function subtitle() {
-    if (root.needsRestart)
-      return (root.pending === "hdmi" ? "HDMI-Ready" : "Battery") + " pending — restart to apply";
+    var api = root.pluginApi;
+    if (root.needsRestart) {
+      var m = (root.pending === "hdmi") ? api?.tr("common.mode-hdmi") : api?.tr("common.mode-battery");
+      return api?.tr("panel.subtitle-pending", {
+        "mode": m
+      });
+    }
     if (root.pending === "hdmi")
-      return root.ext ? "Driving external display" : "HDMI-Ready — dGPU on demand";
-    return root.active ? "Battery — dGPU awake" : "Battery — dGPU asleep";
+      return root.ext ? api?.tr("panel.subtitle-driving") : api?.tr("panel.subtitle-hdmi");
+    return root.active ? api?.tr("panel.subtitle-battery-awake") : api?.tr("panel.subtitle-battery-asleep");
   }
 
   function statRows() {
     var d = root.full || {};
+    var api = root.pluginApi;
     return [
       {
         "icon": "bolt",
-        "label": "Power draw",
+        "label": api?.tr("panel.stat-power"),
         "value": fmt1(d.powerW) + " W"
       }, {
         "icon": "temperature",
-        "label": "GPU temp",
+        "label": api?.tr("panel.stat-temp"),
         "value": (d.tempC || 0) + "°C"
       }, {
         "icon": "activity",
-        "label": "GPU util",
+        "label": api?.tr("panel.stat-util"),
         "value": (d.util || 0) + "%"
       }, {
         "icon": "memory",
-        "label": "VRAM",
+        "label": api?.tr("panel.stat-vram"),
         "value": fmt1(d.vramUsed) + " / " + fmt1(d.vramTotal) + " GB"
       }
     ];
@@ -144,7 +150,7 @@ Item {
           spacing: 0
 
           NText {
-            text: (root.s && root.s.gpuName) ? root.s.gpuName : "NVIDIA dGPU"
+            text: (root.s && root.s.gpuName) ? root.s.gpuName : root.pluginApi?.tr("panel.title-fallback")
             font.weight: Style.fontWeightBold
             pointSize: Style.fontSizeL
             color: Color.mOnSurface
@@ -184,13 +190,13 @@ Item {
             pointSize: Style.fontSizeM
           }
           NText {
-            text: "External display"
+            text: root.pluginApi?.tr("panel.external")
             color: Color.mOnSurfaceVariant
             pointSize: Style.fontSizeS
             Layout.fillWidth: true
           }
           NText {
-            text: root.ext ? ((root.s.external || "?") + " · " + (root.s.externalName || "")) : "none"
+            text: root.ext ? ((root.s.external || "?") + " · " + (root.s.externalName || "")) : root.pluginApi?.tr("common.none")
             color: root.ext ? Color.mPrimary : Color.mOnSurface
             pointSize: Style.fontSizeS
             font.weight: Style.fontWeightBold
@@ -207,13 +213,13 @@ Item {
             pointSize: Style.fontSizeM
           }
           NText {
-            text: "GPU processes"
+            text: root.pluginApi?.tr("panel.gpu-processes")
             color: Color.mOnSurfaceVariant
             pointSize: Style.fontSizeS
             Layout.fillWidth: true
           }
           NText {
-            text: (root.full && root.full.heldBy && root.full.heldBy.length > 0) ? root.full.heldBy : "none reported"
+            text: (root.full && root.full.heldBy && root.full.heldBy.length > 0) ? root.full.heldBy : root.pluginApi?.tr("panel.none-reported")
             color: Color.mOnSurface
             pointSize: Style.fontSizeS
             font.weight: Style.fontWeightBold
@@ -275,13 +281,13 @@ Item {
         NText {
           Layout.fillWidth: true
           wrapMode: Text.WordWrap
-          text: "AQ_DRM_DEVICES is read at session start."
+          text: root.pluginApi?.tr("panel.apply-note")
           pointSize: Style.fontSizeXS
           color: Color.mOnSurfaceVariant
         }
 
         NButton {
-          text: "Apply now (log out)"
+          text: root.pluginApi?.tr("panel.apply-button")
           fontSize: Style.fontSizeS
           backgroundColor: Color.mError
           textColor: Color.mOnError

@@ -30,10 +30,15 @@ NIconButton {
   icon: "" // hidden: we draw the tinted NVIDIA mark below
 
   tooltipText: {
+    var api = root.pluginApi;
     if (root.ext)
-      return "dGPU — driving external display";
-    var m = (root.md === "hdmi") ? "HDMI-Ready" : "Battery";
-    return "dGPU — " + (root.rt === "active" ? "active" : "asleep") + "  (" + m + " mode)";
+      return api?.tr("bar.tooltip-external");
+    var state = (root.rt === "active") ? api?.tr("common.state-active") : api?.tr("common.state-asleep");
+    var mode = (root.md === "hdmi") ? api?.tr("common.mode-hdmi") : api?.tr("common.mode-battery");
+    return api?.tr("bar.tooltip", {
+      "state": state,
+      "mode": mode
+    });
   }
   tooltipDirection: BarService.getTooltipDirection(screen?.name)
   baseSize: Style.getCapsuleHeightForScreen(screen?.name)

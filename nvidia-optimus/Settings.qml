@@ -18,7 +18,7 @@ Item {
     spacing: Style.marginM
 
     NText {
-      text: "NVIDIA Optimus"
+      text: root.pluginApi?.tr("settings.title")
       font.weight: Style.fontWeightBold
       pointSize: Style.fontSizeL
       color: Color.mOnSurface
@@ -29,7 +29,7 @@ Item {
       wrapMode: Text.WordWrap
       pointSize: Style.fontSizeS
       color: Color.mOnSurfaceVariant
-      text: "The bar toggle flips Hyprland's AQ_DRM_DEVICES between Battery (iGPU only — the NVIDIA dGPU runtime-suspends, no HDMI) and HDMI-Ready (iGPU + dGPU — external outputs work). It edits ~/.config/hypr/env.conf (backed up alongside) and applies on the next login. The bar icon is theme-tinted: accent when the dGPU is awake, neutral when asleep. Stats poll every 2s from a bundled sysfs-only script that never wakes the GPU; nvidia-smi runs only while this panel is open, and only when the GPU is already awake."
+      text: root.pluginApi?.tr("settings.description")
     }
 
     NText {
@@ -37,7 +37,7 @@ Item {
       wrapMode: Text.WordWrap
       pointSize: Style.fontSizeXS
       color: Color.mOnSurfaceVariant
-      text: "Requires: Hyprland (aquamarine), an NVIDIA Optimus laptop with the proprietary driver + nvidia-drm.modeset=1. Override the env file with $HYPR_ENV_FILE if yours lives elsewhere."
+      text: root.pluginApi?.tr("settings.requirements")
     }
   }
 }
