@@ -10,13 +10,17 @@
     "huobi": "Huobi",
     "okx": "OKX"
   },
+  "marketType": {
+    "perpetual": "Perpetual futures",
+    "spot": "Spot"
+  },
   "menu": {
     "settings": "Settings"
   },
   "panel": {
     "change": "Change",
     "close": "Close",
-    "coin": "Coin",
+    "coin": "Asset",
     "dataFrom": "Data source",
     "error": "Error",
     "high": "High",
@@ -27,11 +31,11 @@
     "refresh": "Refresh",
     "refreshNow": "Refresh now",
     "settings": "Settings",
-    "title": "Crypto Market"
+    "title": "Market Watch"
   },
   "settings": {
-    "barCoin": "Status bar coin",
-    "barCoinDesc": "Select the coin to display in the status bar",
+    "barCoin": "Status bar asset",
+    "barCoinDesc": "Select the asset to display in the status bar",
     "colorScheme": "Color scheme",
     "colorSchemeDesc": "Select the color scheme for price changes",
     "configExported": "Configuration exported to ~/Downloads/crypto-market-config.json",
@@ -51,17 +55,19 @@
     "import": "Import config",
     "language": "Interface language",
     "languageDesc": "Select the language used by this plugin",
+    "marketType": "Market type",
+    "marketTypeDesc": "Spot supports crypto pairs. Perpetual futures can display supported metals and stock contracts from exchanges.",
     "proxy": "Proxy URL (optional)",
     "proxyPlaceholder": "http://127.0.0.1:7890",
     "proxyTip": "Leave empty to disable proxy. Format: http://host:port or socks5://host:port",
     "redRises": "Red rises",
     "refreshInterval": "Refresh interval",
     "refreshIntervalDesc": "Data update interval (1-60 seconds)",
-    "search": "Search coins",
-    "searchPlaceholder": "Enter a coin symbol to search (for example: btc, eth, ada)",
+    "search": "Search assets",
+    "searchPlaceholder": "Enter an asset symbol to search (for example: btc, xau, aapl)",
     "searchResults": "Search results",
     "seconds": "seconds",
     "watchList": "Watch list",
-    "watchListTip": "Click a coin to add or remove it, and use arrows to reorder"
+    "watchListTip": "Click an asset to add or remove it, and use arrows to reorder"
   }
 }

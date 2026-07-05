@@ -1,12 +1,12 @@
 {
   "id": "crypto-market",
-  "name": "Crypto Market",
+  "name": "Market Watch",
   "version": "1.0.0",
   "minNoctaliaVersion": "4.6.6",
   "author": "chengongliang",
   "license": "MIT",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-  "description": "Real-time cryptocurrency market data from multiple exchanges",
+  "description": "Real-time market data from multiple exchanges",
   "tags": ["Bar", "Panel", "Indicator", "Utility"],
   "entryPoints": {
     "main": "Main.qml",
@@ -25,6 +25,7 @@
       "redRises": false,
       "refreshInterval": 5,
       "dataSource": "huobi",
+      "marketType": "spot",
       "proxyUrl": "",
       "language": "en"
     }

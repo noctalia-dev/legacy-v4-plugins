@@ -1,6 +1,6 @@
-# Crypto Market Plugin
+# Market Watch Plugin
 
-A real-time cryptocurrency market monitoring plugin for Noctalia Shell, displaying live price data from multiple exchanges.
+A real-time market monitoring plugin for Noctalia Shell, displaying live crypto spot prices and supported USDT perpetual contract prices from multiple exchanges.
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -8,9 +8,10 @@ A real-time cryptocurrency market monitoring plugin for Noctalia Shell, displayi
 ## Features
 
 - **Multi-Exchange Support**: Huobi, Binance, OKX, and CoinGecko
-- **Status Bar Widget**: Display single coin price with trend indicator
-- **Market Panel**: Detailed view of multiple coins with 24h high/low
-- **Display Modes**: Text mode (with coin symbol) or compact mode (price only)
+- **Spot and Perpetual Markets**: Spot crypto pairs plus supported USDT perpetual contracts, including exchange-listed metals and stock contracts
+- **Status Bar Widget**: Display single asset price with trend indicator
+- **Market Panel**: Detailed view of multiple assets with 24h high/low
+- **Display Modes**: Text mode (with asset symbol) or compact mode (price only)
 - **Color Schemes**: Red-rises-green-falls or green-rises-red-falls
 - **Auto Logo Management**: Downloads and caches coin logos from CoinGecko CDN
 - **Language Switcher**: Switch the plugin interface between English and Simplified Chinese
@@ -40,9 +41,10 @@ cp -r crypto-market ~/.config/noctalia/plugins/
 ### Settings
 - **Data Source**: Choose between Huobi, Binance, OKX, or CoinGecko
 - **Proxy URL**: Optional HTTP/SOCKS5 proxy (format: `http://host:port` or `socks5://host:port`)
-- **Status Bar Coin**: Select which coin to display in the status bar
+- **Market Type**: Choose spot or perpetual futures for Huobi, Binance, and OKX
+- **Status Bar Asset**: Select which asset to display in the status bar
 - **Display Mode**: Full mode (with symbol) or compact mode (price only)
-- **Watch List**: Add/remove coins by clicking, reorder with arrow buttons
+- **Watch List**: Add/remove assets by clicking, reorder with arrow buttons
 - **Color Scheme**: Red rises (Chinese style) or green rises (Western style)
 - **Refresh Interval**: Set update frequency from 1 to 60 seconds
 - **Language**: Switch the plugin interface between English and Simplified Chinese
@@ -59,14 +61,15 @@ Default settings in `manifest.json`:
   "redRises": false,
   "refreshInterval": 5,
   "dataSource": "huobi",
+  "marketType": "spot",
   "proxyUrl": "",
   "language": "en"
 }
 ```
 
-## Supported Coins
+## Supported Assets
 
-Pre-configured coins with logos:
+Pre-configured crypto assets with logos:
 - **BTC** (Bitcoin)
 - **ETH** (Ethereum)
 - **BNB** (Binance Coin)
@@ -78,27 +81,31 @@ Pre-configured coins with logos:
 - **MATIC** (Polygon)
 - **AVAX** (Avalanche)
 
-You can add more coins by searching in the settings panel. The plugin will automatically download logos from CoinGecko.
+You can add more assets by searching in the settings panel. In perpetual mode, the search list is loaded from the selected exchange when possible. You can also type symbols directly, for example `xau`, `xag`, `aapl`, `msft`, or `nvda`; availability depends on the selected exchange.
 
 ## Data Sources
 
 ### Huobi (Default)
 - API: `https://api.huobi.pro/market/history/kline`
+- Perpetual API: `https://api.hbdm.com/linear-swap-ex/market/history/kline`
 - No rate limits for basic usage
 - Recommended refresh interval: 5 seconds
 
 ### Binance
 - API: `https://api.binance.com/api/v3/klines`
+- Perpetual API: `https://fapi.binance.com/fapi/v1/klines`
 - Rate limit: 1200 requests per minute
 - Recommended refresh interval: 3 seconds
 
 ### OKX
 - API: `https://www.okx.com/api/v5/market/candles`
+- Perpetual symbols use `-USDT-SWAP` instruments
 - Rate limit: 20 requests per 2 seconds
 - Recommended refresh interval: 5 seconds
 
 ### CoinGecko
 - API: `https://api.coingecko.com/api/v3/simple/price`
+- Spot crypto assets only in this plugin
 - Rate limit: 50 calls per minute (free tier)
 - **Minimum refresh interval: 10 seconds** (enforced by plugin)
 
@@ -148,11 +155,20 @@ crypto-market/
 # Test Huobi API
 curl -s 'https://api.huobi.pro/market/history/kline?period=1day&size=1&symbol=btcusdt'
 
+# Test Huobi perpetual API
+curl -s 'https://api.hbdm.com/linear-swap-ex/market/history/kline?period=1day&size=1&contract_code=BTC-USDT'
+
 # Test Binance API
 curl -s 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=1'
 
+# Test Binance perpetual API
+curl -s 'https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1d&limit=1'
+
 # Test OKX API
 curl -s 'https://www.okx.com/api/v5/market/candles?instId=BTC-USDT&bar=1D&limit=1'
+
+# Test OKX perpetual API
+curl -s 'https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1D&limit=1'
 
 # Test CoinGecko API
 curl -s 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true'

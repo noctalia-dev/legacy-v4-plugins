@@ -1,6 +1,6 @@
-# 加密货币行情插件
+# 市场行情插件
 
-Noctalia Shell 的实时加密货币行情监控插件，支持多个交易所的实时行情数据。
+Noctalia Shell 的实时行情监控插件，支持多个交易所的加密货币现货价格和已上线的 USDT 永续合约价格。
 
 ![版本](https://img.shields.io/badge/版本-1.0.0-blue)
 ![许可证](https://img.shields.io/badge/许可证-MIT-green)
@@ -8,9 +8,10 @@ Noctalia Shell 的实时加密货币行情监控插件，支持多个交易所�
 ## 功能特性
 
 - **多交易所支持**：火币、币安、OKX、CoinGecko
-- **状态栏小部件**：显示单个币种价格及涨跌趋势
-- **行情面板**：详细显示多个币种及 24 小时最高/最低价
-- **显示模式**：文字模式（带币种符号）或简洁模式（仅价格）
+- **现货和永续市场**：支持加密货币现货交易对，以及交易所已上线的金属、美股等 USDT 永续合约
+- **状态栏小部件**：显示单个资产价格及涨跌趋势
+- **行情面板**：详细显示多个资产及 24 小时最高/最低价
+- **显示模式**：文字模式（带资产符号）或简洁模式（仅价格）
 - **配色方案**：红涨绿跌或绿涨红跌
 - **自动 Logo 管理**：从 CoinGecko CDN 下载并缓存币种 Logo
 - **语言切换**：在英文和简体中文之间切换插件界面
@@ -40,9 +41,10 @@ cp -r crypto-market ~/.config/noctalia/plugins/
 ### 设置
 - **数据源**：在火币、币安、OKX、CoinGecko 之间选择
 - **代理地址**：可选的 HTTP/SOCKS5 代理（格式：`http://host:port` 或 `socks5://host:port`）
-- **状态栏显示币种**：选择在状态栏显示哪个币种
+- **市场类型**：为火币、币安、OKX 选择现货或永续合约
+- **状态栏显示资产**：选择在状态栏显示哪个资产
 - **显示模式**：完整模式（带符号）或简洁模式（仅价格）
-- **自选币种列表**：点击添加/移除币种，使用箭头按钮调整顺序
+- **自选资产列表**：点击添加/移除资产，使用箭头按钮调整顺序
 - **涨跌配色**：红涨绿跌（中国风格）或绿涨红跌（西方风格）
 - **刷新频率**：设置更新间隔，1 到 60 秒
 - **界面语言**：在英文和简体中文之间切换插件界面
@@ -59,14 +61,15 @@ cp -r crypto-market ~/.config/noctalia/plugins/
   "redRises": false,
   "refreshInterval": 5,
   "dataSource": "huobi",
+  "marketType": "spot",
   "proxyUrl": "",
   "language": "en"
 }
 ```
 
-## 支持的币种
+## 支持的资产
 
-预配置带 Logo 的币种：
+预配置带 Logo 的加密资产：
 - **BTC** (比特币)
 - **ETH** (以太坊)
 - **BNB** (币安币)
@@ -78,27 +81,31 @@ cp -r crypto-market ~/.config/noctalia/plugins/
 - **MATIC** (Polygon)
 - **AVAX** (雪崩)
 
-您可以在设置面板中搜索添加更多币种。插件会自动从 CoinGecko 下载 Logo。
+您可以在设置面板中搜索添加更多资产。永续合约模式下，插件会尽量从所选交易所加载可交易列表。也可以直接输入代码，例如 `xau`、`xag`、`aapl`、`msft`、`nvda`；是否有数据取决于所选交易所是否上线该合约。
 
 ## 数据源
 
 ### 火币（默认）
 - API：`https://api.huobi.pro/market/history/kline`
+- 永续合约 API：`https://api.hbdm.com/linear-swap-ex/market/history/kline`
 - 基础使用无速率限制
 - 推荐刷新间隔：5 秒
 
 ### 币安
 - API：`https://api.binance.com/api/v3/klines`
+- 永续合约 API：`https://fapi.binance.com/fapi/v1/klines`
 - 速率限制：每分钟 1200 次请求
 - 推荐刷新间隔：3 秒
 
 ### OKX
 - API：`https://www.okx.com/api/v5/market/candles`
+- 永续合约使用 `-USDT-SWAP` 交易工具
 - 速率限制：每 2 秒 20 次请求
 - 推荐刷新间隔：5 秒
 
 ### CoinGecko
 - API：`https://api.coingecko.com/api/v3/simple/price`
+- 此插件中仅用于加密货币现货资产
 - 速率限制：免费版每分钟 50 次调用
 - **最小刷新间隔：10 秒**（插件强制执行）
 
@@ -148,11 +155,20 @@ crypto-market/
 # 测试火币 API
 curl -s 'https://api.huobi.pro/market/history/kline?period=1day&size=1&symbol=btcusdt'
 
+# 测试火币永续合约 API
+curl -s 'https://api.hbdm.com/linear-swap-ex/market/history/kline?period=1day&size=1&contract_code=BTC-USDT'
+
 # 测试币安 API
 curl -s 'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=1'
 
+# 测试币安永续合约 API
+curl -s 'https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1d&limit=1'
+
 # 测试 OKX API
 curl -s 'https://www.okx.com/api/v5/market/candles?instId=BTC-USDT&bar=1D&limit=1'
+
+# 测试 OKX 永续合约 API
+curl -s 'https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=1D&limit=1'
 
 # 测试 CoinGecko API
 curl -s 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true'

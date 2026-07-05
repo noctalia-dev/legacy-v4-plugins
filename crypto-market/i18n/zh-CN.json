@@ -10,13 +10,17 @@
     "huobi": "火币",
     "okx": "OKX"
   },
+  "marketType": {
+    "perpetual": "永续合约",
+    "spot": "现货"
+  },
   "menu": {
     "settings": "设置"
   },
   "panel": {
     "change": "涨跌幅",
     "close": "关闭",
-    "coin": "币种",
+    "coin": "资产",
     "dataFrom": "数据来源",
     "error": "错误",
     "high": "最高",
@@ -27,11 +31,11 @@
     "refresh": "刷新",
     "refreshNow": "立即刷新",
     "settings": "设置",
-    "title": "加密货币行情"
+    "title": "市场行情"
   },
   "settings": {
-    "barCoin": "状态栏显示币种",
-    "barCoinDesc": "选择在状态栏显示的币种",
+    "barCoin": "状态栏显示资产",
+    "barCoinDesc": "选择在状态栏显示的资产",
     "colorScheme": "涨跌配色",
     "colorSchemeDesc": "选择涨跌颜色方案",
     "configExported": "配置已导出到 ~/Downloads/crypto-market-config.json",
@@ -51,17 +55,19 @@
     "import": "导入配置",
     "language": "界面语言",
     "languageDesc": "选择此插件使用的显示语言",
+    "marketType": "市场类型",
+    "marketTypeDesc": "现货支持加密货币交易对。永续合约可显示交易所支持的金属和美股合约。",
     "proxy": "代理地址（可选）",
     "proxyPlaceholder": "http://127.0.0.1:7890",
     "proxyTip": "留空则不使用代理。格式: http://host:port 或 socks5://host:port",
     "redRises": "红涨绿跌",
     "refreshInterval": "刷新频率",
     "refreshIntervalDesc": "数据更新间隔（1-60 秒）",
-    "search": "搜索添加币种",
-    "searchPlaceholder": "输入币种代码搜索（例如：btc, eth, ada）",
+    "search": "搜索添加资产",
+    "searchPlaceholder": "输入资产代码搜索（例如：btc, xau, aapl）",
     "searchResults": "搜索结果",
     "seconds": "秒",
-    "watchList": "自选币种列表",
-    "watchListTip": "点击币种名称添加或移除，使用箭头调整顺序"
+    "watchList": "自选资产列表",
+    "watchListTip": "点击资产名称添加或移除，使用箭头调整顺序"
   }
 }

@@ -28,7 +28,8 @@ Item {
   // 强制重新计算 coinData，依赖 tick
   readonly property var coinData: {
     const t = tick;
-    return mainInstance?.marketData[barCoin];
+    const key = mainInstance?.normalizeAssetKey(barCoin) ?? barCoin;
+    return mainInstance?.marketData[key];
   }
 
   function tr(key) {

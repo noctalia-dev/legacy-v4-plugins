@@ -18,8 +18,10 @@ Item {
   property int refreshInterval: Math.max(1, Math.min(60, cfg.refreshInterval ?? defaults.refreshInterval ?? 5))
   property string displayMode: cfg.displayMode ?? defaults.displayMode ?? "text"  // "text" or "compact"
   property string dataSource: cfg.dataSource ?? defaults.dataSource ?? "huobi"
+  property string marketType: cfg.marketType ?? defaults.marketType ?? "spot"
   property string proxyUrl: cfg.proxyUrl ?? defaults.proxyUrl ?? ""
   property string language: cfg.language ?? defaults.language ?? "en"
+  readonly property var marketTypes: ["spot", "perpetual"]
   readonly property string configPath: Quickshell.env("HOME") + "/Downloads/crypto-market-config.json"
   property var translations: ({
     "en": {
@@ -34,10 +36,14 @@ Item {
         "huobi": "Huobi",
         "okx": "OKX"
       },
+      "marketType": {
+        "perpetual": "Perpetual futures",
+        "spot": "Spot"
+      },
       "panel": {
         "change": "Change",
         "close": "Close",
-        "coin": "Coin",
+        "coin": "Asset",
         "dataFrom": "Data source",
         "error": "Error",
         "high": "High",
@@ -48,11 +54,11 @@ Item {
         "refresh": "Refresh",
         "refreshNow": "Refresh now",
         "settings": "Settings",
-        "title": "Crypto Market"
+        "title": "Market Watch"
       },
       "settings": {
-        "barCoin": "Status bar coin",
-        "barCoinDesc": "Select the coin to display in the status bar",
+        "barCoin": "Status bar asset",
+        "barCoinDesc": "Select the asset to display in the status bar",
         "colorScheme": "Color scheme",
         "colorSchemeDesc": "Select the color scheme for price changes",
         "configExported": "Configuration exported to ~/Downloads/crypto-market-config.json",
@@ -72,18 +78,20 @@ Item {
         "import": "Import config",
         "language": "Interface language",
         "languageDesc": "Select the language used by this plugin",
+        "marketType": "Market type",
+        "marketTypeDesc": "Spot supports crypto pairs. Perpetual futures can display supported metals and stock contracts from exchanges.",
         "proxy": "Proxy URL (optional)",
         "proxyPlaceholder": "http://127.0.0.1:7890",
         "proxyTip": "Leave empty to disable proxy. Format: http://host:port or socks5://host:port",
         "redRises": "Red rises",
         "refreshInterval": "Refresh interval",
         "refreshIntervalDesc": "Data update interval (1-60 seconds)",
-        "search": "Search coins",
-        "searchPlaceholder": "Enter a coin symbol to search (for example: btc, eth, ada)",
+        "search": "Search assets",
+        "searchPlaceholder": "Enter an asset symbol to search (for example: btc, xau, aapl)",
         "searchResults": "Search results",
         "seconds": "seconds",
         "watchList": "Watch list",
-        "watchListTip": "Click a coin to add or remove it, and use arrows to reorder"
+        "watchListTip": "Click an asset to add or remove it, and use arrows to reorder"
       }
     },
     "zh-CN": {
@@ -98,10 +106,14 @@ Item {
         "huobi": "火币",
         "okx": "OKX"
       },
+      "marketType": {
+        "perpetual": "永续合约",
+        "spot": "现货"
+      },
       "panel": {
         "change": "涨跌幅",
         "close": "关闭",
-        "coin": "币种",
+        "coin": "资产",
         "dataFrom": "数据来源",
         "error": "错误",
         "high": "最高",
@@ -112,11 +124,11 @@ Item {
         "refresh": "刷新",
         "refreshNow": "立即刷新",
         "settings": "设置",
-        "title": "加密货币行情"
+        "title": "市场行情"
       },
       "settings": {
-        "barCoin": "状态栏显示币种",
-        "barCoinDesc": "选择在状态栏显示的币种",
+        "barCoin": "状态栏显示资产",
+        "barCoinDesc": "选择在状态栏显示的资产",
         "colorScheme": "涨跌配色",
         "colorSchemeDesc": "选择涨跌颜色方案",
         "configExported": "配置已导出到 ~/Downloads/crypto-market-config.json",
@@ -136,18 +148,20 @@ Item {
         "import": "导入配置",
         "language": "界面语言",
         "languageDesc": "选择此插件使用的显示语言",
+        "marketType": "市场类型",
+        "marketTypeDesc": "现货支持加密货币交易对。永续合约可显示交易所支持的金属和美股合约。",
         "proxy": "代理地址（可选）",
         "proxyPlaceholder": "http://127.0.0.1:7890",
         "proxyTip": "留空则不使用代理。格式: http://host:port 或 socks5://host:port",
         "redRises": "红涨绿跌",
         "refreshInterval": "刷新频率",
         "refreshIntervalDesc": "数据更新间隔（1-60 秒）",
-        "search": "搜索添加币种",
-        "searchPlaceholder": "输入币种代码搜索（例如：btc, eth, ada）",
+        "search": "搜索添加资产",
+        "searchPlaceholder": "输入资产代码搜索（例如：btc, xau, aapl）",
         "searchResults": "搜索结果",
         "seconds": "秒",
-        "watchList": "自选币种列表",
-        "watchListTip": "点击币种名称添加或移除，使用箭头调整顺序"
+        "watchList": "自选资产列表",
+        "watchListTip": "点击资产名称添加或移除，使用箭头调整顺序"
       }
     }
   })
@@ -171,7 +185,9 @@ Item {
     "theta", "icp", "xmr", "algo", "eos", "aave", "ftm", "axs", "sand", "mana",
     "grt", "cake", "crv", "snx", "comp", "mkr", "ksm", "near", "hbar", "flow",
     "egld", "xtz", "btt", "zec", "waves", "dash", "zil", "neo", "chz", "bat",
-    "enj", "lrc", "1inch", "sushi", "yfi", "bal", "ren", "omg", "uma", "kava"
+    "enj", "lrc", "1inch", "sushi", "yfi", "bal", "ren", "omg", "uma", "kava",
+    "xau", "xag", "aapl", "msft", "nvda", "tsla", "amzn", "googl", "meta", "nflx",
+    "coin", "mstr", "qqq", "spy"
   ]
 
   readonly property var coinNames: ({
@@ -234,7 +250,21 @@ Item {
     "ren": "Ren",
     "omg": "OMG Network",
     "uma": "UMA",
-    "kava": "Kava"
+    "kava": "Kava",
+    "xau": "Gold",
+    "xag": "Silver",
+    "aapl": "Apple",
+    "msft": "Microsoft",
+    "nvda": "NVIDIA",
+    "tsla": "Tesla",
+    "amzn": "Amazon",
+    "googl": "Alphabet",
+    "meta": "Meta",
+    "nflx": "Netflix",
+    "coin": "Coinbase",
+    "mstr": "MicroStrategy",
+    "qqq": "Nasdaq 100 ETF",
+    "spy": "S&P 500 ETF"
   })
 
   // CoinGecko 币种 ID 映射
@@ -276,7 +306,21 @@ Item {
     "dot": "⚪",
     "doge": "🐕",
     "matic": "🟣",
-    "avax": "🔺"
+    "avax": "🔺",
+    "xau": "Au",
+    "xag": "Ag",
+    "aapl": "A",
+    "msft": "M",
+    "nvda": "N",
+    "tsla": "T",
+    "amzn": "A",
+    "googl": "G",
+    "meta": "M",
+    "nflx": "N",
+    "coin": "C",
+    "mstr": "M",
+    "qqq": "Q",
+    "spy": "S"
   })
 
   // 数据源适配器
@@ -284,7 +328,10 @@ Item {
     "huobi": {
       name: "火币",
       getUrl: function(coin) {
-        return `https://api.huobi.pro/market/history/kline?period=1day&size=1&symbol=${coin}usdt`;
+        if (root.marketType === "perpetual") {
+          return `https://api.hbdm.com/linear-swap-ex/market/history/kline?period=1day&size=1&contract_code=${root.formatExchangeSymbol(coin, "huobi", "perpetual")}`;
+        }
+        return `https://api.huobi.pro/market/history/kline?period=1day&size=1&symbol=${root.formatExchangeSymbol(coin, "huobi", "spot")}`;
       },
       parseResponse: function(response, coin) {
         if (response.status === "ok" && response.data && response.data.length > 0) {
@@ -303,7 +350,10 @@ Item {
     "binance": {
       name: "币安",
       getUrl: function(coin) {
-        return `https://api.binance.com/api/v3/klines?symbol=${coin.toUpperCase()}USDT&interval=1d&limit=1`;
+        if (root.marketType === "perpetual") {
+          return `https://fapi.binance.com/fapi/v1/klines?symbol=${root.formatExchangeSymbol(coin, "binance", "perpetual")}&interval=1d&limit=1`;
+        }
+        return `https://api.binance.com/api/v3/klines?symbol=${root.formatExchangeSymbol(coin, "binance", "spot")}&interval=1d&limit=1`;
       },
       parseResponse: function(response, coin) {
         if (response && response.length > 0) {
@@ -322,7 +372,10 @@ Item {
     "okx": {
       name: "OKX",
       getUrl: function(coin) {
-        return `https://www.okx.com/api/v5/market/candles?instId=${coin.toUpperCase()}-USDT&bar=1D&limit=1`;
+        if (root.marketType === "perpetual") {
+          return `https://www.okx.com/api/v5/market/candles?instId=${root.formatExchangeSymbol(coin, "okx", "perpetual")}&bar=1D&limit=1`;
+        }
+        return `https://www.okx.com/api/v5/market/candles?instId=${root.formatExchangeSymbol(coin, "okx", "spot")}&bar=1D&limit=1`;
       },
       parseResponse: function(response, coin) {
         if (response.code === "0" && response.data && response.data.length > 0) {
@@ -341,11 +394,13 @@ Item {
     "coingecko": {
       name: "CoinGecko",
       getUrl: function(coin) {
-        const id = root.coinGeckoIds[coin] || coin;
+        const key = root.normalizeAssetKey(coin);
+        const id = root.coinGeckoIds[key] || key;
         return `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true&include_24hr_high_low=true`;
       },
       parseResponse: function(response, coin) {
-        const id = root.coinGeckoIds[coin] || coin;
+        const key = root.normalizeAssetKey(coin);
+        const id = root.coinGeckoIds[key] || key;
         const data = response[id];
         if (data && data.usd) {
           const currentPrice = data.usd;
@@ -372,6 +427,14 @@ Item {
   property bool coinsListRefetchPending: false
 
   Component.onCompleted: {
+    watchList = normalizeAssetList(watchList);
+    barCoin = normalizeAssetKey(barCoin);
+    if (!watchList.includes(barCoin)) {
+      barCoin = watchList.length > 0 ? watchList[0] : "btc";
+    }
+    if (!marketTypes.includes(marketType)) {
+      marketType = "spot";
+    }
     loadTranslations();
     initLogoCache();
     fetchCoinsList();
@@ -449,6 +512,57 @@ Item {
       }
     }
     return current;
+  }
+
+  function normalizeAssetKey(asset) {
+    let text = String(asset || "").trim().toLowerCase();
+    if (text === "") return "";
+
+    text = text
+      .replace(/_/g, "-")
+      .replace(/\.perp$/i, "")
+      .replace(/-swap$/i, "")
+      .replace(/-usdt$/i, "")
+      .replace(/\/usdt$/i, "")
+      .replace(/usdt$/i, "")
+      .replace(/-+$/g, "");
+
+    return text;
+  }
+
+  function normalizeAssetList(assets) {
+    const result = [];
+    const seen = {};
+    if (!Array.isArray(assets)) return result;
+
+    for (let i = 0; i < assets.length; i++) {
+      const symbol = normalizeAssetKey(assets[i]);
+      if (symbol !== "" && !seen[symbol]) {
+        seen[symbol] = true;
+        result.push(symbol);
+      }
+    }
+
+    return result;
+  }
+
+  function formatExchangeSymbol(asset, source, type) {
+    const symbol = normalizeAssetKey(asset).toUpperCase();
+    const selectedType = type || root.marketType;
+
+    if (symbol.indexOf("-") !== -1 || symbol.indexOf("/") !== -1) {
+      return source === "binance" ? symbol.replace(/[-/]/g, "") : symbol.replace("/", "-");
+    }
+
+    if (source === "okx") {
+      return selectedType === "perpetual" ? symbol + "-USDT-SWAP" : symbol + "-USDT";
+    }
+
+    if (source === "huobi") {
+      return selectedType === "perpetual" ? symbol + "-USDT" : symbol.toLowerCase() + "usdt";
+    }
+
+    return symbol + "USDT";
   }
 
   // 创建缓存目录的 Process
@@ -557,27 +671,29 @@ Item {
 
   // 动态下载币种 Logo
   function requestLogo(coin) {
-    if (logoCache[coin]) return;
-    if (!canRetryLogo(coin)) return;
+    const key = normalizeAssetKey(coin);
+    if (key === "") return;
+    if (logoCache[key]) return;
+    if (!canRetryLogo(key)) return;
 
     // 标记为正在下载，避免重复
     const nextCache = Object.assign({}, logoCache);
-    nextCache[coin] = "downloading";
+    nextCache[key] = "downloading";
     root.logoCache = nextCache;
 
     // 已知币种直接使用静态图片 URL，避免频繁请求 CoinGecko metadata API 触发限流。
-    const logoUrl = fallbackLogoUrls[coin];
+    const logoUrl = fallbackLogoUrls[key];
     if (logoUrl) {
-      downloadLogo(coin, logoUrl, function(success) {
+      downloadLogo(key, logoUrl, function(success) {
         if (success) {
-          setLogoPath(coin, logoDir + "/" + coin + ".png");
+          setLogoPath(key, logoDir + "/" + key + ".png");
         } else {
-          markLogoFailed(coin);
+          markLogoFailed(key);
         }
       });
     } else {
       // 未知币种，通过搜索 API 查找
-      const searchUrl = `https://api.coingecko.com/api/v3/search?query=${coin}`;
+      const searchUrl = `https://api.coingecko.com/api/v3/search?query=${key}`;
       const searchProc = curlProcComponent.createObject(root, {
         "command": proxyUrl ? ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", "-x", proxyUrl, searchUrl] : ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", searchUrl]
       });
@@ -590,26 +706,26 @@ Item {
               const foundCoin = response.coins[0];
               const logoUrl = foundCoin.large || foundCoin.thumb;
               if (logoUrl) {
-                downloadLogo(coin, logoUrl, function(success) {
+                downloadLogo(key, logoUrl, function(success) {
                   if (success) {
-                    setLogoPath(coin, logoDir + "/" + coin + ".png");
+                    setLogoPath(key, logoDir + "/" + key + ".png");
                   } else {
-                    markLogoFailed(coin);
+                    markLogoFailed(key);
                   }
                 });
               } else {
-                markLogoFailed(coin);
+                markLogoFailed(key);
               }
             } else {
-              markLogoFailed(coin);
+              markLogoFailed(key);
             }
           } catch (e) {
-            Logger.w("CryptoMarket", "Failed to parse logo search response for " + coin + ": " + e);
-            markLogoFailed(coin);
+            Logger.w("CryptoMarket", "Failed to parse logo search response for " + key + ": " + e);
+            markLogoFailed(key);
           }
         } else {
-          Logger.w("CryptoMarket", "Failed to search logo for " + coin + ": " + String(searchProc.stderr.text));
-          markLogoFailed(coin);
+          Logger.w("CryptoMarket", "Failed to search logo for " + key + ": " + String(searchProc.stderr.text));
+          markLogoFailed(key);
         }
         searchProc.destroy();
       });
@@ -619,30 +735,33 @@ Item {
   }
 
   function setLogoPath(coin, path) {
+    const key = normalizeAssetKey(coin);
     const nextCache = Object.assign({}, root.logoCache);
-    nextCache[coin] = path;
+    nextCache[key] = path;
     root.logoCache = nextCache;
 
     const nextFailures = Object.assign({}, root.logoFailures);
-    delete nextFailures[coin];
+    delete nextFailures[key];
     root.logoFailures = nextFailures;
 
     root.refreshNonce++;
   }
 
   function markLogoFailed(coin) {
+    const key = normalizeAssetKey(coin);
     const nextCache = Object.assign({}, root.logoCache);
-    delete nextCache[coin];
+    delete nextCache[key];
     root.logoCache = nextCache;
 
     const nextFailures = Object.assign({}, root.logoFailures);
-    nextFailures[coin] = Date.now();
+    nextFailures[key] = Date.now();
     root.logoFailures = nextFailures;
     root.refreshNonce++;
   }
 
   function canRetryLogo(coin) {
-    const failedAt = root.logoFailures[coin];
+    const key = normalizeAssetKey(coin);
+    const failedAt = root.logoFailures[key];
     if (!failedAt) return true;
 
     if ((Date.now() - failedAt) < root.logoRetryCooldownMs) {
@@ -650,7 +769,7 @@ Item {
     }
 
     const nextFailures = Object.assign({}, root.logoFailures);
-    delete nextFailures[coin];
+    delete nextFailures[key];
     root.logoFailures = nextFailures;
     return true;
   }
@@ -685,17 +804,18 @@ Item {
 
   // 获取 logo 路径
   function getLogoPath(coin) {
+    const key = normalizeAssetKey(coin);
     // 如果缓存中有记录，直接返回
-    if (logoCache[coin] && logoCache[coin] !== "downloading") {
-      return "file://" + logoCache[coin];
+    if (logoCache[key] && logoCache[key] !== "downloading") {
+      return "file://" + logoCache[key];
     }
 
     // 如果正在下载，返回空
-    if (logoCache[coin] === "downloading") {
+    if (logoCache[key] === "downloading") {
       return "";
     }
 
-    if (logoFailures[coin]) {
+    if (logoFailures[key]) {
       return "";
     }
 
@@ -720,6 +840,11 @@ Item {
     const adapter = dataSourceAdapters[dataSource];
     if (!adapter) return;
 
+    if (dataSource === "coingecko" && marketType !== "spot") {
+      Logger.w("CryptoMarket", "CoinGecko only supports spot crypto asset IDs in this plugin");
+    }
+
+    const key = normalizeAssetKey(coin);
     const url = adapter.getUrl(coin);
 
     const proc = curlProcComponent.createObject(root, {
@@ -730,12 +855,13 @@ Item {
       if (exitCode === 0) {
         try {
           const response = JSON.parse(String(proc.stdout.text));
-          const parsed = adapter.parseResponse(response, coin);
+          const parsed = adapter.parseResponse(response, key);
 
-          if (parsed) {
+          if (parsed && parsed.open > 0 && parsed.close > 0) {
             const change = ((parsed.close - parsed.open) / parsed.open * 100);
 
-            marketData[coin] = {
+            const nextMarketData = Object.assign({}, marketData);
+            nextMarketData[key] = {
               open: parsed.open,
               close: parsed.close,
               high: parsed.high,
@@ -744,6 +870,7 @@ Item {
               change: change,
               isRising: parsed.close >= parsed.open
             };
+            marketData = nextMarketData;
 
             refreshNonce++;
             root.isLoading = false;
@@ -785,7 +912,7 @@ Item {
 
   // 获取价格颜色
   function getPriceColor(coin) {
-    const data = marketData[coin];
+    const data = marketData[normalizeAssetKey(coin)];
     if (!data) return "#888888";
 
     const isRising = data.isRising;
@@ -800,29 +927,31 @@ Item {
 
   // 获取币种图标
   function getCoinIcon(coin) {
-    return coinIcons[coin] || "🔸";
+    const key = normalizeAssetKey(coin);
+    return coinIcons[key] || key.slice(0, 2).toUpperCase();
   }
 
   function getCoinName(coin) {
-    const symbol = String(coin || "").toLowerCase();
+    const symbol = normalizeAssetKey(coin);
     const name = coinNames[symbol];
     return name ? symbol.toUpperCase() + " (" + name + ")" : symbol.toUpperCase();
   }
 
   function searchCoinSymbols(query) {
-    const text = String(query || "").trim().toLowerCase();
+    const text = normalizeAssetKey(query);
     if (text === "") return [];
 
     const coins = [];
     const seen = {};
     const appendCoin = function(coin) {
-      const symbol = String(coin || "").toLowerCase();
+      const symbol = normalizeAssetKey(coin);
       if (symbol !== "" && !seen[symbol]) {
         seen[symbol] = true;
         coins.push(symbol);
       }
     };
 
+    appendCoin(text);
     root.commonCoinSymbols.forEach(appendCoin);
     root.allCoinsList.forEach(appendCoin);
 
@@ -850,6 +979,7 @@ Item {
       redRises: root.redRises,
       refreshInterval: root.refreshInterval,
       dataSource: root.dataSource,
+      marketType: root.marketType,
       proxyUrl: root.proxyUrl,
       language: root.language
     };
@@ -895,6 +1025,7 @@ Item {
     const validSources = ["huobi", "binance", "okx", "coingecko"];
     const validModes = ["text", "compact"];
     const validLanguages = ["en", "zh-CN", "zh"];
+    const validMarketTypes = root.marketTypes;
     const next = {
       watchList: root.watchList,
       barCoin: root.barCoin,
@@ -902,21 +1033,21 @@ Item {
       redRises: root.redRises,
       refreshInterval: root.refreshInterval,
       dataSource: root.dataSource,
+      marketType: root.marketType,
       proxyUrl: root.proxyUrl,
       language: root.language
     };
 
     if (Array.isArray(config.watchList)) {
-      const coins = config.watchList
-        .filter(coin => typeof coin === "string" && coin.trim() !== "")
-        .map(coin => coin.trim().toLowerCase());
-      if (coins.length > 0) next.watchList = [...new Set(coins)];
+      const coins = normalizeAssetList(config.watchList);
+      if (coins.length > 0) next.watchList = coins;
     }
-    if (typeof config.barCoin === "string" && config.barCoin.trim() !== "") next.barCoin = config.barCoin.trim().toLowerCase();
+    if (typeof config.barCoin === "string" && config.barCoin.trim() !== "") next.barCoin = normalizeAssetKey(config.barCoin);
     if (validModes.includes(config.displayMode)) next.displayMode = config.displayMode;
     if (typeof config.redRises === "boolean") next.redRises = config.redRises;
     if (typeof config.refreshInterval === "number") next.refreshInterval = Math.max(1, Math.min(60, Math.round(config.refreshInterval)));
     if (validSources.includes(config.dataSource)) next.dataSource = config.dataSource;
+    if (validMarketTypes.includes(config.marketType)) next.marketType = config.marketType;
     if (typeof config.proxyUrl === "string") next.proxyUrl = config.proxyUrl;
     if (validLanguages.includes(config.language)) next.language = config.language === "zh" ? "zh-CN" : config.language;
 
@@ -929,12 +1060,19 @@ Item {
 
   function applyConfig(config, persist) {
     const previousProxyUrl = root.proxyUrl;
-    root.watchList = config.watchList;
-    root.barCoin = config.barCoin;
+    const previousDataSource = root.dataSource;
+    const previousMarketType = root.marketType;
+    const nextWatchList = normalizeAssetList(config.watchList);
+    root.watchList = nextWatchList.length > 0 ? nextWatchList : root.watchList;
+    root.barCoin = normalizeAssetKey(config.barCoin);
+    if (!root.watchList.includes(root.barCoin)) {
+      root.barCoin = root.watchList[0];
+    }
     root.displayMode = config.displayMode;
     root.redRises = config.redRises;
     root.refreshInterval = Math.max(1, Math.min(60, config.refreshInterval));
     root.dataSource = config.dataSource;
+    root.marketType = root.dataSource === "coingecko" ? "spot" : (root.marketTypes.includes(config.marketType) ? config.marketType : "spot");
     root.proxyUrl = config.proxyUrl;
     root.language = config.language;
     root.marketData = ({});
@@ -942,7 +1080,7 @@ Item {
     root.errorMessage = "";
     root.refreshNonce++;
 
-    if (previousProxyUrl !== root.proxyUrl) {
+    if (previousProxyUrl !== root.proxyUrl || previousDataSource !== root.dataSource || previousMarketType !== root.marketType) {
       root.logoFailures = ({});
       root.fetchCoinsList(true);
     }
@@ -954,6 +1092,7 @@ Item {
       pluginApi.pluginSettings.redRises = root.redRises;
       pluginApi.pluginSettings.refreshInterval = root.refreshInterval;
       pluginApi.pluginSettings.dataSource = root.dataSource;
+      pluginApi.pluginSettings.marketType = root.marketType;
       pluginApi.pluginSettings.proxyUrl = root.proxyUrl;
       pluginApi.pluginSettings.language = root.language;
       pluginApi.saveSettings();
@@ -971,9 +1110,59 @@ Item {
       return;
     }
     root.coinsListRefetchPending = false;
-    const url = "https://api.huobi.pro/v1/common/symbols";
+    const url = getSymbolsUrl();
+    if (url === "") {
+      root.allCoinsList = root.commonCoinSymbols;
+      return;
+    }
     coinsListProc.command = proxyUrl ? ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", "-x", proxyUrl, url] : ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", url];
     coinsListProc.running = true;
+  }
+
+  function getSymbolsUrl() {
+    if (root.dataSource === "coingecko") return "";
+    if (root.dataSource === "binance") {
+      return root.marketType === "perpetual"
+        ? "https://fapi.binance.com/fapi/v1/exchangeInfo"
+        : "https://api.binance.com/api/v3/exchangeInfo";
+    }
+    if (root.dataSource === "okx") {
+      return root.marketType === "perpetual"
+        ? "https://www.okx.com/api/v5/public/instruments?instType=SWAP"
+        : "https://www.okx.com/api/v5/public/instruments?instType=SPOT";
+    }
+    if (root.marketType === "perpetual") {
+      return "https://api.hbdm.com/linear-swap-api/v1/swap_contract_info";
+    }
+    return "https://api.huobi.pro/v1/common/symbols";
+  }
+
+  function parseSymbolsResponse(response) {
+    const symbols = [];
+    const append = function(symbol) {
+      const key = normalizeAssetKey(symbol);
+      if (key !== "") symbols.push(key);
+    };
+
+    if (root.dataSource === "binance" && Array.isArray(response.symbols)) {
+      response.symbols
+        .filter(symbol => symbol.quoteAsset === "USDT" && symbol.status === "TRADING")
+        .forEach(symbol => append(symbol.baseAsset));
+    } else if (root.dataSource === "okx" && response.code === "0" && Array.isArray(response.data)) {
+      response.data
+        .filter(symbol => symbol.quoteCcy === "USDT" || symbol.settleCcy === "USDT" || String(symbol.instId || "").indexOf("-USDT") !== -1)
+        .forEach(symbol => append(symbol.baseCcy || symbol.instId));
+    } else if (root.dataSource === "huobi" && root.marketType === "perpetual" && response.status === "ok" && Array.isArray(response.data)) {
+      response.data
+        .filter(symbol => symbol.contract_status === 1 || symbol.contract_status === "1" || symbol.contract_status === undefined)
+        .forEach(symbol => append(symbol.symbol || symbol.contract_code));
+    } else if (response.status === "ok" && Array.isArray(response.data)) {
+      response.data
+        .filter(symbol => symbol["quote-currency"] === "usdt" && symbol.state === "online")
+        .forEach(symbol => append(symbol["base-currency"]));
+    }
+
+    return normalizeAssetList(symbols);
   }
 
   Process {
@@ -985,13 +1174,8 @@ Item {
         try {
           const text = String(stdout.text);
           const response = JSON.parse(text);
-          if (response.status === "ok" && Array.isArray(response.data)) {
-            // 只保留 USDT 交易对，且状态为 online
-            const usdtPairs = response.data
-              .filter(symbol => symbol["quote-currency"] === "usdt" && symbol.state === "online")
-              .map(symbol => symbol["base-currency"]);
-            root.allCoinsList = [...new Set(usdtPairs)];
-          }
+          const symbols = parseSymbolsResponse(response);
+          root.allCoinsList = symbols.length > 0 ? symbols : root.commonCoinSymbols;
         } catch (e) {
           Logger.w("CryptoMarket", "Failed to parse coin list: " + e);
         }

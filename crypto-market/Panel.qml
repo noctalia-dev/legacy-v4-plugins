@@ -34,9 +34,10 @@ Item {
 
     for (let i = 0; i < watchList.length; i++) {
       const coin = watchList[i];
-      const data = mainInstance?.marketData[coin];
+      const key = mainInstance?.normalizeAssetKey(coin) ?? coin;
+      const data = mainInstance?.marketData[key];
       rows.push({
-        coin: coin,
+        coin: key,
         price: mainInstance?.formatPrice(data?.close) ?? "--",
         change: mainInstance?.formatChange(data?.change) ?? "--",
         high: mainInstance?.formatPrice(data?.high) ?? "--",

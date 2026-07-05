@@ -17,6 +17,7 @@ ColumnLayout {
   property bool editRedRises: cfg.redRises ?? defaults.redRises ?? false
   property int editRefreshInterval: cfg.refreshInterval ?? defaults.refreshInterval ?? 5
   property string editDataSource: cfg.dataSource ?? defaults.dataSource ?? "huobi"
+  property string editMarketType: cfg.marketType ?? defaults.marketType ?? "spot"
   property string editProxyUrl: cfg.proxyUrl ?? defaults.proxyUrl ?? ""
   property string editLanguage: cfg.language ?? defaults.language ?? "en"
 
@@ -71,7 +72,27 @@ ColumnLayout {
     ]
     currentKey: root.editDataSource
     defaultValue: defaults.dataSource ?? "huobi"
-    onSelected: key => root.editDataSource = key
+    onSelected: key => {
+      root.editDataSource = key;
+      if (key === "coingecko") {
+        root.editMarketType = "spot";
+      }
+    }
+  }
+
+  NComboBox {
+    Layout.fillWidth: true
+    label: tr("settings.marketType")
+    description: tr("settings.marketTypeDesc")
+    minimumWidth: 240
+    visible: root.editDataSource !== "coingecko"
+    model: [
+      { "key": "spot", "name": tr("marketType.spot") },
+      { "key": "perpetual", "name": tr("marketType.perpetual") }
+    ]
+    currentKey: root.editMarketType
+    defaultValue: defaults.marketType ?? "spot"
+    onSelected: key => root.editMarketType = key
   }
 
   NTextInput {
@@ -97,13 +118,7 @@ ColumnLayout {
     label: tr("settings.barCoin")
     description: tr("settings.barCoinDesc")
     minimumWidth: 240
-    model: [
-      { "key": "btc", "name": "BTC (Bitcoin)" },
-      { "key": "eth", "name": "ETH (Ethereum)" },
-      { "key": "bnb", "name": "BNB (Binance Coin)" },
-      { "key": "sol", "name": "SOL (Solana)" },
-      { "key": "xrp", "name": "XRP (Ripple)" }
-    ]
+    model: buildBarCoinModel()
     currentKey: root.editBarCoin
     defaultValue: defaults.barCoin ?? "btc"
     onSelected: key => root.editBarCoin = key
@@ -293,24 +308,29 @@ ColumnLayout {
   function saveSettings() {
     if (!pluginApi) return;
 
-    pluginApi.pluginSettings.watchList = root.editWatchList;
-    pluginApi.pluginSettings.barCoin = root.editBarCoin;
+    const normalizedWatchList = normalizeEditWatchList();
+    const normalizedBarCoin = normalizedWatchList.includes(normalizeAsset(root.editBarCoin)) ? normalizeAsset(root.editBarCoin) : normalizedWatchList[0];
+
+    pluginApi.pluginSettings.watchList = normalizedWatchList;
+    pluginApi.pluginSettings.barCoin = normalizedBarCoin;
     pluginApi.pluginSettings.displayMode = root.editDisplayMode;
     pluginApi.pluginSettings.redRises = root.editRedRises;
     pluginApi.pluginSettings.refreshInterval = root.editRefreshInterval;
     pluginApi.pluginSettings.dataSource = root.editDataSource;
+    pluginApi.pluginSettings.marketType = effectiveMarketType();
     pluginApi.pluginSettings.proxyUrl = root.editProxyUrl;
     pluginApi.pluginSettings.language = root.editLanguage;
     pluginApi.saveSettings();
 
     if (mainInstance) {
       mainInstance.applyConfig({
-        watchList: root.editWatchList,
-        barCoin: root.editBarCoin,
+        watchList: normalizedWatchList,
+        barCoin: normalizedBarCoin,
         displayMode: root.editDisplayMode,
         redRises: root.editRedRises,
         refreshInterval: root.editRefreshInterval,
         dataSource: root.editDataSource,
+        marketType: effectiveMarketType(),
         proxyUrl: root.editProxyUrl,
         language: root.editLanguage
       }, false);
@@ -338,18 +358,20 @@ ColumnLayout {
     root.editRedRises = mainInstance.redRises;
     root.editRefreshInterval = mainInstance.refreshInterval;
     root.editDataSource = mainInstance.dataSource;
+    root.editMarketType = mainInstance.marketType;
     root.editProxyUrl = mainInstance.proxyUrl;
     root.editLanguage = mainInstance.language;
   }
 
   function toggleCoin(coin, checked) {
+    const key = normalizeAsset(coin);
     let list = [...root.editWatchList];
     if (checked) {
-      if (!list.includes(coin)) {
-        list.push(coin);
+      if (!list.includes(key)) {
+        list.push(key);
       }
     } else {
-      const index = list.indexOf(coin);
+      const index = list.indexOf(key);
       if (index > -1) {
         list.splice(index, 1);
       }
@@ -380,6 +402,43 @@ ColumnLayout {
     return String(coin || "").toUpperCase();
   }
 
+  function normalizeAsset(symbol) {
+    return mainInstance ? mainInstance.normalizeAssetKey(symbol) : String(symbol || "").trim().toLowerCase();
+  }
+
+  function normalizeEditWatchList() {
+    const result = [];
+    const seen = {};
+    for (let i = 0; i < root.editWatchList.length; i++) {
+      const key = normalizeAsset(root.editWatchList[i]);
+      if (key !== "" && !seen[key]) {
+        seen[key] = true;
+        result.push(key);
+      }
+    }
+    return result.length > 0 ? result : ["btc"];
+  }
+
+  function effectiveMarketType() {
+    return root.editDataSource === "coingecko" ? "spot" : root.editMarketType;
+  }
+
+  function buildBarCoinModel() {
+    const model = [];
+    const seen = {};
+    const append = function(symbol) {
+      const key = mainInstance ? mainInstance.normalizeAssetKey(symbol) : String(symbol || "").toLowerCase();
+      if (key !== "" && !seen[key]) {
+        seen[key] = true;
+        model.push({ "key": key, "name": getCoinName(key) });
+      }
+    };
+
+    root.editWatchList.forEach(append);
+    ["btc", "eth", "bnb", "sol", "xrp"].forEach(append);
+    return model;
+  }
+
   function getSearchResults() {
     if (!root.searchText || root.searchText === "") {
       return [];
@@ -391,9 +450,10 @@ ColumnLayout {
   }
 
   function addCoin(coin) {
+    const key = normalizeAsset(coin);
     let list = [...root.editWatchList];
-    if (!list.includes(coin)) {
-      list.push(coin);
+    if (key !== "" && !list.includes(key)) {
+      list.push(key);
       root.editWatchList = list;
     }
   }
