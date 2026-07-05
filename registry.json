@@ -342,6 +342,24 @@
       "lastUpdated": "2026-04-23T21:39:21+02:00"
     },
     {
+      "id": "crypto-market",
+      "name": "Crypto Market",
+      "version": "1.0.0",
+      "official": false,
+      "author": "chengongliang",
+      "description": "Real-time cryptocurrency market data from multiple exchanges",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.6.6",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "Indicator",
+        "Utility"
+      ],
+      "lastUpdated": "2026-06-10T16:16:38+08:00"
+    },
+    {
       "id": "currency-exchange",
       "name": "Currency Exchange",
       "version": "1.0.4",
