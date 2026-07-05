@@ -231,6 +231,10 @@ Item {
                 Layout.fillWidth: true
                 spacing: Style.marginM
 
+                Component.onCompleted: {
+                  mainInstance?.requestLogo(modelData.coin);
+                }
+
                 Item {
                   Layout.preferredWidth: 32 * Style.uiScaleRatio
                   Layout.preferredHeight: 28 * Style.uiScaleRatio

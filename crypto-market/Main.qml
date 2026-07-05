@@ -161,7 +161,81 @@ Item {
   // Logo 管理
   property string logoDir: Quickshell.env("HOME") + "/.cache/noctalia/crypto-market/logos"
   property var logoCache: ({})
+  property var logoFailures: ({})
   property bool logosReady: false
+  readonly property int logoRetryCooldownMs: 60000
+
+  readonly property var commonCoinSymbols: [
+    "btc", "eth", "bnb", "sol", "xrp", "ada", "dot", "doge", "matic", "avax",
+    "link", "ltc", "bch", "xlm", "trx", "atom", "uni", "etc", "vet", "fil",
+    "theta", "icp", "xmr", "algo", "eos", "aave", "ftm", "axs", "sand", "mana",
+    "grt", "cake", "crv", "snx", "comp", "mkr", "ksm", "near", "hbar", "flow",
+    "egld", "xtz", "btt", "zec", "waves", "dash", "zil", "neo", "chz", "bat",
+    "enj", "lrc", "1inch", "sushi", "yfi", "bal", "ren", "omg", "uma", "kava"
+  ]
+
+  readonly property var coinNames: ({
+    "btc": "Bitcoin",
+    "eth": "Ethereum",
+    "bnb": "Binance Coin",
+    "sol": "Solana",
+    "xrp": "Ripple",
+    "ada": "Cardano",
+    "dot": "Polkadot",
+    "doge": "Dogecoin",
+    "matic": "Polygon",
+    "avax": "Avalanche",
+    "link": "Chainlink",
+    "ltc": "Litecoin",
+    "bch": "Bitcoin Cash",
+    "xlm": "Stellar",
+    "trx": "TRON",
+    "atom": "Cosmos",
+    "uni": "Uniswap",
+    "etc": "Ethereum Classic",
+    "vet": "VeChain",
+    "fil": "Filecoin",
+    "theta": "Theta Network",
+    "icp": "Internet Computer",
+    "xmr": "Monero",
+    "algo": "Algorand",
+    "eos": "EOS",
+    "aave": "Aave",
+    "ftm": "Fantom",
+    "axs": "Axie Infinity",
+    "sand": "The Sandbox",
+    "mana": "Decentraland",
+    "grt": "The Graph",
+    "cake": "PancakeSwap",
+    "crv": "Curve DAO",
+    "snx": "Synthetix",
+    "comp": "Compound",
+    "mkr": "Maker",
+    "ksm": "Kusama",
+    "near": "NEAR Protocol",
+    "hbar": "Hedera",
+    "flow": "Flow",
+    "egld": "MultiversX",
+    "xtz": "Tezos",
+    "btt": "BitTorrent",
+    "zec": "Zcash",
+    "waves": "Waves",
+    "dash": "Dash",
+    "zil": "Zilliqa",
+    "neo": "NEO",
+    "chz": "Chiliz",
+    "bat": "Basic Attention Token",
+    "enj": "Enjin Coin",
+    "lrc": "Loopring",
+    "1inch": "1inch",
+    "sushi": "SushiSwap",
+    "yfi": "yearn.finance",
+    "bal": "Balancer",
+    "ren": "Ren",
+    "omg": "OMG Network",
+    "uma": "UMA",
+    "kava": "Kava"
+  })
 
   // CoinGecko 币种 ID 映射
   readonly property var coinGeckoIds: ({
@@ -295,6 +369,7 @@ Item {
   property bool isLoading: true
   property string errorMessage: ""
   property int refreshNonce: 0
+  property bool coinsListRefetchPending: false
 
   Component.onCompleted: {
     loadTranslations();
@@ -385,7 +460,9 @@ Item {
 
     onExited: exitCode => {
       if (exitCode === 0) {
-        checkLocalLogos();
+        root.logosReady = true;
+      } else {
+        Logger.w("CryptoMarket", "Failed to create logo cache directory: " + String(stderr.text));
       }
     }
   }
@@ -435,6 +512,7 @@ Item {
         }
         if (downloaded === totalCoins) {
           root.logosReady = true;
+          root.refreshNonce++;
         }
       });
     }
@@ -457,13 +535,14 @@ Item {
       }
 
       const proc = downloadProcComponent.createObject(root, {
-        "command": proxyUrl ? ["curl", "-s", "-L", "-x", proxyUrl, "-o", outputPath, url] : ["curl", "-s", "-L", "-o", outputPath, url]
+        "command": proxyUrl ? ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", "-x", proxyUrl, "-o", outputPath, url] : ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", "-o", outputPath, url]
       });
 
       proc.exited.connect(function(exitCode) {
         if (exitCode === 0) {
           callback(true);
         } else {
+          Logger.w("CryptoMarket", "Failed to download logo for " + coin + ": " + String(proc.stderr.text));
           callback(false);
         }
         proc.destroy();
@@ -477,45 +556,30 @@ Item {
   }
 
   // 动态下载币种 Logo
-  function downloadCoinLogo(coin) {
+  function requestLogo(coin) {
     if (logoCache[coin]) return;
+    if (!canRetryLogo(coin)) return;
 
     // 标记为正在下载，避免重复
-    logoCache[coin] = "downloading";
+    const nextCache = Object.assign({}, logoCache);
+    nextCache[coin] = "downloading";
+    root.logoCache = nextCache;
 
-    // 使用 CoinGecko ID（如果有映射）或搜索 API
-    const coinId = coinGeckoIds[coin];
-    if (coinId) {
-      // 已知币种，直接获取信息
-      const url = `https://api.coingecko.com/api/v3/coins/${coinId}`;
-      const proc = curlProcComponent.createObject(root, {
-        "command": proxyUrl ? ["curl", "-s", "-x", proxyUrl, url] : ["curl", "-s", url]
-      });
-
-      proc.exited.connect(function(exitCode) {
-        if (exitCode === 0) {
-          try {
-            const response = JSON.parse(String(proc.stdout.text));
-            if (response.image && response.image.large) {
-              const logoUrl = response.image.large;
-              downloadLogo(coin, logoUrl, function(success) {
-                if (success) {
-                  logoCache[coin] = logoDir + "/" + coin + ".png";
-                  refreshNonce++;
-                }
-              });
-            }
-          } catch (e) {}
+    // 已知币种直接使用静态图片 URL，避免频繁请求 CoinGecko metadata API 触发限流。
+    const logoUrl = fallbackLogoUrls[coin];
+    if (logoUrl) {
+      downloadLogo(coin, logoUrl, function(success) {
+        if (success) {
+          setLogoPath(coin, logoDir + "/" + coin + ".png");
+        } else {
+          markLogoFailed(coin);
         }
-        proc.destroy();
       });
-
-      proc.running = true;
     } else {
       // 未知币种，通过搜索 API 查找
       const searchUrl = `https://api.coingecko.com/api/v3/search?query=${coin}`;
       const searchProc = curlProcComponent.createObject(root, {
-        "command": proxyUrl ? ["curl", "-s", "-x", proxyUrl, searchUrl] : ["curl", "-s", searchUrl]
+        "command": proxyUrl ? ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", "-x", proxyUrl, searchUrl] : ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", searchUrl]
       });
 
       searchProc.exited.connect(function(exitCode) {
@@ -528,18 +592,78 @@ Item {
               if (logoUrl) {
                 downloadLogo(coin, logoUrl, function(success) {
                   if (success) {
-                    logoCache[coin] = logoDir + "/" + coin + ".png";
-                    refreshNonce++;
+                    setLogoPath(coin, logoDir + "/" + coin + ".png");
+                  } else {
+                    markLogoFailed(coin);
                   }
                 });
+              } else {
+                markLogoFailed(coin);
               }
+            } else {
+              markLogoFailed(coin);
             }
-          } catch (e) {}
+          } catch (e) {
+            Logger.w("CryptoMarket", "Failed to parse logo search response for " + coin + ": " + e);
+            markLogoFailed(coin);
+          }
+        } else {
+          Logger.w("CryptoMarket", "Failed to search logo for " + coin + ": " + String(searchProc.stderr.text));
+          markLogoFailed(coin);
         }
         searchProc.destroy();
       });
 
       searchProc.running = true;
+    }
+  }
+
+  function setLogoPath(coin, path) {
+    const nextCache = Object.assign({}, root.logoCache);
+    nextCache[coin] = path;
+    root.logoCache = nextCache;
+
+    const nextFailures = Object.assign({}, root.logoFailures);
+    delete nextFailures[coin];
+    root.logoFailures = nextFailures;
+
+    root.refreshNonce++;
+  }
+
+  function markLogoFailed(coin) {
+    const nextCache = Object.assign({}, root.logoCache);
+    delete nextCache[coin];
+    root.logoCache = nextCache;
+
+    const nextFailures = Object.assign({}, root.logoFailures);
+    nextFailures[coin] = Date.now();
+    root.logoFailures = nextFailures;
+    root.refreshNonce++;
+  }
+
+  function canRetryLogo(coin) {
+    const failedAt = root.logoFailures[coin];
+    if (!failedAt) return true;
+
+    if ((Date.now() - failedAt) < root.logoRetryCooldownMs) {
+      return false;
+    }
+
+    const nextFailures = Object.assign({}, root.logoFailures);
+    delete nextFailures[coin];
+    root.logoFailures = nextFailures;
+    return true;
+  }
+
+  Timer {
+    interval: root.logoRetryCooldownMs
+    repeat: true
+    running: Object.keys(root.logoFailures).length > 0
+    onTriggered: {
+      const failedCoins = Object.keys(root.logoFailures);
+      for (let i = 0; i < failedCoins.length; i++) {
+        root.requestLogo(failedCoins[i]);
+      }
     }
   }
 
@@ -561,8 +685,6 @@ Item {
 
   // 获取 logo 路径
   function getLogoPath(coin) {
-    const path = logoDir + "/" + coin + ".png";
-
     // 如果缓存中有记录，直接返回
     if (logoCache[coin] && logoCache[coin] !== "downloading") {
       return "file://" + logoCache[coin];
@@ -573,8 +695,10 @@ Item {
       return "";
     }
 
-    // 否则触发下载
-    downloadCoinLogo(coin);
+    if (logoFailures[coin]) {
+      return "";
+    }
+
     return "";
   }
 
@@ -599,7 +723,7 @@ Item {
     const url = adapter.getUrl(coin);
 
     const proc = curlProcComponent.createObject(root, {
-      "command": proxyUrl ? ["curl", "-s", "-x", proxyUrl, url] : ["curl", "-s", url]
+      "command": proxyUrl ? ["curl", "-fsSL", "--connect-timeout", "8", "--max-time", "20", "-x", proxyUrl, url] : ["curl", "-fsSL", "--connect-timeout", "8", "--max-time", "20", url]
     });
 
     proc.exited.connect(function(exitCode) {
@@ -625,7 +749,11 @@ Item {
             root.isLoading = false;
             root.errorMessage = "";
           }
-        } catch (e) {}
+        } catch (e) {
+          Logger.w("CryptoMarket", "Failed to parse market data for " + coin + ": " + e);
+        }
+      } else {
+        Logger.w("CryptoMarket", "Failed to fetch market data for " + coin + ": " + String(proc.stderr.text));
       }
       proc.destroy();
     });
@@ -673,6 +801,44 @@ Item {
   // 获取币种图标
   function getCoinIcon(coin) {
     return coinIcons[coin] || "🔸";
+  }
+
+  function getCoinName(coin) {
+    const symbol = String(coin || "").toLowerCase();
+    const name = coinNames[symbol];
+    return name ? symbol.toUpperCase() + " (" + name + ")" : symbol.toUpperCase();
+  }
+
+  function searchCoinSymbols(query) {
+    const text = String(query || "").trim().toLowerCase();
+    if (text === "") return [];
+
+    const coins = [];
+    const seen = {};
+    const appendCoin = function(coin) {
+      const symbol = String(coin || "").toLowerCase();
+      if (symbol !== "" && !seen[symbol]) {
+        seen[symbol] = true;
+        coins.push(symbol);
+      }
+    };
+
+    root.commonCoinSymbols.forEach(appendCoin);
+    root.allCoinsList.forEach(appendCoin);
+
+    const filtered = coins.filter(function(coin) {
+      const name = root.coinNames[coin] || "";
+      return coin.indexOf(text) === 0 || name.toLowerCase().indexOf(text) !== -1;
+    });
+
+    filtered.sort(function(a, b) {
+      const aSymbolMatch = a.indexOf(text) === 0 ? 0 : 1;
+      const bSymbolMatch = b.indexOf(text) === 0 ? 0 : 1;
+      if (aSymbolMatch !== bSymbolMatch) return aSymbolMatch - bSymbolMatch;
+      return a.localeCompare(b);
+    });
+
+    return filtered.slice(0, 10);
   }
 
   // 导出配置
@@ -762,6 +928,7 @@ Item {
   }
 
   function applyConfig(config, persist) {
+    const previousProxyUrl = root.proxyUrl;
     root.watchList = config.watchList;
     root.barCoin = config.barCoin;
     root.displayMode = config.displayMode;
@@ -774,6 +941,11 @@ Item {
     root.isLoading = true;
     root.errorMessage = "";
     root.refreshNonce++;
+
+    if (previousProxyUrl !== root.proxyUrl) {
+      root.logoFailures = ({});
+      root.fetchCoinsList(true);
+    }
 
     if (persist && pluginApi) {
       pluginApi.pluginSettings.watchList = root.watchList;
@@ -793,9 +965,14 @@ Item {
   }
 
   // 获取币种列表
-  function fetchCoinsList() {
+  function fetchCoinsList(force) {
+    if (coinsListProc.running) {
+      if (force) root.coinsListRefetchPending = true;
+      return;
+    }
+    root.coinsListRefetchPending = false;
     const url = "https://api.huobi.pro/v1/common/symbols";
-    coinsListProc.command = proxyUrl ? ["curl", "-s", "-x", proxyUrl, url] : ["curl", "-s", url];
+    coinsListProc.command = proxyUrl ? ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", "-x", proxyUrl, url] : ["curl", "-fsSL", "--connect-timeout", "10", "--max-time", "30", url];
     coinsListProc.running = true;
   }
 
@@ -816,7 +993,13 @@ Item {
             root.allCoinsList = [...new Set(usdtPairs)];
           }
         } catch (e) {
+          Logger.w("CryptoMarket", "Failed to parse coin list: " + e);
         }
+      } else {
+        Logger.w("CryptoMarket", "Failed to fetch coin list: " + String(stderr.text));
+      }
+      if (root.coinsListRefetchPending) {
+        root.fetchCoinsList(false);
       }
     }
   }

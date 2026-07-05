@@ -23,7 +23,6 @@ ColumnLayout {
   property string configMessage: ""
   property bool configMessageIsError: false
   property string searchText: ""
-  property var allCoinsList: pluginApi?.mainInstance?.allCoinsList ?? []
   readonly property int localeTick: mainInstance?.refreshNonce ?? 0
 
   readonly property var mainInstance: pluginApi?.mainInstance
@@ -377,40 +376,18 @@ ColumnLayout {
   }
 
   function getCoinName(coin) {
-    const names = {
-      "btc": "BTC (Bitcoin)",
-      "eth": "ETH (Ethereum)",
-      "bnb": "BNB (Binance Coin)",
-      "sol": "SOL (Solana)",
-      "xrp": "XRP (Ripple)",
-      "ada": "ADA (Cardano)",
-      "dot": "DOT (Polkadot)",
-      "doge": "DOGE (Dogecoin)",
-      "matic": "MATIC (Polygon)",
-      "avax": "AVAX (Avalanche)"
-    };
-    return names[coin] || coin.toUpperCase();
-  }
-
-  function getAllCoins() {
-    return [
-      "btc", "eth", "bnb", "sol", "xrp", "ada", "dot", "doge", "matic", "avax",
-      "link", "ltc", "bch", "xlm", "trx", "atom", "uni", "etc", "vet", "fil",
-      "theta", "icp", "xmr", "algo", "eos", "aave", "ftm", "axs", "sand", "mana",
-      "grt", "cake", "crv", "snx", "comp", "mkr", "ksm", "near", "hbar", "flow",
-      "egld", "xtz", "btt", "zec", "waves", "dash", "zil", "neo", "chz", "bat",
-      "enj", "lrc", "1inch", "sushi", "yfi", "bal", "ren", "omg", "uma", "kava"
-    ];
+    if (mainInstance) return mainInstance.getCoinName(coin);
+    return String(coin || "").toUpperCase();
   }
 
   function getSearchResults() {
     if (!root.searchText || root.searchText === "") {
       return [];
     }
-    const searchLower = root.searchText.toLowerCase();
-    const coins = root.allCoinsList.length > 0 ? root.allCoinsList : getAllCoins();
-    const filtered = coins.filter(coin => coin.startsWith(searchLower));
-    return [...new Set(filtered)].slice(0, 10);
+    if (mainInstance) {
+      return mainInstance.searchCoinSymbols(root.searchText);
+    }
+    return [];
   }
 
   function addCoin(coin) {
