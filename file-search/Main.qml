@@ -14,54 +14,40 @@ Item {
 
   IpcHandler {
     target: "plugin:file-search"
-    
+
     // Toggle launcher in file search mode
     function toggle() {
       if (!pluginApi) return;
-      
+
       pluginApi.withCurrentScreen(screen => {
-        var launcherPanel = PanelService.getPanel("launcherPanel", screen);
-        if (!launcherPanel) {
-          Logger.e("FileSearch", "Could not get launcher panel");
-          return;
-        }
-        
-        var searchText = launcherPanel.searchText || "";
+        var searchText = PanelService.getLauncherSearchText(screen) || "";
         var isInFileMode = searchText.startsWith(">file");
-        
-        if (!launcherPanel.isPanelOpen) {
+
+        if (!PanelService.isLauncherOpen(screen)) {
           // Launcher closed - open with file search
           Logger.i("FileSearch", "Opening launcher in file search mode");
-          launcherPanel.open();
-          launcherPanel.setSearchText(">file ");
+          PanelService.openLauncherWithSearch(screen, ">file ");
         } else if (isInFileMode) {
           // Already in file mode - close launcher
           Logger.i("FileSearch", "Closing launcher (toggle off)");
-          launcherPanel.close();
+          PanelService.closeLauncher(screen);
         } else {
           // Launcher open but different mode - switch to file search
           Logger.i("FileSearch", "Switching to file search mode");
-          launcherPanel.setSearchText(">file ");
+          PanelService.setLauncherSearchText(screen, ">file ");
         }
       });
     }
-    
+
     // Open launcher with file search and specific query
     function search(query: string) {
       if (!pluginApi) return;
-      
+
       pluginApi.withCurrentScreen(screen => {
-        var launcherPanel = PanelService.getPanel("launcherPanel", screen);
-        if (!launcherPanel) {
-          Logger.e("FileSearch", "Could not get launcher panel");
-          return;
-        }
-        
         var searchQuery = query || "";
         Logger.i("FileSearch", "Opening launcher with search query:", searchQuery);
-        
-        launcherPanel.open();
-        launcherPanel.setSearchText(">file " + searchQuery);
+
+        PanelService.openLauncherWithSearch(screen, ">file " + searchQuery);
       });
     }
   }
