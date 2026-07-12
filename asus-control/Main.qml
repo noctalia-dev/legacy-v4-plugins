@@ -479,10 +479,10 @@ Item {
     }
 
     // ============================================================
-    // Binary discovery — try known paths directly
+    // Binary discovery — try "asusctl" from PATH first, then full paths
     // ============================================================
     property int _tryIdx: 0
-    property var _tryPaths: ["/usr/bin/asusctl", "/usr/local/bin/asusctl", "/bin/asusctl"]
+    property var _tryPaths: ["asusctl", "/usr/bin/asusctl", "/usr/local/bin/asusctl", "/bin/asusctl"]
 
     Process {
         id: findProc
@@ -490,7 +490,8 @@ Item {
         command: [root._tryPaths[root._tryIdx], "info"]
         stdout: StdioCollector {
             onStreamFinished: {
-                root.asusctlBin = root._tryPaths[root._tryIdx];
+                var bin = root._tryPaths[root._tryIdx];
+                root.asusctlBin = bin;
                 var lines = text.trim().split("\n");
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i].trim();
@@ -501,15 +502,17 @@ Item {
                     else if (line.indexOf("Board name:") >= 0)
                         root.boardName = line.substring(line.indexOf(":") + 1).trim();
                 }
+                Logger.i("AsusctlControl", "asusctl found at: " + bin);
             }
         }
         onExited: function(exitCode) {
             if (exitCode === 0 && root.asusctlBin.length > 0) {
                 root.isAvailable = true;
-                Logger.i("AsusctlControl", "asusctl " + root.asusctlVersion + " at " + root.asusctlBin + " (" + root.productFamily + ")");
+                Logger.i("AsusctlControl", "asusctl " + root.asusctlVersion + " (" + root.productFamily + ")");
                 root.refreshAll();
             } else if (root._tryIdx < root._tryPaths.length - 1) {
                 root._tryIdx++;
+                findProc.command = [root._tryPaths[root._tryIdx], "info"];
                 findProc.running = true;
             } else {
                 Logger.w("AsusctlControl", "asusctl not found in any known path");
