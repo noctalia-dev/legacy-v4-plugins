@@ -74,10 +74,10 @@ Item {
 
                 ColumnLayout {
                     Layout.fillWidth: true
-                    spacing: 2
+                    spacing: Style.marginXS
 
                     NText {
-                        text: pluginApi?.tr("panel.title") || "ASUS Control"
+                        text: pluginApi?.tr("panel.title")
                         pointSize: Style.fontSizeL
                         font.weight: Font.DemiBold
                         color: Color.mOnSurface
@@ -92,7 +92,7 @@ Item {
 
                     NText {
                         visible: !root.isAvailable
-                        text: pluginApi?.tr("panel.not-available") || "asusctl not found. Install asusctl to use this plugin."
+                        text: pluginApi?.tr("panel.not-available")
                         pointSize: Style.fontSizeXS
                         color: Color.mError
                     }
@@ -139,8 +139,8 @@ Item {
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.margins: 2
-                    spacing: 2
+                    anchors.margins: Style.marginXS
+                    spacing: Style.marginXS
 
                     Repeater {
                         model: root.tabNames.length
@@ -196,7 +196,7 @@ Item {
                     NText {
                         visible: !root.isAvailable
                         Layout.fillWidth: true
-                        text: pluginApi?.tr("panel.not-available") || "asusctl not found"
+                        text: pluginApi?.tr("panel.not-available-short")
                         pointSize: Style.fontSizeM
                         color: Color.mError
                         horizontalAlignment: Text.AlignHCenter
@@ -209,7 +209,7 @@ Item {
                         spacing: Style.marginS
 
                         NText {
-                            text: pluginApi?.tr("panel.profile") || "Power Profile"
+                            text: pluginApi?.tr("panel.profile")
                             pointSize: Style.fontSizeM
                             font.weight: Font.DemiBold
                             color: Color.mOnSurface
@@ -286,10 +286,10 @@ Item {
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 4
+                                spacing: Style.marginXS
 
                                 NText {
-                                    text: "AC"
+                                    text: pluginApi?.tr("panel.ac")
                                     pointSize: Style.fontSizeXS
                                     color: Color.mOnSurfaceVariant
                                     font.weight: Font.DemiBold
@@ -304,10 +304,10 @@ Item {
 
                             ColumnLayout {
                                 Layout.fillWidth: true
-                                spacing: 4
+                                spacing: Style.marginXS
 
                                 NText {
-                                    text: "Battery"
+                                    text: pluginApi?.tr("panel.battery")
                                     pointSize: Style.fontSizeXS
                                     color: Color.mOnSurfaceVariant
                                     font.weight: Font.DemiBold
@@ -343,7 +343,7 @@ Item {
                         NText {
                             visible: !root.isAvailable
                             Layout.fillWidth: true
-                            text: pluginApi?.tr("panel.not-available") || "asusctl not found"
+                            text: pluginApi?.tr("panel.not-available-short")
                             pointSize: Style.fontSizeM
                             color: Color.mError
                             horizontalAlignment: Text.AlignHCenter
@@ -351,14 +351,14 @@ Item {
                         }
 
                         NText {
-                            text: pluginApi?.tr("panel.led") || "Keyboard LED"
+                            text: pluginApi?.tr("panel.led")
                             pointSize: Style.fontSizeM
                             font.weight: Font.DemiBold
                             color: Color.mOnSurface
                         }
 
                         NText {
-                            text: (pluginApi?.tr("led.brightness") || "Brightness") + ": " +
+                            text: pluginApi?.tr("led.brightness") + ": " +
                                   (mainInstance?.ledBrightness ?? "—")
                             pointSize: Style.fontSizeS
                             color: Color.mOnSurfaceVariant
@@ -424,7 +424,7 @@ Item {
 
                         // Aura controls
                         NText {
-                            text: pluginApi?.tr("panel.aura") || "Aura Lighting"
+                            text: pluginApi?.tr("panel.aura")
                             pointSize: Style.fontSizeM
                             font.weight: Font.DemiBold
                             color: Color.mOnSurface
@@ -432,7 +432,7 @@ Item {
 
                         NText {
                             visible: root.syncAura
-                            text: pluginApi?.tr("aura.sync-active") || "Color is synced to Noctalia theme"
+                            text: pluginApi?.tr("aura.sync-active")
                             pointSize: Style.fontSizeXS
                             color: Color.mOnSurfaceVariant
                         }
@@ -444,7 +444,7 @@ Item {
                             spacing: Style.marginS
 
                             NText {
-                                text: "Effect"
+                                text: pluginApi?.tr("panel.effect")
                                 pointSize: Style.fontSizeS
                                 color: Color.mOnSurfaceVariant
                                 Layout.fillWidth: true
@@ -473,7 +473,7 @@ Item {
                             spacing: Style.marginS
 
                             NText {
-                                text: pluginApi?.tr("aura.static-color") || "Static color"
+                                text: pluginApi?.tr("aura.static-color")
                                 pointSize: Style.fontSizeS
                                 font.weight: Font.DemiBold
                                 color: Color.mOnSurface
@@ -490,7 +490,7 @@ Item {
                             }
 
                             NText {
-                                text: pluginApi?.tr("aura.scheme-colors") || "Quick colors"
+                                text: pluginApi?.tr("aura.scheme-colors")
                                 pointSize: Style.fontSizeXS
                                 color: Color.mOnSurfaceVariant
                             }
@@ -535,7 +535,7 @@ Item {
 
                         // Zone power controls
                         NText {
-                            text: "Zones"
+                            text: pluginApi?.tr("panel.zones")
                             pointSize: Style.fontSizeS
                             font.weight: Font.DemiBold
                             color: Color.mOnSurface
@@ -543,7 +543,7 @@ Item {
 
                         NText {
                             visible: (mainInstance?.auraAvailableZones?.length ?? 0) === 0
-                            text: "No aura zones detected"
+                            text: pluginApi?.tr("panel.no-zones")
                             pointSize: Style.fontSizeXS
                             color: Color.mOnSurfaceVariant
                         }
@@ -554,7 +554,7 @@ Item {
                             ColumnLayout {
                                 required property string modelData
                                 required property int index
-                                spacing: 4
+                                spacing: Style.marginXS
 
                                 NText {
                                     text: modelData.charAt(0).toUpperCase() + modelData.slice(1)
@@ -602,7 +602,7 @@ Item {
                                             RowLayout {
                                                 id: zoneChip
                                                 anchors.centerIn: parent
-                                                spacing: 4
+                                                spacing: Style.marginXS
 
                                                 NIcon {
                                                     icon: isAwake ? "sun" : isSleep ? "moon" : isBoot ? "power" : "power-off"
@@ -656,7 +656,7 @@ Item {
                     NText {
                         visible: !root.isAvailable
                         Layout.fillWidth: true
-                        text: pluginApi?.tr("panel.not-available") || "asusctl not found"
+                        text: pluginApi?.tr("panel.not-available-short")
                         pointSize: Style.fontSizeM
                         color: Color.mError
                         horizontalAlignment: Text.AlignHCenter
@@ -669,7 +669,7 @@ Item {
                         spacing: Style.marginM
 
                         NText {
-                            text: pluginApi?.tr("panel.battery") || "Battery"
+                            text: pluginApi?.tr("panel.battery")
                             pointSize: Style.fontSizeM
                             font.weight: Font.DemiBold
                             color: Color.mOnSurface
@@ -680,7 +680,7 @@ Item {
                             spacing: Style.marginM
 
                             NText {
-                                text: pluginApi?.tr("battery.charge-limit") || "Charge Limit"
+                                text: pluginApi?.tr("battery.charge-limit")
                                 pointSize: Style.fontSizeS
                                 color: Color.mOnSurface
                                 Layout.fillWidth: true
@@ -699,7 +699,7 @@ Item {
                             spacing: Style.marginS
 
                             NText {
-                                text: "20%"
+                                text: pluginApi?.tr("battery.min")
                                 pointSize: Style.fontSizeXS
                                 color: Color.mOnSurfaceVariant
                             }
@@ -716,7 +716,7 @@ Item {
                             }
 
                             NText {
-                                text: "100%"
+                                text: pluginApi?.tr("battery.max")
                                 pointSize: Style.fontSizeXS
                                 color: Color.mOnSurfaceVariant
                             }
@@ -731,7 +731,7 @@ Item {
 
                         NButton {
                             Layout.fillWidth: true
-                            text: pluginApi?.tr("battery.oneshot") || "Charge to 100% Once"
+                            text: pluginApi?.tr("battery.oneshot")
                             onClicked: {
                                 if (mainInstance) mainInstance._triggerOneshot();
                             }
@@ -751,7 +751,7 @@ Item {
                     NText {
                         visible: !root.isAvailable
                         Layout.fillWidth: true
-                        text: pluginApi?.tr("panel.not-available") || "asusctl not found"
+                        text: pluginApi?.tr("panel.not-available-short")
                         pointSize: Style.fontSizeM
                         color: Color.mError
                         horizontalAlignment: Text.AlignHCenter
@@ -767,7 +767,7 @@ Item {
                             Layout.fillWidth: true
 
                             NText {
-                                text: pluginApi?.tr("panel.fan") || "Fan Curves"
+                                text: pluginApi?.tr("panel.fan")
                                 pointSize: Style.fontSizeM
                                 font.weight: Font.DemiBold
                                 color: Color.mOnSurface
@@ -814,7 +814,7 @@ Item {
                                             var states = mainInstance?.fanStates ?? {};
                                             var state = states[modelData];
                                             if (!state) return "—";
-                                            return state.enabled ? (pluginApi?.tr("fan.enabled") || "Enabled") : (pluginApi?.tr("fan.disabled") || "Disabled");
+                                            return state.enabled ? pluginApi?.tr("fan.enabled") : pluginApi?.tr("fan.disabled");
                                         }
                                         pointSize: Style.fontSizeS
                                         color: Color.mOnSurfaceVariant
@@ -823,17 +823,17 @@ Item {
 
                                     Rectangle {
                                         id: fanToggle
-                                        width: 44
-                                        height: 24
-                                        radius: 12
+                                        width: Style.baseWidgetSize * 0.6
+                                        height: Style.baseWidgetSize * 0.33
+                                        radius: Style.baseWidgetSize * 0.16
                                         color: fanToggle.active ? Color.mPrimary : Color.mSurfaceVariant
 
                                         Rectangle {
-                                            x: fanToggle.active ? 22 : 2
+                                            x: fanToggle.active ? fanToggle.width - fanToggle.height + 2 : 2
                                             y: 2
-                                            width: 20
-                                            height: 20
-                                            radius: 10
+                                            width: fanToggle.height - 4
+                                            height: fanToggle.height - 4
+                                            radius: (fanToggle.height - 4) / 2
                                             color: fanToggle.active ? Color.mOnPrimary : Color.mOutline
 
                                             Behavior on x {
@@ -854,8 +854,7 @@ Item {
                                                 var states = mainInstance?.fanStates ?? {};
                                                 var state = states[modelData];
                                                 var newEnabled = state ? !state.enabled : true;
-                                                var profile = mainInstance?.activeProfile || "Balanced";
-                                                if (mainInstance) mainInstance._setFanEnabled(profile, modelData, newEnabled);
+                                                if (mainInstance) mainInstance._setFanEnabled(mainInstance?.activeProfile, modelData, newEnabled);
                                             }
                                         }
                                     }
@@ -863,7 +862,7 @@ Item {
 
                                 Flow {
                                     Layout.fillWidth: true
-                                    spacing: 4
+                                    spacing: Style.marginXS
 
                                     Repeater {
                                         model: {
@@ -895,10 +894,9 @@ Item {
                         NButton {
                             Layout.fillWidth: true
                             visible: (mainInstance?.availableFanTypes?.length ?? 0) > 0
-                            text: pluginApi?.tr("fan.reset-default") || "Reset to Default"
+                            text: pluginApi?.tr("fan.reset-default")
                             onClicked: {
-                                var profile = mainInstance?.activeProfile || "Balanced";
-                                if (mainInstance) mainInstance._resetFanToDefault(profile);
+                                if (mainInstance) mainInstance._resetFanToDefault(mainInstance?.activeProfile);
                             }
                         }
                     }

@@ -100,8 +100,8 @@ Item {
     NPopupContextMenu {
         id: contextMenu
         model: [
-            { "label": pluginApi?.tr("menu.settings") || "Settings", "action": "settings", "icon": "settings" },
-            { "label": pluginApi?.tr("menu.refresh") || "Refresh", "action": "refresh", "icon": "refresh" }
+            { "label": pluginApi?.tr("menu.settings"), "action": "settings", "icon": "settings" },
+            { "label": pluginApi?.tr("menu.refresh"), "action": "refresh", "icon": "refresh" }
         ]
         onTriggered: function(action) {
             contextMenu.close();

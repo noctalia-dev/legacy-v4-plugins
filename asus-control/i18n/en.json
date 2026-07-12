@@ -9,16 +9,16 @@
   "panel": {
     "title": "ASUS Control",
     "not-available": "asusctl not found. Install asusctl to use this plugin.",
+    "not-available-short": "asusctl not found",
     "profile": "Power Profile",
     "led": "Keyboard LED",
     "battery": "Battery",
+    "ac": "AC",
     "fan": "Fan Curves",
-    "aura": "Aura Lighting"
-  },
-  "profile": {
-    "quiet": "Quiet",
-    "balanced": "Balanced",
-    "performance": "Performance"
+    "aura": "Aura Lighting",
+    "effect": "Effect",
+    "zones": "Zones",
+    "no-zones": "No aura zones detected"
   },
   "led": {
     "brightness": "Brightness",
@@ -29,6 +29,8 @@
   },
   "battery": {
     "charge-limit": "Charge Limit",
+    "min": "20%",
+    "max": "100%",
     "oneshot": "Charge to 100% Once"
   },
   "fan": {

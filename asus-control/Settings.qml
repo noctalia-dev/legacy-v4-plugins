@@ -26,9 +26,9 @@ ColumnLayout {
         text: {
             var main = pluginApi?.mainInstance;
             if (!main || !main.isAvailable) {
-                return pluginApi?.tr("settings.not-available") || "asusctl is not installed or not in PATH.";
+                return pluginApi?.tr("settings.not-available");
             }
-            return (pluginApi?.tr("settings.detected") || "Detected:") + " " +
+            return pluginApi?.tr("settings.detected") + " " +
                    main.asusctlVersion + " — " + main.productFamily + " (" + main.boardName + ")";
         }
         pointSize: Style.fontSizeM
@@ -44,8 +44,8 @@ ColumnLayout {
 
     NComboBox {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.iconColor.label") || "Icon Color"
-        description: pluginApi?.tr("settings.iconColor.desc") || "Color of the bar widget icon."
+        label: pluginApi?.tr("settings.iconColor.label")
+        description: pluginApi?.tr("settings.iconColor.desc")
         model: [
             { "key": "none", "name": "Default" },
             { "key": "primary", "name": "Primary" },
@@ -59,8 +59,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.pollingEnabled.label") || "Polling"
-        description: pluginApi?.tr("settings.pollingEnabled.desc") || "Periodically poll asusctl for status updates."
+        label: pluginApi?.tr("settings.pollingEnabled.label")
+        description: pluginApi?.tr("settings.pollingEnabled.desc")
         checked: root.editPollingEnabled
         onToggled: function(checked) {
             root.editPollingEnabled = checked;
@@ -70,10 +70,10 @@ ColumnLayout {
     ColumnLayout {
         Layout.fillWidth: true
         visible: root.editPollingEnabled
-        spacing: 4
+        spacing: Style.marginXS
 
         NText {
-            text: (pluginApi?.tr("settings.pollingInterval.label") || "Polling Interval") + ": " + root.editPollingIntervalMs + "ms"
+            text: pluginApi?.tr("settings.pollingInterval.label") + ": " + root.editPollingIntervalMs + "ms"
             pointSize: Style.fontSizeS
             color: Color.mOnSurface
         }
@@ -90,8 +90,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.syncPowerProfiles.label") || "Sync Power Profiles"
-        description: pluginApi?.tr("settings.syncPowerProfiles.desc") || "When you change an ASUS profile, also switch the Noctalia power profile (and vice versa)."
+        label: pluginApi?.tr("settings.syncPowerProfiles.label")
+        description: pluginApi?.tr("settings.syncPowerProfiles.desc")
         checked: root.editSyncPowerProfiles
         onToggled: function(checked) {
             root.editSyncPowerProfiles = checked;
@@ -100,8 +100,8 @@ ColumnLayout {
 
     NToggle {
         Layout.fillWidth: true
-        label: pluginApi?.tr("settings.syncAuraColor.label") || "Sync Keyboard Color"
-        description: pluginApi?.tr("settings.syncAuraColor.desc") || "Automatically set the keyboard aura color from the current Noctalia theme."
+        label: pluginApi?.tr("settings.syncAuraColor.label")
+        description: pluginApi?.tr("settings.syncAuraColor.desc")
         checked: root.editSyncAuraColor
         onToggled: function(checked) {
             root.editSyncAuraColor = checked;
@@ -111,8 +111,8 @@ ColumnLayout {
     NComboBox {
         Layout.fillWidth: true
         visible: root.editSyncAuraColor
-        label: pluginApi?.tr("settings.auraColorSource.label") || "Color Source"
-        description: pluginApi?.tr("settings.auraColorSource.desc") || "Which Noctalia theme color to apply to the keyboard."
+        label: pluginApi?.tr("settings.auraColorSource.label")
+        description: pluginApi?.tr("settings.auraColorSource.desc")
         model: [
             { "key": "primary", "name": "Primary" },
             { "key": "secondary", "name": "Secondary" },
