@@ -10,6 +10,7 @@ Item {
 
     // --- Availability ---
     property bool isAvailable: false
+    property string asusctlBin: ""
     property string asusctlVersion: ""
     property string productFamily: ""
     property string boardName: ""
@@ -40,10 +41,33 @@ Item {
         pluginApi: root.pluginApi
     }
 
-    // --- Availability check ---
+    // --- Step 1: Find asusctl binary ---
+    Process {
+        id: findProc
+        command: ["sh", "-c", "command -v asusctl || which asusctl || echo /usr/bin/asusctl"]
+        running: false
+        stdout: StdioCollector {
+            onStreamFinished: {
+                var path = text.trim();
+                if (path.length > 0) {
+                    root.asusctlBin = path;
+                    Logger.i("AsusctlControl", "asusctl binary: " + path);
+                }
+            }
+        }
+        onExited: function(exitCode) {
+            if (root.asusctlBin.length > 0) {
+                checkProc.running = true;
+            } else {
+                Logger.w("AsusctlControl", "asusctl not found in PATH");
+            }
+        }
+    }
+
+    // --- Step 2: Check asusctl info ---
     Process {
         id: checkProc
-        command: ["asusctl", "info"]
+        command: [root.asusctlBin, "info"]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
@@ -66,7 +90,7 @@ Item {
                 Logger.i("AsusctlControl", "asusctl found: " + root.asusctlVersion + " (" + root.productFamily + ")");
                 root.refreshAll();
             } else {
-                Logger.w("AsusctlControl", "asusctl not found in PATH");
+                Logger.w("AsusctlControl", "asusctl info failed, exitCode=" + exitCode);
             }
         }
     }
@@ -89,7 +113,7 @@ Item {
     }
 
     function checkAvailability() {
-        checkProc.running = true;
+        findProc.running = true;
     }
 
     // --- IPC ---

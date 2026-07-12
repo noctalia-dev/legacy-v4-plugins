@@ -12,9 +12,11 @@ Item {
 
     signal chargeLimitChanged()
 
+    property string bin: pluginApi?.mainInstance?.asusctlBin || "asusctl"
+
     Process {
         id: infoProc
-        command: ["asusctl", "battery", "info"]
+        command: [root.bin, "battery", "info"]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
@@ -70,13 +72,13 @@ Item {
         if (setProc.running) return;
         var v = Math.round(Math.max(20, Math.min(100, percent)));
         setProc.pendingLimit = v;
-        setProc.command = ["asusctl", "battery", "limit", v.toString()];
+        setProc.command = [root.bin, "battery", "limit", v.toString()];
         setProc.running = true;
     }
 
     function triggerOneshot() {
         if (oneshotProc.running) return;
-        oneshotProc.command = ["asusctl", "battery", "oneshot"];
+        oneshotProc.command = [root.bin, "battery", "oneshot"];
         oneshotProc.running = true;
     }
 

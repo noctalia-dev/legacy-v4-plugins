@@ -19,9 +19,11 @@ Item {
 
     signal fanCurvesChanged()
 
+    property string bin: pluginApi?.mainInstance?.asusctlBin || "asusctl"
+
     Process {
         id: enabledProc
-        command: ["asusctl", "fan-curve", "--get-enabled"]
+        command: [root.bin, "fan-curve", "--get-enabled"]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
@@ -33,7 +35,7 @@ Item {
     Process {
         id: curveDataProc
         property string profileName: ""
-        command: ["asusctl", "fan-curve", "--mod-profile", profileName]
+        command: [root.bin, "fan-curve", "--mod-profile", profileName]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
@@ -92,27 +94,27 @@ Item {
 
     function setFanCurve(profile, fan, dataStr) {
         if (setProc.running) return;
-        setProc.command = ["asusctl", "fan-curve", "--mod-profile", profile, "--fan", fan, "--data", dataStr];
+        setProc.command = [root.bin, "fan-curve", "--mod-profile", profile, "--fan", fan, "--data", dataStr];
         setProc.running = true;
         Logger.i("AsusctlFanCurve", "Setting " + fan + " curve for " + profile);
     }
 
     function setFanEnabled(profile, fan, enabled) {
         if (enableProc.running) return;
-        enableProc.command = ["asusctl", "fan-curve", "--enable-fan-curve", enabled ? "true" : "false", "--mod-profile", profile, "--fan", fan];
+        enableProc.command = [root.bin, "fan-curve", "--enable-fan-curve", enabled ? "true" : "false", "--mod-profile", profile, "--fan", fan];
         enableProc.running = true;
         Logger.i("AsusctlFanCurve", (enabled ? "Enabling" : "Disabling") + " " + fan + " curve for " + profile);
     }
 
     function setAllFanCurves(profile, enabled) {
         if (enableProc.running) return;
-        enableProc.command = ["asusctl", "fan-curve", "--enable-fan-curves", enabled ? "true" : "false", "--mod-profile", profile];
+        enableProc.command = [root.bin, "fan-curve", "--enable-fan-curves", enabled ? "true" : "false", "--mod-profile", profile];
         enableProc.running = true;
     }
 
     function resetToDefault(profile) {
         if (defaultProc.running) return;
-        defaultProc.command = ["asusctl", "fan-curve", "--default", "--mod-profile", profile];
+        defaultProc.command = [root.bin, "fan-curve", "--default", "--mod-profile", profile];
         defaultProc.running = true;
         Logger.i("AsusctlFanCurve", "Resetting fan curves to default for " + profile);
     }

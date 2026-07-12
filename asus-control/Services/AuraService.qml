@@ -21,12 +21,14 @@ Item {
 
     signal zonesChanged()
 
+    property string bin: pluginApi?.mainInstance?.asusctlBin || "asusctl"
+
     // One probe process, reused for each zone
     Process {
         id: probeProc
         running: false
         property string targetZone: ""
-        command: ["asusctl", "aura", "power", targetZone, "--help"]
+        command: [root.bin, "aura", "power", targetZone, "--help"]
         stdout: StdioCollector {
             onStreamFinished: {
                 if (text.indexOf("--awake") >= 0) {
@@ -46,7 +48,7 @@ Item {
         id: readProc
         running: false
         property string targetZone: ""
-        command: ["asusctl", "aura", "power", targetZone]
+        command: [root.bin, "aura", "power", targetZone]
         stdout: StdioCollector {
             onStreamFinished: {
                 var zone = readProc.targetZone;
@@ -139,7 +141,7 @@ Item {
 
     function setZonePower(zone, boot, awake, sleep, shutdown) {
         if (setPowerProc.running) return;
-        var args = ["asusctl", "aura", "power", zone];
+        var args = [root.bin, "aura", "power", zone];
         if (boot) args.push("--boot");
         if (awake) args.push("--awake");
         if (sleep) args.push("--sleep");
@@ -153,7 +155,7 @@ Item {
 
     function setEffect(effectName, colour, zone) {
         if (setEffectProc.running) return;
-        var args = ["asusctl", "aura", "effect", effectName];
+        var args = [root.bin, "aura", "effect", effectName];
         if (colour && colour.length > 0) {
             args.push("-c");
             args.push(colour);
@@ -169,13 +171,13 @@ Item {
 
     function nextEffect() {
         if (setEffectProc.running) return;
-        setEffectProc.command = ["asusctl", "aura", "effect", "--next-mode"];
+        setEffectProc.command = [root.bin, "aura", "effect", "--next-mode"];
         setEffectProc.running = true;
     }
 
     function prevEffect() {
         if (setEffectProc.running) return;
-        setEffectProc.command = ["asusctl", "aura", "effect", "--prev-mode"];
+        setEffectProc.command = [root.bin, "aura", "effect", "--prev-mode"];
         setEffectProc.running = true;
     }
 

@@ -16,9 +16,11 @@ Item {
     signal profilesChanged()
     signal activeProfileChanged()
 
+    property string bin: pluginApi?.mainInstance?.asusctlBin || "asusctl"
+
     Process {
         id: listProc
-        command: ["asusctl", "profile", "list"]
+        command: [root.bin, "profile", "list"]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
@@ -37,7 +39,7 @@ Item {
 
     Process {
         id: getProc
-        command: ["asusctl", "profile", "get"]
+        command: [root.bin, "profile", "get"]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
@@ -77,21 +79,21 @@ Item {
 
     function setProfile(name) {
         if (setProc.running) return;
-        setProc.command = ["asusctl", "profile", "set", name];
+        setProc.command = [root.bin, "profile", "set", name];
         setProc.running = true;
         Logger.i("AsusctlProfile", "Setting profile to " + name);
     }
 
     function setAcProfile(name) {
         if (setProc.running) return;
-        setProc.command = ["asusctl", "profile", "set", "--ac", name];
+        setProc.command = [root.bin, "profile", "set", "--ac", name];
         setProc.running = true;
         Logger.i("AsusctlProfile", "Setting AC profile to " + name);
     }
 
     function setBatteryProfile(name) {
         if (setProc.running) return;
-        setProc.command = ["asusctl", "profile", "set", "--battery", name];
+        setProc.command = [root.bin, "profile", "set", "--battery", name];
         setProc.running = true;
         Logger.i("AsusctlProfile", "Setting battery profile to " + name);
     }

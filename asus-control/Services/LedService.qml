@@ -16,9 +16,11 @@ Item {
 
     signal brightnessChanged()
 
+    property string bin: pluginApi?.mainInstance?.asusctlBin || "asusctl"
+
     Process {
         id: getProc
-        command: ["asusctl", "leds", "get"]
+        command: [root.bin, "leds", "get"]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {
@@ -57,20 +59,20 @@ Item {
 
     function setBrightness(level) {
         if (setProc.running) return;
-        setProc.command = ["asusctl", "leds", "set", level];
+        setProc.command = [root.bin, "leds", "set", level];
         setProc.running = true;
         Logger.i("AsusctlLed", "Setting brightness to " + level);
     }
 
     function nextBrightness() {
         if (setProc.running) return;
-        setProc.command = ["asusctl", "leds", "next"];
+        setProc.command = [root.bin, "leds", "next"];
         setProc.running = true;
     }
 
     function prevBrightness() {
         if (setProc.running) return;
-        setProc.command = ["asusctl", "leds", "prev"];
+        setProc.command = [root.bin, "leds", "prev"];
         setProc.running = true;
     }
 
