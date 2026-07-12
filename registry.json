@@ -94,6 +94,23 @@
       "lastUpdated": "2026-03-29T19:05:12-04:00"
     },
     {
+      "id": "asus-control",
+      "name": "ASUS Control",
+      "version": "1.0.0",
+      "official": false,
+      "author": "peachoff",
+      "description": "Full ASUS laptop control via asusctl: power profiles, keyboard LED, battery charge limit, fan curves, and aura zones.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.4.1",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "System"
+      ],
+      "lastUpdated": "2026-07-12T00:00:00+00:00"
+    },
+    {
       "id": "asus-um5606-fan-state",
       "name": "ASUS UM5606 Fan State",
       "version": "1.1.7",
