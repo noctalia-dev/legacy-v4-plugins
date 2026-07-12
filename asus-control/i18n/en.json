@@ -1,0 +1,56 @@
+{
+  "widget": {
+    "tooltip": "ASUS Control"
+  },
+  "menu": {
+    "settings": "Widget Settings",
+    "refresh": "Refresh Status"
+  },
+  "panel": {
+    "title": "ASUS Control",
+    "not-available": "asusctl not found. Install asusctl to use this plugin.",
+    "profile": "Power Profile",
+    "led": "Keyboard LED",
+    "battery": "Battery",
+    "fan": "Fan Curves",
+    "aura": "Aura Lighting"
+  },
+  "profile": {
+    "quiet": "Quiet",
+    "balanced": "Balanced",
+    "performance": "Performance"
+  },
+  "led": {
+    "brightness": "Brightness",
+    "off": "Off",
+    "low": "Low",
+    "med": "Medium",
+    "high": "High"
+  },
+  "battery": {
+    "charge-limit": "Charge Limit",
+    "oneshot": "Charge to 100% Once"
+  },
+  "fan": {
+    "cpu-curve": "CPU Fan Curve",
+    "gpu-curve": "GPU Fan Curve",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "reset-default": "Reset to Default"
+  },
+  "settings": {
+    "not-available": "asusctl is not installed or not in PATH.",
+    "detected": "Detected:",
+    "iconColor": {
+      "label": "Icon Color",
+      "desc": "Color of the bar widget icon."
+    },
+    "pollingEnabled": {
+      "label": "Polling",
+      "desc": "Periodically poll asusctl for status updates."
+    },
+    "pollingInterval": {
+      "label": "Polling Interval"
+    }
+  }
+}
