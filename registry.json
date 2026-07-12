@@ -96,7 +96,7 @@
     {
       "id": "asus-control",
       "name": "ASUS Control",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "official": false,
       "author": "peachoff",
       "description": "Full ASUS laptop control via asusctl: power profiles, keyboard LED, battery charge limit, fan curves, and aura zones.",

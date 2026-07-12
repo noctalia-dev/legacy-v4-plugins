@@ -85,7 +85,6 @@ Item {
             profileSetProc.running = true;
         }
 
-        Component.onCompleted: refresh()
     }
 
     // ============================================================
@@ -140,7 +139,6 @@ Item {
             ledSetProc.running = true;
         }
 
-        Component.onCompleted: refresh()
     }
 
     // ============================================================
@@ -212,7 +210,6 @@ Item {
             batOneshotProc.running = true;
         }
 
-        Component.onCompleted: refresh()
     }
 
     // ============================================================
@@ -339,7 +336,6 @@ Item {
             }
         }
 
-        Component.onCompleted: refresh()
     }
 
     // ============================================================
@@ -475,23 +471,16 @@ Item {
             auraSetEffectProc.running = true;
         }
 
-        Component.onCompleted: probeZones()
     }
 
     // ============================================================
-    // Binary discovery — try "asusctl" from PATH first, then full paths
+    // Binary discovery
     // ============================================================
-    property int _tryIdx: 0
-    property var _tryPaths: ["asusctl", "/usr/bin/asusctl", "/usr/local/bin/asusctl", "/bin/asusctl"]
-
-    Process {
-        id: findProc
+    readonly property Process findProc: Process {
         running: false
-        command: [root._tryPaths[root._tryIdx], "info"]
+        command: ["asusctl", "info"]
         stdout: StdioCollector {
             onStreamFinished: {
-                var bin = root._tryPaths[root._tryIdx];
-                root.asusctlBin = bin;
                 var lines = text.trim().split("\n");
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i].trim();
@@ -502,20 +491,15 @@ Item {
                     else if (line.indexOf("Board name:") >= 0)
                         root.boardName = line.substring(line.indexOf(":") + 1).trim();
                 }
-                Logger.i("AsusctlControl", "asusctl found at: " + bin);
-            }
-        }
-        onExited: function(exitCode) {
-            if (exitCode === 0 && root.asusctlBin.length > 0) {
+                root.asusctlBin = "asusctl";
                 root.isAvailable = true;
                 Logger.i("AsusctlControl", "asusctl " + root.asusctlVersion + " (" + root.productFamily + ")");
                 root.refreshAll();
-            } else if (root._tryIdx < root._tryPaths.length - 1) {
-                root._tryIdx++;
-                findProc.command = [root._tryPaths[root._tryIdx], "info"];
-                findProc.running = true;
-            } else {
-                Logger.w("AsusctlControl", "asusctl not found in any known path");
+            }
+        }
+        onExited: function(exitCode) {
+            if (exitCode !== 0) {
+                Logger.w("AsusctlControl", "asusctl not found (exitCode=" + exitCode + ")");
             }
         }
     }
@@ -532,10 +516,12 @@ Item {
     }
 
     function refreshAll() {
+        if (!root.isAvailable) return;
         profileService.refresh();
         ledService.refresh();
         batteryService.refresh();
         fanCurveService.refresh();
+        auraService.probeZones();
     }
 
     // ============================================================
