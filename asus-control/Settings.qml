@@ -14,6 +14,9 @@ ColumnLayout {
     property string editIconColor: cfg.iconColor ?? defaults.iconColor ?? "none"
     property bool editPollingEnabled: cfg.pollingEnabled ?? defaults.pollingEnabled ?? false
     property int editPollingIntervalMs: cfg.pollingIntervalMs ?? defaults.pollingIntervalMs ?? 5000
+    property bool editSyncPowerProfiles: cfg.syncPowerProfiles ?? defaults.syncPowerProfiles ?? true
+    property bool editSyncAuraColor: cfg.syncAuraColor ?? defaults.syncAuraColor ?? false
+    property string editAuraColorSource: cfg.auraColorSource ?? defaults.auraColorSource ?? "primary"
 
     spacing: Style.marginL
 
@@ -85,6 +88,40 @@ ColumnLayout {
         }
     }
 
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.syncPowerProfiles.label") || "Sync Power Profiles"
+        description: pluginApi?.tr("settings.syncPowerProfiles.desc") || "When you change an ASUS profile, also switch the Noctalia power profile (and vice versa)."
+        checked: root.editSyncPowerProfiles
+        onToggled: function(checked) {
+            root.editSyncPowerProfiles = checked;
+        }
+    }
+
+    NToggle {
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.syncAuraColor.label") || "Sync Keyboard Color"
+        description: pluginApi?.tr("settings.syncAuraColor.desc") || "Automatically set the keyboard aura color from the current Noctalia theme."
+        checked: root.editSyncAuraColor
+        onToggled: function(checked) {
+            root.editSyncAuraColor = checked;
+        }
+    }
+
+    NComboBox {
+        Layout.fillWidth: true
+        visible: root.editSyncAuraColor
+        label: pluginApi?.tr("settings.auraColorSource.label") || "Color Source"
+        description: pluginApi?.tr("settings.auraColorSource.desc") || "Which Noctalia theme color to apply to the keyboard."
+        model: [
+            { "key": "primary", "name": "Primary" },
+            { "key": "secondary", "name": "Secondary" },
+            { "key": "tertiary", "name": "Tertiary" }
+        ]
+        currentKey: root.editAuraColorSource
+        onSelected: key => root.editAuraColorSource = key
+    }
+
     Item { Layout.fillHeight: true }
 
     function saveSettings() {
@@ -92,6 +129,9 @@ ColumnLayout {
         pluginApi.pluginSettings.iconColor = root.editIconColor;
         pluginApi.pluginSettings.pollingEnabled = root.editPollingEnabled;
         pluginApi.pluginSettings.pollingIntervalMs = root.editPollingIntervalMs;
+        pluginApi.pluginSettings.syncPowerProfiles = root.editSyncPowerProfiles;
+        pluginApi.pluginSettings.syncAuraColor = root.editSyncAuraColor;
+        pluginApi.pluginSettings.auraColorSource = root.editAuraColorSource;
         pluginApi.saveSettings();
     }
 }

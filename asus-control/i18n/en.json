@@ -38,6 +38,11 @@
     "disabled": "Disabled",
     "reset-default": "Reset to Default"
   },
+  "aura": {
+    "static-color": "Static color",
+    "scheme-colors": "Quick colors",
+    "sync-active": "Color is synced to Noctalia theme"
+  },
   "settings": {
     "not-available": "asusctl is not installed or not in PATH.",
     "detected": "Detected:",
@@ -51,6 +56,18 @@
     },
     "pollingInterval": {
       "label": "Polling Interval"
+    },
+    "syncPowerProfiles": {
+      "label": "Sync Power Profiles",
+      "desc": "When you change an ASUS profile, also switch the Noctalia power profile (and vice versa)."
+    },
+    "syncAuraColor": {
+      "label": "Sync Keyboard Color",
+      "desc": "Automatically set the keyboard aura color from the current Noctalia theme."
+    },
+    "auraColorSource": {
+      "label": "Color Source",
+      "desc": "Which Noctalia theme color to apply to the keyboard."
     }
   }
 }

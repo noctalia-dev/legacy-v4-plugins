@@ -19,6 +19,10 @@ View and toggle per-fan (CPU, GPU) fan curves for the active profile. Displays t
 ### Aura Lighting Zones
 Dynamically detects which aura zones your laptop supports (keyboard, logo, lightbar, lid, rear-glow, ally) and lets you toggle power states (awake, sleep, boot, shutdown) per zone. Also supports setting static colors and cycling through effect modes.
 
+### Noctalia Integration
+- **Power Profile Sync** (enabled by default) — automatically syncs ASUS power profiles with Noctalia Shell's power profiles in both directions (e.g. switching to "Performance" in Noctalia also sets the ASUS profile).
+- **Keyboard Color Sync** — automatically applies a chosen Noctalia theme color (Primary, Secondary, or Tertiary) to the keyboard aura after theme transitions. When enabled, the manual color picker is disabled.
+
 ## Dynamic Detection
 
 The plugin does not hardcode any laptop-specific values. Everything is detected at runtime:
@@ -53,8 +57,8 @@ Then reload Noctalia Shell or enable the plugin from Settings > Plugins.
 - **Bar widget** shows the current power profile icon and name, plus a battery icon when charge limit is active.
 - **Left-click** the bar widget to open the control panel.
 - **Right-click** for a context menu with Settings and Refresh.
-- **Panel** has 5 tabs: Profile, LED, Battery, Fan, Aura.
-- **Settings** page allows configuring icon color, polling interval, and enabling periodic status refresh.
+- **Panel** has 4 tabs: Profile, LED (with aura controls), Battery, Fan.
+- **Settings** page allows configuring icon color, polling interval, power profile sync, and keyboard color sync.
 
 ## IPC Commands
 

@@ -1,7 +1,7 @@
 {
   "id": "asus-control",
   "name": "ASUS Control",
-  "version": "1.1.6",
+  "version": "1.1.9",
   "minNoctaliaVersion": "4.4.1",
   "author": "peachoff",
   "license": "MIT",
@@ -21,7 +21,10 @@
     "defaultSettings": {
       "iconColor": "none",
       "pollingEnabled": false,
-      "pollingIntervalMs": 5000
+      "pollingIntervalMs": 5000,
+      "syncPowerProfiles": true,
+      "syncAuraColor": false,
+      "auraColorSource": "primary"
     }
   }
 }
