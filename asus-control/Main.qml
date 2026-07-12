@@ -479,36 +479,18 @@ Item {
     }
 
     // ============================================================
-    // Binary discovery
+    // Binary discovery — try known paths directly
     // ============================================================
-    Process {
-        id: findProc
-        command: ["sh", "-c", "command -v asusctl || which asusctl || echo /usr/bin/asusctl"]
-        running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                var path = text.trim();
-                if (path.length > 0) {
-                    root.asusctlBin = path;
-                    Logger.i("AsusctlControl", "asusctl binary: " + path);
-                }
-            }
-        }
-        onExited: function(exitCode) {
-            if (root.asusctlBin.length > 0) {
-                checkProc.running = true;
-            } else {
-                Logger.w("AsusctlControl", "asusctl not found in PATH");
-            }
-        }
-    }
+    property int _tryIdx: 0
+    property var _tryPaths: ["/usr/bin/asusctl", "/usr/local/bin/asusctl", "/bin/asusctl"]
 
     Process {
-        id: checkProc
-        command: [root.asusctlBin, "info"]
+        id: findProc
         running: false
+        command: [root._tryPaths[root._tryIdx], "info"]
         stdout: StdioCollector {
             onStreamFinished: {
+                root.asusctlBin = root._tryPaths[root._tryIdx];
                 var lines = text.trim().split("\n");
                 for (var i = 0; i < lines.length; i++) {
                     var line = lines[i].trim();
@@ -522,12 +504,15 @@ Item {
             }
         }
         onExited: function(exitCode) {
-            root.isAvailable = (exitCode === 0);
-            if (root.isAvailable) {
-                Logger.i("AsusctlControl", "asusctl " + root.asusctlVersion + " (" + root.productFamily + ")");
+            if (exitCode === 0 && root.asusctlBin.length > 0) {
+                root.isAvailable = true;
+                Logger.i("AsusctlControl", "asusctl " + root.asusctlVersion + " at " + root.asusctlBin + " (" + root.productFamily + ")");
                 root.refreshAll();
+            } else if (root._tryIdx < root._tryPaths.length - 1) {
+                root._tryIdx++;
+                findProc.running = true;
             } else {
-                Logger.w("AsusctlControl", "asusctl info failed, exitCode=" + exitCode);
+                Logger.w("AsusctlControl", "asusctl not found in any known path");
             }
         }
     }
