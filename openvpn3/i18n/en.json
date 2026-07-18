@@ -1,0 +1,127 @@
+{
+  "plugin": {
+    "name": "OpenVPN3",
+    "tooltip": "OpenVPN3 VPN"
+  },
+  "bar": {
+    "active": "active",
+    "connecting": "Connecting...",
+    "noConfigs": "No Configs",
+    "disconnected": "VPN Off"
+  },
+  "panel": {
+    "title": "OpenVPN3",
+    "importConfig": "Import Config",
+    "logs": "Logs",
+    "refresh": "Refresh",
+    "close": "Close",
+    "noConfigs": "No OpenVPN3 configurations found",
+    "clickToImport": "Click + to import a config file",
+    "lines": "lines",
+    "clearLogs": "Clear logs"
+  },
+  "import": {
+    "title": "Import Config",
+    "nameLabel": "Config Name",
+    "namePlaceholder": "Config name",
+    "fileLabel": "Config File",
+    "filePlaceholder": "Select .ovpn file",
+    "persistent": "Persistent",
+    "importBtn": "Import",
+    "cancel": "Cancel"
+  },
+  "status": {
+    "connected": "Connected",
+    "connecting": "Connecting...",
+    "disconnected": "Disconnected",
+    "paused": "Paused"
+  },
+  "actions": {
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "restart": "Restart",
+    "rename": "Rename",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "confirmDelete": "Confirm delete"
+  },
+  "stats": {
+    "download": "↓",
+    "upload": "↑",
+    "packets": "PKT:",
+    "reconnect": "Re:"
+  },
+  "details": {
+    "server": "Server",
+    "port": "Port",
+    "protocol": "Protocol",
+    "cipher": "Cipher",
+    "device": "Device",
+    "username": "Username"
+  },
+  "settings": {
+    "bar": {
+      "label": "Bar",
+      "description": "Appearance in the status bar"
+    },
+    "displayMode": {
+      "label": "Display Mode",
+      "description": "When to show the VPN status in the bar",
+      "onhover": "On Hover",
+      "alwaysShow": "Always Show",
+      "alwaysHide": "Always Hide"
+    },
+    "colors": {
+      "label": "Colors",
+      "description": "Customize icon and text colors",
+      "connected": {
+        "label": "Connected",
+        "description": "Color when VPN is active"
+      },
+      "disconnected": {
+        "label": "Disconnected",
+        "description": "Color when VPN is inactive"
+      }
+    },
+    "behavior": {
+      "label": "Behavior",
+      "description": "Polling and notification settings"
+    },
+    "pollInterval": {
+      "label": "Poll Interval",
+      "description": "How often to check VPN status",
+      "2s": "2s (Fast)",
+      "5s": "5s (Default)",
+      "10s": "10s (Balanced)",
+      "30s": "30s (Power Save)"
+    },
+    "showNotifications": {
+      "label": "Show Notifications",
+      "description": "Show toast on connection errors"
+    },
+    "defaultPersistent": {
+      "label": "Default Persistent",
+      "description": "Default value for persistent when importing configs"
+    },
+    "hideWhenInactive": {
+      "label": "Hide When Inactive",
+      "description": "Hide the bar widget when VPN is disconnected"
+    }
+  },
+  "menu": {
+    "settings": "Settings"
+  },
+  "errors": {
+    "restart": "Failed to restart",
+    "connect": "Failed to connect",
+    "disconnect": "Failed to disconnect",
+    "import": "Failed to import config",
+    "rename": "Failed to rename config",
+    "delete": "Failed to delete config"
+  },
+  "tooltip": {
+    "temporary": "Temporary (removed on restart)",
+    "browse": "Browse"
+  }
+}
