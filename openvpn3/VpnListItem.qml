@@ -40,6 +40,7 @@ NBox {
 
     MouseArea {
         anchors.fill: parent
+        anchors.margins: -Style.marginXS
         hoverEnabled: true
         onContainsMouseChanged: root.hovered = containsMouse
         acceptedButtons: Qt.NoButton
