@@ -32,6 +32,31 @@ Item {
 
     readonly property bool isHidden: root.hideWhenInactive && root.isInactive
 
+    readonly property var sessionList: root.main.sessionList ?? []
+
+    readonly property string connectedName: {
+        if (root.connectedCount !== 1 || root.sessionList.length === 0) return ""
+        const name = root.sessionList[0]?.name
+        return (name && name.length > 0) ? name : ""
+    }
+
+    function _tooltipText() {
+        if (root.isLoading)
+            return pluginApi?.tr("bar.connecting")
+        if (root.connectedCount > 0) {
+            const lines = []
+            for (let i = 0; i < root.sessionList.length; i++) {
+                const s = root.sessionList[i]
+                const name = (s?.name && s.name.length > 0) ? s.name : (s?.sessionPath || "session")
+                lines.push(name)
+            }
+            return lines.join("\n")
+        }
+        if (!root.hasConfigs)
+            return pluginApi?.tr("bar.noConfigs")
+        return pluginApi?.tr("bar.disconnected")
+    }
+
     readonly property string pillIcon: {
         if (root.isLoading) return "shield-check"
         if (root.connectedCount > 0) return "shield-lock"
@@ -40,7 +65,11 @@ Item {
     }
 
     readonly property string pillText: {
-        if (root.connectedCount > 0) return root.connectedCount + " " + pluginApi?.tr("bar.active")
+        if (root.connectedCount > 0) {
+            if (root.connectedCount === 1 && root.connectedName.length > 0)
+                return root.connectedName
+            return root.connectedCount + " " + pluginApi?.tr("bar.active")
+        }
         if (root.isLoading) return pluginApi?.tr("bar.connecting")
         if (!root.hasConfigs) return pluginApi?.tr("bar.noConfigs")
         return pluginApi?.tr("bar.disconnected")
@@ -74,6 +103,7 @@ Item {
         autoHide: false
         text: root.pillText
         icon: root.pillIcon
+        tooltipText: root._tooltipText()
         customIconColor: Color.resolveColorKeyOptional(root.connectedCount > 0 ? root.connectedColor : root.disconnectedColor)
         customTextColor: Color.resolveColorKeyOptional(root.connectedCount > 0 ? root.connectedColor : root.disconnectedColor)
         forceOpen: root.displayMode === "alwaysShow"
