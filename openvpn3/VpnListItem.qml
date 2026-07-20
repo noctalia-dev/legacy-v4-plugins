@@ -40,6 +40,7 @@ NBox {
 
     MouseArea {
         anchors.fill: parent
+        anchors.margins: -Style.marginXS
         hoverEnabled: true
         onContainsMouseChanged: root.hovered = containsMouse
         acceptedButtons: Qt.NoButton
@@ -127,8 +128,7 @@ NBox {
 
                 // Hover action buttons
                 NIconButton {
-                    visible: root.isConnected && !root.editing && !root.confirmingDelete
-                    opacity: root.hovered ? 1 : 0
+                    visible: root.isConnected && !root.editing && !root.confirmingDelete && root.hovered
                     icon: "refresh"
                     tooltipText: pluginApi?.tr("actions.restart")
                     baseSize: Style.baseWidgetSize * 0.7
@@ -136,8 +136,7 @@ NBox {
                 }
 
                 NIconButton {
-                    visible: !root.isConnected && !root.editing && !root.confirmingDelete
-                    opacity: root.hovered ? 1 : 0
+                    visible: !root.isConnected && !root.editing && !root.confirmingDelete && root.hovered
                     icon: "pencil"
                     tooltipText: pluginApi?.tr("actions.rename")
                     baseSize: Style.baseWidgetSize * 0.7
@@ -149,8 +148,7 @@ NBox {
                 }
 
                 NIconButton {
-                    visible: !root.isConnected && !root.editing && !root.confirmingDelete
-                    opacity: root.hovered ? 1 : 0
+                    visible: !root.isConnected && !root.editing && !root.confirmingDelete && root.hovered
                     icon: "trash"
                     tooltipText: pluginApi?.tr("actions.delete")
                     baseSize: Style.baseWidgetSize * 0.7
