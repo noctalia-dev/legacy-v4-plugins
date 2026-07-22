@@ -33,6 +33,20 @@ Item {
         refreshDevices()
     }
 
+    onDevicesChanged: {
+      if(!root.autoMount) {
+        return
+      }
+
+      for (let i = 0; i < devices.length; i++) {
+            const dev = devices[i]
+
+            if (!dev.isMounted && dev.autoMount && dev.fstype) {
+                mountDevice(dev.path, dev.label)
+            }
+      }
+    }
+
     // ===== IPC =====
 
     IpcHandler {
@@ -86,9 +100,6 @@ Item {
         repeat: false
         onTriggered: {
             refreshDevices()
-            if (root.autoMount) {
-                autoMountNewDevices()
-            }
         }
     }
 
@@ -259,7 +270,8 @@ Item {
                         vendor:      dev.vendor ? dev.vendor.trim() : "",
                         usedPercent: 0,
                         usedSize:    "",
-                        freeSize:    ""
+                        freeSize:    "",
+                        autoMount:   root.autoMount
                     })
                 }
             }
@@ -268,7 +280,13 @@ Item {
                 processDevice(dev, null, false)
             }
 
-            return result
+            if(!root.autoMount) {
+              return result
+            }
+
+            return result.map((dev) => Object.assign(dev, { 
+              autoMount: root.devices.find(oldDev => oldDev.path === dev.path)?.autoMount ?? true
+            }))
         }
 
         // Parse df output and update device usage stats
@@ -335,10 +353,14 @@ Item {
 
     function unmountDevice(devicePath, deviceLabel) {
         if (unmountProc.running) return
+        // prevent auto mount after manually unmount
+        devices.find(dev => dev.path === devicePath).autoMount = false
+
         unmountProc.devicePath = devicePath
         unmountProc.deviceLabel = deviceLabel
         unmountProc.command = ["udisksctl", "unmount", "-b", devicePath]
         unmountProc.running = true
+
     }
 
     function ejectDevice(devicePath, parentPath, deviceLabel) {
@@ -373,6 +395,9 @@ Item {
     function unmountAll() {
         for (let i = 0; i < devices.length; i++) {
             const dev = devices[i]
+            // prevent auto mount after manually unmount
+            dev.autoMount = false
+
             if (dev.isMounted) {
                 Quickshell.execDetached(["udisksctl", "unmount", "-b", dev.path])
             }
@@ -404,15 +429,6 @@ Item {
             )
         }
         refreshDebounce.restart()
-    }
-
-    function autoMountNewDevices() {
-        for (let i = 0; i < devices.length; i++) {
-            const dev = devices[i]
-            if (!dev.isMounted && dev.fstype) {
-                mountDevice(dev.path, dev.label)
-            }
-        }
     }
 
     function buildTooltip() {

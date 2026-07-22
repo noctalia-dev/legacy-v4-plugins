@@ -1,7 +1,7 @@
 {
   "id": "usb-drive-manager",
   "name": "USB Drive Manager",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "minNoctaliaVersion": "3.6.0",
   "author": "hennifant",
   "license": "MIT",
