@@ -10,6 +10,7 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Qt5Compat.GraphicalEffects
 import Qt.labs.folderlistmodel
+import qs.Commons
 
 PanelWindow {
   id: root
@@ -43,19 +44,20 @@ PanelWindow {
   property int thumbnailRevision: thumbnailService.thumbnailRevision
   property int topBarHeight: pluginApi?.pluginSettings?.top_bar_height ?? pluginApi?.manifest?.metadata?.defaultSettings?.top_bar_height
   property int topBarRadius: Style.radiusM
+  property int duration: Settings.data.wallpaper.transitionDuration
 
   signal quitRequested
 
   function applyCurrentCard() {
-    var f = filteredFiles[cardDeck.currentIndex];
-    if (!f)
-      return;
+        var f = filteredFiles[cardDeck.currentIndex];
+        if (!f)
+            return;
 
-    applicant.command = ["bash", "-c", Utils.wallpaperCommand(f)];
-    applicant.running = true;
+        var wallpaperPath = f.isVideo ? f.thumbnail : f.filePath;
+        WallpaperService.changeWallpaper(wallpaperPath);
 
-    var wallpaperPath = f.isVideo ? f.thumbnail : f.filePath;
-    WallpaperService.changeWallpaper(wallpaperPath);
+        applicant.command = ["bash", "-c", Utils.wallpaperCommand(f, duration)];
+        applicant.running = true;
   }
 
   function applyFilterToFiles() {

@@ -1,7 +1,7 @@
 {
   "id": "wallcards",
   "name": "Wallcards",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minNoctaliaVersion": "4.7.0",
   "author": "tonigineer",
   "license": "MIT",
