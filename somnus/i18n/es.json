@@ -1,0 +1,78 @@
+{
+  "header": {
+    "title": "Somnus Menú de Energía",
+    "desc": "Personaliza la apariencia del menú de energía"
+  },
+  "section": {
+    "barButton": "Botón de la barra",
+    "behavior": "Comportamiento",
+    "buttons": "Botones",
+    "background": "Fondo",
+    "animations": "Animaciones"
+  },
+  "menu": {
+    "settings": "Configuración del widget"
+  },
+  "widget": {
+    "tooltip": "Somnus"
+  },
+  "button": {
+    "lock": "Bloquear",
+    "logout": "Cerrar sesión",
+    "suspend": "Suspender",
+    "hibernate": "Hibernar",
+    "reboot": "Reiniciar",
+    "shutdown": "Apagar"
+  },
+  "settings": {
+    "iconColor": {
+      "label": "Color del ícono",
+      "desc": "Color del ícono de encendido en la barra"
+    },
+    "hoverColor": {
+      "label": "Color al hover",
+      "desc": "Color al pasar el cursor sobre un botón"
+    },
+    "buttonWidth": {
+      "label": "Ancho del botón"
+    },
+    "buttonHeight": {
+      "label": "Alto del botón"
+    },
+    "buttonSpacing": {
+      "label": "Espaciado entre botones",
+      "desc": "Distancia entre los botones en la cuadrícula"
+    },
+    "buttonOpacity": {
+      "label": "Opacidad del botón"
+    },
+    "useOverlay": {
+      "label": "Modo superposición",
+      "desc": "Cuando está activado, el menú cubre toda la pantalla. Cuando está desactivado, aparece como un panel centrado."
+    },
+    "overlayBlur": {
+      "label": "Desenfoque de superposición",
+      "desc": "Intensidad del desenfoque cuando el menú cubre toda la pantalla."
+    },
+    "overlayTint": {
+      "label": "Tinte de superposición",
+      "desc": "Oscuridad de la superposición sobre el fondo borroso."
+    },
+    "panelTint": {
+      "label": "Tinte del panel",
+      "desc": "Oscuridad del fondo del panel centrado."
+    },
+    "animationsEnabled": {
+      "label": "Animaciones de botones",
+      "desc": "Cuando está desactivado, los botones aparecen instantáneamente sin animaciones."
+    },
+    "lockOnSuspend": {
+      "label": "Bloquear al suspender",
+      "desc": "Cuando está activado, la pantalla se bloquea antes de suspender. Cuando está desactivado, el sistema suspende sin bloquear."
+    },
+    "hoverDesaturation": {
+      "label": "Desaturación del hover",
+      "desc": "Reduce la intensidad del color del hover. Valores más altos vuelven el color más grisáceo."
+    }
+  }
+}

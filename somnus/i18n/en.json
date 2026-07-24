@@ -1,0 +1,78 @@
+{
+  "header": {
+    "title": "Somnus Power Menu",
+    "desc": "Customize the appearance of the power menu"
+  },
+  "section": {
+    "barButton": "Bar button",
+    "behavior": "Behavior",
+    "buttons": "Buttons",
+    "background": "Background",
+    "animations": "Animations"
+  },
+  "menu": {
+    "settings": "Widget settings"
+  },
+  "widget": {
+    "tooltip": "Somnus"
+  },
+  "button": {
+    "lock": "Lock",
+    "logout": "Logout",
+    "suspend": "Suspend",
+    "hibernate": "Hibernate",
+    "reboot": "Reboot",
+    "shutdown": "Shutdown"
+  },
+  "settings": {
+    "iconColor": {
+      "label": "Icon color",
+      "desc": "Color of the power icon in the bar"
+    },
+    "hoverColor": {
+      "label": "Hover color",
+      "desc": "Color when hovering over a button"
+    },
+    "buttonWidth": {
+      "label": "Button width"
+    },
+    "buttonHeight": {
+      "label": "Button height"
+    },
+    "buttonSpacing": {
+      "label": "Button spacing",
+      "desc": "Distance between buttons in the grid"
+    },
+    "buttonOpacity": {
+      "label": "Button opacity"
+    },
+    "useOverlay": {
+      "label": "Screen overlay mode",
+      "desc": "When enabled, the menu covers the full screen. When disabled, the menu appears as a centered panel."
+    },
+    "overlayBlur": {
+      "label": "Overlay blur",
+      "desc": "Blur intensity when the menu covers the full screen."
+    },
+    "overlayTint": {
+      "label": "Overlay tint",
+      "desc": "Darkness of the overlay on top of the blurred background."
+    },
+    "panelTint": {
+      "label": "Panel tint",
+      "desc": "Darkness of the centered panel background."
+    },
+    "animationsEnabled": {
+      "label": "Button animations",
+      "desc": "When disabled, buttons appear instantly without entry or hover animations."
+    },
+    "lockOnSuspend": {
+      "label": "Lock on suspend",
+      "desc": "When enabled, the screen locks before suspending. When disabled, the system suspends without locking."
+    },
+    "hoverDesaturation": {
+      "label": "Hover desaturation",
+      "desc": "Reduces color intensity on hover. Higher values make the hover color appear more gray."
+    }
+  }
+}

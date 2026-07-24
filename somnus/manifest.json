@@ -1,0 +1,36 @@
+{
+  "id": "somnus",
+  "name": "somnus",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.7.0",
+  "author": "yhordi45",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A full-screen power menu for Noctalia Shell, inspired by the wlogout design.",
+  "tags": ["Bar", "Panel", "Hyprland", "System"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "iconColor": "primary",
+      "hoverColor": "primary",
+      "buttonWidth": 470,
+      "buttonHeight": 280,
+      "buttonSpacing": 20,
+      "buttonOpacity": 0.50,
+      "useOverlay": true,
+      "overlayBlur": 0.75,
+      "overlayTint": 0.6,
+      "panelTint": 0.7,
+      "animationsEnabled": true,
+      "lockOnSuspend": true,
+      "hoverDesaturation": 0.0
+    }
+  }
+}
