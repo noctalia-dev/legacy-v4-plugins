@@ -40,6 +40,8 @@ NIconButton {
   onClicked: {
     if (pluginApi) {
       pluginApi.openPanel(root.screen, root)
+    } else {
+      Logger.w("ScreenShot", "[BarWidget] onClicked: no pluginApi!")
     }
   }
 

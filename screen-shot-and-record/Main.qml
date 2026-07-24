@@ -14,6 +14,18 @@ Item {
     property string target: ""
     property string recordingCheckTarget: ""
 
+    Component.onCompleted: {
+        Logger.d("ScreenShot", "[Main] Component.onCompleted compositor=sway:",
+                 CompositorService.isSway, "hyprland:", CompositorService.isHyprland,
+                 "niri:", CompositorService.isNiri,
+                 "selectorSource=", root.selectorSource,
+                 "screens count=", Quickshell.screens?.length)
+    }
+
+    Component.onDestruction: {
+        Logger.d("ScreenShot", "[Main] Component.onDestruction")
+    }
+
     Process {
         id: recordingCheckProc
         command: ["pidof", "wf-recorder"]
@@ -22,21 +34,30 @@ Item {
             const requestedTarget = root.recordingCheckTarget
             root.recordingCheckTarget = ""
 
+            Logger.d("ScreenShot", "[Main] recordingCheckProc onExited code=", exitCode,
+                     "requestedTarget=", requestedTarget)
+
             if (requestedTarget === "") {
                 return
             }
 
             if (exitCode === 0) {
+                Logger.d("ScreenShot", "[Main] recordingCheckProc: wf-recorder is running, stopping")
                 root.stopRecording()
                 return
             }
 
+            Logger.d("ScreenShot", "[Main] recordingCheckProc: wf-recorder not running, opening selector for", requestedTarget)
             root.openSelector(requestedTarget)
         }
     }
 
     function stopRecording() {
+        Logger.d("ScreenShot", "[Main] stopRecording() pluginDir=", pluginApi?.pluginDir,
+                 "recordingActive=", root.recordingActive)
+
         if (!pluginApi?.pluginDir) {
+            Logger.w("ScreenShot", "[Main] stopRecording: no pluginDir")
             return
         }
 
@@ -50,6 +71,7 @@ Item {
             stopArgs.push("--notify")
         }
         stopArgs.push(...buildRecordingNotifyArgs())
+        Logger.d("ScreenShot", "[Main] stopRecording: executing", stopArgs)
         Quickshell.execDetached(stopArgs)
     }
 
@@ -65,29 +87,10 @@ Item {
         ]
     }
 
-    function openSelector(target) {
-        if (active) {
-            return
-        }
-
-        if (CompositorService.isNiri) {
-           // Show a notification that Niri is not supported (i18n only)
-            pluginApi?.mainInstance?.showToast?.(pluginApi?.tr("notify.screenshot.niriNotSupported"));
-           Logger.w("ScreenShot", "Niri is not supported for screenshots.");
-           return;
-        }
-
-        root.target = target
-        active = true
-    }
-
-    // 存储当前所有屏幕
-    property var screens: Quickshell.screens
     readonly property string selectorSource: CompositorService.isSway ? "ScreenShotSway.qml"
                                            : CompositorService.isHyprland ? "ScreenShotHypr.qml"
+                                           : CompositorService.isNiri ? "ScreenShotNiri.qml"
                                            : "ScreenShot.qml"
-
-    // 使用 Instantiator 管理选择框
     Instantiator {
         id: selectorInstantiator
         active: root.active
@@ -98,17 +101,24 @@ Item {
             onLoaded: {
                 item.pluginApi = root.pluginApi
                 item.screen = Quickshell.screens[index]
-                Logger.d("ScreenShot", (root.target))
                 item.target = root.target
                 item.closed.connect(() => root.close())
                 item.startCapture()
             }
         }
-        onObjectAdded: (index, object) => Logger.d("ScreenShot", ("Selector added for screen", index))
-        onObjectRemoved: (index, object) => Logger.d("ScreenShot", ("Selector removed for screen", index))
+    }
+
+    function openSelector(target) {
+        if (root.active) return
+
+        root.target = target
+        active = true
     }
 
     function open(target) {
+        Logger.d("ScreenShot", "[Main] open(" + target + ") recordingCheckTarget=",
+                 root.recordingCheckTarget, "active=", root.active)
+
         if (target === "record" || target === "recordsound") {
             if (root.recordingCheckTarget !== "") {
                 return
@@ -123,6 +133,8 @@ Item {
     }
 
     function close() {
+        if (!root.active) return
+
         active = false
         root.target = ""
     }

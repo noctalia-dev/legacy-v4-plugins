@@ -18,7 +18,8 @@
     },
     "enableWindowsSelection": {
       "label": "Fenstererkennung aktivieren",
-      "description": "Erlaubt das Anklicken von Fenstern zur automatischen Regionsauswahl auf unterstutzten Compositors."
+      "description": "Erlaubt das Anklicken von Fenstern zur automatischen Regionsauswahl auf unterstutzten Compositors.",
+      "niriWarning": "Niri-Benutzer: Siehe README für Voraussetzungen und Einschränkungen der Fenstererkennung."
     },
     "screenshotEditor": {
       "label": "Tool zum Bearbeiten von Screenshots",
@@ -36,6 +37,14 @@
       "label": "Speicherordner für Aufnahmen",
       "description": "Ordner, in dem Bildschirmaufnahmen gespeichert werden."
     },
+    "pngCompressionLevel": {
+      "label": "PNG-Komprimierungsstufe",
+      "description": "PNG-Komprimierungsstufe (0=unkomprimiert, 1=Standard, 9=maximal). Höhere Werte verlangsamen Screenshots, erzeugen aber kleinere Dateien; niedrigere Werte vergrößern die PNG-Datei und können das Kopieren verhindern."
+    },
+    "notificationsEnabled": {
+      "label": "Benachrichtigungen aktivieren",
+      "description": "Erfolgsbenachrichtigungen für Screenshots, OCR und Aufnahmen anzeigen. Fehlende Abhängigkeiten werden immer gemeldet."
+    },
     "recordingNotifications": {
       "label": "Aufnahme-Benachrichtigungen",
       "description": "Benachrichtigungen anzeigen, wenn eine Aufnahme startet/stoppt oder Fehler auftreten."
@@ -51,8 +60,7 @@
       "failed": "Screenshot fehlgeschlagen",
       "savedTitle": "Screenshot gespeichert",
       "copiedTitle": "Screenshot kopiert",
-      "copiedBody": "Bild in die Zwischenablage kopiert",
-      "niriNotSupported": "Niri wird für Screenshots nicht unterstützt."
+      "copiedBody": "Bild in die Zwischenablage kopiert"
     },
     "search": {
       "failed": "Bildersuche fehlgeschlagen"

@@ -1,17 +1,18 @@
 {
   "id": "screen-shot-and-record",
   "name": "ScreenShot & Record",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "minNoctaliaVersion": "3.6.0",
   "author": "Pulsar",
   "license": "GPL-3.0-or-later",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
-  "description": "A screenshot plugin with OCR, Google Lens integration, and screen recording. Supports Sway, Hyprland and MangoWM.",
+  "description": "A screenshot plugin with OCR, Google Lens integration, and screen recording. Supports Niri, Hyprland, Sway and MangoWM.",
   "tags": [
     "Bar",
     "Panel",
     "Utility",
-     "Hyprland",
+    "Niri",
+    "Hyprland",
     "Sway"
   ],
   "entryPoints": {
@@ -24,14 +25,16 @@
     "plugins": []
   },
   "metadata": {
-   "defaultSettings": {
+    "defaultSettings": {
       "enableCross": true,
       "enableWindowsSelection": true,
       "screenshotEditor": "swappy",
       "keepSourceScreenshot": false,
+      "pngCompressionLevel": 1,
       "savePath": "~/Pictures/Screenshots",
       "recordingSavePath": "~/Videos",
-      "recordingNotifications": true
+      "recordingNotifications": true,
+      "notificationsEnabled": true
     }
   }
 }

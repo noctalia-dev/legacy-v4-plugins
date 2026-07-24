@@ -1,7 +1,8 @@
 # Screenshot Plugin
 
-**This plugin currently supports Sway. Hyprland and MangoWM. Window selection is only avaible in Sway and Hyrland. MangoWM/MangoWC only supports region selection.  
-> **Note:** Niri is currently not supported.
+**This plugin currently supports Sway, Hyprland, MangoWM and Niri. Window selection is available in Sway, Hyprland and Niri. MangoWM/MangoWC only supports region selection.  
+
+> **Niri Prerequisites and Limitations:** Window detection requires Niri with [PR #3305](https://github.com/YaLTeR/niri/pull/3305) (not yet merged). Due to f64 rounding in the PR, window borders may have up to 1px of offset. Niri builds without `window-geometries` (from #3305) will silently disable window detection — screenshot capture still works normally.
 
 This plugin implements screen region selection, window selection, text recognition, Google Lens, and screen recording functionality based on Quickshell.
 

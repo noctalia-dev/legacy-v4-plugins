@@ -28,13 +28,17 @@ PanelWindow {
                                ?? pluginApi?.manifest?.metadata?.defaultSettings?.enableCross
                                ?? true
 
-    // Track if mouse is currently on this screen
     property bool mouseOnThisScreen: false
 
     readonly property real monitorOffsetX: Number(root.screen?.x ?? 0)
     readonly property real monitorOffsetY: Number(root.screen?.y ?? 0)
     property string frozenSourceFile: ""
     property bool frozenSourceReady: false
+
+    Component.onDestruction: {
+        freezeCaptureProc.running = false
+        checkRecordingProc.running = false
+    }
 
     Process {
         id: checkRecordingProc
@@ -43,7 +47,6 @@ PanelWindow {
         onExited: (exitCode) => {
             if (exitCode === 0) {
                 if (root.target === "record" || root.target === "recordsound"){
-                    // Stop flow: if recorder is already running, stop it immediately.
                     if (pluginApi?.mainInstance) {
                         pluginApi.mainInstance.recordingActive = false
                     }
@@ -59,6 +62,12 @@ PanelWindow {
                     Quickshell.execDetached(stopArgs)
                     root.closeSelector()
                 }
+            } else if (root.target === "record" || root.target === "recordsound") {
+                const outputName = root.screen ? root.screen.name : "unknown"
+                const safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
+                root.frozenSourceFile = `/tmp/screen-${safeOutputName}-frozen.ppm`
+                freezeCaptureProc.command = ["grim", "-t", "ppm", "-o", outputName, root.frozenSourceFile]
+                freezeCaptureProc.running = true
             }
         }
     }
@@ -68,6 +77,8 @@ PanelWindow {
         running: false
         onExited: (exitCode) => {
             root.frozenSourceReady = (exitCode === 0)
+            Logger.d("ScreenShot", "[RegionSelector] freezeCaptureProc exited with code", exitCode,
+                     "frozenSourceFile=", root.frozenSourceFile)
             if (!root.frozenSourceReady) {
                 Logger.w("ScreenShot", "[RegionSelector] Frozen source capture failed; falling back to live region capture")
             }
@@ -75,6 +86,16 @@ PanelWindow {
     }
 
     function startCapture() {
+        root.frozenSourceReady = false
+        root.mouseX = 0
+        root.mouseY = 0
+        root.mouseInside = false
+        root.dragging = false
+
+        const outputName = root.screen ? root.screen.name : "unknown"
+        const safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
+        root.frozenSourceFile = `/tmp/screen-${safeOutputName}-frozen.ppm`
+
         const isRecordingTarget = (root.target === "record" || root.target === "recordsound")
         if (isRecordingTarget) {
             checkRecordingProc.running = true
@@ -82,14 +103,8 @@ PanelWindow {
             root.onNonRecordingStart()
         }
 
-        if (root.target === "screenshot" || root.target === "search" || root.target === "ocr") {
-            const outputName = root.screen ? root.screen.name : "unknown"
-            const safeOutputName = outputName.replace(/[^a-zA-Z0-9_-]/g, "_")
-            root.frozenSourceFile = `/tmp/screen-${safeOutputName}-${Date.now()}-frozen.png`
-            root.frozenSourceReady = false
-            // Capture only the current output at scale 1 so crop coordinates stay
-            // in output-local logical pixels, which is correct for all resolutions.
-            freezeCaptureProc.command = ["sh", "-c", "command -v grim >/dev/null 2>&1 && grim -s 1 -o \"$2\" \"$1\" && test -s \"$1\"", "sh", root.frozenSourceFile, outputName]
+        if (!isRecordingTarget) {
+            freezeCaptureProc.command = ["grim", "-t", "ppm", "-o", outputName, root.frozenSourceFile]
             freezeCaptureProc.running = true
         }
     }
@@ -123,7 +138,6 @@ PanelWindow {
             return
         }
 
-        // Avoid destroying the selector while Qt is still dispatching pointer/hover events.
         Qt.callLater(() => {
             if (!root.visible) {
                 return
@@ -135,14 +149,24 @@ PanelWindow {
 
     function finish() {
         const mode = (root.mouseButton === Qt.RightButton) ? "edit" : "copy"
-
+        Logger.d("ScreenShot", "[RegionSelector] finish() mode=", mode,
+                 "regionWidth=", root.regionWidth, "regionHeight=", root.regionHeight,
+                 "dragStartX=", root.dragStartX, "dragStartY=", root.dragStartY,
+                 "draggingX=", root.draggingX, "draggingY=", root.draggingY,
+                 "frozenSourceReady=", root.frozenSourceReady,
+                 "frozenSourceFile=", root.frozenSourceFile)
         if (root.regionWidth > 0 && root.regionHeight > 0) {
             captureCommon.processRegion(root, root.regionX, root.regionY, root.regionWidth, root.regionHeight, mode)
         } else if (typeof root.resolveFallbackRegion === "function") {
             const fallback = root.resolveFallbackRegion()
             if (fallback && fallback.width > 0 && fallback.height > 0) {
                 captureCommon.processRegion(root, fallback.x, fallback.y, fallback.width, fallback.height, mode)
+            } else {
+                Logger.w("ScreenShot", "[RegionSelector] finish: fallback region invalid or empty",
+                         fallback ? JSON.stringify(fallback) : "null")
             }
+        } else {
+            Logger.w("ScreenShot", "[RegionSelector] finish: no region and no resolveFallbackRegion, nothing to capture")
         }
 
         root.closeSelector()

@@ -57,8 +57,10 @@ ScreenShot {
             }
         }
         onExited: (code) => {
+            Logger.d("ScreenShot", "[Sway] swayTreeProc onExited code=", code)
             if (code !== 0) {
                 root.windowRegions = []
+                Logger.w("ScreenShot", "[Sway] swayTreeProc failed, cleared windowRegions")
             }
         }
     }
@@ -66,12 +68,16 @@ ScreenShot {
 
     function extractSwayWindowRegions(tree) {
         const outputName = String(root.screen?.name ?? "")
+
         if (outputName === "") {
+            Logger.w("ScreenShot", "[Sway] extractSwayWindowRegions: empty outputName")
             return []
         }
 
         const outputs = (tree?.nodes ?? []).filter(node => node?.type === "output" && String(node?.name ?? "") === outputName)
+
         if (outputs.length === 0) {
+            Logger.w("ScreenShot", "[Sway] extractSwayWindowRegions: no matching outputs")
             return []
         }
 
@@ -88,6 +94,7 @@ ScreenShot {
                 selectedWorkspaces = workspaces
             }
 
+
             for (let j = 0; j < selectedWorkspaces.length; j++) {
                 root.collectWorkspaceWindows(selectedWorkspaces[j], result)
             }
@@ -99,6 +106,7 @@ ScreenShot {
     function collectWorkspaceWindows(workspaceNode, result) {
         const stack = [workspaceNode]
         const seenWindowKeys = ({})
+        let processedCount = 0
         while (stack.length > 0) {
             const node = stack.pop()
             if (!node) {
@@ -125,6 +133,8 @@ ScreenShot {
             if (!isSelectableWindowNode || !hasRect) {
                 continue
             }
+
+            processedCount++
 
             const windowTitle = String(node.name ?? "")
             const windowClass = String(node.app_id ?? node.window_properties?.class ?? "")
@@ -156,8 +166,6 @@ ScreenShot {
                 return w
             }
         }
-
         return null
     }
-
 }

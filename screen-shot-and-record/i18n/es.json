@@ -18,7 +18,8 @@
         },
         "enableWindowsSelection": {
             "label": "Activar deteccion de ventanas",
-            "description": "Permite hacer clic en ventanas para seleccionar automaticamente su region en compositores compatibles."
+            "description": "Permite hacer clic en ventanas para seleccionar automaticamente su region en compositores compatibles.",
+            "niriWarning": "Usuarios de Niri: consulte el README para conocer los requisitos previos y limitaciones de la deteccion de ventanas."
         },
         "screenshotEditor": {
             "label": "Herramienta de Anotación de Capturas",
@@ -36,6 +37,14 @@
             "label": "Carpeta de guardado de grabaciones",
             "description": "Carpeta donde se guardan las grabaciones de pantalla."
         },
+        "pngCompressionLevel": {
+            "label": "Nivel de compresion PNG",
+            "description": "Nivel de compresión PNG (0=sin comprimir, 1=predeterminado, 9=máximo). Valores altos ralentizan la captura pero reducen el tamaño; valores bajos aumentan el tamaño PNG y pueden impedir copiar al portapapeles."
+        },
+        "notificationsEnabled": {
+            "label": "Activar notificaciones",
+            "description": "Mostrar notificaciones de éxito para capturas, OCR y grabación. Las alertas de dependencias faltantes siempre se muestran."
+        },
         "recordingNotifications": {
             "label": "Notificaciones de grabación",
             "description": "Mostrar notificaciones al iniciar/detener la grabación o cuando ocurren errores."
@@ -51,8 +60,7 @@
             "failed": "La captura falló",
             "savedTitle": "Captura guardada",
             "copiedTitle": "Captura copiada",
-            "copiedBody": "Imagen copiada al portapapeles",
-            "niriNotSupported": "Niri no es compatible con capturas de pantalla."
+            "copiedBody": "Imagen copiada al portapapeles"
         },
         "search": {
             "failed": "La búsqueda de imágenes falló"

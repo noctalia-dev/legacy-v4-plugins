@@ -18,7 +18,8 @@
         },
         "enableWindowsSelection": {
             "label": "Enable Window Detection",
-            "description": "Allow clicking windows to auto-select their region on supported compositors."
+            "description": "Allow clicking windows to auto-select their region on supported compositors.",
+            "niriWarning": "Niri users: see README for prerequisites and limitations of window detection."
         },
         "screenshotEditor": {
             "label": "Screenshot Annotation Tool",
@@ -36,6 +37,14 @@
             "label": "Recording Save Folder",
             "description": "Folder where screen recordings are saved."
         },
+        "pngCompressionLevel": {
+            "label": "PNG Compression Level",
+            "description": "PNG compression level (0=uncompressed, 1=default, 9=maximum). Higher values slow down screenshots but reduce file size; lower values bloat PNG size and may cause clipboard copy failures."
+        },
+        "notificationsEnabled": {
+            "label": "Enable Notifications",
+            "description": "Show success notifications for screenshots, OCR, and recording. Dependency missing alerts are always shown."
+        },
         "recordingNotifications": {
             "label": "Recording Notifications",
             "description": "Show notifications when recording starts/stops or errors occur."
@@ -51,8 +60,7 @@
             "failed": "Screenshot failed",
             "savedTitle": "Screenshot saved",
             "copiedTitle": "Screenshot copied",
-            "copiedBody": "Image copied to clipboard",
-            "niriNotSupported": "Niri is not supported for screenshots."
+            "copiedBody": "Image copied to clipboard"
         },
         "search": {
             "failed": "Image search failed"
