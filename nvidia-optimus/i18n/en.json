@@ -1,0 +1,35 @@
+{
+  "common": {
+    "state-active": "active",
+    "state-asleep": "asleep",
+    "mode-hdmi": "HDMI-Ready",
+    "mode-battery": "Battery",
+    "none": "none"
+  },
+  "bar": {
+    "tooltip-external": "dGPU — driving external display",
+    "tooltip": "dGPU — {state}  ({mode} mode)"
+  },
+  "panel": {
+    "title-fallback": "NVIDIA dGPU",
+    "subtitle-pending": "{mode} pending — restart to apply",
+    "subtitle-driving": "Driving external display",
+    "subtitle-hdmi": "HDMI-Ready — dGPU on demand",
+    "subtitle-battery-awake": "Battery — dGPU awake",
+    "subtitle-battery-asleep": "Battery — dGPU asleep",
+    "external": "External display",
+    "gpu-processes": "GPU processes",
+    "none-reported": "none reported",
+    "stat-power": "Power draw",
+    "stat-temp": "GPU temp",
+    "stat-util": "GPU util",
+    "stat-vram": "VRAM",
+    "apply-note": "AQ_DRM_DEVICES is read at session start.",
+    "apply-button": "Apply now (log out)"
+  },
+  "settings": {
+    "title": "NVIDIA Optimus",
+    "description": "The bar toggle flips Hyprland's AQ_DRM_DEVICES between Battery (iGPU only — the NVIDIA dGPU runtime-suspends, no HDMI) and HDMI-Ready (iGPU + dGPU — external outputs work). It edits ~/.config/hypr/env.conf (backed up alongside) and applies on the next login. The bar icon is theme-tinted: accent when the dGPU is awake, neutral when asleep. Stats poll every 2s from a bundled sysfs-only script that never wakes the GPU; nvidia-smi runs only while this panel is open, and only when the GPU is already awake.",
+    "requirements": "Requires: Hyprland (aquamarine), an NVIDIA Optimus laptop with the proprietary driver + nvidia-drm.modeset=1. Override the env file with $HYPR_ENV_FILE if yours lives elsewhere."
+  }
+}
