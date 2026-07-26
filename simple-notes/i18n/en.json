@@ -11,12 +11,19 @@
       "cancel_button": "Cancel",
       "content_placeholder": "Write your thoughts here...",
       "delete_button": "Delete",
+      "filename_label": "File Name",
+      "filename_placeholder": "auto-generated-from-title.md",
       "save_button": "Save",
+      "title_edit": "Edit Note",
+      "title_new": "New Note",
       "title_placeholder": "Note Title"
     },
     "header": {
       "add_button": "New Note",
       "title": "Notes"
+    },
+    "export": {
+      "error": "Failed to export note to file. Please check the directory path and permissions."
     },
     "list": {
       "empty_message": "No notes yet. Create one!",
@@ -24,6 +31,29 @@
     }
   },
   "settings": {
+    "bar_icon": {
+      "change_button": "Change",
+      "description": "Choose an icon for the bar widget",
+      "label": "Bar Icon"
+    },
+    "hide_bar_widget": {
+      "description": "Hide the bar widget from the status bar",
+      "label": "Hide Bar Widget"
+    },
+    "keyboard_shortcut": {
+      "description": "Toggle the notes panel with this command:",
+      "title": "Keyboard Shortcut"
+    },
+    "notes_directory": {
+      "description": "Optionally export notes as .md files to a directory. Leave empty to skip file export.",
+      "label": "Notes Directory",
+      "picker_title": "Choose directory for notes",
+      "select": "Select directory"
+    },
+    "panel_position": {
+      "description": "Where the notes panel should appear on the screen",
+      "label": "Panel Position"
+    },
     "show_count": {
       "description": "Show the number of notes in the bar widget",
       "label": "Show Note Count"

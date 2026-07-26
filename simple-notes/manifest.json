@@ -1,7 +1,7 @@
 {
   "id": "simple-notes",
   "name": "Simple Notes",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "minNoctaliaVersion": "3.7.1",
   "author": "fusuyfusuy",
   "license": "MIT",
@@ -24,7 +24,12 @@
   "metadata": {
     "defaultSettings": {
       "notes": [],
-      "showCountInBar": true
+      "showCountInBar": true,
+      "count": 0,
+      "positionMode": "attached",
+      "barIcon": "paperclip",
+      "hideBarWidget": false,
+      "notesDirectory": "~/Documents"
     }
   }
 }

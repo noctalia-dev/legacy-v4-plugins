@@ -17,20 +17,37 @@ Item {
   readonly property string barPosition: Settings.data.bar.position || "top"
   readonly property bool barIsVertical: barPosition === "left" || barPosition === "right"
 
-  // Settings
-  readonly property bool showCount: pluginApi?.pluginSettings?.showCountInBar ?? true
+  property var cfg: pluginApi?.pluginSettings || ({})
+  property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
+
+  readonly property bool showCount: cfg.showCountInBar ?? defaults.showCountInBar ?? true
+  readonly property string barIcon: cfg.barIcon ?? defaults.barIcon ?? "paperclip"
+  readonly property bool hideBarWidget: cfg.hideBarWidget ?? defaults.hideBarWidget ?? false
 
   function getIntValue(value, defaultValue) {
     return (typeof value === 'number') ? Math.floor(value) : defaultValue;
   }
 
-  readonly property int noteCount: getIntValue(pluginApi?.pluginSettings?.count, 0)
+  readonly property int noteCount: getIntValue(cfg.count, 0)
 
   readonly property real contentWidth: barIsVertical ? Style.capsuleHeight : contentRow.implicitWidth + Style.marginM * 2
   readonly property real contentHeight: Style.capsuleHeight
 
-  implicitWidth: contentWidth
-  implicitHeight: contentHeight
+  opacity: hideBarWidget ? 0.0 : 1.0
+  implicitWidth: hideBarWidget ? 0 : contentWidth
+  implicitHeight: hideBarWidget ? 0 : contentHeight
+
+  Behavior on opacity {
+    NumberAnimation { duration: Style.animationNormal }
+  }
+
+  Behavior on implicitWidth {
+    NumberAnimation { duration: Style.animationNormal }
+  }
+
+  Behavior on implicitHeight {
+    NumberAnimation { duration: Style.animationNormal }
+  }
 
   Rectangle {
     id: visualCapsule
@@ -47,7 +64,7 @@ Item {
       spacing: Style.marginS
 
       NIcon {
-        icon: "paperclip"
+        icon: root.barIcon
         applyUiScale: false
         color: mouseArea.containsMouse ? Color.mOnHover : Color.mOnSurface
       }
