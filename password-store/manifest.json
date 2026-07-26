@@ -1,0 +1,20 @@
+{
+  "id": "password-store",
+  "name": "Password Store",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Bojan Jovanovic",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Search pass (password-store) from the launcher. Type 'pass <name>' to copy a password or 'po <name>' to copy a TOTP code to clipboard.",
+  "tags": ["Launcher", "Utility"],
+  "entryPoints": {
+    "launcherProvider": "LauncherProvider.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}
