@@ -1,0 +1,127 @@
+{
+  "plugin": {
+    "name": "OpenVPN3",
+    "tooltip": "VPN OpenVPN3"
+  },
+  "bar": {
+    "active": "active",
+    "connecting": "Đang kết nối...",
+    "noConfigs": "Không có cấu hình",
+    "disconnected": "VPN tắt"
+  },
+  "panel": {
+    "title": "OpenVPN3",
+    "importConfig": "Nhập cấu hình",
+    "logs": "Logs",
+    "refresh": "Làm mới",
+    "close": "Đóng",
+    "noConfigs": "Không tìm thấy cấu hình OpenVPN3 nào",
+    "clickToImport": "Nhấn + để nhập file cấu hình",
+    "lines": "dòng",
+    "clearLogs": "Xóa logs"
+  },
+  "import": {
+    "title": "Nhập cấu hình",
+    "nameLabel": "Tên cấu hình",
+    "namePlaceholder": "Tên cấu hình",
+    "fileLabel": "File cấu hình",
+    "filePlaceholder": "Chọn file .ovpn",
+    "persistent": "Lưu cấu hình",
+    "importBtn": "Nhập",
+    "cancel": "Hủy"
+  },
+  "status": {
+    "connected": "Đã kết nối",
+    "connecting": "Đang kết nối...",
+    "disconnected": "Ngắt kết nối",
+    "paused": "Tạm dừng"
+  },
+  "actions": {
+    "connect": "Kết nối",
+    "disconnect": "Ngắt kết nối",
+    "restart": "Khởi động lại",
+    "rename": "Đổi tên",
+    "delete": "Xóa",
+    "confirm": "Xác nhận",
+    "cancel": "Hủy",
+    "confirmDelete": "Xác nhận xóa"
+  },
+  "stats": {
+    "download": "↓",
+    "upload": "↑",
+    "packets": "Gói:",
+    "reconnect": "Kết nối lại:"
+  },
+  "details": {
+    "server": "Máy chủ",
+    "port": "Cổng",
+    "protocol": "Giao thức",
+    "cipher": "Mã hóa",
+    "device": "Thiết bị",
+    "username": "Tên người dùng"
+  },
+  "settings": {
+    "bar": {
+      "label": "Thanh trạng thái",
+      "description": "Hiển thị trên thanh trạng thái"
+    },
+    "displayMode": {
+      "label": "Chế độ hiển thị",
+      "description": "Khi nào hiển thị trạng thái VPN trên thanh",
+      "onhover": "Khi di chuột",
+      "alwaysShow": "Luôn hiển thị",
+      "alwaysHide": "Luôn ẩn"
+    },
+    "colors": {
+      "label": "Màu sắc",
+      "description": "Tùy chỉnh màu biểu tượng và chữ",
+      "connected": {
+        "label": "Đã kết nối",
+        "description": "Màu khi VPN đang hoạt động"
+      },
+      "disconnected": {
+        "label": "Ngắt kết nối",
+        "description": "Màu khi VPN không hoạt động"
+      }
+    },
+    "behavior": {
+      "label": "Hành vi",
+      "description": "Cài đặt kiểm tra và thông báo"
+    },
+    "pollInterval": {
+      "label": "Tần suất kiểm tra",
+      "description": "Kiểm tra trạng thái VPN bao lâu một lần",
+      "2s": "2s (Nhanh)",
+      "5s": "5s (Mặc định)",
+      "10s": "10s (Cân bằng)",
+      "30s": "30s (Tiết kiệm điện)"
+    },
+    "showNotifications": {
+      "label": "Hiển thị thông báo",
+      "description": "Hiển thị thông báo khi gặp lỗi kết nối"
+    },
+    "defaultPersistent": {
+      "label": "Lưu trú mặc định",
+      "description": "Giá trị mặc định cho lưu trú khi nhập cấu hình"
+    },
+    "hideWhenInactive": {
+      "label": "Ẩn khi không hoạt động",
+      "description": "Ẩn widget trên thanh khi VPN ngắt kết nối"
+    }
+  },
+  "menu": {
+    "settings": "Cài đặt"
+  },
+  "errors": {
+    "restart": "Không thể khởi động lại",
+    "connect": "Không thể kết nối",
+    "disconnect": "Không thể ngắt kết nối",
+    "import": "Không thể nhập cấu hình",
+    "rename": "Không thể đổi tên cấu hình",
+    "delete": "Không thể xóa cấu hình"
+  },
+  "tooltip": {
+    "temporary": "Tạm thời (bị xóa khi khởi động lại)",
+    "browse": "Duyệt"
+  }
+}

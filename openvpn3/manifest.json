@@ -1,0 +1,32 @@
+{
+  "id": "openvpn3",
+  "name": "OpenVPN3",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "minh",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Manage OpenVPN3 VPN connections from the bar and control center",
+  "tags": ["Bar", "Panel", "Network", "Utility"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "displayMode": "onhover",
+      "connectedColor": "primary",
+      "disconnectedColor": "none",
+      "pollInterval": 5,
+      "showNotifications": true,
+      "defaultPersistent": true,
+      "hideWhenInactive": false
+    }
+  }
+}
