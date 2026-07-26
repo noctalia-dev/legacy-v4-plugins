@@ -1,0 +1,51 @@
+{
+  "desktop": {
+    "loading": "Katkılar yükleniyor...",
+    "total": "Son bir yılda {total} katkı",
+    "streak": "{count} günlük seri",
+    "todayCount": "bugün {count}",
+    "streakLabel": "günlük seri",
+    "contributionsLabel": "katkı",
+    "cellNone": "{date} tarihinde katkı yok",
+    "cellSome": "{date} tarihinde {count} katkı",
+    "cellSomeUnknown": "{date} tarihinde katkılar"
+  },
+  "errors": {
+    "noUsername": "Eklenti ayarlarında GitHub kullanıcı adınızı belirleyin",
+    "fetchFailed": "Katkılar alınamadı",
+    "userNotFound": "GitHub kullanıcısı bulunamadı",
+    "apiError": "GitHub API hatası"
+  },
+  "settings": {
+    "username": {
+      "label": "GitHub Kullanıcı Adı",
+      "desc": "Katkı grafiği gösterilecek kullanıcı"
+    },
+    "token": {
+      "label": "Kişisel Erişim Belirteci (isteğe bağlı)",
+      "desc": "Belirteç olmadan herkese açık katkılar profilinizden okunur. Özel katkıları dahil etmek için 'read:user' kapsamlı bir belirteç ekleyin"
+    },
+    "layout": {
+      "label": "Düzen",
+      "desc": "Tam grafik veya daha küçük ızgaralı kompakt istatistik kartı",
+      "graph": "Tam grafik",
+      "stats": "Kompakt istatistikler"
+    },
+    "weeksShown": {
+      "label": "Gösterilen Haftalar",
+      "desc": "Son {count} haftayı göster"
+    },
+    "refreshInterval": {
+      "label": "Yenileme Aralığı",
+      "desc": "Her {count} dakikada bir yenile"
+    },
+    "showTotal": {
+      "label": "Toplamları Göster",
+      "desc": "Katkı sayısını ve mevcut seriyi grafiğin üzerinde göster"
+    },
+    "showLabels": {
+      "label": "Etiketleri Göster",
+      "desc": "Grafiğin çevresinde ay ve gün etiketlerini göster"
+    }
+  }
+}

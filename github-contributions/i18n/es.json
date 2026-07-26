@@ -1,0 +1,51 @@
+{
+  "desktop": {
+    "loading": "Cargando contribuciones...",
+    "total": "{total} contribuciones en el último año",
+    "streak": "racha de {count} días",
+    "todayCount": "{count} hoy",
+    "streakLabel": "días de racha",
+    "contributionsLabel": "contribuciones",
+    "cellNone": "Sin contribuciones el {date}",
+    "cellSome": "{count} contribuciones el {date}",
+    "cellSomeUnknown": "Contribuciones el {date}"
+  },
+  "errors": {
+    "noUsername": "Configura tu nombre de usuario de GitHub en los ajustes del plugin",
+    "fetchFailed": "No se pudieron obtener las contribuciones",
+    "userNotFound": "Usuario de GitHub no encontrado",
+    "apiError": "Error de la API de GitHub"
+  },
+  "settings": {
+    "username": {
+      "label": "Nombre de usuario de GitHub",
+      "desc": "Usuario cuyo gráfico de contribuciones se muestra"
+    },
+    "token": {
+      "label": "Token de acceso personal (opcional)",
+      "desc": "Sin token, las contribuciones públicas se leen desde tu perfil. Añade un token con el permiso 'read:user' para incluir contribuciones privadas"
+    },
+    "layout": {
+      "label": "Diseño",
+      "desc": "Gráfico completo o tarjeta compacta de estadísticas con una cuadrícula más pequeña",
+      "graph": "Gráfico completo",
+      "stats": "Estadísticas compactas"
+    },
+    "weeksShown": {
+      "label": "Semanas mostradas",
+      "desc": "Mostrar las últimas {count} semanas"
+    },
+    "refreshInterval": {
+      "label": "Intervalo de actualización",
+      "desc": "Actualizar cada {count} minutos"
+    },
+    "showTotal": {
+      "label": "Mostrar totales",
+      "desc": "Mostrar el recuento de contribuciones y la racha actual sobre el gráfico"
+    },
+    "showLabels": {
+      "label": "Mostrar etiquetas",
+      "desc": "Mostrar etiquetas de meses y días de la semana alrededor del gráfico"
+    }
+  }
+}

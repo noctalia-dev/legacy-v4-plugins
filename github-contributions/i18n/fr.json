@@ -1,0 +1,51 @@
+{
+  "desktop": {
+    "loading": "Chargement des contributions...",
+    "total": "{total} contributions au cours de la dernière année",
+    "streak": "série de {count} jours",
+    "todayCount": "{count} aujourd'hui",
+    "streakLabel": "jours de série",
+    "contributionsLabel": "contributions",
+    "cellNone": "Aucune contribution le {date}",
+    "cellSome": "{count} contributions le {date}",
+    "cellSomeUnknown": "Contributions le {date}"
+  },
+  "errors": {
+    "noUsername": "Définissez votre nom d'utilisateur GitHub dans les paramètres du plugin",
+    "fetchFailed": "Impossible de récupérer les contributions",
+    "userNotFound": "Utilisateur GitHub introuvable",
+    "apiError": "Erreur de l'API GitHub"
+  },
+  "settings": {
+    "username": {
+      "label": "Nom d'utilisateur GitHub",
+      "desc": "Utilisateur dont le graphique de contributions est affiché"
+    },
+    "token": {
+      "label": "Jeton d'accès personnel (optionnel)",
+      "desc": "Sans jeton, les contributions publiques sont lues depuis votre profil. Ajoutez un jeton avec la portée 'read:user' pour inclure les contributions privées"
+    },
+    "layout": {
+      "label": "Disposition",
+      "desc": "Graphique complet ou carte compacte de statistiques avec une grille réduite",
+      "graph": "Graphique complet",
+      "stats": "Statistiques compactes"
+    },
+    "weeksShown": {
+      "label": "Semaines affichées",
+      "desc": "Afficher les {count} dernières semaines"
+    },
+    "refreshInterval": {
+      "label": "Intervalle d'actualisation",
+      "desc": "Actualiser toutes les {count} minutes"
+    },
+    "showTotal": {
+      "label": "Afficher les totaux",
+      "desc": "Afficher le nombre de contributions et la série actuelle au-dessus du graphique"
+    },
+    "showLabels": {
+      "label": "Afficher les libellés",
+      "desc": "Afficher les libellés des mois et des jours autour du graphique"
+    }
+  }
+}
