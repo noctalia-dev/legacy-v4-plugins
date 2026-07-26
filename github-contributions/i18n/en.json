@@ -1,0 +1,51 @@
+{
+  "desktop": {
+    "loading": "Loading contributions...",
+    "total": "{total} contributions in the last year",
+    "streak": "{count} day streak",
+    "todayCount": "{count} today",
+    "streakLabel": "day streak",
+    "contributionsLabel": "contributions",
+    "cellNone": "No contributions on {date}",
+    "cellSome": "{count} contributions on {date}",
+    "cellSomeUnknown": "Contributions on {date}"
+  },
+  "errors": {
+    "noUsername": "Set your GitHub username in the plugin settings",
+    "fetchFailed": "Could not fetch contributions",
+    "userNotFound": "GitHub user not found",
+    "apiError": "GitHub API error"
+  },
+  "settings": {
+    "username": {
+      "label": "GitHub Username",
+      "desc": "Username whose contribution graph is displayed"
+    },
+    "token": {
+      "label": "Personal Access Token (optional)",
+      "desc": "Without a token, public contributions are read from your profile. Add a token with 'read:user' scope to include private contributions"
+    },
+    "layout": {
+      "label": "Layout",
+      "desc": "Full graph or a compact stat card with a smaller grid",
+      "graph": "Full graph",
+      "stats": "Compact stats"
+    },
+    "weeksShown": {
+      "label": "Weeks Shown",
+      "desc": "Display the last {count} weeks"
+    },
+    "refreshInterval": {
+      "label": "Refresh Interval",
+      "desc": "Refresh every {count} minutes"
+    },
+    "showTotal": {
+      "label": "Show Totals",
+      "desc": "Show the contribution count and current streak above the graph"
+    },
+    "showLabels": {
+      "label": "Show Labels",
+      "desc": "Show month and weekday labels around the graph"
+    }
+  }
+}

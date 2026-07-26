@@ -1,0 +1,51 @@
+{
+  "desktop": {
+    "loading": "正在加载贡献...",
+    "total": "过去一年 {total} 次贡献",
+    "streak": "连续 {count} 天",
+    "todayCount": "今天 {count} 次",
+    "streakLabel": "天连续贡献",
+    "contributionsLabel": "次贡献",
+    "cellNone": "{date} 无贡献",
+    "cellSome": "{date} 有 {count} 次贡献",
+    "cellSomeUnknown": "{date} 有贡献"
+  },
+  "errors": {
+    "noUsername": "请在插件设置中填写 GitHub 用户名",
+    "fetchFailed": "无法获取贡献数据",
+    "userNotFound": "未找到该 GitHub 用户",
+    "apiError": "GitHub API 错误"
+  },
+  "settings": {
+    "username": {
+      "label": "GitHub 用户名",
+      "desc": "显示其贡献图的用户"
+    },
+    "token": {
+      "label": "个人访问令牌（可选）",
+      "desc": "不填令牌时从公开个人资料读取贡献。添加具有 'read:user' 权限的令牌可包含私有贡献"
+    },
+    "layout": {
+      "label": "布局",
+      "desc": "完整图表或带小网格的紧凑统计卡片",
+      "graph": "完整图表",
+      "stats": "紧凑统计"
+    },
+    "weeksShown": {
+      "label": "显示周数",
+      "desc": "显示最近 {count} 周"
+    },
+    "refreshInterval": {
+      "label": "刷新间隔",
+      "desc": "每 {count} 分钟刷新一次"
+    },
+    "showTotal": {
+      "label": "显示统计",
+      "desc": "在图表上方显示贡献总数和当前连续天数"
+    },
+    "showLabels": {
+      "label": "显示标签",
+      "desc": "在图表周围显示月份和星期标签"
+    }
+  }
+}

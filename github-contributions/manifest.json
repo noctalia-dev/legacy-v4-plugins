@@ -1,0 +1,30 @@
+{
+  "id": "github-contributions",
+  "name": "GitHub Contributions",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "xevrion",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Displays your GitHub contribution graph as a desktop widget. Works without a token via your public profile, or with a personal access token for private contributions.",
+  "tags": ["Desktop", "Development", "Network"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "desktopWidget": "DesktopWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "username": "",
+      "token": "",
+      "layout": "graph",
+      "weeksShown": 52,
+      "refreshInterval": 60,
+      "showTotal": true,
+      "showLabels": true
+    }
+  }
+}

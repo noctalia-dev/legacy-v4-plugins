@@ -1,0 +1,51 @@
+{
+  "desktop": {
+    "loading": "Beiträge werden geladen...",
+    "total": "{total} Beiträge im letzten Jahr",
+    "streak": "{count} Tage in Folge",
+    "todayCount": "{count} heute",
+    "streakLabel": "Tage in Folge",
+    "contributionsLabel": "Beiträge",
+    "cellNone": "Keine Beiträge am {date}",
+    "cellSome": "{count} Beiträge am {date}",
+    "cellSomeUnknown": "Beiträge am {date}"
+  },
+  "errors": {
+    "noUsername": "GitHub-Benutzername in den Plugin-Einstellungen festlegen",
+    "fetchFailed": "Beiträge konnten nicht abgerufen werden",
+    "userNotFound": "GitHub-Benutzer nicht gefunden",
+    "apiError": "GitHub-API-Fehler"
+  },
+  "settings": {
+    "username": {
+      "label": "GitHub-Benutzername",
+      "desc": "Benutzername, dessen Beitragsgraph angezeigt wird"
+    },
+    "token": {
+      "label": "Personal Access Token (optional)",
+      "desc": "Ohne Token werden öffentliche Beiträge vom Profil gelesen. Token mit 'read:user'-Berechtigung hinzufügen, um private Beiträge einzubeziehen"
+    },
+    "layout": {
+      "label": "Layout",
+      "desc": "Vollständiger Graph oder kompakte Statistik-Karte mit kleinerem Raster",
+      "graph": "Vollständiger Graph",
+      "stats": "Kompakte Statistik"
+    },
+    "weeksShown": {
+      "label": "Angezeigte Wochen",
+      "desc": "Die letzten {count} Wochen anzeigen"
+    },
+    "refreshInterval": {
+      "label": "Aktualisierungsintervall",
+      "desc": "Alle {count} Minuten aktualisieren"
+    },
+    "showTotal": {
+      "label": "Summen anzeigen",
+      "desc": "Beitragszahl und aktuelle Serie über dem Graphen anzeigen"
+    },
+    "showLabels": {
+      "label": "Beschriftungen anzeigen",
+      "desc": "Monats- und Wochentagsbeschriftungen um den Graphen anzeigen"
+    }
+  }
+}
