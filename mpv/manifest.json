@@ -1,0 +1,30 @@
+{
+  "id": "mpv",
+  "name": "MPV",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "aglairdev",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "MPV plugin for Noctalia. Based on noctalia-mpd by Ido Perlmuter.",
+  "tags": [
+    "Bar",
+    "Audio",
+    "Music"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "leftButton": "toggle",
+      "rightButton": "next",
+      "middleButton": "prev"
+    }
+  }
+}
