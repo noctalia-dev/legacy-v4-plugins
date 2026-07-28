@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "AMD GPU 监控",
+    "unavailable": "GPU 数据不可用",
+    "check_rocm": "请确保已安装 rocm-smi 且独立 GPU 可用。"
+  },
+  "metrics": {
+    "gpu_use": "GPU 使用率",
+    "temperature": "温度",
+    "temp_edge": "边缘温度",
+    "temp_junction": "结温",
+    "temp_memory": "显存温度",
+    "vram": "VRAM",
+    "vram_activity": "VRAM 活动",
+    "fan_speed": "风扇转速",
+    "power": "功耗",
+    "sclk": "核心频率 (SCLK)",
+    "mclk": "显存频率 (MCLK)",
+    "fclk": "Fabric 频率 (FCLK)",
+    "socclk": "SoC 频率",
+    "dcefclk": "DCEF 频率",
+    "clock_speeds": "频率"
+  },
+  "temp": {
+    "junction": "结温",
+    "edge": "边缘",
+    "memory": "显存"
+  },
+  "vram": {
+    "usage": "使用量",
+    "activity": "活动"
+  },
+  "settings": {
+    "bar_section": "栏组件",
+    "compact_mode_label": "紧凑模式",
+    "compact_mode_description": "显示竖向迷你仪表而非百分比文字。",
+    "icon_color_label": "图标颜色",
+    "monospace_font_label": "等宽字体",
+    "monospace_font_description": "使用等宽字体对齐数值。",
+    "use_padding_label": "填充数值",
+    "use_padding_description": "填充百分比以稳定栏宽度（仅水平栏）。",
+    "metrics_section": "可见指标",
+    "metrics_description": "选择栏组件和面板中显示的值。",
+    "display_section": "数据源",
+    "device_index": "GPU 设备索引",
+    "device_index_description": "rocm-smi -d 索引（0 表示第一个独立 GPU）。"
+  },
+  "actions": {
+    "widget_settings": "设置"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

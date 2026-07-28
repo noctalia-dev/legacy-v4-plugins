@@ -1,0 +1,42 @@
+{
+  "id": "amd-gpu-monitor",
+  "name": "AMD GPU Monitor",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "Dvaxert",
+  "license": "MIT",
+  "description": "AMD discrete GPU monitoring via rocm-smi with graphs and configurable metrics.",
+  "tags": ["Bar", "Panel", "System", "Amd", "GPU", "Monitoring", "Graph", "Video"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "deviceIndex": 0,
+      "compactMode": true,
+      "iconColor": "primary",
+      "textColor": "onSurface",
+      "useMonospaceFont": true,
+      "usePadding": false,
+      "showTempEdge": false,
+      "showTempJunction": true,
+      "showTempMemory": false,
+      "showGpuUse": true,
+      "showVram": true,
+      "showVramActivity": false,
+      "showFanSpeed": false,
+      "showPower": true,
+      "showSclk": true,
+      "showMclk": true,
+      "showFclk": false,
+      "showSocclk": false,
+      "showDcefclk": false
+    }
+  }
+}

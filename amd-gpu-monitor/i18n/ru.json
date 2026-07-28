@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "AMD GPU Monitor",
+    "unavailable": "Данные GPU недоступны",
+    "check_rocm": "Убедитесь, что установлен rocm-smi и дискретная видеокарта доступна."
+  },
+  "metrics": {
+    "gpu_use": "Загрузка GPU",
+    "temperature": "Температура",
+    "temp_edge": "Температура (edge)",
+    "temp_junction": "Температура (junction)",
+    "temp_memory": "Температура памяти",
+    "vram": "VRAM",
+    "vram_activity": "Активность VRAM",
+    "fan_speed": "Скорость вентилятора",
+    "power": "Потребление",
+    "sclk": "Частота ядра (SCLK)",
+    "mclk": "Частота памяти (MCLK)",
+    "fclk": "Частота fabric (FCLK)",
+    "socclk": "Частота SoC",
+    "dcefclk": "Частота DCEF",
+    "clock_speeds": "Частоты"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "Память"
+  },
+  "vram": {
+    "usage": "Использование",
+    "activity": "Активность"
+  },
+  "settings": {
+    "bar_section": "Виджет в баре",
+    "compact_mode_label": "Компактный режим",
+    "compact_mode_description": "Мини-столбики вместо текста с процентами.",
+    "icon_color_label": "Цвет иконок",
+    "monospace_font_label": "Моноширинный шрифт",
+    "monospace_font_description": "Фиксированная ширина цифр для ровного выравнивания.",
+    "use_padding_label": "Выравнивать значения",
+    "use_padding_description": "Дополнительные пробелы для стабильной ширины (только горизонтальный бар).",
+    "metrics_section": "Отображаемые метрики",
+    "metrics_description": "Выберите значения для виджета в баре и панели.",
+    "display_section": "Источник данных",
+    "device_index": "Индекс GPU",
+    "device_index_description": "Параметр rocm-smi -d (0 — первая дискретная видеокарта)."
+  },
+  "actions": {
+    "widget_settings": "Настройки"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

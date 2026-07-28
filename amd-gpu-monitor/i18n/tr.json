@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "AMD GPU Monitörü",
+    "unavailable": "GPU verileri kullanılamıyor",
+    "check_rocm": "rocm-smi'nin kurulu olduğundan ve ayrık GPU'nun kullanılabilir olduğundan emin olun."
+  },
+  "metrics": {
+    "gpu_use": "GPU kullanımı",
+    "temperature": "Sıcaklık",
+    "temp_edge": "Edge sıcaklığı",
+    "temp_junction": "Junction sıcaklığı",
+    "temp_memory": "Bellek sıcaklığı",
+    "vram": "VRAM",
+    "vram_activity": "VRAM etkinliği",
+    "fan_speed": "Fan hızı",
+    "power": "Güç tüketimi",
+    "sclk": "Grafik saati (SCLK)",
+    "mclk": "Bellek saati (MCLK)",
+    "fclk": "Fabric saati (FCLK)",
+    "socclk": "SoC saati",
+    "dcefclk": "DCEF saati",
+    "clock_speeds": "Saat hızları"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "Bellek"
+  },
+  "vram": {
+    "usage": "Kullanım",
+    "activity": "Etkinlik"
+  },
+  "settings": {
+    "bar_section": "Çubuk widget'ı",
+    "compact_mode_label": "Kompakt mod",
+    "compact_mode_description": "Yüzde metni yerine dikey mini göstergeler.",
+    "icon_color_label": "Simge rengi",
+    "monospace_font_label": "Monospace yazı tipi",
+    "monospace_font_description": "Hizalı değerler için sabit genişlikli yazı tipi.",
+    "use_padding_label": "Değerleri doldur",
+    "use_padding_description": "Kararlı çubuk genişliği için yüzdeleri doldur (yalnızca yatay çubuk).",
+    "metrics_section": "Görünür metrikler",
+    "metrics_description": "Çubuk widget'ında ve panelde hangi değerlerin görüneceğini seçin.",
+    "display_section": "Veri kaynağı",
+    "device_index": "GPU cihaz indeksi",
+    "device_index_description": "rocm-smi -d indeksi (0 ilk ayrık GPU)."
+  },
+  "actions": {
+    "widget_settings": "Ayarlar"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

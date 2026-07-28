@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "Монітор AMD GPU",
+    "unavailable": "Дані GPU недоступні",
+    "check_rocm": "Переконайтеся, що rocm-smi встановлено і дискретна відеокарта доступна."
+  },
+  "metrics": {
+    "gpu_use": "Завантаження GPU",
+    "temperature": "Температура",
+    "temp_edge": "Температура (edge)",
+    "temp_junction": "Температура (junction)",
+    "temp_memory": "Температура пам'яті",
+    "vram": "VRAM",
+    "vram_activity": "Активність VRAM",
+    "fan_speed": "Швидкість вентилятора",
+    "power": "Споживання",
+    "sclk": "Частота ядра (SCLK)",
+    "mclk": "Частота пам'яті (MCLK)",
+    "fclk": "Частота fabric (FCLK)",
+    "socclk": "Частота SoC",
+    "dcefclk": "Частота DCEF",
+    "clock_speeds": "Частоти"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "Пам'ять"
+  },
+  "vram": {
+    "usage": "Використання",
+    "activity": "Активність"
+  },
+  "settings": {
+    "bar_section": "Віджет у барі",
+    "compact_mode_label": "Компактний режим",
+    "compact_mode_description": "Міні-стовпчики замість тексту з відсотками.",
+    "icon_color_label": "Колір іконок",
+    "monospace_font_label": "Моноширинний шрифт",
+    "monospace_font_description": "Фіксована ширина цифр для рівного вирівнювання.",
+    "use_padding_label": "Вирівнювати значення",
+    "use_padding_description": "Додаткові пробіли для стабільної ширини (лише горизонтальний бар).",
+    "metrics_section": "Відображувані метрики",
+    "metrics_description": "Оберіть значення для віджета в барі та панелі.",
+    "display_section": "Джерело даних",
+    "device_index": "Індекс GPU",
+    "device_index_description": "Параметр rocm-smi -d (0 — перша дискретна відеокарта)."
+  },
+  "actions": {
+    "widget_settings": "Налаштування"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

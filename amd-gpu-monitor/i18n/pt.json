@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "Monitor GPU AMD",
+    "unavailable": "Dados da GPU indisponíveis",
+    "check_rocm": "Certifique-se de que o rocm-smi está instalado e a GPU dedicada está disponível."
+  },
+  "metrics": {
+    "gpu_use": "Uso da GPU",
+    "temperature": "Temperatura",
+    "temp_edge": "Temperatura edge",
+    "temp_junction": "Temperatura junction",
+    "temp_memory": "Temperatura da memória",
+    "vram": "VRAM",
+    "vram_activity": "Atividade VRAM",
+    "fan_speed": "Velocidade do ventilador",
+    "power": "Consumo",
+    "sclk": "Clock gráfico (SCLK)",
+    "mclk": "Clock de memória (MCLK)",
+    "fclk": "Clock fabric (FCLK)",
+    "socclk": "Clock SoC",
+    "dcefclk": "Clock DCEF",
+    "clock_speeds": "Frequências"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "Memória"
+  },
+  "vram": {
+    "usage": "Uso",
+    "activity": "Atividade"
+  },
+  "settings": {
+    "bar_section": "Widget da barra",
+    "compact_mode_label": "Modo compacto",
+    "compact_mode_description": "Mini medidores verticais em vez de texto percentual.",
+    "icon_color_label": "Cor dos ícones",
+    "monospace_font_label": "Fonte monoespaçada",
+    "monospace_font_description": "Fonte de largura fixa para valores alinhados.",
+    "use_padding_label": "Preencher valores",
+    "use_padding_description": "Preencher percentagens para largura estável da barra (apenas barra horizontal).",
+    "metrics_section": "Métricas visíveis",
+    "metrics_description": "Escolha quais valores aparecem no widget da barra e no painel.",
+    "display_section": "Fonte de dados",
+    "device_index": "Índice da GPU",
+    "device_index_description": "rocm-smi -d índice (0 para a primeira GPU dedicada)."
+  },
+  "actions": {
+    "widget_settings": "Configurações"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

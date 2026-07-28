@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "AMD GPU Monitor",
+    "unavailable": "GPU data unavailable",
+    "check_rocm": "Ensure rocm-smi is installed and the discrete GPU is available."
+  },
+  "metrics": {
+    "gpu_use": "GPU usage",
+    "temperature": "Temperature",
+    "temp_edge": "Edge temperature",
+    "temp_junction": "Junction temperature",
+    "temp_memory": "Memory temperature",
+    "vram": "VRAM",
+    "vram_activity": "VRAM activity",
+    "fan_speed": "Fan speed",
+    "power": "Power",
+    "sclk": "Graphics clock (SCLK)",
+    "mclk": "Memory clock (MCLK)",
+    "fclk": "Fabric clock (FCLK)",
+    "socclk": "SoC clock",
+    "dcefclk": "DCEF clock",
+    "clock_speeds": "Clock speeds"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "Memory"
+  },
+  "vram": {
+    "usage": "Usage",
+    "activity": "Activity"
+  },
+  "settings": {
+    "bar_section": "Bar widget",
+    "compact_mode_label": "Compact mode",
+    "compact_mode_description": "Show vertical mini gauges instead of percentage text.",
+    "icon_color_label": "Icon color",
+    "monospace_font_label": "Monospace font",
+    "monospace_font_description": "Use a fixed-width font for aligned percentage values.",
+    "use_padding_label": "Pad values",
+    "use_padding_description": "Pad percentage values for stable bar width (horizontal bar only).",
+    "metrics_section": "Visible metrics",
+    "metrics_description": "Choose which values appear in the bar widget and panel.",
+    "display_section": "Data source",
+    "device_index": "GPU device index",
+    "device_index_description": "rocm-smi -d index (0 for first discrete GPU)."
+  },
+  "actions": {
+    "widget_settings": "Settings"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

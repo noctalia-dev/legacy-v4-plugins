@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "AMD GPU Monitor",
+    "unavailable": "GPU-gegevens niet beschikbaar",
+    "check_rocm": "Zorg dat rocm-smi is geïnstalleerd en de dedicated GPU beschikbaar is."
+  },
+  "metrics": {
+    "gpu_use": "GPU-gebruik",
+    "temperature": "Temperatuur",
+    "temp_edge": "Edge-temperatuur",
+    "temp_junction": "Junction-temperatuur",
+    "temp_memory": "Geheugentemperatuur",
+    "vram": "VRAM",
+    "vram_activity": "VRAM-activiteit",
+    "fan_speed": "Ventilatorsnelheid",
+    "power": "Vermogen",
+    "sclk": "Grafische klok (SCLK)",
+    "mclk": "Geheugenklok (MCLK)",
+    "fclk": "Fabric-klok (FCLK)",
+    "socclk": "SoC-klok",
+    "dcefclk": "DCEF-klok",
+    "clock_speeds": "Kloksnelheden"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "Geheugen"
+  },
+  "vram": {
+    "usage": "Gebruik",
+    "activity": "Activiteit"
+  },
+  "settings": {
+    "bar_section": "Balkwidget",
+    "compact_mode_label": "Compacte modus",
+    "compact_mode_description": "Verticale mini-meters in plaats van procenttekst.",
+    "icon_color_label": "Pictogramkleur",
+    "monospace_font_label": "Monospace-lettertype",
+    "monospace_font_description": "Vaste breedte voor uitgelijnde waarden.",
+    "use_padding_label": "Waarden opvullen",
+    "use_padding_description": "Procenten opvullen voor stabiele balkbreedte (alleen horizontale balk).",
+    "metrics_section": "Zichtbare metrieken",
+    "metrics_description": "Kies welke waarden in de balkwidget en het paneel verschijnen.",
+    "display_section": "Gegevensbron",
+    "device_index": "GPU-apparaatindex",
+    "device_index_description": "rocm-smi -d index (0 voor eerste dedicated GPU)."
+  },
+  "actions": {
+    "widget_settings": "Instellingen"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

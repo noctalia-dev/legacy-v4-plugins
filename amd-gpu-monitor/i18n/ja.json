@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "AMD GPU モニター",
+    "unavailable": "GPU データを利用できません",
+    "check_rocm": "rocm-smi がインストールされ、ディスクリート GPU が利用可能であることを確認してください。"
+  },
+  "metrics": {
+    "gpu_use": "GPU 使用率",
+    "temperature": "温度",
+    "temp_edge": "エッジ温度",
+    "temp_junction": "ジャンクション温度",
+    "temp_memory": "メモリ温度",
+    "vram": "VRAM",
+    "vram_activity": "VRAM アクティビティ",
+    "fan_speed": "ファン速度",
+    "power": "消費電力",
+    "sclk": "グラフィックスクロック (SCLK)",
+    "mclk": "メモリクロック (MCLK)",
+    "fclk": "ファブリッククロック (FCLK)",
+    "socclk": "SoC クロック",
+    "dcefclk": "DCEF クロック",
+    "clock_speeds": "クロック"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "メモリ"
+  },
+  "vram": {
+    "usage": "使用量",
+    "activity": "アクティビティ"
+  },
+  "settings": {
+    "bar_section": "バーウィジェット",
+    "compact_mode_label": "コンパクトモード",
+    "compact_mode_description": "パーセント表示の代わりに縦型ミニゲージを表示します。",
+    "icon_color_label": "アイコンの色",
+    "monospace_font_label": "等幅フォント",
+    "monospace_font_description": "揃えた数値表示用の等幅フォントを使用します。",
+    "use_padding_label": "値をパディング",
+    "use_padding_description": "バー幅を安定させるためパーセント値をパディングします（水平バーのみ）。",
+    "metrics_section": "表示するメトリクス",
+    "metrics_description": "バーウィジェットとパネルに表示する値を選択します。",
+    "display_section": "データソース",
+    "device_index": "GPU デバイスインデックス",
+    "device_index_description": "rocm-smi -d インデックス（0 は最初のディスクリート GPU）。"
+  },
+  "actions": {
+    "widget_settings": "設定"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}

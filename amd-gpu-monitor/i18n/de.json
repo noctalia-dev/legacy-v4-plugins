@@ -1,0 +1,58 @@
+{
+  "panel": {
+    "title": "AMD GPU Monitor",
+    "unavailable": "GPU-Daten nicht verfügbar",
+    "check_rocm": "Stellen Sie sicher, dass rocm-smi installiert ist und die dedizierte GPU verfügbar ist."
+  },
+  "metrics": {
+    "gpu_use": "GPU-Auslastung",
+    "temperature": "Temperatur",
+    "temp_edge": "Randtemperatur",
+    "temp_junction": "Junction-Temperatur",
+    "temp_memory": "Speichertemperatur",
+    "vram": "VRAM",
+    "vram_activity": "VRAM-Aktivität",
+    "fan_speed": "Lüftergeschwindigkeit",
+    "power": "Leistung",
+    "sclk": "Grafiktakt (SCLK)",
+    "mclk": "Speichertakt (MCLK)",
+    "fclk": "Fabric-Takt (FCLK)",
+    "socclk": "SoC-Takt",
+    "dcefclk": "DCEF-Takt",
+    "clock_speeds": "Takte"
+  },
+  "temp": {
+    "junction": "Junction",
+    "edge": "Edge",
+    "memory": "Speicher"
+  },
+  "vram": {
+    "usage": "Nutzung",
+    "activity": "Aktivität"
+  },
+  "settings": {
+    "bar_section": "Bar-Widget",
+    "compact_mode_label": "Kompaktmodus",
+    "compact_mode_description": "Vertikale Mini-Anzeigen statt Prozenttext.",
+    "icon_color_label": "Symbolfarbe",
+    "monospace_font_label": "Monospace-Schrift",
+    "monospace_font_description": "Festbreitenschrift für ausgerichtete Prozentwerte.",
+    "use_padding_label": "Werte auffüllen",
+    "use_padding_description": "Prozentwerte für stabile Balkenbreite auffüllen (nur horizontaler Balken).",
+    "metrics_section": "Sichtbare Metriken",
+    "metrics_description": "Wählen Sie, welche Werte im Bar-Widget und Panel angezeigt werden.",
+    "display_section": "Datenquelle",
+    "device_index": "GPU-Geräteindex",
+    "device_index_description": "rocm-smi -d Index (0 für erste dedizierte GPU)."
+  },
+  "actions": {
+    "widget_settings": "Einstellungen"
+  },
+  "clocks": {
+    "sclk": "SCLK",
+    "mclk": "MCLK",
+    "fclk": "FCLK",
+    "socclk": "SOCCLK",
+    "dcefclk": "DCEFCLK"
+  }
+}
