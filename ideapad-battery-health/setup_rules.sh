@@ -36,10 +36,18 @@ fi
 
 echo "Installing udev rule"
 
-if [ -f "/sys/class/power_supply/BAT0/extensions/ideapad_laptop/conservation_mode" ]; then
+CONSERVATION_MODE=""
+for f in /sys/class/power_supply/BAT*/extensions/ideapad_laptop/conservation_mode; do
+	if [ -f "$f" ]; then
+		CONSERVATION_MODE="$f"
+		break
+	fi
+done
+
+if [ -n "$CONSERVATION_MODE" ]; then
 	cp "$RULE_FILE_IDEAPAD" /etc/udev/rules.d/
 else
-	echo "no battery control found (/sys/class/power_supply/BAT0/extensions/ideapad_laptop/conservation_mode), aborting"
+	echo "no battery control found (no ideapad_laptop conservation_mode in /sys/class/power_supply), aborting"
 	exit 1
 fi
 

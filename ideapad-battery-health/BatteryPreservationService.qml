@@ -12,10 +12,11 @@ Item {
     property bool isWritable: false
     property int desiredPreservation: 0
 
-    readonly property string preservationFile: "/sys/class/power_supply/BAT0/extensions/ideapad_laptop/conservation_mode"
+    property string preservationFile: ""
+    readonly property string batteryDir: preservationFile !== "" ? preservationFile.replace("/extensions/ideapad_laptop/conservation_mode", "") : ""
 
     Component.onCompleted: {
-        batteryChecker.running = true
+        batteryDetector.running = true
     }
 
     function refresh() {
@@ -38,14 +39,14 @@ Item {
 
     function setPreservation(value) {
         const v = value
-	if (v !== 0 && v !== 1) {
-        Logger.e("BatteryPreservation", `Invalid value: ${v}. Must be exactly 0 or 1`)
-        return
-    	}
+        if (v !== 0 && v !== 1) {
+            Logger.e("BatteryPreservation", `Invalid value: ${v}. Must be exactly 0 or 1`)
+            return
+        }
         Logger.i("BatteryPreservation", "Set preservation mode to " + v)
-
+        desiredPreservation = v
         preservationWriter.pendingPreservation = v
-        preservationWriter.command = ["/bin/bash", "-c", `echo ${v} > ${preservationFile}`]
+        preservationWriter.command = ["/bin/sh", "-c", `echo ${v} > ${preservationFile}`]
         preservationWriter.running = true
     }
 
@@ -55,22 +56,29 @@ Item {
     }
 
     Process {
-        id: batteryChecker
-        command: ["test", "-f", root.preservationFile]
+        id: batteryDetector
+        command: ["sh", "-c", "for f in /sys/class/power_supply/BAT*/extensions/ideapad_laptop/conservation_mode; do [ -f \"$f\" ] && echo \"$f\" && break; done"]
         running: false
 
-        onExited: function (exitCode) {
-            if (exitCode === 0) {
-                root.isAvailable = true
-                preservationFileView.path = root.preservationFile
-                writeAccessChecker.running = true
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const detected = text.trim()
+                if (detected !== "") {
+                    root.preservationFile = detected
+                    root.isAvailable = true
+                    preservationFileView.path = detected
+                    Logger.i("BatteryPreservation", "Detected conservation_mode at: " + detected)
+                    writeAccessChecker.running = true
+                } else {
+                    Logger.w("BatteryPreservation", "No ideapad conservation_mode file found")
+                }
             }
         }
     }
 
     Process {
         id: writeAccessChecker
-        command: ["/bin/bash", "-c", `test -w ${root.preservationFile} && echo 1 || echo 0`]
+        command: ["sh", "-c", `test -w ${root.preservationFile} && echo 1 || echo 0`]
         running: false
 
         stdout: StdioCollector {
@@ -102,7 +110,7 @@ Item {
 
         onExited: function(exitCode) {
             if (exitCode === 0) {
-                service.refresh()
+                root.refresh()
                 if (pluginApi && pluginApi.pluginSettings.preservationMode != pendingPreservation) {
                     pluginApi.pluginSettings.preservationMode = pendingPreservation
                     pluginApi.saveSettings()

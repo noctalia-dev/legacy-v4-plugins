@@ -1,7 +1,7 @@
 # Battery Preservation - udev rule
 # Grants write access to conservation_mode for users in the
-# 'battery_ctl' group, only for BAT0
-SUBSYSTEM=="power_supply", KERNEL=="BAT0", \
+# 'battery_ctl' group, for any battery (BAT0, BAT1, etc.)
+SUBSYSTEM=="power_supply", KERNEL=="BAT*", \
     RUN+="/bin/chgrp battery_ctl /sys$devpath/extensions/ideapad_laptop/conservation_mode", \
     RUN+="/bin/chmod g+w /sys$devpath/extensions/ideapad_laptop/conservation_mode"
 

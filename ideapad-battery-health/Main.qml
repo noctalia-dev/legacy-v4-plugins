@@ -1,11 +1,12 @@
 import QtQuick
-import Quickshell.Io
+import Quickshell
 
 // Start the BatteryPreservationService to restore a previously set preservation
 // mode when the plugin is loaded. This is needed as FW may reset
 // the preservation mode when the device is fully powered off.
 Item {
     property var pluginApi: null
+    readonly property alias service: service
 
     BatteryPreservationService {
         id: service
