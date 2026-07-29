@@ -1,0 +1,22 @@
+{
+  "widget": {
+    "tooltip": {
+      "idle": "Record GIF",
+      "recording": "Recording GIF — click to stop"
+    }
+  },
+  "settings": {
+    "outputDir": {
+      "label": "Output directory",
+      "description": "Where to save the .gif files. Leading ~ is expanded to $HOME."
+    },
+    "fps": {
+      "label": "Frame rate",
+      "description": "GIF frame rate. 15-25 is a good balance between smoothness and file size."
+    },
+    "maxRecordingSeconds": {
+      "label": "Auto-stop after (seconds)",
+      "description": "Maximum recording duration before auto-stopping. Use 0 to disable."
+    }
+  }
+}
