@@ -14,7 +14,7 @@
         "Desktop",
         "Fun"
       ],
-      "lastUpdated": "2026-02-04T23:08:01-07:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "agent-session-status",
@@ -91,7 +91,7 @@
         "Productivity",
         "Network"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "asus-um5606-fan-state",
@@ -224,7 +224,7 @@
         "Panel",
         "Fun"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "claude-code-panel",
@@ -293,7 +293,7 @@
         "Network",
         "Panel"
       ],
-      "lastUpdated": "2026-04-11T18:01:28+07:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "coin-flip",
@@ -370,7 +370,7 @@
       "tags": [
         "Launcher"
       ],
-      "lastUpdated": "2026-03-27T20:43:49+07:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "custom-sticker",
@@ -411,14 +411,14 @@
       "version": "2.0.2",
       "official": false,
       "author": "HAVEKziad",
-      "description": "Audio visualizer desktop widget — bars, wave, or mirror. Supports all directions. Transparent, follows color scheme.",
+      "description": "Audio visualizer desktop widget \u2014 bars, wave, or mirror. Supports all directions. Transparent, follows color scheme.",
       "minNoctaliaVersion": "4.6.6",
       "license": "MIT",
       "tags": [
         "Desktop",
         "Audio"
       ],
-      "lastUpdated": "2026-03-20T22:21:12+01:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "display-settings",
@@ -455,7 +455,7 @@
         "System",
         "Utility"
       ],
-      "lastUpdated": "2026-04-13T17:24:58-06:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "dns-switcher",
@@ -471,7 +471,7 @@
         "Bar",
         "Network"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "ds4-colors",
@@ -504,7 +504,7 @@
         "Desktop",
         "Audio"
       ],
-      "lastUpdated": "2026-03-27T20:43:49+07:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "file-search",
@@ -623,7 +623,25 @@
       "tags": [
         "Development"
       ],
-      "lastUpdated": "2026-03-30T17:33:26+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
+    },
+    {
+      "id": "hermes-agent",
+      "name": "Hermes Agent",
+      "version": "1.1.0",
+      "official": false,
+      "author": "nomadx, FelipeMayerDev",
+      "description": "Native Noctalia status, chat panel, and launcher provider for Hermes Agent. Bar widget with traffic-light status + summary popup, streaming chat with tool-call approvals, session management, and a >hermes launcher command. Authenticated HTTP bridge to Hermes, with a client-only mode to drive a bridge running on a remote server over SSH.",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "minNoctaliaVersion": "4.4.1",
+      "license": "MIT",
+      "tags": [
+        "Bar",
+        "Panel",
+        "Launcher",
+        "AI"
+      ],
+      "lastUpdated": "2026-06-21T13:30:00+00:00"
     },
     {
       "id": "hot-corners",
@@ -639,7 +657,7 @@
         "Desktop",
         "Productivity"
       ],
-      "lastUpdated": "2026-03-18T17:51:21+01:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "hyprland-steam-overlay",
@@ -647,7 +665,7 @@
       "version": "2.2.0",
       "official": false,
       "author": "blacku",
-      "description": "[DEPRECATED — not maintained from Hyprland 0.55+] Steam overlay with automatic window management for Hyprland. Due to Hyprland 0.55 deprecating hyprlang in favour of Lua (changing hyprctl dispatch parsing and popup/xdg handling), this plugin is no longer actively maintained. The 2.2.0 release adds a best-effort dual-mode dispatch fix and an optional custom Lua layout, but no further updates are planned. Automatically moves all Steam windows (except fullscreen games) to an overlay workspace; main 3 windows (Friends, Client, Chat) positioned in a row, fully responsive percentage-based layout. Requires Hyprland window manager.",
+      "description": "[DEPRECATED \u2014 not maintained from Hyprland 0.55+] Steam overlay with automatic window management for Hyprland. Due to Hyprland 0.55 deprecating hyprlang in favour of Lua (changing hyprctl dispatch parsing and popup/xdg handling), this plugin is no longer actively maintained. The 2.2.0 release adds a best-effort dual-mode dispatch fix and an optional custom Lua layout, but no further updates are planned. Automatically moves all Steam windows (except fullscreen games) to an overlay workspace; main 3 windows (Friends, Client, Chat) positioned in a row, fully responsive percentage-based layout. Requires Hyprland window manager.",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.1.2",
       "license": "MIT",
@@ -690,7 +708,7 @@
         "Panel",
         "System"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "ip-monitor",
@@ -705,7 +723,7 @@
       "tags": [
         "Development"
       ],
-      "lastUpdated": "2026-04-14T20:44:12+07:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "kagi-quick-search",
@@ -721,7 +739,7 @@
         "Launcher",
         "Productivity"
       ],
-      "lastUpdated": "2026-03-10T11:27:20-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "kaomoji-provider",
@@ -737,7 +755,7 @@
         "Launcher",
         "Fun"
       ],
-      "lastUpdated": "2026-02-10T10:12:36-05:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "kde-connect",
@@ -755,7 +773,7 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "keep-awake-plus",
@@ -835,7 +853,7 @@
       "version": "1.0.2",
       "official": false,
       "author": "Borhaneddine GUEMIDI <guemidiborhane@gmail.com>",
-      "description": "Network latency monitor — multi-host, windowed averages, sparkline graphs",
+      "description": "Network latency monitor \u2014 multi-host, windowed averages, sparkline graphs",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.1.0",
       "license": "MIT",
@@ -925,7 +943,7 @@
         "Bar",
         "Panel"
       ],
-      "lastUpdated": "2026-04-15T16:35:10+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "mimeapp-gui",
@@ -943,7 +961,7 @@
         "Utility",
         "System"
       ],
-      "lastUpdated": "2026-04-20T21:30:27+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "mini-docker",
@@ -1032,7 +1050,7 @@
         "Sway",
         "Hyprland"
       ],
-      "lastUpdated": "2026-04-16T23:55:46-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "mpd",
@@ -1049,7 +1067,7 @@
         "Audio",
         "Music"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "mpris-lyric",
@@ -1065,7 +1083,7 @@
         "Bar",
         "Music"
       ],
-      "lastUpdated": "2026-04-19T11:52:26+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "mpvpaper",
@@ -1083,7 +1101,7 @@
         "Fun",
         "System"
       ],
-      "lastUpdated": "2026-04-18T21:56:28+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "mullvad",
@@ -1119,7 +1137,7 @@
         "Audio",
         "Music"
       ],
-      "lastUpdated": "2026-04-18T22:02:45+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "netbird",
@@ -1188,7 +1206,7 @@
         "Network",
         "Fun"
       ],
-      "lastUpdated": "2026-04-18T23:08:10+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "niri-animation-picker",
@@ -1206,7 +1224,7 @@
         "Theming",
         "Utility"
       ],
-      "lastUpdated": "2026-04-08T18:53:05+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "niri-auto-tile",
@@ -1224,7 +1242,7 @@
         "System",
         "Niri"
       ],
-      "lastUpdated": "2026-03-23T17:28:07-03:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "niri-overview-launcher",
@@ -1239,7 +1257,7 @@
       "tags": [
         "System"
       ],
-      "lastUpdated": "2026-02-05T11:41:54-08:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "niri-screensaver",
@@ -1280,7 +1298,7 @@
       "name": "Niri Workspaces",
       "version": "1.0.0",
       "official": false,
-      "author": "Kohányi Róbert",
+      "author": "Koh\u00e1nyi R\u00f3bert",
       "description": "Filter, jump to, rename or reset Niri workspaces from the launcher.",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.4.1",
@@ -1324,7 +1342,7 @@
         "Panel",
         "System"
       ],
-      "lastUpdated": "2026-02-23T20:48:07-05:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "not-just-text",
@@ -1340,7 +1358,7 @@
         "Bar",
         "Fun"
       ],
-      "lastUpdated": "2026-04-13T22:31:42Z"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "notes-scratchpad",
@@ -1357,7 +1375,7 @@
         "Panel",
         "Productivity"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "ntfy-notifications",
@@ -1375,7 +1393,7 @@
         "Network",
         "Indicator"
       ],
-      "lastUpdated": "2026-04-10T15:49:56+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "nvibrant",
@@ -1408,7 +1426,7 @@
         "Launcher",
         "Development"
       ],
-      "lastUpdated": "2026-03-21T21:19:00+01:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "obs-control",
@@ -1426,7 +1444,7 @@
         "Indicator",
         "Utility"
       ],
-      "lastUpdated": "2026-04-18T22:24:44+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "obsidian-provider",
@@ -1458,7 +1476,7 @@
         "Bar",
         "Panel"
       ],
-      "lastUpdated": "2026-04-01T18:21:46+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "osk-toggle",
@@ -1523,7 +1541,7 @@
         "System",
         "Security"
       ],
-      "lastUpdated": "2026-03-27T20:43:49+07:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "pomodoro",
@@ -1539,7 +1557,7 @@
         "Bar",
         "Productivity"
       ],
-      "lastUpdated": "2026-02-01T21:52:23+05:30"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "port-monitor",
@@ -1558,7 +1576,7 @@
         "System",
         "Utility"
       ],
-      "lastUpdated": "2026-04-19T11:51:23+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "privacy-indicator",
@@ -1607,7 +1625,7 @@
         "Bar",
         "Panel"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "rss-feed",
@@ -1620,7 +1638,7 @@
       "minNoctaliaVersion": "3.6.0",
       "license": "MIT",
       "tags": [],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "ru-menu",
@@ -1636,7 +1654,7 @@
         "Bar",
         "Panel"
       ],
-      "lastUpdated": "2026-04-10T17:07:23+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "saved-desktop-widgets",
@@ -1652,7 +1670,7 @@
         "Fun",
         "System"
       ],
-      "lastUpdated": "2026-03-22T18:59:32+01:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "screen-recorder",
@@ -1668,7 +1686,7 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-04-02T10:26:27+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "screen-shot-and-record",
@@ -1721,7 +1739,7 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-04-19T00:00:51+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "shell-profiles",
@@ -1755,7 +1773,7 @@
         "Indicator",
         "System"
       ],
-      "lastUpdated": "2026-04-09T18:01:49+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "simple-notes",
@@ -1772,7 +1790,7 @@
         "Panel",
         "Productivity"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "slowbongo",
@@ -1789,7 +1807,7 @@
         "Audio",
         "Fun"
       ],
-      "lastUpdated": "2026-04-15T09:46:06+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "special-workspaces",
@@ -1806,7 +1824,7 @@
         "Productivity",
         "Hyprland"
       ],
-      "lastUpdated": "2026-04-18T22:57:42+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "squeekboard-toggle",
@@ -1823,7 +1841,7 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-04-13T18:41:37+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "ssh-sessions",
@@ -1842,7 +1860,7 @@
         "Utility",
         "Development"
       ],
-      "lastUpdated": "2026-04-13T20:17:59+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "steam-price-watcher",
@@ -1855,7 +1873,7 @@
       "minNoctaliaVersion": "3.6.0",
       "license": "MIT",
       "tags": [],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "sticky-notes",
@@ -1890,7 +1908,7 @@
         "System",
         "Utility"
       ],
-      "lastUpdated": "2026-03-24T10:16:52-03:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "sys-info-widget",
@@ -1974,7 +1992,7 @@
         "Bar",
         "Utility"
       ],
-      "lastUpdated": "2026-04-01T18:03:19+08:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "todo",
@@ -2007,7 +2025,7 @@
       "tags": [
         "Launcher"
       ],
-      "lastUpdated": "2026-04-11T00:50:22+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "unicode-picker",
@@ -2023,7 +2041,7 @@
         "Launcher",
         "Utility"
       ],
-      "lastUpdated": "2026-02-10T10:12:36-05:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "update-count",
@@ -2039,7 +2057,7 @@
         "Bar",
         "System"
       ],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "usb-drive-manager",
@@ -2108,7 +2126,7 @@
         "Launcher",
         "Development"
       ],
-      "lastUpdated": "2026-04-08T22:23:54+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "wallcards",
@@ -2172,7 +2190,7 @@
         "Panel",
         "Productivity"
       ],
-      "lastUpdated": "2026-04-01T22:22:03+02:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "workspace-overview",
@@ -2203,7 +2221,7 @@
       "minNoctaliaVersion": "3.6.0",
       "license": "MIT",
       "tags": [],
-      "lastUpdated": "2026-03-29T19:05:12-04:00"
+      "lastUpdated": "2026-04-21T15:49:39Z"
     },
     {
       "id": "zed-provider",

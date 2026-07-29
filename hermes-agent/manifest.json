@@ -1,0 +1,48 @@
+{
+  "id": "hermes-agent",
+  "name": "Hermes Agent",
+  "version": "1.1.0",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "nomadx, FelipeMayerDev",
+  "license": "MIT",
+  "description": "Native Noctalia status and side-panel interface for Hermes Agent. Supports a client-only mode to drive a Hermes bridge running on a remote server over SSH.",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Launcher",
+    "AI"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "launcherProvider": "LauncherProvider.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "commandPrefix": "hermes",
+    "defaultSettings": {
+      "bridgeHost": "127.0.0.1",
+      "bridgePort": 19777,
+      "stateFile": "~/.cache/noctalia-hermes/state.json",
+      "hermesHome": "~/.hermes",
+      "hermesCommand": "hermes",
+      "autoStartBridge": true,
+      "autoStartGateway": true,
+      "clientOnlyMode": false,
+      "bridgeTokenManual": "",
+      "statusPollIntervalSec": 30,
+      "hideWhenIdle": false,
+      "launcherPrefix": ">hermes",
+      "panelPinned": false,
+      "showToolActivity": false,
+      "defaultProvider": "",
+      "defaultModel": "",
+      "configured": false
+    }
+  }
+}
