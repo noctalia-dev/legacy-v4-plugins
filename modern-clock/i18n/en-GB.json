@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Widget Settings",
+      "colourToggle": {
+        "description": "Toggle between Colour Picker or Colour Choice.",
+        "label": "Colour Selection Method"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Day Settings",
+        "colour": {
+          "description": "Sets day colour.",
+          "label": "Day Colour"
+        }
+      },
+      "date": {
+        "header": "Date Settings",
+        "colour": {
+          "description": "Sets date colour.",
+          "label": "Date Colour"
+        }
+      },
+      "time": {
+        "header": "Time Settings",
+        "colour": {
+          "description": "Sets time colour.",
+          "label": "Time Colour"
+        }
+      },
+    "fontOpacity": "Font Opacity"
+    }
+  }
+}

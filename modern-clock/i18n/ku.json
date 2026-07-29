@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Mîhengên widget",
+      "colourToggle": {
+        "description": "Di navbera Hilbijêrê Rengê an Hilbijartina Rengê de biguherîne.",
+        "label": "Rêbaza Hilbijartina Rengê"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Mîhengên rojê",
+        "colour": {
+          "description": "Rengê rojê destnîşan dike.",
+          "label": "Rengê rojê"
+        }
+      },
+      "date": {
+        "header": "Mîhengên dîrokê",
+        "colour": {
+          "description": "Rengê dîrokê destnîşan dike.",
+          "label": "Rengê dîrokê"
+        }
+      },
+      "time": {
+        "header": "Mîhengên demê",
+        "colour": {
+          "description": "Rengê demê destnîşan dike.",
+          "label": "Rengê demê"
+        }
+      },
+    "fontOpacity": "Şefafiya nivîsê"
+    }
+  }
+}

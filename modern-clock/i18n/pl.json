@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Ustawienia widżetu",
+      "colourToggle": {
+        "description": "Przełącz między Selektorem Kolorów lub Wyborem Koloru.",
+        "label": "Metoda wyboru koloru"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Ustawienia dnia",
+        "colour": {
+          "description": "Ustawia kolor dnia.",
+          "label": "Kolor dnia"
+        }
+      },
+      "date": {
+        "header": "Ustawienia daty",
+        "colour": {
+          "description": "Ustawia kolor daty.",
+          "label": "Kolor daty"
+        }
+      },
+      "time": {
+        "header": "Ustawienia czasu",
+        "colour": {
+          "description": "Ustawia kolor czasu.",
+          "label": "Kolor czasu"
+        }
+      },
+    "fontOpacity": "Przezroczystość czcionki"
+    }
+  }
+}

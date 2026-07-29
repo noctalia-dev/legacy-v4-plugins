@@ -1,0 +1,33 @@
+{
+  "id": "modern-clock",
+  "name": "Modern Clock",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.1.2",
+  "author": "Screamified",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A Modern looking clock desktop widget that will tell you the time. (duh)",
+  "tags": ["Desktop", "Fun"],
+  "entryPoints": {
+    "desktopWidget": "DesktopWidget.qml",
+    "desktopWidgetSettings": "DesktopWidgetSettings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "dayColourPicker": "black",
+      "dateColourPicker": "black",
+      "timeColourPicker": "black",
+      "dayColourChoice": "primary",
+      "dateColourChoice": "secondary",
+      "timeColourChoice": "secondary",
+      "customDayFont": "",
+      "customDateFont": "",
+      "customTimeFont": "",
+      "textOpacity": 1,
+      "colourChoice": true
+    }
+  }
+}

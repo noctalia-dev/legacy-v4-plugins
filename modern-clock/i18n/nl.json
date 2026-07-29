@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Widget-instellingen",
+      "colourToggle": {
+        "description": "Schakel tussen Kleurenkiezer of Kleurkeuze.",
+        "label": "Kleurselectiemethode"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Daginstellingen",
+        "colour": {
+          "description": "Stelt de dagkleur in.",
+          "label": "Dagkleur"
+        }
+      },
+      "date": {
+        "header": "Datuminstellingen",
+        "colour": {
+          "description": "Stelt de datumkleur in.",
+          "label": "Datumkleur"
+        }
+      },
+      "time": {
+        "header": "Tijdinstellingen",
+        "colour": {
+          "description": "Stelt de tijdkleur in.",
+          "label": "Tijdkleur"
+        }
+      },
+    "fontOpacity": "Lettertypeopaciteit"
+    }
+  }
+}

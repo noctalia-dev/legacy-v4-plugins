@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "ウィジェット設定",
+      "colourToggle": {
+        "description": "カラーピッカーまたはカラーチョイスを切り替えます。",
+        "label": "色の選択方法"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "曜日設定",
+        "colour": {
+          "description": "曜日の色を設定します。",
+          "label": "曜日の色"
+        }
+      },
+      "date": {
+        "header": "日付設定",
+        "colour": {
+          "description": "日付の色を設定します。",
+          "label": "日付の色"
+        }
+      },
+      "time": {
+        "header": "時刻設定",
+        "colour": {
+          "description": "時刻の色を設定します。",
+          "label": "時刻の色"
+        }
+      },
+    "fontOpacity": "フォントの透明度"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Widget-Einstellungen",
+      "colourToggle": {
+        "description": "Wechseln zwischen Farbwähler oder Farbauswahl.",
+        "label": "Farbauswahlmethode"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Tageseinstellungen",
+        "colour": {
+          "description": "Legt die Farbe des Tages fest.",
+          "label": "Tagesfarbe"
+        }
+      },
+      "date": {
+        "header": "Datumseinstellungen",
+        "colour": {
+          "description": "Legt die Farbe des Datums fest.",
+          "label": "Datumsfarbe"
+        }
+      },
+      "time": {
+        "header": "Zeiteinstellungen",
+        "colour": {
+          "description": "Legt die Farbe der Zeit fest.",
+          "label": "Zeitfarbe"
+        }
+      },
+    "fontOpacity": "Schriftdeckkraft"
+    }
+  }
+}

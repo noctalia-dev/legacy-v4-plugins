@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Impostazioni widget",
+      "colourToggle": {
+        "description": "Passa tra Selettore Colore o Scelta Colore.",
+        "label": "Metodo di selezione del colore"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Impostazioni del giorno",
+        "colour": {
+          "description": "Imposta il colore del giorno.",
+          "label": "Colore del giorno"
+        }
+      },
+      "date": {
+        "header": "Impostazioni della data",
+        "colour": {
+          "description": "Imposta il colore della data.",
+          "label": "Colore della data"
+        }
+      },
+      "time": {
+        "header": "Impostazioni dell'ora",
+        "colour": {
+          "description": "Imposta il colore dell'ora.",
+          "label": "Colore dell'ora"
+        }
+      },
+    "fontOpacity": "Opacità del carattere"
+    }
+  }
+}

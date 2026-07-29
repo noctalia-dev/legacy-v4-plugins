@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "小工具設定",
+      "colourToggle": {
+        "description": "在顏色選擇器或顏色選擇之間切換。",
+        "label": "顏色選擇方法"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "星期設定",
+        "colour": {
+          "description": "設定星期顏色。",
+          "label": "星期顏色"
+        }
+      },
+      "date": {
+        "header": "日期設定",
+        "colour": {
+          "description": "設定日期顏色。",
+          "label": "日期顏色"
+        }
+      },
+      "time": {
+        "header": "時間設定",
+        "colour": {
+          "description": "設定時間顏色。",
+          "label": "時間顏色"
+        }
+      },
+    "fontOpacity": "字型不透明度"
+    }
+  }
+}

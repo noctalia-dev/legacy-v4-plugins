@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "小部件设置",
+      "colourToggle": {
+        "description": "在颜色选择器或颜色选择之间切换。",
+        "label": "颜色选择方法"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "星期设置",
+        "colour": {
+          "description": "设置星期颜色。",
+          "label": "星期颜色"
+        }
+      },
+      "date": {
+        "header": "日期设置",
+        "colour": {
+          "description": "设置日期颜色。",
+          "label": "日期颜色"
+        }
+      },
+      "time": {
+        "header": "时间设置",
+        "colour": {
+          "description": "设置时间颜色。",
+          "label": "时间颜色"
+        }
+      },
+    "fontOpacity": "字体不透明度"
+    }
+  }
+}

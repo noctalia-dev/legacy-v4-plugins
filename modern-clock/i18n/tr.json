@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Widget ayarları",
+      "colourToggle": {
+        "description": "Renk Seçici veya Renk Seçimi arasında geçiş yapın.",
+        "label": "Renk seçim yöntemi"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Gün ayarları",
+        "colour": {
+          "description": "Gün rengini ayarlar.",
+          "label": "Gün rengi"
+        }
+      },
+      "date": {
+        "header": "Tarih ayarları",
+        "colour": {
+          "description": "Tarih rengini ayarlar.",
+          "label": "Tarih rengi"
+        }
+      },
+      "time": {
+        "header": "Saat ayarları",
+        "colour": {
+          "description": "Saat rengini ayarlar.",
+          "label": "Saat rengi"
+        }
+      },
+    "fontOpacity": "Yazı tipi şeffaflığı"
+    }
+  }
+}

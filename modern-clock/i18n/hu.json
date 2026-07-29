@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "menu": {
+      "header": "Widget beállítások",
+      "colourToggle": {
+        "description": "Váltás a Színválasztó vagy a Színkiválasztás között.",
+        "label": "Színválasztási módszer"
+      }
+    },
+    "font": {
+      "day": {
+        "header": "Nap beállítások",
+        "colour": {
+          "description": "Beállítja a nap színét.",
+          "label": "Nap színe"
+        }
+      },
+      "date": {
+        "header": "Dátum beállítások",
+        "colour": {
+          "description": "Beállítja a dátum színét.",
+          "label": "Dátum színe"
+        }
+      },
+      "time": {
+        "header": "Idő beállítások",
+        "colour": {
+          "description": "Beállítja az idő színét.",
+          "label": "Idő színe"
+        }
+      },
+    "fontOpacity": "Betűtípus átlátszósága"
+    }
+  }
+}
