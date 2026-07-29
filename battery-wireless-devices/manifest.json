@@ -1,0 +1,28 @@
+{
+  "id": "battery-wireless-devices",
+  "name": "Battery for Wireless Devices",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "aslauw",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Bar widget showing battery levels for wireless peripherals (mouse, keyboard, headset, etc.) via OpenRazer and Solaar.",
+  "tags": ["Bar", "Indicator", "System"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "refreshInterval": 60,
+      "showPercentage": false,
+      "showCharging": false,
+      "devices": {},
+      "deviceOrder": []
+    }
+  }
+}
