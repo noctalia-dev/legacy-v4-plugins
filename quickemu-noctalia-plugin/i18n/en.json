@@ -1,0 +1,22 @@
+{
+	"widget": {
+		"title": "VMs"
+	},
+	"panel": {
+		"title": "Quickemu Manager",
+		"refresh": "Refresh",
+		"existing-vms": "Existing VMs",
+		"create-vm": "Create New VM",
+		"start": "Start",
+		"start-spice": "Spice",
+		"edit": "Edit",
+		"delete": "Delete",
+		"no-vms": "No VMs found.",
+		"search-os": "Search OS...",
+		"download": "Download",
+		"downloading": "Downloading...",
+		"download-wait": "Please wait while the image downloads.",
+		"all-categories": "All",
+		"category": "Category"
+	}
+}

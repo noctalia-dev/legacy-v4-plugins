@@ -1,0 +1,21 @@
+{
+  "id": "quickemu",
+  "name": "Quickemu",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.0.0",
+  "author": "GughNess",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Manage and create Quickemu virtual machines from the bar.",
+  "tags": ["Bar", "Virtualization", "Panel"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "metadata": {
+    "defaultSettings": {
+      "vmDirectory": "~/quickemu/"
+    }
+  }
+}
