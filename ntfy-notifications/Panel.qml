@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import qs.Commons
 import qs.Services.UI
 import qs.Widgets
+import Quickshell
 
 Item {
     id: root
@@ -388,6 +389,13 @@ Item {
                                     wrapMode: Text.Wrap
                                     Layout.fillWidth: true
                                     opacity: messageItem.itemOpacity
+
+                                    TapHandler {
+                                        onTapped: {
+                                            Quickshell.execDetached(["wl-copy", modelData.message.trim()])
+                                            pluginApi.withCurrentScreen(s => pluginApi.closePanel(s))
+                                        }
+                                    }
                                 }
 
                                 // Tags (if present)
