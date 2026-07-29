@@ -1,0 +1,57 @@
+{
+  "panel": {
+    "title": "auto-cpufreq",
+    "daemon-running": "daemon running",
+    "daemon-stopped": "daemon not running",
+    "cpu-usage": "usage",
+    "cpu-freq": "frequency",
+    "cpu-temp": "temp",
+    "section-governor": "GOVERNOR",
+    "section-force": "FORCE OVERRIDE",
+    "section-turbo": "TURBO BOOST",
+    "forced": "forced",
+    "turbo": "turbo",
+    "pkexec-error": "pkexec not authorized. See README for polkit setup.",
+    "bat-charging": "Charging",
+    "bat-discharging": "Discharging",
+    "bat-plugged": "Plugged in",
+    "powersave": "powersave",
+    "auto": "auto",
+    "performance": "performance",
+    "turbo-never": "never",
+    "turbo-auto": "auto",
+    "turbo-always": "always"
+  },
+  "menu": {
+    "force-performance": "Force performance",
+    "force-powersave": "Force powersave",
+    "force-reset": "Reset override",
+    "turbo-on": "Turbo: always on",
+    "turbo-off": "Turbo: always off",
+    "turbo-auto": "Turbo: auto"
+  },
+  "widget": {
+    "turbo-label": "turbo: {state}"
+  },
+  "actions": {
+    "widget-settings": "Widget settings"
+  },
+  "settings": {
+    "compact": {
+      "label": "Compact mode",
+      "desc": "Show only the CPU icon, hide governor and turbo text"
+    },
+    "show-governor": {
+      "label": "Show governor",
+      "desc": "Display the active CPU frequency scaling governor"
+    },
+    "show-turbo": {
+      "label": "Show turbo state",
+      "desc": "Display whether turbo boost is on or off"
+    },
+    "refresh": {
+      "label": "Refresh interval",
+      "desc": "How often to poll sysfs for governor, turbo, and CPU stats"
+    }
+  }
+}

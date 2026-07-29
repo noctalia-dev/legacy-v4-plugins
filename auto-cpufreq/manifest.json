@@ -1,0 +1,32 @@
+{
+  "id": "auto-cpufreq",
+  "name": "auto-cpufreq",
+  "version": "2.6.0",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "4rmcyt",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Monitor and control auto-cpufreq daemon: governor, turbo boost, CPU stats, and force-override.",
+  "tags": [
+    "Bar",
+    "Panel",
+    "System",
+    "Utility"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "refreshInterval": 3000,
+      "showGovernor": true,
+      "showTurbo": true,
+      "compactMode": false
+    }
+  }
+}
