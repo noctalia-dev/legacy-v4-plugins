@@ -1,0 +1,86 @@
+{
+  "menu": {
+    "settings": "Configurações do widget"
+  },
+  "panel": {
+    "title": "Terminal Hermes",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "settings": "Configurações",
+    "close": "Fechar",
+    "host": {
+      "label": "Host / IP",
+      "placeholder": "192.168.1.129"
+    },
+    "port": {
+      "label": "Porta",
+      "placeholder": "22"
+    },
+    "user": {
+      "label": "Usuário",
+      "placeholder": "usuário"
+    },
+    "password": {
+      "label": "Senha",
+      "placeholder": "opcional (use chave SSH)"
+    }
+  },
+  "settings": {
+    "host": {
+      "label": "Host / IP padrão",
+      "desc": "Destino salvo para o painel. Senhas nunca são salvas.",
+      "placeholder": "192.168.1.10"
+    },
+    "user": {
+      "label": "Usuário padrão",
+      "placeholder": "usuário"
+    },
+    "port": {
+      "label": "Porta SSH"
+    },
+    "panelWidth": {
+      "label": "Largura do painel",
+      "desc": "Largura preferida do painel em pixels."
+    },
+    "panelHeight": {
+      "label": "Altura do painel",
+      "desc": "Altura preferida do painel em pixels."
+    },
+    "terminalCols": {
+      "label": "Colunas do terminal"
+    },
+    "terminalRows": {
+      "label": "Linhas do terminal"
+    },
+    "terminalFontSize": {
+      "label": "Tamanho da fonte do terminal"
+    },
+    "autoConnectOnStartup": {
+      "label": "Conectar na inicialização"
+    },
+    "rememberLastTarget": {
+      "label": "Lembrar último destino"
+    },
+    "showBarText": {
+      "label": "Mostrar texto na barra"
+    },
+    "toggleShortcut": {
+      "label": "Nome do atalho de abrir/fechar (Hyprland)",
+      "desc": "Id do atalho global do Hyprland. Vincule no seu config: bind = SUPER, H, global, noctalia:{name}. Outros compositores: use o comando IPC (veja o README)."
+    }
+  },
+  "status": {
+    "missingTarget": "Host e usuário são obrigatórios",
+    "connecting": "Conectando a {target}",
+    "disconnected": "Desconectado",
+    "error": "Erro",
+    "bridgeExited": "Bridge encerrada"
+  },
+  "widget": {
+    "label": "Hermes",
+    "connecting": "SSH"
+  },
+  "shortcut": {
+    "description": "Abrir/fechar o painel Hermes SSH"
+  }
+}

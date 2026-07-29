@@ -1,0 +1,86 @@
+{
+  "menu": {
+    "settings": "Widget settings"
+  },
+  "panel": {
+    "title": "Hermes Terminal",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "settings": "Settings",
+    "close": "Close",
+    "host": {
+      "label": "Host / IP",
+      "placeholder": "192.168.1.129"
+    },
+    "port": {
+      "label": "Port",
+      "placeholder": "22"
+    },
+    "user": {
+      "label": "User",
+      "placeholder": "user"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "optional (use SSH key)"
+    }
+  },
+  "settings": {
+    "host": {
+      "label": "Default host / IP",
+      "desc": "Saved target for the panel. Passwords are never saved.",
+      "placeholder": "192.168.1.10"
+    },
+    "user": {
+      "label": "Default user",
+      "placeholder": "user"
+    },
+    "port": {
+      "label": "SSH port"
+    },
+    "panelWidth": {
+      "label": "Panel width",
+      "desc": "Preferred panel width in pixels."
+    },
+    "panelHeight": {
+      "label": "Panel height",
+      "desc": "Preferred panel height in pixels."
+    },
+    "terminalCols": {
+      "label": "Terminal columns"
+    },
+    "terminalRows": {
+      "label": "Terminal rows"
+    },
+    "terminalFontSize": {
+      "label": "Terminal font size"
+    },
+    "autoConnectOnStartup": {
+      "label": "Connect on startup"
+    },
+    "rememberLastTarget": {
+      "label": "Remember last target"
+    },
+    "showBarText": {
+      "label": "Show text in bar"
+    },
+    "toggleShortcut": {
+      "label": "Toggle shortcut name (Hyprland)",
+      "desc": "Hyprland global shortcut id. Bind it in your config: bind = SUPER, H, global, noctalia:{name}. Other compositors: use the IPC command (see README)."
+    }
+  },
+  "status": {
+    "missingTarget": "Host and user are required",
+    "connecting": "Connecting to {target}",
+    "disconnected": "Disconnected",
+    "error": "Error",
+    "bridgeExited": "Bridge exited"
+  },
+  "widget": {
+    "label": "Hermes",
+    "connecting": "SSH"
+  },
+  "shortcut": {
+    "description": "Toggle the Hermes SSH terminal panel"
+  }
+}

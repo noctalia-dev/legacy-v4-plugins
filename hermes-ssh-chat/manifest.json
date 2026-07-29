@@ -1,0 +1,42 @@
+{
+  "id": "hermes-ssh-chat",
+  "name": "Hermes SSH Terminal",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.6.6",
+  "author": "focky",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Use Hermes on a remote server through an interactive SSH terminal.",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Development",
+    "AI"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "cpuIntensive": false,
+    "defaultSettings": {
+      "host": "",
+      "port": 22,
+      "user": "",
+      "rememberLastTarget": true,
+      "autoConnectOnStartup": false,
+      "toggleShortcutName": "hermes-toggle",
+      "panelWidth": 1200,
+      "panelHeight": 760,
+      "terminalCols": 180,
+      "terminalRows": 32,
+      "terminalFontSize": 11,
+      "showBarText": true
+    }
+  }
+}
