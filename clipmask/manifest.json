@@ -1,0 +1,24 @@
+{
+  "id": "clipmask",
+  "name": "ClipMask",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.1.0",
+  "author": "x0d7x",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Privacy-first clipboard manager with masked entries, Vim navigation, and search.",
+  "tags": ["Utility", "Bar", "Panel", "Clipboard", "Niri"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "metadata": {
+    "defaultSettings": {
+      "maskChar": "•",
+      "maskLength": 30,
+      "showInBar": true,
+      "masked": true
+    }
+  }
+}

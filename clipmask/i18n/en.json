@@ -1,0 +1,24 @@
+{
+  "panel": {
+    "title": "ClipMask",
+    "masked": "Masked",
+    "partial": "Partial",
+    "revealed": "Revealed",
+    "close": "Close",
+    "search-hint": "Type to filter...",
+    "hint-search": "Enter copy  |  Ctrl+J/K ↑↓ nav  |  Ctrl+A toggle  |  Esc/Ctrl+E exit",
+    "hint-normal": "/ search  |  Ctrl+J/K nav  |  Enter copy  |  Ctrl+A toggle  |  d/Del remove",
+    "loading": "Loading...",
+    "empty": "No clipboard history.",
+    "no-matches": "No matching entries.",
+    "refreshing": "Refreshing...",
+    "count-filtered": "({visible}/{total})",
+    "count-singular": "{count} item",
+    "count-plural": "{count} items",
+    "count-no-matches": "(no matches)"
+  },
+  "item": {
+    "image": "[Image]",
+    "img-badge": "IMG"
+  }
+}
