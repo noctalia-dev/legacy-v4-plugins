@@ -411,7 +411,7 @@
       "version": "2.0.2",
       "official": false,
       "author": "HAVEKziad",
-      "description": "Audio visualizer desktop widget — bars, wave, or mirror. Supports all directions. Transparent, follows color scheme.",
+      "description": "Audio visualizer desktop widget \u2014 bars, wave, or mirror. Supports all directions. Transparent, follows color scheme.",
       "minNoctaliaVersion": "4.6.6",
       "license": "MIT",
       "tags": [
@@ -647,7 +647,7 @@
       "version": "2.2.0",
       "official": false,
       "author": "blacku",
-      "description": "[DEPRECATED — not maintained from Hyprland 0.55+] Steam overlay with automatic window management for Hyprland. Due to Hyprland 0.55 deprecating hyprlang in favour of Lua (changing hyprctl dispatch parsing and popup/xdg handling), this plugin is no longer actively maintained. The 2.2.0 release adds a best-effort dual-mode dispatch fix and an optional custom Lua layout, but no further updates are planned. Automatically moves all Steam windows (except fullscreen games) to an overlay workspace; main 3 windows (Friends, Client, Chat) positioned in a row, fully responsive percentage-based layout. Requires Hyprland window manager.",
+      "description": "[DEPRECATED \u2014 not maintained from Hyprland 0.55+] Steam overlay with automatic window management for Hyprland. Due to Hyprland 0.55 deprecating hyprlang in favour of Lua (changing hyprctl dispatch parsing and popup/xdg handling), this plugin is no longer actively maintained. The 2.2.0 release adds a best-effort dual-mode dispatch fix and an optional custom Lua layout, but no further updates are planned. Automatically moves all Steam windows (except fullscreen games) to an overlay workspace; main 3 windows (Friends, Client, Chat) positioned in a row, fully responsive percentage-based layout. Requires Hyprland window manager.",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.1.2",
       "license": "MIT",
@@ -835,7 +835,7 @@
       "version": "1.0.2",
       "official": false,
       "author": "Borhaneddine GUEMIDI <guemidiborhane@gmail.com>",
-      "description": "Network latency monitor — multi-host, windowed averages, sparkline graphs",
+      "description": "Network latency monitor \u2014 multi-host, windowed averages, sparkline graphs",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.1.0",
       "license": "MIT",
@@ -1280,7 +1280,7 @@
       "name": "Niri Workspaces",
       "version": "1.0.0",
       "official": false,
-      "author": "Kohányi Róbert",
+      "author": "Koh\u00e1nyi R\u00f3bert",
       "description": "Filter, jump to, rename or reset Niri workspaces from the launcher.",
       "repository": "https://github.com/noctalia-dev/noctalia-plugins",
       "minNoctaliaVersion": "4.4.1",
@@ -2220,6 +2220,20 @@
         "Developer"
       ],
       "lastUpdated": "2026-05-05T20:15:18+03:00"
+    },
+    {
+      "id": "vinyl-launcher",
+      "name": "Vinyl Launcher",
+      "version": "1.0.0",
+      "official": false,
+      "author": "c1ph3r-1337",
+      "description": "A rotational disc launcher",
+      "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+      "license": "MIT",
+      "tags": [
+        "Launcher"
+      ],
+      "lastUpdated": "2026-06-07T19:48:00Z"
     }
   ]
 }

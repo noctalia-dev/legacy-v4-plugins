@@ -1,0 +1,20 @@
+{
+  "id": "vinyl-launcher",
+  "name": "Vinyl Launcher",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "c1ph3r-1337",
+  "description": "A rotational disc app launcher plugin",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "tags": ["Launcher"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}
