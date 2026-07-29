@@ -1,0 +1,31 @@
+{
+    "id": "spotify-player",
+    "name": "Spotify Player",
+    "version": "1.0.0",
+    "minNoctaliaVersion": "4.7.6",
+    "author": "suvi",
+    "license": "GPL 3.0",
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+    "description": "Control spotify_player from a bar widget.",
+    "tags": ["Bar", "Panel", "Music"],
+    "entryPoints": {
+        "barWidget": "BarWidget.qml",
+        "panel": "Panel.qml",
+        "settings": "Settings.qml",
+        "main": "Main.qml"
+    },
+    "dependencies": {
+        "plugins": []
+    },
+    "metadata": {
+        "defaultSettings": {
+            "clientId": "",
+            "clientSecret": "",
+            "playerId": "",
+            "callbackPort": 8888,
+            "accessToken": "",
+            "refreshToken": "",
+            "tokenExpiresAt": 0
+        }
+    }
+}

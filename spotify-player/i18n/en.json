@@ -1,0 +1,33 @@
+{
+    "panel": {
+        "title": "Spotify Player",
+        "search": "Search",
+        "search_placeholder": "Search...",
+        "search_hint": "Try searching something to get started.",
+        "playlist": "Playlist",
+        "shuffle": "Shuffle",
+        "notif": "Now Playing"
+    },
+    "settings": {
+        "cid": "Client ID",
+        "cid_desc": "The Spotify API client ID",
+        "cid_placeholder": "Enter Client ID...",
+
+        "secret": "Client Secret",
+        "secret_desc": "The Spotify API client secret",
+        "secret_placeholder": "Enter Client Secret...",
+
+        "callback": "Callback port",
+        "callback_warning": "Ensure this port is not already in use.",
+
+        "tokengen_info": "Once you've entered the client ID and client secret, click here to generate an access token for your Spotify account.",
+        "tokengen_btn": "Request token",
+
+        "devicelist_info": "With a valid API token, you can press this button to fetch all of your currently available devices on Spotify.",
+        "devicelist_btn": "Get devices",
+
+        "pid": "Player ID",
+        "pid_desc": "The ID of the player you want to control.",
+        "pid_placeholder": "Enter Player ID or leave blank for default..."
+    }
+}
