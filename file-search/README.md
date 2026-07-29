@@ -15,11 +15,11 @@ Type `>file` in the Noctalia launcher to activate file search.
 **Toggle file search:**
 
 ```bash
-noctalia-shell ipc call plugin:file-search toggle
+qs -c noctalia-shell ipc call plugin:file-search toggle
 ```
 
 **Search with pre-filled query:**
 
 ```bash
-noctalia-shell ipc call plugin:file-search search "eko"
+qs -c noctalia-shell ipc call plugin:file-search search "eko"
 ```
