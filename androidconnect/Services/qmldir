@@ -1,0 +1,2 @@
+singleton KDEConnect 1.0 KDEConnect.qml
+singleton KDEConnectUtils 1.0 KDEConnectUtils.qml

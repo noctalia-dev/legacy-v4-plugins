@@ -1,0 +1,41 @@
+{
+  "id": "androidconnect",
+  "name": "AndroidConnect",
+  "version": "1.6.1",
+  "minNoctaliaVersion": "4.4.0",
+  "author": "demencia89",
+  "license": "GPLv2",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A Noctalia Android device plugin built on top of the original KDE Connect plugin, with embedded scrcpy support.",
+  "tags": [
+    "Bar",
+    "Panel",
+    "Utility",
+    "System"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "hideIfNoDeviceConnected": false,
+      "iconColor": "none",
+      "embeddedMirrorAudioEnabled": false,
+      "phoneSizePresetIndex": 0,
+      "phoneSizePresetKey": "small",
+      "phoneSizeStepDirection": 1,
+      "wirelessAdbPairHost": "",
+      "wirelessAdbPairPort": "",
+      "wirelessAdbConnectHost": "",
+      "wirelessAdbConnectPort": "",
+      "wirelessAdbDevices": {}
+    }
+  }
+}

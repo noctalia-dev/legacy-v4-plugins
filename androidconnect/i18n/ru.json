@@ -1,0 +1,148 @@
+{
+  "panel": {
+    "title": "Подключённые устройства",
+    "signal": {
+      "very-weak": "Очень слабое",
+      "weak": "Слабое",
+      "fair": "Среднее",
+      "good": "Хорошее",
+      "excellent": "Отличное"
+    },
+    "unknown": "Неизвестно",
+    "card": {
+      "battery": "Батарея",
+      "network": "Сеть",
+      "signal-strength": "Качество сигнала",
+      "notifications": "Уведомления"
+    },
+    "other-devices": "Другие устройства",
+    "send-file-picker": "Выберите файл для отправки на устройство",
+    "send-file": "Отправить файл",
+    "browse-device": "Просмотреть файлы на устройстве",
+    "find-device": "Найти моё устройство",
+    "pair": "Сопрячь устройство",
+    "unpair": "Разорвать сопряжение",
+    "kdeconnect-error": {
+      "no-devices": "Устройства с KDE Connect не обнаружены",
+      "unavailable-title": "Похоже, kdeconnectd не запущен!",
+      "unavailable-desc": "Убедитесь, что KDE Connect установлен в системе и служба kdeconnectd работает.",
+      "device-unavailable": "Устройство сейчас недоступно"
+    },
+    "busctl-error": {
+      "unavailable-title": "Не удаётся найти busctl!",
+      "unavailable-desc": "Убедитесь, что busctl установлен в вашей системе"
+    },
+    "device-switcher": {
+      "title": "Connected Devices",
+      "refresh": "Refresh",
+      "selected": "Selected"
+    },
+    "device-status": {
+      "unknown": "Unknown",
+      "ready": "Paired and reachable",
+      "pair-requested": "Pairing requested",
+      "unreachable": "Paired, not reachable",
+      "not-paired": "Not paired",
+      "selected": "Panel controls target this phone",
+      "select-ready": "Switch panel controls to this phone",
+      "open-phone": "Open KDE Connect on the phone or keep both devices on the same network",
+      "pair-first": "Pair this device before mirror and file actions are available"
+    },
+    "adb-only": {
+      "device-name": "ADB device"
+    },
+    "diagnostics": {
+      "tooltip": "Open diagnostics",
+      "open-button": "Open Diagnostics",
+      "dialog-title": "AndroidConnect Diagnostics",
+      "dialog-description": "Raw connection state for KDE Connect, ADB, scrcpy, and the embedded video feed.",
+      "refresh": "Refresh",
+      "copy": "Copy",
+      "copy-success": "Diagnostics copied.",
+      "section-device": "KDE Connect Device",
+      "section-adb": "ADB",
+      "section-mirror": "Mirror",
+      "section-errors": "Last Errors",
+      "value-yes": "yes",
+      "value-no": "no",
+      "value-never": "never",
+      "value-now": "just now",
+      "value-none": "none",
+      "value-adb-not-connected": "not connected",
+      "value-usb": "USB",
+      "value-no-device": "no device",
+      "value-no-host": "no host",
+      "row-selected-device": "Selected device",
+      "row-selected-device-id": "Selected device ID",
+      "row-selected-device-hosts": "Selected device hosts",
+      "row-selected-device-providers": "Selected device providers",
+      "row-device-count": "Known devices",
+      "row-daemon": "kdeconnectd available",
+      "row-any-reachable": "Any reachable device",
+      "row-paired": "Selected paired",
+      "row-reachable": "Selected reachable",
+      "row-pair-requested": "Pair requested",
+      "row-kde-refresh": "KDE refresh",
+      "row-adb-refresh": "ADB refresh",
+      "row-adb-exit": "adb devices exit code",
+      "row-usb-transport": "USB transport",
+      "row-wireless-configured": "Wireless configured",
+      "row-wireless-connected": "Wireless connected",
+      "row-wireless-profile-host": "Wireless profile host",
+      "row-wireless-last-port": "Last known Wireless ADB port",
+      "row-selected-kde-host": "Selected KDE host",
+      "row-resolved-adb": "Resolved ADB serial",
+      "row-adb-states": "ADB states",
+      "row-adb-connected": "Connected serials",
+      "row-scrcpy-running": "scrcpy running",
+      "row-scrcpy-launching": "scrcpy launching",
+      "row-scrcpy-active-serial": "scrcpy active serial",
+      "row-current-mirror-serial": "Current mirror serial",
+      "row-video-device": "Video device",
+      "row-video-check-known": "Video check known",
+      "row-video-accessible": "Video accessible",
+      "row-feed-available": "Preview feed available",
+      "row-screen-size": "Android screen size",
+      "row-touch-active": "Touch input active",
+      "row-scrcpy-error": "scrcpy launch error",
+      "row-scrcpy-stderr": "scrcpy stderr",
+      "row-adb-stderr": "adb stderr",
+      "row-wireless-stderr": "Wireless ADB stderr",
+      "kde-discovery-title": "KDE Connect discovery",
+      "kde-pair-title": "KDE Connect pairing",
+      "kde-reachable-title": "KDE Connect reachability",
+      "kde-reachable-body": "is paired but unreachable. Select another reachable device or keep the phone awake on the same network.",
+      "kde-ready-title": "KDE Connect ready",
+      "kde-ready-body": "is paired and reachable.",
+      "adb-only-title": "ADB-only mode",
+      "adb-only-body": "KDE Connect is not paired, but an authorized ADB device is available for mirroring and input.",
+      "adb-title": "ADB input and mirroring",
+      "adb-waiting-body": "Waiting for KDE Connect reachability before checking ADB controls.",
+      "adb-ready-title": "ADB ready",
+      "adb-ready-body": "An authorized ADB transport is available for the selected phone.",
+      "v4l2-checking-title": "V4L2 loopback",
+      "v4l2-ready-title": "V4L2 loopback ready",
+      "v4l2-ready-body": "is present and writable for the embedded video feed.",
+      "v4l2-missing-title": "V4L2 loopback unavailable",
+      "v4l2-missing-body": "is missing or not writable. Copy the loopback setup command below if you want the embedded feed.",
+      "scrcpy-ready-title": "scrcpy command ready",
+      "scrcpy-ready-body": "The embedded mirror command is configured and will launch after the required transports are ready."
+    },
+    "scrcpy": {
+      "adb-setup-description": "Connect one authorized ADB phone over USB or Wireless ADB to use mirroring and input."
+    }
+  },
+  "bar": {
+    "tooltip": "Подключённые устройства"
+  },
+  "control_center": {
+    "state-label": "Статус",
+    "state": {
+      "connected": "Подключено",
+      "disconnected": "Не подключено",
+      "unavailable": "Недоступно",
+      "no-device": "Нет устройства",
+      "not-paired": "Нет сопряжения"
+    }
+  }
+}
