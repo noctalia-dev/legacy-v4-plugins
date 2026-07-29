@@ -1,0 +1,44 @@
+{
+  "id": "2-in-1-tools",
+  "name": "2-in-1-tools",
+  "version": "1.2.2",
+  "minNoctaliaVersion": "4.4.3",
+  "author": "Codex",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "A Noctalia utility plugin for screen rotation tools on Niri and Hyprland.",
+  "tags": [
+    "Bar",
+    "Control Center",
+    "System",
+    "Utility"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml",
+    "barWidget": "BarWidget.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "iconName": "rotate-cw",
+      "showTransformInTooltip": true,
+      "showSuccessToast": true,
+      "autoTabletBarDensity": false,
+      "exclusiveDockInTabletMode": false,
+      "autoRotateInTabletMode": false,
+      "autoRotateOutsideTabletMode": false,
+      "syncHyprTouchTransform": true,
+      "flipVerticalSensorOrientation": false,
+      "buttonBehavior": "toggle-auto-rotate-lock",
+      "tabletBarDensity": "default",
+      "tabletModeStateFile": "/tmp/noctalia-tablet-mode",
+      "lastNonTabletBarDensity": "",
+      "lastNonTabletDockType": "",
+      "lastNonTabletDockEnabled": true
+    }
+  }
+}
