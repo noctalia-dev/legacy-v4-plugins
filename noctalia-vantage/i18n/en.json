@@ -1,0 +1,59 @@
+{
+  "widget": {
+    "title": "Noctalia Vantage"
+  },
+  "panel": {
+    "close": "Close",
+    "fan": {
+      "title": "Fan Mode",
+      "mode": {
+        "super_silent": "Super Silent",
+        "standard": "Standard",
+        "dust_cleaning": "Dust Cleaning",
+        "efficient_thermal_dissipation": "Efficient Thermal Dissipation"
+      }
+    },
+    "toggle": {
+      "fn_lock": {
+        "title": "Fn Lock",
+        "description": "Access multimedia keys without holding Fn",
+        "tooltip": "When enabled, the multimedia functions will be accessible without having to hold the Fn key."
+      },
+      "super_key": {
+        "title": "Super key",
+        "description": "Enables the Super/Windows key",
+        "tooltip": "Whether to enable or not the Super (Windows) key."
+      },
+      "touchpad": {
+        "title": "Touchpad",
+        "description": "Enables the laptop's touchpad",
+        "tooltip": "Whether to enable orthe laptop's touchpad."
+      },
+      "conservation": {
+        "title": "Battery conservation mode",
+        "description": "Limits the charge of the battery to extend its lifespan",
+        "tooltip": "When enabled, the battery will not charge above a certain value (usually around 50-70%) in order to extend its lifespan."
+      },
+      "fast_charge": {
+        "title": "Battery fast charge mode",
+        "description": "Allows the battery to charge faster",
+        "tooltip": "When enabled, allows the battery to charge faster at the cost of its lifespan."
+      },
+      "always_on_usb": {
+        "title": "Always ON USB",
+        "description": "Keeps the USB ports always powered on",
+        "tooltip": "Keeps the USB ports powered on even if the laptop is suspended."
+      },
+      "overdrive": {
+        "title": "Display Overdrive",
+        "description": "Reduces the laptop's display latency",
+        "tooltip": "Reduces the display latency in order to limit ghosting and trailing images.\nIncreases power consumption and may introduce othher graphical defects."
+      },
+      "hybrid": {
+        "title": "Hybrid graphics mode",
+        "description": "Enables the laptop's integrated graphics",
+        "tooltip": "Enables the processor's integrated graphics.\nDecreases power consupmtion by allowing the dedicated GPU to power down and work only when necessary but slightly decreases performance.\nReboot is required to apply the change."
+      }
+    }
+  }
+}

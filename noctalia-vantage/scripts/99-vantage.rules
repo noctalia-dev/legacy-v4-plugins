@@ -1,0 +1,29 @@
+# ===== Ideapad ACPI =====
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chgrp vantage /sys$devpath/fn_lock"
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chmod g+w /sys$devpath/fn_lock"
+
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chgrp vantage /sys$devpath/conservation_mode"
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chmod g+w /sys$devpath/conservation_mode"
+
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chgrp vantage /sys$devpath/usb_charging"
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chmod g+w /sys$devpath/usb_charging"
+
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chgrp vantage /sys$devpath/fan_mode"
+SUBSYSTEM=="platform", KERNEL=="VPC2004:00", RUN+="/bin/chmod g+w /sys$devpath/fan_mode"
+
+
+# ===== Legion =====
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chgrp vantage /sys$devpath/winkey"
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chmod g+w /sys$devpath/winkey"
+
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chgrp vantage /sys$devpath/touchpad"
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chmod g+w /sys$devpath/touchpad"usb_charging
+
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chgrp vantage /sys$devpath/rapidcharge"
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chmod g+w /sys$devpath/rapidcharge"
+
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chgrp vantage /sys$devpath/overdrive"
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chmod g+w /sys$devpath/overdrive"
+
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chgrp vantage /sys$devpath/gsync"
+SUBSYSTEM=="platform", KERNEL=="PNP0C09:00", DRIVER=="legion", RUN+="/bin/chmod g+w /sys$devpath/gsync"

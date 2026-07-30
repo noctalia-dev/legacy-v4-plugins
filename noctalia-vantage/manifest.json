@@ -1,0 +1,20 @@
+{
+  "id": "noctalia-vantage",
+  "name": "Noctalia Vantage",
+  "version": "0.1.1",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Sourajyoti Basak",
+  "license": "GPL-3.0-or-later",
+  "repository": "https://github.com/wizard-28/noctalia-plugins",
+  "description": "Lenovo Vantage for Noctalia Shell",
+  "entryPoints": {
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}
