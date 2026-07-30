@@ -1,0 +1,38 @@
+{
+  "id": "wallpaper-carousel",
+  "name": "Wallpaper Carousel",
+  "version": "0.8.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "yngwe",
+  "license": "MIT",
+  "description": "Browse and pick wallpapers with a fullscreen skewed carousel overlay",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "tags": [
+    "Theming",
+    "Wallpaper"
+  ],
+  "entryPoints": {
+    "main": "Main.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "wallpaperDirectory": "",
+      "carouselMode": "wrap",
+      "overlayOpacity": 80,
+      "cornerRadius": 0,
+      "itemWidth": 300,
+      "itemHeight": 420,
+      "borderWidth": 3,
+      "expandSelected": "false",
+      "selectedScale": 108,
+      "expandMultiplier": 120,
+      "enableHoldExpand": "false",
+      "holdExpandRatio": 35,
+      "holdDelay": 1500
+    }
+  }
+}

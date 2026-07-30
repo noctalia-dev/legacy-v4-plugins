@@ -1,0 +1,19 @@
+{
+    "id": "wallpaperCarousel",
+    "name": "Wallpaper Carousel",
+    "description": "Browse and pick wallpapers with a fullscreen skewed carousel overlay",
+    "version": "0.8.0",
+    "author": "yngwe",
+    "icon": "wallpaper",
+    "type": "daemon",
+    "capabilities": [
+        "wallpaper"
+    ],
+    "component": "./WallpaperCarousel.qml",
+    "settings": "./WallpaperCarouselSettings.qml",
+    "requires_dms": ">=1.2.0",
+    "permissions": [
+        "settings_read",
+        "settings_write"
+    ]
+}
