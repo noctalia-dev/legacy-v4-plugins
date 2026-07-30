@@ -1,0 +1,19 @@
+{
+    "settings": {
+        "title": "Battery Icon Settings",
+        "description": "Customize the appearance and behavior of the battery icon.",
+        "display_mode_label": "Display Mode",
+        "display_mode_desc": "How to show the battery information.",
+        "mode_icon_text": "Icon + Percentage",
+        "mode_always_show": "Always Show Pill",
+        "mode_icon_only": "Icon Only",
+        "device_label": "Battery Device",
+        "device_desc": "Select which device to monitor.",
+        "hide_idle_label": "Hide if Idle",
+        "hide_idle_desc": "Hide the icon when fully charged and plugged in.",
+        "hide_missing_label": "Hide if Not Detected",
+        "hide_missing_desc": "Hide the icon if no battery device is found.",
+        "scale_label": "Icon Scale",
+        "scale_desc": "Adjust the size of the battery icon relative to the pill."
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "id": "custom-battery",
+    "name": "Custom Battery",
+    "version": "1.0.0",
+    "minNoctaliaVersion": "4.0.0",
+    "author": "ronin ck",
+    "license": "MIT",
+
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+    "description": "A custom battery icon.",
+    "tags": [
+        "Bar",
+        "System"
+    ],
+    "entryPoints": {
+        "main": "Main.qml",
+        "barWidget": "BarWidget.qml"
+    },
+    "dependencies": {
+        "plugins": []
+    },
+    "metadata": {
+        "defaultSettings": {}
+    }
+}
