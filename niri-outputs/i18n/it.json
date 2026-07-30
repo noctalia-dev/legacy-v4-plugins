@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Gestione Output Niri",
+    "scale": "Scala",
+    "rotate": "Ruota",
+    "mode": "Modalità",
+    "refresh-rate": "Frequenza di Aggiornamento",
+    "transform": "Trasformazione",
+    "apply": "Applica Modifiche",
+    "discard": "Annulla",
+    "position": "Posizione",
+    "enabled": "Abilitato",
+    "display-configuration": "Configurazione Display"
+  }
+}

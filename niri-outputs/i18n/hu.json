@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Niri Kimenetkezelés",
+    "scale": "Méretezés",
+    "rotate": "Forgatás",
+    "mode": "Mód",
+    "refresh-rate": "Frissítési Gyakoriság",
+    "transform": "Transzformáció",
+    "apply": "Módosítások Alkalmazása",
+    "discard": "Elvetés",
+    "position": "Pozíció",
+    "enabled": "Engedélyezve",
+    "display-configuration": "Kijelző Konfiguráció"
+  }
+}

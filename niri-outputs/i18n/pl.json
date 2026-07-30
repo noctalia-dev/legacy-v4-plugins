@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Zarządzanie Wyjściami Niri",
+    "scale": "Skala",
+    "rotate": "Obróć",
+    "mode": "Tryb",
+    "refresh-rate": "Częstotliwość Odświeżania",
+    "transform": "Transformacja",
+    "apply": "Zastosuj Zmiany",
+    "discard": "Odrzuć",
+    "position": "Pozycja",
+    "enabled": "Włączone",
+    "display-configuration": "Konfiguracja Wyświetlacza"
+  }
+}

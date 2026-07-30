@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Gestión de Salidas Niri",
+    "scale": "Escala",
+    "rotate": "Rotar",
+    "mode": "Modo",
+    "refresh-rate": "Frecuencia de Actualización",
+    "transform": "Transformación",
+    "apply": "Aplicar Cambios",
+    "discard": "Descartar",
+    "position": "Posición",
+    "enabled": "Habilitado",
+    "display-configuration": "Configuración de Pantalla"
+  }
+}

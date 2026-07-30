@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Niri Output Management",
+    "scale": "Scale",
+    "rotate": "Rotate",
+    "mode": "Mode",
+    "refresh-rate": "Refresh Rate",
+    "transform": "Transform",
+    "apply": "Apply Changes",
+    "discard": "Discard",
+    "position": "Position",
+    "enabled": "Enabled",
+    "display-configuration": "Display Configuration"
+  }
+}

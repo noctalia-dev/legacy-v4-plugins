@@ -1,0 +1,15 @@
+{
+  "panel": {
+    "title": "Niri 輸出管理",
+    "scale": "縮放",
+    "rotate": "旋轉",
+    "mode": "模式",
+    "refresh-rate": "重新整理率",
+    "transform": "變換",
+    "apply": "套用變更",
+    "discard": "放棄",
+    "position": "位置",
+    "enabled": "已啟用",
+    "display-configuration": "顯示配置"
+  }
+}
