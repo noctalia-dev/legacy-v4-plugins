@@ -20,6 +20,10 @@ Item {
   readonly property bool isGenerating: mainInstance?.isGenerating || false
   readonly property string currentResponse: mainInstance?.currentResponse || ""
   readonly property string errorMessage: mainInstance?.errorMessage || ""
+  readonly property bool isExecutingTools: mainInstance?.isExecutingTools || false
+  readonly property int toolCount: mainInstance?.toolCount || 0
+  readonly property bool awaitingToolConfirmation: mainInstance?.awaitingToolConfirmation || false
+  readonly property var pendingToolConfirmation: mainInstance?.pendingToolConfirmation || null
   property string initialInputText: mainInstance?.chatInputText || ""
   property int initialCursorPosition: mainInstance?.chatInputCursorPosition || 0
 
@@ -51,6 +55,24 @@ Item {
         font.weight: Font.Medium
         Layout.fillWidth: true
         elide: Text.ElideRight
+      }
+
+      // Tool count badge
+      NText {
+        visible: toolCount > 0
+        text: toolCount + " tools"
+        color: Color.mOnSurfaceVariant
+        pointSize: Style.fontSizeXS
+        applyUiScale: false
+
+        ToolTip.visible: toolCountMouse.containsMouse
+        ToolTip.text: pluginApi?.tr("chat.toolsAvailable") + ": " + toolCount
+
+        MouseArea {
+          id: toolCountMouse
+          anchors.fill: parent
+          hoverEnabled: true
+        }
       }
 
       NIcon {
@@ -238,7 +260,7 @@ Item {
           MessageBubble {
             id: streamingBubble
             width: messageColumn.width
-            visible: isGenerating && currentResponse.trim() !== ""
+            visible: isGenerating && !isExecutingTools && currentResponse.trim() !== ""
             pluginApi: root.pluginApi
             message: ({
                 "id": "streaming",
@@ -246,6 +268,189 @@ Item {
                 "content": currentResponse,
                 "isStreaming": true
               })
+          }
+
+          // Tool execution indicator
+          RowLayout {
+            width: messageColumn.width
+            visible: isExecutingTools && !awaitingToolConfirmation
+            spacing: Style.marginS
+
+            NIcon {
+              icon: "tool"
+              color: Color.mTertiary
+              pointSize: Style.fontSizeL
+              applyUiScale: false
+            }
+
+            NIcon {
+              id: toolSpinner
+              icon: "loader-2"
+              color: Color.mTertiary
+              pointSize: Style.fontSizeS
+              applyUiScale: false
+
+              RotationAnimation on rotation {
+                from: 0
+                to: 360
+                duration: 1000
+                loops: Animation.Infinite
+                running: isExecutingTools && !awaitingToolConfirmation
+              }
+            }
+
+            NText {
+              text: pluginApi?.tr("chat.executingTools")
+              color: Color.mTertiary
+              pointSize: Style.fontSizeS
+              applyUiScale: false
+              font.weight: Font.Medium
+            }
+          }
+
+          // Tool confirmation prompt
+          Rectangle {
+            id: confirmRect
+            width: messageColumn.width
+            visible: awaitingToolConfirmation && pendingToolConfirmation
+            height: visible ? confirmCol.implicitHeight + Style.marginM * 2 : 0
+            color: Qt.alpha(Color.mTertiary, 0.08)
+            radius: Style.radiusM
+            border.color: Qt.alpha(Color.mTertiary, 0.3)
+            border.width: Style.borderS
+
+            // Qualifier extracted from the pending tool call
+            readonly property string qualifier: {
+              if (!pendingToolConfirmation || !mainInstance) return "";
+              return mainInstance.extractQualifier(pendingToolConfirmation) || "";
+            }
+            readonly property bool hasQualifier: qualifier !== ""
+            readonly property string qualifiedKey: {
+              if (!hasQualifier || !pendingToolConfirmation) return "";
+              return pendingToolConfirmation.name + ":" + qualifier;
+            }
+
+            ColumnLayout {
+              id: confirmCol
+              anchors.left: parent.left
+              anchors.right: parent.right
+              anchors.top: parent.top
+              anchors.margins: Style.marginM
+              spacing: Style.marginS
+
+              // Header
+              RowLayout {
+                spacing: Style.marginS
+
+                NIcon {
+                  icon: "shield-question"
+                  color: Color.mTertiary
+                  pointSize: Style.fontSizeL
+                  applyUiScale: false
+                }
+
+                NText {
+                  text: pluginApi?.tr("chat.toolConfirmTitle")
+                  color: Color.mOnSurface
+                  pointSize: Style.fontSizeS
+                  applyUiScale: false
+                  font.weight: Font.Bold
+                }
+              }
+
+              // Tool name
+              NText {
+                text: pendingToolConfirmation ? pendingToolConfirmation.name : ""
+                color: Color.mTertiary
+                pointSize: Style.fontSizeM
+                applyUiScale: false
+                font.weight: Font.Medium
+                font.family: "monospace"
+              }
+
+              // Tool args
+              Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: confirmArgsText.implicitHeight + Style.marginS * 2
+                color: Qt.alpha(Color.mSurface, 0.6)
+                radius: Style.radiusS
+
+                TextEdit {
+                  id: confirmArgsText
+                  anchors.fill: parent
+                  anchors.margins: Style.marginS
+                  text: {
+                    if (!pendingToolConfirmation) return "";
+                    var args = pendingToolConfirmation.arguments;
+                    if (typeof args === "string") {
+                      try { return JSON.stringify(JSON.parse(args), null, 2); }
+                      catch (e) { return args; }
+                    }
+                    return JSON.stringify(args || {}, null, 2);
+                  }
+                  readOnly: true
+                  selectByMouse: true
+                  wrapMode: TextEdit.Wrap
+                  color: Color.mOnSurface
+                  font.family: "monospace"
+                  font.pointSize: Math.max(1, Style.fontSizeS * Settings.data.ui.fontDefaultScale * Style.uiScaleRatio)
+                }
+              }
+
+              // Action buttons
+              RowLayout {
+                Layout.fillWidth: true
+                spacing: Style.marginS
+
+                NButton {
+                  text: pluginApi?.tr("chat.approveOnce")
+                  backgroundColor: Color.mPrimary
+                  textColor: Color.mOnPrimary
+                  hoverColor: Qt.lighter(Color.mPrimary, 1.2)
+                  textHoverColor: Color.mOnPrimary
+                  onClicked: {
+                    if (mainInstance) mainInstance.approveToolOnce();
+                  }
+                }
+
+                // Qualified: "Allow <tool:qualifier>" button
+                NButton {
+                  visible: confirmRect.hasQualifier
+                  text: pluginApi?.tr("chat.allowCommand") + " `" + confirmRect.qualifiedKey + "`"
+                  backgroundColor: Color.mSurface
+                  textColor: Color.mOnSurface
+                  hoverColor: Qt.lighter(Color.mSurface, 1.3)
+                  textHoverColor: Color.mOnSurface
+                  onClicked: {
+                    if (mainInstance) mainInstance.approveQualifier(confirmRect.qualifiedKey);
+                  }
+                }
+
+                // Non-qualified: "Always Allow" button
+                NButton {
+                  visible: !confirmRect.hasQualifier
+                  text: pluginApi?.tr("chat.approveAlways")
+                  backgroundColor: Color.mSurface
+                  textColor: Color.mOnSurface
+                  hoverColor: Qt.lighter(Color.mSurface, 1.3)
+                  textHoverColor: Color.mOnSurface
+                  onClicked: {
+                    if (mainInstance) mainInstance.approveToolAlways();
+                  }
+                }
+
+                NButton {
+                  text: pluginApi?.tr("chat.deny")
+                  backgroundColor: Qt.alpha(Color.mError, 0.15)
+                  textColor: Color.mError
+                  hoverColor: Qt.alpha(Color.mError, 0.25)
+                  textHoverColor: Color.mError
+                  onClicked: {
+                    if (mainInstance) mainInstance.denyToolOnce();
+                  }
+                }
+              }
+            }
           }
         }
       }

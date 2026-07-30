@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -uo pipefail
+args=$(cat)
+command=$(printf '%s' "$args" | jq -r '.command')
+eval "$command" 2>&1

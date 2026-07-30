@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -uo pipefail
+args=$(cat)
+path=$(printf '%s' "$args" | jq -r '.path')
+if [ ! -e "$path" ]; then
+  echo "Error: file not found: $path" >&2
+  exit 1
+fi
+cat "$path"

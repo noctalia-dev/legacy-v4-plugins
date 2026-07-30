@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -uo pipefail
+args=$(cat)
+query=$(printf '%s' "$args" | jq -r '.query')
+if command -v ddgr &>/dev/null; then
+  ddgr -n 5 --json "$query" 2>/dev/null
+else
+  encoded=$(printf '%s' "$query" | jq -sRr @uri)
+  curl -s "https://api.duckduckgo.com/?q=${encoded}&format=json&no_html=1" | \
+    jq '{abstract: .Abstract, results: [.RelatedTopics[:5][] | select(.Text) | {text: .Text, url: .FirstURL}]}'
+fi

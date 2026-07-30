@@ -5,7 +5,8 @@
     "noApiKey": "Configure API key in settings",
     "provider": "Provider",
     "messages": "Messages",
-    "rightClickHint": "Right-click for options"
+    "rightClickHint": "Right-click for options",
+    "tools": "Tools"
   },
   "tabs": {
     "ai": "AI Chat",
@@ -28,7 +29,15 @@
     "save": "Save",
     "cancel": "Cancel",
     "regenerate": "Regenerate",
-    "typing": "Typing..."
+    "typing": "Typing...",
+    "usingTools": "Using tools...",
+    "executingTools": "Executing tools...",
+    "toolsAvailable": "Tools available",
+    "toolConfirmTitle": "Tool wants to run",
+    "approveOnce": "Approve Once",
+    "approveAlways": "Always Allow",
+    "allowCommand": "Allow",
+    "deny": "Deny"
   },
   "translator": {
     "title": "Translator",
@@ -114,7 +123,26 @@
     "panelWidth": "Panel Width (px)",
     "panelWidthDesc": "Set a custom width for the detached panel (in pixels)",
     "uiScale": "UI Scale",
-    "uiScaleDesc": "Scale factor for plugin UI elements (1 = 100%)"
+    "uiScaleDesc": "Scale factor for plugin UI elements (1 = 100%)",
+    "toolsSection": "Tool Use (Function Calling)",
+    "toolsEnabled": "Enable Tool Use",
+    "toolsEnabledDesc": "Allow the AI to call external tools during conversation",
+    "toolsDirectory": "Tools Directory",
+    "toolsDirectoryDesc": "Path to tools directory (leave blank for default)",
+    "maxToolIterations": "Max Tool Iterations",
+    "maxToolIterationsDesc": "Maximum number of tool use rounds per message (safety limit)",
+    "toolTimeout": "Tool Timeout",
+    "toolTimeoutDesc": "Maximum seconds each tool execution can take",
+    "toolsList": "Discovered Tools",
+    "noTools": "No tools found. Add tools to the tools/ directory.",
+    "toolAskEveryTime": "Ask every time",
+    "toolAlwaysAllow": "Always allow",
+    "toolNeverAllow": "Never allow",
+    "allowlistEntries": "Allowlist Rules",
+    "allowlistEntriesDesc": "Fine-grained rules. Use tool:qualifier for sub-permissions (e.g. shell:ls). Use tool:* for wildcard.",
+    "noAllowlistEntries": "No rules yet. Rules are added when you approve tools in the chat.",
+    "allowlistAddPlaceholder": "e.g. shell:ls, shell:git, shell:*",
+    "allowlistAdd": "Add"
   },
   "toast": {
     "copied": "Copied to clipboard",

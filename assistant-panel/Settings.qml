@@ -33,6 +33,12 @@ ColumnLayout {
   property bool editRealTimeTranslation: pluginApi?.pluginSettings?.translator?.realTimeTranslation ?? pluginApi?.manifest?.metadata?.defaultSettings?.translator?.realTimeTranslation ?? true
   property string editDeeplApiKey: pluginApi?.pluginSettings?.translator?.deeplApiKey || pluginApi?.manifest?.metadata?.defaultSettings?.translator?.deeplApiKey || ""
 
+  // Tool Settings
+  property bool editToolsEnabled: pluginApi?.pluginSettings?.tools?.enabled ?? true
+  property int editMaxToolIterations: pluginApi?.pluginSettings?.tools?.maxIterations ?? 10
+  property int editToolTimeout: pluginApi?.pluginSettings?.tools?.timeout ?? 30
+  property string editToolsDirectory: pluginApi?.pluginSettings?.tools?.directory || ""
+
   // General Settings
   property int editMaxHistoryLength: pluginApi?.pluginSettings?.maxHistoryLength || pluginApi?.manifest?.metadata?.defaultSettings?.maxHistoryLength || 100
 
@@ -431,6 +437,303 @@ ColumnLayout {
   }
 
   // ==================
+  // Tool Settings Section
+  // ==================
+  NText {
+    text: pluginApi?.tr("settings.toolsSection")
+    pointSize: Style.fontSizeM
+    font.weight: Font.Bold
+    color: Color.mOnSurface
+  }
+
+  NToggle {
+    Layout.fillWidth: true
+    label: pluginApi?.tr("settings.toolsEnabled")
+    description: pluginApi?.tr("settings.toolsEnabledDesc")
+    checked: root.editToolsEnabled
+    onToggled: function (checked) {
+      root.editToolsEnabled = checked;
+    }
+    defaultValue: true
+  }
+
+  NTextInput {
+    Layout.fillWidth: true
+    label: pluginApi?.tr("settings.toolsDirectory")
+    description: pluginApi?.tr("settings.toolsDirectoryDesc")
+    text: root.editToolsDirectory
+    placeholderText: "tools/ (relative to plugin directory)"
+    onTextChanged: root.editToolsDirectory = text
+  }
+
+  ColumnLayout {
+    Layout.fillWidth: true
+    spacing: Style.marginS
+
+    NLabel {
+      label: pluginApi?.tr("settings.maxToolIterations") + ": " + root.editMaxToolIterations
+      description: pluginApi?.tr("settings.maxToolIterationsDesc")
+    }
+
+    NSlider {
+      Layout.fillWidth: true
+      from: 1
+      to: 30
+      stepSize: 1
+      value: root.editMaxToolIterations
+      onValueChanged: root.editMaxToolIterations = value
+    }
+  }
+
+  ColumnLayout {
+    Layout.fillWidth: true
+    spacing: Style.marginS
+
+    NLabel {
+      label: pluginApi?.tr("settings.toolTimeout") + ": " + root.editToolTimeout + "s"
+      description: pluginApi?.tr("settings.toolTimeoutDesc")
+    }
+
+    NSlider {
+      Layout.fillWidth: true
+      from: 5
+      to: 120
+      stepSize: 5
+      value: root.editToolTimeout
+      onValueChanged: root.editToolTimeout = value
+    }
+  }
+
+  // Discovered tools list with allowlist controls
+  NText {
+    Layout.topMargin: Style.marginM
+    text: pluginApi?.tr("settings.toolsList")
+    pointSize: Style.fontSizeS
+    font.weight: Font.Bold
+    color: Color.mOnSurface
+  }
+
+  NText {
+    visible: !toolListRepeater.model || toolListRepeater.model.length === 0
+    text: pluginApi?.tr("settings.noTools")
+    color: Color.mOnSurfaceVariant
+    pointSize: Style.fontSizeXS
+  }
+
+  // Access main instance for tool schemas
+  readonly property var mainInstance: pluginApi?.mainInstance
+  readonly property var discoveredTools: mainInstance?.toolSchemas || []
+
+  Repeater {
+    id: toolListRepeater
+    model: root.discoveredTools
+
+    Rectangle {
+      Layout.fillWidth: true
+      Layout.preferredHeight: toolItemCol.implicitHeight + Style.marginS * 2
+      color: Color.mSurface
+      radius: Style.radiusS
+
+      ColumnLayout {
+        id: toolItemCol
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.margins: Style.marginS
+        spacing: Style.marginXS
+
+        RowLayout {
+          Layout.fillWidth: true
+          spacing: Style.marginS
+
+          NText {
+            text: modelData.name
+            color: Color.mOnSurface
+            pointSize: Style.fontSizeS
+            font.weight: Font.Medium
+            font.family: "monospace"
+          }
+
+          Item { Layout.fillWidth: true }
+
+          NComboBox {
+            Layout.preferredWidth: 160
+            model: [
+              { "key": "confirm", "name": pluginApi?.tr("settings.toolAskEveryTime") },
+              { "key": "always", "name": pluginApi?.tr("settings.toolAlwaysAllow") },
+              { "key": "never", "name": pluginApi?.tr("settings.toolNeverAllow") }
+            ]
+            currentKey: {
+              var allowlist = pluginApi?.pluginSettings?.tools?.allowlist;
+              if (!allowlist) return "confirm";
+              return allowlist[modelData.name] || "confirm";
+            }
+            onSelected: function (key) {
+              if (!pluginApi) return;
+              if (!pluginApi.pluginSettings.tools)
+                pluginApi.pluginSettings.tools = {};
+              if (!pluginApi.pluginSettings.tools.allowlist)
+                pluginApi.pluginSettings.tools.allowlist = {};
+              pluginApi.pluginSettings.tools.allowlist[modelData.name] = key;
+              pluginApi.saveSettings();
+            }
+          }
+        }
+
+        NText {
+          text: modelData.description || ""
+          color: Color.mOnSurfaceVariant
+          pointSize: Style.fontSizeXS
+          Layout.fillWidth: true
+          wrapMode: Text.Wrap
+        }
+      }
+    }
+  }
+
+  // Qualified allowlist entries (e.g. shell:ls, shell:cat)
+  NText {
+    Layout.topMargin: Style.marginM
+    text: pluginApi?.tr("settings.allowlistEntries")
+    pointSize: Style.fontSizeS
+    font.weight: Font.Bold
+    color: Color.mOnSurface
+  }
+
+  NText {
+    text: pluginApi?.tr("settings.allowlistEntriesDesc")
+    color: Color.mOnSurfaceVariant
+    pointSize: Style.fontSizeXS
+    Layout.fillWidth: true
+    wrapMode: Text.Wrap
+  }
+
+  // Compute qualified entries from allowlist (entries containing ":")
+  property var qualifiedEntries: {
+    var al = pluginApi?.pluginSettings?.tools?.allowlist || {};
+    var entries = [];
+    var keys = Object.keys(al);
+    for (var i = 0; i < keys.length; i++) {
+      if (keys[i].indexOf(":") > 0) {
+        entries.push({ key: keys[i], status: al[keys[i]] });
+      }
+    }
+    return entries;
+  }
+
+  NText {
+    visible: root.qualifiedEntries.length === 0
+    text: pluginApi?.tr("settings.noAllowlistEntries")
+    color: Color.mOnSurfaceVariant
+    pointSize: Style.fontSizeXS
+  }
+
+  Repeater {
+    model: root.qualifiedEntries
+
+    RowLayout {
+      Layout.fillWidth: true
+      spacing: Style.marginS
+
+      NText {
+        text: modelData.key
+        color: Color.mOnSurface
+        pointSize: Style.fontSizeS
+        font.family: "monospace"
+      }
+
+      NText {
+        text: modelData.status
+        color: modelData.status === "always" ? Color.mPrimary : (modelData.status === "never" ? Color.mError : Color.mOnSurfaceVariant)
+        pointSize: Style.fontSizeXS
+      }
+
+      Item { Layout.fillWidth: true }
+
+      // Remove button
+      Rectangle {
+        width: 24
+        height: 24
+        radius: Style.radiusS
+        color: entryRemoveMouse.containsMouse ? Qt.alpha(Color.mError, 0.15) : "transparent"
+
+        NIcon {
+          anchors.centerIn: parent
+          icon: "x"
+          color: entryRemoveMouse.containsMouse ? Color.mError : Color.mOnSurfaceVariant
+          pointSize: Style.fontSizeS
+          applyUiScale: false
+        }
+
+        MouseArea {
+          id: entryRemoveMouse
+          anchors.fill: parent
+          hoverEnabled: true
+          cursorShape: Qt.PointingHandCursor
+          onClicked: {
+            var al = pluginApi?.pluginSettings?.tools?.allowlist;
+            if (!al) return;
+            delete al[modelData.key];
+            pluginApi.pluginSettings.tools.allowlist = al;
+            pluginApi.saveSettings();
+            // Force re-evaluation
+            root.qualifiedEntries = root.qualifiedEntries.filter(function(e) { return e.key !== modelData.key; });
+          }
+        }
+      }
+    }
+  }
+
+  // Add new allowlist entry
+  RowLayout {
+    Layout.fillWidth: true
+    spacing: Style.marginS
+
+    NTextInput {
+      id: newAllowlistInput
+      Layout.fillWidth: true
+      placeholderText: pluginApi?.tr("settings.allowlistAddPlaceholder")
+      text: ""
+    }
+
+    NButton {
+      text: pluginApi?.tr("settings.allowlistAdd")
+      backgroundColor: Color.mPrimary
+      textColor: Color.mOnPrimary
+      hoverColor: Qt.lighter(Color.mPrimary, 1.2)
+      textHoverColor: Color.mOnPrimary
+      onClicked: {
+        var entry = newAllowlistInput.text.trim();
+        if (entry === "") return;
+        if (!pluginApi) return;
+        if (!pluginApi.pluginSettings.tools)
+          pluginApi.pluginSettings.tools = {};
+        if (!pluginApi.pluginSettings.tools.allowlist)
+          pluginApi.pluginSettings.tools.allowlist = {};
+        pluginApi.pluginSettings.tools.allowlist[entry] = "always";
+        pluginApi.saveSettings();
+        // Force re-evaluation
+        var al = pluginApi.pluginSettings.tools.allowlist;
+        var entries = [];
+        var keys = Object.keys(al);
+        for (var i = 0; i < keys.length; i++) {
+          if (keys[i].indexOf(":") > 0) {
+            entries.push({ key: keys[i], status: al[keys[i]] });
+          }
+        }
+        root.qualifiedEntries = entries;
+        newAllowlistInput.text = "";
+      }
+    }
+  }
+
+  NDivider {
+    Layout.fillWidth: true
+    Layout.topMargin: Style.marginM
+    Layout.bottomMargin: Style.marginM
+  }
+
+  // ==================
   // Translator Settings Section
   // ==================
   NText {
@@ -551,6 +854,15 @@ ColumnLayout {
     pluginApi.pluginSettings.translator.backend = root.editTranslatorBackend;
     pluginApi.pluginSettings.translator.deeplApiKey = root.editDeeplApiKey;
     pluginApi.pluginSettings.translator.realTimeTranslation = root.editRealTimeTranslation;
+
+    // Save tool settings
+    if (!pluginApi.pluginSettings.tools) {
+      pluginApi.pluginSettings.tools = {};
+    }
+    pluginApi.pluginSettings.tools.enabled = root.editToolsEnabled;
+    pluginApi.pluginSettings.tools.maxIterations = root.editMaxToolIterations;
+    pluginApi.pluginSettings.tools.timeout = root.editToolTimeout;
+    pluginApi.pluginSettings.tools.directory = root.editToolsDirectory;
 
     // Save general settings
     pluginApi.pluginSettings.maxHistoryLength = root.editMaxHistoryLength;

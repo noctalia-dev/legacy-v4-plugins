@@ -10,6 +10,8 @@ Item {
   property var pluginApi
 
   readonly property int bubblePadding: Style.marginM
+  readonly property bool isToolMessage: message.role === "tool"
+  readonly property bool hasToolCalls: message.role === "assistant" && message.tool_calls && message.tool_calls.length > 0
 
   signal regenerateRequested
   signal copyRequested(string text)
@@ -17,6 +19,7 @@ Item {
 
   property bool isEditing: false
   property string editBuffer: ""
+  property bool toolExpanded: false
 
   height: mainLayout.implicitHeight
   width: parent ? parent.width : 400
@@ -24,20 +27,17 @@ Item {
   // ---------------------------------------------------------
   // User Row Hover Logic
   // ---------------------------------------------------------
-  // This MouseArea covers the entire row (full width) for User messages.
-  // It sits in the background (z: 0) to allow buttons/text selection on top to work.
   MouseArea {
     id: userHoverArea
     visible: message.role === "user"
     anchors.fill: parent
     hoverEnabled: true
-    acceptedButtons: Qt.NoButton // Pass clicks through
+    acceptedButtons: Qt.NoButton
     z: 0
   }
 
   RowLayout {
     id: mainLayout
-    // Ensure layout sits above the background hover detection
     z: 1
 
     anchors.left: parent.left
@@ -46,14 +46,32 @@ Item {
     spacing: Style.marginS
 
     // ---------------------------------------------------------
-    // Left Side Items (Assistant Avatar & Spacer for User)
+    // Left Side Items
     // ---------------------------------------------------------
 
     NIcon {
       Layout.alignment: Qt.AlignTop
-      visible: message.role === "assistant"
+      visible: message.role === "assistant" && !root.hasToolCalls
       icon: "sparkles"
       color: Color.mPrimary
+      pointSize: Style.fontSizeL
+      applyUiScale: false
+    }
+
+    NIcon {
+      Layout.alignment: Qt.AlignTop
+      visible: root.hasToolCalls
+      icon: "tool"
+      color: Color.mTertiary
+      pointSize: Style.fontSizeL
+      applyUiScale: false
+    }
+
+    NIcon {
+      Layout.alignment: Qt.AlignTop
+      visible: root.isToolMessage
+      icon: "terminal-2"
+      color: Color.mSecondary
       pointSize: Style.fontSizeL
       applyUiScale: false
     }
@@ -73,7 +91,12 @@ Item {
       Layout.preferredWidth: root.isEditing ? (parent.width * 0.8) : (contentCol.implicitWidth + (root.bubblePadding * 2))
       Layout.preferredHeight: contentCol.implicitHeight + (root.bubblePadding * 2)
 
-      color: message.role === "user" ? Color.mSurfaceVariant : Color.mSurface
+      color: {
+        if (root.isToolMessage) return Qt.alpha(Color.mSecondary, 0.1);
+        if (root.hasToolCalls) return Qt.alpha(Color.mTertiary, 0.1);
+        if (message.role === "user") return Color.mSurfaceVariant;
+        return Color.mSurface;
+      }
       radius: Style.radiusM
 
       // Sharp Corner Hack for User (Top Right)
@@ -169,22 +192,158 @@ Item {
         anchors.top: parent.top
         anchors.margins: root.bubblePadding
 
-        spacing: Style.marginM
+        spacing: Style.marginS
 
+        // ---------------------------------------------------------
+        // Tool Call Header (for assistant messages requesting tools)
+        // ---------------------------------------------------------
+        ColumnLayout {
+          visible: root.hasToolCalls
+          Layout.fillWidth: true
+          spacing: Style.marginXS
+
+          NText {
+            text: pluginApi?.tr("chat.usingTools")
+            color: Color.mTertiary
+            pointSize: Style.fontSizeS
+            applyUiScale: false
+            font.weight: Font.Medium
+          }
+
+          Repeater {
+            model: message.tool_calls || []
+
+            RowLayout {
+              Layout.fillWidth: true
+              spacing: Style.marginXS
+
+              NIcon {
+                icon: "chevron-right"
+                color: Color.mOnSurfaceVariant
+                pointSize: Style.fontSizeXS
+                applyUiScale: false
+              }
+
+              NText {
+                text: modelData.name + "(" + formatToolArgs(modelData.arguments) + ")"
+                color: Color.mOnSurfaceVariant
+                pointSize: Style.fontSizeXS
+                applyUiScale: false
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                font.family: "monospace"
+              }
+            }
+          }
+        }
+
+        // ---------------------------------------------------------
+        // Tool Result Header (for tool response messages)
+        // ---------------------------------------------------------
+        RowLayout {
+          visible: root.isToolMessage
+          Layout.fillWidth: true
+          spacing: Style.marginS
+
+          NText {
+            text: message.tool_name || "tool"
+            color: Color.mSecondary
+            pointSize: Style.fontSizeS
+            applyUiScale: false
+            font.weight: Font.Medium
+            font.family: "monospace"
+          }
+
+          NText {
+            visible: message.tool_args !== undefined
+            text: formatToolArgs(message.tool_args)
+            color: Color.mOnSurfaceVariant
+            pointSize: Style.fontSizeXS
+            applyUiScale: false
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            font.family: "monospace"
+          }
+
+          // Expand/collapse toggle
+          Rectangle {
+            width: 24
+            height: 24
+            radius: Style.radiusS
+            color: expandMouse.containsMouse ? Color.mSurfaceVariant : "transparent"
+
+            NIcon {
+              anchors.centerIn: parent
+              icon: root.toolExpanded ? "chevron-up" : "chevron-down"
+              color: Color.mOnSurfaceVariant
+              pointSize: Style.fontSizeS
+              applyUiScale: false
+            }
+
+            MouseArea {
+              id: expandMouse
+              anchors.fill: parent
+              hoverEnabled: true
+              cursorShape: Qt.PointingHandCursor
+              onClicked: root.toolExpanded = !root.toolExpanded
+            }
+          }
+        }
+
+        // Tool result content (collapsed by default)
         TextEdit {
           Layout.maximumWidth: bubbleRect.Layout.maximumWidth - (root.bubblePadding * 2)
           Layout.fillWidth: true
           wrapMode: TextEdit.Wrap
 
-          visible: !root.isEditing
-          text: message.content
+          visible: root.isToolMessage && root.toolExpanded
+          text: message.content || ""
+          textFormat: Text.PlainText
+          readOnly: true
+          selectByMouse: true
+
+          color: Color.mOnSurface
+          font.family: "monospace"
+          font.pointSize: Math.max(1, Style.fontSizeS * Settings.data.ui.fontDefaultScale * Style.uiScaleRatio)
+
+          selectionColor: Color.mPrimary
+          selectedTextColor: Color.mOnPrimary
+        }
+
+        // Collapsed tool result preview
+        NText {
+          visible: root.isToolMessage && !root.toolExpanded
+          text: {
+            var content = message.content || "";
+            var firstLine = content.split("\n")[0];
+            if (firstLine.length > 80) return firstLine.substring(0, 80) + "...";
+            if (content.split("\n").length > 1) return firstLine + "...";
+            return firstLine;
+          }
+          color: Color.mOnSurfaceVariant
+          pointSize: Style.fontSizeXS
+          applyUiScale: false
+          Layout.fillWidth: true
+          elide: Text.ElideRight
+          font.family: "monospace"
+        }
+
+        // ---------------------------------------------------------
+        // Regular Message Content
+        // ---------------------------------------------------------
+        TextEdit {
+          Layout.maximumWidth: bubbleRect.Layout.maximumWidth - (root.bubblePadding * 2)
+          Layout.fillWidth: true
+          wrapMode: TextEdit.Wrap
+
+          visible: !root.isEditing && !root.isToolMessage && !(root.hasToolCalls && (!message.content || message.content.trim() === ""))
+          text: message.content || ""
           textFormat: message.role === "assistant" ? Text.MarkdownText : Text.PlainText
           readOnly: true
           selectByMouse: true
 
           color: Color.mOnSurface
           font.family: Settings.data.ui.fontDefault
-          // Replicate NText font scaling logic for consistency
           font.pointSize: Math.max(1, Style.fontSizeM * Settings.data.ui.fontDefaultScale * Style.uiScaleRatio)
           font.weight: Style.fontWeightMedium
 
@@ -248,7 +407,7 @@ Item {
 
         // Assistant Buttons (Bottom)
         RowLayout {
-          visible: message.role === "assistant" && !message.isStreaming
+          visible: message.role === "assistant" && !message.isStreaming && !root.hasToolCalls
           spacing: Style.marginS
           Layout.alignment: Qt.AlignLeft
 
@@ -308,11 +467,11 @@ Item {
     }
 
     // ---------------------------------------------------------
-    // Right Side Items (User Avatar & Spacer for Assistant)
+    // Right Side Items
     // ---------------------------------------------------------
 
     Item {
-      visible: message.role === "assistant"
+      visible: message.role === "assistant" || root.isToolMessage
       Layout.fillWidth: true
     }
 
@@ -324,5 +483,21 @@ Item {
       pointSize: Style.fontSizeL
       applyUiScale: false
     }
+  }
+
+  function formatToolArgs(args) {
+    if (!args) return "";
+    var obj = args;
+    if (typeof args === "string") {
+      try { obj = JSON.parse(args); } catch (e) { return args; }
+    }
+    var parts = [];
+    var keys = Object.keys(obj);
+    for (var i = 0; i < keys.length; i++) {
+      var val = obj[keys[i]];
+      if (typeof val === "string" && val.length > 40) val = val.substring(0, 40) + "...";
+      parts.push(keys[i] + "=" + JSON.stringify(val));
+    }
+    return parts.join(", ");
   }
 }

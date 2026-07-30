@@ -1,0 +1,15 @@
+{
+  "name": "shell",
+  "description": "Run a shell command and return its stdout and stderr combined. Use for system commands, listing files, checking system state, etc.",
+  "qualifierParam": "command",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string",
+        "description": "The shell command to execute"
+      }
+    },
+    "required": ["command"]
+  }
+}
