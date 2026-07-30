@@ -1,0 +1,108 @@
+{
+  "provider": {
+    "name": "Caffeinate",
+    "description": "Pause idle actions for a duration",
+    "aliasDescription": "Caffeinate using your configured alias"
+  },
+  "action": {
+    "startFinite": "Caffeinate for {duration}",
+    "replaceFinite": "Replace with {duration}",
+    "startFiniteDescription": "Pause idle actions until this duration expires",
+    "replaceFiniteDescription": "Replace the current session with this duration",
+    "startIndefinite": "Caffeinate until stopped",
+    "replaceIndefinite": "Replace with an indefinite session",
+    "startIndefiniteDescription": "Pause idle actions until you explicitly end the session",
+    "replaceIndefiniteDescription": "Replace the current session and keep caffeinating until stopped",
+    "end": "End current session",
+    "endDescription": "Resume normal idle behavior now"
+  },
+  "status": {
+    "off": "Caffeinate is off",
+    "offDescription": "Idle-triggered actions are using their normal settings",
+    "finite": "{duration} remaining",
+    "finiteDescription": "Idle-triggered actions are currently paused",
+    "indefinite": "Caffeinating until stopped",
+    "indefiniteDescription": "Idle-triggered actions stay paused until you end the session"
+  },
+  "feedback": {
+    "incomplete": {
+      "title": "Keep typing a duration",
+      "empty-expression": "Try 30m, 1h 30m, :45, or ::30",
+      "missing-unit": "Add a unit such as s, m, h, d, or w",
+      "missing-component": "Add another duration component after the separator",
+      "missing-clock-field": "Complete the clock form, for example 1:30 or ::30"
+    },
+    "invalid": {
+      "title": "That duration is not valid",
+      "negative-duration": "Durations cannot be negative",
+      "unsupported-unit": "Use seconds, minutes, hours, days, or weeks",
+      "expected-number": "Start each duration component with a number",
+      "unexpected-token": "Remove the unsupported punctuation or word",
+      "below-minimum": "The rounded duration must be at least one second",
+      "above-maximum": "The duration cannot exceed 52 weeks",
+      "clock-minute-range": "Clock-form minutes must be between 0 and 59",
+      "clock-second-range": "Clock-form seconds must be between 0 and 59",
+      "clock-empty-field": "Only leading clock fields may be empty; use ::30 for 30 seconds",
+      "clock-field-width": "Clock-form minutes and seconds use one or two digits",
+      "clock-numeric-field": "Clock-form fields must contain whole numbers",
+      "clock-field-count": "Use hours:minutes or hours:minutes:seconds",
+      "invalid-expression": "Try 30m, 1h 30m, :45, or ::30"
+    }
+  },
+  "bar": {
+    "inactiveText": "Off",
+    "indefiniteText": "Until stopped",
+    "finiteTooltip": "Caffeinating — {duration} remaining\nLeft-click: session menu · Right-click: settings",
+    "indefiniteTooltip": "Caffeinating until stopped\nLeft-click: session menu · Right-click: settings",
+    "inactiveTooltip": "Caffeinate is off\nLeft-click: session menu · Right-click: settings"
+  },
+  "panel": {
+    "title": "Caffeinate",
+    "startSession": "Start a session",
+    "replaceSession": "Replace current session",
+    "presetsDescription": "Choose a configured duration, or open the launcher to enter another.",
+    "untilStopped": "Until stopped",
+    "noPresets": "No presets are configured. Open the launcher to enter a duration.",
+    "cancel": "Cancel session",
+    "openLauncher": "Open launcher"
+  },
+  "settings": {
+    "title": "Caffeinate",
+    "description": "Configure launcher shortcuts, session presets, and bar behavior.",
+    "alias": {
+      "label": "Command alias",
+      "description": "Optional shorter launcher word. Leave empty to disable it.",
+      "placeholder": "c",
+      "valid": "The alias opens Caffeinate as >{alias}",
+      "disabled": "Only >caffeinate will be available",
+      "formatError": "Use letters, numbers, and hyphens without spaces or a leading >",
+      "duplicateError": "The alias must differ from caffeinate"
+    },
+    "presets": {
+      "title": "Duration presets",
+      "description": "These shortcuts appear when the provider opens with no duration.",
+      "placeholder": "30m",
+      "valid": "Resolves to {duration}",
+      "invalid": "Enter a valid duration from one second through 52 weeks",
+      "moveUp": "Move preset up",
+      "moveDown": "Move preset down",
+      "remove": "Remove preset",
+      "add": "Add preset"
+    },
+    "indefinite": {
+      "label": "Show Until stopped",
+      "description": "Include an indefinite session among the blank-query presets"
+    },
+    "bar": {
+      "title": "Bar widget",
+      "description": "Choose how Caffeinate appears between sessions.",
+      "hideInactive": {
+        "label": "Hide when inactive",
+        "description": "Remove the widget from the bar when there is no current session"
+      }
+    },
+    "reset": "Reset defaults",
+    "invalidSave": "Fix invalid settings before saving",
+    "saved": "Caffeinate settings saved"
+  }
+}
