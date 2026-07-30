@@ -1,0 +1,31 @@
+{
+  "state": {
+    "active": "On - external display detected",
+    "standby": "Auto - no external display",
+    "disabled": "Off"
+  },
+  "notify": {
+    "on": "Clamshell ON - lid switch inhibited",
+    "off": "Clamshell OFF - normal lid behavior"
+  },
+  "settings": {
+    "enabled": "Enable clamshell mode",
+    "alwaysShowBarWidget": "Always show bar icon",
+    "notify": "Show notifications",
+    "internalConnectorRegex": "Internal connector pattern",
+    "inhibitorWho": "Inhibitor identifier"
+  },
+  "status": {
+    "title": "Status",
+    "state": "State: {value}",
+    "inhibitorPid": "Inhibitor PID: {value}",
+    "unknown": "Unknown"
+  },
+  "error": {
+    "noInhibit": "systemd-inhibit not found - plugin disabled",
+    "noSocket": "niri socket unavailable"
+  },
+  "menu": {
+    "settings": "Settings"
+  }
+}
