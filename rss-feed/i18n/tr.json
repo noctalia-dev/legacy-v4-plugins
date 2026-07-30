@@ -2,7 +2,9 @@
   "settings": {
     "add": "Ekle",
     "addFeed": "Yeni Kaynak Ekle",
+    "feedNamePlaceholder": "Örnek Blog",
     "feedName": "Kaynak Adı",
+    "feedUrlPlaceholder": "https://ornek.com/feed.xml",
     "feedUrl": "Kaynak URL'si",
     "feeds": "RSS Kaynakları",
     "markOnClick": "Tıklandığında Okundu Olarak İşaretle",
@@ -14,6 +16,8 @@
     "seconds": "saniye",
     "showOnlyUnread": "Sadece Okunmamışları Göster",
     "showOnlyUnreadDesc": "Panelde sadece okunmamış öğeleri göster",
+    "showOnlyWhenUnread": "Sadece okunmamış varsa göster",
+    "showOnlyWhenUnreadDesc": "Okunmamış makaleler varsa bileşeni göster",
     "title": "RSS Okuyucu Ayarları",
     "updateInterval": "Güncelleme Aralığı",
     "updateIntervalDesc": "Yeni öğeleri ne sıklıkla kontrol etmeli (saniye)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Tümünü okundu olarak işaretle",
     "noItems": "Gösterilecek öğe yok",
+    "totalItems": "Toplam %1 öğe",
     "timeDays": "%1g önce",
     "timeHours": "%1sa önce",
     "timeMinutes": "%1dk önce",
     "timeNow": "şimdi",
-    "title": "RSS Kaynakları"
+    "title": "RSS Kaynakları",
+    "unknownFeed": "Bilinmeyen kaynak",
+    "untitled": "Başlıksız"
   }
 }

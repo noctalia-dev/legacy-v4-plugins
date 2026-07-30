@@ -2,7 +2,9 @@
   "settings": {
     "add": "Добавить",
     "addFeed": "Добавить новый канал",
+    "feedNamePlaceholder": "Пример блога",
     "feedName": "Название канала",
+    "feedUrlPlaceholder": "https://example.ru/feed.xml",
     "feedUrl": "URL канала",
     "feeds": "RSS-каналы",
     "markOnClick": "Отмечать как прочитанное при клике",
@@ -14,6 +16,8 @@
     "seconds": "секунд",
     "showOnlyUnread": "Показывать только непрочитанные",
     "showOnlyUnreadDesc": "Отображать только непрочитанные элементы на панели",
+    "showOnlyWhenUnread": "Показывать только при наличии непрочитанных",
+    "showOnlyWhenUnreadDesc": "Показывать виджет только когда есть непрочитанные статьи",
     "title": "Настройки RSS-ридера",
     "updateInterval": "Интервал обновления",
     "updateIntervalDesc": "Как часто проверять новые элементы (секунды)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Отметить все как прочитанные",
     "noItems": "Нет элементов для отображения",
+    "totalItems": "Всего: %1",
     "timeDays": "%1д назад",
     "timeHours": "%1ч назад",
     "timeMinutes": "%1мин назад",
     "timeNow": "сейчас",
-    "title": "RSS-каналы"
+    "title": "RSS-каналы",
+    "unknownFeed": "Неизвестный канал",
+    "untitled": "Без названия"
   }
 }

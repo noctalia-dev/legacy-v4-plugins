@@ -2,7 +2,9 @@
   "settings": {
     "add": "Toevoegen",
     "addFeed": "Nieuwe Feed Toevoegen",
+    "feedNamePlaceholder": "Voorbeeldblog",
     "feedName": "Feed Naam",
+    "feedUrlPlaceholder": "https://voorbeeld.nl/feed.xml",
     "feedUrl": "Feed URL",
     "feeds": "RSS-feeds",
     "markOnClick": "Markeren als Gelezen bij Klikken",
@@ -14,6 +16,8 @@
     "seconds": "seconden",
     "showOnlyUnread": "Alleen Ongelezen Tonen",
     "showOnlyUnreadDesc": "Alleen ongelezen items tonen in het paneel",
+    "showOnlyWhenUnread": "Alleen tonen wanneer er ongelezen zijn",
+    "showOnlyWhenUnreadDesc": "Toon de widget alleen wanneer er ongelezen artikelen zijn",
     "title": "RSS-lezer Instellingen",
     "updateInterval": "Update Interval",
     "updateIntervalDesc": "Hoe vaak nieuwe items controleren (seconden)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Alles markeren als gelezen",
     "noItems": "Geen items om weer te geven",
+    "totalItems": "%1 items in totaal",
     "timeDays": "%1d geleden",
     "timeHours": "%1u geleden",
     "timeMinutes": "%1min geleden",
     "timeNow": "nu",
-    "title": "RSS-feeds"
+    "title": "RSS-feeds",
+    "unknownFeed": "Onbekende feed",
+    "untitled": "Zonder titel"
   }
 }

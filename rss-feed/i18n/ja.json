@@ -2,7 +2,9 @@
   "settings": {
     "add": "追加",
     "addFeed": "新しいフィードを追加",
+    "feedNamePlaceholder": "例のブログ",
     "feedName": "フィード名",
+    "feedUrlPlaceholder": "https://example.jp/feed.xml",
     "feedUrl": "フィードURL",
     "feeds": "RSSフィード",
     "markOnClick": "クリック時に既読にする",
@@ -14,6 +16,8 @@
     "seconds": "秒",
     "showOnlyUnread": "未読のみ表示",
     "showOnlyUnreadDesc": "パネルに未読アイテムのみを表示",
+    "showOnlyWhenUnread": "未読があるときのみ表示",
+    "showOnlyWhenUnreadDesc": "未読の記事がある場合のみウィジェットを表示",
     "title": "RSSリーダー設定",
     "updateInterval": "更新間隔",
     "updateIntervalDesc": "新しいアイテムをチェックする頻度（秒）"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "すべて既読にする",
     "noItems": "表示するアイテムがありません",
+    "totalItems": "合計%1件",
     "timeDays": "%1日前",
     "timeHours": "%1時間前",
     "timeMinutes": "%1分前",
     "timeNow": "今",
-    "title": "RSSフィード"
+    "title": "RSSフィード",
+    "unknownFeed": "不明なフィード",
+    "untitled": "無題"
   }
 }

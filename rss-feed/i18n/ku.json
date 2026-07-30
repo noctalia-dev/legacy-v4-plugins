@@ -2,7 +2,9 @@
   "settings": {
     "add": "Zêde bike",
     "addFeed": "Xwarinek Nû Zêde Bike",
+    "feedNamePlaceholder": "Bloga mînak",
     "feedName": "Navê Xwarinê",
+    "feedUrlPlaceholder": "https://mînak.com/feed.xml",
     "feedUrl": "URL'ê Xurekî",
     "feeds": "Xwarinên RSS",
     "markOnClick": "Bi tikandinê wekî Xwendî nîşan bide",
@@ -14,6 +16,8 @@
     "seconds": "sanîye",
     "showOnlyUnread": "Tenê Nexwendî Nîşan Bide",
     "showOnlyUnreadDesc": "Tenê tiştên nehatî xwendin di panelê de nîşan bide",
+    "showOnlyWhenUnread": "Tenê dema ku nehatî xwendin hebe nîşan bide",
+    "showOnlyWhenUnreadDesc": "Tenê dema ku gotarên nehatî xwendin hebin widgetê nîşan bide",
     "title": "Mîhengên Xwendevanê Feeda RSS",
     "updateInterval": "Demê Nûkirinê",
     "updateIntervalDesc": "Çend caran ji bo tiştên nû kontrol bike (saniye)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Hemûyan wekî hatî xwendin nîşan bide",
     "noItems": "Tiştên ku bên nîşandan tune ne",
+    "totalItems": "Hemû: %1",
     "timeDays": "%1d berê",
     "timeHours": "%1 demjimêr berê",
     "timeMinutes": "%1 deqîqe berê",
     "timeNow": "niha",
-    "title": "Xwarinên RSS"
+    "title": "Xwarinên RSS",
+    "unknownFeed": "Xurekî nenas",
+    "untitled": "Bê nav"
   }
 }

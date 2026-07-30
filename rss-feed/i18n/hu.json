@@ -2,7 +2,9 @@
   "settings": {
     "add": "Hozzáadás",
     "addFeed": "Új hírforrás hozzáadása",
+    "feedNamePlaceholder": "Példa blog",
     "feedName": "Hírfolyam neve",
+    "feedUrlPlaceholder": "https://pelda.hu/feed.xml",
     "feedUrl": "Hírfolyam URL",
     "feeds": "RSS-hírcsatornák",
     "markOnClick": "Olvasottként jelölés kattintásra",
@@ -14,6 +16,8 @@
     "seconds": "másodperc",
     "showOnlyUnread": "Csak olvasatlanok megjelenítése",
     "showOnlyUnreadDesc": "Csak a nem olvasott elemek megjelenítése a panelen",
+    "showOnlyWhenUnread": "Csak akkor jelenjen meg, ha van olvasatlan",
+    "showOnlyWhenUnreadDesc": "Csak akkor jelenítse meg a modult, ha vannak olvasatlan cikkek",
     "title": "RSS-hírcsatorna olvasó beállításai",
     "updateInterval": "Frissítési időköz",
     "updateIntervalDesc": "Új elemek keresésének gyakorisága (másodperc)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Összes megjelölése olvasottként",
     "noItems": "Nincsenek megjeleníthető elemek",
+    "totalItems": "Összesen: %1",
     "timeDays": "%1d perce",
     "timeHours": "%1 órával ezelőtt",
     "timeMinutes": "%1 perce",
     "timeNow": "most",
-    "title": "RSS-hírcsatornák"
+    "title": "RSS-hírcsatornák",
+    "unknownFeed": "Ismeretlen hírfolyam",
+    "untitled": "Cím nélkül"
   }
 }

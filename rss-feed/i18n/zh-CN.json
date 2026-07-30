@@ -2,7 +2,9 @@
   "settings": {
     "add": "添加",
     "addFeed": "添加新源",
+    "feedNamePlaceholder": "示例博客",
     "feedName": "源名称",
+    "feedUrlPlaceholder": "https://example.cn/feed.xml",
     "feedUrl": "源URL",
     "feeds": "RSS源",
     "markOnClick": "点击时标记为已读",
@@ -14,6 +16,8 @@
     "seconds": "秒",
     "showOnlyUnread": "仅显示未读",
     "showOnlyUnreadDesc": "在面板中仅显示未读项目",
+    "showOnlyWhenUnread": "仅在有未读时显示",
+    "showOnlyWhenUnreadDesc": "仅在有未读文章时显示小部件",
     "title": "RSS阅读器设置",
     "updateInterval": "更新间隔",
     "updateIntervalDesc": "检查新项目的频率（秒）"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "全部标记为已读",
     "noItems": "没有可显示的项目",
+    "totalItems": "共 %1 项",
     "timeDays": "%1天前",
     "timeHours": "%1小时前",
     "timeMinutes": "%1分钟前",
     "timeNow": "现在",
-    "title": "RSS源"
+    "title": "RSS源",
+    "unknownFeed": "未知源",
+    "untitled": "未命名"
   }
 }

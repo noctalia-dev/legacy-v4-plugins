@@ -24,11 +24,15 @@ Item {
     property var defaults: pluginApi?.manifest?.metadata?.defaultSettings || ({})
 
     readonly property var feeds: cfg.feeds || defaults.feeds || []
+    readonly property bool showOnlyWhenUnread: cfg.showOnlyWhenUnread ?? defaults.showOnlyWhenUnread ?? false
     readonly property int updateInterval: cfg.updateInterval ?? defaults.updateInterval ?? 600
     readonly property int maxItemsPerFeed: cfg.maxItemsPerFeed ?? defaults.maxItemsPerFeed ?? 10
     readonly property bool showOnlyUnread: cfg.showOnlyUnread ?? defaults.showOnlyUnread ?? false
     readonly property bool markAsReadOnClick: cfg.markAsReadOnClick ?? defaults.markAsReadOnClick ?? true
     readonly property var readItems: cfg.readItems || defaults.readItems || []
+
+    readonly property bool isVisible: !showOnlyWhenUnread || unreadCount > 0
+    visible: root.isVisible
 
     // Watch for changes in readItems and cfg to update unread count
     onCfgChanged: {

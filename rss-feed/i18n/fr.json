@@ -2,7 +2,9 @@
   "settings": {
     "add": "Ajouter",
     "addFeed": "Ajouter un Nouveau Flux",
+    "feedNamePlaceholder": "Blog d'exemple",
     "feedName": "Nom du Flux",
+    "feedUrlPlaceholder": "https://exemple.com/feed.xml",
     "feedUrl": "URL du Flux",
     "feeds": "Flux RSS",
     "markOnClick": "Marquer Comme Lu au Clic",
@@ -14,6 +16,8 @@
     "seconds": "secondes",
     "showOnlyUnread": "Afficher Uniquement Non Lus",
     "showOnlyUnreadDesc": "Afficher uniquement les éléments non lus dans le panneau",
+    "showOnlyWhenUnread": "Afficher uniquement s'il y a des non lus",
+    "showOnlyWhenUnreadDesc": "Afficher le widget uniquement lorsqu'il y a des articles non lus",
     "title": "Paramètres du Lecteur RSS",
     "updateInterval": "Intervalle de Mise à Jour",
     "updateIntervalDesc": "Fréquence de vérification des nouveaux éléments (secondes)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Tout marquer comme lu",
     "noItems": "Aucun élément à afficher",
+    "totalItems": "%1 éléments au total",
     "timeDays": "il y a %1j",
     "timeHours": "il y a %1h",
     "timeMinutes": "il y a %1min",
     "timeNow": "maintenant",
-    "title": "Flux RSS"
+    "title": "Flux RSS",
+    "unknownFeed": "Flux inconnu",
+    "untitled": "Sans titre"
   }
 }

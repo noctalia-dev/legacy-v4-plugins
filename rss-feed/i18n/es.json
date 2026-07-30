@@ -2,7 +2,9 @@
   "settings": {
     "add": "Agregar",
     "addFeed": "Agregar Nuevo Feed",
+    "feedNamePlaceholder": "Blog de ejemplo",
     "feedName": "Nombre del Feed",
+    "feedUrlPlaceholder": "https://ejemplo.com/feed.xml",
     "feedUrl": "URL del Feed",
     "feeds": "Feeds RSS",
     "markOnClick": "Marcar Como Leído al Hacer Clic",
@@ -14,6 +16,8 @@
     "seconds": "segundos",
     "showOnlyUnread": "Mostrar Solo No Leídos",
     "showOnlyUnreadDesc": "Mostrar solo elementos no leídos en el panel",
+    "showOnlyWhenUnread": "Mostrar solo cuando haya no leídos",
+    "showOnlyWhenUnreadDesc": "Mostrar el widget solo cuando haya artículos no leídos",
     "title": "Configuración del Lector RSS",
     "updateInterval": "Intervalo de Actualización",
     "updateIntervalDesc": "Cada cuánto tiempo buscar nuevos elementos (segundos)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Marcar todos como leídos",
     "noItems": "No hay elementos para mostrar",
+    "totalItems": "%1 elementos en total",
     "timeDays": "hace %1d",
     "timeHours": "hace %1h",
     "timeMinutes": "hace %1min",
     "timeNow": "ahora",
-    "title": "Feeds RSS"
+    "title": "Feeds RSS",
+    "unknownFeed": "Feed desconocido",
+    "untitled": "Sin título"
   }
 }

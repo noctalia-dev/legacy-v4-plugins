@@ -2,7 +2,9 @@
   "settings": {
     "add": "Add",
     "addFeed": "Add New Feed",
+    "feedNamePlaceholder": "Example Blog",
     "feedName": "Feed Name",
+    "feedUrlPlaceholder": "https://example.com/feed.xml",
     "feedUrl": "Feed URL",
     "feeds": "RSS Feeds",
     "markOnClick": "Mark as Read on Click",
@@ -14,6 +16,8 @@
     "seconds": "seconds",
     "showOnlyUnread": "Show Only Unread",
     "showOnlyUnreadDesc": "Display only unread items in the panel",
+    "showOnlyWhenUnread": "Show Only When Unread",
+    "showOnlyWhenUnreadDesc": "Only show the widget when there are unread articles",
     "title": "RSS Feed Reader Settings",
     "updateInterval": "Update Interval",
     "updateIntervalDesc": "How often to check for new items (seconds)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Mark all as read",
     "noItems": "No items to display",
+    "totalItems": "%1 total items",
     "timeDays": "%1d ago",
     "timeHours": "%1h ago",
     "timeMinutes": "%1min ago",
     "timeNow": "now",
-    "title": "RSS Feeds"
+    "title": "RSS Feeds",
+    "unknownFeed": "Unknown Feed",
+    "untitled": "Untitled"
   }
 }

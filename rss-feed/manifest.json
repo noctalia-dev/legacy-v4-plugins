@@ -1,7 +1,7 @@
 {
   "id": "rss-feed",
   "name": "RSS Feed Reader",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Monitor and read RSS/Atom feeds directly from your desktop",
   "repository": "https://github.com/noctalia-dev/noctalia-plugins",
   "author": "Lokize",
@@ -18,6 +18,7 @@
   "metadata": {
     "defaultSettings": {
       "feeds": [],
+      "showOnlyWhenUnread": false,
       "updateInterval": 600,
       "maxItemsPerFeed": 10,
       "showOnlyUnread": false,

@@ -2,7 +2,9 @@
   "settings": {
     "add": "Dodaj",
     "addFeed": "Dodaj nowy kanał",
+    "feedNamePlaceholder": "Przykładowy blog",
     "feedName": "Nazwa kanału",
+    "feedUrlPlaceholder": "https://example.pl/feed.xml",
     "feedUrl": "Adres URL kanału",
     "feeds": "Kanały RSS",
     "markOnClick": "Oznacz jako przeczytane po kliknięciu",
@@ -14,6 +16,8 @@
     "seconds": "sekundy",
     "showOnlyUnread": "Pokaż tylko nieprzeczytane",
     "showOnlyUnreadDesc": "Wyświetlaj tylko nieprzeczytane elementy w panelu",
+    "showOnlyWhenUnread": "Pokazuj tylko, gdy są nieprzeczytane",
+    "showOnlyWhenUnreadDesc": "Pokazuj widżet tylko wtedy, gdy są nieprzeczytane artykuły",
     "title": "Ustawienia czytnika kanałów RSS",
     "updateInterval": "Interwał aktualizacji",
     "updateIntervalDesc": "Jak często sprawdzać nowe elementy (sekundy)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Oznacz wszystko jako przeczytane",
     "noItems": "Brak elementów do wyświetlenia",
+    "totalItems": "Łącznie: %1",
     "timeDays": "%1d temu",
     "timeHours": "%1 godz. temu",
     "timeMinutes": "%1 min temu",
     "timeNow": "teraz",
-    "title": "Kanały RSS"
+    "title": "Kanały RSS",
+    "unknownFeed": "Nieznany kanał",
+    "untitled": "Bez tytułu"
   }
 }

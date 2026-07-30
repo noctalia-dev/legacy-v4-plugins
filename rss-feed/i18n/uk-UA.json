@@ -2,7 +2,9 @@
   "settings": {
     "add": "Додати",
     "addFeed": "Додати новий канал",
+    "feedNamePlaceholder": "Приклад блогу",
     "feedName": "Назва каналу",
+    "feedUrlPlaceholder": "https://example.ua/feed.xml",
     "feedUrl": "URL каналу",
     "feeds": "RSS-канали",
     "markOnClick": "Позначати як прочитане при кліку",
@@ -14,6 +16,8 @@
     "seconds": "секунд",
     "showOnlyUnread": "Показувати лише непрочитані",
     "showOnlyUnreadDesc": "Відображати лише непрочитані елементи на панелі",
+    "showOnlyWhenUnread": "Показувати лише за наявності непрочитаних",
+    "showOnlyWhenUnreadDesc": "Показувати віджет лише коли є непрочитані статті",
     "title": "Налаштування RSS-читача",
     "updateInterval": "Інтервал оновлення",
     "updateIntervalDesc": "Як часто перевіряти нові елементи (секунди)"
@@ -21,10 +25,13 @@
   "widget": {
     "markAllRead": "Позначити всі як прочитані",
     "noItems": "Немає елементів для відображення",
+    "totalItems": "Усього: %1",
     "timeDays": "%1д тому",
     "timeHours": "%1год тому",
     "timeMinutes": "%1хв тому",
     "timeNow": "зараз",
-    "title": "RSS-канали"
+    "title": "RSS-канали",
+    "unknownFeed": "Невідомий канал",
+    "untitled": "Без назви"
   }
 }

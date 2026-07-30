@@ -383,7 +383,7 @@ Item {
                 spacing: Style.marginM
 
                 NText {
-                    text: pluginApi?.tr("widget.title", "RSS Feeds") || "RSS Feeds"
+                    text: pluginApi?.tr("widget.title")
                     pointSize: Style.fontSizeL
                     font.bold: true
                     color: Color.mOnSurface
@@ -435,7 +435,7 @@ Item {
                 }
 
                 NButton {
-                    text: pluginApi?.tr("widget.markAllRead", "Mark all as read") || "Mark all as read"
+                    text: pluginApi?.tr("widget.markAllRead")
                     enabled: displayItems.length > 0
                     onClicked: markAllAsRead()
                 }
@@ -533,7 +533,7 @@ Item {
 
                             // Feed name
                             NText {
-                                text: modelData.feedName || "Unknown Feed"
+                                text: modelData.feedName || (pluginApi ? pluginApi.tr("widget.unknownFeed") : "")
                                 pointSize: Style.fontSizeS
                                 font.bold: true
                                 color: Color.mPrimary
@@ -543,7 +543,7 @@ Item {
 
                             // Title
                             NText {
-                                text: modelData.title || "Untitled"
+                                text: modelData.title || (pluginApi ? pluginApi.tr("widget.untitled") : "")
                                 pointSize: Style.fontSizeM 
                                 font.bold: isUnread
                                 color: Color.mOnSurface
@@ -590,7 +590,7 @@ Item {
                     NText {
                         visible: displayItems.length === 0
                         anchors.centerIn: parent
-                        text: pluginApi?.tr("widget.noItems", "No items to display") || "No items to display"
+                        text: pluginApi?.tr("widget.noItems")
                         pointSize: Style.fontSizeM
                         color: Color.mSecondary
                     }
@@ -606,7 +606,7 @@ Item {
                 Layout.fillWidth: true
 
                 NText {
-                    text: allItems.length + " total items"
+                    text: pluginApi ? pluginApi.tr("widget.totalItems").replace("%1", allItems.length) : ""
                     pointSize: Style.fontSizeS
                     color: Color.mSecondary
                     Layout.fillWidth: true
@@ -623,10 +623,10 @@ Item {
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMins < 1) return pluginApi?.tr("widget.timeNow", "now") || "now";
-        if (diffMins < 60) return (pluginApi?.tr("widget.timeMinutes", "%1min ago") || "%1min ago").replace("%1", diffMins);
-        if (diffHours < 24) return (pluginApi?.tr("widget.timeHours", "%1h ago") || "%1h ago").replace("%1", diffHours);
-        if (diffDays < 7) return (pluginApi?.tr("widget.timeDays", "%1d ago") || "%1d ago").replace("%1", diffDays);
+        if (diffMins < 1) return pluginApi ? pluginApi.tr("widget.timeNow") : "";
+        if (diffMins < 60) return pluginApi ? pluginApi.tr("widget.timeMinutes").replace("%1", diffMins) : "";
+        if (diffHours < 24) return pluginApi ? pluginApi.tr("widget.timeHours").replace("%1", diffHours) : "";
+        if (diffDays < 7) return pluginApi ? pluginApi.tr("widget.timeDays").replace("%1", diffDays) : "";
         
         return date.toLocaleDateString();
     }
