@@ -1,0 +1,24 @@
+// Noctalia VPN: allow members of the `wheel` group to make the
+// systemd-resolved / systemd-networkd calls that sing-box performs when
+// bringing the TUN interface up (auto_route) and tearing it back down.
+//
+// Without this rule the user is prompted by Polkit once per call:
+//   - org.freedesktop.resolve1.set-default-route  (TUN start)
+//   - org.freedesktop.resolve1.set-dns-servers    (TUN start)
+//   - org.freedesktop.resolve1.set-domains        (TUN start, search domains)
+//   - org.freedesktop.network1.set-dns-servers    (TUN start, when networkd-managed)
+//   - org.freedesktop.resolve1.revert             (TUN stop / mode switch)
+//
+// CAP_NET_ADMIN on /usr/bin/sing-box itself is still a separate one-off prompt
+// gated by org.noctalia.vpn.setcap; this rule does not cover that case.
+
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.resolve1.set-default-route" ||
+         action.id == "org.freedesktop.resolve1.revert" ||
+         action.id == "org.freedesktop.resolve1.set-dns-servers" ||
+         action.id == "org.freedesktop.resolve1.set-domains" ||
+         action.id == "org.freedesktop.network1.set-dns-servers") &&
+        subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+    }
+});

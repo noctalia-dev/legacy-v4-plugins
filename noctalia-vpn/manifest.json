@@ -1,0 +1,28 @@
+{
+  "id": "noctalia-vpn",
+  "name": "Noctalia VPN",
+  "version": "0.1.0",
+  "minNoctaliaVersion": "3.6.0",
+  "author": "Умеджон Базаров",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "VPN/proxy manager for SSH, VLESS, VMess, SOCKS5 and Shadowsocks with routing rules and kill switch.",
+  "tags": ["Bar", "Panel", "Network", "VPN", "Proxy", "VLESS", "SSH"],
+  "screenshots": ["preview.png"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "lastActiveServerId": "",
+      "lastMode": "rules",
+      "lastProxyMode": "system",
+      "autoStart": false
+    }
+  }
+}
