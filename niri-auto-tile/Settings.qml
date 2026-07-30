@@ -13,7 +13,7 @@ ColumnLayout {
 
     property bool valueEnabled: settings.enabled ?? defaults.enabled ?? true
     property bool valuePerWorkspace: settings.perWorkspace ?? defaults.perWorkspace ?? false
-    property bool valueOnlyAtMax: settings.onlyAtMax ?? defaults.onlyAtMax ?? true
+    property bool valueOnlyAtMax: settings.onlyAtMax ?? defaults.onlyAtMax ?? false
     property int valueMaxVisible: settings.maxVisible ?? defaults.maxVisible ?? 4
     property int valueDebounceMs: settings.debounceMs ?? defaults.debounceMs ?? 300
     property int valueMaxEventsPerSecond: settings.maxEventsPerSecond ?? defaults.maxEventsPerSecond ?? 20

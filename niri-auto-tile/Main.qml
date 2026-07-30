@@ -13,7 +13,7 @@ Item {
     readonly property bool enabled: pluginApi?.pluginSettings?.enabled ?? true
     readonly property int maxVisible: pluginApi?.pluginSettings?.maxVisible ?? 4
     readonly property bool perWorkspace: pluginApi?.pluginSettings?.perWorkspace ?? false
-    readonly property bool onlyAtMax: pluginApi?.pluginSettings?.onlyAtMax ?? true
+    readonly property bool onlyAtMax: pluginApi?.pluginSettings?.onlyAtMax ?? false
     readonly property var workspaceMaxVisible: pluginApi?.pluginSettings?.workspaceMaxVisible ?? ({})
     readonly property int debounceMs: pluginApi?.pluginSettings?.debounceMs ?? 300
     readonly property int maxEventsPerSecond: pluginApi?.pluginSettings?.maxEventsPerSecond ?? 20
@@ -192,7 +192,7 @@ Item {
             onStreamFinished: {
                 const msg = text.trim();
                 if (msg) {
-                    console.warn("[auto-tile]", msg);
+                    Logger.w("[auto-tile]", msg);
                 }
             }
         }
