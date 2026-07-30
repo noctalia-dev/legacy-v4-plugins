@@ -14,6 +14,8 @@ ColumnLayout {
         "google"
 
     property string editDeeplApiKey: pluginApi?.pluginSettings?.deeplApiKey || ""
+    property string editDeepLXApiUrl: pluginApi?.pluginSettings?.deeplxApiUrl || ""
+    property string editDeepLXApiKey: pluginApi?.pluginSettings?.deeplxApiKey || ""
     property bool editRealTime: pluginApi?.pluginSettings?.realTimeTranslation !== undefined ? pluginApi.pluginSettings.realTimeTranslation : true
     property bool editShowPreview: pluginApi?.pluginSettings?.showPreview !== undefined ? pluginApi.pluginSettings.showPreview : true
     spacing: Style.marginM
@@ -29,6 +31,10 @@ ColumnLayout {
             {
                 "key": "deepl",
                 "name": "DeepL"
+            },
+            {
+                "key": "deeplxLike",
+                "name": "DeepLX-like API"
             }
         ]
         currentKey: root.editBackend
@@ -43,6 +49,24 @@ ColumnLayout {
         text: root.editDeeplApiKey
         onTextChanged: root.editDeeplApiKey = text
         placeholderText: pluginApi?.tr("settings.apiKey-placeholder") || "Enter your API key here"
+    }
+
+    NTextInput {
+        visible: root.editBackend === "deeplxLike"
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.apiUrl-label")
+        text: root.editDeepLXApiUrl
+        onTextChanged: root.editDeepLXApiUrl = text
+        placeholderText: pluginApi?.tr("settings.apiUrl-placeholder")
+    }
+
+    NTextInput {
+        visible: root.editBackend === "deeplxLike"
+        Layout.fillWidth: true
+        label: pluginApi?.tr("settings.apiKey-label")
+        text: root.editDeepLXApiKey
+        onTextChanged: root.editDeepLXApiKey = text
+        placeholderText: pluginApi?.tr("settings.optional-placeholder")
     }
 
     NToggle {
@@ -66,6 +90,8 @@ ColumnLayout {
 
         pluginApi.pluginSettings.backend = root.editBackend;
         pluginApi.pluginSettings.deeplApiKey = root.editDeeplApiKey;
+        pluginApi.pluginSettings.deeplxApiUrl = root.editDeepLXApiUrl;
+        pluginApi.pluginSettings.deeplxApiKey = root.editDeepLXApiKey;
         pluginApi.pluginSettings.realTimeTranslation = root.editRealTime;
         pluginApi.pluginSettings.showPreview = root.editShowPreview;
         pluginApi.saveSettings();

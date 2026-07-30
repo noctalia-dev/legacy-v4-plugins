@@ -107,7 +107,8 @@
     "translation": "Übersetzung ({code})",
     "missingApiKey": "API-Schlüssel fehlt",
     "invalidApiKey": "Ungültiger API-Schlüssel",
-    "pressEnter": "Zum Übersetzen Enter drücken"
+    "pressEnter": "Zum Übersetzen Enter drücken",
+    "missingApiUrl": "API-URL fehlt"
   },
   "settings": {
     "backend-description": "Wählen Sie den zu verwendenden Übersetzungsdienst",
@@ -116,6 +117,9 @@
     "realTime-description": "Während der Eingabe übersetzen (kann zu einem erheblichen Token-Verbrauch führen)",
     "apiKey-placeholder": "Gib deinen API-Schlüssel hier ein",
     "apiKey-label": "API Schlüssel",
+    "apiUrl-label": "API-URL",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "optional-placeholder": "Optional",
     "showPreview-label": "Übersetzungsvorschau",
     "showPreview-description": "Das Übersetzungsergebnis im Vorschaufenster anzeigen"
   }

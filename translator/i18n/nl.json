@@ -104,12 +104,17 @@
     "error": "Vertalingsfout",
     "targetLanguage": "Doeltaal: {code}",
     "translating": "Vertalen...",
-    "translation": "Vertaling ({code})"
+    "translation": "Vertaling ({code})",
+    "missingApiUrl": "API-URL ontbreekt"
   },
   "settings": {
     "backend": {
       "description": "Kies de vertaaldienst die je wilt gebruiken",
       "label": "Vertaal-backend"
-    }
+    },
+    "apiUrl-label": "API-URL",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "API-sleutel",
+    "optional-placeholder": "Optioneel"
   }
 }

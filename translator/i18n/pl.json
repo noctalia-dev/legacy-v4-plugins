@@ -104,12 +104,17 @@
     "error": "Błąd tłumaczenia",
     "targetLanguage": "Język docelowy: {code}",
     "translating": "Tłumaczenie...",
-    "translation": "Tłumaczenie ({code})"
+    "translation": "Tłumaczenie ({code})",
+    "missingApiUrl": "Brak adresu URL API"
   },
   "settings": {
     "backend": {
       "description": "Wybierz usługę tłumaczeniową, której chcesz użyć",
       "label": "Backend tłumaczeń"
-    }
+    },
+    "apiUrl-label": "Adres URL API",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "Klucz API",
+    "optional-placeholder": "Opcjonalne"
   }
 }

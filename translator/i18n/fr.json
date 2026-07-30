@@ -107,7 +107,8 @@
     "translation": "Traduction ({code})",
     "missingApiKey": "Clé API manquante",
     "invalidApiKey": "Clé API invalide",
-    "pressEnter": "Appuyez sur Entrée pour traduire"
+    "pressEnter": "Appuyez sur Entrée pour traduire",
+    "missingApiUrl": "URL d'API manquante"
   },
   "settings": {
       "backend-description": "Choisissez le service de traduction à utiliser",
@@ -116,6 +117,9 @@
       "realTime-description": "Traduire au fur et à mesure que vous tapez (Peut entraîner une consommation importante de tokens)",
       "apiKey-placeholder": "Entrez votre clé API ici",
       "apiKey-label": "Clé API",
+      "apiUrl-label": "URL de l'API",
+      "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+      "optional-placeholder": "Optionnel",
       "showPreview-label": "Aperçu de la traduction",
       "showPreview-description": "Afficher le résultat de la traduction dans le panneau d'aperçu"
   }

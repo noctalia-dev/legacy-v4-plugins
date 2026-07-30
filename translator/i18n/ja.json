@@ -104,12 +104,17 @@
     "error": "翻訳エラー",
     "targetLanguage": "対象言語: {code}",
     "translating": "翻訳中...",
-    "translation": "翻訳 ({code})"
+    "translation": "翻訳 ({code})",
+    "missingApiUrl": "API URL がありません"
   },
   "settings": {
     "backend": {
       "description": "使用する翻訳サービスを選択してください",
       "label": "翻訳バックエンド"
-    }
+    },
+    "apiUrl-label": "API URL",
+    "apiUrl-placeholder": "http://127.0.0.1:1188/translate",
+    "apiKey-label": "API キー",
+    "optional-placeholder": "任意"
   }
 }
