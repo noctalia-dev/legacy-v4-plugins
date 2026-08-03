@@ -1,0 +1,14 @@
+{
+  "bar_widget": {
+    "tooltip": "Show Wi-Fi QR code",
+    "open_panel": "Open Panel"
+  },
+  "panel": {
+    "title": "Wi-Fi QR",
+    "error_no_connection": "No Wi-Fi connection detected",
+    "empty_state": "No QR data available",
+    "connected": "Connected: ",
+    "scan_to_connect": "Scan to connect",
+    "refresh": "Refresh"
+  }
+}

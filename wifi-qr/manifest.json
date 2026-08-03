@@ -1,0 +1,22 @@
+{
+  "id": "wifi-qr",
+  "name": "Wi-Fi QR",
+  "version": "1.0.0",
+  "minNoctaliaVersion": "4.1.0",
+  "author": "MorphoRust",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Show a QR code to join the current Wi-Fi network",
+  "tags": ["Bar", "Panel", "Network"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {}
+  }
+}
