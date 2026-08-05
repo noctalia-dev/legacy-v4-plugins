@@ -1,0 +1,30 @@
+{
+  "id": "asus-control",
+  "name": "ASUS Control",
+  "version": "1.1.9",
+  "minNoctaliaVersion": "4.4.1",
+  "author": "peachoff",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "description": "Full ASUS laptop control via asusctl: power profiles, keyboard LED brightness, battery charge limit, fan curves, and aura zone power management.",
+  "tags": ["Bar", "Panel", "System"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "iconColor": "none",
+      "pollingEnabled": false,
+      "pollingIntervalMs": 5000,
+      "syncPowerProfiles": true,
+      "syncAuraColor": false,
+      "auraColorSource": "primary"
+    }
+  }
+}

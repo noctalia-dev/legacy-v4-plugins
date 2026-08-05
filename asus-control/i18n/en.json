@@ -1,0 +1,75 @@
+{
+  "widget": {
+    "tooltip": "ASUS Control"
+  },
+  "menu": {
+    "settings": "Widget Settings",
+    "refresh": "Refresh Status"
+  },
+  "panel": {
+    "title": "ASUS Control",
+    "not-available": "asusctl not found. Install asusctl to use this plugin.",
+    "not-available-short": "asusctl not found",
+    "profile": "Power Profile",
+    "led": "Keyboard LED",
+    "battery": "Battery",
+    "ac": "AC",
+    "fan": "Fan Curves",
+    "aura": "Aura Lighting",
+    "effect": "Effect",
+    "zones": "Zones",
+    "no-zones": "No aura zones detected"
+  },
+  "led": {
+    "brightness": "Brightness",
+    "off": "Off",
+    "low": "Low",
+    "med": "Medium",
+    "high": "High"
+  },
+  "battery": {
+    "charge-limit": "Charge Limit",
+    "min": "20%",
+    "max": "100%",
+    "oneshot": "Charge to 100% Once"
+  },
+  "fan": {
+    "cpu-curve": "CPU Fan Curve",
+    "gpu-curve": "GPU Fan Curve",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "reset-default": "Reset to Default"
+  },
+  "aura": {
+    "static-color": "Static color",
+    "scheme-colors": "Quick colors",
+    "sync-active": "Color is synced to Noctalia theme"
+  },
+  "settings": {
+    "not-available": "asusctl is not installed or not in PATH.",
+    "detected": "Detected:",
+    "iconColor": {
+      "label": "Icon Color",
+      "desc": "Color of the bar widget icon."
+    },
+    "pollingEnabled": {
+      "label": "Polling",
+      "desc": "Periodically poll asusctl for status updates."
+    },
+    "pollingInterval": {
+      "label": "Polling Interval"
+    },
+    "syncPowerProfiles": {
+      "label": "Sync Power Profiles",
+      "desc": "When you change an ASUS profile, also switch the Noctalia power profile (and vice versa)."
+    },
+    "syncAuraColor": {
+      "label": "Sync Keyboard Color",
+      "desc": "Automatically set the keyboard aura color from the current Noctalia theme."
+    },
+    "auraColorSource": {
+      "label": "Color Source",
+      "desc": "Which Noctalia theme color to apply to the keyboard."
+    }
+  }
+}
