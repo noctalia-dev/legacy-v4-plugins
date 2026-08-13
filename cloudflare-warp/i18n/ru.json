@@ -15,6 +15,15 @@
     "mode": "Режим",
     "not-installed": "warp-cli не найден. Установите Cloudflare WARP для использования этого плагина."
   },
+  "modes": {
+    "warp": "WARP (полный VPN)",
+    "doh": "Только DNS over HTTPS",
+    "warp_doh": "WARP + DNS over HTTPS",
+    "dot": "Только DNS over TLS",
+    "warp_dot": "WARP + DNS over TLS",
+    "proxy": "SOCKS5-прокси",
+    "tunnel_only": "Только туннель (без DNS-прокси)"
+  },
   "settings": {
     "title": "Cloudflare WARP",
     "description": "Включайте и отключайте Cloudflare WARP с панели и настраивайте внешний вид.",
@@ -28,6 +37,7 @@
   "toast": {
     "title": "Cloudflare WARP",
     "connected": "Подключено к WARP",
-    "disconnected": "Отключено от WARP"
+    "disconnected": "Отключено от WARP",
+    "mode-changed": "Режим изменён"
   }
 }

@@ -15,7 +15,12 @@ Item {
   property bool warpConnected: false
   property string warpMode: ""
   property bool isRefreshing: false
+  property bool isSwitchingMode: false
   property string lastToggleAction: ""
+
+  readonly property var availableModes: [
+    "warp", "doh", "warp+doh", "dot", "warp+dot", "proxy", "tunnel_only"
+  ]
 
   Timer {
     id: updateTimer
@@ -45,6 +50,15 @@ Item {
     if (root.isRefreshing) return
     root.isRefreshing = true
     statusProcess.running = true
+    modeProcess.running = true
+  }
+
+  function setMode(mode) {
+    if (root.isSwitchingMode) return
+    if (root.availableModes.indexOf(mode) === -1) return
+    root.isSwitchingMode = true
+    modeSetProcess.command = ["warp-cli", "--accept-tos", "mode", mode]
+    modeSetProcess.running = true
   }
 
   function connect() {
@@ -85,7 +99,7 @@ Item {
 
   Process {
     id: statusProcess
-    command: ["warp-cli", "status"]
+    command: ["warp-cli", "--accept-tos", "status"]
     stdout: StdioCollector {}
     stderr: StdioCollector {}
 
@@ -101,16 +115,8 @@ Item {
         } else {
           root.warpConnected = false
         }
-
-        var modeMatch = output.match(/[Dd]aemon [Mm]ode:\s*(\S+)/)
-        if (modeMatch) {
-          root.warpMode = modeMatch[1]
-        } else {
-          root.warpMode = ""
-        }
       } else {
         root.warpConnected = false
-        root.warpMode = ""
         if (exitCode !== 0) {
           Logger.w("CloudflareWarp", "warp-cli status failed: " + String(statusProcess.stderr.text || "").trim())
         }
@@ -119,8 +125,52 @@ Item {
   }
 
   Process {
+    id: modeProcess
+    command: ["warp-cli", "--accept-tos", "--json", "settings"]
+    stdout: StdioCollector {}
+    stderr: StdioCollector {}
+
+    onExited: function(exitCode) {
+      var output = String(modeProcess.stdout.text || "").trim()
+      if (exitCode === 0 && output) {
+        try {
+          var data = JSON.parse(output)
+          root.warpMode = data?.settings?.operation_mode ?? ""
+        } catch (e) {
+          Logger.w("CloudflareWarp", "Failed to parse warp-cli settings JSON: " + e)
+          root.warpMode = ""
+        }
+      } else {
+        Logger.w("CloudflareWarp", "warp-cli settings failed: " + String(modeProcess.stderr.text || "").trim())
+      }
+    }
+  }
+
+  Process {
+    id: modeSetProcess
+    stdout: StdioCollector {}
+    stderr: StdioCollector {}
+
+    onExited: function(exitCode) {
+      root.isSwitchingMode = false
+      if (exitCode === 0) {
+        ToastService.showNotice(
+          pluginApi?.tr("toast.title"),
+          pluginApi?.tr("toast.mode-changed"),
+          "cloud-lock"
+        )
+      } else {
+        var err = String(modeSetProcess.stderr.text || "").trim()
+        Logger.e("CloudflareWarp", "Mode switch failed: " + err)
+        ToastService.showWarning(pluginApi?.tr("toast.title"), err || "Mode switch failed")
+      }
+      statusDelayTimer.start()
+    }
+  }
+
+  Process {
     id: connectProcess
-    command: ["warp-cli", "connect"]
+    command: ["warp-cli", "--accept-tos", "connect"]
     stdout: StdioCollector {}
     stderr: StdioCollector {}
 
@@ -142,7 +192,7 @@ Item {
 
   Process {
     id: disconnectProcess
-    command: ["warp-cli", "disconnect"]
+    command: ["warp-cli", "--accept-tos", "disconnect"]
     stdout: StdioCollector {}
     stderr: StdioCollector {}
 

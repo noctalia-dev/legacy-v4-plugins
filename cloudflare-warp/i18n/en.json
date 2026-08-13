@@ -15,6 +15,15 @@
     "mode": "Mode",
     "not-installed": "warp-cli not found. Install Cloudflare WARP to use this plugin."
   },
+  "modes": {
+    "warp": "WARP (full VPN)",
+    "doh": "DNS over HTTPS only",
+    "warp_doh": "WARP + DNS over HTTPS",
+    "dot": "DNS over TLS only",
+    "warp_dot": "WARP + DNS over TLS",
+    "proxy": "SOCKS5 proxy",
+    "tunnel_only": "Tunnel only (no DNS proxy)"
+  },
   "settings": {
     "title": "Cloudflare WARP",
     "description": "Toggle Cloudflare WARP from the bar and customize how it looks.",
@@ -28,6 +37,7 @@
   "toast": {
     "title": "Cloudflare WARP",
     "connected": "Connected to WARP",
-    "disconnected": "Disconnected from WARP"
+    "disconnected": "Disconnected from WARP",
+    "mode-changed": "Mode switched"
   }
 }
