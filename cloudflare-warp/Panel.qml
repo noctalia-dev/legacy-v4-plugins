@@ -14,7 +14,7 @@ Item {
 
   readonly property var mainInstance: pluginApi?.mainInstance
 
-  property real contentPreferredWidth: 300 * Style.uiScaleRatio
+  property real contentPreferredWidth: 420 * Style.uiScaleRatio
   property real contentPreferredHeight: contentColumn.implicitHeight + Style.marginM * 2
 
   anchors.fill: parent
@@ -74,22 +74,34 @@ Item {
             }
           }
 
-          RowLayout {
+          NText {
+            visible: mainInstance?.warpInstalled ?? false
+            text: pluginApi?.tr("panel.mode") + ":"
+            pointSize: Style.fontSizeS
+            font.weight: Style.fontWeightSemiBold
+            color: Color.mOnSurfaceVariant
+          }
+
+          NComboBox {
             Layout.fillWidth: true
-            visible: (mainInstance?.warpMode ?? "") !== ""
-            spacing: Style.marginS
+            minimumWidth: 340
+            popupHeight: 260
+            visible: mainInstance?.warpInstalled ?? false
+            enabled: !(mainInstance?.isSwitchingMode ?? false) && !(mainInstance?.modeSwitchLocked ?? false)
+            model: [
+              { key: "warp", name: pluginApi?.tr("modes.warp") },
+              { key: "doh", name: pluginApi?.tr("modes.doh") },
+              { key: "warp+doh", name: pluginApi?.tr("modes.warp_doh") },
+              { key: "dot", name: pluginApi?.tr("modes.dot") },
+              { key: "warp+dot", name: pluginApi?.tr("modes.warp_dot") },
+              { key: "proxy", name: pluginApi?.tr("modes.proxy") },
+              { key: "tunnel_only", name: pluginApi?.tr("modes.tunnel_only") }
+            ]
+            currentKey: mainInstance?.warpMode ?? ""
+            placeholder: pluginApi?.tr("panel.mode")
 
-            NText {
-              text: pluginApi?.tr("panel.mode") + ":"
-              pointSize: Style.fontSizeS
-              color: Color.mOnSurfaceVariant
-            }
-
-            NText {
-              text: mainInstance?.warpMode ?? ""
-              pointSize: Style.fontSizeS
-              color: Color.mOnSurface
-              font.family: Settings.data.ui.fontFixed
+            onSelected: key => {
+              mainInstance?.setMode(key)
             }
           }
 
