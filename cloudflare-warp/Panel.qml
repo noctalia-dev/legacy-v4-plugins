@@ -87,7 +87,7 @@ Item {
             minimumWidth: 340
             popupHeight: 260
             visible: mainInstance?.warpInstalled ?? false
-            enabled: !(mainInstance?.isSwitchingMode ?? false)
+            enabled: !(mainInstance?.isSwitchingMode ?? false) && !(mainInstance?.modeSwitchLocked ?? false)
             model: [
               { key: "warp", name: pluginApi?.tr("modes.warp") },
               { key: "doh", name: pluginApi?.tr("modes.doh") },

@@ -16,6 +16,7 @@ Item {
   property string warpMode: ""
   property bool isRefreshing: false
   property bool isSwitchingMode: false
+  property bool modeSwitchLocked: false
   property string lastToggleAction: ""
 
   readonly property var availableModes: [
@@ -136,6 +137,7 @@ Item {
         try {
           var data = JSON.parse(output)
           root.warpMode = data?.settings?.operation_mode ?? ""
+          root.modeSwitchLocked = data?.settings?.switch_locked ?? false
         } catch (e) {
           Logger.w("CloudflareWarp", "Failed to parse warp-cli settings JSON: " + e)
           root.warpMode = ""
@@ -143,6 +145,7 @@ Item {
       } else {
         Logger.w("CloudflareWarp", "warp-cli settings failed: " + String(modeProcess.stderr.text || "").trim())
       }
+      root.isRefreshing = false
     }
   }
 
