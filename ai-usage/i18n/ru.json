@@ -1,0 +1,85 @@
+{
+  "desktop_widget": {
+    "title": "AI",
+    "remaining": "осталось {percent}%",
+    "reset_in": "сброс через {duration}",
+    "reset_at": "в {time}",
+    "until": "до {date} · {days} дн",
+    "no_key": "не задан API-ключ",
+    "no_providers": "Нет провайдеров",
+    "add_provider_hint": "клик → настройки",
+    "error": "ошибка запроса",
+    "loading": "…"
+  },
+  "panel": {
+    "header": "AI Usage",
+    "plan": "план: {plan}",
+    "section_title": "ИСПОЛЬЗОВАНИЕ",
+    "session_label": "Сессия (5ч)",
+    "weekly_label": "Недельный лимит (MCP-tools)",
+    "balance_label": "Баланс",
+    "tools_label": "Разбивка MCP-инструментов",
+    "breakdown_label": "Состав баланса",
+    "key_label": "О ключе",
+    "remaining": "осталось {percent}%",
+    "remaining_num": "осталось {num}",
+    "resets": "сброс {time} · через {duration}",
+    "refresh": "Обновить",
+    "updated": "обновлено {duration} назад",
+    "never": "ещё нет данных",
+    "cached": " · кэш",
+    "no_data": "Данных пока нет.",
+    "no_key": "Для этого провайдера не настроен API-ключ.",
+    "no_providers": "Провайдеры не настроены. Добавьте их в настройках плагина."
+  },
+  "settings": {
+    "title": "AI Usage",
+    "providers_label": "ПРОВАЙДЕРЫ",
+    "add_provider": {
+      "label": "ДОБАВИТЬ ПРОВАЙДЕРА",
+      "button": "Добавить провайдера",
+      "action": "Добавить"
+    },
+    "edit_provider": {
+      "label": "РЕДАКТИРОВАТЬ ПРОВАЙДЕРА",
+      "action": "Сохранить"
+    },
+    "form": {
+      "cancel": "Отмена"
+    },
+    "provider": {
+      "type": "Тип провайдера",
+      "label_field": "Отображаемое имя (необязательно)",
+      "plan_field": "Тарифный план (необязательно)",
+      "valid_until": "Действует до (ГГГГ-ММ-ДД, необязательно)",
+      "cli_login": "логин claude CLI"
+    },
+    "api_key": {
+      "label": "API-ключ",
+      "description": "Ключ API провайдера.",
+      "description_edit": "Введите новый ключ, чтобы заменить. Оставьте пустым, чтобы сохранить текущий.",
+      "placeholder_keep": "не изменится",
+      "keyless_hint": "Использует логин claude CLI (~/.claude/.credentials.json). Ключ не нужен."
+    },
+    "edit": "Изменить",
+    "refresh": {
+      "label": "Интервал обновления (минуты)",
+      "description": "Как часто опрашивать API (1–60)."
+    },
+    "background": {
+      "label": "Фон виджета",
+      "description": "Рисовать фон карточки виджета на рабочем столе."
+    },
+    "saved": "Настройки сохранены"
+  },
+  "bar_widget": {
+    "tooltip": "осталось {percent}% · сброс через {duration}"
+  },
+  "main": {
+    "fetch_error": "AI usage: ошибка запроса: {error}"
+  },
+  "units": {
+    "h": "ч",
+    "m": "мин"
+  }
+}
