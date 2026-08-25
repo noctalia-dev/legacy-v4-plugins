@@ -1,1 +1,0 @@
-../../BarWidget.qml
