@@ -1,0 +1,1 @@
+../../ControlCenterWidget.qml

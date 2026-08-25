@@ -1,0 +1,12 @@
+{
+  "data": {
+    "label": "sk-or-main",
+    "usage": 25.5,
+    "limit": null,
+    "is_free_tier": true,
+    "rate_limit": {
+      "requests": 20,
+      "interval": "10s"
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "desktop_widget": {
+    "title": "AI",
+    "remaining": "{percent}% left",
+    "reset_in": "resets in {duration}",
+    "reset_at": "at {time}",
+    "until": "until {date} · {days}d",
+    "no_key": "API key not set",
+    "no_providers": "No providers",
+    "add_provider_hint": "click → settings",
+    "error": "fetch failed",
+    "loading": "…"
+  },
+  "panel": {
+    "header": "AI Usage",
+    "plan": "plan: {plan}",
+    "section_title": "USAGE",
+    "session_label": "Session (5h)",
+    "weekly_label": "Weekly (MCP tools)",
+    "balance_label": "Balance",
+    "tools_label": "MCP tools breakdown",
+    "breakdown_label": "Balance breakdown",
+    "key_label": "Key info",
+    "remaining": "{percent}% left",
+    "remaining_num": "{num} left",
+    "resets": "resets {time} · in {duration}",
+    "refresh": "Refresh",
+    "updated": "updated {duration} ago",
+    "never": "not fetched yet",
+    "cached": " · cached",
+    "no_data": "No data yet.",
+    "no_key": "API key is not configured for this provider.",
+    "no_providers": "No providers configured. Add one in the plugin settings."
+  },
+  "settings": {
+    "title": "AI Usage",
+    "providers_label": "PROVIDERS",
+    "add_provider": {
+      "label": "ADD PROVIDER",
+      "button": "Add provider",
+      "action": "Add"
+    },
+    "edit_provider": {
+      "label": "EDIT PROVIDER",
+      "action": "Save"
+    },
+    "form": {
+      "cancel": "Cancel"
+    },
+    "provider": {
+      "type": "Provider type",
+      "label_field": "Display name (optional)",
+      "plan_field": "Plan override (optional)",
+      "valid_until": "Valid until (YYYY-MM-DD, optional)",
+      "cli_login": "claude CLI login"
+    },
+    "api_key": {
+      "label": "API key",
+      "description": "Provider API key.",
+      "description_edit": "Enter a new key to replace it. Leave empty to keep the stored key.",
+      "placeholder_keep": "unchanged",
+      "keyless_hint": "Uses the claude CLI login (~/.claude/.credentials.json). No key needed."
+    },
+    "edit": "Edit",
+    "refresh": {
+      "label": "Refresh interval (minutes)",
+      "description": "How often the usage APIs are polled (1–60)."
+    },
+    "background": {
+      "label": "Widget background",
+      "description": "Draw the desktop widget card background."
+    },
+    "saved": "Settings saved"
+  },
+  "bar_widget": {
+    "tooltip": "{percent}% left · resets in {duration}"
+  },
+  "main": {
+    "fetch_error": "AI usage fetch failed: {error}"
+  },
+  "units": {
+    "h": "h",
+    "m": "m"
+  }
+}

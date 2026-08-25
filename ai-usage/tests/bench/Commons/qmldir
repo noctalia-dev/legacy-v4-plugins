@@ -1,0 +1,4 @@
+singleton Style 1.0 Style.qml
+singleton Color 1.0 Color.qml
+singleton Settings 1.0 Settings.qml
+singleton Logger 1.0 Logger.qml

@@ -1,0 +1,30 @@
+{
+  "id": "ai-usage",
+  "name": "AI Usage",
+  "version": "0.5.1",
+  "minNoctaliaVersion": "3.7.1",
+  "author": "apilot",
+  "license": "MIT",
+  "repository": "https://github.com/apilot/ai-usage",
+  "description": "Multi-provider AI plan usage monitor for Noctalia Shell: z.ai, DeepSeek, OpenRouter, Kimi, Claude (claude CLI login) and Anthropic Admin API — quotas, balances, reset countdowns and plan validity in one card. Keys encrypted at rest. UI ported from akitaonrails/ai-usagebar (KDE plasmoid).",
+  "tags": ["Bar", "Desktop", "Panel", "AI", "Indicator", "Hyprland"],
+  "entryPoints": {
+    "main": "Main.qml",
+    "barWidget": "BarWidget.qml",
+    "desktopWidget": "DesktopWidget.qml",
+    "panel": "Panel.qml",
+    "settings": "Settings.qml",
+    "controlCenterWidget": "ControlCenterWidget.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "defaultSettings": {
+      "providers": [],
+      "activeProviderId": "",
+      "refreshMinutes": 5,
+      "showBackground": true
+    }
+  }
+}

@@ -1,0 +1,2 @@
+singleton Logger 1.0 Logger.qml
+singleton BarService 1.0 BarService.qml

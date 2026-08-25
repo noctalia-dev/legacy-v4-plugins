@@ -1,0 +1,17 @@
+{
+  "data": {
+    "plan": "kimi-pro",
+    "weekly": {
+      "limit": 500,
+      "used": 100,
+      "remaining": 400,
+      "reset_at": "2026-08-31T00:00:00Z"
+    },
+    "window": {
+      "limit": 100,
+      "used": 75,
+      "remaining": 25,
+      "reset_at": "2026-08-24T22:00:00Z"
+    }
+  }
+}
