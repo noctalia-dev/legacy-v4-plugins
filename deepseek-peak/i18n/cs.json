@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "další změna za",
+        "driftSuffix": "pravidla se možná změnila"
+    },
+    "menu": {
+        "settings": "Nastavení widgetu"
+    },
+    "notice": {
+        "policyChanged": "Pravidla cen DeepSeek se možná změnila"
+    },
+    "panel": {
+        "peak": "ŠPIČKA (2x)",
+        "offPeak": "MIMO ŠPIČKU",
+        "offPeakIn": "Mimo špičku za",
+        "peakIn": "Špička za",
+        "local": "Místní",
+        "utc": "UTC",
+        "beijing": "Peking",
+        "cost": "Špička = 2x mimo špičku",
+        "checked": "Zkontrolováno",
+        "drift": "Pravidla se možná změnila — zkontrolujte zdroj",
+        "weekendAllDay": "celý den mimo špičku"
+    },
+    "checked": {
+        "justNow": "právě teď",
+        "minutesAgo": "před {n} min",
+        "hoursAgo": "před {n} h"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Režim zobrazení",
+            "description": "Jak zobrazit widget",
+            "compact": "Kompaktní (tečka + odpočet)",
+            "icon": "Pouze ikona",
+            "full": "Plný (stav + odpočet)"
+        },
+        "offPeakColor": {
+            "label": "Barva mimo špičku",
+            "description": "Barva widgetu mimo špičku"
+        },
+        "peakColor": {
+            "label": "Barva špičky",
+            "description": "Barva widgetu během špičky"
+        },
+        "driftColor": {
+            "label": "Barva odchylky",
+            "description": "Barva widgetu při zjištěné změně pravidel"
+        },
+        "showTooltip": {
+            "label": "Zobrazit tooltip",
+            "description": "Zobrazit tooltip stavu při najetí"
+        },
+        "autoCheck": {
+            "label": "Automatická kontrola",
+            "description": "Pravidelně kontrolovat oficiální ceník"
+        },
+        "offlineOnly": {
+            "label": "Pouze offline",
+            "description": "Vypnout síťové kontroly"
+        },
+        "checkIntervalH": {
+            "label": "Interval kontroly (hodiny)",
+            "description": "Hodiny mezi kontrolami pravidel"
+        },
+        "customSourceUrl": {
+            "label": "Vlastní URL zdroje",
+            "description": "Nahradí oficiální ceník",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Režim víkendu",
+            "description": "Ukotvení víkendu mimo špičku",
+            "beijing": "Peking (pá 16:00 UTC – ne 16:00 UTC)",
+            "utc": "UTC půlnoc"
+        }
+    }
+}

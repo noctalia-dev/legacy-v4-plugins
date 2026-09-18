@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "próximo cambio en",
+        "driftSuffix": "la política puede haber cambiado"
+    },
+    "menu": {
+        "settings": "Ajustes del widget"
+    },
+    "notice": {
+        "policyChanged": "La política de precios de DeepSeek puede haber cambiado"
+    },
+    "panel": {
+        "peak": "HORA PUNTA (2x)",
+        "offPeak": "FUERA DE PUNTA",
+        "offPeakIn": "Fuera de punta en",
+        "peakIn": "Hora punta en",
+        "local": "Local",
+        "utc": "UTC",
+        "beijing": "Pekín",
+        "cost": "Punta = 2x fuera de punta",
+        "checked": "Comprobado",
+        "drift": "La política puede haber cambiado — revisa la fuente",
+        "weekendAllDay": "fuera de punta todo el día"
+    },
+    "checked": {
+        "justNow": "ahora mismo",
+        "minutesAgo": "hace {n} min",
+        "hoursAgo": "hace {n} h"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Modo de visualización",
+            "description": "Cómo mostrar el widget",
+            "compact": "Compacto (punto + cuenta atrás)",
+            "icon": "Solo icono",
+            "full": "Completo (estado + cuenta atrás)"
+        },
+        "offPeakColor": {
+            "label": "Color fuera de punta",
+            "description": "Color del widget fuera de punta"
+        },
+        "peakColor": {
+            "label": "Color de hora punta",
+            "description": "Color del widget durante la hora punta"
+        },
+        "driftColor": {
+            "label": "Color de desviación",
+            "description": "Color del widget si se detecta un cambio de política"
+        },
+        "showTooltip": {
+            "label": "Mostrar tooltip",
+            "description": "Mostrar tooltip de estado al pasar el cursor"
+        },
+        "autoCheck": {
+            "label": "Comprobación automática",
+            "description": "Comprobar periódicamente la página oficial de precios"
+        },
+        "offlineOnly": {
+            "label": "Solo sin conexión",
+            "description": "Desactivar comprobaciones de red"
+        },
+        "checkIntervalH": {
+            "label": "Intervalo de comprobación (horas)",
+            "description": "Horas entre comprobaciones de política"
+        },
+        "customSourceUrl": {
+            "label": "URL de origen personalizada",
+            "description": "Reemplaza la página oficial de precios",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Modo de fin de semana",
+            "description": "Anclaje del fin de semana fuera de punta",
+            "beijing": "Pekín (vie 16:00 UTC – dom 16:00 UTC)",
+            "utc": "Medianoche UTC"
+        }
+    }
+}

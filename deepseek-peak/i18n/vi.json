@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "lần chuyển tiếp theo sau",
+        "driftSuffix": "chính sách có thể đã thay đổi"
+    },
+    "menu": {
+        "settings": "Cài đặt tiện ích"
+    },
+    "notice": {
+        "policyChanged": "Chính sách giá của DeepSeek có thể đã thay đổi"
+    },
+    "panel": {
+        "peak": "CAO ĐIỂM (2x)",
+        "offPeak": "THẤP ĐIỂM",
+        "offPeakIn": "Thấp điểm sau",
+        "peakIn": "Cao điểm sau",
+        "local": "Cục bộ",
+        "utc": "UTC",
+        "beijing": "Bắc Kinh",
+        "cost": "Cao điểm = 2x thấp điểm",
+        "checked": "Đã kiểm tra",
+        "drift": "Chính sách có thể đã thay đổi — xem nguồn",
+        "weekendAllDay": "thấp điểm cả ngày"
+    },
+    "checked": {
+        "justNow": "vừa xong",
+        "minutesAgo": "{n} phút trước",
+        "hoursAgo": "{n} giờ trước"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Chế độ hiển thị",
+            "description": "Cách hiển thị tiện ích",
+            "compact": "Gọn (chấm + đếm ngược)",
+            "icon": "Chỉ biểu tượng",
+            "full": "Đầy đủ (trạng thái + đếm ngược)"
+        },
+        "offPeakColor": {
+            "label": "Màu thấp điểm",
+            "description": "Màu tiện ích ngoài cao điểm"
+        },
+        "peakColor": {
+            "label": "Màu cao điểm",
+            "description": "Màu tiện ích trong cao điểm"
+        },
+        "driftColor": {
+            "label": "Màu thay đổi",
+            "description": "Màu tiện ích khi phát hiện thay đổi chính sách"
+        },
+        "showTooltip": {
+            "label": "Hiện chú thích",
+            "description": "Hiện chú thích trạng thái khi rê chuột"
+        },
+        "autoCheck": {
+            "label": "Tự động kiểm tra",
+            "description": "Định kỳ kiểm tra trang giá chính thức"
+        },
+        "offlineOnly": {
+            "label": "Chỉ ngoại tuyến",
+            "description": "Tắt kiểm tra mạng"
+        },
+        "checkIntervalH": {
+            "label": "Khoảng kiểm tra (giờ)",
+            "description": "Số giờ giữa các lần kiểm tra"
+        },
+        "customSourceUrl": {
+            "label": "URL nguồn tùy chỉnh",
+            "description": "Thay thế trang giá chính thức",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Chế độ cuối tuần",
+            "description": "Mốc thấp điểm cuối tuần",
+            "beijing": "Bắc Kinh (T6 16:00 UTC – CN 16:00 UTC)",
+            "utc": "Nửa đêm UTC"
+        }
+    }
+}

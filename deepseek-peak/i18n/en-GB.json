@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "next flip in",
+        "driftSuffix": "policy may have changed"
+    },
+    "menu": {
+        "settings": "Widget settings"
+    },
+    "notice": {
+        "policyChanged": "DeepSeek pricing policy may have changed"
+    },
+    "panel": {
+        "peak": "PEAK (2x)",
+        "offPeak": "OFF-PEAK",
+        "offPeakIn": "Off-peak in",
+        "peakIn": "Peak in",
+        "local": "Local",
+        "utc": "UTC",
+        "beijing": "Beijing",
+        "cost": "Peak = 2x off-peak",
+        "checked": "Checked",
+        "drift": "Policy may have changed — check source",
+        "weekendAllDay": "off-peak all day"
+    },
+    "checked": {
+        "justNow": "just now",
+        "minutesAgo": "{n}m ago",
+        "hoursAgo": "{n}h ago"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Display Mode",
+            "description": "How to show the widget",
+            "compact": "Compact (dot + countdown)",
+            "icon": "Icon only",
+            "full": "Full (state + countdown)"
+        },
+        "offPeakColor": {
+            "label": "Off-peak Colour",
+            "description": "Widget colour during off-peak"
+        },
+        "peakColor": {
+            "label": "Peak Colour",
+            "description": "Widget colour during peak"
+        },
+        "driftColor": {
+            "label": "Drift Colour",
+            "description": "Widget colour when policy drift is detected"
+        },
+        "showTooltip": {
+            "label": "Show Tooltip",
+            "description": "Show state tooltip on hover"
+        },
+        "autoCheck": {
+            "label": "Auto Check",
+            "description": "Periodically check the official pricing page for policy drift"
+        },
+        "offlineOnly": {
+            "label": "Offline Only",
+            "description": "Disable network checks"
+        },
+        "checkIntervalH": {
+            "label": "Check Interval (hours)",
+            "description": "Hours between policy-drift checks"
+        },
+        "customSourceUrl": {
+            "label": "Custom Source URL",
+            "description": "Override for the official pricing page",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Weekend Mode",
+            "description": "Weekend off-peak anchoring",
+            "beijing": "Beijing (Fri 16:00 UTC – Sun 16:00 UTC)",
+            "utc": "UTC midnight"
+        }
+    }
+}

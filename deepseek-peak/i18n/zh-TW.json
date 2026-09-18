@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "距下次切換",
+        "driftSuffix": "計費策略可能已變更"
+    },
+    "menu": {
+        "settings": "元件設定"
+    },
+    "notice": {
+        "policyChanged": "DeepSeek 計費策略可能已變更"
+    },
+    "panel": {
+        "peak": "尖峰 (2x)",
+        "offPeak": "離峰",
+        "offPeakIn": "距離峰",
+        "peakIn": "距尖峰",
+        "local": "本地",
+        "utc": "UTC",
+        "beijing": "北京",
+        "cost": "尖峰 = 離峰的 2 倍",
+        "checked": "已檢查",
+        "drift": "計費策略可能已變更 — 請查看來源",
+        "weekendAllDay": "全天離峰"
+    },
+    "checked": {
+        "justNow": "剛剛",
+        "minutesAgo": "{n} 分鐘前",
+        "hoursAgo": "{n} 小時前"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "顯示模式",
+            "description": "元件的顯示方式",
+            "compact": "精簡（圓點 + 倒數）",
+            "icon": "僅圖示",
+            "full": "完整（狀態 + 倒數）"
+        },
+        "offPeakColor": {
+            "label": "離峰顏色",
+            "description": "離峰時的元件顏色"
+        },
+        "peakColor": {
+            "label": "尖峰顏色",
+            "description": "尖峰時的元件顏色"
+        },
+        "driftColor": {
+            "label": "變更提示顏色",
+            "description": "偵測到策略變更時的元件顏色"
+        },
+        "showTooltip": {
+            "label": "顯示提示",
+            "description": "游標懸停時顯示狀態提示"
+        },
+        "autoCheck": {
+            "label": "自動檢查",
+            "description": "定期檢查官方定價頁面"
+        },
+        "offlineOnly": {
+            "label": "僅離線",
+            "description": "停用網路檢查"
+        },
+        "checkIntervalH": {
+            "label": "檢查間隔（小時）",
+            "description": "兩次檢查之間的小時數"
+        },
+        "customSourceUrl": {
+            "label": "自訂來源 URL",
+            "description": "覆寫官方定價頁面",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "週末模式",
+            "description": "週末離峰的基準",
+            "beijing": "北京（週五 16:00 UTC – 週日 16:00 UTC）",
+            "utc": "UTC 午夜"
+        }
+    }
+}

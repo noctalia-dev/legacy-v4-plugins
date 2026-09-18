@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "次の切替まで",
+        "driftSuffix": "料金体系が変更された可能性"
+    },
+    "menu": {
+        "settings": "ウィジェット設定"
+    },
+    "notice": {
+        "policyChanged": "DeepSeekの料金体系が変更された可能性"
+    },
+    "panel": {
+        "peak": "ピーク (2x)",
+        "offPeak": "オフピーク",
+        "offPeakIn": "オフピークまで",
+        "peakIn": "ピークまで",
+        "local": "ローカル",
+        "utc": "UTC",
+        "beijing": "北京",
+        "cost": "ピーク = オフピークの2倍",
+        "checked": "確認済み",
+        "drift": "料金体系が変更された可能性 — 情報源を確認",
+        "weekendAllDay": "終日オフピーク"
+    },
+    "checked": {
+        "justNow": "たった今",
+        "minutesAgo": "{n}分前",
+        "hoursAgo": "{n}時間前"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "表示モード",
+            "description": "ウィジェットの表示方法",
+            "compact": "コンパクト（ドット＋カウントダウン）",
+            "icon": "アイコンのみ",
+            "full": "フル（状態＋カウントダウン）"
+        },
+        "offPeakColor": {
+            "label": "オフピークの色",
+            "description": "オフピーク時のウィジェット色"
+        },
+        "peakColor": {
+            "label": "ピークの色",
+            "description": "ピーク時のウィジェット色"
+        },
+        "driftColor": {
+            "label": "変更検知の色",
+            "description": "料金体系の変更を検知したときの色"
+        },
+        "showTooltip": {
+            "label": "ツールチップを表示",
+            "description": "ホバー時に状態のツールチップを表示"
+        },
+        "autoCheck": {
+            "label": "自動確認",
+            "description": "公式料金ページを定期的に確認"
+        },
+        "offlineOnly": {
+            "label": "オフラインのみ",
+            "description": "ネットワーク確認を無効化"
+        },
+        "checkIntervalH": {
+            "label": "確認間隔（時間）",
+            "description": "確認の間隔（時間）"
+        },
+        "customSourceUrl": {
+            "label": "カスタムソースURL",
+            "description": "公式料金ページを上書き",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "週末モード",
+            "description": "週末オフピークの基準",
+            "beijing": "北京（金 16:00 UTC – 日 16:00 UTC）",
+            "utc": "UTC 深夜0時"
+        }
+    }
+}

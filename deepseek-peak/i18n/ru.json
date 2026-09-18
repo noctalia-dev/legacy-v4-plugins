@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "следующее переключение через",
+        "driftSuffix": "правила могли измениться"
+    },
+    "menu": {
+        "settings": "Настройки виджета"
+    },
+    "notice": {
+        "policyChanged": "Ценовая политика DeepSeek могла измениться"
+    },
+    "panel": {
+        "peak": "ПИК (2x)",
+        "offPeak": "ВНЕ ПИКА",
+        "offPeakIn": "Вне пика через",
+        "peakIn": "Пик через",
+        "local": "Местное",
+        "utc": "UTC",
+        "beijing": "Пекин",
+        "cost": "Пик = 2x вне пика",
+        "checked": "Проверено",
+        "drift": "Правила могли измениться — проверьте источник",
+        "weekendAllDay": "вне пика весь день"
+    },
+    "checked": {
+        "justNow": "только что",
+        "minutesAgo": "{n} мин назад",
+        "hoursAgo": "{n} ч назад"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Режим отображения",
+            "description": "Как показывать виджет",
+            "compact": "Компактный (точка + отсчёт)",
+            "icon": "Только значок",
+            "full": "Полный (состояние + отсчёт)"
+        },
+        "offPeakColor": {
+            "label": "Цвет вне пика",
+            "description": "Цвет виджета вне пика"
+        },
+        "peakColor": {
+            "label": "Цвет пика",
+            "description": "Цвет виджета во время пика"
+        },
+        "driftColor": {
+            "label": "Цвет отклонения",
+            "description": "Цвет виджета при изменении правил"
+        },
+        "showTooltip": {
+            "label": "Показывать подсказку",
+            "description": "Показывать подсказку состояния при наведении"
+        },
+        "autoCheck": {
+            "label": "Автопроверка",
+            "description": "Периодически проверять официальную страницу цен"
+        },
+        "offlineOnly": {
+            "label": "Только офлайн",
+            "description": "Отключить сетевые проверки"
+        },
+        "checkIntervalH": {
+            "label": "Интервал проверки (часы)",
+            "description": "Часы между проверками правил"
+        },
+        "customSourceUrl": {
+            "label": "Свой URL источника",
+            "description": "Заменяет официальную страницу цен",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Режим выходных",
+            "description": "Привязка выходных ко времени вне пика",
+            "beijing": "Пекин (пт 16:00 UTC — вс 16:00 UTC)",
+            "utc": "Полночь UTC"
+        }
+    }
+}

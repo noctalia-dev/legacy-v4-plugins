@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "nästa växling om",
+        "driftSuffix": "policyn kan ha ändrats"
+    },
+    "menu": {
+        "settings": "Widgetinställningar"
+    },
+    "notice": {
+        "policyChanged": "DeepSeeks prispolicy kan ha ändrats"
+    },
+    "panel": {
+        "peak": "TOPP (2x)",
+        "offPeak": "LÅGLAST",
+        "offPeakIn": "Låglast om",
+        "peakIn": "Topp om",
+        "local": "Lokal",
+        "utc": "UTC",
+        "beijing": "Peking",
+        "cost": "Topp = 2x låglast",
+        "checked": "Kontrollerad",
+        "drift": "Policyn kan ha ändrats — kontrollera källan",
+        "weekendAllDay": "låglast hela dagen"
+    },
+    "checked": {
+        "justNow": "nyss",
+        "minutesAgo": "{n} min sedan",
+        "hoursAgo": "{n} tim sedan"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Visningsläge",
+            "description": "Hur widgeten visas",
+            "compact": "Kompakt (prick + nedräkning)",
+            "icon": "Endast ikon",
+            "full": "Full (status + nedräkning)"
+        },
+        "offPeakColor": {
+            "label": "Låglastfärg",
+            "description": "Widgetfärg vid låglast"
+        },
+        "peakColor": {
+            "label": "Toppfärg",
+            "description": "Widgetfärg vid topplast"
+        },
+        "driftColor": {
+            "label": "Avvikelsefärg",
+            "description": "Widgetfärg vid ändrad policy"
+        },
+        "showTooltip": {
+            "label": "Visa verktygstips",
+            "description": "Visa status-tips vid hover"
+        },
+        "autoCheck": {
+            "label": "Automatisk kontroll",
+            "description": "Kontrollera den officiella prissidan regelbundet"
+        },
+        "offlineOnly": {
+            "label": "Endast offline",
+            "description": "Stäng av nätverkskontroller"
+        },
+        "checkIntervalH": {
+            "label": "Kontrollintervall (timmar)",
+            "description": "Timmar mellan policykontroller"
+        },
+        "customSourceUrl": {
+            "label": "Egen käll-URL",
+            "description": "Ersätter den officiella prissidan",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Helgläge",
+            "description": "Förankring av låglast på helgen",
+            "beijing": "Peking (fre 16:00 UTC – sön 16:00 UTC)",
+            "utc": "UTC-midnatt"
+        }
+    }
+}

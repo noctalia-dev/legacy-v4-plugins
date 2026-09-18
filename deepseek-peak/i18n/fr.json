@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "prochain changement dans",
+        "driftSuffix": "la politique a peut-être changé"
+    },
+    "menu": {
+        "settings": "Paramètres du widget"
+    },
+    "notice": {
+        "policyChanged": "La politique tarifaire DeepSeek a peut-être changé"
+    },
+    "panel": {
+        "peak": "HEURE DE POINTE (2x)",
+        "offPeak": "HEURES CREUSES",
+        "offPeakIn": "Heures creuses dans",
+        "peakIn": "Heure de pointe dans",
+        "local": "Local",
+        "utc": "UTC",
+        "beijing": "Pékin",
+        "cost": "Pointe = 2x heures creuses",
+        "checked": "Vérifié",
+        "drift": "La politique a peut-être changé — voir la source",
+        "weekendAllDay": "heures creuses toute la journée"
+    },
+    "checked": {
+        "justNow": "à l'instant",
+        "minutesAgo": "il y a {n} min",
+        "hoursAgo": "il y a {n} h"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Mode d'affichage",
+            "description": "Comment afficher le widget",
+            "compact": "Compact (point + compte à rebours)",
+            "icon": "Icône seule",
+            "full": "Complet (état + compte à rebours)"
+        },
+        "offPeakColor": {
+            "label": "Couleur heures creuses",
+            "description": "Couleur du widget en heures creuses"
+        },
+        "peakColor": {
+            "label": "Couleur heure de pointe",
+            "description": "Couleur du widget en heure de pointe"
+        },
+        "driftColor": {
+            "label": "Couleur de dérive",
+            "description": "Couleur du widget si la politique change"
+        },
+        "showTooltip": {
+            "label": "Afficher l'infobulle",
+            "description": "Afficher l'infobulle d'état au survol"
+        },
+        "autoCheck": {
+            "label": "Vérification automatique",
+            "description": "Vérifier régulièrement la page tarifaire officielle"
+        },
+        "offlineOnly": {
+            "label": "Hors ligne uniquement",
+            "description": "Désactiver les vérifications réseau"
+        },
+        "checkIntervalH": {
+            "label": "Intervalle de vérification (heures)",
+            "description": "Heures entre les vérifications"
+        },
+        "customSourceUrl": {
+            "label": "URL source personnalisée",
+            "description": "Remplace la page tarifaire officielle",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Mode week-end",
+            "description": "Ancrage des heures creuses le week-end",
+            "beijing": "Pékin (ven 16:00 UTC – dim 16:00 UTC)",
+            "utc": "Minuit UTC"
+        }
+    }
+}

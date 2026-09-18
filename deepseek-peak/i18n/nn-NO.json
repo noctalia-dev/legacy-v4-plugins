@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "neste byte om",
+        "driftSuffix": "retningslinjene kan ha endra seg"
+    },
+    "menu": {
+        "settings": "Innstillingar for widget"
+    },
+    "notice": {
+        "policyChanged": "DeepSeek-prisretningslinjene kan ha endra seg"
+    },
+    "panel": {
+        "peak": "TOPP (2x)",
+        "offPeak": "OFF-PEAK",
+        "offPeakIn": "Off-peak om",
+        "peakIn": "Topp om",
+        "local": "Lokal",
+        "utc": "UTC",
+        "beijing": "Beijing",
+        "cost": "Topp = 2x off-peak",
+        "checked": "Sjekka",
+        "drift": "Retningslinjene kan ha endra seg — sjekk kjelda",
+        "weekendAllDay": "off-peak heile dagen"
+    },
+    "checked": {
+        "justNow": "nett no",
+        "minutesAgo": "{n} min sidan",
+        "hoursAgo": "{n} t sidan"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Visingsmodus",
+            "description": "Korleis widgeten skal visast",
+            "compact": "Kompakt (prikk + nedteljing)",
+            "icon": "Berre ikon",
+            "full": "Full (status + nedteljing)"
+        },
+        "offPeakColor": {
+            "label": "Off-peak-farge",
+            "description": "Widgetfarge utanom topp"
+        },
+        "peakColor": {
+            "label": "Toppfarge",
+            "description": "Widgetfarge i toppperioden"
+        },
+        "driftColor": {
+            "label": "Avviksfarge",
+            "description": "Widgetfarge ved endra retningslinjer"
+        },
+        "showTooltip": {
+            "label": "Vis tooltip",
+            "description": "Vis status-tooltip ved hovering"
+        },
+        "autoCheck": {
+            "label": "Automatisk sjekk",
+            "description": "Sjekk den offisielle prissida jamleg"
+        },
+        "offlineOnly": {
+            "label": "Berre offline",
+            "description": "Slå av nettverkssjekkar"
+        },
+        "checkIntervalH": {
+            "label": "Sjekkintervall (timar)",
+            "description": "Timar mellom retningslinjesjekkar"
+        },
+        "customSourceUrl": {
+            "label": "Eiga kjelde-URL",
+            "description": "Overstyrer den offisielle prissida",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Helgemodus",
+            "description": "Forankring av off-peak i helga",
+            "beijing": "Beijing (fre 16:00 UTC – søn 16:00 UTC)",
+            "utc": "UTC-midnatt"
+        }
+    }
+}

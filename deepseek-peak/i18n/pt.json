@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "próxima mudança em",
+        "driftSuffix": "a política pode ter mudado"
+    },
+    "menu": {
+        "settings": "Configurações do widget"
+    },
+    "notice": {
+        "policyChanged": "A política de preços da DeepSeek pode ter mudado"
+    },
+    "panel": {
+        "peak": "PICO (2x)",
+        "offPeak": "FORA DE PICO",
+        "offPeakIn": "Fora de pico em",
+        "peakIn": "Pico em",
+        "local": "Local",
+        "utc": "UTC",
+        "beijing": "Pequim",
+        "cost": "Pico = 2x fora de pico",
+        "checked": "Verificado",
+        "drift": "A política pode ter mudado — verifique a fonte",
+        "weekendAllDay": "fora de pico o dia todo"
+    },
+    "checked": {
+        "justNow": "agora mesmo",
+        "minutesAgo": "há {n} min",
+        "hoursAgo": "há {n} h"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Modo de exibição",
+            "description": "Como mostrar o widget",
+            "compact": "Compacto (ponto + contagem)",
+            "icon": "Apenas ícone",
+            "full": "Completo (estado + contagem)"
+        },
+        "offPeakColor": {
+            "label": "Cor fora de pico",
+            "description": "Cor do widget fora de pico"
+        },
+        "peakColor": {
+            "label": "Cor de pico",
+            "description": "Cor do widget durante o pico"
+        },
+        "driftColor": {
+            "label": "Cor de desvio",
+            "description": "Cor do widget quando a política muda"
+        },
+        "showTooltip": {
+            "label": "Mostrar dica",
+            "description": "Mostrar dica de estado ao passar o cursor"
+        },
+        "autoCheck": {
+            "label": "Verificação automática",
+            "description": "Verificar periodicamente a página oficial de preços"
+        },
+        "offlineOnly": {
+            "label": "Apenas offline",
+            "description": "Desativar verificações de rede"
+        },
+        "checkIntervalH": {
+            "label": "Intervalo de verificação (horas)",
+            "description": "Horas entre verificações"
+        },
+        "customSourceUrl": {
+            "label": "URL de origem personalizado",
+            "description": "Substitui a página oficial de preços",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Modo de fim de semana",
+            "description": "Ancoragem de fim de semana fora de pico",
+            "beijing": "Pequim (sex 16:00 UTC – dom 16:00 UTC)",
+            "utc": "Meia-noite UTC"
+        }
+    }
+}

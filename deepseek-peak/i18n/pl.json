@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "następna zmiana za",
+        "driftSuffix": "polityka mogła się zmienić"
+    },
+    "menu": {
+        "settings": "Ustawienia widżetu"
+    },
+    "notice": {
+        "policyChanged": "Polityka cen DeepSeek mogła się zmienić"
+    },
+    "panel": {
+        "peak": "SZCZYT (2x)",
+        "offPeak": "POZA SZCZYTEM",
+        "offPeakIn": "Poza szczytem za",
+        "peakIn": "Szczyt za",
+        "local": "Lokalny",
+        "utc": "UTC",
+        "beijing": "Pekin",
+        "cost": "Szczyt = 2x poza szczytem",
+        "checked": "Sprawdzono",
+        "drift": "Polityka mogła się zmienić — sprawdź źródło",
+        "weekendAllDay": "cały dzień poza szczytem"
+    },
+    "checked": {
+        "justNow": "właśnie teraz",
+        "minutesAgo": "{n} min temu",
+        "hoursAgo": "{n} godz. temu"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Tryb wyświetlania",
+            "description": "Jak wyświetlać widget",
+            "compact": "Kompaktowy (kropka + odliczanie)",
+            "icon": "Tylko ikona",
+            "full": "Pełny (stan + odliczanie)"
+        },
+        "offPeakColor": {
+            "label": "Kolor poza szczytem",
+            "description": "Kolor widgetu poza szczytem"
+        },
+        "peakColor": {
+            "label": "Kolor szczytu",
+            "description": "Kolor widgetu w szczycie"
+        },
+        "driftColor": {
+            "label": "Kolor odchylenia",
+            "description": "Kolor widgetu przy zmianie polityki"
+        },
+        "showTooltip": {
+            "label": "Pokaż podpowiedź",
+            "description": "Pokaż podpowiedź stanu po najechaniu"
+        },
+        "autoCheck": {
+            "label": "Automatyczne sprawdzanie",
+            "description": "Regularnie sprawdzaj oficjalną stronę cen"
+        },
+        "offlineOnly": {
+            "label": "Tylko offline",
+            "description": "Wyłącz sprawdzanie sieci"
+        },
+        "checkIntervalH": {
+            "label": "Interwał sprawdzania (godziny)",
+            "description": "Godziny między sprawdzeniami"
+        },
+        "customSourceUrl": {
+            "label": "Własny URL źródła",
+            "description": "Zastępuje oficjalną stronę cen",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Tryb weekendowy",
+            "description": "Zakotwiczenie weekendu poza szczytem",
+            "beijing": "Pekin (pt 16:00 UTC – niedz. 16:00 UTC)",
+            "utc": "Północ UTC"
+        }
+    }
+}

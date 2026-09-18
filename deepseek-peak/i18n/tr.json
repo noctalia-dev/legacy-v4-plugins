@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "sonraki geçiş",
+        "driftSuffix": "ilke değişmiş olabilir"
+    },
+    "menu": {
+        "settings": "Widget ayarları"
+    },
+    "notice": {
+        "policyChanged": "DeepSeek fiyat ilkesi değişmiş olabilir"
+    },
+    "panel": {
+        "peak": "ZİRVE (2x)",
+        "offPeak": "ZİRVE DIŞI",
+        "offPeakIn": "Zirve dışına",
+        "peakIn": "Zirveye",
+        "local": "Yerel",
+        "utc": "UTC",
+        "beijing": "Pekin",
+        "cost": "Zirve = zirve dışının 2 katı",
+        "checked": "Kontrol edildi",
+        "drift": "İlke değişmiş olabilir — kaynağa bakın",
+        "weekendAllDay": "tüm gün zirve dışı"
+    },
+    "checked": {
+        "justNow": "az önce",
+        "minutesAgo": "{n} dk önce",
+        "hoursAgo": "{n} sa önce"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Görünüm modu",
+            "description": "Widget nasıl gösterilsin",
+            "compact": "Kompakt (nokta + geri sayım)",
+            "icon": "Yalnızca simge",
+            "full": "Tam (durum + geri sayım)"
+        },
+        "offPeakColor": {
+            "label": "Zirve dışı rengi",
+            "description": "Zirve dışında widget rengi"
+        },
+        "peakColor": {
+            "label": "Zirve rengi",
+            "description": "Zirve saatlerinde widget rengi"
+        },
+        "driftColor": {
+            "label": "Değişiklik rengi",
+            "description": "İlke değişikliği algılandığında widget rengi"
+        },
+        "showTooltip": {
+            "label": "İpucunu göster",
+            "description": "Üzerine gelince durum ipucunu göster"
+        },
+        "autoCheck": {
+            "label": "Otomatik kontrol",
+            "description": "Resmî fiyat sayfasını düzenli kontrol et"
+        },
+        "offlineOnly": {
+            "label": "Yalnızca çevrimdışı",
+            "description": "Ağ kontrollerini kapat"
+        },
+        "checkIntervalH": {
+            "label": "Kontrol aralığı (saat)",
+            "description": "Kontroller arası saat"
+        },
+        "customSourceUrl": {
+            "label": "Özel kaynak URL",
+            "description": "Resmî fiyat sayfasını geçersiz kılar",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Hafta sonu modu",
+            "description": "Hafta sonu zirve dışı dayanağı",
+            "beijing": "Pekin (Cum 16:00 UTC – Paz 16:00 UTC)",
+            "utc": "UTC gece yarısı"
+        }
+    }
+}

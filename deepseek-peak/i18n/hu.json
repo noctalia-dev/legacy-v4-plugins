@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "következő váltás",
+        "driftSuffix": "a szabályzat megváltozhatott"
+    },
+    "menu": {
+        "settings": "Widget beállításai"
+    },
+    "notice": {
+        "policyChanged": "A DeepSeek árazási szabályzata megváltozhatott"
+    },
+    "panel": {
+        "peak": "CSÚCS (2x)",
+        "offPeak": "CSÚCSON KÍVÜL",
+        "offPeakIn": "Csúcson kívül",
+        "peakIn": "Csúcs kezdete",
+        "local": "Helyi",
+        "utc": "UTC",
+        "beijing": "Peking",
+        "cost": "Csúcs = 2x csúcson kívül",
+        "checked": "Ellenőrizve",
+        "drift": "A szabályzat megváltozhatott — nézd meg a forrást",
+        "weekendAllDay": "egész nap csúcson kívül"
+    },
+    "checked": {
+        "justNow": "épp most",
+        "minutesAgo": "{n} perccel ezelőtt",
+        "hoursAgo": "{n} órával ezelőtt"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Megjelenítési mód",
+            "description": "A widget megjelenítése",
+            "compact": "Kompakt (pont + visszaszámlálás)",
+            "icon": "Csak ikon",
+            "full": "Teljes (állapot + visszaszámlálás)"
+        },
+        "offPeakColor": {
+            "label": "Csúcson kívüli szín",
+            "description": "A widget színe csúcson kívül"
+        },
+        "peakColor": {
+            "label": "Csúcsidő színe",
+            "description": "A widget színe csúcsidőben"
+        },
+        "driftColor": {
+            "label": "Eltérés színe",
+            "description": "A widget színe szabályzatváltozás esetén"
+        },
+        "showTooltip": {
+            "label": "Tipp megjelenítése",
+            "description": "Állapot tipp megjelenítése ráhúzáskor"
+        },
+        "autoCheck": {
+            "label": "Automatikus ellenőrzés",
+            "description": "A hivatalos árazási oldal rendszeres ellenőrzése"
+        },
+        "offlineOnly": {
+            "label": "Csak offline",
+            "description": "Hálózati ellenőrzések kikapcsolása"
+        },
+        "checkIntervalH": {
+            "label": "Ellenőrzési időköz (óra)",
+            "description": "Órák az ellenőrzések között"
+        },
+        "customSourceUrl": {
+            "label": "Egyéni forrás URL",
+            "description": "Felülírja a hivatalos árazási oldalt",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Hétvége mód",
+            "description": "Hétvégi csúcson kívüli időszak igazítása",
+            "beijing": "Peking (P 16:00 UTC – V 16:00 UTC)",
+            "utc": "UTC éjfél"
+        }
+    }
+}

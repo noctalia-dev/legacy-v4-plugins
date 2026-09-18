@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "guhertina din di",
+        "driftSuffix": "dibe ku siyaset guherîbe"
+    },
+    "menu": {
+        "settings": "Mîhengên wîgetê"
+    },
+    "notice": {
+        "policyChanged": "Dibe ku siyasetnameya bihayê ya DeepSeek guherîbe"
+    },
+    "panel": {
+        "peak": "LUTKE (2x)",
+        "offPeak": "DERVEYÎ LUTKE",
+        "offPeakIn": "Derveya lutkeyê di",
+        "peakIn": "Lutke di",
+        "local": "Herêmî",
+        "utc": "UTC",
+        "beijing": "Beijing",
+        "cost": "Lutke = 2x derveyî lutke",
+        "checked": "Hat kontrolkirin",
+        "drift": "Dibe ku siyaset guherîbe — çavkaniyê binêre",
+        "weekendAllDay": "tewra rojê derveyî lutke"
+    },
+    "checked": {
+        "justNow": "niha",
+        "minutesAgo": "berî {n} hûrdeman",
+        "hoursAgo": "berî {n} saetan"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Moda nîşandanê",
+            "description": "Wîget çawa were nîşandan",
+            "compact": "Kompakt (xal + jimartin)",
+            "icon": "Tenê îkon",
+            "full": "Temam (rewş + jimartin)"
+        },
+        "offPeakColor": {
+            "label": "Rengê derveyî lutke",
+            "description": "Rengê wîgetê derveyî lutkeyê"
+        },
+        "peakColor": {
+            "label": "Rengê lutkeyê",
+            "description": "Rengê wîgetê di dema lutkeyê de"
+        },
+        "driftColor": {
+            "label": "Rengê guhertinê",
+            "description": "Rengê wîgetê dema siyaset biguhere"
+        },
+        "showTooltip": {
+            "label": "Tooltip nîşan bide",
+            "description": "Dema çûnê ser tooltipa rewşê nîşan bide"
+        },
+        "autoCheck": {
+            "label": "Kontrola xweber",
+            "description": "Rûpela bihayê ya fermî bi rêkûpêk kontrol bike"
+        },
+        "offlineOnly": {
+            "label": "Tenê offline",
+            "description": "Kontrolên torê neçalak bike"
+        },
+        "checkIntervalH": {
+            "label": "Navbera kontrolê (saet)",
+            "description": "Saetên di navbera kontrolan de"
+        },
+        "customSourceUrl": {
+            "label": "URL-ya çavkaniya taybet",
+            "description": "Rûpela bihayê ya fermî diguhere",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Moda dawiya hefteyê",
+            "description": "Bingehê derveyî-lutke yê dawiya hefteyê",
+            "beijing": "Beijing (În 16:00 UTC – Yek 16:00 UTC)",
+            "utc": "Nîvşeva UTC"
+        }
+    }
+}

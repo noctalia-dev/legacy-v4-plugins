@@ -1,0 +1,34 @@
+{
+    "id": "deepseek-peak",
+    "name": "DeepSeek Peak Hours",
+    "version": "1.0.0",
+    "minNoctaliaVersion": "4.4.4",
+    "author": "Alpzy",
+    "license": "MIT",
+    "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+    "description": "Shows DeepSeek API peak/off-peak pricing in the bar: green off-peak, red peak, with a live countdown.",
+    "tags": ["Bar", "Panel", "Indicator", "Niri"],
+    "entryPoints": {
+        "main": "Main.qml",
+        "barWidget": "BarWidget.qml",
+        "panel": "Panel.qml",
+        "settings": "Settings.qml"
+    },
+    "dependencies": {
+        "plugins": []
+    },
+    "metadata": {
+        "defaultSettings": {
+            "displayMode": "compact",
+            "offPeakColor": "#4ade80",
+            "peakColor": "#f87171",
+            "driftColor": "#fbbf24",
+            "showTooltip": true,
+            "weekendMode": "beijing-anchored",
+            "autoCheck": true,
+            "checkIntervalH": 6,
+            "customSourceUrl": "",
+            "offlineOnly": false
+        }
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "nächster Wechsel in",
+        "driftSuffix": "Preisrichtlinie evtl. geändert"
+    },
+    "menu": {
+        "settings": "Widget-Einstellungen"
+    },
+    "notice": {
+        "policyChanged": "DeepSeek-Preisrichtlinie evtl. geändert"
+    },
+    "panel": {
+        "peak": "HAUPTZEIT (2x)",
+        "offPeak": "NEBENZEIT",
+        "offPeakIn": "Nebenzeit in",
+        "peakIn": "Hauptzeit in",
+        "local": "Lokal",
+        "utc": "UTC",
+        "beijing": "Peking",
+        "cost": "Hauptzeit = 2x Nebenzeit",
+        "checked": "Geprüft",
+        "drift": "Preisrichtlinie evtl. geändert — Quelle prüfen",
+        "weekendAllDay": "ganztägig Nebenzeit"
+    },
+    "checked": {
+        "justNow": "gerade eben",
+        "minutesAgo": "vor {n} Min.",
+        "hoursAgo": "vor {n} Std."
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Anzeigemodus",
+            "description": "Darstellung des Widgets",
+            "compact": "Kompakt (Punkt + Countdown)",
+            "icon": "Nur Symbol",
+            "full": "Voll (Status + Countdown)"
+        },
+        "offPeakColor": {
+            "label": "Farbe Nebenzeit",
+            "description": "Widget-Farbe außerhalb der Hauptzeit"
+        },
+        "peakColor": {
+            "label": "Farbe Hauptzeit",
+            "description": "Widget-Farbe während der Hauptzeit"
+        },
+        "driftColor": {
+            "label": "Farbe Abweichung",
+            "description": "Widget-Farbe bei erkannter Richtlinienabweichung"
+        },
+        "showTooltip": {
+            "label": "Tooltip anzeigen",
+            "description": "Status-Tooltip beim Überfahren anzeigen"
+        },
+        "autoCheck": {
+            "label": "Automatische Prüfung",
+            "description": "Offizielle Preisseite regelmäßig auf Änderungen prüfen"
+        },
+        "offlineOnly": {
+            "label": "Nur offline",
+            "description": "Netzwerkprüfungen deaktivieren"
+        },
+        "checkIntervalH": {
+            "label": "Prüfintervall (Stunden)",
+            "description": "Stunden zwischen Richtlinienprüfungen"
+        },
+        "customSourceUrl": {
+            "label": "Eigene Quell-URL",
+            "description": "Überschreibt die offizielle Preisseite",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Wochenendmodus",
+            "description": "Anker der Nebenzeit am Wochenende",
+            "beijing": "Peking (Fr 16:00 UTC – So 16:00 UTC)",
+            "utc": "UTC-Mitternacht"
+        }
+    }
+}

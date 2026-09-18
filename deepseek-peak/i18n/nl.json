@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "volgende wissel over",
+        "driftSuffix": "beleid is mogelijk gewijzigd"
+    },
+    "menu": {
+        "settings": "Widgetinstellingen"
+    },
+    "notice": {
+        "policyChanged": "DeepSeek-prijsbeleid is mogelijk gewijzigd"
+    },
+    "panel": {
+        "peak": "PIEK (2x)",
+        "offPeak": "DAL",
+        "offPeakIn": "Dal over",
+        "peakIn": "Piek over",
+        "local": "Lokaal",
+        "utc": "UTC",
+        "beijing": "Peking",
+        "cost": "Piek = 2x dal",
+        "checked": "Gecontroleerd",
+        "drift": "Beleid is mogelijk gewijzigd — controleer de bron",
+        "weekendAllDay": "hele dag dal"
+    },
+    "checked": {
+        "justNow": "zojuist",
+        "minutesAgo": "{n} min geleden",
+        "hoursAgo": "{n} uur geleden"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "Weergavemodus",
+            "description": "Hoe de widget wordt weergegeven",
+            "compact": "Compact (punt + aftelling)",
+            "icon": "Alleen pictogram",
+            "full": "Volledig (status + aftelling)"
+        },
+        "offPeakColor": {
+            "label": "Dalkleur",
+            "description": "Widgetkleur tijdens daluren"
+        },
+        "peakColor": {
+            "label": "Piekkleur",
+            "description": "Widgetkleur tijdens piekuren"
+        },
+        "driftColor": {
+            "label": "Afwijkingskleur",
+            "description": "Widgetkleur bij gedetecteerde beleidswijziging"
+        },
+        "showTooltip": {
+            "label": "Tooltip tonen",
+            "description": "Statustooltip bij hover tonen"
+        },
+        "autoCheck": {
+            "label": "Automatische controle",
+            "description": "Controleer regelmatig de officiële prijspagina"
+        },
+        "offlineOnly": {
+            "label": "Alleen offline",
+            "description": "Netwerkcontroles uitschakelen"
+        },
+        "checkIntervalH": {
+            "label": "Controle-interval (uren)",
+            "description": "Uren tussen beleidscontroles"
+        },
+        "customSourceUrl": {
+            "label": "Eigen bron-URL",
+            "description": "Vervangt de officiële prijspagina",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "Weekendmodus",
+            "description": "Verankering van daluren in het weekend",
+            "beijing": "Peking (vr 16:00 UTC – zo 16:00 UTC)",
+            "utc": "UTC-middernacht"
+        }
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "bar": {
+        "peak": "PEAK 2x",
+        "offPeak": "OFF-PEAK",
+        "tooltipPeak": "PEAK (2x)",
+        "tooltipOffPeak": "OFF-PEAK",
+        "nextFlip": "다음 전환까지",
+        "driftSuffix": "정책이 변경되었을 수 있음"
+    },
+    "menu": {
+        "settings": "위젯 설정"
+    },
+    "notice": {
+        "policyChanged": "DeepSeek 요금 정책이 변경되었을 수 있음"
+    },
+    "panel": {
+        "peak": "피크 (2x)",
+        "offPeak": "오프피크",
+        "offPeakIn": "오프피크까지",
+        "peakIn": "피크까지",
+        "local": "로컬",
+        "utc": "UTC",
+        "beijing": "베이징",
+        "cost": "피크 = 오프피크의 2배",
+        "checked": "확인함",
+        "drift": "정책이 변경되었을 수 있음 — 출처 확인",
+        "weekendAllDay": "종일 오프피크"
+    },
+    "checked": {
+        "justNow": "방금 전",
+        "minutesAgo": "{n}분 전",
+        "hoursAgo": "{n}시간 전"
+    },
+    "settings": {
+        "displayMode": {
+            "label": "표시 모드",
+            "description": "위젯 표시 방법",
+            "compact": "컴팩트 (점 + 카운트다운)",
+            "icon": "아이콘만",
+            "full": "전체 (상태 + 카운트다운)"
+        },
+        "offPeakColor": {
+            "label": "오프피크 색상",
+            "description": "오프피크일 때 위젯 색상"
+        },
+        "peakColor": {
+            "label": "피크 색상",
+            "description": "피크일 때 위젯 색상"
+        },
+        "driftColor": {
+            "label": "변경 감지 색상",
+            "description": "정책 변경 감지 시 위젯 색상"
+        },
+        "showTooltip": {
+            "label": "툴팁 표시",
+            "description": "마우스를 올리면 상태 툴팁 표시"
+        },
+        "autoCheck": {
+            "label": "자동 확인",
+            "description": "공식 가격 페이지를 주기적으로 확인"
+        },
+        "offlineOnly": {
+            "label": "오프라인 전용",
+            "description": "네트워크 확인 사용 안 함"
+        },
+        "checkIntervalH": {
+            "label": "확인 간격 (시간)",
+            "description": "정책 확인 사이의 시간"
+        },
+        "customSourceUrl": {
+            "label": "사용자 지정 소스 URL",
+            "description": "공식 가격 페이지를 대체",
+            "placeholder": "https://…"
+        },
+        "weekendMode": {
+            "label": "주말 모드",
+            "description": "주말 오프피크 기준",
+            "beijing": "베이징 (금 16:00 UTC – 일 16:00 UTC)",
+            "utc": "UTC 자정"
+        }
+    }
+}
